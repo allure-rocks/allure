@@ -1,0 +1,33 @@
+<%# What's-new dialog (DESIGN.md §10.11). Rendered only when the running
+    release has curated notes and the viewer is signed in; the footer version
+    is the always-available reopen trigger. Auto-show and the acknowledgement
+    live in the release-notes Stimulus controller. %>
+<div class="modal fade" id="release-notes-modal" tabindex="-1" aria-hidden="true"
+     aria-labelledby="release-notes-modal-title"
+     data-controller="release-notes"
+     data-release-notes-auto-show-value="<%= release_notes_unseen? %>"
+     data-release-notes-version-value="<%= Allure::VERSION %>"
+     data-release-notes-acknowledge-url-value="<%= release_notes_path %>">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="text-secondary small"><%= t("release_notes.version", version: Allure::VERSION) %></div>
+          <h2 class="modal-title" id="release-notes-modal-title"><%= t("release_notes.title") %></h2>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<%= t("close") %>"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="mb-0">
+          <% current_release_notes.each do |note| %>
+            <li><%= note %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                data-release-notes-target="dismiss"><%= t("close") %></button>
+      </div>
+    </div>
+  </div>
+</div>

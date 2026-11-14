@@ -1,0 +1,131 @@
+<% content_for :title, t("admin.system.title") %>
+
+<% content_for :page_header do %>
+  <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+  <h1 class="page-title"><%= t("admin.system.title") %></h1>
+<% end %>
+
+<div class="row row-deck row-cards">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.system.versions") %></h2></div>
+      <div class="table-responsive">
+        <table class="table table-sm card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.system.component") %></th>
+              <th scope="col"><%= t("admin.system.version") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @diagnostics.versions.each do |component, version| %>
+              <tr>
+                <td><%= t("admin.system.components.#{component}") %></td>
+                <td class="text-secondary"><%= version.presence || t("admin.system.unknown") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.system.databases") %></h2></div>
+      <div class="table-responsive">
+        <table class="table table-sm card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.system.component") %></th>
+              <th scope="col" class="text-end"><%= t("admin.system.size") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @diagnostics.database_sizes.each do |database, bytes| %>
+              <tr>
+                <td><%= t("admin.system.database.#{database}") %></td>
+                <td class="text-end text-secondary">
+                  <%= bytes ? number_to_human_size(bytes) : t("admin.system.unknown") %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer text-secondary small"><%= t("admin.system.databases_hint") %></div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.system.storage") %></h2></div>
+      <div class="card-body">
+        <div class="h2 mb-1"><%= number_to_human_size(@diagnostics.storage[:bytes]) %></div>
+        <div class="text-secondary small mb-2">
+          <%= t("admin.system.blobs", count: number_with_delimiter(@diagnostics.storage[:blobs])) %>
+        </div>
+        <ul class="list-unstyled text-secondary small mb-0">
+          <% @diagnostics.storage[:attachments].sort_by { |_, count| -count }.each do |record_type, count| %>
+            <li class="d-flex justify-content-between">
+              <span><%= t("admin.dashboard.storage.record_types.#{record_type.underscore}", default: record_type) %></span>
+              <span><%= number_with_delimiter(count) %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.system.environment") %></h2></div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-3">
+          <% %i[registration_open federation_enabled restricted_federation operator_configured smtp_configured].each do |flag| %>
+            <li class="d-flex justify-content-between align-items-center py-1">
+              <span><%= t("admin.system.#{flag}") %></span>
+              <% if @diagnostics.environment[flag] %>
+                <span class="badge bg-success-lt"><%= t("admin.system.enabled") %></span>
+              <% else %>
+                <span class="badge bg-secondary-lt"><%= t("admin.system.disabled") %></span>
+              <% end %>
+            </li>
+          <% end %>
+          <% @diagnostics.environment[:remote_imports].each do |provider, enabled| %>
+            <li class="d-flex justify-content-between align-items-center py-1">
+              <span><%= t("admin.system.remote_import", provider: t("workouts.batch_import.sources.#{provider}.label")) %></span>
+              <span class="badge <%= enabled ? "bg-success-lt" : "bg-secondary-lt" %>">
+                <%= t(enabled ? "admin.system.enabled" : "admin.system.disabled") %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+        <dl class="row mb-0">
+          <dt class="col-5"><%= t("admin.system.federation_base_url") %></dt>
+          <dd class="col-7 text-break"><%= @diagnostics.environment[:federation_base_url] %></dd>
+          <dt class="col-5"><%= t("admin.system.federation_domain") %></dt>
+          <dd class="col-7"><%= @diagnostics.environment[:federation_domain] %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.system.instance") %></h2></div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-5"><%= t("admin.system.instance_name") %></dt>
+          <dd class="col-7"><%= @diagnostics.instance[:name] %></dd>
+          <dt class="col-5"><%= t("admin.system.instance_description") %></dt>
+          <dd class="col-7"><%= @diagnostics.instance[:description].presence || t("admin.system.absent") %></dd>
+          <dt class="col-5"><%= t("admin.system.instance_host_name") %></dt>
+          <dd class="col-7"><%= @diagnostics.instance[:host_name].presence || t("admin.system.absent") %></dd>
+          <dt class="col-5"><%= t("admin.system.instance_host_url") %></dt>
+          <dd class="col-7 text-break"><%= @diagnostics.instance[:host_url].presence || t("admin.system.absent") %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

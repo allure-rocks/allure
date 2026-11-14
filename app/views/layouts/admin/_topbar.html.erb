@@ -1,0 +1,40 @@
+<%# Administration console topbar (PLAN_ADMIN.md §2). Same Tabler shell, its own
+    menu tree from navigation.rb's :admin section, and an explicit way back to
+    the product. The bottom bar, feedback widget, and product navigation are
+    deliberately absent. The menu expands only from xxl: nine destinations plus
+    the exit action do not fit a 1280px topbar. %>
+<header class="navbar navbar-expand-xxl d-print-none">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#admin-menu"
+            aria-controls="admin-menu" aria-expanded="false"
+            aria-label="<%= t("navigation.toggle") %>">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-brand navbar-brand-autodark me-lg-4">
+      <%= link_to admin_root_path, class: "text-decoration-none allure-brand",
+            aria: { label: t("admin.console") } do %>
+        <%= render "shared/brand_mark", size: "fs-1" %>
+        <%= render "shared/brand_wordmark", responsive: true %>
+        <span class="badge bg-primary-lt text-uppercase d-none d-sm-inline"><%= t("admin.console") %></span>
+      <% end %>
+    </div>
+
+    <div class="navbar-nav flex-row order-xxl-last">
+      <%= render "layouts/theme_toggle" %>
+      <div class="nav-item ms-3 me-2 d-flex align-items-center">
+        <%= link_to t("admin.exit"), me_path, class: "btn btn-outline-secondary btn-sm" %>
+      </div>
+      <%= render "layouts/account_menu", admin: true, compact: true %>
+    </div>
+
+    <nav class="collapse navbar-collapse" id="admin-menu" aria-label="<%= t("admin.navigation") %>">
+      <% nav_sections(position: :admin).each do |section| %>
+        <ul class="navbar-nav">
+          <%= render partial: "layouts/nav_item", collection: section.items, as: :item %>
+        </ul>
+      <% end %>
+    </nav>
+  </div>
+</header>

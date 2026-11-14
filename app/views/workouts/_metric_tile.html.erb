@@ -1,0 +1,24 @@
+<%# One primary metric tile (DESIGN.md §10.2): label above, value below, and
+    Tabler's card stamp when the value carries a marker. Shared by the workout
+    summary, the segment details and the feed card. Locals: `metric` (an item
+    with :label, :value, :has_unit), `trophy_label` (a record, nil otherwise),
+    or `stamp` (`{ icon:, css:, label: }`) for a non-record marker such as a
+    podium's laurel wreath. `stamp` wins when both are given.
+    `anomaly_note` is the owner's plausible value of a contested figure, and
+    `metric[:caption]` a quieter line under the value. %>
+<% stamp = local_assigns[:stamp] %>
+<% trophy_label = local_assigns[:trophy_label] %>
+<% marker = stamp || (trophy_label ? personal_place_stamp(1, tooltip: trophy_label) : nil) %>
+<div class="allure-metric-tile" <%= tag.attributes(marker ? { data: tooltip_data(marker[:label]) } : {}) %>>
+  <% if marker %>
+    <div class="card-stamp">
+      <div class="card-stamp-icon <%= marker[:css] %>">
+        <i class="ti <%= marker[:icon] %>" aria-hidden="true"></i>
+      </div>
+    </div>
+    <span class="visually-hidden"><%= marker[:label] %></span>
+  <% end %>
+  <dt><%= metric[:label] %><%= render "workouts/anomaly_note", note: local_assigns[:anomaly_note] if local_assigns[:anomaly_note] %></dt>
+  <dd><%= workout_metric_value(metric) %></dd>
+  <% if metric[:caption] %><div class="allure-metric-caption"><%= metric[:caption] %></div><% end %>
+</div>

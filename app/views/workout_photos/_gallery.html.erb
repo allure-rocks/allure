@@ -1,0 +1,44 @@
+<% photos = workout.photos.includes(:display_attachment, :thumbnail_attachment).to_a %>
+<turbo-frame id="<%= photo_gallery_frame_id(workout) %>" refresh="morph"
+             data-controller="photo-gallery photo-lightbox"
+             data-action="turbo:frame-render->photo-gallery#refresh allure:photo-uploaded@window->photo-gallery#uploaded turbo:before-cache@document->photo-lightbox#close allure:photo-open@window->photo-lightbox#openById"
+             data-photo-gallery-url-value="<%= gallery_workout_photos_path(workout) %>">
+  <%# A morphing frame render updates its children, never the frame's own
+      attributes: the values that change live on this hidden child. %>
+  <span hidden data-photo-gallery-pending="<%= photos.any?(&:processing?) %>"
+        data-photo-gallery-markers="<%= workout_photo_markers(workout, photos).to_json %>"></span>
+  <% if photos.empty? %><p class="text-secondary mb-0"><%= t("photos.empty") %></p><% end %>
+  <div class="allure-photo-grid allure-photo-grid--compact">
+    <% photos.each_with_index do |photo, index| %>
+      <% if photo.ready? %>
+        <button type="button" class="allure-photo-preview" data-action="photo-lightbox#open" data-photo-lightbox-target="photo"
+                data-photo-tile data-photo-id="<%= photo.to_param %>"
+                data-src="<%= workout_photo_path(workout, photo, variant: :display) %>"
+                data-original="<%= workout_photo_path(workout, photo, variant: :original) %>"
+                data-caption="<%= workout_photo_label(photo, index) %>"
+                data-meta="<%= workout_photo_lightbox_meta(photo) %>"
+                data-map="<%= photo.placed? ? "1" : nil %>"
+                data-edit="<%= workout_photos_path(workout, anchor: "photo-#{photo.to_param}") %>">
+          <%= image_tag workout_photo_path(workout, photo, variant: :thumbnail), alt: workout_photo_label(photo, index), loading: "lazy" %>
+        </button>
+      <% elsif photo.processing? %>
+        <div class="allure-photo-tile allure-photo-tile--pending" data-photo-tile>
+          <div class="allure-photo-tile__placeholder" role="status" aria-label="<%= t("photos.processing") %>">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+          </div>
+        </div>
+      <% else %>
+        <div class="allure-photo-tile allure-photo-tile--failed" data-photo-tile>
+          <div class="allure-photo-tile__placeholder"><i class="ti ti-photo-off" aria-hidden="true"></i></div>
+          <p class="small text-danger mb-1"><%= t("photos.errors.#{photo.failure_reason || 'processing_error'}") %></p>
+          <div class="d-flex flex-wrap gap-1">
+            <%= button_to t("photos.retry"), retry_workout_photo_path(workout, photo), class: "btn btn-sm btn-outline-secondary" %>
+            <%= button_to t("photos.delete"), workout_photo_path(workout, photo), method: :delete, class: "btn btn-sm btn-outline-danger",
+                  form: { data: { confirm_title: t("photos.delete"), confirm_body: t("photos.delete_body"), confirm_verb: t("photos.delete") } } %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <%= render "workout_photos/lightbox", original: true, edit: true %>
+</turbo-frame>

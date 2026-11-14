@@ -1,0 +1,16 @@
+<%# Client configurations for the MCP endpoint (PLAN_MCP.md §7). `secret` is the
+    fresh token right after creation, or a placeholder on the settings page. %>
+<% McpHelper::MCP_CLIENTS.each do |client| %>
+  <div class="mb-3" data-controller="clipboard"
+       data-clipboard-copied-label-value="<%= t("settings.api_tokens.created.copied") %>">
+    <div class="d-flex align-items-center justify-content-between mb-1">
+      <span class="fw-medium" id="mcp_client_<%= client %>_<%= dom_suffix %>"><%= t("settings.api.mcp.clients.#{client}") %></span>
+      <button type="button" class="btn btn-sm" data-action="clipboard#copy"
+              aria-describedby="mcp_client_<%= client %>_<%= dom_suffix %>">
+        <i class="ti ti-copy me-1" aria-hidden="true"></i><span data-clipboard-target="label"><%= t("settings.api_tokens.created.copy_button") %></span>
+      </button>
+    </div>
+    <pre class="mb-0 small" data-clipboard-target="source"
+         aria-labelledby="mcp_client_<%= client %>_<%= dom_suffix %>"><code><%= mcp_client_config(client, secret) %></code></pre>
+  </div>
+<% end %>

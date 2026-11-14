@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Allure Test Suite"
+     xmlns="http://www.topografix.com/GPX/1/1"
+     xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1">
+  <trk>
+    <name>Ride with HR, cadence, and power</name>
+    <extensions>
+      <cal>350</cal>
+    </extensions>
+    <trkseg>
+      <trkpt lat="45.0000" lon="6.4000">
+        <time>2026-06-01T08:00:00Z</time>
+        <extensions>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:hr>140</gpxtpx:hr>
+            <gpxtpx:cad>80</gpxtpx:cad>
+            <gpxtpx:power>200</gpxtpx:power>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="45.0010" lon="6.4000">
+        <time>2026-06-01T08:01:00Z</time>
+        <extensions>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:hr>150</gpxtpx:hr>
+            <gpxtpx:cad>82</gpxtpx:cad>
+            <gpxtpx:power>210</gpxtpx:power>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="45.0020" lon="6.4000">
+        <time>2026-06-01T08:02:00Z</time>
+        <extensions>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:hr>160</gpxtpx:hr>
+            <gpxtpx:cad>84</gpxtpx:cad>
+            <gpxtpx:power>220</gpxtpx:power>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

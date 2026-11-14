@@ -1,0 +1,7 @@
+<%# Development-only entry (AGENTS.md, "Development tools"). Only present while
+    the devtools engine is loaded, and only for the operator — a member's HTML
+    never names the tool. %>
+<% if instance_operator? %>
+  <div class="dropdown-divider"></div>
+  <%= link_to t("dev_tools.menu"), devtools_impersonation_path, class: "dropdown-item" %>
+<% end %>

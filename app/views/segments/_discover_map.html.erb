@@ -1,0 +1,30 @@
+<%# The Découvrir map (DESIGN.md §20.6): every readable course in the current
+    viewport, refreshed as the reader moves. The states carry the meaning
+    (§11.1) and the count is announced politely; the popup facts are all
+    server-formatted. `segments-map` owns the MapLibre lifecycle. The canvas
+    carries the account's basemap theme (§15.2). %>
+<div class="card mb-3"
+     data-controller="segments-map"
+     data-action="allure:theme-changed@window->segments-map#themeChanged"
+     data-segments-map-url-value="<%= segments_discover_map_path %>"
+     data-segments-map-style-url-value="<%= map_style_url %>"
+     data-segments-map-style-url-dark-value="<%= map_dark_style_url %>"
+     data-segments-map-locale-value="<%= map_control_locale.to_json %>"
+     data-segments-map-unit-system-value="<%= current_user&.unit_system || "metric" %>"
+     data-segments-map-basemap-theme-value="<%= basemap_theme_preference %>"
+     data-segments-map-count-label-value="<%= t("segments.discover.map.count", count: "%{count}") %>"
+     <% if @discover_map_center %>data-segments-map-center-value="<%= @discover_map_center.to_json %>"<% end %>>
+  <div class="card-header">
+    <h2 class="card-title"><%= t("segments.discover.map.title") %></h2>
+    <div class="card-actions">
+      <span class="text-secondary small text-nowrap" aria-live="polite" data-segments-map-target="count"></span>
+    </div>
+  </div>
+  <div class="allure-visual allure-visual--discover">
+    <div class="allure-visual-state" data-segments-map-target="loading" role="status"><%= t("segments.discover.map.loading") %></div>
+    <div class="allure-visual-state text-secondary" data-segments-map-target="empty" role="status" hidden><%= t("segments.discover.map.empty") %></div>
+    <div class="allure-visual-state text-danger" data-segments-map-target="error" role="alert" hidden><%= t("segments.discover.map.error") %></div>
+    <div class="allure-map allure-map--discover" data-bs-theme="<%= basemap_theme %>" data-segments-map-target="canvas"
+         aria-label="<%= t("segments.discover.map.title") %>"></div>
+  </div>
+</div>

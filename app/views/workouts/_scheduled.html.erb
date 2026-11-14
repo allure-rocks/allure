@@ -1,0 +1,43 @@
+<%# The frozen publication inside its safety delay, as a row of the sharing
+    list (PLAN_DELAYED_PUBLISHING.md, DESIGN.md §19.19). Owner-only by
+    construction: only the owner's workout page renders it, and the
+    publication is invisible to every reader until activation. The row states
+    the delay and its consequences and carries the three actions; it projects
+    nothing. Locals: `workout`, `publication`. %>
+<li class="list-group-item allure-scheduled-publication">
+  <div class="d-flex flex-wrap align-items-center gap-2">
+    <%= publication_badge("scheduled", audience: publication.audience) %>
+    <div class="me-auto">
+      <div class="fw-semibold"><%= t("workouts.scheduled.at", time: l(publication.scheduled_for, format: :long)) %></div>
+      <div class="text-secondary small">
+        <%= t("workouts.publication.published_as", audience: t("workouts.publication.audience.#{publication.audience}")) %>
+        <% if local_assigns[:automatic] %>
+          · <i class="ti ti-bolt" aria-hidden="true"></i> <%= t("auto_publications.badge_scheduled") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-info mt-2 mb-2" role="note"><%= t("workouts.scheduled.notice") %></div>
+  <div class="d-flex flex-wrap align-items-center gap-2">
+    <%= form_with url: reschedule_publication_workout_path(workout), method: :patch,
+                  class: "d-flex align-items-center gap-2 me-auto" do %>
+      <%= hidden_field_tag :publication_id, publication.to_param, id: nil %>
+      <%= select_tag :publish_delay,
+                     options_for_select(publishing_delay_options(include_immediate: false), nil),
+                     include_blank: t("workouts.scheduled.choose_delay"),
+                     id: "publish_delay_#{publication.to_param}",
+                     class: "form-select form-select-sm w-auto",
+                     required: true,
+                     aria: { label: t("workouts.scheduled.delay_label") } %>
+      <%= submit_tag t("workouts.scheduled.reschedule"), class: "btn btn-sm btn-outline-secondary" %>
+    <% end %>
+    <%= button_to t("workouts.scheduled.cancel"), scheduled_publication_workout_path(workout), method: :delete,
+                  params: { publication_id: publication.to_param },
+                  form: { data: { confirm_title: t("workouts.scheduled.cancel_confirm.title"), confirm_body: t("workouts.scheduled.cancel_confirm.body"), confirm_verb: t("workouts.scheduled.cancel_confirm.verb") } },
+                  class: "btn btn-sm btn-ghost-danger" %>
+    <%= button_to t("workouts.scheduled.publish_now"), activate_publication_workout_path(workout), method: :post,
+                  params: { publication_id: publication.to_param },
+                  form: { data: { confirm_title: t("workouts.scheduled.publish_now_confirm.title"), confirm_body: t("workouts.scheduled.publish_now_confirm.body"), confirm_verb: t("workouts.scheduled.publish_now_confirm.verb") } },
+                  class: "btn btn-sm btn-primary" %>
+  </div>
+</li>

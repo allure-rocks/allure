@@ -1,0 +1,22 @@
+<%# Distribution of one active publication (DESIGN.md §20.3): silent while it
+    goes well — local only, nobody to send to, sending, or delivered — and an
+    inline alert with the refresh action when some servers have not received
+    it. Locals: `workout`, `publication`, `summary`. %>
+<% if summary && %i[partial unavailable].include?(summary.state) %>
+  <div class="alert alert-warning mt-3 mb-0 d-flex flex-wrap align-items-center gap-2" role="status">
+    <div class="me-auto">
+      <% if summary.state == :partial %>
+        <i class="ti ti-alert-triangle me-1" aria-hidden="true"></i><%= t("workouts.delivery.partial") %>
+        <%= t("workouts.delivery.delivered_accounts", count: summary.delivered_accounts) %> <%= t("workouts.delivery.delivered_servers", count: summary.delivered_servers) %>
+        <%= t("workouts.delivery.failed_deliveries", count: summary.failed_deliveries) %>
+      <% else %>
+        <i class="ti ti-cloud-off me-1" aria-hidden="true"></i><%= t("workouts.delivery.unavailable") %>
+        <%= t("workouts.delivery.failed_deliveries", count: summary.failed_deliveries) %>
+      <% end %>
+    </div>
+    <%= button_to t("workouts.delivery.refresh"), delivery_refresh_workout_path(workout), method: :post,
+                  params: { publication_id: publication.to_param },
+                  class: "btn btn-sm btn-outline-warning",
+                  title: t("workouts.delivery.refresh_hint") %>
+  </div>
+<% end %>

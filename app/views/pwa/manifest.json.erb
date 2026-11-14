@@ -1,0 +1,24 @@
+{
+  "name": "Allure",
+  "short_name": "Allure",
+  "description": <%= raw((Allure::Instance.description || t("footer.tagline")).to_json) %>,
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#c5426c",
+  "background_color": "#ffffff"
+}

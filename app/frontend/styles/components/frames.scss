@@ -1,0 +1,7 @@
+// Turbo Frames are custom elements and default to inline; every frame in the
+// app lays out as a block.
+turbo-frame {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}

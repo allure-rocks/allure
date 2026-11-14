@@ -1,0 +1,108 @@
+<%# The participants card (DESIGN.md §10.18, PLAN_TOGETHER.md §5/§10). The
+    owner invites and manages; a participant confirms, declines, or withdraws.
+    Never rendered to non-participants. Locals: `workout`, `participation` (the
+    viewer's live row, or nil). %>
+<% owner = workout.user_id == current_user&.id %>
+<% participation = local_assigns.fetch(:participation, nil) %>
+<% rows = participation_visible_rows(workout, owner) %>
+<% current_actor_id = current_user&.actor&.id %>
+<% answerable = !owner && participation&.active? && participation.participant_confirmed_at.nil? %>
+<% links = owner ? participation_links_on(workout) : [] %>
+<% convertible = !owner && participation&.confirmed? && participation.kind == "credit" %>
+<% recordings = answerable || convertible ? participation_recording_candidates(participation) : [] %>
+
+<div class="card mb-3 allure-participants-card">
+  <% invite_id = "workout-participation-invite" %>
+  <div class="card-header">
+    <h2 class="card-title"><%= t("workouts.participations.title") %></h2>
+    <% if owner %>
+      <div class="card-actions">
+        <button type="button" class="btn btn-sm btn-primary collapsed" data-bs-toggle="collapse"
+                data-bs-target="#<%= invite_id %>" aria-expanded="false" aria-controls="<%= invite_id %>">
+          <i class="ti ti-user-plus me-1" aria-hidden="true"></i><%= t("workouts.participations.add") %>
+        </button>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <% if owner %>
+      <%# The invitation unfolds from the header action (DESIGN.md §10.18); the
+          §19.20 sentence stays visible even while the field is folded. %>
+      <%= form_with url: workout_participations_path(workout), method: :post,
+                    id: invite_id, class: "collapse" do |form| %>
+        <div class="input-group mb-1">
+          <%= form.text_field :handle, name: "participation[handle]", class: "form-control",
+                              placeholder: t("workouts.participations.handle_placeholder"),
+                              aria: { label: t("workouts.participations.handle_label") } %>
+          <%= form.submit t("workouts.participations.invite"), class: "btn btn-outline-primary" %>
+        </div>
+      <% end %>
+      <small class="form-text d-block mt-0<%= " mb-3" if rows.any? %>"><%= t("workouts.participations.invite_hint") %></small>
+    <% end %>
+
+    <% if answerable %>
+      <% confirm_form_id = "workout-participation-confirm" %>
+      <div class="allure-participation-answer mb-3">
+        <p class="text-secondary"><%= t("workouts.participations.confirm_notice") %></p>
+        <% if recordings.any? %>
+          <%# The picker belongs to the Confirmer form through the `form`
+              attribute, so the two buttons keep their own forms. %>
+          <div class="mb-3">
+            <label class="form-label" for="workout-participation-recording"><%= t("workouts.participations.recording_label") %></label>
+            <%= select_tag :participant_workout_id,
+                           options_for_select([ [ t("workouts.participations.recording_none"), "" ] ] + participation_recording_options(recordings)),
+                           id: "workout-participation-recording", class: "form-select", form: confirm_form_id %>
+            <small class="form-hint"><%= t("workouts.participations.recording_hint") %></small>
+          </div>
+        <% end %>
+        <div class="allure-actions">
+          <%= button_to t("workouts.participations.confirm"),
+                        workout_participation_path(workout, participation),
+                        method: :patch, params: { decision: "confirm" },
+                        form: { id: confirm_form_id }, class: "btn btn-primary" %>
+          <%= button_to t("workouts.participations.decline"),
+                        workout_participation_path(workout, participation),
+                        method: :patch, params: { decision: "decline" }, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if convertible && recordings.any? %>
+      <% convert_form_id = "workout-participation-convert" %>
+      <div class="allure-participation-convert mb-3">
+        <label class="form-label" for="workout-participation-convert-recording"><%= t("workouts.participations.convert_label") %></label>
+        <%= select_tag :participant_workout_id,
+                       options_for_select(participation_recording_options(recordings)),
+                       id: "workout-participation-convert-recording", class: "form-select mb-2", form: convert_form_id %>
+        <small class="form-hint mb-2"><%= t("workouts.participations.recording_hint") %></small>
+        <%= button_to t("workouts.participations.convert"),
+                      convert_workout_participation_path(workout, participation),
+                      method: :patch, form: { id: convert_form_id }, class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+
+    <% if links.any? { |link| participation_awaits_side?(link, :participant) } ||
+          rows.any? { |row| owner && participation_awaits_side?(row, :owner) } %>
+      <p class="text-secondary small mb-2"><%= t("workouts.participations.suggestion_notice") %></p>
+    <% end %>
+
+    <% if rows.any? || links.any? %>
+      <ul class="list-unstyled mb-0">
+        <% rows.each do |row| %>
+          <%= render "workout_participations/row", participation: row, counterpart: row.participant_actor,
+                     answerable: owner && participation_awaits_side?(row, :owner),
+                     withdrawable: row.active? && (owner || row.participant_actor_id == current_actor_id) %>
+        <% end %>
+        <%# This workout as the participant's own recording: the link names its
+            source's owner, and a detection is answered from here. %>
+        <% links.each do |link| %>
+          <%= render "workout_participations/row", participation: link, counterpart: link.workout.user&.actor,
+                     answerable: participation_awaits_side?(link, :participant),
+                     withdrawable: link.active? %>
+        <% end %>
+      </ul>
+    <% elsif !owner %>
+      <p class="text-secondary mb-0"><%= t("workouts.participations.empty") %></p>
+    <% end %>
+  </div>
+</div>

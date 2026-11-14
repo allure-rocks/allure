@@ -1,0 +1,63 @@
+<% content_for :title, t("settings.api_tokens.new.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.api_tokens.new.title") } do %>
+  <div class="card">
+    <%= form_with model: @token, scope: :api_token, url: settings_api_tokens_path, method: :post do |form| %>
+      <div class="card-body">
+        <%= render "shared/form_errors", form: form %>
+
+        <div class="mb-3">
+          <%= form.label :name, t("settings.api_tokens.new.name"), class: "form-label required" %>
+          <%= form.text_field :name, required: true, maxlength: 80, size: nil, autocomplete: "off",
+                class: class_names("form-control", "is-invalid": @token.errors[:name].any?),
+                aria: { describedby: "api_token_name_hint" } %>
+          <div id="api_token_name_hint" class="form-hint"><%= t("settings.api_tokens.new.name_hint") %></div>
+        </div>
+
+        <fieldset class="mb-3" id="<%= form.field_id(:scopes) %>">
+          <legend class="form-label required"><%= t("settings.api_tokens.new.permissions") %></legend>
+          <% ApiToken::SCOPES.each do |scope| %>
+            <% key = scope.tr(":", "_") %>
+            <label class="form-check">
+              <%= check_box_tag "api_token[scopes][]", scope, @token.scopes.include?(scope),
+                    id: "api_token_scope_#{key}", class: "form-check-input",
+                    aria: { describedby: "api_token_scope_#{key}_hint" } %>
+              <span class="form-check-label"><%= t("settings.api.scopes.#{key}.label") %>
+                <code class="ms-1 small text-secondary"><%= scope %></code></span>
+              <span id="api_token_scope_<%= key %>_hint" class="form-check-description"><%= t("settings.api.scopes.#{key}.description") %></span>
+            </label>
+          <% end %>
+        </fieldset>
+
+        <fieldset class="mb-3" id="<%= form.field_id(:mcp_geometry) %>" aria-describedby="api_token_mcp_geometry_hint">
+          <legend class="form-label"><%= t("settings.api_tokens.new.mcp_geometry.legend") %></legend>
+          <p id="api_token_mcp_geometry_hint" class="form-hint mt-n1"><%= t("settings.api_tokens.new.mcp_geometry.hint") %></p>
+          <% ApiToken.offered_mcp_geometry_levels.each do |level| %>
+            <label class="form-check">
+              <%= form.radio_button :mcp_geometry, level, class: class_names("form-check-input", "is-invalid": @token.errors[:mcp_geometry].any?),
+                    aria: { describedby: "api_token_mcp_geometry_#{level}_hint" } %>
+              <span class="form-check-label"><%= t("settings.api.mcp_geometry.#{level}.label") %></span>
+              <span id="api_token_mcp_geometry_<%= level %>_hint" class="form-check-description"><%= t("settings.api.mcp_geometry.#{level}.description") %></span>
+            </label>
+          <% end %>
+          <div class="alert alert-warning mb-0 mt-2" role="note"><%= t("settings.api_tokens.new.mcp_geometry.warning") %></div>
+        </fieldset>
+
+        <div class="mb-3">
+          <%= label_tag "api_token_expires_in_days", t("settings.api_tokens.new.expiry"), class: "form-label" %>
+          <%= select_tag "api_token[expires_in_days]",
+                options_for_select(ApiToken::EXPIRY_DAYS.map { [ t("settings.api_tokens.new.expiry_days", count: it), it ] }, @expires_in_days),
+                id: "api_token_expires_in_days", class: "form-select w-auto" %>
+        </div>
+
+        <div class="alert alert-warning mb-0" role="note">
+          <%= t("settings.api_tokens.new.warning") %>
+        </div>
+      </div>
+      <div class="card-footer allure-actions">
+        <%= form.submit t("settings.api_tokens.new.submit"), class: "btn btn-primary" %>
+        <%= link_to t("settings.api_tokens.new.cancel"), settings_api_path, class: "btn btn-link" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

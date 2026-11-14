@@ -1,0 +1,75 @@
+# PostgreSQL + PostGIS.
+#
+# The `postgis` adapter is supplied by activerecord-postgis-adapter and is a
+# superset of the `postgresql` adapter. It is required: workout tracks are stored
+# as geography(LineString, 4326) and start points as geography(Point, 4326).
+#
+# Every environment uses the same four-database layout — primary plus the Solid
+# Queue/Cache/Cable stores. Development deliberately mirrors production here
+# rather than collapsing to a single database: the federation delivery queue is
+# core machinery, and it should fail in development the same way it would in
+# production rather than quietly running on a different adapter.
+
+default: &default
+  adapter: postgis
+  encoding: unicode
+  postgis_extension: postgis
+  schema_search_path: public
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "db") %>
+  port: 5432
+  username: <%= ENV.fetch("POSTGRES_USER", "allure") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "allure") %>
+
+development:
+  primary:
+    <<: *default
+    database: allure_development
+  cache:
+    <<: *default
+    database: allure_development_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    database: allure_development_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: allure_development_cable
+    migrations_paths: db/cable_migrate
+
+test:
+  primary:
+    <<: *default
+    database: allure_test
+  cache:
+    <<: *default
+    database: allure_test_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    database: allure_test_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: allure_test_cable
+    migrations_paths: db/cable_migrate
+
+production:
+  primary: &primary_production
+    <<: *default
+    database: allure_production
+    username: allure
+    password: <%= ENV["ALLURE_DATABASE_PASSWORD"] %>
+  cache:
+    <<: *primary_production
+    database: allure_production_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    database: allure_production_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    database: allure_production_cable
+    migrations_paths: db/cable_migrate

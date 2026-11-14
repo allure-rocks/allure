@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Allure Test Suite" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>Three laps</name>
+    <trkseg>
+      <trkpt lat="45.00000" lon="6.40000"><time>2026-08-28T08:00:00Z</time></trkpt>
+      <trkpt lat="45.00000" lon="6.40180"><time>2026-08-28T08:00:30Z</time></trkpt>
+      <trkpt lat="45.00055" lon="6.40180"><time>2026-08-28T08:00:45Z</time></trkpt>
+      <trkpt lat="45.00055" lon="6.40000"><time>2026-08-28T08:01:15Z</time></trkpt>
+      <trkpt lat="45.00000" lon="6.40000"><time>2026-08-28T08:01:30Z</time></trkpt>
+      <trkpt lat="45.00000" lon="6.40180"><time>2026-08-28T08:02:00Z</time></trkpt>
+      <trkpt lat="45.00055" lon="6.40180"><time>2026-08-28T08:02:15Z</time></trkpt>
+      <trkpt lat="45.00055" lon="6.40000"><time>2026-08-28T08:02:45Z</time></trkpt>
+      <trkpt lat="45.00000" lon="6.40000"><time>2026-08-28T08:03:00Z</time></trkpt>
+      <trkpt lat="45.00000" lon="6.40180"><time>2026-08-28T08:03:30Z</time></trkpt>
+      <trkpt lat="45.00055" lon="6.40180"><time>2026-08-28T08:03:45Z</time></trkpt>
+      <trkpt lat="45.00055" lon="6.40000"><time>2026-08-28T08:04:15Z</time></trkpt>
+      <trkpt lat="45.00000" lon="6.40000"><time>2026-08-28T08:04:30Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

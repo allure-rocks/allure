@@ -1,0 +1,30 @@
+# Development OpenID Connect provider (PLAN_AUTH.md §10). Started only with
+# `dip compose --profile oidc up -d dex`; never used by CI or production.
+# The issuer listens on the port it publishes, so the same URL resolves from
+# the host browser (127.0.0.1 dex.test), the Rails container and Playwright.
+issuer: http://dex.test:5556/dex
+
+storage:
+  type: memory
+
+web:
+  http: 0.0.0.0:5556
+
+oauth2:
+  skipApprovalScreen: true
+
+enablePasswordDB: true
+
+# Password: "password" (Dex's documented development hash).
+staticPasswords:
+  - email: rider@dex.test
+    hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+    username: rider
+    userID: 6b3a3b1e-7d1a-4c3e-9f0b-2a4a1b6d8c01
+
+staticClients:
+  - id: allure-dev
+    secret: allure-dev-secret
+    name: Allure (development)
+    redirectURIs:
+      - http://allure.test:3001/auth/oidc/callback

@@ -1,0 +1,123 @@
+<p>
+  Une activité que vous importez est <strong>non publiée</strong> : ses détails
+  et son parcours restent privés tant que vous ne la publiez pas. Si vous activez
+  séparément le partage des statistiques ou des records sur votre profil, ses
+  chiffres peuvent toutefois y contribuer. Aucun réglage ne publie à votre place
+  si vous ne l'activez pas vous-même.
+</p>
+
+<h2>Une publication est une copie</h2>
+<p>
+  Publier crée une <strong>publication</strong> : une copie de l'activité,
+  faite à ce moment-là, qui ne contient que ce que vous avez choisi de
+  partager. Vos abonnés et le fil de publications lisent cette copie, jamais
+  l'activité elle-même. Parce que c'est une copie :
+</p>
+<ul>
+  <li>modifier l'activité ensuite — son titre, sa description ou son sport — ne
+    modifie pas la publication ;</li>
+  <li>pour partager une version à jour, vous <strong>remplacez la
+    publication</strong> : l'ancienne est supprimée et une nouvelle est
+    créée ;</li>
+  <li>votre fichier d'origine, vos notes privées et les points masqués par vos
+    zones de confidentialité n'en font jamais partie.</li>
+</ul>
+
+<h2>Profils de publication</h2>
+<p>
+  Un <strong>profil de publication</strong> est la recette de cette copie :
+  les mesures qu'elle contient (distance, temps, dénivelé, vitesse, fréquence
+  cardiaque…), si elle montre le parcours, l'image de la carte, le fichier GPX,
+  l'appareil, la météo, vos photos, si les commentaires sont ouverts, et si le
+  départ et l'arrivée sont masqués. Avant de publier, le formulaire liste
+  exactement ce qui sera partagé et ce qui ne le sera pas.
+</p>
+<p>
+  Vous disposez de deux profils intégrés, un par audience, et pouvez créer les
+  vôtres dans <%= link_to "Profils de publication", publishing_profiles_path %>.
+  Modifier un profil ne touche que les publications futures : les publications
+  existantes gardent les réglages avec lesquels elles ont été faites.
+</p>
+<p>
+  La fréquence cardiaque est une donnée de santé : les nouveaux profils ne la
+  partagent pas tant que vous ne la cochez pas.
+</p>
+
+<h2>Audiences</h2>
+<ul>
+  <li><strong>Public</strong> — tous les membres de cette instance et, quand
+    cette instance partage avec d'autres, les comptes qui vous y suivent.</li>
+  <li><strong>Abonnés</strong> — seulement les comptes qui vous suivent, une
+    fois que vous les avez acceptés. Ceux de cette instance les voient
+    toujours ; ceux des autres instances ne les reçoivent que si l'opérateur de
+    cette instance l'a activé.</li>
+</ul>
+<p>
+  Une activité peut avoir une publication par audience : une version détaillée
+  pour vos abonnés et une version plus légère en public, par exemple. Chaque
+  lecteur voit la version qui lui est destinée : vos abonnés lisent celle des
+  abonnés.
+</p>
+
+<h2>Attendre avant de publier</h2>
+<p>
+  Un profil peut retenir les publications un moment — un jour, trois jours, une
+  semaine, deux semaines ou un mois — pour qu'une sortie partie de chez vous ne
+  soit pas visible pendant que vous êtes encore absent, par exemple. Pendant
+  l'attente, la publication est <strong>programmée</strong> : personne ne la
+  voit, et vous pouvez la publier tout de suite, changer sa date ou l'annuler.
+</p>
+
+<h2>Publication automatique</h2>
+<p>
+  Si vous rendez un profil automatique, chaque nouvelle activité est publiée
+  avec lui dès que son analyse est terminée. Cela ne s'applique jamais aux
+  activités de plus de sept jours, aux imports volumineux (une archive, un lot
+  de fichiers) ni, si vous le choisissez, aux trajets domicile-travail ou aux
+  sports que vous excluez. Vous pouvez refuser une publication automatique en
+  attente depuis la page de l'activité.
+</p>
+
+<h2>Supprimer une publication</h2>
+<p>
+  Supprimer une publication la retire de cette instance et demande aux autres
+  serveurs qui l'ont reçue de la supprimer aussi.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  Supprimer l'activité retire ses publications de la même façon.
+</p>
+
+<h2>Statistiques et records sur votre profil</h2>
+<p>
+  Dans les <%= link_to t("settings.profile.title"), settings_profile_path %>,
+  vous choisissez séparément qui peut voir vos statistiques générales par sport
+  et vos records personnels : vos abonnés acceptés ou tous les membres de cette
+  instance. Par défaut, aucun bloc n'est partagé. Les demandes d'abonnement en
+  attente ne donnent pas accès aux chiffres réservés aux abonnés ; se désabonner
+  retire cet accès. Les visiteurs anonymes n'y ont jamais accès.
+</p>
+<p>
+  Ces blocs portent sur tout votre carnet, toutes années confondues, même si les
+  activités ne sont pas publiées. Ils sont indépendants des profils de
+  publication et des filtres du journal ; les activer ne publie aucune activité.
+</p>
+<p>
+  Sur la carte des statistiques, les axes du radar sont les sports : vous
+  choisissez la mesure affichée — activités, distance, durée ou dénivelé positif.
+  Avec moins de trois sports concernés, des barres remplacent le radar.
+</p>
+<p><%= t("profile.statistics.log_scale") %></p>
+<p>
+  <%= t("profile.statistics.reading_hint") %>
+  L'infobulle indique le nom complet du sport et la valeur réelle, dans vos
+  unités, jamais le logarithme. Le bout de chaque axe permet aussi de lire les
+  zéros. Un appui bref sur mobile affiche la même information, sans empêcher de
+  balayer les mesures ou de faire défiler la page. Les barres offrent la même
+  lecture et les tableaux gardent toutes les valeurs.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("settings.profile.sharing.privacy") %>
+</div>

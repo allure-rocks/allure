@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Activity Recorder"
+     xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>Morning workout</name>
+    <type>Run</type>
+    <trkseg>
+      <trkpt lat="45.0000" lon="6.4000">
+        <time>2026-06-01T08:00:00Z</time>
+        <ele>1000</ele>
+      </trkpt>
+      <trkpt lat="45.0010" lon="6.4000">
+        <time>2026-06-01T08:01:00Z</time>
+        <ele>1001</ele>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

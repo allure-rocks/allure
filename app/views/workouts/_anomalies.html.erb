@@ -1,0 +1,129 @@
+<%# Readings that look wrong in the original file (PLAN_M1.md §8.10,
+    DESIGN.md §15.5): first the figures they make wrong, then one group per
+    kind (the figure-changing kinds first), then, folded, what this device
+    does on most recordings. Rows preview their range on the chart and the map
+    like every analysis row. Owner-only, never part of a publication. %>
+<% impacts = workout_anomaly_impacts(workout) %>
+<% flagged = anomalies.reject { |anomaly| anomaly[:tier] == "signature" } %>
+<% signature_kinds = anomalies.select { |anomaly| anomaly[:tier] == "signature" }.map { |anomaly| anomaly[:kind] }.uniq %>
+<% groups = workout_anomaly_groups(workout, flagged) %>
+<div class="card-body pb-2">
+  <p class="text-secondary small mb-2"><%= t("workouts.anomalies.intro") %></p>
+  <label class="form-check form-switch mb-0 small">
+    <input class="form-check-input" type="checkbox" data-controller="anomaly-inspect" data-action="change->anomaly-inspect#toggle">
+    <span class="form-check-label"><%= t("workouts.anomalies.inspect") %></span>
+  </label>
+</div>
+
+<% if impacts.any? %>
+  <div class="card-body py-2">
+    <h3 class="text-secondary small text-uppercase mb-2"><%= t("workouts.anomalies.impact.title") %></h3>
+    <ul class="list-unstyled mb-0">
+      <% impacts.each do |impact| %>
+        <li class="allure-anomaly-impact py-1" <%= tag.attributes(impact[:range] ? analysis_row_attributes(impact[:range].first, impact[:range].last, source: "anomaly") : {}) %>>
+          <i class="ti ti-alert-triangle text-warning me-1" aria-hidden="true"></i>
+          <strong><%= impact[:label] %></strong> · <%= impact[:text] %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if groups.any? %>
+  <div class="table-responsive allure-analysis-table">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("workouts.show.laps.tabs.anomalies") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("workouts.anomalies.columns.distance") %></th>
+          <th scope="col"><%= t("workouts.anomalies.columns.time") %></th>
+          <th scope="col"><%= t("workouts.anomalies.columns.detail") %></th>
+        </tr>
+      </thead>
+      <% groups.each do |group| %>
+        <% first = group[:rows].first %>
+        <tbody>
+          <tr class="allure-anomaly-group">
+            <th scope="rowgroup" colspan="3">
+              <i class="ti ti-<%= first[:icon] %> me-1 <%= group[:major] ? "text-warning" : "text-secondary" %>" aria-hidden="true"></i><%= first[:title] %>
+              <span class="badge bg-secondary-lt ms-1"><%= group[:total] %></span>
+            </th>
+          </tr>
+          <% group[:rows].each do |anomaly| %>
+            <% range = anomaly_row_range(anomaly) %>
+            <tr <%= tag.attributes(analysis_row_attributes(range.first, range.last, source: "anomaly")) %>>
+              <td><%= format_distance(anomaly[:start_distance]) %></td>
+              <td><%= format_duration(anomaly[:start_time]) %></td>
+              <td>
+                <%= anomaly[:detail] %>
+                <% if anomaly[:tier] == "major" %>
+                  <span class="badge bg-warning-lt ms-1"><%= t("workouts.anomalies.major") %></span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if group[:total] > group[:rows].length %>
+            <tr>
+              <td colspan="3" class="text-secondary small"><%= t("workouts.anomalies.truncated", count: group[:total] - group[:rows].length) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      <% end %>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+    <% groups.each do |group| %>
+      <% first = group[:rows].first %>
+      <li class="list-group-item allure-anomaly-group">
+        <i class="ti ti-<%= first[:icon] %> me-1 <%= group[:major] ? "text-warning" : "text-secondary" %>" aria-hidden="true"></i><strong><%= first[:title] %></strong>
+        <span class="badge bg-secondary-lt ms-1"><%= group[:total] %></span>
+      </li>
+      <% group[:rows].each do |anomaly| %>
+        <% range = anomaly_row_range(anomaly) %>
+        <li class="list-group-item" <%= tag.attributes(analysis_row_attributes(range.first, range.last, source: "anomaly")) %>>
+          <div class="d-flex justify-content-between align-items-baseline gap-3">
+            <span class="allure-card-title"><%= anomaly[:detail] %></span>
+            <% if anomaly[:tier] == "major" %>
+              <span class="badge bg-warning-lt"><%= t("workouts.anomalies.major") %></span>
+            <% end %>
+          </div>
+          <div class="text-secondary small allure-table-nums">
+            <%= format_distance(anomaly[:start_distance]) %> · <%= format_duration(anomaly[:start_time]) %>
+          </div>
+        </li>
+      <% end %>
+      <% if group[:total] > group[:rows].length %>
+        <li class="list-group-item text-secondary small"><%= t("workouts.anomalies.truncated", count: group[:total] - group[:rows].length) %></li>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>
+
+<%# A gap between two passages is what the recorded profile gets wrong; the
+    terrain profile is the one correction available (PLAN_M1.md §8.10). %>
+<% if groups.any? { |group| group[:kind] == "elevation_mismatch" } && elevation_source_control?(workout) &&
+      workout.elevation_source != "dem" %>
+  <div class="card-body pt-2">
+    <p class="text-secondary small mb-0">
+      <i class="ti ti-mountain me-1" aria-hidden="true"></i><%= t("workouts.anomalies.elevation_hint") %>
+      <%= button_to t("workouts.elevation.menu.switch_to_dem"), workout_elevation_source_path(workout),
+                    method: :patch, class: "btn btn-link btn-sm p-0 align-baseline" %>
+    </p>
+  </div>
+<% end %>
+
+<% if signature_kinds.any? %>
+  <div class="card-body pt-2">
+    <details>
+      <summary class="text-secondary small"><%= t("workouts.anomalies.signature.title", count: signature_kinds.size) %></summary>
+      <p class="text-secondary small mt-2 mb-1">
+        <%= t("workouts.anomalies.signature.body", device: workout.source) %>
+      </p>
+      <ul class="small text-secondary mb-0">
+        <% signature_kinds.each do |kind| %>
+          <li><%= t("workouts.anomalies.kinds.#{kind}") %></li>
+        <% end %>
+      </ul>
+    </details>
+  </div>
+<% end %>

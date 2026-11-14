@@ -1,0 +1,13 @@
+// In-app notification bell (DESIGN.md §10.16). On larger screens the card is
+// anchored to the trigger; on phones it would be wider than the space left of
+// the trigger, so it becomes a near-full-width sheet pinned under the 3.5rem
+// topbar.
+@media (max-width: 575.98px) {
+  .dropdown-menu.notification-menu-card {
+    position: fixed;
+    top: calc(3.5rem + 0.25rem);
+    inset-inline: 0.5rem;
+    min-width: 0;
+    max-width: none;
+  }
+}

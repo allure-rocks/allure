@@ -1,0 +1,12 @@
+<%# Weather badge (PLAN_WEATHER.md §7, DESIGN.md §20.3): the condition icon and
+    the mean temperature, named in full for screen readers and in the tooltip.
+    On the workout header it leads to the weather card. %>
+<% summary = local_assigns.fetch(:summary) %>
+<% mean = summary["temperature_mean"] || [ summary["temperature_min"], summary["temperature_max"] ].compact.then { |values| values.empty? ? nil : values.sum / values.length } %>
+<% condition = weather_condition_label(summary["condition"]) %>
+<% description = t("weather.badge.label", condition: condition || t("weather.card.title"), temperature: format_temperature(mean)) %>
+<% href = local_assigns[:href] %>
+<%= content_tag(href ? :a : :span, class: class_names("badge bg-secondary-lt allure-weather-badge", local_assigns[:class_name]),
+                href:, tabindex: (0 unless href), data: tooltip_data(description)) do %>
+  <%= weather_condition_icon(summary["condition"], day: summary["is_day"]) %><span aria-hidden="true"><%= format_temperature(mean) %></span><span class="visually-hidden"><%= description %></span>
+<% end %>

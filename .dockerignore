@@ -1,0 +1,78 @@
+# See https://docs.docker.com/engine/reference/builder/#dockerignore-file for more about ignoring files.
+
+# Ignore git directory.
+/.git/
+/.gitignore
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore all environment files.
+/.env*
+/demo.env
+
+# Ignore deployment-only secrets and local reference data.
+/.secrets/
+/references_apps/
+/spec/
+/script/fetch-fit-corpus
+/script/federation_ring_test.rb
+
+# Development-only tools (AGENTS.md): never part of the production image, and a
+# COPY of the directory fails loudly if one is ever added.
+/devtools/
+
+# The operator documentation site (docs/site/README.md) is published on its
+# own; docs/openapi stays, the application serves it.
+/docs/site/
+
+# The development documents (plans, design, runbooks) are not part of the
+# image either.
+/docs/dev/
+
+# The demo dataset loader (AGENTS.md, "Seeds"): db/seeds.rb requires
+# db/seeds/development.rb, which loads db/seeds/demo/, under
+# `Rails.env.development?` only. Production runs db:seed for the reference
+# catalogs alone.
+/db/seeds/development.rb
+/db/seeds/demo/
+
+# Ignore all default key files.
+/config/master.key
+/config/credentials/*.key
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/.keep
+
+# Ignore storage (uploaded files in development and any SQLite databases).
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/.keep
+
+# Ignore assets.
+/node_modules/
+/app/assets/builds/*
+!/app/assets/builds/.keep
+/public/assets
+
+# Ignore CI service files.
+/.github/
+
+# Ignore Kamal files.
+/config/deploy*.yml
+/.kamal
+
+# Ignore development files
+/.devcontainer
+
+# Ignore Docker-related files
+/.dockerignore
+/Dockerfile*

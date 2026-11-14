@@ -1,0 +1,29 @@
+<% photos_count = workout.photos.count %>
+<% quota = Workouts::PhotoQuota.new(user: workout.user) %>
+<section id="section-photos" class="allure-detail-section card mb-3"
+         <%= photo_upload_attributes(workout, frame_id: photo_gallery_frame_id(workout)) %>>
+  <div class="card-header">
+    <h2 class="card-title">
+      <%= t("photos.title") %>
+      <% if photos_count.positive? %>
+        <span class="text-secondary fw-normal">· <%= t("photos.count", count: photos_count) %></span>
+      <% end %>
+    </h2>
+    <div class="card-actions d-flex flex-wrap gap-2">
+      <button type="button" class="btn btn-sm btn-outline-primary" data-action="photo-upload#choose">
+        <i class="ti ti-photo-plus me-1" aria-hidden="true"></i><%= t("photos.add") %>
+      </button>
+      <%= link_to t("photos.manage"), workout_photos_path(workout), class: "btn btn-sm btn-outline-secondary" %>
+    </div>
+  </div>
+  <div class="card-body">
+    <p class="text-secondary small"><%= t("photos.privacy") %></p>
+    <%# The quota is the manager's business until it starts to matter. %>
+    <% if quota.used >= quota.limit * 0.8 %>
+      <p class="small text-secondary mb-1"><%= t("photos.usage", used: number_to_human_size(quota.used), quota: number_to_human_size(quota.limit)) %></p>
+      <progress class="allure-photo-quota mb-3" value="<%= [quota.used, quota.limit].min %>" max="<%= [quota.limit, 1].max %>" aria-label="<%= t('photos.quota') %>"></progress>
+    <% end %>
+    <%= render "workout_photos/upload", workout: workout, compact: true %>
+    <%= render "workout_photos/gallery", workout: workout %>
+  </div>
+</section>

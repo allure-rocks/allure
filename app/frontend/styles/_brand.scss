@@ -1,0 +1,60 @@
+// Allure brand overrides on top of Tabler.
+//
+// This file must be imported BEFORE @tabler/core/scss/tabler. It sets the
+// brand primary and adds the semantic surface tokens (DESIGN.md §5.3); sport
+// identity is icon + text only (§6) and has no palette here.
+//
+// Keep this file small. If you find yourself overriding component internals,
+// prefer a rule in styles/components/ instead — that keeps Tabler upgradable.
+
+// The Allure primary. Route tracks share it (the renderer's TRACK_COLOUR is
+// the same value, guarded by a parity spec).
+$primary: #c5426c;
+
+:root {
+  // Semantic surface tokens (DESIGN.md §5.3). Every Allure token resolves to
+  // a Tabler variable so data-bs-theme swaps them for free.
+  --allure-surface: var(--body-bg);
+  --allure-surface-raised: var(--bg-surface);
+  --allure-surface-sunken: var(--bg-surface-secondary);
+  --allure-border: var(--border-color);
+  --allure-text: var(--body-color);
+  --allure-text-muted: var(--secondary);
+  --allure-focus: var(--primary);
+
+  // The muted line of an inverted surface — every chart tooltip and the hub's
+  // selection callout. The theme's secondary grey sits on the wrong side of
+  // it (3.8:1 on the dark surface, 2.3:1 on the light one), so the tone is
+  // derived from that surface's own ink and clears 4.5:1 in both themes
+  // (DESIGN.md §18.1).
+  --allure-text-inverted-muted: color-mix(in oklab, var(--text-inverted) 78%, transparent);
+
+  // Place colours (DESIGN.md §5.3, §10.4), shared by the personal trophy and
+  // the leaderboard laurel. Component-local literals, not semantic surfaces;
+  // each value clears 3:1 against its theme's surface.
+  --allure-medal-gold: #a97b16;
+  --allure-medal-silver: #6f7885;
+  --allure-medal-bronze: #96522c;
+}
+
+[data-bs-theme="dark"] {
+  --allure-medal-gold: #e3bc55;
+  --allure-medal-silver: #b3bcc7;
+  --allure-medal-bronze: #cf8151;
+}
+
+// Tabler's default font is the system stack. The variables below are declared
+// anyway so a future Tabler default change cannot silently start fetching a
+// third-party font from a self-hosted instance.
+$font-google: false;
+$font-local: false;
+
+// Tabler's icon webfont declares `src: url('./fonts/...woff2?v3.48.0')`. Vite
+// cannot rebase that through a node_modules @import (the version query defeats
+// it), so the font is served from public/ instead and the path is absolute.
+// bin/sync-icon-fonts copies it there on npm install.
+//
+// Only woff2 is shipped: ApplicationController declares
+// `allow_browser versions: :modern`, and every browser meeting that bar
+// supports woff2. That saves 3.4 MB against also carrying woff and ttf.
+$ti-font-path: "/fonts/tabler";

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>Alpine ride</name>
+    <Placemark>
+      <name>Alpine ride</name>
+      <gx:Track>
+        <when>2026-08-28T09:00:00Z</when>
+        <gx:coord>6.4100 45.0700 1500.0</gx:coord>
+        <when>2026-08-28T09:01:00Z</when>
+        <gx:coord>6.4110 45.0710 1510.0</gx:coord>
+        <when>2026-08-28T09:02:00Z</when>
+        <gx:coord>6.4120 45.0720 1520.0</gx:coord>
+      </gx:Track>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,70 @@
+<% content_for :title, t("admin.events.title") %>
+
+<% content_for :page_header do %>
+  <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+  <h1 class="page-title"><%= t("admin.events.title") %></h1>
+<% end %>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <%= form_with url: admin_events_path, method: :get, class: "row g-2 align-items-end" do %>
+      <div class="col-auto">
+        <%= label_tag :kind, t("admin.events.filters.action"), class: "form-label" %>
+        <%= select_tag :kind,
+              options_for_select(
+                [ [ t("admin.events.filters.all"), "" ] ] +
+                  AdminEvent::ACTIONS.map { |value| [ t("admin.events.actions.#{value}"), value ] },
+                @kind
+              ),
+              class: "form-select" %>
+      </div>
+      <div class="col-auto">
+        <%= submit_tag t("admin.events.filters.apply"), class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm card-table">
+      <thead>
+        <tr>
+          <th scope="col"><%= t("admin.events.table.created_at") %></th>
+          <th scope="col"><%= t("admin.events.table.actor") %></th>
+          <th scope="col"><%= t("admin.events.table.action") %></th>
+          <th scope="col"><%= t("admin.events.table.subject") %></th>
+          <th scope="col"><%= t("admin.events.table.metadata") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @events.each do |event| %>
+          <tr>
+            <td class="text-secondary"><%= l(event.created_at, format: :long) %></td>
+            <td class="text-secondary"><%= event.user ? "@#{event.user.username}" : t("admin.events.deleted_actor") %></td>
+            <td><%= t("admin.events.actions.#{event.action}", default: event.action) %></td>
+            <td class="text-secondary">
+              <% if event.subject_type %>
+                <%= t("admin.events.subjects.#{event.subject_type.underscore}", default: event.subject_type) %>
+                <span class="text-secondary">#<%= event.subject_id %></span>
+              <% else %>
+                —
+              <% end %>
+            </td>
+            <td class="text-secondary small text-break">
+              <%= event.metadata.map { |key, value| "#{key}: #{value}" }.join(" · ") %>
+            </td>
+          </tr>
+        <% end %>
+        <% if @events.empty? %>
+          <tr><td colspan="5" class="text-secondary"><%= t("admin.events.empty") %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if @pagy.pages > 1 %>
+    <div class="card-footer d-flex justify-content-center">
+      <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
+  <% end %>
+</div>

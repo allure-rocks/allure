@@ -1,0 +1,49 @@
+<% content_for :title, t("settings.elevation.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.elevation.title") } do %>
+
+  <% if Allure::Elevation::Config.configured? %>
+    <%= form_with model: @user, url: settings_elevation_path, method: :patch do |form| %>
+      <%= render "shared/form_errors", form: form %>
+
+      <div class="card mb-3">
+        <div class="card-header">
+          <h2 class="card-title h3"><%= t("settings.elevation.enrichment_title") %></h2>
+        </div>
+        <div class="card-body">
+          <label class="form-check form-switch">
+            <%= form.check_box :elevation_enrichment_enabled, class: "form-check-input", role: "switch" %>
+            <span class="form-check-label"><%= t("settings.elevation.enrichment_label") %></span>
+          </label>
+          <small class="form-text"><%= t("settings.elevation.enrichment_hint") %></small>
+
+          <p class="text-secondary mt-3 mb-0">
+            <%= t("settings.elevation.privacy", provider: Allure::Elevation::Config.base_url) %>
+          </p>
+          <p class="text-secondary mt-2 mb-0"><%= t("settings.elevation.segments_privacy") %></p>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4 text-secondary fw-normal"><%= t("settings.elevation.provider") %></dt>
+            <dd class="col-sm-8 mb-2"><%= Allure::Elevation::Config.base_url %></dd>
+            <dt class="col-sm-4 text-secondary fw-normal"><%= t("settings.elevation.dataset") %></dt>
+            <dd class="col-sm-8 mb-0"><%= Allure::Elevation::Config.dataset %></dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <%= form.submit t("settings.elevation.save"), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="card">
+      <div class="card-body text-secondary">
+        <i class="ti ti-mountain me-1" aria-hidden="true"></i><%= t("settings.elevation.not_configured") %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

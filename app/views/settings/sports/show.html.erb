@@ -1,0 +1,37 @@
+<% content_for :title, t("settings.sports.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.sports.title") } do %>
+
+  <%= form_with model: @user, url: settings_sports_path, method: :patch do |form| %>
+    <%= render "shared/form_errors", form: form %>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.sports.card_title") %></h2>
+      </div>
+      <div class="card-body">
+        <p class="text-secondary"><%= t("settings.sports.intro") %></p>
+
+        <% User::SPORT_DEFAULT_KEYS.each do |generic_slug, attribute| %>
+          <% generic = Sport.find_by(slug: generic_slug) %>
+          <% next unless generic %>
+
+          <div class="mb-3">
+            <%= form.label :"#{attribute}_id", sport_display_name(generic), class: "form-label" %>
+            <%= form.select :"#{attribute}_id",
+                  sport_default_options_for(generic_slug),
+                  { selected: form.object.public_send(:"#{attribute}_id") || generic.id },
+                  class: "form-select" %>
+            <small class="form-text">
+              <%= t("settings.sports.hint", sport: sport_display_name(generic)) %>
+            </small>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <%= form.submit t("settings.sports.save"), class: "btn btn-primary" %>
+    </div>
+  <% end %>
+<% end %>

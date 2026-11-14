@@ -1,0 +1,22 @@
+fr:
+  dev_tools:
+    pretitle: Développement
+    menu: Agir en tant que…
+    bar:
+      copy: "Mode développement : vous agissez en tant que @%{username}."
+      stop: Revenir à @%{operator}
+    impersonations:
+      show:
+        title: Agir en tant que…
+        accounts: Comptes
+        intro: "Ouvre une session à la place de ce compte, sans mot de passe ni double authentification. Le bouton du bandeau ramène ensuite au compte de l'opérateur."
+        start: Agir en tant que
+        start_aria: Agir en tant que @%{username}
+        empty: Aucun autre compte à ouvrir.
+        more: Seuls les %{limit} premiers comptes sont listés.
+      create:
+        started: "Vous agissez en tant que @%{username}."
+        self_refused: Vous êtes déjà ce compte.
+        suspended_refused: Un compte suspendu ne peut pas être ouvert.
+      destroy:
+        stopped: "Vous agissez à nouveau en tant que @%{username}."

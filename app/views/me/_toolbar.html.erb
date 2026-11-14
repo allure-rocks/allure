@@ -1,0 +1,4 @@
+<%= render "shared/sport_period_toolbar", path: me_path, period: @period, periods: MeController::PERIODS,
+           sport_param: :sport_id, selected_sport: @filter_sport&.id,
+           sports: @practiced_sports.map { |sport| { sport:, key: sport.id } },
+           selector_sports: @selector_sports.map { |entry| entry.merge(key: entry[:sport].id) } %>

@@ -1,0 +1,342 @@
+<% reader_preview = @reader_preview.present? %>
+<% owner = @workout.user == current_user && !reader_preview %>
+<% participant = !owner && !reader_preview && @participant_participation.present? %>
+<%# The credited metrics-only presentation applies only while the source is
+    unpublished; a participant of a published source reads the standard
+    publication presentation, as any reader (PLAN_TOGETHER.md §4/§10). %>
+<% participant_metrics_only = participant && !@publication %>
+<% publication_view = @display_workout.is_a?(Workouts::PublicationView) %>
+<% device_name = owner ? @workout.source : (publication_view ? @display_workout.device : nil) %>
+<%# The owner's map needs a track: a positionless recording has none
+    (PLAN_NO_GPS.md §9). A publication always carries one. %>
+<% map_visible = (owner && @workout.positioned?) || (publication_view && @display_workout.map_visible?) %>
+<% public_segment_count = if owner
+     @workout.track_segments.size
+   elsif publication_view
+     Array(@display_workout.track&.fetch("features", nil)).size
+   else
+     0
+   end %>
+<% metric_items_present = owner || participant_metrics_only || @display_workout.metrics_present? %>
+<% elevation_notice = owner ? workout_elevation_notice(@workout) : nil %>
+<% summary_visible = metric_items_present || elevation_notice.present? %>
+<% description = participant_metrics_only ? nil : @display_workout.description %>
+<% notes = owner ? @workout.notes : nil %>
+<% profile_visible = owner || (publication_view && @display_workout.chart_visible?) %>
+<% split_layout = map_visible && (summary_visible || description.present? || notes.present? || profile_visible) %>
+<% preview_params = reader_preview ? { as: :publication, audience: @publication.audience } : {} %>
+<% track_url = reader_preview ? workout_track_path(@workout, **preview_params) : nil %>
+<% anomalies = owner ? workout_anomalies(@workout) : [] %>
+<% anomaly_notes = owner ? workout_anomaly_notes(@workout) : {} %>
+<%# The owner reads the stored weather and its states; a reader reads the
+    summary the publication froze, when its profile shared it
+    (PLAN_WEATHER.md §6). %>
+<% device_temperature = owner ? workout_device_temperature(@workout) : nil %>
+<% weather_state = owner ? workout_weather_state(@workout, device_temperature:) : nil %>
+<% reader_weather = !owner && !participant_metrics_only && publication_view ? @display_workout.weather : nil %>
+<% header_weather = weather_state == :ready ? @workout.weather.summary : reader_weather %>
+<%# The owner's preview reads the page as a reader would, without the thread. %>
+<% comment_card = reader_preview ? nil : comment_card_for(@workout) %>
+<%# The owner's own photos on their map and profile (PLAN_PHOTOS.md §7);
+    never on a reader's page or the owner's reader preview. %>
+<%# A reader, and the owner's reader preview, see the photos the
+    publication froze, placed only by their shared distance. %>
+<% reader_photos = publication_view && !participant_metrics_only && @display_workout.photos_visible? %>
+<% photo_markers = if owner
+     Allure::Photos::Config.enabled? && @workout.positioned? ? workout_photo_markers(@workout) : nil
+   elsif reader_photos
+     publication_photo_markers(@display_workout).presence
+   end %>
+<% content_for :title, @display_workout.title.presence || t("workouts.show.title") %>
+
+<% content_for :page_header do %>
+  <%# The workout header (DESIGN.md §20.3): the sport tile leads the title,
+      the sport and date sit right under it, the places and the badges follow
+      from the left margin, and the owner's actions (Publish, ⋯) stay at the
+      top right — beside the title on phones too. %>
+  <div class="allure-workout-header">
+    <div class="allure-workout-header__top">
+      <div class="allure-workout-header__identity d-flex align-items-start gap-3">
+        <%= sport_tile_tag(@display_workout.sport, size: :md) %>
+        <div>
+          <h1 class="page-title"><%= workout_display_title(@display_workout) %></h1>
+          <% unless owner || reader_preview %>
+            <div class="text-secondary small mt-1">
+              <%= t("workouts.show.by_author_html", author: link_to(@display_workout.user.display_name, profile_path(@display_workout.user.username))) %>
+            </div>
+          <% end %>
+          <div class="allure-workout-header__when text-secondary small mt-1">
+            <%= sport_display_name(@display_workout.sport) %> · <%= format_started_at(@display_workout.started_at) %>
+          </div>
+        </div>
+      </div>
+      <% if owner %>
+        <div class="allure-workout-header__actions d-print-none">
+          <div class="btn-list flex-nowrap align-items-end align-items-md-center">
+            <%# A positionless recording is not publishable yet: the sharing
+                card states it instead of offering the form. %>
+            <% if @active_publications.empty? && @scheduled_publications.empty? && @workout.positioned? %>
+              <%= link_to t("workouts.publication.publish"), "#section-sharing", class: "btn btn-primary" %>
+            <% end %>
+            <%= link_to t("workouts.show.edit"), edit_workout_path(@workout), class: "btn btn-outline-primary d-none d-md-inline-flex" %>
+            <div class="dropdown">
+              <button class="btn btn-outline-secondary btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="<%= t("workouts.show.actions.menu") %>">
+                <i class="ti ti-dots" aria-hidden="true"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <%= link_to t("workouts.show.edit"), edit_workout_path(@workout), class: "dropdown-item d-md-none" %>
+                <%# A positionless recording has no geometry to cut a course
+                    from, to draw, or to sample for terrain elevation
+                    (PLAN_NO_GPS.md §9). %>
+                <% if @workout.positioned? %>
+                  <%= link_to t("workouts.show.create_segment"), new_workout_segment_path(@workout), class: "dropdown-item" %>
+                  <%= link_to t("workouts.show.save_as_route"), new_workout_route_path(@workout), class: "dropdown-item" %>
+                <% end %>
+                <% if @workout.original_file.attached? %>
+                  <div class="dropdown-divider"></div>
+                  <%= link_to workout_original_file_path(@workout), class: "dropdown-item",
+                              data: { controller: "bridge--download", bridge__download_url_value: workout_original_file_path(@workout) } do %>
+                    <i class="ti ti-download me-2" aria-hidden="true"></i><%= t("workouts.show.download_file") %>
+                  <% end %>
+                <% end %>
+                <% if @workout.positioned? %>
+                  <div class="dropdown-divider"></div>
+                  <%= button_to t("workouts.route_image.regenerate"), workout_regenerate_route_image_path(@workout),
+                                class: "dropdown-item",
+                                form: { data: { turbo_frame: "_top" } } %>
+                  <% if elevation_source_control?(@workout) %>
+                    <div class="dropdown-divider"></div>
+                    <% elevation_source_target = @workout.elevation_source == "dem" ? "device" : "dem" %>
+                    <% if @workout.elevation_source_requested.present? %>
+                      <span class="dropdown-item-text text-secondary small d-flex align-items-center gap-1">
+                        <i class="ti ti-loader" aria-hidden="true"></i><%= t("workouts.elevation.pending") %>
+                      </span>
+                    <% else %>
+                      <% if @workout.elevation&.failed? %>
+                        <span class="dropdown-item-text text-warning small">
+                          <i class="ti ti-alert-triangle me-1" aria-hidden="true"></i><%= t("workouts.elevation.failed") %>
+                        </span>
+                      <% elsif @workout.elevation&.unavailable? %>
+                        <span class="dropdown-item-text text-warning small">
+                          <i class="ti ti-map-off me-1" aria-hidden="true"></i><%= t("workouts.elevation.unavailable") %>
+                        </span>
+                      <% end %>
+                      <%= button_to t("workouts.elevation.menu.switch_to_#{elevation_source_target}"), workout_elevation_source_path(@workout),
+                                    method: :patch, params: { elevation_source: elevation_source_target },
+                                    class: "dropdown-item" %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+                <div class="dropdown-divider"></div>
+                <%= button_to workout_path(@workout), method: :delete,
+                              form: { data: { confirm_title: t("workouts.show.confirm.title"), confirm_body: t("workouts.show.confirm.body"), confirm_verb: t("workouts.show.confirm.verb") } },
+                              class: "dropdown-item text-danger" do %>
+                  <i class="ti ti-trash me-2" aria-hidden="true"></i><%= t("workouts.show.delete") %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <% place_label = owner ? workout_place_label(@workout) : nil %>
+    <% if place_label.present? %>
+      <div class="allure-workout-header__places text-secondary small mt-2 d-flex align-items-center gap-1">
+        <i class="ti ti-map-pin" aria-hidden="true"></i><%= place_label %>
+      </div>
+    <% end %>
+
+    <% badges = capture do %>
+      <% if owner %>
+        <%= workout_publication_badges(@workout) %>
+      <% elsif @publication %>
+        <%= publication_badge(@publication.audience) %>
+      <% end %>
+      <% if participant %>
+        <%= together_badge(participation_badge_text(@workout)) %>
+      <% end %>
+      <%# Done together shows on both workouts (DESIGN.md §10.18): the source
+          names each confirmed participant, the owner's own recording the
+          source it is linked to. %>
+      <% if owner %>
+        <%= owner_together_badges(@workout) %>
+      <% end %>
+      <% held_labels = if owner
+           held_record_labels(@records_held, @effort_records_held, sport: @workout.sport)
+         elsif participant_metrics_only
+           []
+         else
+           snapshot_record_labels(@display_workout.record_types, @display_workout.record_distances)
+         end %>
+      <%= render "record_badge", labels: held_labels %>
+      <% if owner ? @workout.commute? : (!participant_metrics_only && publication_view && @display_workout.commute) %>
+        <%= render "commute_badge" %>
+      <% end %>
+      <%# The owner's own recording imported without a GPS position
+          (PLAN_NO_GPS.md §9). It never appears on a publication: a
+          positionless workout is not publishable yet. %>
+      <% if owner && @workout.recording? && !@workout.positioned? %>
+        <span class="badge bg-secondary-lt">
+          <i class="ti ti-map-off me-1" aria-hidden="true"></i><%= t("workouts.show.no_position") %>
+        </span>
+      <% end %>
+      <% if header_weather %>
+        <%= render "weather/badge", summary: header_weather, href: "#section-weather" %>
+      <% end %>
+      <% if device_name.present? %>
+        <span class="text-secondary d-inline-flex align-items-center gap-1">
+          <i class="ti ti-device-watch" aria-hidden="true"></i><%= device_name %>
+        </span>
+      <% end %>
+    <% end %>
+    <% if badges.strip.present? %>
+      <div class="page-pretitle d-flex flex-wrap align-items-center gap-2 mt-2"><%= badges %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if owner %>
+  <% open_link_suggestions_for(@workout).each do |suggestion| %>
+    <%= render "workout_participations/link_suggestion", participation: suggestion %>
+  <% end %>
+  <% open_route_suggestions_for(@workout).each do |suggestion| %>
+    <%= render "route_suggestions/banner", suggestion: suggestion %>
+  <% end %>
+<% end %>
+
+<% if reader_preview %>
+  <div class="alert alert-info d-flex flex-wrap align-items-center gap-2 mb-3" role="note">
+    <i class="ti ti-eye" aria-hidden="true"></i>
+    <span class="me-auto"><%= t("workouts.reader_preview.notice") %></span>
+    <%= link_to t("workouts.reader_preview.back"), workout_path(@workout), class: "btn btn-sm btn-outline-info" %>
+  </div>
+<% end %>
+
+<%# Map first: it leads the single column on phones and tablets, and becomes
+    the sticky left rail from `lg` up, beside the summary and the analysis
+    (DESIGN.md §20.3). %>
+<div class="<%= class_names("allure-detail-layout", "allure-detail-layout--split": split_layout) %>">
+  <% if map_visible %>
+    <div class="allure-detail-map">
+      <section id="section-map" class="allure-detail-section allure-detail-map-panel">
+        <%= render "map", workout: @workout, display: @display_workout, segment_count: public_segment_count,
+                          anomalies: anomaly_map_payload(anomalies), photos: photo_markers,
+                          **(track_url ? { track_url: } : {}) %>
+      </section>
+    </div>
+  <% end %>
+
+  <div class="allure-detail-before-map">
+    <% if summary_visible %>
+      <section id="section-summary" class="allure-detail-section">
+        <% if participant_metrics_only %>
+          <%= render "participant_metrics", workout: @workout %>
+        <% else %>
+          <% metric_record_labels = if owner
+               record_labels_by_metric_key(@records_held, sport: @workout.sport)
+             else
+               record_labels_from_types(@display_workout.record_types)
+             end %>
+          <%= render "metrics", workout: @display_workout, show_description: false, collapsible: true,
+                                record_labels: metric_record_labels,
+                                anomaly_notes:,
+                                elevation_notice: %>
+        <% end %>
+      </section>
+    <% end %>
+    <%# Reactions and, on phones, the way to the thread follow the figures
+        (DESIGN.md §10.17, §20.3). %>
+    <%= render "comments/social_row", target: @workout, card: comment_card,
+                                      reaction_summary: (reaction_summary_for(@workout) if @active_publications.any?),
+                                      reactable: signed_in? && !owner && !reader_preview %>
+    <%= render "description", description:, notes: %>
+  </div>
+
+  <div class="allure-detail-after-map">
+    <% if owner %>
+      <section id="section-profile" class="allure-detail-section">
+        <% if @workout.min_elevation || @workout.max_elevation || @chart_available_series.any? %>
+          <%# A positionless recording has no places to mark and no distances
+              to place its findings at (PLAN_NO_GPS.md §9). %>
+          <%= render "elevation_chart", workout: @workout, display: @display_workout, table_points: @chart_table,
+                                        available_series: @chart_available_series, configurable: true,
+                                        toponymy: @workout.positioned?, photos: photo_markers,
+                                        anomalies: @workout.positioned? ? anomaly_chart_payload(anomalies) : [] %>
+        <% else %>
+          <div class="card mb-3">
+            <div class="card-header"><h2 class="card-title"><%= t("workouts.show.chart.title") %></h2></div>
+            <div class="card-body text-secondary">
+              <i class="ti ti-chart-area-line me-1" aria-hidden="true"></i><%= t("workouts.show.chart.unavailable") %>
+            </div>
+          </div>
+        <% end %>
+      </section>
+    <% elsif profile_visible %>
+      <section id="section-profile" class="allure-detail-section">
+        <%= render "elevation_chart", workout: @workout, display: @display_workout, table_points: @chart_table,
+                                      available_series: @chart_available_series,
+                                      **(reader_preview ? { chart_url: workout_chart_path(@workout, **preview_params) } : {}) %>
+      </section>
+    <% end %>
+
+    <% if owner && (@segment_efforts.any? || @laps.any? || @detected_laps.any? || @climbs.any? || @descents.any? || @stops.any? || @intervals.any? || @splits.any? || @best_efforts.any? || anomalies.any? || workout_weather_rows(@workout).any? || workout_heart_rate_zones(@workout)) %>
+      <section id="section-laps" class="allure-detail-section">
+        <%= render "laps", workout: @workout, laps: @laps, detected_laps: @detected_laps,
+                           climbs: @climbs, descents: @descents, stops: @stops,
+                           intervals: @intervals, splits: @splits, efforts: @segment_efforts,
+                           segment_ranks: @segment_ranks,
+                           segment_places: @segment_effort_places,
+                           segment_gaps: @segment_effort_gaps,
+                           best_efforts: @best_efforts,
+                           best_effort_places: @best_effort_places,
+                           max_climb_lap: @max_climb_lap,
+                           anomalies: %>
+      </section>
+    <% end %>
+
+    <%# The weather follows the analysis (DESIGN.md §20.3). %>
+    <% if weather_state %>
+      <section id="section-weather" class="allure-detail-section">
+        <%= render "weather/card", summary: @workout.weather&.summary, state: weather_state, workout: @workout,
+                                   device_temperature: %>
+      </section>
+    <% elsif reader_weather %>
+      <section id="section-weather" class="allure-detail-section">
+        <%= render "weather/card", summary: reader_weather %>
+      </section>
+    <% end %>
+  </div>
+</div>
+
+<div class="allure-detail-fullwidth">
+  <% if reader_photos %>
+    <%= render "workout_photos/publication_gallery", view: @display_workout %>
+  <% end %>
+  <% if owner %>
+    <% if Allure::Photos::Config.enabled? %>
+      <%= render "workout_photos/card", workout: @workout %>
+    <% end %>
+    <%= render "comments/section", target: @workout, card: comment_card %>
+
+    <section id="section-sharing" class="allure-detail-section">
+      <%= render "sharing", workout: @workout, active_publications: @active_publications,
+                            scheduled_publications: @scheduled_publications,
+                            profiles: @profiles, readiness: @publication_readiness,
+                            delivery_summaries: @delivery_summaries,
+                            auto_publications: @auto_publications %>
+    </section>
+
+    <section id="section-participants" class="allure-detail-section">
+      <%= render "workout_participations/card", workout: @workout, participation: nil %>
+    </section>
+  <% elsif participant %>
+    <section id="section-participants" class="allure-detail-section">
+      <%= render "workout_participations/card", workout: @workout, participation: @participant_participation %>
+    </section>
+
+    <%= render "comments/section", target: @workout, card: comment_card %>
+  <% elsif !reader_preview %>
+    <%= render "comments/section", target: @workout, card: comment_card %>
+  <% end %>
+</div>

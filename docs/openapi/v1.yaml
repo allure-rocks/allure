@@ -1,0 +1,3261 @@
+openapi: 3.1.0
+info:
+  title: Allure REST API
+  # Replaced at request time by the application version (PLAN_API.md §3).
+  version: "0"
+  summary: Read and manage your Allure workouts from your own programs.
+  description: |
+    The Allure REST API gives programs you write — scripts, automations,
+    dashboards — access to **your own account** on this Allure instance.
+
+    ## Authentication
+
+    Create an API token in **Settings → API et webhooks** and send it with every
+    request:
+
+    ```
+    Authorization: Bearer allure_pat_…
+    ```
+
+    A token carries the permissions (scopes) you tick when you create it; an
+    operation names the scope it needs. Tokens expire after at most a year and
+    can be revoked at any time. The secret is shown once.
+
+    ## Privacy
+
+    The API never shows more than the website does. Your own workouts are yours
+    in full; nothing about another account is reachable here except what that
+    account published to you.
+
+    ## Conventions
+
+    - **Units** are SI, exactly as stored: metres, seconds, metres per second,
+      beats per minute, watts. Pace is never pre-computed; a sport's
+      `pace_basis_metres` tells you over which distance its pace is shown.
+    - **Instants** are RFC 3339 in UTC. **Durations** are whole seconds.
+    - **Coordinates** are GeoJSON `[longitude, latitude]`.
+    - **Identifiers** are opaque 22-character strings.
+    - **Lists** are paginated with an opaque cursor: pass `next_cursor` back as
+      `cursor` until it is `null`.
+    - **Errors** are [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) problem
+      documents; branch on `code`.
+    - **Enumerations** are open: tolerate values you do not know.
+    - **Rate limits**: 300 requests per minute per token, 60 of them writes,
+      and 20 imports per hour. Over the limit you get `429` with `Retry-After`.
+    - **Retries**: send an `Idempotency-Key` header with a `POST`. A retry
+      with the same key and the same request gets the first response back,
+      marked `Idempotency-Replayed: true`, for 24 hours.
+  license:
+    name: AGPL-3.0-or-later
+    identifier: AGPL-3.0-or-later
+servers:
+  # Replaced at request time by this instance's URL.
+  - url: /api/rest/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: Account
+    description: The account the token belongs to, and the sport catalog.
+  - name: Workouts
+    description: Your workouts, their tracks, original files and analysis.
+  - name: Records
+    description: Your personal records.
+  - name: Imports
+    description: |
+      Import GPX, FIT, TCX or KML files, ZIP archives or single-file GZIP
+      sources. An import answers `202` as soon as the files are stored; poll
+      it until its `status` is `completed`, `failed` or `cancelled`. Imports
+      follow the website's rules: duplicates are skipped, and an automatic
+      publishing profile publishes recent imports of up to five files.
+  - name: Equipment
+    description: Your gear and its lifetime totals.
+  - name: Publishing
+    description: |
+      Your publishing profiles and your workouts' publications. Publishing
+      follows the website's rules exactly: the profile decides what is
+      shared, your privacy zones are applied, a profile's safety delay holds
+      the publication before anyone sees it, and a workout has at most one
+      live publication per audience. Show your user what will be shared — the
+      preview's `copy` — before you publish: copies other instances receive
+      cannot be recalled.
+  - name: Social
+    description: |
+      What other accounts published to you, exactly as the website shows it:
+      the feed, a publication or a received note, its comments and reactions,
+      and your followers and the accounts you follow. Read-only: commenting,
+      reacting and following stay on the website. Everything is built from
+      what was published — a field the author's profile did not share is
+      absent, never `null` — and something you cannot read on the website is
+      a `404` here.
+  - name: Webhooks
+    description: |
+      A webhook is an HTTPS address of yours that Allure calls when something
+      happens on your account. Each call is a `POST` of a JSON envelope —
+      `{ id, type, created_at, api_version, data }` — signed as
+      [Standard Webhooks](https://www.standardwebhooks.com/) specifies, so
+      any of its libraries verifies it:
+
+      - `webhook-id` is the envelope's `id`, the same for every retry;
+      - `webhook-timestamp` is the Unix time of this attempt;
+      - `webhook-signature` is `v1,` followed by the Base64
+        HMAC-SHA256 of `<webhook-id>.<webhook-timestamp>.<body>`, keyed with
+        the Base64-decoded part of your secret after `whsec_`. After a secret
+        rotation, two signatures are sent, space-separated, for 24 hours.
+
+      Refuse a timestamp more than 5 minutes away from your clock. Answer
+      `2xx` quickly; anything else is retried after 1 min, 5 min, 30 min,
+      2 h, 6 h and 12 h. `410 Gone` disables the webhook at once, and a
+      webhook failing for 3 days and 20 calls in a row is disabled. Delivery
+      is at least once and unordered: deduplicate by `id`, order by
+      `created_at`. Redirects are not followed. Payloads never carry a track
+      or a file. The events are listed under **Webhooks** below.
+  - name: Problems
+    description: |
+      Every error is an RFC 9457 problem document with a stable `code`:
+
+      | code | status | meaning |
+      |---|---|---|
+      | `missing_token` | 401 | No `Authorization: Bearer` header. |
+      | `invalid_token` | 401 | The token is unknown, revoked or expired. |
+      | `account_suspended` | 403 | The account is suspended. |
+      | `account_deletion_scheduled` | 403 | The account is scheduled for deletion; it can only cancel it on the website. |
+      | `second_factor_required` | 403 | The account must set up two-step verification on the website first. |
+      | `insufficient_scope` | 403 | The token lacks the operation's scope. |
+      | `not_found` | 404 | No such resource, or not visible to this token. |
+      | `invalid_parameter` | 400 | A parameter is malformed or unknown. |
+      | `invalid_cursor` | 400 | The cursor is malformed or belongs to another ordering. |
+      | `validation_failed` | 422 | Some fields were refused; `errors` lists them. |
+      | `sport_change_failed` | 422 | The workout could not be analysed again for the new sport; nothing changed. |
+      | `credited_workout` | 422 | The workout is another account's activity credited to you: it can only be deleted. |
+      | `import_finished` | 409 | The import has already finished. |
+      | `import_limit` | 429 | Too many imports are waiting, or the day's upload budget is spent; `reason` says which and `Retry-After` when to try again. |
+      | `idempotency_key_reused` | 422 | The `Idempotency-Key` was used with a different request. |
+      | `idempotency_key_in_progress` | 409 | A request with this `Idempotency-Key` is still running. |
+      | `acknowledgement_required` | 422 | Publishing needs `acknowledge: true`. |
+      | `publication_refused` | 422 | The workout cannot be published with this profile; `reason` says why. |
+      | `not_scheduled` | 409 | Only a scheduled publication can be activated or rescheduled. |
+      | `webhook_inactive` | 409 | The webhook is paused or disabled. |
+      | `rate_limited` | 429 | Too many requests; see `Retry-After`. |
+
+paths:
+  /me:
+    get:
+      operationId: getMe
+      tags: [Account]
+      summary: Get the account
+      description: The account the token belongs to, and the token itself. Any scope.
+      x-allure-scope: any
+      responses:
+        "200":
+          description: The account.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Me" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /sports:
+    get:
+      operationId: listSports
+      tags: [Account]
+      summary: List sports
+      description: The sport catalog, in display order, with labels in every locale. Any scope.
+      x-allure-scope: any
+      responses:
+        "200":
+          description: The sports.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/Sport" }
+        "304": { $ref: "#/components/responses/NotModified" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts:
+    get:
+      operationId: listWorkouts
+      tags: [Workouts]
+      summary: List workouts
+      description: Your workouts, newest first by default, with the website's filters.
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+        - name: sort
+          in: query
+          description: Ordering; a leading `-` sorts descending.
+          schema:
+            type: string
+            enum: [-started_at, started_at, -distance, distance, -duration, duration, -ascent, ascent]
+            default: -started_at
+        - name: sport
+          in: query
+          description: Comma-separated sport slugs.
+          schema: { type: string, examples: ["cycling_gravel,running"] }
+        - name: from
+          in: query
+          description: First start date, inclusive, in the account's time zone.
+          schema: { type: string, format: date }
+        - name: to
+          in: query
+          description: Last start date, inclusive, in the account's time zone.
+          schema: { type: string, format: date }
+        - name: commute
+          in: query
+          description: Only commutes (`true`) or only other workouts (`false`).
+          schema: { type: boolean }
+        - name: published
+          in: query
+          description: Only workouts with (`true`) or without (`false`) a live publication.
+          schema: { type: boolean }
+        - name: equipment
+          in: query
+          description: Only workouts using this piece of equipment.
+          schema: { $ref: "#/components/schemas/Id" }
+        - name: place
+          in: query
+          description: A place name the workout passed, matched case-insensitively.
+          schema: { type: string, maxLength: 120 }
+        - name: q
+          in: query
+          description: Text searched in titles and descriptions.
+          schema: { type: string }
+      responses:
+        "200":
+          description: A page of workouts.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, next_cursor]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/WorkoutSummary" }
+                  next_cursor: { $ref: "#/components/schemas/NextCursor" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    post:
+      operationId: createWorkout
+      tags: [Workouts]
+      summary: Enter a workout by hand
+      description: |
+        Creates a manual entry, as the website's « Manual entry » import
+        source: a workout with no file, no track and only the figures you send
+        (`origin: manual`). It counts in your totals, statistics and equipment
+        wear, but never in your records, best efforts or segments, and it
+        cannot be published. An `ascent` for a sport that measures no
+        elevation (a swim, a strength session) is refused. To import a file,
+        use `POST /imports`.
+      x-allure-scope: write
+      security:
+        - bearerAuth: [write]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ManualWorkoutCreate" }
+      responses:
+        "201":
+          description: The manual entry.
+          headers:
+            Location:
+              description: The workout's URL.
+              schema: { type: string, format: uri }
+            Idempotency-Replayed: { $ref: "#/components/headers/IdempotencyReplayed" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Workout" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{id}:
+    parameters:
+      - $ref: "#/components/parameters/WorkoutId"
+    get:
+      operationId: getWorkout
+      tags: [Workouts]
+      summary: Get a workout
+      description: One of your workouts, with its owner-only analysis detail.
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: The workout.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Workout" }
+        "304": { $ref: "#/components/responses/NotModified" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    patch:
+      operationId: updateWorkout
+      tags: [Workouts]
+      summary: Update a workout
+      description: |
+        Changes the fields you send, and only those: the website's edit form.
+        A new `sport` analyses the workout again from its original file, as on
+        the website; if that fails, nothing changes (`sport_change_failed`).
+        `equipment_ids` replaces the workout's equipment; inactive equipment
+        already on the workout stays, and is not added otherwise. A workout
+        credited to you from another account's recording cannot be changed
+        (`credited_workout`). A manual entry also takes its figures
+        (`started_at`, `elapsed_time`, `moving_time`, `distance`, `ascent`,
+        `average_heart_rate`, `max_heart_rate`, `calories`, `average_power`);
+        its new `sport` analyses nothing. A recording's figures are measured
+        from its file and are refused with `not_editable`.
+      x-allure-scope: write
+      security:
+        - bearerAuth: [write]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WorkoutUpdate" }
+      responses:
+        "200":
+          description: The updated workout.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Workout" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    delete:
+      operationId: deleteWorkout
+      tags: [Workouts]
+      summary: Delete a workout
+      description: |
+        Deletes the workout and its original file, as the website does. Its
+        live publications are deleted too, and the instances they reached are
+        told; a scheduled publication is cancelled. This cannot be undone.
+      x-allure-scope: write
+      security:
+        - bearerAuth: [write]
+      responses:
+        "204":
+          description: Deleted.
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{id}/track:
+    parameters:
+      - $ref: "#/components/parameters/WorkoutId"
+    get:
+      operationId: getWorkoutTrack
+      tags: [Workouts]
+      summary: Get a workout's track
+      description: |
+        The recorded track as a GeoJSON FeatureCollection: one `LineString`
+        Feature per recording segment, never joined across a pause. Per-point
+        measurements are parallel arrays in `properties`, aligned with the
+        coordinates; a measurement absent from every point of a segment is
+        omitted for that segment.
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: The track.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+          content:
+            application/geo+json:
+              schema: { $ref: "#/components/schemas/Track" }
+        "304": { $ref: "#/components/responses/NotModified" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{id}/original:
+    parameters:
+      - $ref: "#/components/parameters/WorkoutId"
+    get:
+      operationId: getWorkoutOriginal
+      tags: [Workouts]
+      summary: Download the original file
+      description: The GPX, FIT, TCX or KML file the workout was imported from, byte for byte.
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: The original file.
+          headers:
+            Content-Disposition:
+              description: "`attachment` with the original file name."
+              schema: { type: string }
+          content:
+            application/octet-stream:
+              schema: { type: string, description: The file's bytes. }
+            application/gpx+xml:
+              schema: { type: string }
+            application/vnd.ant.fit:
+              schema: { type: string }
+            application/vnd.garmin.tcx+xml:
+              schema: { type: string }
+            application/vnd.google-earth.kml+xml:
+              schema: { type: string }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{id}/laps:
+    parameters:
+      - $ref: "#/components/parameters/WorkoutId"
+    get:
+      operationId: listWorkoutLaps
+      tags: [Workouts]
+      summary: List a workout's laps
+      description: "The laps the device recorded (`source: recorded`), then every lap Allure detected — loops, route repeats, pauses, climbs, descents, stops, speed and power intervals — each with its `source`."
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object, required: [data], properties: { data: { type: array, items: { $ref: "#/components/schemas/Lap" } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{id}/splits:
+    parameters:
+      - $ref: "#/components/parameters/WorkoutId"
+    get:
+      operationId: listWorkoutSplits
+      tags: [Workouts]
+      summary: List a workout's splits
+      description: "Splits over `distance` metres (1000 by default), within each recording segment; the last one may be `partial`."
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      parameters:
+        - name: distance
+          in: query
+          description: Split length in metres (100 to 100000; 1609 for miles).
+          schema: { type: integer, minimum: 100, maximum: 100000, default: 1000 }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object, required: [distance, data], properties: { distance: { type: integer }, data: { type: array, items: { $ref: "#/components/schemas/Split" } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{id}/best_efforts:
+    parameters:
+      - $ref: "#/components/parameters/WorkoutId"
+    get:
+      operationId: listWorkoutBestEfforts
+      tags: [Workouts]
+      summary: List a workout's best efforts
+      description: "The fastest time over each standard distance within the workout, with its personal place among all your efforts over that sport and distance (1 is the record)."
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object, required: [data], properties: { data: { type: array, items: { $ref: "#/components/schemas/BestEffort" } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{id}/segment_efforts:
+    parameters:
+      - $ref: "#/components/parameters/WorkoutId"
+    get:
+      operationId: listWorkoutSegmentEfforts
+      tags: [Workouts]
+      summary: List a workout's segment efforts
+      description: "Every segment the workout matched, with your personal place on it and your rank on its leaderboard when the board ranks you."
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object, required: [data], properties: { data: { type: array, items: { $ref: "#/components/schemas/SegmentEffort" } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /records:
+    get:
+      operationId: listRecords
+      tags: [Records]
+      summary: List personal records
+      description: "Your records per sport, as « Mes records » shows them: the classic records (`AP` average pace, `AS` average speed, `BP` best pace, `FD` farthest distance, `HA` highest ascent, `LD` longest moving time, `MS` maximum speed, `MC` biggest climb; SI values) and the best-effort records per standard distance."
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Records" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /imports:
+    get:
+      operationId: listImports
+      tags: [Imports]
+      summary: List imports
+      description: Your imports, newest first, without their entries.
+      x-allure-scope: import or read
+      security:
+        - bearerAuth: [import]
+        - bearerAuth: [read]
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: A page of imports.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, next_cursor]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/ImportSummary" }
+                  next_cursor: { $ref: "#/components/schemas/NextCursor" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    post:
+      operationId: createImport
+      tags: [Imports]
+      summary: Import files
+      description: |
+        Uploads files to import, as the website's import form: at most 1000
+        files and 500 MB in total. `fallback_sport` is the sport of a file that
+        records none. Answers `202` once the files are stored, before any is
+        read; follow the `Location`.
+
+        With `source=strava_archive`, send exactly one Strava archive (the
+        `.zip` Strava sends, up to 2 GB): each activity is imported with its
+        Strava name, type, description, private note, commute flag, gear and
+        photos, and an activity typed in by hand becomes a manual entry.
+        `fallback_sport` is then optional and `notes` is ignored.
+
+        An account may have at most 3 file imports and 1 Strava archive
+        waiting or running, and upload at most 6 GB in 24 hours; beyond that
+        the answer is `429` `import_limit` with a `reason`
+        (`too_many_active_imports`, `archive_in_progress`,
+        `upload_budget_exceeded`). The uploaded files are deleted once the
+        import finishes.
+      x-allure-scope: import
+      security:
+        - bearerAuth: [import]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [files]
+              properties:
+                source:
+                  type: string
+                  enum: [file, strava_archive]
+                  default: file
+                  description: What `files[]` holds.
+                files:
+                  type: array
+                  description: |
+                    GPX, FIT, TCX or KML files, ZIP archives, or single-file
+                    GZIP sources. Send each file as a part named `files[]`, for
+                    example `curl -F "files[]=@ride.fit" -F fallback_sport=cycling`.
+                  items: { type: string, description: The file's bytes. }
+                fallback_sport:
+                  type: string
+                  description: A sport slug from `GET /sports`; required unless `source` is `strava_archive`.
+                  examples: [cycling]
+                notes:
+                  type: string
+                  maxLength: 500
+                  description: A private note on the import.
+      responses:
+        "202":
+          description: The import, queued.
+          headers:
+            Location:
+              description: The import's URL.
+              schema: { type: string, format: uri }
+            Idempotency-Replayed: { $ref: "#/components/headers/IdempotencyReplayed" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Import" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /imports/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The import identifier.
+        schema: { $ref: "#/components/schemas/Id" }
+    get:
+      operationId: getImport
+      tags: [Imports]
+      summary: Get an import
+      description: The import's state and every entry found in its files.
+      x-allure-scope: import or read
+      security:
+        - bearerAuth: [import]
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: The import.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Import" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    delete:
+      operationId: cancelImport
+      tags: [Imports]
+      summary: Cancel an import
+      description: Asks a running import to stop, as the website's cancel. Workouts already imported stay.
+      x-allure-scope: import
+      security:
+        - bearerAuth: [import]
+      responses:
+        "202":
+          description: Cancellation requested.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Import" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{workout_id}/publications:
+    parameters:
+      - $ref: "#/components/parameters/ParentWorkoutId"
+    get:
+      operationId: listWorkoutPublications
+      tags: [Publishing]
+      summary: List a workout's publications
+      description: Its live and scheduled publications, at most one per audience.
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: The publications.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/Publication" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    post:
+      operationId: publishWorkout
+      tags: [Publishing]
+      summary: Publish a workout
+      description: |
+        Publishes the workout with one of your profiles. `acknowledge` must be
+        `true`: it stands for your user having read what the preview says will
+        be shared. With a safety delay the publication is `scheduled` and
+        nobody sees it until it activates; without one it is live at once. A
+        live publication of the same audience is replaced, as the website's
+        Republish does: the old one is deleted and the instances it reached
+        are told. A workout credited to you from another account's recording
+        is never published (`credited_workout`).
+      x-allure-scope: publish
+      security:
+        - bearerAuth: [publish]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [publishing_profile_id, acknowledge]
+              additionalProperties: false
+              properties:
+                publishing_profile_id: { $ref: "#/components/schemas/Id" }
+                delay: { $ref: "#/components/schemas/PublishDelay" }
+                acknowledge:
+                  type: boolean
+                  const: true
+                  description: Your user has read what will be shared and that copies cannot be recalled.
+      responses:
+        "201":
+          description: The new publication.
+          headers:
+            Location:
+              description: The publication's URL.
+              schema: { type: string, format: uri }
+            Idempotency-Replayed: { $ref: "#/components/headers/IdempotencyReplayed" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Publication" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{workout_id}/publication_previews:
+    parameters:
+      - $ref: "#/components/parameters/ParentWorkoutId"
+    post:
+      operationId: previewPublication
+      tags: [Publishing]
+      summary: Preview a publication
+      description: What publishing with the profile would share, whether it can, and the sentences to show your user. Changes nothing.
+      x-allure-scope: publish
+      security:
+        - bearerAuth: [publish]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [publishing_profile_id]
+              additionalProperties: false
+              properties:
+                publishing_profile_id: { $ref: "#/components/schemas/Id" }
+      responses:
+        "200":
+          description: The preview.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PublicationPreview" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /publications/{id}:
+    parameters:
+      - $ref: "#/components/parameters/PublicationId"
+    get:
+      operationId: getPublication
+      tags: [Social]
+      summary: Read a publication
+      description: A publication of this instance, yours or another account's, while it is served to you.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      responses:
+        "200":
+          description: The publication.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ReaderPublication" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    patch:
+      operationId: reschedulePublication
+      tags: [Publishing]
+      summary: Reschedule a publication
+      description: Moves a scheduled publication to another delay, counted from now. What it shares does not change.
+      x-allure-scope: publish
+      security:
+        - bearerAuth: [publish]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [delay]
+              additionalProperties: false
+              properties:
+                delay:
+                  type: string
+                  enum: [immediate, 1_day, 3_days, 1_week, 2_weeks, 1_month]
+                  description: "`immediate` schedules it for now; it activates within moments."
+      responses:
+        "200":
+          description: The rescheduled publication.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Publication" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    delete:
+      operationId: deletePublication
+      tags: [Publishing]
+      summary: Delete or cancel a publication
+      description: |
+        Deletes a live publication: it leaves this instance and a deletion
+        notice goes to the instances that know it; copies they already fetched
+        cannot be recalled. A scheduled publication, which nobody has seen, is
+        cancelled without a trace.
+      x-allure-scope: publish
+      security:
+        - bearerAuth: [publish]
+      responses:
+        "204":
+          description: Deleted or cancelled.
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /publications/{id}/activation:
+    parameters:
+      - $ref: "#/components/parameters/PublicationId"
+    post:
+      operationId: activatePublication
+      tags: [Publishing]
+      summary: Publish a scheduled publication now
+      description: Ends the safety delay early. The publication becomes visible and is delivered at once.
+      x-allure-scope: publish
+      security:
+        - bearerAuth: [publish]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "200":
+          description: The live publication.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Publication" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /feed:
+    get:
+      operationId: getFeed
+      tags: [Social]
+      summary: Read the feed
+      description: |
+        Your feed, newest publication first: your own publications, those of
+        the accounts you follow, the notes other instances sent you, and —
+        with `public=true` — every public publication of this instance. By
+        default `public` is on only while you follow nobody, as on the
+        website.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+        - name: public
+          in: query
+          description: Include this instance's public publications.
+          schema: { type: boolean }
+      responses:
+        "200":
+          description: A page of the feed.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, next_cursor]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/FeedItem" }
+                  next_cursor: { $ref: "#/components/schemas/NextCursor" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /followers:
+    get:
+      operationId: listFollowers
+      tags: [Social]
+      summary: List your followers
+      description: Accounts whose follow request you accepted, local and remote, newest first.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AccountPage" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /following:
+    get:
+      operationId: listFollowing
+      tags: [Social]
+      summary: List the accounts you follow
+      description: Accounts that accepted your follow request, newest first.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AccountPage" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{workout_id}/comments:
+    parameters:
+      - $ref: "#/components/parameters/ParentWorkoutId"
+    get:
+      operationId: listWorkoutComments
+      tags: [Social]
+      summary: Read your workout's comments
+      description: Every thread of your workout — one per audience it was published to — or only `audience`'s, with replies under their comment.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      parameters:
+        - name: audience
+          in: query
+          schema: { type: string, enum: [public, followers] }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object, required: [data], properties: { data: { type: array, items: { $ref: "#/components/schemas/Comment" } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /workouts/{workout_id}/reactions:
+    parameters:
+      - $ref: "#/components/parameters/ParentWorkoutId"
+    get:
+      operationId: getWorkoutReactions
+      tags: [Social]
+      summary: Count your workout's reactions
+      description: How many readers reacted with each type. As on the website, nobody is named.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Reactions" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /publications/{id}/track:
+    parameters:
+      - $ref: "#/components/parameters/PublicationId"
+    get:
+      operationId: getPublicationTrack
+      tags: [Social]
+      summary: Get a publication's track
+      description: The track as published — privacy zones applied, no timestamps — when the profile shares the route.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/geo+json:
+              schema: { type: object, description: A GeoJSON FeatureCollection. }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /publications/{id}/route_image:
+    parameters:
+      - $ref: "#/components/parameters/PublicationId"
+    get:
+      operationId: getPublicationRouteImage
+      tags: [Social]
+      summary: Get a publication's route image
+      description: The route image as published, when the profile shares it.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      parameters:
+        - name: theme
+          in: query
+          description: The light or the dark rendering; the other is served when only one exists.
+          schema: { type: string, enum: [light, dark], default: light }
+      responses:
+        "200":
+          description: OK.
+          content:
+            image/png:
+              schema: { type: string, description: PNG bytes. }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /publications/{id}/comments:
+    parameters:
+      - $ref: "#/components/parameters/PublicationId"
+    get:
+      operationId: listPublicationComments
+      tags: [Social]
+      summary: Read a publication's comments
+      description: The thread of this publication's audience, as the website shows it to you.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object, required: [data], properties: { data: { type: array, items: { $ref: "#/components/schemas/Comment" } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /remote_notes/{id}:
+    parameters:
+      - $ref: "#/components/parameters/RemoteNoteId"
+    get:
+      operationId: getRemoteNote
+      tags: [Social]
+      summary: Read a received note
+      description: A workout another instance sent you, as this instance received it.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RemoteNote" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /remote_notes/{id}/track:
+    parameters:
+      - $ref: "#/components/parameters/RemoteNoteId"
+    get:
+      operationId: getRemoteNoteTrack
+      tags: [Social]
+      summary: Get a received note's track
+      description: The track the origin published.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/geo+json:
+              schema: { type: object, description: A GeoJSON FeatureCollection. }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /remote_notes/{id}/route_image:
+    parameters:
+      - $ref: "#/components/parameters/RemoteNoteId"
+    get:
+      operationId: getRemoteNoteRouteImage
+      tags: [Social]
+      summary: Get a received note's route image
+      description: This instance's cached copy of the origin's route image.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      parameters:
+        - name: theme
+          in: query
+          description: The light or the dark rendering; the other is served when only one exists.
+          schema: { type: string, enum: [light, dark], default: light }
+      responses:
+        "200":
+          description: OK.
+          content:
+            image/png:
+              schema: { type: string, description: PNG bytes. }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /remote_notes/{id}/comments:
+    parameters:
+      - $ref: "#/components/parameters/RemoteNoteId"
+    get:
+      operationId: listRemoteNoteComments
+      tags: [Social]
+      summary: Read a received note's comments
+      description: The thread the origin hosts, as this instance holds it.
+      x-allure-scope: social:read
+      security:
+        - bearerAuth: [social:read]
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object, required: [data], properties: { data: { type: array, items: { $ref: "#/components/schemas/Comment" } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /webhooks:
+    get:
+      operationId: listWebhooks
+      tags: [Webhooks]
+      summary: List webhooks
+      x-allure-scope: webhooks
+      security:
+        - bearerAuth: [webhooks]
+      responses:
+        "200":
+          description: Your webhooks.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/WebhookEndpoint" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    post:
+      operationId: createWebhook
+      tags: [Webhooks]
+      summary: Create a webhook
+      description: At most 10 per account. The response carries the signing secret, which is never shown again.
+      x-allure-scope: webhooks
+      security:
+        - bearerAuth: [webhooks]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookInput"
+                - required: [url, events]
+      responses:
+        "201":
+          description: The webhook, with its secret.
+          headers:
+            Location:
+              schema: { type: string, format: uri }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WebhookEndpointWithSecret" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /webhooks/{id}:
+    parameters:
+      - $ref: "#/components/parameters/WebhookId"
+    get:
+      operationId: getWebhook
+      tags: [Webhooks]
+      summary: Get a webhook
+      x-allure-scope: webhooks
+      security:
+        - bearerAuth: [webhooks]
+      responses:
+        "200":
+          description: The webhook.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WebhookEndpoint" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    patch:
+      operationId: updateWebhook
+      tags: [Webhooks]
+      summary: Update a webhook
+      description: Changes the fields you send. `active` pauses it, or re-enables a webhook Allure disabled.
+      x-allure-scope: webhooks
+      security:
+        - bearerAuth: [webhooks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WebhookInput" }
+      responses:
+        "200":
+          description: The webhook.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WebhookEndpoint" }
+        "422": { $ref: "#/components/responses/Unprocessable" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    delete:
+      operationId: deleteWebhook
+      tags: [Webhooks]
+      summary: Delete a webhook
+      description: Deletes it with its delivery history; what was waiting is not sent.
+      x-allure-scope: webhooks
+      security:
+        - bearerAuth: [webhooks]
+      responses:
+        "204":
+          description: Deleted.
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /webhooks/{id}/ping:
+    parameters:
+      - $ref: "#/components/parameters/WebhookId"
+    post:
+      operationId: pingWebhook
+      tags: [Webhooks]
+      summary: Send a test event
+      description: Sends a `ping` event to this webhook only.
+      x-allure-scope: webhooks
+      security:
+        - bearerAuth: [webhooks]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "202":
+          description: Queued.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [event_id]
+                properties:
+                  event_id: { type: [string, "null"], examples: [evt_8xKq3vN2mPfR7tLwYcBd4h] }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /webhooks/{id}/secret_rotation:
+    parameters:
+      - $ref: "#/components/parameters/WebhookId"
+    post:
+      operationId: rotateWebhookSecret
+      tags: [Webhooks]
+      summary: Rotate the secret
+      description: Returns a new secret, shown once. The old one keeps signing beside it for 24 hours.
+      x-allure-scope: webhooks
+      security:
+        - bearerAuth: [webhooks]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "200":
+          description: The webhook, with its new secret.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WebhookEndpointWithSecret" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /webhooks/{id}/deliveries:
+    parameters:
+      - $ref: "#/components/parameters/WebhookId"
+    get:
+      operationId: listWebhookDeliveries
+      tags: [Webhooks]
+      summary: List deliveries
+      description: The last 30 days, newest first.
+      x-allure-scope: webhooks
+      security:
+        - bearerAuth: [webhooks]
+      parameters:
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: A page of deliveries.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, next_cursor]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/WebhookDelivery" }
+                  next_cursor: { $ref: "#/components/schemas/NextCursor" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /webhook_deliveries/{id}/redelivery:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The delivery to send again.
+        schema: { $ref: "#/components/schemas/Id" }
+    post:
+      operationId: redeliverWebhook
+      tags: [Webhooks]
+      summary: Send a delivery again
+      description: A new delivery of the same event, with the same `webhook-id`.
+      x-allure-scope: webhooks
+      security:
+        - bearerAuth: [webhooks]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "202":
+          description: The new delivery.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/WebhookDelivery" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /equipment:
+    get:
+      operationId: listEquipment
+      tags: [Equipment]
+      summary: List equipment
+      description: All your equipment, active first.
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: The equipment.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/Equipment" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /equipment/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The equipment identifier.
+        schema: { $ref: "#/components/schemas/Id" }
+    get:
+      operationId: getEquipment
+      tags: [Equipment]
+      summary: Get a piece of equipment
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: The equipment.
+          headers:
+            ETag: { $ref: "#/components/headers/ETag" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Equipment" }
+        "304": { $ref: "#/components/responses/NotModified" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /publishing_profiles:
+    get:
+      operationId: listPublishingProfiles
+      tags: [Publishing]
+      summary: List publishing profiles
+      description: Your publishing profiles, in the website's order.
+      x-allure-scope: read
+      security:
+        - bearerAuth: [read]
+      responses:
+        "200":
+          description: The profiles.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/PublishingProfile" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+webhooks:
+  ping:
+    post:
+      operationId: "ping_event"
+      summary: ping
+      description: "A test, sent by `POST /webhooks/{id}/ping`."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "ping" }
+                    data: { $ref: "#/components/schemas/PingData" }
+      responses:
+        "2XX":
+          description: Received.
+  workout.created:
+    post:
+      operationId: "workout_created_event"
+      summary: workout.created
+      description: "A workout was imported (never for a duplicate)."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "workout.created" }
+                    data: { $ref: "#/components/schemas/WorkoutEventData" }
+      responses:
+        "2XX":
+          description: Received.
+  workout.analyzed:
+    post:
+      operationId: "workout_analyzed_event"
+      summary: workout.analyzed
+      description: "Every enrichment of an import settled — elevation, segments, places, route image — once per analysis version."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "workout.analyzed" }
+                    data: { $ref: "#/components/schemas/WorkoutEventData" }
+      responses:
+        "2XX":
+          description: Received.
+  workout.updated:
+    post:
+      operationId: "workout_updated_event"
+      summary: workout.updated
+      description: "You changed a workout's title, description, notes, sport, commute or equipment, on the website, here or in bulk."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "workout.updated" }
+                    data: { $ref: "#/components/schemas/WorkoutUpdatedData" }
+      responses:
+        "2XX":
+          description: Received.
+  workout.deleted:
+    post:
+      operationId: "workout_deleted_event"
+      summary: workout.deleted
+      description: "A workout was deleted."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "workout.deleted" }
+                    data: { $ref: "#/components/schemas/WorkoutDeletedData" }
+      responses:
+        "2XX":
+          description: Received.
+  publication.activated:
+    post:
+      operationId: "publication_activated_event"
+      summary: publication.activated
+      description: "A publication went live: at once, after its delay, or automatically."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "publication.activated" }
+                    data: { $ref: "#/components/schemas/PublicationActivatedData" }
+      responses:
+        "2XX":
+          description: Received.
+  publication.withdrawn:
+    post:
+      operationId: "publication_withdrawn_event"
+      summary: publication.withdrawn
+      description: "A live publication was deleted, replaced or withdrawn by the operator, or a scheduled one cancelled."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "publication.withdrawn" }
+                    data: { $ref: "#/components/schemas/PublicationWithdrawnData" }
+      responses:
+        "2XX":
+          description: Received.
+  publication.auto_failed:
+    post:
+      operationId: "publication_auto_failed_event"
+      summary: publication.auto_failed
+      description: "An automatic publication could not be made."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "publication.auto_failed" }
+                    data: { $ref: "#/components/schemas/AutoPublicationFailedData" }
+      responses:
+        "2XX":
+          description: Received.
+  record.achieved:
+    post:
+      operationId: "record_achieved_event"
+      summary: record.achieved
+      description: "A workout became the holder of one of your personal records — a classic one (`record_type`) or a standard distance (`distance_key`)."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "record.achieved" }
+                    data: { $ref: "#/components/schemas/RecordAchievedData" }
+      responses:
+        "2XX":
+          description: Received.
+  segment_effort.created:
+    post:
+      operationId: "segment_effort_created_event"
+      summary: segment_effort.created
+      description: "A workout imported in the last 7 days matched a segment."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "segment_effort.created" }
+                    data: { $ref: "#/components/schemas/SegmentEffortCreatedData" }
+      responses:
+        "2XX":
+          description: Received.
+  comment.created:
+    post:
+      operationId: "comment_created_event"
+      summary: comment.created
+      description: "Someone commented on your workout or answered your comment. Fetch the text from the API."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "comment.created" }
+                    data: { $ref: "#/components/schemas/CommentCreatedData" }
+      responses:
+        "2XX":
+          description: Received.
+  reaction.created:
+    post:
+      operationId: "reaction_created_event"
+      summary: reaction.created
+      description: "Someone reacted to your workout."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "reaction.created" }
+                    data: { $ref: "#/components/schemas/ReactionCreatedData" }
+      responses:
+        "2XX":
+          description: Received.
+  follow.requested:
+    post:
+      operationId: "follow_requested_event"
+      summary: follow.requested
+      description: "Someone asked to follow you."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "follow.requested" }
+                    data: { $ref: "#/components/schemas/FollowData" }
+      responses:
+        "2XX":
+          description: Received.
+  follow.accepted:
+    post:
+      operationId: "follow_accepted_event"
+      summary: follow.accepted
+      description: "Someone accepted your follow request."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "follow.accepted" }
+                    data: { $ref: "#/components/schemas/FollowData" }
+      responses:
+        "2XX":
+          description: Received.
+  participation.requested:
+    post:
+      operationId: "participation_requested_event"
+      summary: participation.requested
+      description: "Someone named you as taking part in their workout."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "participation.requested" }
+                    data: { $ref: "#/components/schemas/ParticipationData" }
+      responses:
+        "2XX":
+          description: Received.
+  participation.confirmed:
+    post:
+      operationId: "participation_confirmed_event"
+      summary: participation.confirmed
+      description: "Someone confirmed they took part in your workout."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "participation.confirmed" }
+                    data: { $ref: "#/components/schemas/ParticipationData" }
+      responses:
+        "2XX":
+          description: Received.
+  import_connection.expired:
+    post:
+      operationId: "import_connection_expired_event"
+      summary: import_connection.expired
+      description: "A connected service needs you to sign in again."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "import_connection.expired" }
+                    data: { $ref: "#/components/schemas/ImportConnectionData" }
+      responses:
+        "2XX":
+          description: Received.
+  import_connection.revoked:
+    post:
+      operationId: "import_connection_revoked_event"
+      summary: import_connection.revoked
+      description: "The operator disconnected one of your services."
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/WebhookEnvelope"
+                - type: object
+                  properties:
+                    type: { const: "import_connection.revoked" }
+                    data: { $ref: "#/components/schemas/ImportConnectionData" }
+      responses:
+        "2XX":
+          description: Received.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: allure_pat_<43 characters>
+      description: |
+        An API token from Settings → API et webhooks. Scopes: `read`, `write`,
+        `import`, `publish`, `social:read`, `webhooks`.
+
+  headers:
+    IdempotencyReplayed:
+      description: "`true` when this is the stored response to an earlier request with the same Idempotency-Key."
+      schema: { type: string, enum: ["true"] }
+    ETag:
+      description: Send it back in `If-None-Match` to get `304 Not Modified` while unchanged.
+      schema: { type: string }
+
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Page size.
+      schema: { type: integer, minimum: 1, maximum: 100, default: 25 }
+    Cursor:
+      name: cursor
+      in: query
+      description: The `next_cursor` of the previous page.
+      schema: { type: string }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: Any unique value of yours (a UUID, say); a retry with the same key and request gets the first response.
+      schema: { type: string, minLength: 1, maxLength: 255 }
+    ParentWorkoutId:
+      name: workout_id
+      in: path
+      required: true
+      description: The workout identifier.
+      schema: { $ref: "#/components/schemas/Id" }
+    RemoteNoteId:
+      name: id
+      in: path
+      required: true
+      description: The received note's identifier.
+      schema: { $ref: "#/components/schemas/Id" }
+    WebhookId:
+      name: id
+      in: path
+      required: true
+      description: The webhook identifier.
+      schema: { $ref: "#/components/schemas/Id" }
+    PublicationId:
+      name: id
+      in: path
+      required: true
+      description: The publication identifier.
+      schema: { $ref: "#/components/schemas/Id" }
+    WorkoutId:
+      name: id
+      in: path
+      required: true
+      description: The workout identifier.
+      schema: { $ref: "#/components/schemas/Id" }
+
+  responses:
+    NotModified:
+      description: Unchanged since the ETag you sent.
+    BadRequest:
+      description: A parameter is invalid (`invalid_parameter`, `invalid_cursor`).
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    Unauthorized:
+      description: No usable token (`missing_token`, `invalid_token`).
+      headers:
+        WWW-Authenticate:
+          schema: { type: string }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    Forbidden:
+      description: The token cannot be used for this (`account_suspended`, `account_deletion_scheduled`, `second_factor_required`, `insufficient_scope`).
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    NotFound:
+      description: No such resource, or not visible to this token (`not_found`).
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    Unprocessable:
+      description: Refused (`validation_failed`, `sport_change_failed`, `credited_workout`, `idempotency_key_reused`).
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    Conflict:
+      description: Not possible in the current state (`import_finished`, `idempotency_key_in_progress`, `not_scheduled`, `webhook_inactive`).
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    RateLimited:
+      description: Too many requests (`rate_limited`, or `import_limit` on `POST /imports`).
+      headers:
+        Retry-After:
+          description: Seconds to wait.
+          schema: { type: integer }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+
+  schemas:
+    Id:
+      type: string
+      description: An opaque identifier.
+      pattern: "^[2-9A-HJ-NP-Za-km-z]{22}$"
+      examples: ["8xKq3vN2mPfR7tLwYcBd4h"]
+
+    NextCursor:
+      type: [string, "null"]
+      description: Pass it as `cursor` to get the next page; `null` on the last page.
+
+    Instant:
+      type: string
+      format: date-time
+      examples: ["2026-08-23T06:00:00Z"]
+
+    Problem:
+      type: object
+      description: An RFC 9457 problem document.
+      required: [type, title, status, code]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer }
+        code:
+          type: string
+          description: Stable machine-readable code; see the Problems section. Open enumeration.
+          examples: [not_found]
+        detail: { type: string }
+        reason:
+          type: string
+          description: |
+            For `publication_refused`: why. `privacy` (the privacy zones could
+            not be applied), `endpoint_mask` (a masked start or finish is not
+            covered by a zone), `route_unavailable`, `no_geometry` (the
+            workout has no GPS position, so it carries no route to share),
+            `actor_unavailable`, `followers_unavailable` (the profile cannot
+            carry its audience), `already_scheduled` (the audience
+            already has a scheduled publication), `audience_taken`,
+            `invalid_delay`. For `import_limit`: `too_many_active_imports`,
+            `archive_in_progress` or `upload_budget_exceeded`. Open
+            enumeration.
+        errors:
+          type: array
+          items:
+            type: object
+            required: [field, code]
+            properties:
+              field: { type: string }
+              code: { type: string }
+              detail: { type: string }
+
+    Me:
+      type: object
+      required: [username, display_name, handle, locale, unit_system, time_zone, week_start, discoverable, heart_rate_profile, token]
+      properties:
+        username: { type: string, examples: [marie] }
+        display_name: { type: string }
+        handle:
+          type: string
+          description: The account's fediverse handle.
+          examples: ["marie@allure.example"]
+        locale: { type: string, enum: [fr, en, de, es, nl], examples: [fr] }
+        unit_system:
+          type: string
+          description: The website's display preference; the API always uses SI units.
+          examples: [metric]
+        time_zone: { type: string, examples: [Europe/Paris] }
+        week_start: { type: string, examples: [monday] }
+        discoverable:
+          type: string
+          enum: [none, members]
+          description: Whether name search and suggestions may return the account. `none` by default.
+        heart_rate_profile:
+          description: |
+            The account's heart-rate profile and the zones it gives; `null`
+            until a maximum heart rate is set. Never published.
+          oneOf:
+            - $ref: "#/components/schemas/HeartRateProfile"
+            - type: "null"
+        token:
+          type: object
+          required: [id, name, scopes, expires_at]
+          properties:
+            id: { $ref: "#/components/schemas/Id" }
+            name: { type: string }
+            scopes:
+              type: array
+              items: { type: string, examples: [read] }
+            expires_at: { $ref: "#/components/schemas/Instant" }
+
+    Sport:
+      type: object
+      required: [slug, family, virtual, pace_basis_metres, records_elevation, records_power, labels]
+      properties:
+        slug: { type: string, examples: [cycling_gravel] }
+        family:
+          type: string
+          description: The sport family. Open enumeration.
+          examples: [ride]
+        virtual: { type: boolean, description: Recorded on a virtual platform. }
+        pace_basis_metres:
+          type: [integer, "null"]
+          description: When set, the sport shows pace over this distance instead of speed (rowing - 500).
+        records_elevation: { type: boolean }
+        records_power: { type: boolean }
+        labels:
+          type: object
+          description: The display name in each locale the instance offers (fr, en, de, es, nl).
+          additionalProperties: { type: string }
+          examples: [{ fr: Gravel, en: Gravel cycling, de: Gravel, es: Gravel, nl: Gravel }]
+
+    WorkoutLinks:
+      type: object
+      required: [self, web]
+      properties:
+        self: { type: string, format: uri }
+        track: { type: string, format: uri, description: Absent on a credited workout or a manual entry, which have no track. }
+        original: { type: string, format: uri, description: Absent on a credited workout or a manual entry, which have no file. }
+        web: { type: string, format: uri, description: The workout's page on the website. }
+
+    WorkoutSummary:
+      type: object
+      description: A workout as listed. SI units; a measurement the file did not record is `null`.
+      required: [id, title, sport, commute, started_at, ended_at, elapsed_time, moving_time, pause_time, distance,
+                 ascent, descent, min_elevation, max_elevation, average_speed, max_speed, average_heart_rate,
+                 max_heart_rate, average_cadence, max_cadence, average_power, max_power, calories, device, places,
+                 equipment_ids, import_format, elevation_source, contested_metrics, origin, positioned, credit,
+                 created_at, updated_at, links]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        title: { type: [string, "null"] }
+        sport: { type: string, description: A sport slug., examples: [cycling_road] }
+        commute: { type: boolean }
+        started_at: { $ref: "#/components/schemas/Instant" }
+        ended_at: { $ref: "#/components/schemas/Instant" }
+        elapsed_time: { type: integer, minimum: 0, description: Seconds from start to end. }
+        moving_time: { type: integer, minimum: 0, description: Seconds in motion. }
+        pause_time: { type: integer, minimum: 0, description: Seconds stopped. }
+        distance: { type: number, minimum: 0, description: Metres. }
+        ascent: { type: number, minimum: 0, description: Metres climbed. }
+        descent: { type: number, minimum: 0, description: Metres descended. }
+        min_elevation: { type: [number, "null"], description: Metres. }
+        max_elevation: { type: [number, "null"], description: Metres. }
+        average_speed: { type: number, minimum: 0, description: Metres per second over the moving time. }
+        max_speed: { type: [number, "null"], minimum: 0, description: Metres per second. }
+        average_heart_rate: { type: [integer, "null"], description: Beats per minute. }
+        max_heart_rate: { type: [integer, "null"], description: Beats per minute. }
+        average_cadence: { type: [integer, "null"], description: Revolutions or steps per minute, per the sport. }
+        max_cadence: { type: [integer, "null"] }
+        average_power: { type: [integer, "null"], description: Watts. }
+        max_power: { type: [integer, "null"], description: Watts. }
+        calories: { type: [integer, "null"], description: Kilocalories, as recorded by the device. }
+        device: { type: [string, "null"], description: The device or software that recorded the file. }
+        places:
+          type: array
+          description: Up to three place names along the route, in route order.
+          items: { type: string }
+        equipment_ids:
+          type: array
+          items: { $ref: "#/components/schemas/Id" }
+        import_format:
+          type: [string, "null"]
+          description: Open enumeration; `null` on a credited workout or a manual entry, which have no file.
+          examples: [fit]
+        elevation_source:
+          type: string
+          description: Where the elevation profile comes from (`device` or `dem`). Open enumeration.
+          examples: [device]
+        contested_metrics:
+          type: array
+          description: Figures a data anomaly makes wrong beyond the device's ordinary error; records skip them.
+          items: { type: string, examples: [max_speed, ascent] }
+        origin:
+          type: string
+          description: |
+            `import` for a recording of yours; `credit` for an outing another
+            account recorded and credited to you after you confirmed it. A
+            credited workout carries the metrics only — no track, no file, no
+            heart rate, cadence, power or calories — and can only be deleted.
+            `manual` for a workout you entered by hand: no track, no file,
+            only the figures you typed; it holds no record and cannot be
+            published. Open enumeration.
+          examples: [import]
+        positioned:
+          type: boolean
+          description: |
+            Whether the workout carries a GPS track. `true` for a recording
+            with positions and for a credited workout, whose source has one.
+            `false` for an indoor recording imported without any position
+            (a trainer ride, a treadmill run, a pool swim): it carries its
+            metrics and sensor readings, has no `track` link, and cannot be
+            published yet. `false` for a manual entry too.
+          examples: [true]
+        credit:
+          type: [object, "null"]
+          description: For a credited workout, who recorded it; `null` otherwise.
+          required: [recorded_by, source_deleted]
+          properties:
+            recorded_by: { $ref: "#/components/schemas/Account" }
+            source_deleted:
+              type: boolean
+              description: The recording was deleted; the credited workout keeps its metrics.
+        created_at: { $ref: "#/components/schemas/Instant" }
+        updated_at: { $ref: "#/components/schemas/Instant" }
+        links: { $ref: "#/components/schemas/WorkoutLinks" }
+
+    Workout:
+      description: A workout with its owner-only detail.
+      allOf:
+        - $ref: "#/components/schemas/WorkoutSummary"
+        - type: object
+          required: [description, notes, analysis_version, data_anomalies, plausible_values, import, publications, weather, heart_rate]
+          properties:
+            plausible_values:
+              type: object
+              description: |
+                For a figure a data anomaly makes wrong, the value it would have
+                without it, in SI units (`max_speed`, `distance`,
+                `max_heart_rate`). Empty when nothing is contested.
+              additionalProperties: { type: number }
+            import:
+              type: [object, "null"]
+              description: Where the recording came from; `null` on a credited workout.
+              required: [source, sport_source]
+              properties:
+                source: { type: string, description: "`file`, `strava_archive`, or the connected service it came from. Open enumeration.", examples: [garmin_connect] }
+                sport_source:
+                  type: [string, "null"]
+                  description: "`detected` from the file, `declared` by the source's own activity type, `fallback`, or `manual` once changed by hand. Open enumeration."
+
+            description: { type: [string, "null"] }
+            notes:
+              type: [string, "null"]
+              description: Private notes, never published.
+            analysis_version: { type: integer, minimum: 1 }
+            data_anomalies:
+              type: array
+              description: Readings that look wrong, flagged and never corrected.
+              items:
+                type: object
+                required: [kind, tier]
+                properties:
+                  kind: { type: string, description: Open enumeration., examples: [gps_jump] }
+                  tier:
+                    type: string
+                    enum: [major, minor]
+                    description: "`major` when the finding makes a figure wrong beyond the device's ordinary error."
+                  start_distance: { type: [number, "null"], description: Metres from the start. }
+                  end_distance: { type: [number, "null"] }
+                  start_time: { type: [number, "null"], description: Seconds into the recording segment. }
+                  end_time: { type: [number, "null"] }
+            publications:
+              type: array
+              description: The workout's live and scheduled publications, at most one per audience.
+              items: { $ref: "#/components/schemas/PublicationState" }
+            weather:
+              description: |
+                The historical weather along the workout, when the account
+                consented to fetch it (Open-Meteo); `null` when none was asked.
+              oneOf:
+                - $ref: "#/components/schemas/WorkoutWeather"
+                - type: "null"
+            heart_rate:
+              description: |
+                The time spent at each heart rate, read through the account's
+                zones; `null` when the recording holds too little heart rate
+                (under half of its recorded time) or its points are too far
+                apart to spread it. Owner-only, never published.
+              oneOf:
+                - $ref: "#/components/schemas/WorkoutHeartRate"
+                - type: "null"
+
+    HeartRateProfile:
+      type: object
+      required: [max, rest, basis, bounds, thresholds_bpm]
+      properties:
+        max: { type: integer, minimum: 100, maximum: 220, description: Maximum heart rate, bpm. }
+        rest: { type: [integer, "null"], minimum: 25, maximum: 120, description: Resting heart rate, bpm. }
+        basis:
+          type: string
+          enum: [max, reserve]
+          description: "Zones in percent of the maximum, or of the reserve (maximum − resting, Karvonen)."
+        bounds:
+          type: array
+          description: Lower edges of zones 2 to 5, in percent.
+          minItems: 4
+          maxItems: 4
+          items: { type: integer, minimum: 30, maximum: 99 }
+        thresholds_bpm:
+          type: array
+          description: The same edges in bpm.
+          minItems: 4
+          maxItems: 4
+          items: { type: integer }
+
+    WorkoutHeartRate:
+      type: object
+      required: [coverage, sampled_seconds, recorded_seconds, covered_seconds, frozen_seconds, load, load_floor_bpm, zones]
+      properties:
+        coverage:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: |
+            `sampled_seconds / covered_seconds`: the share of the time the
+            device recorded (pauses excluded) that carries a heart rate.
+        sampled_seconds:
+          type: integer
+          minimum: 0
+          description: Seconds credited to a heart-rate reading (each reading holds until the next point, at most 30 s).
+        recorded_seconds:
+          type: integer
+          minimum: 0
+          description: First to last point of each recording segment, pauses inside a segment included.
+        covered_seconds:
+          type: integer
+          minimum: 0
+          description: Every interval between two points, capped at 30 s like a reading — the recorded time, pauses excluded.
+        frozen_seconds:
+          type: integer
+          minimum: 0
+          description: Seconds of values a strap held while losing its signal; not readings, so in no zone and no load.
+        load:
+          type: [number, "null"]
+          minimum: 0
+          description: |
+            Edwards training load: minutes in each zone weighted by the zone's
+            number, nothing under `load_floor_bpm`; Allure's own unit, not
+            comparable with a power-based score. `null` without a heart-rate
+            profile.
+        load_floor_bpm:
+          type: [integer, "null"]
+          description: The lowest heart rate that carries load (ten points under the zone 2 edge, in the zones' basis); `null` without a profile.
+        zones:
+          type: [array, "null"]
+          description: Seconds in each of the five zones; `null` without a heart-rate profile.
+          items:
+            type: object
+            required: [zone, lower_bpm, upper_bpm, seconds]
+            properties:
+              zone: { type: integer, minimum: 1, maximum: 5 }
+              lower_bpm: { type: [integer, "null"], description: "Inclusive; `null` for zone 1." }
+              upper_bpm: { type: [integer, "null"], description: "Inclusive; `null` for zone 5." }
+              seconds: { type: integer, minimum: 0 }
+
+    WorkoutWeather:
+      type: object
+      required: [status, summary, hours]
+      properties:
+        status:
+          type: string
+          description: "`pending`, `ready`, `unavailable` (no data for this workout) or `failed`. Open enumeration."
+          examples: [ready]
+        summary:
+          oneOf:
+            - $ref: "#/components/schemas/WeatherSummary"
+            - type: "null"
+        hours:
+          type: array
+          description: The weather at the start, at each whole hour inside the workout and at the finish.
+          items: { $ref: "#/components/schemas/WeatherHour" }
+
+    WeatherSummary:
+      type: object
+      description: The weather of a whole workout, in SI units. Names no place and no instant.
+      required: [condition, is_day, temperature_min, temperature_max, temperature_mean, apparent_temperature, humidity,
+                 precipitation, wind_speed, wind_gusts, wind_direction, wind_exposure]
+      properties:
+        condition:
+          type: [string, "null"]
+          description: The dominant condition. Open enumeration.
+          examples: [partly_cloudy]
+        is_day:
+          type: [boolean, "null"]
+          description: Whether the sun was up for the majority of the workout; the icon's day or night variant.
+          examples: [true]
+        temperature_min: { type: [number, "null"], description: Degrees Celsius. }
+        temperature_max: { type: [number, "null"], description: Degrees Celsius. }
+        temperature_mean: { type: [number, "null"], description: Mean temperature over the workout, degrees Celsius. }
+        apparent_temperature: { type: [number, "null"], description: Mean apparent temperature, degrees Celsius. }
+        humidity: { type: [number, "null"], description: Mean relative humidity, percent. }
+        precipitation: { type: [number, "null"], description: Total precipitation, millimetres. }
+        wind_speed: { type: [number, "null"], description: Mean 10 m wind speed, metres per second. }
+        wind_gusts: { type: [number, "null"], description: Maximum gust, metres per second. }
+        wind_direction: { type: [number, "null"], description: Mean direction the wind blows from, degrees. }
+        wind_exposure:
+          type: [object, "null"]
+          description: |
+            The share of the moving distance ridden into a headwind (origin
+            within 45° of ahead), a tailwind or a crosswind, and the
+            distance-weighted mean component against travel (m/s, negative
+            behind).
+          properties:
+            head: { type: [number, "null"], minimum: 0, maximum: 1 }
+            tail: { type: [number, "null"], minimum: 0, maximum: 1 }
+            cross: { type: [number, "null"], minimum: 0, maximum: 1 }
+            headwind: { type: [number, "null"] }
+
+    WeatherHour:
+      type: object
+      required: [time, condition, day, temperature, apparent_temperature, humidity, precipitation, cloud_cover, pressure,
+                 wind_speed, wind_direction, wind_gusts]
+      properties:
+        time: { $ref: "#/components/schemas/Instant" }
+        condition: { type: [string, "null"], description: Open enumeration., examples: [rain] }
+        day:
+          type: [boolean, "null"]
+          description: Whether the sun was up at this hour and place.
+          examples: [true]
+        temperature: { type: [number, "null"], description: Degrees Celsius. }
+        apparent_temperature: { type: [number, "null"], description: Degrees Celsius. }
+        humidity: { type: [number, "null"], description: Percent. }
+        precipitation: { type: [number, "null"], description: Millimetres over the hour. }
+        cloud_cover: { type: [number, "null"], description: Percent. }
+        pressure: { type: [number, "null"], description: Surface pressure, hectopascals. }
+        wind_speed: { type: [number, "null"], description: Metres per second. }
+        wind_direction: { type: [number, "null"], description: Degrees the wind blows from. }
+        wind_gusts: { type: [number, "null"], description: Metres per second. }
+
+    PublicationState:
+      type: object
+      required: [id, audience, status, published_at, scheduled_for]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        audience: { type: string, description: Open enumeration., examples: [public] }
+        status: { type: string, description: "`active` or `scheduled`. Open enumeration.", examples: [active] }
+        published_at: { $ref: "#/components/schemas/Instant" }
+        scheduled_for:
+          oneOf:
+            - $ref: "#/components/schemas/Instant"
+            - type: "null"
+
+    Track:
+      type: object
+      required: [type, features]
+      properties:
+        type: { const: FeatureCollection }
+        features:
+          type: array
+          items:
+            type: object
+            required: [type, geometry, properties]
+            properties:
+              type: { const: Feature }
+              geometry:
+                type: object
+                required: [type, coordinates]
+                properties:
+                  type: { const: LineString }
+                  coordinates:
+                    type: array
+                    description: "`[longitude, latitude]` positions."
+                    items:
+                      type: array
+                      prefixItems:
+                        - { type: number }
+                        - { type: number }
+                      minItems: 2
+                      maxItems: 2
+              properties:
+                type: object
+                required: [segment_index, started_at, times, distances]
+                properties:
+                  segment_index: { type: integer, minimum: 0 }
+                  started_at: { $ref: "#/components/schemas/Instant" }
+                  times:
+                    type: array
+                    description: Seconds since the segment's start.
+                    items: { type: [number, "null"] }
+                  distances:
+                    type: array
+                    description: Metres from the workout's start.
+                    items: { type: number }
+                  elevations: { type: array, description: Metres., items: { type: [number, "null"] } }
+                  speeds: { type: array, description: Metres per second., items: { type: [number, "null"] } }
+                  heart_rates: { type: array, description: Beats per minute., items: { type: [integer, "null"] } }
+                  cadences: { type: array, items: { type: [integer, "null"] } }
+                  powers: { type: array, description: Watts., items: { type: [integer, "null"] } }
+
+    Equipment:
+      type: object
+      required: [id, label, description, type, active, total_distance, total_elapsed_time, total_moving_time,
+                 total_workouts, created_at, updated_at]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        label: { type: string }
+        description: { type: [string, "null"] }
+        type: { type: string, description: The equipment type slug. Open enumeration., examples: [bike] }
+        active: { type: boolean }
+        total_distance: { type: number, minimum: 0, description: Metres. }
+        total_elapsed_time: { type: integer, minimum: 0, description: Seconds. }
+        total_moving_time: { type: integer, minimum: 0, description: Seconds. }
+        total_workouts: { type: integer, minimum: 0 }
+        created_at: { $ref: "#/components/schemas/Instant" }
+        updated_at: { $ref: "#/components/schemas/Instant" }
+
+    PublishingProfile:
+      type: object
+      required: [id, name, audience, built_in, publish_delay, auto_publish, publishable]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        name: { type: string }
+        audience: { type: string, description: "`public` or `followers`. Open enumeration.", examples: [public] }
+        built_in: { type: boolean }
+        publish_delay: { type: integer, minimum: 0, description: Seconds between publishing and going live. }
+        auto_publish: { type: boolean, description: New imports are published with this profile automatically. }
+        publishable: { type: boolean, description: Whether this instance can publish to the profile's audience. }
+
+    WorkoutUpdate:
+      type: object
+      description: Send only the fields to change.
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        title: { type: [string, "null"], maxLength: 255 }
+        description: { type: [string, "null"], maxLength: 10000 }
+        notes: { type: [string, "null"], maxLength: 500, description: Private notes, never published. }
+        sport: { type: string, description: A sport slug from `GET /sports`., examples: [cycling_gravel] }
+        commute: { type: boolean }
+        equipment_ids:
+          type: array
+          description: The workout's equipment, replacing the current list.
+          items: { $ref: "#/components/schemas/Id" }
+        started_at: { $ref: "#/components/schemas/ManualStartedAt" }
+        elapsed_time: { $ref: "#/components/schemas/ManualElapsedTime" }
+        moving_time: { $ref: "#/components/schemas/ManualMovingTime" }
+        distance: { $ref: "#/components/schemas/ManualDistance" }
+        ascent: { $ref: "#/components/schemas/ManualAscent" }
+        average_heart_rate: { $ref: "#/components/schemas/ManualHeartRate" }
+        max_heart_rate: { $ref: "#/components/schemas/ManualHeartRate" }
+        calories: { $ref: "#/components/schemas/ManualCalories" }
+        average_power: { $ref: "#/components/schemas/ManualPower" }
+
+    ManualWorkoutCreate:
+      type: object
+      description: A manual entry's figures, in SI units. Omitted optional figures stay empty.
+      additionalProperties: false
+      required: [sport, started_at, elapsed_time]
+      properties:
+        sport: { type: string, description: A sport slug from `GET /sports`., examples: [strength_training] }
+        started_at: { $ref: "#/components/schemas/ManualStartedAt" }
+        elapsed_time: { $ref: "#/components/schemas/ManualElapsedTime" }
+        moving_time: { $ref: "#/components/schemas/ManualMovingTime" }
+        distance: { $ref: "#/components/schemas/ManualDistance" }
+        ascent: { $ref: "#/components/schemas/ManualAscent" }
+        average_heart_rate: { $ref: "#/components/schemas/ManualHeartRate" }
+        max_heart_rate: { $ref: "#/components/schemas/ManualHeartRate" }
+        calories: { $ref: "#/components/schemas/ManualCalories" }
+        average_power: { $ref: "#/components/schemas/ManualPower" }
+        title: { type: [string, "null"], maxLength: 255 }
+        description: { type: [string, "null"], maxLength: 10000 }
+        notes: { type: [string, "null"], maxLength: 500, description: Private notes, never published. }
+        commute: { type: boolean }
+        equipment_ids:
+          type: array
+          description: The workout's equipment.
+          items: { $ref: "#/components/schemas/Id" }
+
+    ManualStartedAt:
+      type: string
+      format: date-time
+      description: When the workout started, with its offset; not in the future. Manual entries only.
+      examples: ["2026-10-18T07:30:00+02:00"]
+    ManualElapsedTime:
+      type: integer
+      minimum: 1
+      maximum: 604800
+      description: Seconds from start to end. Manual entries only.
+    ManualMovingTime:
+      type: [integer, "null"]
+      minimum: 1
+      maximum: 604800
+      description: Seconds in motion, at most `elapsed_time`; the whole elapsed time when absent or `null`. Manual entries only.
+    ManualDistance:
+      type: [number, "null"]
+      minimum: 0
+      maximum: 2000000
+      description: Metres; none when absent, `null` or `0`. Manual entries only.
+    ManualAscent:
+      type: [number, "null"]
+      minimum: 0
+      maximum: 20000
+      description: Metres climbed, for a sport that measures elevation. Manual entries only.
+    ManualHeartRate:
+      type: [integer, "null"]
+      minimum: 20
+      maximum: 250
+      description: Beats per minute; the maximum is at least the average. Manual entries only.
+    ManualCalories:
+      type: [integer, "null"]
+      minimum: 0
+      maximum: 20000
+      description: Kilocalories. Manual entries only.
+    ManualPower:
+      type: [integer, "null"]
+      minimum: 1
+      maximum: 3000
+      description: Watts. Manual entries only.
+
+    Lap:
+      type: object
+      required: [source, number, name, started_at, start_distance, end_distance, distance, elapsed_time, moving_time,
+                 ascent, descent, average_speed, max_speed, average_heart_rate, max_heart_rate, average_cadence,
+                 average_power, max_power, average_grade, max_grade, trigger]
+      properties:
+        source:
+          type: string
+          description: "`recorded` for the device's laps; otherwise how Allure found it: `loop`, `route`, `pause`, `climb`, `descent`, `stop`, `speed_interval`, `power_interval`. Open enumeration."
+          examples: [climb]
+        number: { type: integer, minimum: 1 }
+        name: { type: [string, "null"], description: A place name for a detected lap. }
+        started_at: { $ref: "#/components/schemas/Instant" }
+        start_distance: { type: [number, "null"], description: Metres from the start; detected laps only. }
+        end_distance: { type: [number, "null"] }
+        distance: { type: [number, "null"], description: Metres. }
+        elapsed_time: { type: integer, minimum: 0 }
+        moving_time: { type: integer, minimum: 0 }
+        ascent: { type: [number, "null"] }
+        descent: { type: [number, "null"] }
+        average_speed: { type: [number, "null"], description: Metres per second. }
+        max_speed: { type: [number, "null"] }
+        average_heart_rate: { type: [integer, "null"] }
+        max_heart_rate: { type: [integer, "null"] }
+        average_cadence: { type: [integer, "null"] }
+        average_power: { type: [integer, "null"] }
+        max_power: { type: [integer, "null"] }
+        average_grade: { type: [number, "null"], description: Percent. }
+        max_grade: { type: [number, "null"], description: Percent. }
+        trigger: { type: [string, "null"], description: What ended a recorded lap, as the device reports it. }
+
+    Split:
+      type: object
+      required: [number, distance, partial, started_at, elapsed_time, ascent, descent, average_power, grade_adjusted_pace]
+      properties:
+        number: { type: integer, minimum: 1 }
+        distance: { type: number, description: Metres. }
+        partial: { type: boolean, description: Shorter than the split distance. }
+        started_at: { $ref: "#/components/schemas/Instant" }
+        elapsed_time: { type: integer, minimum: 0 }
+        ascent: { type: number }
+        descent: { type: number }
+        average_power: { type: [integer, "null"], description: Watts, when the recording carries power. }
+        grade_adjusted_pace: { type: [integer, "null"], description: Seconds per kilometre, for sports that use it. }
+
+    BestEffort:
+      type: object
+      required: [distance_key, distance, elapsed_time, started_at, start_distance, end_distance, sport, personal_place]
+      properties:
+        distance_key: { type: string, examples: [5k] }
+        distance: { type: number, description: Metres. }
+        elapsed_time: { type: integer, minimum: 0 }
+        started_at: { $ref: "#/components/schemas/Instant" }
+        start_distance: { type: [number, "null"] }
+        end_distance: { type: [number, "null"] }
+        sport: { type: string }
+        personal_place:
+          type: [integer, "null"]
+          description: 1 for your record, 2 and 3 for your second and third best time; otherwise null.
+
+    SegmentEffort:
+      type: object
+      required: [id, segment, sport, occurrence, started_at, start_distance, distance, elapsed_time, moving_time, ascent,
+                 descent, average_speed, average_heart_rate, max_heart_rate, average_cadence, average_power, max_power,
+                 personal_best, personal_place, leaderboard]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        segment:
+          type: object
+          required: [id, name, kind]
+          properties:
+            id: { $ref: "#/components/schemas/Id" }
+            name: { type: string }
+            kind: { type: string, description: "`segment`, `route` or `loop`. Open enumeration." }
+        sport: { type: string }
+        occurrence: { type: integer, minimum: 0, description: Which pass, when the workout covered the segment more than once. }
+        started_at: { $ref: "#/components/schemas/Instant" }
+        start_distance: { type: number }
+        distance: { type: number }
+        elapsed_time: { type: integer }
+        moving_time: { type: integer }
+        ascent: { type: [number, "null"] }
+        descent: { type: [number, "null"] }
+        average_speed: { type: number }
+        average_heart_rate: { type: [integer, "null"] }
+        max_heart_rate: { type: [integer, "null"] }
+        average_cadence: { type: [integer, "null"] }
+        average_power: { type: [integer, "null"] }
+        max_power: { type: [integer, "null"] }
+        personal_best: { type: boolean }
+        personal_place: { type: [integer, "null"], description: 1 to 3 among your own efforts; otherwise null. }
+        leaderboard:
+          description: Your place on the segment's leaderboard, when it ranks you.
+          oneOf:
+            - type: "null"
+            - type: object
+              required: [rank, participants]
+              properties:
+                rank: { type: integer, minimum: 1 }
+                participants: { type: integer, minimum: 1 }
+
+    Records:
+      type: object
+      required: [records, best_efforts]
+      properties:
+        records:
+          type: array
+          items:
+            type: object
+            required: [sport, type, value, workout_id, achieved_at]
+            properties:
+              sport: { type: string }
+              type: { type: string, description: Open enumeration; see the operation., examples: [FD] }
+              value: { type: number, description: "In SI: seconds per kilometre for paces, metres per second, metres, seconds." }
+              workout_id: { oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }] }
+              achieved_at: { $ref: "#/components/schemas/Instant" }
+        best_efforts:
+          type: array
+          items:
+            type: object
+            required: [sport, distance_key, distance, elapsed_time, workout_id, achieved_at]
+            properties:
+              sport: { type: string }
+              distance_key: { type: string }
+              distance: { type: number }
+              elapsed_time: { type: integer }
+              workout_id: { oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }] }
+              achieved_at: { $ref: "#/components/schemas/Instant" }
+
+    ImportSummary:
+      type: object
+      required: [id, status, source, trigger, fallback_sport, notes, cancellation_requested, counts, error, created_at,
+                 started_at, completed_at, links]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        status:
+          type: string
+          description: "`queued`, `processing`, then `completed`, `failed` or `cancelled`. Open enumeration."
+          examples: [processing]
+        source: { type: string, description: "`file`, `strava_archive`, or a connected service. Open enumeration.", examples: [file] }
+        trigger: { type: string, description: "`api` for an import you sent here. Open enumeration.", examples: [api] }
+        fallback_sport: { type: [string, "null"] }
+        notes: { type: [string, "null"] }
+        cancellation_requested: { type: boolean }
+        counts:
+          type: object
+          required: [total, processed, imported, duplicate, skipped, failed, cancelled]
+          properties:
+            total: { type: integer, minimum: 0 }
+            processed: { type: integer, minimum: 0 }
+            imported: { type: integer, minimum: 0 }
+            duplicate: { type: integer, minimum: 0 }
+            skipped: { type: integer, minimum: 0 }
+            failed: { type: integer, minimum: 0 }
+            cancelled: { type: integer, minimum: 0 }
+        error: { type: [string, "null"], description: Why the whole import failed, in the account's language. }
+        created_at: { $ref: "#/components/schemas/Instant" }
+        started_at: { oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }] }
+        completed_at: { oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }] }
+        links:
+          type: object
+          required: [self]
+          properties:
+            self: { type: string, format: uri }
+
+    Import:
+      allOf:
+        - $ref: "#/components/schemas/ImportSummary"
+        - type: object
+          required: [entries]
+          properties:
+            entries:
+              type: array
+              description: One entry per activity file found, archives unpacked.
+              items: { $ref: "#/components/schemas/ImportEntry" }
+
+    ImportEntry:
+      type: object
+      required: [position, name, path, status, skip_reason, sport_source, error, workout_id, started_at, completed_at]
+      properties:
+        position: { type: integer, minimum: 0 }
+        name: { type: string }
+        path: { type: [string, "null"], description: The path inside an archive. }
+        status:
+          type: string
+          description: "`queued`, `processing`, `imported`, `duplicate`, `skipped`, `failed` or `cancelled`. Open enumeration."
+        skip_reason: { type: [string, "null"], examples: [no_geometry] }
+        sport_source: { type: string, description: "`detected` from the file, `declared` by the source's own activity type, or `fallback`. Open enumeration." }
+        error: { type: [string, "null"], description: Why the entry failed, in the account's language. }
+        workout_id:
+          description: The workout created, or the existing one for a duplicate.
+          oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }]
+        started_at: { oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }] }
+        completed_at: { oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }] }
+
+    PublishDelay:
+      type: string
+      enum: [profile, immediate, 1_day, 3_days, 1_week, 2_weeks, 1_month]
+      default: profile
+      description: The safety delay before anyone sees the publication; `profile` uses the profile's own.
+
+    Publication:
+      type: object
+      required: [id, workout_id, audience, status, publishing_profile_id, published_at, scheduled_for, object_uri, links]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        workout_id: { oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }] }
+        audience: { type: string, description: "`public` or `followers`. Open enumeration.", examples: [public] }
+        status: { type: string, description: "`active` or `scheduled`. Open enumeration.", examples: [scheduled] }
+        publishing_profile_id: { oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }] }
+        published_at:
+          $ref: "#/components/schemas/Instant"
+        scheduled_for:
+          description: When a scheduled publication goes live.
+          oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }]
+        object_uri: { type: string, format: uri, description: The publication's ActivityPub object. }
+        links:
+          type: object
+          required: [self, web]
+          properties:
+            self: { type: string, format: uri }
+            web:
+              description: The page as its readers see it.
+              oneOf: [{ type: string, format: uri }, { type: "null" }]
+
+    PublicationPreview:
+      type: object
+      required: [publishing_profile_id, audience, publishable, refusals, warnings, shared, not_shared, metrics, delay, copy]
+      properties:
+        publishing_profile_id: { $ref: "#/components/schemas/Id" }
+        audience: { type: string }
+        publishable: { type: boolean }
+        refusals:
+          type: array
+          description: Why it cannot be published (the `reason` codes of `publication_refused`, `no_geometry` for a workout imported without a GPS position, and `endpoint_mask_start` or `endpoint_mask_finish`).
+          items: { type: string }
+        warnings:
+          type: array
+          description: "Publishable, but worth telling your user: `no_interior_points` (no privacy zone touched the route), `endpoint_visible_start`, `endpoint_visible_finish`. Open enumeration."
+          items: { type: string }
+        shared:
+          type: array
+          description: "The optional fields this profile shares: `title`, `description`, `metrics`, `route`, `gpx`, `records`, `route_image`, `device`, `commute`, `weather`."
+          items: { type: string }
+        not_shared:
+          type: array
+          description: The optional fields it leaves out.
+          items: { type: string }
+        metrics:
+          type: array
+          description: The metrics shared, when `metrics` is.
+          items: { type: string, examples: [distance] }
+        delay: { type: [string, "null"], description: The profile's own delay., examples: [immediate] }
+        copy:
+          type: object
+          description: The sentences to show your user before publishing, in English.
+          required: [never, irrevocable]
+          properties:
+            shared: { type: string }
+            never: { type: string }
+            irrevocable: { type: string }
+
+    Account:
+      type: object
+      required: [handle, display_name, local, deleted, profile_url]
+      properties:
+        handle: { type: [string, "null"], description: "`name@instance`.", examples: ["paul@allure.example"] }
+        display_name: { type: [string, "null"] }
+        local: { type: boolean, description: An account of this instance. }
+        deleted: { type: boolean, description: The account no longer exists; nothing else is given. }
+        profile_url: { type: [string, "null"], format: uri, description: Its profile page on this instance's website. }
+
+    AccountPage:
+      type: object
+      required: [data, next_cursor]
+      properties:
+        data:
+          type: array
+          items:
+            allOf:
+              - $ref: "#/components/schemas/Account"
+              - type: object
+                required: [since]
+                properties:
+                  since: { $ref: "#/components/schemas/Instant" }
+        next_cursor: { $ref: "#/components/schemas/NextCursor" }
+
+    Reactions:
+      type: object
+      required: [counts, mine]
+      properties:
+        counts:
+          type: object
+          description: "Readers per reaction type: `beer`, `energy`, `coffee`, `like`. Open enumeration."
+          additionalProperties: { type: integer, minimum: 0 }
+        mine: { type: [string, "null"], description: Your own reaction, if any. }
+
+    SharedWorkout:
+      type: object
+      description: |
+        The fields both a publication and a received note carry. Optional ones
+        are present only when the author's profile shared them.
+      required: [id, audience, published_at, own, author, sport, started_at, metrics, comments_open, comment_count,
+                 reactions, links]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        audience: { type: string, examples: [public] }
+        published_at: { $ref: "#/components/schemas/Instant" }
+        own: { type: boolean, description: You published it. }
+        author: { $ref: "#/components/schemas/Account" }
+        sport: { type: [string, "null"], description: A sport slug; null when a received sport matches none. }
+        started_at: { oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }] }
+        title: { type: string }
+        description: { type: string, description: Plain text. }
+        device: { type: string }
+        commute: { type: boolean, const: true }
+        weather: { $ref: "#/components/schemas/WeatherSummary" }
+        record_types:
+          type: array
+          description: The personal records this workout holds, by type (no values).
+          items: { type: string }
+        record_distances:
+          type: array
+          description: The best-effort records it holds, by distance (no values).
+          items: { type: string }
+        metrics:
+          type: object
+          description: The metrics shared, in SI units, keyed as in `PublishingProfile` metrics (`distance`, `duration`, …).
+          additionalProperties: true
+        comments_open: { type: boolean }
+        comment_count: { type: integer, minimum: 0, description: The comments you can read. }
+        reactions: { $ref: "#/components/schemas/Reactions" }
+        links:
+          type: object
+          required: [self, web]
+          properties:
+            self: { type: string, format: uri }
+            web: { type: string, format: uri }
+            track: { type: string, format: uri, description: Present when the route is shared. }
+            route_image: { type: string, format: uri, description: Present when a route image is available. }
+
+    ReaderPublication:
+      allOf:
+        - $ref: "#/components/schemas/SharedWorkout"
+
+    RemoteNote:
+      allOf:
+        - $ref: "#/components/schemas/SharedWorkout"
+        - type: object
+          required: [sport_label, origin_url, media]
+          properties:
+            sport_label: { type: [string, "null"], description: The sport as the origin named it. }
+            origin_url: { type: string, format: uri }
+            media:
+              type: string
+              description: "This instance's copy of the note's files: `cached`, `pending`, `unavailable` or `none`. Open enumeration."
+
+    FeedItem:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [publication, remote_note], description: Open enumeration. }
+        publication: { $ref: "#/components/schemas/ReaderPublication" }
+        remote_note: { $ref: "#/components/schemas/RemoteNote" }
+
+    Comment:
+      type: object
+      required: [id, audience, state, author, body, by_thread_host, published_at]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        audience: { type: string }
+        state:
+          type: string
+          description: |
+            `active`; `deleted` or `removed` for a comment kept only because
+            replies answer it (then `author` and `body` are null); your own
+            `removed` or `rejected` comment, which only you see. Open
+            enumeration.
+        author:
+          oneOf: [{ $ref: "#/components/schemas/Account" }, { type: "null" }]
+          description: |
+            Null for a stub, and for an account of this instance that is
+            suspended or awaiting deletion: its comment stays, unnamed.
+        body: { type: [string, "null"], description: Plain text. }
+        by_thread_host: { type: boolean, description: Written by the publication's author. }
+        published_at: { $ref: "#/components/schemas/Instant" }
+        replies:
+          type: array
+          items: { $ref: "#/components/schemas/Comment" }
+
+    WebhookInput:
+      type: object
+      additionalProperties: false
+      properties:
+        url: { type: string, format: uri, maxLength: 2048, description: An HTTPS address on the public internet. }
+        description: { type: [string, "null"], maxLength: 200 }
+        events:
+          type: array
+          minItems: 1
+          description: "Event types, or `[\"*\"]` for every event, including those added later."
+          items: { type: string, examples: [workout.created] }
+        active: { type: boolean }
+
+    WebhookEndpoint:
+      type: object
+      required: [id, url, description, events, active, state, disabled_at, consecutive_failures, last_delivery, created_at,
+                 updated_at]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        url: { type: string, format: uri }
+        description: { type: [string, "null"] }
+        events: { type: array, items: { type: string } }
+        active: { type: boolean, description: Your switch. }
+        state:
+          type: string
+          description: "`active`, `paused` (by you), `disabled_failing`, `disabled_gone` (it answered 410), `disabled_operator`. Open enumeration."
+        disabled_at: { oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }] }
+        consecutive_failures: { type: integer, minimum: 0 }
+        last_delivery:
+          oneOf:
+            - type: "null"
+            - type: object
+              required: [id, status, status_code, at]
+              properties:
+                id: { $ref: "#/components/schemas/Id" }
+                status: { type: string }
+                status_code: { type: [integer, "null"] }
+                at: { $ref: "#/components/schemas/Instant" }
+        created_at: { $ref: "#/components/schemas/Instant" }
+        updated_at: { $ref: "#/components/schemas/Instant" }
+
+    WebhookEndpointWithSecret:
+      allOf:
+        - $ref: "#/components/schemas/WebhookEndpoint"
+        - type: object
+          required: [secret]
+          properties:
+            secret: { type: string, description: "Shown once. `whsec_` and the Base64 key.", examples: [whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw] }
+
+    WebhookDelivery:
+      type: object
+      required: [id, event, status, attempts, last_status_code, last_error, last_attempt_at, next_attempt_at, succeeded_at,
+                 redelivery_of_id, created_at]
+      properties:
+        id: { $ref: "#/components/schemas/Id" }
+        event:
+          type: object
+          required: [id, type, created_at]
+          properties:
+            id: { type: string, examples: [evt_8xKq3vN2mPfR7tLwYcBd4h] }
+            type: { type: string }
+            created_at: { $ref: "#/components/schemas/Instant" }
+        status: { type: string, description: "`pending`, `succeeded`, `failed` (410) or `abandoned`. Open enumeration." }
+        attempts: { type: integer, minimum: 0 }
+        last_status_code: { type: [integer, "null"] }
+        last_error:
+          type: [string, "null"]
+          description: "`http_status`, `timeout`, `network`, `redirect`, `response_too_large`, `unsafe_url`, `gone`, `endpoint_disabled`. Open enumeration."
+        last_attempt_at: { oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }] }
+        next_attempt_at: { oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }] }
+        succeeded_at: { oneOf: [{ $ref: "#/components/schemas/Instant" }, { type: "null" }] }
+        redelivery_of_id: { oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }] }
+        created_at: { $ref: "#/components/schemas/Instant" }
+
+    WebhookEnvelope:
+      type: object
+      required: [id, type, created_at, api_version, data]
+      properties:
+        id: { type: string, description: "`evt_` and an identifier; the `webhook-id` header." }
+        type: { type: string, description: Open enumeration. }
+        created_at: { $ref: "#/components/schemas/Instant" }
+        api_version: { const: v1 }
+        data: { type: object }
+
+    PingData:
+      type: object
+      required: [webhook_id]
+      properties:
+        webhook_id: { $ref: "#/components/schemas/Id" }
+
+    WorkoutEventData:
+      type: object
+      required: [workout]
+      properties:
+        workout: { $ref: "#/components/schemas/WorkoutSummary" }
+
+    WorkoutUpdatedData:
+      type: object
+      required: [workout, changed]
+      properties:
+        workout: { $ref: "#/components/schemas/WorkoutSummary" }
+        changed:
+          type: array
+          description: "`title`, `description`, `notes`, `sport`, `commute`, `equipment_ids`. Open enumeration."
+          items: { type: string }
+
+    WorkoutDeletedData:
+      type: object
+      required: [workout_id]
+      properties:
+        workout_id: { $ref: "#/components/schemas/Id" }
+
+    PublicationActivatedData:
+      type: object
+      required: [publication]
+      properties:
+        publication:
+          type: object
+          required: [id, workout_id, audience, published_at, links]
+          properties:
+            id: { $ref: "#/components/schemas/Id" }
+            workout_id: { oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }] }
+            audience: { type: string }
+            published_at: { $ref: "#/components/schemas/Instant" }
+            links:
+              type: object
+              required: [self]
+              properties:
+                self: { type: string, format: uri }
+
+    PublicationWithdrawnData:
+      type: object
+      required: [publication_id, workout_id, audience, reason]
+      properties:
+        publication_id: { $ref: "#/components/schemas/Id" }
+        workout_id: { oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }] }
+        audience: { type: string }
+        reason:
+          type: string
+          description: "`deleted`, `replaced`, `cancelled`, `operator`, `workout_deleted`. Open enumeration."
+
+    AutoPublicationFailedData:
+      type: object
+      required: [workout_id, audience, reason]
+      properties:
+        workout_id: { $ref: "#/components/schemas/Id" }
+        audience: { type: string }
+        reason: { type: string, description: Open enumeration. }
+
+    RecordAchievedData:
+      type: object
+      required: [workout_id, sport]
+      properties:
+        workout_id: { $ref: "#/components/schemas/Id" }
+        sport: { type: string }
+        record_type: { type: string, description: "A classic record: `AP`, `AS`, `BP`, `FD`, `HA`, `LD`, `MS`, `MC`." }
+        value: { type: number, description: The record's value in SI units. }
+        distance_key: { type: string, description: "A best-effort record: the standard distance.", examples: [10k] }
+        distance: { type: number, description: Metres. }
+        elapsed_time: { type: integer, description: Seconds. }
+
+    SegmentEffortCreatedData:
+      type: object
+      required: [segment_effort_id, workout_id, segment_id, segment_name, elapsed_time, personal_place, rank]
+      properties:
+        segment_effort_id: { $ref: "#/components/schemas/Id" }
+        workout_id: { $ref: "#/components/schemas/Id" }
+        segment_id: { $ref: "#/components/schemas/Id" }
+        segment_name: { type: string }
+        elapsed_time: { type: integer }
+        personal_place: { type: [integer, "null"], description: 1 to 3 among your own efforts on the segment. }
+        rank: { type: [integer, "null"], description: Your place on the segment's leaderboard, when it ranks you. }
+
+    CommentCreatedData:
+      type: object
+      required: [comment_id, author, reply_to_id]
+      properties:
+        comment_id: { $ref: "#/components/schemas/Id" }
+        workout_id: { $ref: "#/components/schemas/Id" }
+        remote_note_id: { $ref: "#/components/schemas/Id" }
+        author: { $ref: "#/components/schemas/Account" }
+        reply_to_id: { oneOf: [{ $ref: "#/components/schemas/Id" }, { type: "null" }] }
+
+    ReactionCreatedData:
+      type: object
+      required: [type, author]
+      properties:
+        workout_id: { $ref: "#/components/schemas/Id" }
+        remote_note_id: { $ref: "#/components/schemas/Id" }
+        type: { type: string, description: "`beer`, `energy`, `coffee` or `like`. Open enumeration." }
+        author: { $ref: "#/components/schemas/Account" }
+
+    FollowData:
+      type: object
+      required: [account]
+      properties:
+        account: { $ref: "#/components/schemas/Account" }
+
+    ParticipationData:
+      type: object
+      description: |
+        A participation names the workout it is about when that workout is on
+        this instance (`workout_id`), and the received note when another
+        instance's owner invited you (`remote_note_id`).
+      required: [participation_id, kind, account]
+      properties:
+        participation_id: { $ref: "#/components/schemas/Id" }
+        workout_id: { $ref: "#/components/schemas/Id" }
+        remote_note_id: { $ref: "#/components/schemas/Id" }
+        kind: { type: string, description: "`credit` or `link`. Open enumeration." }
+        account: { $ref: "#/components/schemas/Account" }
+
+    ImportConnectionData:
+      type: object
+      required: [provider]
+      properties:
+        provider: { type: string, examples: [garmin_connect] }

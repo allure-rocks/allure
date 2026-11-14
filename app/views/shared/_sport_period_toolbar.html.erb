@@ -1,0 +1,82 @@
+<%# Hub and profile toolbar (DESIGN.md §8.4, §20.14). From md up: sport pills
+    (§10.6) — icon, name and the period's count, « Tous » first — and the
+    period as a segmented control. On phones: one row of two native selects,
+    sport then period. No frame: it is the page's own control row, not a
+    card. Every choice is a plain GET URL. %>
+<% prefix = sport_param.to_s %>
+<div class="hub-toolbar mb-3">
+  <% if sports.any? %>
+    <%= form_with url: path, method: :get, class: "hub-toolbar__sports d-none d-md-block",
+                  data: { controller: "autosubmit", turbo_action: "advance" } do %>
+      <%= hidden_field_tag :period, period, id: nil %>
+      <fieldset class="allure-sport-filter">
+        <legend class="visually-hidden"><%= t("me.toolbar.sport_label") %></legend>
+        <div class="form-selectgroup allure-sport-filter__options" data-controller="selectgroup-scroll">
+          <% total = selector_sports.sum { |entry| entry[:count] } %>
+          <label class="form-selectgroup-item">
+            <%= radio_button_tag sport_param, "", selected_sport.nil?, id: "#{prefix}_all",
+                  class: "form-selectgroup-input",
+                  aria: { label: "#{t('me.toolbar.all_sports')} — #{t('me.sports.workouts', count: total)}" },
+                  data: { action: "change->autosubmit#submit" } %>
+            <span class="form-selectgroup-label">
+              <i class="ti ti-category allure-sport-filter__icon" aria-hidden="true"></i>
+              <span><%= t("me.toolbar.all") %></span>
+              <span class="allure-sport-filter__count"><%= format_decimal(total) %></span>
+            </span>
+          </label>
+          <% selector_sports.each_with_index do |entry, index| %>
+            <label class="form-selectgroup-item">
+              <%= radio_button_tag sport_param, entry[:key], entry[:active], id: "#{prefix}_#{index}",
+                    class: "form-selectgroup-input",
+                    aria: { label: "#{sport_display_name(entry[:sport])} — #{t('me.sports.workouts', count: entry[:count])}" },
+                    data: { action: "change->autosubmit#submit" } %>
+              <span class="form-selectgroup-label">
+                <span class="allure-sport-filter__icon" aria-hidden="true"><%= sport_icon_tag(entry[:sport]) %></span>
+                <span><%= sport_display_name(entry[:sport]) %></span>
+                <span class="allure-sport-filter__count"><%= format_decimal(entry[:count]) %></span>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+      <noscript><%= submit_tag t("me.toolbar.apply"), name: nil, class: "btn btn-sm btn-outline-secondary mt-2" %></noscript>
+    <% end %>
+  <% end %>
+
+  <nav class="nav nav-segmented nav-sm hub-period-switch d-none d-md-flex" aria-label="<%= t("me.period.label") %>">
+    <% periods.each do |choice| %>
+      <% query = { period: choice, sport_param => selected_sport }.compact.to_query %>
+      <%= link_to t("me.period.#{choice}"), "#{path}?#{query}",
+            class: class_names("nav-link", active: choice == period),
+            aria: { current: (choice == period ? "true" : nil) } %>
+    <% end %>
+  </nav>
+
+  <%# Phones get two native selects on one row (DESIGN.md §8.4): the sport
+      select lists every sport practiced at least once — names only — takes
+      the free width and truncates its label; the period select keeps its
+      short label. Same URLs as the controls above. %>
+  <div class="hub-toolbar__phone d-flex d-md-none">
+    <% if sports.any? %>
+      <%= form_with url: path, method: :get, class: "hub-sport-select d-flex align-items-center gap-2",
+                    data: { controller: "autosubmit", turbo_action: "advance" } do |form| %>
+        <% sport_choices = sports.map { |entry| [ sport_display_name(entry[:sport]), entry[:key] ] } %>
+        <%= form.hidden_field :period, value: period, id: nil %>
+        <%= form.select sport_param, [ [ t("me.toolbar.all_sports"), "" ] ] + sport_choices,
+              { selected: selected_sport },
+              class: "form-select form-select-sm", id: "#{prefix}_select", aria: { label: t("me.toolbar.sport_label") },
+              data: { action: "change->autosubmit#submit" } %>
+        <noscript><%= form.submit t("me.toolbar.apply"), class: "btn btn-sm btn-outline-secondary" %></noscript>
+      <% end %>
+    <% end %>
+
+    <%= form_with url: path, method: :get, class: "hub-period-select ms-auto d-flex align-items-center gap-2",
+                  data: { controller: "autosubmit", turbo_action: "advance" } do |form| %>
+      <%= form.hidden_field sport_param, value: selected_sport, id: nil if selected_sport %>
+      <%= form.select :period, periods.map { |choice| [ t("me.period_short.#{choice}"), choice ] }, { selected: period },
+            class: "form-select form-select-sm", aria: { label: t("me.period.label") },
+            data: { action: "change->autosubmit#submit" } %>
+      <noscript><%= form.submit t("me.toolbar.apply"), class: "btn btn-sm btn-outline-secondary" %></noscript>
+    <% end %>
+  </div>
+</div>

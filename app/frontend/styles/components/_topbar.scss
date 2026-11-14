@@ -1,0 +1,51 @@
+// Topbar action cluster: import button, notification bell, theme toggle and
+// account menu (DESIGN.md §7.3, §10.16, §18.4).
+.navbar .navbar-nav.flex-row {
+  // Below `lg` Tabler left-aligns every collapsed-menu link. The action row
+  // stays horizontal at every width, so its 40×44 link boxes keep their glyph
+  // centred; otherwise the pressed/open box hangs off to the right of the icon.
+  .nav-link {
+    justify-content: center;
+  }
+
+  // Tabler only pins an empty navbar badge (a dot); a count badge stays in the
+  // link's row, beside the glyph. Pin it to the inside top corner of a 40px box
+  // with the glyph centred, so it overlaps the bell's corner and never pokes
+  // out of the open-state box, whatever the count width.
+  .nav-link:has(> .ti-bell) {
+    min-width: 2.5rem;
+  }
+
+  .nav-link .badge {
+    position: absolute;
+    top: 0.25rem;
+    inset-inline-end: 0;
+    margin-inline-start: 0;
+    transform: none;
+  }
+}
+
+// Below `lg` the import label is hidden and the button becomes a square glyph
+// tile sized like Tabler's `btn-icon`, close to the sibling 40×44 boxes. The
+// visual stays 36px, so the 44×44 touch target is extended with a
+// pseudo-element instead of enlarging the tile.
+.topbar-import {
+  position: relative;
+
+  @include media-breakpoint-down(lg) {
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    justify-content: center;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 44px;
+      height: 44px;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

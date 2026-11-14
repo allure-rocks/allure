@@ -1,0 +1,103 @@
+<% content_for :title, t("admin.imports.connections.title") %>
+
+<% content_for :page_header do %>
+  <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+  <h1 class="page-title"><%= t("admin.imports.title") %></h1>
+<% end %>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <%= render "admin/imports/tabs", current: :connections %>
+  </div>
+  <div class="card-body">
+    <%= form_with url: admin_import_connections_path, method: :get, class: "row g-2 align-items-end" do %>
+      <div class="col-auto">
+        <%= label_tag :provider, t("admin.imports.connections.filters.provider"), class: "form-label" %>
+        <%= select_tag :provider,
+              options_for_select(
+                [ [ t("admin.imports.filters.all"), "" ] ] +
+                  ImportConnection::PROVIDERS.map { |key| [ t("workouts.batch_import.sources.#{key}.label"), key ] },
+                @provider
+              ),
+              class: "form-select" %>
+      </div>
+      <div class="col-auto">
+        <%= label_tag :status, t("admin.imports.filters.status"), class: "form-label" %>
+        <%= select_tag :status,
+              options_for_select(
+                [ [ t("admin.imports.filters.all"), "" ] ] +
+                  ImportConnection::STATUSES.map { |value| [ t("settings.connections.states.#{value}"), value ] },
+                @status
+              ),
+              class: "form-select" %>
+      </div>
+      <div class="col-auto">
+        <%= submit_tag t("admin.imports.filters.apply"), class: "btn btn-outline-primary", name: nil %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm card-table">
+      <caption class="visually-hidden"><%= t("admin.imports.connections.title") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("admin.imports.table.owner") %></th>
+          <th scope="col"><%= t("admin.imports.connections.table.provider") %></th>
+          <th scope="col"><%= t("admin.imports.table.status") %></th>
+          <th scope="col"><%= t("admin.imports.connections.table.linked_at") %></th>
+          <th scope="col"><%= t("admin.imports.connections.table.last_synced_at") %></th>
+          <th scope="col"><%= t("admin.imports.connections.table.session_end") %></th>
+          <th scope="col"><%= t("admin.imports.connections.table.auto_sync") %></th>
+          <th scope="col" class="text-end"><%= t("admin.imports.connections.table.workouts") %></th>
+          <th scope="col"><%= t("admin.imports.connections.table.last_error") %></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @connections.each do |connection| %>
+          <% provider = t("workouts.batch_import.sources.#{connection.provider}.label") %>
+          <tr>
+            <td class="text-secondary">
+              <%= link_to "@#{connection.user.username}", admin_account_path(connection.user) %>
+            </td>
+            <td><%= provider %></td>
+            <td>
+              <%= import_connection_badge(connection, enabled: connection.enabled?) %>
+              <% if @active_batches[connection.id].to_i.positive? %>
+                <span class="badge bg-primary-lt"><%= t("admin.imports.connections.table.batch_running") %></span>
+              <% end %>
+            </td>
+            <td class="text-secondary"><%= connection.linked_at ? l(connection.linked_at, format: :long) : "—" %></td>
+            <td class="text-secondary"><%= connection.last_synced_at ? l(connection.last_synced_at, format: :long) : "—" %></td>
+            <td class="text-secondary"><%= connection.token_expires_at ? l(connection.token_expires_at, format: :long) : "—" %></td>
+            <td><%= t(connection.auto_sync? ? "admin.imports.connections.table.yes" : "admin.imports.connections.table.no") %></td>
+            <td class="text-end"><%= @workout_counts.fetch(connection.id, 0) %></td>
+            <td class="text-break text-secondary small"><%= connection.last_sync_error %></td>
+            <td class="text-end">
+              <% if ImportConnections::OperatorRevocation.new(connection).revocable? %>
+                <%= button_to t("admin.imports.connections.revoke"), admin_import_connection_revoke_path(connection),
+                      class: "btn btn-sm btn-outline-danger",
+                      form: { data: {
+                        confirm_title: t("admin.imports.connections.confirm_title", provider:, username: connection.user.username),
+                        confirm_body: t("admin.imports.connections.confirm_body", provider:),
+                        confirm_verb: t("admin.imports.connections.revoke")
+                      } } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        <% if @connections.empty? %>
+          <tr><td colspan="10" class="text-secondary"><%= t("admin.imports.connections.empty") %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if @pagy.pages > 1 %>
+    <div class="card-footer d-flex justify-content-center">
+      <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
+  <% end %>
+</div>

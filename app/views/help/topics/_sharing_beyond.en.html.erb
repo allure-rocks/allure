@@ -1,0 +1,80 @@
+<% if Allure::Federation::Config.enabled? %>
+  <p class="text-secondary">This instance shares with other Allure instances.</p>
+<% else %>
+  <p class="text-secondary">
+    This instance does not share with other instances at the moment: everything
+    you publish stays here. The rest of this page applies once its operator
+    turns sharing on.
+  </p>
+<% end %>
+
+<p>
+  Allure instances can talk to each other. A member of another instance can
+  follow you, and you can follow them, as if you were on the same server. Their
+  address includes their instance: <code>@marie@allure.example.org</code>.
+</p>
+
+<h2>Following and being followed</h2>
+<ul>
+  <li>You follow someone from <%= link_to "People", people_path %>, by their
+    address, or from their profile.</li>
+  <li>Every follow request waits for approval, here and on other instances.
+    You decide who follows you.</li>
+  <li>Blocking an account stops everything between you, in both directions,
+    and ends its follow.</li>
+</ul>
+
+<h2>Being found by name</h2>
+<p>
+  Name search is optional and off by default. Until you turn it on in
+  <%= link_to "your profile", settings_profile_path %>, only people who type your
+  full handle can find you. Once you do, a result shows only your avatar, your
+  name and your handle: never your biography, your places or your activities.
+</p>
+<p>
+  Follower and following lists are not published to the network: who follows you
+  and who you follow stays private. You can remove a follower from
+  <%= link_to "Accounts", people_path %>; they will no longer see your
+  followers-only publications.
+</p>
+
+<h2>What other instances receive</h2>
+<p>
+  When you publish, each instance where someone follows you receives a
+  <strong>copy</strong> of the publication — exactly the copy your publishing
+  profile produced, privacy zones already applied — and keeps it to show it to
+  your followers there.
+</p>
+<ul>
+  <li><strong>Public</strong> publications go to every instance where you have
+    an accepted follower.</li>
+  <li><strong>Followers</strong> publications go only to instances that this
+    instance's operator has approved, and only to your accepted followers there.
+    Elsewhere, your followers simply do not receive them.</li>
+  <li>Comments and reactions people leave from other instances reach you here,
+    and comments on your public publications are passed on to the instances
+    that received them.</li>
+  <li>Nothing else leaves: not your workouts, your original files, your zones,
+    your private settings, or your heart-rate zones and load.</li>
+</ul>
+
+<h2>What a deletion can and cannot do</h2>
+<p>
+  When you delete a publication, unfollow someone, block an account or delete
+  your account, this instance tells the other instances, and well-behaved ones
+  delete their copy. But a copy that has left cannot be taken back by force.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  So the rule is simple: publish what you would be comfortable seeing kept. The
+  publication delay and privacy zones are there to help.
+</p>
+
+<h2>Your address is permanent</h2>
+<p>
+  Other instances know you by your username on this instance. Your username
+  cannot be changed, and once an account is deleted its username is never given
+  to anyone else.
+</p>

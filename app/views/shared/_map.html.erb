@@ -1,0 +1,139 @@
+<%# The map component. Callers pass what differs: the track endpoint or an
+    inline sanitized GeoJSON, the translation scope, whether the elevation
+    chart drives a selection on it, whether the profile keeps the basemap, and
+    whether to draw the card chrome and the zoom/fullscreen/scale controls.
+    The candidate preview embeds it bare, at thumbnail size. The track is one
+    theme-aware ink for every sport (DESIGN.md §6). %>
+<% selection = local_assigns.fetch(:selection, false) %>
+<% analysis = local_assigns.fetch(:analysis, false) %>
+<% sync = local_assigns.fetch(:sync, true) %>
+<% basemap = local_assigns.fetch(:basemap, true) %>
+<% chrome = local_assigns.fetch(:chrome, true) %>
+<% controls = local_assigns.fetch(:controls, true) %>
+<% geojson = local_assigns[:geojson] %>
+<% summary = local_assigns[:summary].presence %>
+<%# A page whose summary tiles already state the same figures keeps the
+    summary for assistive tech only (it still describes the canvas). %>
+<% summary_visible = local_assigns.fetch(:summary_visible, true) %>
+<% map_size = local_assigns.fetch(:map_size, nil) %>
+<% map_modifier = %w[compact tall].include?(map_size.to_s) ? "allure-map--#{map_size}" : nil %>
+<% summary_id = local_assigns.fetch(:summary_id) { "#{scope.tr('.', '-')}-summary" } %>
+<% smoothing = local_assigns.fetch(:smoothing, "off").presence || "off" %>
+<% smoothing_level = local_assigns.fetch(:smoothing_level, "medium").presence || "medium" %>
+<% smoothing_control = local_assigns.fetch(:smoothing_control, false) %>
+<% smoothing_persist_url = local_assigns[:smoothing_persist_url] %>
+<%# Owner-only flagged readings drawn as short dashes (DESIGN.md §15.5). %>
+<% anomalies = local_assigns.fetch(:anomalies, []) %>
+<%# The owner's placed photos (PLAN_PHOTOS.md §7); nil on every other map. %>
+<% photos = local_assigns[:photos] %>
+<%# A virtual world's own map image replaces the ordinary basemap
+    (PLAN_VIRTUAL.md); nil on every real-world activity. %>
+<% virtual_basemap = local_assigns[:virtual_basemap] %>
+<%# A power-led virtual ride offers its watts first and remembers its own
+    colour choice (PLAN_VIRTUAL.md §8). %>
+<% power_led = local_assigns.fetch(:power_led, false) %>
+<% colour_metrics = power_led ? %w[power elevation speed] : %w[elevation speed power] %>
+<% actions = [ "allure:theme-changed@window->map#themeChanged", "allure:smoothing-changed@window->map#smoothingChanged" ] %>
+<% actions << "allure:track-hover@window->map#trackHover" if sync %>
+<% actions << "allure:segment-selection@window->map#highlightSelection" if selection %>
+<% actions << "allure:analysis-highlight@window->map#analysisHighlight" if analysis %>
+<% actions << "allure:analysis-tab-changed@window->map#analysisTabChanged" if analysis %>
+<% if photos %>
+  <% actions.push("allure:photos-changed@window->map#photosChanged", "allure:photo-place@window->map#photoPlace",
+                  "allure:photo-place-error@window->map#photoPlaceError", "allure:photo-focus@window->map#photoFocus") %>
+<% end %>
+<div class="<%= chrome ? "card mb-3" : "allure-map-embed" %>"
+     data-controller="map"
+     data-action="<%= actions.join(" ") %>"
+     data-map-url-value="<%= local_assigns[:url] %>"
+     <% if geojson %>data-map-geojson-value="<%= geojson.to_json %>"<% end %>
+     data-map-style-url-value="<%= basemap ? map_style_url : "" %>"
+     data-map-style-url-dark-value="<%= basemap ? map_dark_style_url : "" %>"
+     <% if virtual_basemap %>data-map-virtual-basemap-value="<%= virtual_basemap.to_map.to_json %>"<% end %>
+     data-map-controls-value="<%= controls %>"
+     data-map-unit-system-value="<%= current_user&.unit_system || "metric" %>"
+     data-map-power-led-value="<%= power_led %>"
+     data-map-locale-value="<%= map_control_locale.to_json %>"
+     data-map-legend-locale-value="<%= map_legend_locale.to_json %>"
+     data-map-basemap-theme-value="<%= basemap_theme_preference %>"
+     data-map-smoothing-value="<%= smoothing %>"
+     data-map-smoothing-level-value="<%= smoothing_level %>"
+     data-map-smoothing-control-value="<%= smoothing_control %>"
+     <% if smoothing_persist_url %>data-map-smoothing-persist-url-value="<%= smoothing_persist_url %>"<% end %>
+     <% if anomalies.present? %>data-map-anomalies-value="<%= anomalies.to_json %>"<% end %>
+     <% if photos.present? %>data-map-photos-value="<%= photos.to_json %>"<% end %>
+     data-map-start-label-value="<%= t("#{scope}.start") %>"
+     data-map-finish-label-value="<%= t("#{scope}.finish") %>">
+  <% if chrome %>
+    <div class="card-header">
+      <h2 class="card-title"><%= t("#{scope}.title") %></h2>
+      <div class="card-actions d-flex align-items-center gap-2 flex-wrap justify-content-end">
+        <%# Visible once at least one metric varies. "flat" is the default:
+            the track keeps the brand colour unless the reader asks for a
+            light-to-dark metric shade. %>
+        <select class="form-select form-select-sm w-auto"
+                data-map-target="metric"
+                data-action="change->map#metricChanged"
+                aria-label="<%= t("maps.colour_by.label") %>"
+                hidden>
+          <option value="flat"><%= t("maps.colour_by.flat") %></option>
+          <% colour_metrics.each do |metric| %>
+            <option value="<%= metric %>"><%= t("maps.colour_by.#{metric}") %></option>
+          <% end %>
+        </select>
+        <% if smoothing_control %>
+          <%# The on/off display toggle; the intensity lives in appearance
+              settings and is restored when the box is checked again. %>
+          <div class="dropdown" data-bs-auto-close="outside">
+            <button class="btn btn-sm btn-ghost-secondary btn-icon" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false"
+                    aria-label="<%= t("maps.options.label") %>">
+              <i class="ti ti-adjustments" aria-hidden="true"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+              <label class="dropdown-item d-flex align-items-center gap-2">
+                <input type="checkbox" class="form-check-input m-0"
+                       data-map-target="smoothing"
+                       data-action="change->map#smoothingToggled"
+                       <%= "checked" if smoothing != "off" %>>
+                <span><%= t("maps.options.smooth") %></span>
+              </label>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <div class="allure-visual <%= "allure-visual--#{map_size}" if map_modifier %>">
+    <div class="allure-visual-state" data-map-target="loading" role="status"><%= t("#{scope}.loading") %></div>
+    <div class="allure-visual-state text-secondary" data-map-target="empty" role="status" hidden><%= t("#{scope}.empty") %></div>
+    <div class="allure-visual-state text-danger" data-map-target="error" role="alert" hidden><%= t("#{scope}.error") %></div>
+    <div class="allure-map <%= map_modifier %>" data-bs-theme="<%= basemap_theme %>" data-map-target="canvas" aria-label="<%= t("#{scope}.title") %>"
+         <% if summary %>aria-describedby="<%= summary_id %>"<% end %>></div>
+    <%# The selected metric's ramp and its two ends, so a light-to-dark track
+        reads as a value (DESIGN.md §15.2). The chart and its data table remain
+        the text equivalent of the figures. %>
+    <div class="allure-map-legend" data-map-target="legend" hidden>
+      <span class="allure-map-legend__title" data-map-target="legendTitle"></span>
+      <span class="allure-map-legend__ramp" data-map-target="legendRamp" aria-hidden="true"></span>
+      <span class="allure-map-legend__values">
+        <span data-map-target="legendLow"></span>
+        <span data-map-target="legendHigh"></span>
+      </span>
+    </div>
+    <% if photos %>
+      <%# The placement instruction, and the reason a click was refused, sit
+          on the map itself (DESIGN.md §10.22). %>
+      <div class="allure-map__placing" data-map-target="placing" hidden>
+        <p class="allure-map__placing-text" data-map-target="placingText" role="status"></p>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="map#cancelPhotoPlacement">
+          <%= t("photos.placement.cancel") %>
+        </button>
+      </div>
+    <% end %>
+  </div>
+  <% if summary %>
+    <div class="<%= summary_visible ? (chrome ? "card-footer text-secondary small" : "allure-map-embed-caption text-secondary small") : "visually-hidden" %>"
+         id="<%= summary_id %>"><%= summary %></div>
+  <% end %>
+</div>

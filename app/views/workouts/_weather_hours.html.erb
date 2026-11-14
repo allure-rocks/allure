@@ -1,0 +1,64 @@
+<%# The « Météo » analysis tab (PLAN_WEATHER.md §7): the weather met at the
+    start, each whole hour and the finish. Owner-only, never published. A row
+    highlights the stretch until the next one on the profile and the map. %>
+<% distances = local_assigns.fetch(:distances, []) %>
+<% row_attributes = rows.each_index.map do |index|
+     from = distances[index]
+     to = distances[index + 1]
+     from && to && to > from ? tag.attributes(analysis_row_attributes(from, to, source: "weather")) : ""
+   end %>
+<div class="table-responsive allure-analysis-table">
+  <table class="table table-sm table-vcenter card-table allure-table-nums">
+    <caption class="visually-hidden"><%= t("weather.hours.title") %></caption>
+    <thead>
+      <tr>
+        <th scope="col"><%= t("weather.hours.time") %></th>
+        <th scope="col"><%= t("weather.hours.condition") %></th>
+        <th scope="col" class="text-end"><%= t("weather.hours.temperature") %></th>
+        <th scope="col" class="text-end"><%= t("weather.hours.apparent") %></th>
+        <th scope="col" class="text-end"><%= t("weather.hours.wind") %></th>
+        <th scope="col" class="text-end"><%= t("weather.hours.gusts") %></th>
+        <th scope="col" class="text-end"><%= t("weather.hours.precipitation") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% rows.each_with_index do |row, index| %>
+        <% condition = Allure::Weather::Conditions.token(row.weather_code) %>
+        <tr <%= row_attributes[index] %>>
+          <td><%= weather_row_time(row.time) %></td>
+          <td>
+            <span class="d-inline-flex align-items-center gap-1">
+              <%= weather_condition_icon(condition, day: row.day, animated: false) %><%= weather_condition_label(condition) || "—" %>
+            </span>
+          </td>
+          <td class="text-end"><strong><%= format_temperature(row.temperature) %></strong></td>
+          <td class="text-end"><%= format_temperature(row.apparent_temperature) %></td>
+          <td class="text-end">
+            <span class="d-inline-flex align-items-center gap-1">
+              <%= wind_arrow(row.wind_direction, size: 14) %><%= wind_label(row.wind_speed, row.wind_direction) %>
+            </span>
+          </td>
+          <td class="text-end"><%= format_wind_speed(row.wind_gusts) %></td>
+          <td class="text-end"><%= format_precipitation(row.precipitation) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+  <% rows.each_with_index do |row, index| %>
+    <% condition = Allure::Weather::Conditions.token(row.weather_code) %>
+    <li class="list-group-item" <%= row_attributes[index] %>>
+      <div class="d-flex justify-content-between align-items-baseline">
+        <span class="allure-card-title d-inline-flex align-items-center gap-1">
+          <%= weather_condition_icon(condition, day: row.day, animated: false) %><%= weather_row_time(row.time) %>
+        </span>
+        <strong class="allure-table-nums"><%= format_temperature(row.temperature) %></strong>
+      </div>
+      <div class="text-secondary small allure-table-nums">
+        <%= wind_label(row.wind_speed, row.wind_direction, gusts: row.wind_gusts) %>
+        <% if row.precipitation.to_f.positive? %> · <%= format_precipitation(row.precipitation) %><% end %>
+      </div>
+    </li>
+  <% end %>
+</ul>

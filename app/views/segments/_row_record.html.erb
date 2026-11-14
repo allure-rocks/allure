@@ -1,0 +1,19 @@
+<%# The course record in the index (DESIGN.md §20.6): the leader of the
+    shown board — the gold laurel, the time, and the athlete under the §20.7
+    alias rules, never an avatar or a date. A private course has no board, so
+    no record. Locals:
+    `segment`, `podium` (a Segments::Podiums::Row), `owner_view`. %>
+<% leader = podium_rows(podium, segment, owner_view:).first %>
+<% if leader %>
+  <span class="d-inline-flex flex-wrap align-items-baseline column-gap-1 flex-md-column align-items-md-end">
+    <span class="text-nowrap">
+      <%= rank_medal(1) %>
+      <span class="ms-1"><%= format_duration(leader[:effort].elapsed_time) %></span>
+    </span>
+    <span class="text-secondary small text-truncate allure-segment-record__athlete">
+      <%= leader[:athlete] %>
+    </span>
+  </span>
+<% else %>
+  <span class="text-secondary">—</span>
+<% end %>

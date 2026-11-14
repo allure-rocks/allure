@@ -1,0 +1,35 @@
+<%# A linked service's preferences card (PLAN_REMOTE_IMPORTS.md §8.1): its own
+    save, like every settings card (DESIGN.md §8.5).
+    Locals: source, connection. %>
+<div class="card mb-3">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("settings.connections.preferences.title") %></h3>
+  </div>
+  <div class="card-body">
+    <%= form_with model: connection, url: connection_path(source.key), method: :patch do |form| %>
+      <label class="form-check form-switch">
+        <%= form.check_box :auto_sync, class: "form-check-input", role: "switch" %>
+        <span class="form-check-label"><%= t("settings.connections.preferences.auto_sync") %></span>
+      </label>
+      <small class="form-text d-block mb-3"><%= t("settings.connections.preferences.auto_sync_hint") %></small>
+
+      <% if ImportConnections::Providers.supports?(source.key, :route_filter) %>
+        <label class="form-check form-switch">
+          <%= form.check_box :positioned_only, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.connections.preferences.positioned_only") %></span>
+        </label>
+        <small class="form-text d-block mb-3"><%= t("settings.connections.preferences.positioned_only_hint") %></small>
+      <% end %>
+
+      <% if ImportConnections::Providers.supports?(source.key, :fallback_sport) %>
+        <%= form.label :fallback_sport_id, t("settings.connections.preferences.fallback_sport"), class: "form-label" %>
+        <%= form.select :fallback_sport_id, sport_options_for_select, { include_blank: t("settings.connections.preferences.no_fallback") }, class: "form-select" %>
+        <small class="form-text"><%= t("settings.connections.preferences.fallback_sport_hint") %></small>
+      <% end %>
+
+      <div class="allure-actions mt-3">
+        <%= form.submit t("settings.connections.preferences.save"), class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

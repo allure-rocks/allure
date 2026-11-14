@@ -1,0 +1,47 @@
+<% content_for :title, t("equipments.index.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("equipments.index.pretitle") %></div>
+      <h1 class="page-title"><%= t("equipments.index.title") %></h1>
+    </div>
+    <div class="col-auto ms-auto">
+      <%= link_to t("equipments.index.new_button"), new_equipment_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
+
+<% if @equipments.any? %>
+  <div class="row row-deck row-cards">
+    <% @equipments.each do |equipment| %>
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h3 class="card-title mb-1 text-truncate"><%= link_to equipment.label, equipment_path(equipment), class: "text-reset" %></h3>
+            <div class="text-secondary small">
+              <%= equipment_type_name(equipment.equipment_type) %>
+              <% unless equipment.is_active? %>
+                <span class="badge bg-secondary-lt ms-1"><%= t("equipments.index.inactive") %></span>
+              <% end %>
+            </div>
+            <div class="mt-2 text-secondary small">
+              <%= format_distance(equipment.total_distance) %> · <%= t("equipments.index.workouts", count: equipment.total_workouts) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="card-body">
+      <div class="empty">
+        <div class="empty-icon"><i class="ti ti-bike fs-1 text-primary"></i></div>
+        <p class="empty-title"><%= t("equipments.index.empty_title") %></p>
+        <p class="empty-subtitle text-secondary"><%= t("equipments.index.empty_subtitle") %></p>
+        <div class="empty-action"><%= link_to t("equipments.index.new_button"), new_equipment_path, class: "btn btn-primary" %></div>
+      </div>
+    </div>
+  </div>
+<% end %>

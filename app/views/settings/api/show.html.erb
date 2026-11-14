@@ -1,0 +1,108 @@
+<% content_for :title, t("settings.api.title") %>
+
+<% content_for :settings_actions do %>
+  <%= link_to new_settings_api_token_path, class: "btn btn-primary" do %>
+    <i class="ti ti-plus me-1" aria-hidden="true"></i><%= t("settings.api.tokens.new_button") %>
+  <% end %>
+<% end %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.api.title") } do %>
+  <p class="text-secondary">
+    <%= t("settings.api.intro") %>
+    <%= link_to developers_api_path do %><%= t("settings.api.reference_link") %> <i class="ti ti-arrow-right" aria-hidden="true"></i><% end %>
+  </p>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title"><%= t("settings.api.tokens.title") %></h3>
+    </div>
+    <% if @tokens.empty? %>
+      <div class="card-body">
+        <div class="empty py-4">
+          <p class="empty-title"><%= t("settings.api.tokens.empty") %></p>
+          <p class="empty-subtitle text-secondary"><%= t("settings.api.tokens.empty_hint") %></p>
+          <div class="empty-action">
+            <%= link_to t("settings.api.tokens.new_button"), new_settings_api_token_path, class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="table-responsive">
+        <table class="table table-sm table-vcenter card-table">
+          <caption class="visually-hidden"><%= t("settings.api.tokens.title") %></caption>
+          <thead>
+            <tr>
+              <th scope="col"><%= t("settings.api.tokens.table.name") %></th>
+              <th scope="col"><%= t("settings.api.tokens.table.permissions") %></th>
+              <th scope="col"><%= t("settings.api.tokens.table.expires") %></th>
+              <th scope="col"><%= t("settings.api.tokens.table.last_used") %></th>
+              <th scope="col"><span class="visually-hidden"><%= t("settings.api.tokens.table.actions") %></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @tokens.each do |token| %>
+              <tr class="<%= "text-secondary" unless token.usable? %>">
+                <td>
+                  <div class="fw-medium text-break"><%= token.name %></div>
+                  <code class="small"><%= token.token_prefix %>…</code>
+                </td>
+                <td>
+                  <% token.scopes.each do |scope| %>
+                    <span class="badge bg-secondary-lt" title="<%= t("settings.api.scopes.#{scope.tr(':', '_')}.label") %>"><%= scope %></span>
+                  <% end %>
+                  <% unless token.mcp_geometry == "none" %>
+                    <span class="badge bg-warning-lt"><i class="ti ti-map-pin me-1" aria-hidden="true"></i><%= t("settings.api.mcp_geometry.#{token.mcp_geometry}.badge") %></span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if token.revoked? %>
+                    <span class="badge bg-danger-lt"><%= t("settings.api.tokens.status.revoked") %></span>
+                  <% elsif token.expired? %>
+                    <span class="badge bg-secondary-lt"><%= t("settings.api.tokens.status.expired") %></span>
+                  <% else %>
+                    <time datetime="<%= token.expires_at.iso8601 %>"><%= l(token.expires_at.to_date, format: :day_month_year) %></time>
+                  <% end %>
+                </td>
+                <td>
+                  <% if token.last_used_at %>
+                    <time datetime="<%= token.last_used_at.iso8601 %>"><%= t("settings.api.tokens.used_ago", time: time_ago_in_words(token.last_used_at)) %></time>
+                  <% else %>
+                    <span class="text-secondary"><%= t("settings.api.tokens.never_used") %></span>
+                  <% end %>
+                </td>
+                <td class="text-end">
+                  <% if token.usable? %>
+                    <%= button_to t("settings.api.tokens.revoke"), settings_api_token_path(token),
+                          method: :delete, class: "btn btn-sm btn-outline-danger",
+                          aria: { label: "#{t("settings.api.tokens.revoke")} : #{token.name}" },
+                          form: { data: {
+                            confirm_title: t("settings.api.tokens.confirm.title"),
+                            confirm_body: t("settings.api.tokens.confirm.body", name: token.name),
+                            confirm_verb: t("settings.api.tokens.confirm.verb")
+                          } } %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      <h3 class="card-title"><%= t("settings.api.mcp.title") %></h3>
+    </div>
+    <div class="card-body">
+      <p class="text-secondary"><%= t("settings.api.mcp.intro") %></p>
+      <dl class="row">
+        <dt class="col-sm-3"><%= t("settings.api.mcp.endpoint") %></dt>
+        <dd class="col-sm-9"><code class="text-break"><%= mcp_endpoint_url %></code></dd>
+      </dl>
+      <%= render "settings/api/mcp_clients", secret: t("settings.api.mcp.placeholder"), dom_suffix: "settings" %>
+    </div>
+  </div>
+
+  <%= render "settings/webhooks/card", webhooks: @webhooks, last_deliveries: @last_deliveries %>
+<% end %>

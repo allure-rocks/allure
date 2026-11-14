@@ -1,0 +1,92 @@
+<%# The table view (§20.4): the full table from md up, and the §12.3 list of
+    stacked rows below it — the phone never falls back to the card grid, so
+    switching views keeps its meaning at every width. Both the table body and
+    the phone list are endless-scroll item containers. Column priorities are
+    declared in DESIGN.md §12.2. The leading selection column and the bulk bar
+    are added from lg up, web only (DESIGN.md §10.19): the iOS companion's HTML
+    never carries them, because it also runs on iPad. %>
+<% bulk_enabled = !hotwire_native_app? %>
+<% filtered_count = local_assigns.fetch(:filtered_count, 0) %>
+<% equipments = local_assigns.fetch(:equipments, []) %>
+<%= tag.div class: class_names("card d-none d-md-block allure-table-card", "allure-bulk-enabled": bulk_enabled),
+            data: bulk_enabled ? { controller: "bulk-selection", bulk_selection_filtered_value: filtered_count } : {} do %>
+  <% if bulk_enabled %>
+    <%= render "bulk_bar", filtered_count:, workouts_size: workouts.size, equipments: %>
+  <% end %>
+  <div class="table-responsive">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+    <caption class="visually-hidden"><%= t("workouts.index.title") %></caption>
+    <thead>
+      <tr>
+        <% if bulk_enabled %>
+          <th scope="col" class="allure-bulk-cell d-none d-lg-table-cell">
+            <input type="checkbox" class="form-check-input m-0" data-bulk-selection-target="all"
+                   data-action="change->bulk-selection#toggleAll"
+                   aria-label="<%= t("workouts.bulk.bar.select_all_page") %>">
+          </th>
+        <% end %>
+        <th scope="col"><%= t("workouts.index.table.title") %></th>
+        <%= workout_sort_header t("workouts.index.table.date"), "date" %>
+        <%= workout_sort_header t("workouts.index.table.distance"), "distance", align: :end %>
+        <%= workout_sort_header t("workouts.index.table.duration"), "duration", align: :end %>
+        <%= workout_sort_header t("workouts.index.table.ascent"), "ascent", align: :end %>
+        <th scope="col"><%= t("workouts.index.table.state") %></th>
+        <th scope="col"><span class="visually-hidden"><%= t("workouts.index.table.open") %></span></th>
+      </tr>
+    </thead>
+    <tbody data-infinite-scroll-target="items">
+      <% workouts.each do |workout| %>
+        <% display = workout_display(workout) %>
+        <tr>
+          <% if bulk_enabled %>
+            <td class="allure-bulk-cell d-none d-lg-table-cell">
+              <%# A credit row is not selectable (PLAN_TOGETHER.md §6.6); a
+                  manual entry is (PLAN_MANUAL_ENTRY.md §6). %>
+              <% if workout.authored? %>
+                <input type="checkbox" class="form-check-input m-0 allure-bulk-check" form="workout-bulk-form"
+                       name="workout_ids[]" value="<%= workout.to_param %>"
+                       data-bulk-selection-target="checkbox" data-action="change->bulk-selection#rowChanged"
+                       aria-label="<%= t("workouts.bulk.bar.select_row", title: workout_display_title(display)) %>">
+              <% end %>
+            </td>
+          <% end %>
+          <td class="allure-table-title">
+            <div class="d-flex align-items-center gap-2">
+              <%= sport_tile_tag(display.sport, size: :xs) %>
+              <div class="min-w-0">
+                <div><%= link_to workout_display_title(display), workout_path(workout), class: "text-reset" %></div>
+                <div class="text-secondary small">
+                  <%= sport_display_name(display.sport) %>
+                  <% if workout.commute? %>
+                    · <i class="ti ti-briefcase" aria-hidden="true"></i> <%= t("workouts.commute.badge") %>
+                  <% end %>
+                  <% place_label = workout_place_label(workout) %>
+                  <% if place_label.present? %>
+                    · <i class="ti ti-map-pin" aria-hidden="true"></i> <%= place_label %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="text-nowrap"><%= format_started_at(display.started_at) %></td>
+          <%# A positionless recording shows a dash where the file recorded
+              nothing: no distance on a duration-only session, and no ascent
+              on any of them (PLAN_NO_GPS.md §9). %>
+          <td class="text-end"><%= display.metrics_present? ? workout_table_distance(display) : "—" %></td>
+          <td class="text-end"><%= display.metrics_present? ? format_duration(display.duration) : "—" %></td>
+          <td class="text-end"><%= display.metrics_present? ? workout_table_ascent(display) : "—" %></td>
+          <td><span class="d-inline-flex flex-wrap gap-1"><%= workout_publication_badges(workout) %></span></td>
+          <td class="text-end">
+            <%= link_to t("workouts.index.table.open"), workout_path(workout),
+                  class: "btn btn-sm btn-ghost-secondary",
+                  aria: { label: "#{t("workouts.index.table.open")} : #{workout_display_title(display)}" } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+    </table>
+  </div>
+<% end %>
+<div class="card d-md-none">
+  <%= render "workout_list", workouts: workouts %>
+</div>

@@ -1,0 +1,22 @@
+en:
+  dev_tools:
+    pretitle: Development
+    menu: Act as…
+    bar:
+      copy: "Development mode: you are acting as @%{username}."
+      stop: Return to @%{operator}
+    impersonations:
+      show:
+        title: Act as…
+        accounts: Accounts
+        intro: "Opens a session as this account, with no password and no second factor. The bar's button then returns to the operator's account."
+        start: Act as
+        start_aria: Act as @%{username}
+        empty: No other account to open.
+        more: Only the first %{limit} accounts are listed.
+      create:
+        started: "You are acting as @%{username}."
+        self_refused: You already are this account.
+        suspended_refused: A suspended account cannot be opened.
+      destroy:
+        stopped: "You are acting as @%{username} again."

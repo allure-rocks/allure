@@ -1,0 +1,72 @@
+<% ranges = split_ranges(splits) %>
+<%# The wind faced on each split, when the owner's workout has weather
+    (PLAN_WEATHER.md §7). %>
+<% winds = local_assigns.fetch(:winds, []) %>
+<% if splits.any? %>
+  <div class="table-responsive allure-analysis-table">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("workouts.show.splits.title") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("workouts.show.splits.split") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.splits.distance") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.splits.time") %></th>
+          <th scope="col" class="text-end"><%= effort_column_label(sport, scope: "workouts.show.splits") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.gain") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.loss") %></th>
+          <% if winds.any? %>
+            <th scope="col" class="text-end"><%= t("weather.splits.wind") %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% splits.each_with_index do |split, index| %>
+          <% pace, speed = split_pace_speed(split) %>
+          <tr <%= tag.attributes(analysis_row_attributes(ranges[index][:start], ranges[index][:end], source: "split")) %>>
+            <td>
+              <%= split.number %>
+              <% if split.partial %>
+                <span class="badge bg-secondary-lt ms-1"><%= t("workouts.show.splits.partial") %></span>
+              <% end %>
+            </td>
+            <td class="text-end"><%= format_distance(split.distance) %></td>
+            <td class="text-end"><strong><%= format_duration(split.elapsed_time) %></strong></td>
+            <td class="text-end"><%= effort_cell(average_pace: pace, average_speed: speed, average_power: split.average_power, sport: sport, grade_adjusted_pace: split.grade_adjusted_pace) %></td>
+            <td class="text-end"><%= format_elevation(split.ascent) %></td>
+            <td class="text-end"><%= format_elevation(split.descent) %></td>
+            <% if winds.any? %>
+              <td class="text-end"><%= split_wind_label(winds[index]) %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+    <% splits.each_with_index do |split, index| %>
+      <% pace, speed = split_pace_speed(split) %>
+      <li class="list-group-item" <%= tag.attributes(analysis_row_attributes(ranges[index][:start], ranges[index][:end], source: "split")) %>>
+        <div class="d-flex justify-content-between align-items-baseline">
+          <span class="allure-card-title">
+            <%= t("workouts.show.splits.split") %> <%= split.number %>
+            <% if split.partial %>
+              <span class="badge bg-secondary-lt ms-1"><%= t("workouts.show.splits.partial") %></span>
+            <% end %>
+          </span>
+          <strong class="allure-table-nums"><%= format_duration(split.elapsed_time) %></strong>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          <%= format_distance(split.distance) %> · <%= effort_cell(average_pace: pace, average_speed: speed, average_power: split.average_power, sport: sport, grade_adjusted_pace: split.grade_adjusted_pace) %>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          ↑ <%= format_elevation(split.ascent) %> · ↓ <%= format_elevation(split.descent) %>
+          <% if winds.any? && (wind = split_wind_label(winds[index])) != "—" %>
+            · <%= wind %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="card-body text-secondary"><%= t("workouts.show.splits.empty") %></div>
+<% end %>

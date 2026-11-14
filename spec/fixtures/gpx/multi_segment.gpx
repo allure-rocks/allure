@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Allure Test Suite" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>Multi segment ride</name>
+    <trkseg>
+      <trkpt lat="45.0000" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:00Z</time></trkpt>
+      <trkpt lat="45.0010" lon="6.4000"><ele>505.0</ele><time>2026-06-01T08:01:00Z</time></trkpt>
+      <trkpt lat="45.0020" lon="6.4000"><ele>510.0</ele><time>2026-06-01T08:02:00Z</time></trkpt>
+    </trkseg>
+    <trkseg>
+      <trkpt lat="45.0030" lon="6.4000"><ele>512.0</ele><time>2026-06-01T08:12:00Z</time></trkpt>
+      <trkpt lat="45.0040" lon="6.4000"><ele>515.0</ele><time>2026-06-01T08:13:00Z</time></trkpt>
+      <trkpt lat="45.0050" lon="6.4000"><ele>518.0</ele><time>2026-06-01T08:14:00Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

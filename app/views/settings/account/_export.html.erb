@@ -1,0 +1,49 @@
+<%# The export card (PLAN_ACCOUNT.md §3), re-rendered in place by the live
+    frame while an archive is being prepared; any other state is final.
+    Locals: export (the latest, or nil), requestable, next_export_at. %>
+<% in_progress = export&.in_progress? %>
+<div class="card" id="account-export">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("settings.account.export.title") %></h3>
+  </div>
+  <div class="card-body">
+    <p><%= t("settings.account.export.description") %></p>
+    <p class="text-secondary small"><%= t("settings.account.export.excluded") %></p>
+
+    <div role="status" aria-live="polite">
+      <% if in_progress %>
+        <p class="d-flex align-items-center gap-2 mb-3">
+          <span class="spinner-border spinner-border-sm text-secondary" aria-hidden="true"></span>
+          <%= t("settings.account.export.states.preparing") %>
+        </p>
+      <% elsif export&.downloadable? %>
+        <p class="mb-3">
+          <%= t("settings.account.export.states.ready",
+                size: number_to_human_size(export.byte_size),
+                date: l(export.expires_at.in_time_zone(current_user.time_zone), format: :long)) %>
+        </p>
+        <p>
+          <%= link_to download_settings_account_export_path(export), class: "btn btn-primary", data: { turbo: false } do %>
+            <i class="ti ti-download me-1" aria-hidden="true"></i><%= t("settings.account.export.download") %>
+          <% end %>
+        </p>
+      <% elsif export&.status == "failed" %>
+        <div class="alert alert-danger" role="alert"><%= t("settings.account.export.states.failed") %></div>
+      <% elsif export&.status == "expired" || (export&.ready? && !export.downloadable?) %>
+        <p class="text-secondary mb-3"><%= t("settings.account.export.states.expired") %></p>
+      <% end %>
+    </div>
+
+    <% unless in_progress %>
+      <%= button_to t("settings.account.export.request"), settings_account_exports_path,
+            class: "btn btn-outline-primary", disabled: !requestable,
+            form: { data: { turbo_frame: "_top" } } %>
+      <% if !requestable && next_export_at %>
+        <p class="form-hint mt-2">
+          <%= t("settings.account.export.cooldown", date: l(next_export_at.in_time_zone(current_user.time_zone), format: :long)) %>
+        </p>
+      <% end %>
+      <span data-live-frame-done hidden></span>
+    <% end %>
+  </div>
+</div>

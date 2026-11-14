@@ -1,0 +1,116 @@
+<%# The participant's credit row (PLAN_TOGETHER.md §3.2, §10; DESIGN.md
+    §10.18): the credited metric set of an outing someone else recorded, the
+    « Avec @X » badge, and its removal. Nothing is drawn from a track, since
+    the row has none; slice 2c adds its analysis tabs. %>
+<% source = @workout.credited_from %>
+<%# A remote credit's source is the received note (PLAN_TOGETHER.md §7). %>
+<% remote_note = @workout.remote_participation&.remote_note if @workout.credit_remote? %>
+<% source_path = if source
+                   workout_path(source)
+                 elsif remote_note&.active? && !@workout.credit_detached?
+                   remote_note_path(remote_note)
+                 end %>
+<% content_for :title, workout_display_title(@workout) %>
+
+<% content_for :page_header do %>
+  <div class="allure-workout-header">
+    <div class="allure-workout-header__top">
+      <div class="allure-workout-header__identity d-flex align-items-start gap-3">
+        <%= sport_tile_tag(@workout.sport, size: :md) %>
+        <div>
+          <h1 class="page-title"><%= workout_display_title(@workout) %></h1>
+          <div class="allure-workout-header__when text-secondary small mt-1">
+            <%= sport_display_name(@workout.sport) %> · <%= format_started_at(@workout.started_at) %>
+          </div>
+        </div>
+      </div>
+      <div class="allure-workout-header__actions d-print-none">
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="<%= t("workouts.show.actions.menu") %>">
+            <i class="ti ti-dots" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+            <%= button_to workout_path(@workout), method: :delete,
+                          form: { data: { confirm_title: t("workouts.credit.remove_confirm.title"),
+                                          confirm_body: t("workouts.credit.remove_confirm.body"),
+                                          confirm_verb: t("workouts.credit.remove") } },
+                          class: "dropdown-item text-danger" do %>
+              <i class="ti ti-trash me-2" aria-hidden="true"></i><%= t("workouts.credit.remove") %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-pretitle d-flex flex-wrap align-items-center gap-2 mt-2">
+      <%= together_badge(credit_badge_text(@workout), href: source_path, detached: @workout.credit_detached?) %>
+    </div>
+  </div>
+<% end %>
+
+<%# The map is the source's, read through the publication this account may
+    read, exactly as on the source page; never the raw track. Its analysis
+    interplay stays off: the rows below measure the full track, the
+    publication's may be trimmed at its masked ends. %>
+<% if @credit_participation&.link_suggestion_open? %>
+  <%= render "workout_participations/link_suggestion", participation: @credit_participation %>
+<% end %>
+<% map_view = @credit_display || @credit_remote_view %>
+<% map_visible = map_view.present? && map_view.map_visible? %>
+<% recordings = @credit_participation ? participation_recording_candidates(@credit_participation) : [] %>
+<div class="<%= class_names("allure-detail-layout", "allure-detail-layout--split": map_visible) %>">
+  <% if map_visible %>
+    <div class="allure-detail-map">
+      <section id="section-map" class="allure-detail-section allure-detail-map-panel">
+        <% if @credit_display %>
+          <%= render "map", workout: source, display: @credit_display, analysis: false,
+                            segment_count: Array(@credit_display.track&.fetch("features", nil)).size %>
+        <% else %>
+          <%= render "map", display: @credit_remote_view, analysis: false,
+                            segment_count: Array(@credit_remote_view.track["features"]).size,
+                            track_url: remote_note_track_path(remote_note) %>
+        <% end %>
+      </section>
+    </div>
+  <% end %>
+
+  <div class="allure-detail-before-map">
+    <section id="section-summary" class="allure-detail-section">
+      <%= render "participant_metrics", workout: @workout, hint: t("workouts.credit.metrics_hint") %>
+      <% unless map_visible %>
+        <p class="text-secondary small mb-3">
+          <i class="ti ti-map-off me-1" aria-hidden="true"></i><%= t(@workout.credit_detached? ? "workouts.credit.route_gone" : "workouts.credit.route_hidden") %>
+        </p>
+      <% end %>
+    </section>
+
+    <% if recordings.any? %>
+      <% convert_form_id = "workout-credit-convert" %>
+      <section id="section-convert" class="allure-detail-section">
+        <div class="card mb-3">
+          <div class="card-body">
+            <label class="form-label" for="workout-credit-convert-recording"><%= t("workouts.participations.convert_label") %></label>
+            <%= select_tag :participant_workout_id,
+                           options_for_select(participation_recording_options(recordings)),
+                           id: "workout-credit-convert-recording", class: "form-select mb-2", form: convert_form_id %>
+            <small class="form-hint mb-2"><%= t("workouts.participations.recording_hint") %></small>
+            <%= button_to t("workouts.participations.convert"),
+                          convert_workout_participation_path(source, @credit_participation),
+                          method: :patch, form: { id: convert_form_id }, class: "btn btn-outline-primary" %>
+          </div>
+        </div>
+      </section>
+    <% end %>
+  </div>
+
+  <div class="allure-detail-after-map">
+    <% if @segment_efforts.any? || @best_efforts.any? %>
+      <section id="section-laps" class="allure-detail-section">
+        <%= render "laps", workout: @workout, laps: [], detected_laps: [], climbs: [], descents: [], stops: [],
+                           intervals: [], splits: [], efforts: @segment_efforts,
+                           segment_places: @segment_effort_places, segment_gaps: @segment_effort_gaps,
+                           best_efforts: @best_efforts, best_effort_places: @best_effort_places %>
+      </section>
+    <% end %>
+  </div>
+</div>

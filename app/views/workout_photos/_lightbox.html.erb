@@ -1,0 +1,38 @@
+<%# The photo viewer (DESIGN.md §10.22): a dark surface in both themes, the
+    photo's place in the set, its caption and — when the gallery has them —
+    the capture time, the distance along the route and the way back to the
+    map. Locals: `original` (the owner's download link; false for a reader). %>
+<dialog class="allure-photo-dialog" aria-label="<%= t("photos.title") %>" data-photo-lightbox-target="dialog" data-action="keydown->photo-lightbox#key touchstart->photo-lightbox#touchStart touchend->photo-lightbox#touchEnd">
+  <div class="allure-photo-dialog__bar">
+    <span class="allure-photo-dialog__counter" data-photo-lightbox-target="counter" aria-live="polite"></span>
+    <button type="button" class="allure-photo-dialog__close" data-action="photo-lightbox#close" aria-label="<%= t("photos.close") %>">
+      <i class="ti ti-x" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="allure-photo-dialog__stage">
+    <button type="button" class="allure-photo-dialog__nav allure-photo-dialog__nav--previous" data-action="photo-lightbox#previous" aria-label="<%= t("photos.previous") %>">
+      <i class="ti ti-chevron-left" aria-hidden="true"></i>
+    </button>
+    <img data-photo-lightbox-target="image" alt="">
+    <button type="button" class="allure-photo-dialog__nav allure-photo-dialog__nav--next" data-action="photo-lightbox#next" aria-label="<%= t("photos.next") %>">
+      <i class="ti ti-chevron-right" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="allure-photo-dialog__foot">
+    <p class="allure-photo-dialog__caption" data-photo-lightbox-target="caption"></p>
+    <p class="allure-photo-dialog__meta" data-photo-lightbox-target="meta" hidden></p>
+    <div class="allure-photo-dialog__links">
+      <% if local_assigns[:edit] %>
+        <a href="#" class="allure-photo-dialog__link" data-photo-lightbox-target="edit" data-turbo="false" hidden>
+          <i class="ti ti-pencil me-1" aria-hidden="true"></i><%= t("photos.lightbox.edit") %>
+        </a>
+      <% end %>
+      <button type="button" class="allure-photo-dialog__link" data-photo-lightbox-target="map" data-action="photo-lightbox#showOnMap" hidden>
+        <i class="ti ti-map-pin me-1" aria-hidden="true"></i><%= t("photos.lightbox.map") %>
+      </button>
+      <% if original %>
+        <%= link_to t("photos.original"), "#", data: { controller: "bridge--download", photo_lightbox_target: "original", turbo: false } %>
+      <% end %>
+    </div>
+  </div>
+</dialog>

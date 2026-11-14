@@ -1,0 +1,73 @@
+<%# The viewer's own times on this course over time (PLAN_SEGMENTS.md §10,
+    DESIGN.md §15.1), one chart per sport holding two efforts: one point per
+    effort, the three best times marked by their trophy beside the point, and
+    a grey trend, on a reversed time axis so faster reads higher. Each chart's
+    table is its text equivalent. Locals: `history`, `segment`. %>
+<% lines = history.chartable_series %>
+<% many_sports = lines.many? %>
+<div class="card-body border-bottom">
+  <h4 class="card-title mb-1"><%= t("segments.progress.title") %></h4>
+  <p class="card-subtitle text-secondary small mt-1"><%= t("segments.progress.subtitle") %></p>
+  <% lines.each do |line| %>
+    <% sport = line.entries.first.effort.sport %>
+    <% caption = many_sports ? t("segments.progress.sport_title", sport: sport_display_name(sport)) : t("segments.progress.title") %>
+    <section class="allure-progress-sport"
+             data-controller="segment-progress-chart"
+             data-segment-progress-chart-payload-value="<%= h(segment_progress_payload(line).to_json) %>"
+             data-segment-progress-chart-locale-value="<%= I18n.locale %>">
+      <% if many_sports %>
+        <h5 class="allure-progress-sport-title d-flex align-items-center gap-2 mb-0">
+          <%= sport_tile_tag(sport, size: :xs) %>
+          <span><%= sport_display_name(sport) %></span>
+        </h5>
+      <% end %>
+      <div class="allure-progress-chart-visual">
+        <div class="allure-visual-state text-danger" data-segment-progress-chart-target="error" role="alert" hidden><%= t("segments.progress.error") %></div>
+        <div class="allure-progress-chart" data-segment-progress-chart-target="chart" aria-hidden="true"></div>
+      </div>
+      <div class="allure-chart-data">
+        <details class="d-none d-md-block">
+          <summary><%= t("segments.progress.data") %></summary>
+          <div class="table-responsive">
+            <table class="table table-sm table-vcenter card-table allure-table-nums">
+              <caption class="visually-hidden"><%= caption %></caption>
+              <thead>
+                <tr>
+                  <th scope="col"><%= t("segments.efforts.date") %></th>
+                  <th scope="col"><%= t("segments.efforts.workout") %></th>
+                  <th scope="col" class="text-end"><%= t("segments.efforts.time") %></th>
+                  <th scope="col" class="text-end"><%= t("segments.progress.gap_column") %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% line.entries.each do |entry| %>
+                  <tr>
+                    <td><%= format_started_at(entry.effort.started_at) %></td>
+                    <td>
+                      <%= link_to workout_display_title(entry.effort.workout), workout_path(entry.effort.workout) %>
+                      <%= personal_place_icon(entry.place, segment.name, extra_classes: "ms-1") %>
+                    </td>
+                    <td class="text-end"><strong><%= format_duration(entry.effort.elapsed_time) %></strong></td>
+                    <td class="text-end"><%= segment_progress_gap(entry) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <div class="visually-hidden d-md-none">
+          <p><%= caption %></p>
+          <ul>
+            <% line.entries.each do |entry| %>
+              <li>
+                <%= format_started_at(entry.effort.started_at) %> ·
+                <%= format_duration(entry.effort.elapsed_time) %> ·
+                <%= [ personal_place_label(entry.place, segment.name), (segment_progress_gap(entry) unless entry.place == 1) ].compact.join(" · ") %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </section>
+  <% end %>
+</div>

@@ -1,0 +1,95 @@
+// Avatar component (DESIGN.md §9.5). Tabler sizes an avatar with a fixed width,
+// but as a flex item it still shrinks beside long text, turning the circle into
+// an oval and misaligning the rows next to it. An avatar never yields its size.
+.avatar {
+  flex-shrink: 0;
+}
+
+// An avatar image is covered, never stretched (DESIGN.md §9.5): a non-square
+// upload, a cached Gravatar or a remote avatar keeps its proportions inside
+// the circle instead of being squashed into it.
+img.avatar {
+  object-fit: cover;
+}
+
+// The crop stage (DESIGN.md §9.4): a square window over the picked image, the
+// circle it will become cut out of a darkened surround. The image keeps its
+// proportions; the account moves and zooms it under the window.
+.allure-avatar-crop {
+  --allure-avatar-crop-size: 18rem;
+  max-width: var(--allure-avatar-crop-size);
+}
+
+.allure-avatar-crop__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--tblr-border-radius);
+  background: var(--allure-surface-sunken);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--allure-focus);
+    outline-offset: 2px;
+  }
+
+  &.is-dragging {
+    cursor: grabbing;
+  }
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: none;
+    transform-origin: 0 0;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+.allure-avatar-crop__mask {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 9999px rgb(0 0 0 / 55%), inset 0 0 0 1px rgb(255 255 255 / 35%);
+  pointer-events: none;
+}
+
+// Avatar overlays (DESIGN.md §9.6 supporter badge, §9.7 operator badge): a
+// small circular badge sits over a corner of the avatar, with a
+// surface-coloured separating ring and white ink. The wrapper keeps the
+// avatar's dimensions; the overlay scales with it.
+.avatar-badged {
+  position: relative;
+  overflow: visible;
+  vertical-align: middle;
+
+  > .avatar { width: 100%; height: 100%; }
+}
+
+.funding-badge,
+.operator-badge {
+  position: absolute;
+  bottom: -8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48%;
+  height: 48%;
+  border: 2px solid var(--allure-surface-raised);
+  border-radius: 50%;
+  color: #fff;
+  font-size: calc(var(--avatar-size) * .29);
+  line-height: 1;
+}
+
+// The operator badge (DESIGN.md §9.7) marks the role, in the brand primary —
+// the same #a93459 the supporter palette already validates for white ink.
+.operator-badge {
+  left: -8%;
+  background: #a93459;
+}

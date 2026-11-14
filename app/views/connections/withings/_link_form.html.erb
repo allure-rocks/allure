@@ -1,0 +1,28 @@
+<%# The Withings sign-in (PLAN_REMOTE_IMPORTS.md §7c.2). The password goes to
+    Withings once, from a background job, and is never kept; the session
+    Withings grants for a day then drives the connected card's retrieval. A
+    reconnection resumes the batches the previous session left queued.
+    Locals: connection. %>
+<% resume = connection.persisted? && connection.interrupted_batches.exists? %>
+<% waiting = resume ? connection.interrupted_entries_count : 0 %>
+<%= form_with url: connection_link_path("withings"), method: :post do %>
+  <% if waiting.positive? %>
+    <p class="text-secondary"><%= t("settings.connections.withings.pending_entries", count: waiting) %></p>
+  <% end %>
+  <div class="row g-2">
+    <div class="col-md-6">
+      <%= label_tag :withings_email, t("settings.connections.withings.email"), class: "form-label required" %>
+      <%= email_field_tag :email, nil, id: "withings_email", required: true, autocomplete: "username", class: "form-control" %>
+    </div>
+    <div class="col-md-6">
+      <%= label_tag :withings_password, t("settings.connections.withings.password"), class: "form-label required" %>
+      <%= password_field_tag :password, nil, id: "withings_password", required: true, autocomplete: "current-password",
+                             class: "form-control" %>
+    </div>
+  </div>
+  <small class="form-text d-block"><%= t("settings.connections.withings.link_hint") %></small>
+  <div class="allure-actions mt-3">
+    <% label = if resume then "resume" elsif connection.needs_relink? then "relink" else "link" end %>
+    <%= submit_tag t("settings.connections.withings.#{label}"), class: "btn btn-primary", name: nil %>
+  </div>
+<% end %>

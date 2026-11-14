@@ -1,0 +1,7 @@
+<%# The secondary metrics the file did not record, named once (DESIGN.md
+    §20.3). Locals: `labels`, `class_name`, `disclosure` (folds with the
+    secondary grid behind its toggle). %>
+<p class="<%= class_names("allure-metrics-missing text-secondary small mb-0", local_assigns[:class_name]) %>"
+   <% if local_assigns[:disclosure] %>data-disclosure-target="content"<% end %>>
+  <i class="ti ti-circle-off me-1" aria-hidden="true"></i><%= t("workouts.show.metrics.missing", list: labels.join(", ")) %>
+</p>

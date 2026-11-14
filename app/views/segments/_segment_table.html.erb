@@ -1,0 +1,109 @@
+<%# The segment index list (DESIGN.md §20.6): the full table from md up and
+    the §12.3 list of stacked rows below it. Both the table body and the phone
+    list are endless-scroll item containers. Each row carries the course
+    glyph, its name and nearby place, the sport, the whole facts, the mini
+    elevation profile, the board's record under the §20.7 alias rules and
+    the viewer's own best time with their standing. An all-sports course has
+    one row per sport it was run in, each with that sport's record and best.
+    Locals: `segments` (rows carrying `row_sport_id`), `podiums`. %>
+<div class="card d-none d-md-block allure-table-card">
+  <div class="table-responsive">
+    <table class="table table-sm table-vcenter card-table allure-table-nums allure-segment-table">
+      <caption class="visually-hidden"><%= t("segments.index.table.caption") %></caption>
+      <thead>
+        <tr>
+          <th scope="col" class="w-1"><span class="visually-hidden"><%= t("segments.index.table.shape") %></span></th>
+          <%= segment_sort_header t("segments.index.table.name"), "name" %>
+          <th scope="col" class="w-1"><%= t("segments.index.table.sport") %></th>
+          <%= segment_sort_header t("segments.index.table.distance"), "distance", align: :end %>
+          <%= segment_sort_header t("segments.index.table.ascent"), "ascent", align: :end %>
+          <%= segment_sort_header t("segments.index.table.grade"), "grade", align: :end %>
+          <th scope="col" class="d-none d-xl-table-cell"><%= t("segments.index.table.profile") %></th>
+          <% if list_query.records? %>
+            <%= segment_sort_header t("segments.index.table.record"), "record", align: :end %>
+          <% end %>
+          <%= segment_sort_header t("segments.index.table.best"), "best", align: :end %>
+        </tr>
+      </thead>
+      <tbody data-infinite-scroll-target="items">
+        <% segments.each do |segment| %>
+          <% podium = podiums.fetch([ segment.id, Segments::Podiums.sport_id(segment) ]) %>
+          <% owner_view = segment.user_id == current_user.id %>
+          <tr class="allure-segment-row">
+            <td><%= segment_thumbnail_tag(segment) %></td>
+            <td class="allure-table-title">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
+                <%= link_to segment_row_title(segment, podium.sport), segment_path(segment),
+                      class: "text-reset fw-medium stretched-link",
+                      aria: { label: "#{t('segments.index.view')} : #{segment_row_title(segment, podium.sport)}" } %>
+                <%= render "segments/row_badges", segment:, owner_view: %>
+              </div>
+              <% if segment.place_name.present? %>
+                <div class="text-secondary small">
+                  <i class="ti ti-map-pin" aria-hidden="true"></i> <%= segment.place_name %>
+                </div>
+              <% end %>
+            </td>
+            <td><%= render "segments/row_sport", sport: podium.sport %></td>
+            <td class="text-end text-nowrap"><%= format_distance(segment.distance) %></td>
+            <td class="text-end text-nowrap"><%= segment_elevation_label(segment) || "—" %></td>
+            <td class="text-end text-nowrap"><%= segment_grade_label(segment) %></td>
+            <td class="d-none d-xl-table-cell"><%= segment_sparkline_tag(segment) %></td>
+            <% if list_query.records? %>
+              <td class="text-end"><%= render "segments/row_record", segment:, podium:, owner_view: %></td>
+            <% end %>
+            <td class="text-end"><%= render "segments/row_best", podium: %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card d-md-none">
+  <ul class="list-group list-group-flush allure-segment-list" data-infinite-scroll-target="items">
+    <% segments.each do |segment| %>
+      <% podium = podiums.fetch([ segment.id, Segments::Podiums.sport_id(segment) ]) %>
+      <% owner_view = segment.user_id == current_user.id %>
+      <li class="list-group-item position-relative">
+        <div class="d-flex align-items-start gap-2">
+          <%= segment_thumbnail_tag(segment) %>
+          <div class="flex-fill min-w-0">
+            <div class="d-flex align-items-center gap-2">
+              <div class="fw-bold text-truncate flex-fill min-w-0">
+                <%= link_to segment_row_title(segment, podium.sport), segment_path(segment),
+                      class: "text-reset stretched-link",
+                      aria: { label: "#{t('segments.index.view')} : #{segment_row_title(segment, podium.sport)}" } %>
+              </div>
+              <%= render "segments/row_badges", segment:, owner_view: %>
+            </div>
+            <% if segment.place_name.present? %>
+              <div class="text-secondary small text-truncate">
+                <i class="ti ti-map-pin" aria-hidden="true"></i> <%= segment.place_name %>
+              </div>
+            <% end %>
+            <div class="text-secondary small allure-table-nums">
+              <%= podium.sport ? sport_display_name(podium.sport) : t("segments.details.all_sports") %>
+              · <span class="text-nowrap"><%= format_distance(segment.distance) %></span>
+              <% if (elevation = segment_elevation_label(segment)) %>· <span class="text-nowrap"><%= elevation %></span><% end %>
+              <% if segment.average_grade.present? %>· <span class="text-nowrap"><%= segment_grade_label(segment) %></span><% end %>
+            </div>
+            <div class="d-flex flex-wrap column-gap-3 small allure-table-nums mt-1">
+              <% if list_query.records? %>
+                <span class="d-inline-flex align-items-baseline gap-1">
+                  <span class="text-secondary"><%= t("segments.index.table.record") %></span>
+                  <%= render "segments/row_record", segment:, podium:, owner_view: %>
+                </span>
+              <% end %>
+              <span class="d-inline-flex align-items-baseline gap-1">
+                <span class="text-secondary"><%= t("segments.index.table.best") %></span>
+                <%= render "segments/row_best", podium: %>
+              </span>
+            </div>
+          </div>
+          <div class="flex-shrink-0 d-none d-sm-block"><%= segment_sparkline_tag(segment) %></div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

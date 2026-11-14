@@ -1,0 +1,78 @@
+// Responsive data tables (DESIGN.md §12).
+//
+// Wide tables render as real <table> elements on md+ screens and as stacked
+// card lists (<ul>) below md. Both variants ship in the DOM and exactly one
+// is visible at a time, so screen readers get a table on desktop and a list
+// on phones — never a broken table, never a horizontal scrollbar.
+.allure-table-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+// Neither Bootstrap nor Tabler ships it: lets a flex child shrink below its
+// content so `text-truncate` and wrapping can work inside it.
+.min-w-0 {
+  min-width: 0 !important;
+}
+
+// The workout table's title cell (DESIGN.md §20.4): it takes the free width
+// and wraps a long title, even an unbroken one, instead of widening the
+// table past its card.
+.allure-table-title {
+  min-width: 14rem;
+  overflow-wrap: anywhere;
+}
+
+.allure-card-list {
+  .allure-card-title {
+    font-weight: 600;
+  }
+}
+
+// List section separators (DESIGN.md §20.4, §8.3): the feed's day rules and
+// the workout list's month rules are one component — Tabler's `hr-text`, with
+// the section's own spacing and the small uppercase treatment.
+//
+// `width: 100%` keeps that component identical in both contexts: inside the
+// workout cards row, Tabler makes every column a flex container, which would
+// otherwise shrink the heading to its label and collapse the rule lines.
+.allure-list-separator {
+  width: 100%;
+  margin: 1.5rem 0 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: var(--allure-text-muted);
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+// Sortable table headers (DESIGN.md §10.5): the header text is the link that
+// writes the next sort value, the direction glyph shows the active column, and
+// an inactive column keeps a muted sort mark so it reads as sortable. The
+// table's own header styles stay Tabler's.
+.allure-sort-cell {
+  .allure-sort-link {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    white-space: nowrap;
+
+    .ti {
+      color: var(--allure-text-muted);
+    }
+  }
+
+  .allure-sort-link--active {
+    color: var(--primary);
+
+    .ti {
+      color: currentColor;
+    }
+  }
+}

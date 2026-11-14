@@ -1,0 +1,106 @@
+// Segment index header (DESIGN.md §20.6): below md the actions stack in a
+// narrow column beside the title, right-aligned at their natural widths,
+// like the workout header's Publish and ⋯.
+@include media-breakpoint-down(md) {
+  .allure-segments-header-actions {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+  }
+
+  // The kind switch spans the width in three equal parts.
+  .allure-segments-kind-switch {
+    display: flex;
+    flex-wrap: nowrap;
+
+    .nav-link {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+}
+
+// Segment index list (DESIGN.md §20.6): a dense table from md up, stacked
+// rows below. The whole row is the course link: the name's stretched link
+// covers it, so the row is the containing block, and the badges lift above.
+.allure-segment-row {
+  position: relative;
+}
+
+// The course glyph: the simplified line in the brand primary on a
+// transparent ground.
+.allure-segment-thumbnail {
+  display: block;
+  flex-shrink: 0;
+
+  path {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+// The mini elevation profile: a muted filled area under a primary line.
+.allure-segment-sparkline {
+  display: block;
+  overflow: visible;
+}
+
+.allure-segment-sparkline__area {
+  fill: var(--primary);
+  fill-opacity: 0.12;
+  stroke: none;
+}
+
+.allure-segment-sparkline__line {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+// The course-creation picker's source activity (DESIGN.md §20.6): its own
+// route image cropped to a fixed 16:9 box, a muted map tile while it renders.
+.allure-source-thumbnail {
+  flex-shrink: 0;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  background: var(--allure-surface-sunken);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.allure-source-thumbnail--sm {
+  width: 6rem;
+}
+
+.allure-source-thumbnail--lg {
+  width: 100%;
+
+  @include media-breakpoint-up(sm) {
+    width: 12rem;
+  }
+}
+
+.allure-source-thumbnail__pending {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--allure-text-muted);
+  font-size: 1.5rem;
+}
+
+// A long alias never widens the record column past its time.
+.allure-segment-record__athlete {
+  max-width: 10rem;
+}

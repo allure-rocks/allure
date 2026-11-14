@@ -1,0 +1,16 @@
+{
+  "id": "https://allure-a.example/users/marie/activities/4d5e6f70-8a9b-0c1d-2e3f-4a5b6c7d8e9f",
+  "type": "Delete",
+  "actor": "https://allure-a.example/users/marie",
+  "object": {
+    "@context": "https://www.w3.org/ns/activitystreams",
+    "id": "https://allure-a.example/users/marie",
+    "type": "Tombstone",
+    "formerType": "Person",
+    "deleted": "2026-08-26T12:00:00Z"
+  },
+  "to": [
+    "https://allure-a.example/users/marie/followers"
+  ],
+  "cc": []
+}

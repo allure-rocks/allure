@@ -1,0 +1,21 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    "https://w3id.org/security/v1"
+  ],
+  "id": "https://wanderer.example/users/demo",
+  "type": "Person",
+  "preferredUsername": "demo",
+  "name": "Demo Wanderer",
+  "summary": "",
+  "url": "https://wanderer.example/@demo",
+  "inbox": "https://wanderer.example/users/demo/inbox",
+  "outbox": "https://wanderer.example/users/demo/outbox",
+  "followers": "https://wanderer.example/users/demo/followers",
+  "following": "https://wanderer.example/users/demo/following",
+  "publicKey": {
+    "id": "https://wanderer.example/users/demo#main-key",
+    "owner": "https://wanderer.example/users/demo",
+    "publicKeyPem": "FIXTURE_PUBLIC_KEY_REPLACED_BY_SIGNATURE_SLICE"
+  }
+}

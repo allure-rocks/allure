@@ -1,0 +1,64 @@
+// Settings shell and universal hub (DESIGN.md §8.5).
+//
+// From md up, one card holds the grouped section navigation in the bordered
+// md-3 column beside the content, like the Tabler settings pages. Below md the
+// shell hides that column and links back to /settings; the hub itself renders
+// the same collection as full-width cards on every breakpoint.
+
+.settings-hub {
+  .list-group-item {
+    min-height: 3rem;
+  }
+}
+
+.settings-back {
+  min-height: 2.75rem;
+}
+
+.settings-nav {
+  @include media-breakpoint-down(md) {
+    display: none;
+  }
+
+  @include media-breakpoint-up(md) {
+    // The `border-end` utility is !important; draw the same Tabler border here.
+    border-inline-end: var(--border-width) var(--border-style) var(--border-color-translucent);
+  }
+
+  // Tabler ships a global `a:hover { text-decoration: underline }`; the
+  // section navigation is made of links and must never underline.
+  a.list-group-item,
+  a.list-group-item:hover,
+  a.list-group-item:focus,
+  a.list-group-item:active {
+    text-decoration: none;
+  }
+
+  @include media-breakpoint-up(md) {
+    .settings-nav-menu {
+      display: block;
+    }
+
+    .list-group {
+      margin-inline: -$list-group-item-padding-x;
+    }
+
+    .list-group-item {
+      white-space: normal;
+    }
+  }
+}
+
+// Security settings: a session's user agent is truncated to one line, its
+// full value in the title (DESIGN.md §20.15).
+.session-device {
+  max-width: 13rem;
+
+  @include media-breakpoint-up(md) {
+    max-width: 18rem;
+  }
+
+  @include media-breakpoint-up(lg) {
+    max-width: 32rem;
+  }
+}

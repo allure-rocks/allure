@@ -1,0 +1,45 @@
+<% content_for :title, t("onboardings.new.title") %>
+
+<div class="card card-md">
+  <div class="card-body">
+    <h1 class="h2 text-center mb-2"><%= t("onboardings.new.title") %></h1>
+    <p class="text-secondary text-center mb-4">
+      <%= t("onboardings.new.copy", provider: Allure::Auth::Providers.label_for(@pending["provider"])) %>
+    </p>
+
+    <%= form_with model: @user, url: onboarding_path, data: credential_form_data do |form| %>
+      <%= render "shared/form_errors", form: form %>
+
+      <div class="mb-3">
+        <%= form.label :email_address, t("onboardings.new.email"), class: "form-label" %>
+        <%= form.email_field :email_address, readonly: true, class: "form-control-plaintext" %>
+      </div>
+      <div class="mb-3" data-controller="availability"
+           data-availability-url-value="<%= availability_registration_path(invitation_token: @pending["invitation_token"]) %>"
+           data-availability-available-value="<%= t("registrations.new.username_available") %>"
+           data-availability-taken-value="<%= t("registrations.new.username_taken") %>">
+        <%= form.label :username, t("registrations.new.username"), class: "form-label" %>
+        <%= form.text_field :username, required: true, autofocus: true, autocomplete: "username", size: nil,
+              class: class_names("form-control", "is-invalid": @user.errors[:username].any?),
+              data: { availability_target: "input", action: "input->availability#check" } %>
+        <% if @user.errors[:username].any? %>
+          <div class="invalid-feedback"><%= @user.errors.full_messages_for(:username).to_sentence %></div>
+        <% end %>
+        <small class="form-text"><%= t("onboardings.new.username_hint") %></small>
+        <div class="small mt-1" data-availability-target="status" role="status"></div>
+      </div>
+      <div class="mb-3">
+        <%= form.label :display_name, t("onboardings.new.display_name"), class: "form-label" %>
+        <%= form.text_field :display_name, maxlength: 60, autocomplete: "name", size: nil,
+              class: class_names("form-control", "is-invalid": @user.errors[:display_name].any?) %>
+      </div>
+      <div class="form-footer">
+        <%= form.submit t("onboardings.new.submit"), class: "btn btn-primary w-100" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="text-center text-secondary mt-3">
+  <%= button_to t("onboardings.new.cancel"), onboarding_path, method: :delete, class: "btn btn-link p-0" %>
+</div>

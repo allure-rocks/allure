@@ -1,0 +1,19 @@
+#!/bin/bash -e
+
+# If the command runs the Rails web server, apply pending migrations first.
+# Compose passes `bin/rails server -b 0.0.0.0 -p 3000`, so match the command
+# prefix: the generated template's exact `./bin/rails server` check never
+# matched and silently skipped this step. Workers share this entrypoint but run
+# `bin/jobs`, and ad-hoc `run ... db:prepare db:seed` commands do not match
+# either, so only the web container migrates.
+#
+# The reference catalogs (sports, equipment types) are seed data, not schema:
+# migrating only creates the tables. Seed after migrating so a catalog addition
+# reaches an existing production database on the next boot, without a manual
+# step. Seeds are idempotent and keep their demo dataset development-only.
+if [[ "${1}" == *bin/rails && "${2}" == "server" ]]; then
+  ./bin/rails db:prepare
+  ./bin/rails db:seed
+fi
+
+exec "$@"

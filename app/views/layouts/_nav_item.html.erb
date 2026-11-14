@@ -1,0 +1,35 @@
+<%# One recursive partial renders the whole tree for the desktop horizontal and
+    collapsed responsive menus. Active state is decided server-side. The
+    `data-bridge-item` ids are the links the iOS companion's menu clicks. %>
+<% active = nav_item_active?(item) %>
+
+<% if item.leaf? %>
+  <li class="nav-item <%= "active" if active %>">
+    <%= link_to nav_item_path(item), class: "nav-link", aria: { current: ("page" if active) },
+                data: { bridge_item: nav_bridge_id(item) } do %>
+      <span class="nav-link-icon d-md-none d-lg-inline-block">
+        <i class="ti ti-<%= item.icon %>"></i>
+      </span>
+      <span class="nav-link-title"><%= nav_item_label(item) %></span>
+    <% end %>
+  </li>
+<% else %>
+  <% dom_id = "nav-#{item.key}" %>
+  <li class="nav-item dropdown <%= "active" if active %>">
+    <a class="nav-link dropdown-toggle" href="#<%= dom_id %>"
+       data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
+       aria-expanded="<%= active %>">
+      <span class="nav-link-icon d-md-none d-lg-inline-block">
+        <i class="ti ti-<%= item.icon %>"></i>
+      </span>
+      <span class="nav-link-title"><%= nav_item_label(item) %></span>
+    </a>
+    <div class="dropdown-menu <%= "show" if active %>">
+      <% item.items.each do |child| %>
+        <%= link_to nav_item_label(child), nav_item_path(child),
+                    class: class_names("dropdown-item", active: nav_item_active?(child)),
+                    data: { bridge_item: nav_bridge_id(child) } %>
+      <% end %>
+    </div>
+  </li>
+<% end %>

@@ -1,0 +1,197 @@
+<% selection = local_assigns.fetch(:selection, false) %>
+<% table_points = local_assigns.fetch(:table_points, []) %>
+<% display = local_assigns.fetch(:display) { workout } %>
+<% available_series = local_assigns.fetch(:available_series, [ :elevation ]) %>
+<% toponymy = local_assigns.fetch(:toponymy, false) %>
+<% anomalies = local_assigns.fetch(:anomalies, []) %>
+<%# The owner's placed photos (PLAN_PHOTOS.md §7); nil on every other chart. %>
+<% photos = local_assigns[:photos] %>
+<% secondary_options = local_assigns.fetch(:configurable, false) ? workout_chart_secondary_options(display, available_series) : [] %>
+<% table_series = workout_chart_display_series(display, available_series) %>
+<% chart_url = local_assigns.fetch(:chart_url) { workout_chart_path(workout, version: secondary_options.any? ? 2 : nil) } %>
+<% title_label = local_assigns.fetch(:title_label) { t("workouts.show.chart.title") } %>
+<% loading_label = local_assigns.fetch(:loading_label) { t("workouts.show.chart.loading") } %>
+<% empty_label = local_assigns.fetch(:empty_label) { t("workouts.show.chart.empty") } %>
+<% error_label = local_assigns.fetch(:error_label) { t("workouts.show.chart.error") } %>
+<% data_label = local_assigns.fetch(:data_label) { t("workouts.show.chart.data") } %>
+<% data_description_label = local_assigns.fetch(:data_description_label) { t("workouts.show.chart.data_description") } %>
+<% chart_uid = SecureRandom.hex(4) %>
+<% show_elapsed = table_points.any? { |point| point[:elapsed_time].present? } %>
+<div class="card mb-3"
+     data-controller="elevation-chart"
+     data-action="allure:theme-changed@window->elevation-chart#themeChanged allure:track-hover@window->elevation-chart#trackHover allure:analysis-tab-changed@window->elevation-chart#analysisTabChanged allure:analysis-highlight@window->elevation-chart#analysisHighlightChanged<%= ' allure:segment-selection-input@window->elevation-chart#selectionInputChanged' if selection %><%= ' allure:photos-changed@window->elevation-chart#photosChanged' if photos %>"
+     <% if photos.present? %>data-elevation-chart-photos-value="<%= photos.to_json %>"<% end %>
+     data-elevation-chart-url-value="<%= chart_url %>"
+     <% if toponymy %>data-elevation-chart-toponymy-url-value="<%= workout_toponymy_path(workout) %>"<% end %>
+     <%= "data-elevation-chart-selection-value=true data-elevation-chart-selection-url-value=#{workout_segment_selection_path(workout)}" if selection %>
+     <% if anomalies.present? %>data-elevation-chart-anomalies-value="<%= anomalies.to_json %>"<% end %>
+     data-elevation-chart-unit-system-value="<%= current_user&.unit_system || 'metric' %>"
+     <%# A power-led virtual ride opens on its watts (PLAN_VIRTUAL.md §8). %>
+     <% if display.sport&.power_led? && available_series.map(&:to_sym).include?(:power) %>data-elevation-chart-power-led-value="true"<% end %>
+     <%# The axis mode belongs to the workout the chart plots; a course chart
+         passes no workout and stays on its distance axis. %>
+     data-elevation-chart-axis-mode-value="<%= local_assigns.fetch(:axis_mode) { local_assigns[:workout].is_a?(Workout) && workout_time_axis?(local_assigns[:workout]) ? 'time' : 'distance' } %>"
+     data-elevation-chart-distance-label-value="<%= t('workouts.show.chart.distance') %>"
+     data-elevation-chart-elevation-label-value="<%= t('workouts.show.chart.elevation') %>"
+     data-elevation-chart-elapsed-time-label-value="<%= t('workouts.show.chart.elapsed_time') %>"
+     data-elevation-chart-minute-label-value="<%= t('units.time.minute') %>"
+     data-elevation-chart-speed-label-value="<%= t('workouts.show.chart.series.speed') %>"
+     data-elevation-chart-pace-label-value="<%= t('workouts.show.chart.series.pace') %>"
+     <% if display.sport&.pace_basis_metres.present? %>
+     data-elevation-chart-pace-basis-value="<%= display.sport.pace_basis_metres %>"
+     data-elevation-chart-pace-basis-label-value="<%= pace_basis_unit(display.sport) %>"
+     <% end %>
+     data-elevation-chart-heart-rate-label-value="<%= t('workouts.show.chart.series.heart_rate') %>"
+     data-elevation-chart-cadence-label-value="<%= t('workouts.show.chart.series.cadence') %>"
+     data-elevation-chart-power-label-value="<%= t('workouts.show.chart.series.power') %>"
+     data-elevation-chart-kilometre-label-value="<%= t('units.symbols.kilometre') %>"
+     data-elevation-chart-mile-label-value="<%= t('units.symbols.mile') %>"
+     data-elevation-chart-metre-label-value="<%= t('units.symbols.metre') %>"
+     data-elevation-chart-foot-label-value="<%= t('units.symbols.foot') %>"
+     data-elevation-chart-kilometres-per-hour-label-value="<%= t('units.speed.kmh') %>"
+     data-elevation-chart-miles-per-hour-label-value="<%= t('units.speed.mph') %>"
+     data-elevation-chart-heart-rate-unit-value="<%= t('units.heart_rate.bpm') %>"
+     data-elevation-chart-cadence-unit-value="<%= display.sport&.cadence_unit %>"
+     data-elevation-chart-power-unit-value="<%= t('units.power.watt') %>"
+     data-elevation-chart-temperature-label-value="<%= t('workouts.show.chart.series.temperature') %>"
+     data-elevation-chart-device-temperature-label-value="<%= t('workouts.show.chart.series.device_temperature') %>"
+     data-elevation-chart-headwind-label-value="<%= t('workouts.show.chart.series.headwind') %>"
+     data-elevation-chart-celsius-unit-value="<%= t('units.temperature.celsius', value: '').strip %>"
+     data-elevation-chart-fahrenheit-unit-value="<%= t('units.temperature.fahrenheit', value: '').strip %>"
+     data-elevation-chart-pass-label-value="<%= t('workouts.show.chart.places.kinds.pass') %>"
+     data-elevation-chart-summit-label-value="<%= t('workouts.show.chart.places.kinds.summit') %>"
+     data-elevation-chart-toponymy-loading-label-value="<%= t('workouts.show.chart.places.loading') %>"
+     data-elevation-chart-toponymy-error-label-value="<%= t('workouts.show.chart.places.error') %>"
+     data-elevation-chart-start-label-value="<%= t('workouts.show.chart.places.start') %>"
+     data-elevation-chart-finish-label-value="<%= t('workouts.show.chart.places.finish') %>"
+     data-elevation-chart-loop-label-value="<%= t('workouts.show.chart.places.loop') %>"
+     data-elevation-chart-loop-endpoint-label-value="<%= t('workouts.show.chart.places.loop_endpoint') %>">
+  <div class="card-header">
+    <div>
+      <h2 class="card-title">
+        <%= title_label %>
+        <% owner_workout = local_assigns[:workout] %>
+        <% estimated = local_assigns[:estimated_elevation] ||
+                       (owner_workout && current_user == owner_workout.user && owner_workout.elevation_source == "dem") %>
+        <% if estimated %>
+          <span class="badge bg-blue-lt ms-2 allure-badge-icon" tabindex="0" <%= tag.attributes(data: tooltip_data(t("workouts.elevation.estimated_badge"))) %>>
+            <i class="ti ti-mountain" aria-hidden="true"></i><span class="visually-hidden"><%= t("workouts.elevation.estimated_badge") %></span>
+          </span>
+        <% end %>
+      </h2>
+      <% if toponymy %>
+        <p class="card-subtitle mt-1" data-elevation-chart-target="routeContext" hidden></p>
+        <p class="card-subtitle mt-1" data-elevation-chart-target="toponymyState" role="status" hidden></p>
+      <% end %>
+    </div>
+    <% if secondary_options.any? %>
+      <div class="card-actions">
+        <label class="visually-hidden" for="workout-chart-secondary"><%= t("workouts.show.chart.secondary_series") %></label>
+        <select id="workout-chart-secondary" class="form-select form-select-sm w-auto"
+                data-elevation-chart-target="secondaryMetric"
+                data-action="change->elevation-chart#secondaryMetricChanged">
+          <option value=""><%= t("workouts.show.chart.series.none") %></option>
+          <%= options_for_select(secondary_options, secondary_options.first.last) %>
+        </select>
+      </div>
+    <% end %>
+  </div>
+  <div class="allure-chart-visual">
+    <div class="allure-visual-state" data-elevation-chart-target="loading" role="status"><%= loading_label %></div>
+    <div class="allure-visual-state text-secondary" data-elevation-chart-target="empty" role="status" hidden><%= empty_label %></div>
+    <div class="allure-visual-state text-danger" data-elevation-chart-target="error" role="alert" hidden><%= error_label %></div>
+    <div class="allure-elevation-chart" data-elevation-chart-target="chart" aria-hidden="true"></div>
+    <div class="allure-chart-xticks" data-elevation-chart-target="xTicks" aria-hidden="true"></div>
+    <% if anomalies.present? %>
+      <%# Short dashes under the curve where readings look wrong; the
+          analysis card's « Qualité des données » tab is their text
+          equivalent. %>
+      <div class="allure-chart-anomalies" data-elevation-chart-target="anomalies" aria-hidden="true"></div>
+    <% end %>
+    <% if photos %>
+      <%# Camera pills where the owner's photos were taken; the Photos card
+          is their text equivalent. %>
+      <div class="allure-chart-photos" data-elevation-chart-target="photos"></div>
+    <% end %>
+    <% unless selection %>
+      <%# Zoom: drag across the profile (hold, then drag on a touch screen);
+          this button brings back the whole activity. %>
+      <div class="allure-chart-touch-selection" data-elevation-chart-target="touchSelection" hidden></div>
+      <button type="button" class="btn btn-sm allure-chart-zoom-reset d-print-none" hidden
+              data-elevation-chart-target="zoomReset" data-action="elevation-chart#zoomReset">
+        <i class="ti ti-zoom-reset me-1" aria-hidden="true"></i><%= t("workouts.show.chart.zoom.reset") %>
+      </button>
+    <% end %>
+  </div>
+  <% if toponymy %>
+    <%# One horizontal line at every width, scrolling sideways with faded
+        edges, so switching analysis tabs never changes the card's height. %>
+    <div class="card-body allure-route-timeline" data-elevation-chart-target="places" hidden>
+      <h3 class="text-secondary small text-uppercase mb-3"><%= t("workouts.show.chart.places.title") %></h3>
+      <div class="allure-route-timeline__scroll" data-controller="scroll-fade">
+        <ol class="allure-route-timeline__steps" data-elevation-chart-target="placesList"></ol>
+      </div>
+    </div>
+  <% end %>
+  <% if table_points.any? %>
+    <%# The data table is the chart's text equivalent: a disclosure from
+        `md` up, read by assistive technology only on phones. %>
+    <div class="card-body allure-chart-data">
+      <details class="d-none d-md-block">
+        <summary><%= data_label %></summary>
+        <p class="visually-hidden"><%= data_description_label %></p>
+        <div class="table-responsive">
+          <table class="table table-sm table-vcenter card-table allure-table-nums">
+            <caption class="visually-hidden"><%= title_label %></caption>
+            <thead>
+              <tr>
+                <th scope="col"><%= t("workouts.show.chart.distance") %></th>
+                <% if show_elapsed %>
+                  <th scope="col"><%= t("workouts.show.chart.elapsed_time") %></th>
+                <% end %>
+                <% table_series.each do |key| %>
+                  <th scope="col" class="text-end"><%= t("workouts.show.chart.series.#{key}") %></th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <% table_points.each do |point| %>
+                <tr>
+                  <td><%= format_distance(point[:distance]) %></td>
+                  <% if show_elapsed %>
+                    <td><%= format_duration(point[:elapsed_time]) %></td>
+                  <% end %>
+                  <% table_series.each do |key| %>
+                    <% source_key = key == :pace ? :speed : key %>
+                    <td class="text-end"><%= format_workout_chart_value(key, point[source_key], sport: display.sport) %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <div class="visually-hidden d-md-none">
+        <p><%= data_description_label %></p>
+        <ul class="list-group list-group-flush allure-card-list">
+          <% table_points.each do |point| %>
+            <li class="list-group-item px-0">
+              <div class="d-flex justify-content-between align-items-baseline">
+                <span class="allure-card-title"><%= format_distance(point[:distance]) %></span>
+                <% if show_elapsed %>
+                  <span class="text-secondary small"><%= format_duration(point[:elapsed_time]) %></span>
+                <% end %>
+              </div>
+              <dl class="row g-2 mt-1 mb-0">
+                <% table_series.each do |key| %>
+                  <% source_key = key == :pace ? :speed : key %>
+                  <div class="col-6"><dt class="text-secondary small"><%= t("workouts.show.chart.series.#{key}") %></dt><dd class="mb-0"><%= format_workout_chart_value(key, point[source_key], sport: display.sport) %></dd></div>
+                <% end %>
+              </dl>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+</div>

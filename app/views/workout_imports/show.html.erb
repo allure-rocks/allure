@@ -1,0 +1,24 @@
+<% content_for :title, t("workouts.batch_import.show.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("workouts.batch_import.show.pretitle") %></div>
+      <h1 class="page-title">
+        <%= t("workouts.batch_import.show.title") %>
+        <% unless @batch.file? %>
+          <span class="badge bg-secondary-lt ms-2"><%= import_batch_source_label(@batch) %></span>
+          <% unless @batch.trigger == "manual" %>
+            <span class="badge bg-secondary-lt ms-1"><%= t("workouts.batch_import.show.triggers.#{@batch.trigger}") %></span>
+          <% end %>
+        <% end %>
+      </h1>
+    </div>
+  </div>
+<% end %>
+
+<div data-controller="batch-import"
+     data-batch-import-status-url-value="<%= status_workout_import_path(@batch) %>">
+  <p class="visually-hidden" role="status" data-batch-import-target="announcer"></p>
+  <%= render "status", batch: @batch, entries: @entries %>
+</div>

@@ -1,0 +1,8 @@
+<%# The mark of a figure an anomaly makes wrong (DESIGN.md §15.5): the warning
+    triangle sits beside the metric's label, like the record trophy, and its
+    tooltip carries the sentence so the summary keeps its size. The analysis
+    tab holds both the sentence and the stretch as text. %>
+<%= tag.span(class: "allure-anomaly-note", role: "img", tabindex: 0, aria: { label: note[:text] },
+             data: tooltip_data(note[:text])) do %>
+  <i class="ti ti-alert-triangle text-warning" aria-hidden="true"></i>
+<% end %>

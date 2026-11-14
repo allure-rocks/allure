@@ -1,0 +1,59 @@
+// Sport identity tiles (DESIGN.md §6). Sport has no per-sport colour: every
+// tile carries the same brand-primary tint, and the per-sport glyph carries
+// the identity, always beside the translated sport name — except on workout
+// cards, where the tile itself is the accessible, tooltipped sport mark.
+// The tile is Tabler's avatar component in its `avatar-square` shape: the
+// `avatar avatar-square avatar-{size}` classes own the dimensions, the corner
+// radius and the glyph tokens, so nothing here restates them. This layer only
+// brands the surface and sizes the inline custom SVGs to the same icon box as
+// the Tabler glyphs.
+.sport-tile {
+  flex-shrink: 0;
+  font-size: var(--avatar-icon-size);
+  color: var(--primary);
+  background-color: color-mix(in srgb, var(--primary) 10%, var(--allure-surface-sunken));
+  --avatar-box-shadow-color: color-mix(in srgb, var(--primary) 25%, var(--allure-border));
+}
+
+// The tile doubles as the sport's accessible mark and, on linked workout
+// cards, as a link that sits above the card's stretched link. It keeps the
+// primary glyph ink; only the link chrome is neutralized.
+.sport-tile--link {
+  position: relative;
+  z-index: 2;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: none;
+  }
+}
+
+.sport-tile svg {
+  width: 1em;
+  height: 1em;
+}
+
+// The sport SVG outside a tile, currently the calendar tooltip: it scales to
+// the surrounding text instead of the tile's icon token.
+.sport-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+// A remote provider's mark beside its name, sized like the Tabler glyph it
+// replaces.
+.import-source-icon {
+  display: inline-flex;
+  vertical-align: -0.125em;
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+}

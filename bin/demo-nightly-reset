@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# Host-side nightly reset (PLAN_DEMO.md §5), run from cron every minute:
+#
+#     * * * * * /srv/allure/bin/demo-nightly-reset /srv/allure/demo.env
+#
+# Recreates the demo project's containers AND volumes — the database, storage
+# and queue all start empty — and the rails container's bin/demo-boot seeds
+# the fresh database. The schedule lives in the demo env file
+# (DEMO_RESET_AT=HH:MM, TZ), the same values the application reads for its
+# warning strip, so the reset time exists in exactly one place. A host-side
+# flock prevents overlapping runs; a success stamp prevents a second reset on
+# the same day. A failed or missed run is retried by the next cron invocation.
+set -euo pipefail
+
+usage() { echo "usage: bin/demo-nightly-reset /path/to/demo.env" >&2; exit 64; }
+[ "$#" -eq 1 ] || usage
+[ -f "$1" ] || { echo "no such env file: $1" >&2; exit 66; }
+repo_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+env_file="$(cd -- "$(dirname -- "$1")" && pwd)/$(basename -- "$1")"
+readonly repo_root env_file
+
+set -a
+# shellcheck disable=SC1090
+. "$env_file"
+set +a
+: "${DEMO_RESET_AT:?DEMO_RESET_AT is required in the demo env file}"
+[[ "$DEMO_RESET_AT" =~ ^([01][0-9]|2[0-3]):[0-5][0-9]$ ]] || {
+  echo "DEMO_RESET_AT must be HH:MM (00:00 to 23:59)" >&2; exit 64;
+}
+export TZ=${TZ:-UTC}
+
+read -r today now < <(date '+%F %H:%M')
+[[ "$now" < "$DEMO_RESET_AT" ]] && exit 0
+command -v flock >/dev/null || { echo "flock (util-linux) is required" >&2; exit 69; }
+
+# This directory belongs to the host checkout, never to a disposable volume.
+umask 077
+state_dir="$repo_root/tmp/demo-reset"
+mkdir -p "$state_dir"
+exec 9>"$state_dir/lock"
+flock -n -E 75 9 || {
+  status=$?
+  [ "$status" -eq 75 ] && exit 0
+  exit "$status"
+}
+stamp="$state_dir/last-success"
+[ "$(cat "$stamp" 2>/dev/null || true)" != "$today" ] || exit 0
+
+# The demo always runs the administration console (docker-compose.demo.yml
+# defaults the operator to marie). The app refuses to boot without a usable
+# DEMO_OPERATOR_PASSWORD; check it before down -v so a bad configuration
+# leaves the previous demo serving. The app enforces the same rules; the
+# 15-character minimum is User::MINIMUM_PASSWORD_LENGTH.
+operator="${INSTANCE_OPERATOR_USERNAME:-marie}"
+if [ -n "$operator" ]; then
+  if [ -z "${DEMO_OPERATOR_PASSWORD:-}" ]; then
+    echo "DEMO_OPERATOR_PASSWORD is required when INSTANCE_OPERATOR_USERNAME is set" >&2
+    exit 64
+  fi
+  if [ "${#DEMO_OPERATOR_PASSWORD}" -lt 15 ]; then
+    echo "DEMO_OPERATOR_PASSWORD must be at least 15 characters" >&2
+    exit 64
+  fi
+  if [ -n "${DEMO_PASSWORD:-}" ] && [ "$DEMO_OPERATOR_PASSWORD" = "$DEMO_PASSWORD" ]; then
+    echo "DEMO_OPERATOR_PASSWORD must differ from DEMO_PASSWORD" >&2
+    exit 64
+  fi
+  if [ "$DEMO_OPERATOR_PASSWORD" = "allure-dev-password" ]; then
+    echo "DEMO_OPERATOR_PASSWORD must not be the public development password" >&2
+    exit 64
+  fi
+fi
+
+# Pin every destructive command: COMPOSE_PROJECT_NAME and the caller's working
+# directory must never redirect this reset onto another stack's volumes.
+cd "$repo_root"
+compose=(docker compose --project-name allure-demo --project-directory "$repo_root"
+  --env-file "$env_file" --file "$repo_root/docker-compose.demo.yml")
+"${compose[@]}" config --quiet
+"${compose[@]}" down -v
+# The images already on the host: a reset never changes the deployed version.
+"${compose[@]}" up -d --pull never --wait --wait-timeout 1800
+printf '%s\n' "$today" > "$stamp"

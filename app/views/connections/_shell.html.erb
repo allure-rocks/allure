@@ -1,0 +1,16 @@
+<%# Connected-services shell (DESIGN.md §8.6): the shared section shell with one
+    entry per service the account may see, so the services switch in place as
+    the settings sections do. Locals: card, cards. %>
+<% source = card[:source] %>
+<% label = t("workouts.batch_import.sources.#{source.key}.label") %>
+<%= render layout: "shared/section_shell", locals: {
+      title: safe_join([ import_source_icon_tag(source), label ]),
+      pretitle: t("settings.connections.pretitle"),
+      heading: t("settings.connections.title"),
+      back_path: connections_path,
+      back_label: t("settings.connections.back"),
+      groups: connections_navigation_groups(cards: cards, active: source.key),
+      nav_label: t("settings.connections.title")
+    } do %>
+  <%= yield %>
+<% end %>

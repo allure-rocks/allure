@@ -1,0 +1,62 @@
+<div class="alert alert-info" role="note">
+  <%= t("privacy_zones.panel") %>
+</div>
+
+<h2>Ce qu'est une zone</h2>
+<p>
+  Un cercle que vous tracez autour d'un lieu que vous ne voulez pas révéler —
+  votre domicile, votre lieu de travail, la maison d'un proche. Vous les créez
+  dans <%= link_to "Zones de confidentialité", privacy_zones_path %>, en
+  cherchant un lieu ou en cliquant sur la carte, et vous choisissez le rayon.
+  Les zones elles-mêmes ne sont jamais partagées.
+</p>
+
+<h2>Ce qu'elle masque</h2>
+<p>
+  Quand vous publiez, chaque point du parcours situé dans une de vos zones est
+  retiré avant que la copie ne soit faite : du parcours sur la carte, de
+  l'image de la carte, du fichier GPX et de la position des photos. Le
+  parcours y est interrompu, si bien que personne ne peut le suivre jusqu'à
+  votre porte.
+</p>
+
+<h2>Le départ et l'arrivée</h2>
+<p>
+  C'est au départ et à l'arrivée qu'un parcours trahit le plus facilement un
+  lieu ; chaque profil de publication en décide donc séparément, avec
+  <strong>masquer le départ</strong> et <strong>masquer l'arrivée</strong> :
+</p>
+<ul>
+  <li><strong>Masque coché</strong> — le départ (ou l'arrivée) doit se trouver
+    dans une de vos zones, et il est retiré avec elle. Si aucune zone ne le
+    couvre, Allure refuse de publier et vous dit pourquoi, plutôt que de le
+    révéler.</li>
+  <li><strong>Masque décoché</strong> — le départ (ou l'arrivée) reste visible,
+    <strong>même dans une zone</strong>. C'est utile pour les sorties qui
+    partent d'un lieu public, comme un parking de randonnée ou un club.</li>
+</ul>
+<p>
+  Si une partie de l'enregistrement ne sort jamais d'une zone, il ne reste rien
+  à montrer sans risque, et le parcours n'est pas publié.
+</p>
+
+<h2>Ce qu'elle ne change jamais</h2>
+<ul>
+  <li>Votre propre activité : vous voyez toujours tout le parcours, et vos
+    mesures sont calculées à partir de lui.</li>
+  <li>Les publications déjà faites : ce sont des copies, figées au moment où
+    vous avez publié. Ajouter une zone ensuite ne les atteint pas —
+    supprimez-les et publiez à nouveau.</li>
+  <li>Supprimer une zone ne révèle rien de ce qui est déjà publié, mais vos
+    prochaines publications ne masqueront plus cette zone.</li>
+</ul>
+
+<h2>Photos et segments</h2>
+<ul>
+  <li>Une photo prise dans une zone est écartée d'une publication, sauf si vous
+    l'incluez explicitement ; elle est alors partagée sans sa position.</li>
+  <li>Vos efforts sur un segment que touche une de vos zones n'apparaissent
+    jamais à son classement.</li>
+  <li>Partager un de vos parcours qui traverse une zone demande d'abord votre
+    confirmation.</li>
+</ul>

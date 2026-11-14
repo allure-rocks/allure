@@ -1,0 +1,24 @@
+<% content_for :title, t("workouts.edit.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("workouts.edit.pretitle") %></div>
+      <h1 class="page-title"><%= t("workouts.edit.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<% if @has_active_publication %>
+  <div class="alert alert-info" role="note"><%= t("workouts.edit.published_notice") %></div>
+<% end %>
+
+<% if @workout.manual? %>
+  <%= render "manual_form", manual: @manual_form, equipments: @equipments,
+                            url: workout_path(@workout), method: :patch,
+                            submit_label: t("workouts.edit.submit"), cancel_path: workout_path(@workout) %>
+<% else %>
+  <%= form_with model: @workout, url: workout_path(@workout), method: :patch, class: "workout-form" do |form| %>
+    <%= render "form", form: form %>
+  <% end %>
+<% end %>

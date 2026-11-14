@@ -1,0 +1,14 @@
+<%# Theme toggle (DESIGN.md §17). The server already rendered the correct
+    data-bs-theme; this swaps it and persists the choice for signed-in accounts. %>
+<div class="nav-item d-flex align-items-center" <%= tag.attributes(theme_controller_attributes) %>>
+  <%= tag.a href: "#", class: "nav-link px-0 hide-theme-dark ms-2",
+        data: tooltip_data(t("theme.enable_dark")).merge(action: "theme#toggle"),
+        aria: { label: t("theme.enable_dark") } do %>
+    <i class="ti ti-moon fs-2" aria-hidden="true"></i>
+  <% end %>
+  <%= tag.a href: "#", class: "nav-link px-0 hide-theme-light ms-2",
+        data: tooltip_data(t("theme.enable_light")).merge(action: "theme#toggle"),
+        aria: { label: t("theme.enable_light") } do %>
+    <i class="ti ti-sun fs-2" aria-hidden="true"></i>
+  <% end %>
+</div>

@@ -1,0 +1,28 @@
+<%# The file panel. When the iOS companion registers the `shared-files`
+    bridge, files the user shared into Allure from another app are streamed
+    into this input (PLAN_IMPORT_SOURCES.md §3.1); the panel, the fallback
+    sport and the submit stay Rails'. %>
+<% shared_files = hotwire_native_bridge?(:"shared-files") %>
+<div class="card mb-3">
+  <%= tag.div class: "card-body",
+              data: (shared_files ? {
+                controller: "bridge--shared-files",
+                bridge__shared_files_received_value: t("workouts.batch_import.sources.file.shared_received"),
+                bridge__shared_files_failed_value: t("workouts.batch_import.sources.file.shared_failed")
+              } : {}) do %>
+    <%= tag.div data: { controller: "upload-size",
+                        upload_size_max_value: Workouts::ArchiveReader::MAX_SOURCE_BYTES,
+                        upload_size_text_value: t("workouts.batch_import.errors.source_too_large", max: "500 MB") } do %>
+      <%= form.label :source_files, t("workouts.batch_import.form.source_files"), class: "form-label required" %>
+      <%= form.file_field :source_files, multiple: true, class: "form-control#{' is-invalid' if form.object.errors[:source_files].present?}", accept: ".gpx,.fit,.tcx,.kml,.zip,.gz,.kmz,application/gpx+xml,application/vnd.ant.fit,application/vnd.garmin.tcx+xml,application/vnd.google-earth.kml+xml,application/vnd.google-earth.kmz,application/zip,application/gzip", data: { action: "change->import-source#filesChanged change->upload-size#changed", upload_size_target: "input" } %>
+      <div class="invalid-feedback" data-upload-size-target="message" aria-live="polite"></div>
+    <% end %>
+    <small class="form-text"><%= t("workouts.batch_import.form.source_files_hint") %></small>
+    <% if shared_files %>
+      <p class="text-secondary small mt-2 mb-0" role="status" data-bridge--shared-files-target="status" hidden></p>
+    <% end %>
+    <% if form.object.errors[:source_files].present? %>
+      <div class="invalid-feedback d-block"><%= form.object.errors[:source_files].join(", ") %></div>
+    <% end %>
+  <% end %>
+</div>

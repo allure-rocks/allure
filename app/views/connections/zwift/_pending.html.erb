@@ -1,0 +1,10 @@
+<%# A Zwift link in progress: the sign-in and the first profile call running
+    in the background. Locals: connection. %>
+<p class="text-secondary" role="status">
+  <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+  <%= t("settings.connections.zwift.signing_in") %>
+</p>
+<div class="allure-actions mt-2">
+  <%= button_to t("settings.connections.link.cancel"), connection_link_path("zwift"),
+        method: :delete, class: "btn btn-link" %>
+</div>

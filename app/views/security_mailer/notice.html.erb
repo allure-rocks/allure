@@ -1,0 +1,10 @@
+<p><%= t("security_mailer.notice.greeting", name: @user.display_name) %></p>
+<p><%= t("security_mailer.notice.bodies.#{@event}", provider: @provider, token: @token_name) %></p>
+<% if @mcp_geometry %>
+  <p><%= t("security_mailer.notice.mcp_geometry.#{@mcp_geometry}") %></p>
+<% end %>
+<% unless @remaining.nil? %>
+  <p><%= t("security_mailer.notice.remaining", count: @remaining) %></p>
+<% end %>
+<p><%= t("security_mailer.notice.not_you") %></p>
+<p><%= link_to t("security_mailer.notice.action"), settings_security_url %></p>

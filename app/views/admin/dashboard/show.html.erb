@@ -1,0 +1,268 @@
+<% content_for :title, t("admin.dashboard.title") %>
+
+<% content_for :page_header do %>
+  <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+  <h1 class="page-title"><%= t("admin.dashboard.title") %></h1>
+<% end %>
+
+<div class="row row-deck row-cards mb-3">
+  <div class="col-sm-6 col-xl-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-secondary small text-uppercase"><%= t("admin.dashboard.accounts.title") %></div>
+        <div class="h1 mt-1 mb-1"><%= number_with_delimiter(@overview.accounts[:total]) %></div>
+        <div class="text-secondary small">
+          <%= t("admin.dashboard.trend", week: number_with_delimiter(@overview.accounts[:week]),
+                                         month: number_with_delimiter(@overview.accounts[:month])) %>
+        </div>
+        <div class="text-secondary small">
+          <%= t("admin.dashboard.accounts.activity",
+                connected: number_with_delimiter(@overview.accounts[:connected]),
+                active: number_with_delimiter(@overview.accounts[:active_week])) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-secondary small text-uppercase"><%= t("admin.dashboard.workouts.title") %></div>
+        <div class="h1 mt-1 mb-1"><%= number_with_delimiter(@overview.workouts[:total]) %></div>
+        <div class="text-secondary small">
+          <%= t("admin.dashboard.workouts.totals",
+                distance: format_distance(@overview.workouts[:distance]),
+                duration: format_duration(@overview.workouts[:moving_time])) %>
+        </div>
+        <div class="text-secondary small">
+          <%= t("admin.dashboard.trend", week: number_with_delimiter(@overview.workouts[:week]),
+                                         month: number_with_delimiter(@overview.workouts[:month])) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-secondary small text-uppercase"><%= t("admin.dashboard.publications.title") %></div>
+        <div class="h1 mt-1 mb-1"><%= number_with_delimiter(@overview.publications[:active]) %></div>
+        <div class="text-secondary small">
+          <%= t("admin.dashboard.publications.summary",
+                public: number_with_delimiter(@overview.publications[:public]),
+                followers: number_with_delimiter(@overview.publications[:followers]),
+                scheduled: number_with_delimiter(@overview.publications[:scheduled]),
+                courses: number_with_delimiter(@overview.publications[:courses])) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-secondary small text-uppercase"><%= t("admin.dashboard.federation.title") %></div>
+        <div class="h1 mt-1 mb-1"><%= number_with_delimiter(@overview.federation[:remote_actors]) %></div>
+        <div class="text-secondary small"><%= t("admin.dashboard.federation.remote_actors") %></div>
+        <div class="text-secondary small">
+          <%= t("admin.dashboard.federation.follows",
+                accepted: number_with_delimiter(@overview.federation[:followed]),
+                pending: number_with_delimiter(@overview.federation[:pending_follows])) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row-deck row-cards mb-3">
+  <div class="col-md-6 col-xl-3">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.dashboard.federation.remote_title") %></h2></div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <li><%= t("admin.dashboard.federation.remote_notes", count: number_with_delimiter(@overview.federation[:remote_notes])) %></li>
+          <li><%= t("admin.dashboard.federation.remote_segments", count: number_with_delimiter(@overview.federation[:remote_segments])) %></li>
+          <li><%= t("admin.dashboard.federation.outbox", count: number_with_delimiter(@overview.federation[:outbox_open])) %></li>
+          <li><%= t("admin.dashboard.federation.deliveries", count: number_with_delimiter(@overview.federation[:deliveries_open])) %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.dashboard.queue.title") %></h2></div>
+      <div class="card-body">
+        <% if @overview.queue %>
+          <ul class="list-unstyled mb-0">
+            <li><%= t("admin.dashboard.queue.ready", count: number_with_delimiter(@overview.queue[:ready])) %></li>
+            <li><%= t("admin.dashboard.queue.scheduled", count: number_with_delimiter(@overview.queue[:scheduled])) %></li>
+            <li class="<%= "text-danger" if @overview.queue[:failed].positive? %>">
+              <%= t("admin.dashboard.queue.failed", count: number_with_delimiter(@overview.queue[:failed])) %>
+            </li>
+          </ul>
+        <% else %>
+          <p class="text-secondary mb-0"><%= t("admin.dashboard.queue.unavailable") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.dashboard.storage.title") %></h2></div>
+      <div class="card-body">
+        <div class="h2 mb-1"><%= number_to_human_size(@overview.storage[:bytes]) %></div>
+        <div class="text-secondary small mb-2"><%= t("admin.dashboard.storage.blobs", count: number_with_delimiter(@overview.storage[:blobs])) %></div>
+        <ul class="list-unstyled text-secondary small mb-0">
+          <% @overview.storage[:attachments].sort_by { |_, count| -count }.first(4).each do |record_type, count| %>
+            <li><%= t("admin.dashboard.storage.record_types.#{record_type.underscore}", default: record_type) %> · <%= number_with_delimiter(count) %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.dashboard.imports.title") %></h2></div>
+      <div class="card-body">
+        <div class="h2 mb-1 <%= "text-danger" if @overview.imports[:failed_entries].positive? %>">
+          <%= number_with_delimiter(@overview.imports[:failed_entries]) %>
+        </div>
+        <div class="text-secondary small"><%= t("admin.dashboard.imports.failed") %></div>
+        <% if @overview.imports[:connections_linked].positive? || @overview.imports[:connections_relink].positive? %>
+          <div class="small mt-2">
+            <%= link_to t("admin.dashboard.imports.connections",
+                          linked: number_with_delimiter(@overview.imports[:connections_linked]),
+                          relink: number_with_delimiter(@overview.imports[:connections_relink])),
+                        admin_import_connections_path,
+                        class: class_names("text-reset", "text-warning": @overview.imports[:connections_relink].positive?) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row-deck row-cards">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.dashboard.recent.accounts") %></h2></div>
+      <div class="table-responsive">
+        <table class="table table-sm card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.dashboard.table.account") %></th>
+              <th scope="col"><%= t("admin.dashboard.table.created_at") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @overview.recent_accounts.each do |account| %>
+              <tr>
+                <td>
+                  <div><%= account.display_name %></div>
+                  <div class="text-secondary small">@<%= account.username %></div>
+                </td>
+                <td class="text-secondary"><%= l(account.created_at, format: :long) %></td>
+              </tr>
+            <% end %>
+            <% if @overview.recent_accounts.empty? %>
+              <tr><td colspan="2" class="text-secondary"><%= t("admin.dashboard.recent.empty") %></td></tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.dashboard.recent.publications") %></h2></div>
+      <div class="table-responsive">
+        <table class="table table-sm card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.dashboard.table.publication") %></th>
+              <th scope="col"><%= t("admin.dashboard.table.audience") %></th>
+              <th scope="col"><%= t("admin.dashboard.table.published_at") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @overview.recent_publications.each do |publication| %>
+              <% workout = publication.workout %>
+              <tr>
+                <td>
+                  <div><%= workout&.title.presence || t("admin.dashboard.recent.untitled") %></div>
+                  <div class="text-secondary small">@<%= workout&.user&.username || publication.actor&.handle %></div>
+                </td>
+                <td>
+                  <%= publication_badge(publication.audience) %>
+                </td>
+                <td class="text-secondary"><%= l(publication.published_at, format: :long) %></td>
+              </tr>
+            <% end %>
+            <% if @overview.recent_publications.empty? %>
+              <tr><td colspan="3" class="text-secondary"><%= t("admin.dashboard.recent.empty") %></td></tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.dashboard.recent.imports") %></h2></div>
+      <div class="table-responsive">
+        <table class="table table-sm card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.dashboard.table.account") %></th>
+              <th scope="col"><%= t("admin.dashboard.table.status") %></th>
+              <th scope="col"><%= t("admin.dashboard.table.created_at") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @overview.recent_imports.each do |batch| %>
+              <tr>
+                <td>@<%= batch.user.username %></td>
+                <td><%= t("workouts.batch_import.status.labels.#{batch.status}", default: batch.status) %></td>
+                <td class="text-secondary"><%= l(batch.created_at, format: :long) %></td>
+              </tr>
+            <% end %>
+            <% if @overview.recent_imports.empty? %>
+              <tr><td colspan="3" class="text-secondary"><%= t("admin.dashboard.recent.empty") %></td></tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.dashboard.recent.events") %></h2></div>
+      <div class="table-responsive">
+        <table class="table table-sm card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.dashboard.table.action") %></th>
+              <th scope="col"><%= t("admin.dashboard.table.actor") %></th>
+              <th scope="col"><%= t("admin.dashboard.table.created_at") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @overview.recent_events.each do |event| %>
+              <tr>
+                <td><%= t("admin.events.actions.#{event.action}", default: event.action) %></td>
+                <td class="text-secondary"><%= event.user ? "@#{event.user.username}" : t("admin.events.deleted_actor") %></td>
+                <td class="text-secondary"><%= l(event.created_at, format: :long) %></td>
+              </tr>
+            <% end %>
+            <% if @overview.recent_events.empty? %>
+              <tr><td colspan="3" class="text-secondary"><%= t("admin.dashboard.recent.empty") %></td></tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

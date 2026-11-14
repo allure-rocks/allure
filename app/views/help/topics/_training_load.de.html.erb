@@ -1,0 +1,83 @@
+<p>
+  Wenn deine Aktivitäten die Herzfrequenz aufzeichnen, kann Allure dir sagen,
+  wie anstrengend jede war und wie sich dein Training über die Wochen summiert.
+  Alles beginnt mit deinem Herzfrequenzprofil.
+</p>
+
+<h2>Dein Herzfrequenzprofil und deine Zonen</h2>
+<p>
+  Unter <%= link_to "Herzfrequenz", settings_heart_rate_path %> gibst du deine
+  maximale Herzfrequenz an und, falls du sie kennst, deinen Ruhepuls. Allure
+  schlägt den höchsten Wert vor, den eine deiner Aufzeichnungen mindestens zehn
+  Sekunden lang gehalten hat — oft ein besserer Schätzwert als eine Formel. Aus
+  diesem Profil ergeben sich fünf <strong>Zonen</strong>, von Z1 (locker) bis
+  Z5 (maximal), entweder als Prozentsatz deines Maximums oder deiner
+  Herzfrequenzreserve (zwischen Ruhe und Maximum). Du kannst jede Schwelle
+  selbst verschieben.
+</p>
+<p>
+  Eine Änderung deines Profils berechnet deinen gesamten Verlauf mit den neuen
+  Zonen neu.
+</p>
+
+<h2>Zeit in den Zonen</h2>
+<p>
+  Jede Aktivität mit Herzfrequenz erhält einen Tab
+  <strong>Herzfrequenzzonen</strong>: die Zeit in jeder Zone. Eine Aufzeichnung,
+  in der die Herzfrequenz zu lückenhaft ist oder weniger als die Hälfte der
+  Zeit vorliegt, erhält keine Zonen, und der Tab sagt warum. Werte, die ein
+  verrutschender Brustgurt immer wieder liefert, werden beiseitegelegt statt
+  gezählt.
+</p>
+
+<h2>Belastung</h2>
+<p>
+  Die <strong>Belastung</strong> einer Aktivität sind die Minuten in jeder
+  Zone, multipliziert mit der Nummer der Zone (Edwards-Methode): Zehn Minuten in
+  Z4 zählen 40 Punkte, zehn Minuten in Z1 zählen 10. Zeit unterhalb der
+  Untergrenze deiner Zonen — 50 % deines Maximums mit den Standardschwellen —
+  zählt nicht.
+</p>
+
+<h2>Fitness, Ermüdung und Form</h2>
+<p>
+  Auf der Seite „Ich“ verfolgt die Karte <strong>Trainingsbelastung</strong> drei
+  Werte über die letzten 90 Tage, alle Sportarten zusammen:
+</p>
+<ul>
+  <li><strong>Fitness</strong> — deine durchschnittliche tägliche Belastung
+    über 42 Tage, wobei die letzten Tage stärker zählen. Das, was du aufgebaut
+    hast.</li>
+  <li><strong>Ermüdung</strong> — derselbe Durchschnitt über 7 Tage. Das, was
+    du gerade verkraftest.</li>
+  <li><strong>Form</strong> — die Fitness von gestern minus die Ermüdung von
+    gestern. Positiv: Du bist frisch; negativ: Du belastest dich, was mitten in
+    einem Trainingsblock normal ist.</li>
+</ul>
+<p>
+  Beide Durchschnitte beginnen bei null mit deiner ersten Aktivität mit
+  Herzfrequenz: Die Fitness ist erst nach etwa sechs Wochen aussagekräftig.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[4] %>
+</div>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[5] %>
+</div>
+
+<h2>Zonen im Zeitverlauf</h2>
+<p>
+  Die Statistik <%= link_to "Herzfrequenzzonen", heart_rate_stats_path %> stapelt
+  deine Zeit in den Zonen pro Woche oder pro Monat, in Stunden oder in Anteilen,
+  und fasst sie zu niedriger, mittlerer und hoher Intensität zusammen. Nutze
+  das als Orientierung, nicht als Vorgabe.
+</p>
+
+<h2>Es bleibt privat</h2>
+<div class="alert alert-info" role="note">
+  <%= t("settings.heart_rate.privacy") %>
+</div>
+<p>
+  Ein Veröffentlichungsprofil kann die durchschnittliche und die maximale
+  Herzfrequenz einer Aktivität teilen, aber nur, wenn du sie ankreuzt.
+</p>

@@ -1,0 +1,175 @@
+<% public_view = local_assigns.fetch(:public_view, false) %>
+<% linked = local_assigns.fetch(:linked, false) %>
+<% owner_view = !public_view && workout.user == current_user %>
+<% display = workout_display(workout, snapshot_only: public_view) %>
+<% title = workout_display_title(display) %>
+<% place_label = owner_view ? workout_place_label(workout) : nil %>
+<div class="col-sm-6 col-lg-4<%= " col-xxl-3" if linked %>">
+  <div class="card<%= " position-relative workout-card--linked" if linked %>">
+    <%# A credit row has no image of its own: it shows its source's
+        publication image when the viewer may read it (PLAN_TOGETHER.md §10). %>
+    <% image_view = if owner_view
+                      workout.credit? ? credit_source_display(workout) : nil
+                    else
+                      display
+                    end %>
+    <% own_image = owner_view && workout.recording? && workout.route_image.attached? %>
+    <% if own_image || image_view&.route_image_visible? %>
+      <% light_path, dark_path = if own_image
+           [ workout_route_image_path(workout), workout_route_image_path(workout, theme: "dark") ]
+         elsif owner_view
+           [ credit_source_image_path(workout, image_view), credit_source_image_path(workout, image_view, theme: "dark") ]
+         else
+           [ publication_route_image_path(image_view.publication), publication_route_image_path(image_view.publication, theme: "dark") ]
+         end %>
+      <% image = route_image_tag(light_url: light_path,
+                                         dark_url: dark_path,
+                                         class: "card-img-top",
+                                         width: Workouts::RouteImageRenderer::WIDTH,
+                                         height: Workouts::RouteImageRenderer::HEIGHT,
+                                         loading: "lazy",
+                                         alt: t("workouts.route_image.alt", title:)) %>
+      <% if linked %>
+        <%= image %>
+      <% else %>
+        <%= link_to image, workout_path(workout), class: "d-block" %>
+      <% end %>
+    <% elsif owner_view && workout.recording? && !workout.positioned? %>
+      <%# A positionless recording has no track, so no route image ever
+          comes: the card top names the state instead of waiting forever
+          (PLAN_NO_GPS.md §9). %>
+      <div class="ratio ratio-16x9 bg-secondary-lt" role="status">
+        <div class="d-flex align-items-center justify-content-center">
+          <span class="small text-secondary">
+            <i class="ti ti-map-off me-1" aria-hidden="true"></i><%= t("workouts.show.no_position") %>
+          </span>
+        </div>
+      </div>
+    <% elsif owner_view && workout.manual? %>
+      <%# A manual entry was typed in, never recorded: no image ever comes
+          (PLAN_MANUAL_ENTRY.md §7). %>
+      <div class="ratio ratio-16x9 bg-secondary-lt">
+        <div class="d-flex align-items-center justify-content-center">
+          <span class="small text-secondary">
+            <i class="ti ti-pencil me-1" aria-hidden="true"></i><%= t("workouts.manual.badge") %>
+          </span>
+        </div>
+      </div>
+    <% elsif owner_view && workout.recording? %>
+      <%# The owner's route image is enqueued at import: the 16x9 skeleton
+          matches the real card top until the job attaches it (DESIGN.md §11.1).
+          A credit row has no track, so no image ever comes. %>
+      <div class="ratio ratio-16x9 bg-secondary-lt placeholder-glow" role="status">
+        <span class="placeholder" aria-hidden="true"></span>
+        <div class="d-flex align-items-center justify-content-center">
+          <span class="small text-secondary"><%= t("workouts.route_image.pending") %></span>
+        </div>
+      </div>
+    <% end %>
+    <div class="card-body">
+      <div class="d-flex align-items-start mb-2">
+        <% tile_label = sport_display_name(display.sport) %>
+        <% if linked %>
+          <%= sport_tile_tag(display.sport, label: tile_label, href: workout_path(workout)) %>
+        <% else %>
+          <%= sport_tile_tag(display.sport, label: tile_label) %>
+        <% end %>
+        <div class="ms-2 workout-card__title">
+          <div class="fw-bold">
+            <%= link_to title, workout_path(workout),
+                  class: "text-reset#{" stretched-link" if linked}",
+                  aria: { label: "#{t('workouts.show.title')} : #{title}" } %>
+          </div>
+        </div>
+        <%# The card badges are icon-only pills named by their tooltip, so the
+            title keeps the row (DESIGN.md §8.4); the default « not published »
+            state carries no badge. The group is lifted above the stretched
+            link whenever it holds a badge, like the feed card. %>
+        <% card_commute = owner_view ? workout.commute? : display.commute %>
+        <%# The owner reads the records the workout holds now; every other
+            reader, the owner on the public profile included, the markers
+            frozen in the publication (DESIGN.md §8.3). %>
+        <% record_labels = if owner_view
+                             linked ? held_record_labels(workout.records, workout.effort_records, sport: workout.sport) : []
+                           else
+                             snapshot_record_labels(display.record_types, display.record_distances)
+                           end %>
+        <% publication_badges = if owner_view
+                                  workout_publication_badges(workout, fit: :icon, unpublished: false)
+                                else
+                                  publication_badge(display.publication.audience, fit: :icon)
+                                end %>
+        <% together = owner_view ? owner_together_badges(workout, fit: :icon) : "" %>
+        <% if card_commute || record_labels.any? || publication_badges.present? || together.present? %>
+          <div class="ms-auto workout-card__badges workout-card__lift">
+            <% if card_commute %>
+              <%= render "workouts/commute_badge", compact: true %>
+            <% end %>
+            <%= render "workouts/record_badge", labels: record_labels, compact: true %>
+            <%= together %>
+            <%= publication_badges %>
+          </div>
+        <% end %>
+      </div>
+
+      <% if linked %>
+        <%# Smart date on its own line, then the facts: each fact stays whole
+            and the line wraps only between them (DESIGN.md §8.4). %>
+        <div class="text-secondary small allure-table-nums">
+          <%= smart_started_at(display.started_at) %>
+        </div>
+        <% if display.metrics_present? %>
+          <% primary, secondary = pace_speed_values(average_pace: display.average_pace, average_speed: display.average_speed, sport: display.sport) %>
+          <% facts = [] %>
+          <% facts << format_distance(display.distance) if display.metric_visible?(:distance) %>
+          <% facts << format_duration_human(display.duration) if display.metric_visible?(:duration) && display.duration %>
+          <%# A power-led virtual ride names its watts where the others name
+              their speed: the platform's speed is a game output
+              (PLAN_VIRTUAL.md §8). A publication that withholds power keeps
+              the speed. A duration-only session recorded no distance to
+              divide: its card names no pace or speed (PLAN_NO_GPS.md §9). %>
+          <% if display.sport&.power_led? && display.metric_visible?(:average_power) && display.average_power.present? %>
+            <% facts << format_power(display.average_power) %>
+          <% elsif display.metric_visible?(:average_speed) || display.metric_visible?(:average_pace) %>
+            <% facts << primary if primary %>
+            <% facts << secondary if secondary %>
+          <% end %>
+          <% facts << format_elevation(display.ascent) if display.metric_visible?(:ascent) %>
+          <% if facts.any? %>
+            <div class="text-secondary small allure-table-nums">
+              <%= safe_join(facts.map { |fact| tag.span(fact, class: "text-nowrap") }, " · ") %>
+            </div>
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="text-secondary small mb-2">
+          <%= format_started_at(display.started_at) %>
+          <% if display.metrics_present? %>
+            <% if display.metric_visible?(:distance) %>
+              · <%= format_distance(display.distance) %>
+            <% end %>
+            · <%= format_duration(display.duration) %>
+          <% end %>
+        </div>
+
+        <% if display.metrics_present? %>
+          <div class="text-secondary small">
+            <%= t("workouts.show.metrics.moving_time") %>: <%= format_duration(display.moving_time) %><% if display.metric_visible?(:ascent) %> ·
+              <%= t("workouts.show.metrics.ascent") %>: <%= format_elevation(display.ascent) %><% end %>
+          </div>
+        <% end %>
+      <% end %>
+      <% if place_label.present? %>
+        <div class="text-secondary small<%= " mt-1" unless linked %> text-truncate">
+          <i class="ti ti-map-pin me-1" aria-hidden="true"></i><%= place_label %>
+        </div>
+      <% end %>
+    </div>
+    <% unless linked %>
+      <div class="card-footer">
+        <%= link_to t("workouts.show.title"), workout_path(workout), class: "btn btn-sm btn-outline-primary",
+                    aria: { label: "#{t("workouts.show.title")} : #{title}" } %>
+      </div>
+    <% end %>
+  </div>
+</div>

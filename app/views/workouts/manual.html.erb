@@ -1,0 +1,62 @@
+<%# The owner's manual entry (PLAN_MANUAL_ENTRY.md §7, DESIGN.md §20.3): the
+    figures typed in, the « Saisie manuelle » pill, and what the entry does
+    and does not count for. No map, chart, analysis, publication or
+    participants: nothing here was recorded. %>
+<% content_for :title, workout_display_title(@workout) %>
+
+<% content_for :page_header do %>
+  <div class="allure-workout-header">
+    <div class="allure-workout-header__top">
+      <div class="allure-workout-header__identity d-flex align-items-start gap-3">
+        <%= sport_tile_tag(@workout.sport, size: :md) %>
+        <div>
+          <h1 class="page-title"><%= workout_display_title(@workout) %></h1>
+          <div class="allure-workout-header__when text-secondary small mt-1">
+            <%= sport_display_name(@workout.sport) %> · <%= format_started_at(@workout.started_at) %>
+          </div>
+        </div>
+      </div>
+      <div class="allure-workout-header__actions d-print-none">
+        <div class="btn-list flex-nowrap align-items-end align-items-md-center">
+          <%= link_to t("workouts.show.edit"), edit_workout_path(@workout), class: "btn btn-outline-primary d-none d-md-inline-flex" %>
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="<%= t("workouts.show.actions.menu") %>">
+              <i class="ti ti-dots" aria-hidden="true"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+              <%= link_to t("workouts.show.edit"), edit_workout_path(@workout), class: "dropdown-item d-md-none" %>
+              <div class="dropdown-divider d-md-none"></div>
+              <%= button_to workout_path(@workout), method: :delete,
+                            form: { data: { confirm_title: t("workouts.show.confirm.title"), confirm_body: t("workouts.show.confirm.body"), confirm_verb: t("workouts.show.confirm.verb") } },
+                            class: "dropdown-item text-danger" do %>
+                <i class="ti ti-trash me-2" aria-hidden="true"></i><%= t("workouts.show.delete") %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-pretitle d-flex flex-wrap align-items-center gap-2 mt-2">
+      <%= render "manual_badge" %>
+      <% if @workout.commute? %>
+        <%= render "commute_badge" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="allure-detail-layout">
+  <div class="allure-detail-before-map">
+    <section id="section-summary" class="allure-detail-section">
+      <%= render "metrics", workout: @workout, show_description: false, collapsible: true %>
+      <p class="text-secondary small mb-3">
+        <i class="ti ti-info-circle me-1" aria-hidden="true"></i><%= t("workouts.manual.show.scope") %>
+      </p>
+    </section>
+    <%= render "description", description: @workout.description, notes: @workout.notes %>
+    <% if Allure::Photos::Config.enabled? %>
+      <%= render "workout_photos/card", workout: @workout %>
+    <% end %>
+  </div>
+</div>

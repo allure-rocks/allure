@@ -1,0 +1,6 @@
+# BuildKit reads this file instead of .dockerignore for Dockerfile.demo: the
+# demo image needs only the seed inputs the production context excludes.
+*
+!db/seeds/demo/
+!spec/fixtures/gpx/
+!script/fetch-fit-corpus

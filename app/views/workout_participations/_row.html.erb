@@ -1,0 +1,35 @@
+<%# One participation on the card (DESIGN.md §10.18). `counterpart` is the
+    other account: the participant on the source's card, the source's owner on
+    a linked recording's card. `answerable` offers Confirmer / Refuser to the
+    viewer's side of a pending detection; `withdrawable` the removal. Every
+    action addresses the participation through its source workout. %>
+<% source = participation.workout %>
+<li class="allure-participant-row py-2">
+  <%= actor_avatar_tag(counterpart, size: "sm") %>
+  <div class="allure-participant-row__identity">
+    <div class="text-truncate"><%= participation_actor_name(counterpart) %></div>
+    <% if participation_actor_handle(counterpart) %>
+      <div class="text-secondary small text-truncate"><%= participation_actor_handle(counterpart) %></div>
+    <% end %>
+  </div>
+  <div class="allure-participant-row__meta">
+    <span class="badge bg-secondary-lt"><%= participation_kind_label(participation) %></span>
+    <span class="badge <%= participation.confirmed? ? "bg-success-lt" : "bg-secondary-lt" %>">
+      <%= participation_state_label(participation) %>
+    </span>
+    <% if answerable %>
+      <%= button_to t("workouts.participations.confirm"), workout_participation_path(source, participation),
+                    method: :patch, params: { decision: "confirm" }, class: "btn btn-sm btn-primary" %>
+      <%= button_to t("workouts.participations.decline"), workout_participation_path(source, participation),
+                    method: :patch, params: { decision: "decline" }, class: "btn btn-sm btn-outline-secondary" %>
+    <% elsif withdrawable %>
+      <%= button_to t("workouts.participations.withdraw"),
+                    workout_participation_path(source, participation),
+                    method: :delete,
+                    form: { data: { confirm_title: t("workouts.participations.withdraw_confirm.title"),
+                                    confirm_body: t("workouts.participations.withdraw_confirm.body"),
+                                    confirm_verb: t("workouts.participations.withdraw") } },
+                    class: "btn btn-sm btn-outline-secondary" %>
+    <% end %>
+  </div>
+</li>

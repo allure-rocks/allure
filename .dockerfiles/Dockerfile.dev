@@ -1,0 +1,83 @@
+# syntax=docker/dockerfile:1
+#
+# Allure — development image.
+#
+# Ruby and every native extension live in here, so the host toolchain is
+# irrelevant. This is deliberate: rgeo/GEOS and pg build reliably on Debian,
+# and much less reliably on darwin/arm64.
+
+ARG RUBY_VERSION=4.0
+ARG NODE_VERSION=24
+
+# Debian trixie ships a Node too old for Vite 7 (needs >= 20.19 / 22.12), so we
+# lift a known-good Node out of the official image instead of using apt.
+FROM node:${NODE_VERSION}-slim AS node
+
+FROM ruby:${RUBY_VERSION}-slim-trixie AS development
+
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+RUN ln -sf /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+ && ln -sf /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+
+# build-essential / pkg-config : native gem compilation
+# libpq-dev                    : pg
+# postgresql-client            : `dip psql`
+# libgeos-dev                  : rgeo — GEOS-backed geometry predicates
+# libproj-dev                  : proj — coordinate transforms
+# libvips-dev                  : ruby-vips (ActiveStorage variants, route PNGs)
+# librsvg2-2                   : SVG loader used by libvips for route PNGs
+# libyaml-dev                  : psych
+# git                          : bundler git sources
+RUN apt-get update -qq \
+ && apt-get install --no-install-recommends -y \
+      build-essential \
+      ca-certificates \
+      curl \
+      git \
+      libgeos-dev \
+      libproj-dev \
+      libpq-dev \
+      librsvg2-2 \
+      libvips-dev \
+      libyaml-dev \
+      pkg-config \
+      postgresql-client \
+ && rm -rf /var/lib/apt/lists/*
+
+ENV LANG=C.UTF-8 \
+    TZ=Europe/Paris \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_JOBS=4 \
+    BUNDLE_RETRY=3 \
+    NODE_ENV=development \
+    PATH=/app/bin:/usr/local/bundle/bin:$PATH
+
+# /etc/profile resets PATH, so login shells (`dip sh`) would otherwise lose the
+# app binstubs and the gem bin directory.
+RUN printf 'export PATH=/app/bin:/usr/local/bundle/bin:$PATH\n' \
+      > /etc/profile.d/00-allure-path.sh
+
+# Keep the history file on a volume so `dip rails c` remembers across runs.
+ENV IRBRC=/app/.irbrc.docker \
+    HISTFILE=/usr/local/hist/.bash_history
+
+RUN mkdir -p /usr/local/hist && touch /usr/local/hist/.bash_history
+
+WORKDIR /app
+
+CMD ["bash"]
+
+FROM development AS route-image-worker
+
+# Chromium is isolated to the route-image worker: ordinary Rails, Vite, and job
+# containers do not pay its image-size or runtime cost.
+RUN apt-get update -qq \
+ && apt-get install --no-install-recommends -y chromium \
+ && rm -rf /var/lib/apt/lists/*
+
+ENV CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium
+
+# Keep an unqualified development build small; Compose selects the browser
+# target explicitly only for route-image workers.
+FROM development AS default

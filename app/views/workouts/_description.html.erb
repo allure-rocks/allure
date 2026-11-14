@@ -1,0 +1,27 @@
+<%# The workout's text, its own card under the summary (DESIGN.md §20.3):
+    the shared description, then the owner's private notes. Locals:
+    `description`, `notes` (owner only, nil otherwise). %>
+<% description = local_assigns[:description] %>
+<% notes = local_assigns[:notes] %>
+<% if description.present? || notes.present? %>
+  <div class="card mb-3 allure-workout-description">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("workouts.show.description") %></h2>
+    </div>
+    <div class="card-body">
+      <% if description.present? %>
+        <div class="allure-workout-copy">
+          <%= simple_format(h(description), class: "mb-0") %>
+        </div>
+      <% end %>
+      <% if notes.present? %>
+        <aside class="alert alert-secondary mb-0<%= " mt-3" if description.present? %>" aria-labelledby="private-notes-title">
+          <h3 class="h4 alert-title" id="private-notes-title">
+            <i class="ti ti-lock me-1" aria-hidden="true"></i><%= t("workouts.show.private_notes") %>
+          </h3>
+          <%= simple_format(h(notes), class: "mb-0") %>
+        </aside>
+      <% end %>
+    </div>
+  </div>
+<% end %>

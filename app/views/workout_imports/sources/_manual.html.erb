@@ -1,0 +1,12 @@
+<%# The manual source (PLAN_MANUAL_ENTRY.md §5): a workout typed in by hand,
+    with no file. It owns its form, outside the upload form, so `form` is
+    unused here. %>
+<div class="alert alert-info" role="note">
+  <div class="d-flex gap-2">
+    <i class="ti ti-pencil mt-1" aria-hidden="true"></i>
+    <div><%= t("workouts.manual.form.intro") %></div>
+  </div>
+</div>
+<%= render "workouts/manual_form", manual: @manual_form, equipments: @equipments || [],
+                                   url: manual_workouts_path, method: :post,
+                                   submit_label: t("workouts.manual.form.create"), cancel_path: workouts_path %>

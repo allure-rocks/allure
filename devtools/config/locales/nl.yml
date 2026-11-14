@@ -1,0 +1,22 @@
+nl:
+  dev_tools:
+    pretitle: Ontwikkeling
+    menu: Optreden als…
+    bar:
+      copy: "Ontwikkelmodus: je treedt op als @%{username}."
+      stop: Terug naar @%{operator}
+    impersonations:
+      show:
+        title: Optreden als…
+        accounts: Accounts
+        intro: "Opent een sessie als dit account, zonder wachtwoord en zonder tweede factor. De knop in de balk brengt je daarna terug naar het account van de beheerder."
+        start: Optreden als
+        start_aria: Optreden als @%{username}
+        empty: Geen ander account om te openen.
+        more: Alleen de eerste %{limit} accounts worden getoond.
+      create:
+        started: "Je treedt op als @%{username}."
+        self_refused: Je bent dit account al.
+        suspended_refused: Een geschorst account kan niet worden geopend.
+      destroy:
+        stopped: "Je treedt weer op als @%{username}."

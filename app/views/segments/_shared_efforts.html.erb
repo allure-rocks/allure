@@ -1,0 +1,63 @@
+<% rows = shared_leaderboard_rows(efforts, segment, owner_view: local_assigns.fetch(:owner_view, false)) %>
+<% sport = local_assigns[:sport] || efforts.first&.sport %>
+<% if rows.any? %>
+  <div class="table-responsive d-none d-md-block">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("segments.leaderboard.title", name: segment.name) %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("segments.leaderboard.rank") %></th>
+          <th scope="col"><%= t("segments.leaderboard.athlete") %></th>
+          <th scope="col"><%= t("segments.leaderboard.date") %></th>
+          <th scope="col" class="text-end"><%= t("segments.leaderboard.time") %></th>
+          <th scope="col" class="text-end"><%= leaderboard_pace_speed_header(sport) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% rows.each_with_index do |row, index| %>
+          <tr>
+            <td><%= rank_medal(index + 1) %></td>
+            <td>
+              <% if row[:linked] %>
+                <%= link_to row[:athlete], profile_path(row[:effort].user.username) %>
+              <% else %>
+                <%= row[:athlete] %>
+              <% end %>
+            </td>
+            <td><%= row[:date] %></td>
+            <td class="text-end"><strong><%= format_duration(row[:effort].elapsed_time) %></strong></td>
+            <td class="text-end"><%= pace_speed_cell(average_pace: row[:effort].average_pace, average_speed: row[:effort].average_speed, sport:) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush d-md-none allure-card-list">
+    <% rows.each_with_index do |row, index| %>
+      <li class="list-group-item">
+        <div class="d-flex justify-content-between align-items-baseline">
+          <span class="allure-card-title">
+            <%= rank_medal(index + 1) %> ·
+            <% if row[:linked] %>
+              <%= link_to row[:athlete], profile_path(row[:effort].user.username), class: "text-reset" %>
+            <% else %>
+              <%= row[:athlete] %>
+            <% end %>
+          </span>
+          <strong class="allure-table-nums"><%= format_duration(row[:effort].elapsed_time) %></strong>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          <%= row[:date] %> · <%= pace_speed_cell(average_pace: row[:effort].average_pace, average_speed: row[:effort].average_speed, sport:) %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="card-body">
+    <div class="empty">
+      <div class="empty-icon"><i class="ti ti-route fs-1 text-primary"></i></div>
+      <p class="empty-title"><%= t("segments.efforts.empty_title") %></p>
+      <p class="empty-subtitle text-secondary"><%= t("segments.efforts.empty_subtitle") %></p>
+    </div>
+  </div>
+<% end %>

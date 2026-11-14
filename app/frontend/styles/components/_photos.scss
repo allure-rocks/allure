@@ -1,0 +1,509 @@
+// Workout photos (DESIGN.md §10.22). This build's Tabler tokens are
+// unprefixed: a `--tblr-*` reference resolves to nothing and silently loses
+// the surface, border or brand colour it was meant to paint.
+
+.allure-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.allure-photo-preview {
+  padding: 0;
+  width: 100%;
+  border: 0;
+  border-radius: var(--border-radius);
+  background: transparent;
+  overflow: hidden;
+}
+
+.allure-photo-preview img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+// The workout card's gallery: the same thumbnails readers see, square and
+// small, so the card stays a glance rather than a workspace.
+.allure-photo-grid--compact {
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 0.5rem;
+
+  .allure-photo-preview img {
+    aspect-ratio: 1;
+  }
+}
+
+.allure-photo-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.allure-photo-tile__placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: var(--border-radius);
+  background: var(--bg-surface-secondary);
+  color: var(--secondary);
+}
+
+.allure-photo-tile--failed .allure-photo-tile__placeholder {
+  color: var(--danger);
+}
+
+.allure-photo-drop--compact {
+  padding: 0.75rem;
+}
+
+// The intake zone: a labelled picker button and a drop target, never the
+// browser's own file control.
+.allure-photo-drop {
+  padding: 1rem;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius);
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.allure-photo-drop__title {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.allure-photo-dragover .allure-photo-drop {
+  border-color: var(--primary);
+  background-color: var(--bg-surface-secondary);
+}
+
+.allure-photo-quota {
+  width: 100%;
+  height: 0.5rem;
+  accent-color: var(--primary);
+}
+
+// The photo viewer: a dark surface in both themes, like every photo viewer, so
+// the image is what the eye reads. The palette is component-local, not a
+// semantic surface.
+.allure-photo-dialog {
+  width: min(1100px, 96vw);
+  max-height: 96dvh;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: var(--border-radius);
+  color: #f4f4f5;
+  background: #0c0c0e;
+  overflow: hidden;
+
+  &::backdrop {
+    background: rgb(0 0 0 / 88%);
+  }
+
+  &[open] {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.allure-photo-dialog__bar,
+.allure-photo-dialog__foot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.allure-photo-dialog__bar {
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+.allure-photo-dialog__counter {
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255 255 255 / 70%);
+}
+
+.allure-photo-dialog__close,
+.allure-photo-dialog__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 50%;
+  color: #fff;
+  background: rgb(0 0 0 / 45%);
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: rgb(0 0 0 / 70%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
+
+.allure-photo-dialog__close {
+  width: 2rem;
+  height: 2rem;
+}
+
+.allure-photo-dialog__stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 0.5rem;
+}
+
+.allure-photo-dialog__stage img {
+  display: block;
+  max-width: 100%;
+  max-height: 70dvh;
+  object-fit: contain;
+}
+
+.allure-photo-dialog__nav {
+  position: absolute;
+  top: 50%;
+  width: 2.75rem;
+  height: 2.75rem;
+  transform: translateY(-50%);
+
+  &--previous {
+    left: 0.75rem;
+  }
+
+  &--next {
+    right: 0.75rem;
+  }
+}
+
+.allure-photo-dialog__foot {
+  flex-wrap: wrap;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+}
+
+.allure-photo-dialog__caption {
+  flex: 1 1 16rem;
+  margin: 0;
+}
+
+.allure-photo-dialog__meta {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgb(255 255 255 / 65%);
+}
+
+.allure-photo-dialog__links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.allure-photo-dialog__link,
+.allure-photo-dialog__links a {
+  padding: 0;
+  border: 0;
+  color: #fff;
+  background: none;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+// The manager (DESIGN.md §20.24): the route stays beside the list from lg up,
+// and leads the single column on phones.
+.allure-photo-manager {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+@media (min-width: 992px) {
+  .allure-photo-manager--split {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .allure-photo-manager__map .card {
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+.allure-photo-manager__map,
+.allure-photo-manager__panel {
+  min-width: 0;
+}
+
+.allure-photo-rows {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.allure-photo-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 6rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--bg-surface);
+
+  &--before::before,
+  &--after::after {
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--primary);
+    content: "";
+  }
+
+  &--before::before { top: -0.5rem; }
+  &--after::after { bottom: -0.5rem; }
+
+  &--active {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 30%, transparent);
+  }
+
+  // « Modifier » in the card's lightbox lands on this row.
+  &:target {
+    animation: allure-photo-row-target 2s ease-out;
+  }
+}
+
+@keyframes allure-photo-row-target {
+  from {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+}
+
+.allure-photo-row__handle {
+  padding: 0.25rem;
+  border: 0;
+  color: var(--secondary);
+  background: none;
+  cursor: grab;
+
+  &:active { cursor: grabbing; }
+}
+
+.allure-photo-row__thumb {
+  display: grid;
+  place-items: center;
+  width: 6rem;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--border-radius);
+  background: var(--bg-surface-secondary);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &--pending { color: var(--secondary); }
+  &--failed { color: var(--danger); }
+}
+
+.allure-photo-row__body {
+  min-width: 0;
+}
+
+.allure-photo-caption__status {
+  min-height: 1.1rem;
+  color: var(--success);
+}
+
+// A drag handle is a pointer affordance: on a touch screen the row menu's
+// « Monter » / « Descendre » are the path.
+@media (pointer: coarse) {
+  .allure-photo-row {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+  }
+
+  .allure-photo-row__handle {
+    display: none;
+  }
+
+  .allure-photo-row__thumb {
+    width: 4.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .allure-photo-manager__map .allure-map {
+    height: 18rem;
+  }
+
+  .allure-photo-manager__map .allure-visual {
+    min-height: 18rem;
+  }
+}
+
+// The first shared photos on a feed card, under its route image.
+.allure-feed-photos {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+
+  img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+}
+
+.allure-feed-photos__more {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 65%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+// The publish form's photo choice.
+.allure-publish-photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.5rem;
+}
+
+.allure-publish-photo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+  }
+
+  .form-check-input {
+    position: absolute;
+    top: 0.35rem;
+    left: 0.35rem;
+    margin: 0;
+  }
+}
+
+// Owner photo markers on the map (PLAN_PHOTOS.md §7): a round thumbnail with
+// a primary ring; a group shows its first photo and the count.
+.allure-map-photo {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  background: var(--bg-surface);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+  cursor: pointer;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
+
+// The lightbox's map link flies to this marker. The pulse must not touch
+// `transform`: MapLibre positions the marker element with its own inline
+// transform.
+.allure-map-photo--active {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  animation: allure-photo-pulse 1.2s ease-in-out 2;
+}
+
+@keyframes allure-photo-pulse {
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+}
+
+.allure-map-photo-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  min-width: 1.15rem;
+  padding: 0 0.25rem;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.1rem;
+  text-align: center;
+}
+
+.allure-map--placing {
+  outline: 2px dashed var(--primary);
+  outline-offset: -2px;
+}
+
+// Camera pills on the profile, along the top of the plot.
+.allure-chart-photos {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.allure-chart-photo {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.75rem;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "subject": "acct:demo@wanderer.example",
+  "aliases": [
+    "https://wanderer.example/users/demo",
+    "https://wanderer.example/@demo"
+  ],
+  "links": [
+    {
+      "rel": "self",
+      "type": "application/activity+json",
+      "href": "https://wanderer.example/users/demo"
+    }
+  ]
+}

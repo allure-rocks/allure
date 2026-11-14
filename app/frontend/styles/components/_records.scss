@@ -1,0 +1,9 @@
+// The owner's records page (DESIGN.md §20.8): one sport per page, its classic
+// records and its best efforts side by side as soon as the page is wide
+// enough, stacked on a phone.
+.records-panel__tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 0.5rem 1.5rem;
+  padding-bottom: 0.75rem;
+}

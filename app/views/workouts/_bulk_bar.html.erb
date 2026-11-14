@@ -1,0 +1,71 @@
+<%# The bulk selection bar (DESIGN.md §10.19, PLAN_BULK_ACTIONS.md §7): a
+    desktop-only card header that appears as soon as a row is checked. It is a
+    plain form — the row checkboxes are associated with `form=` — so every
+    control still submits without JavaScript; the Stimulus controller only adds
+    the live count, the tri-state and the apply-button enablement. %>
+<% filtered_count = local_assigns.fetch(:filtered_count, 0) %>
+<% workouts_size = local_assigns.fetch(:workouts_size, 0) %>
+<% equipments = local_assigns.fetch(:equipments, []) %>
+<% max = Workouts::BulkSelection::MAX_WORKOUTS %>
+<% at_cap = filtered_count > max %>
+<%= form_with url: apply_workout_bulk_operations_path,
+              html: { id: "workout-bulk-form", class: "card-header allure-bulk-bar" },
+              data: { unsaved_changes: "off" } do %>
+  <%= hidden_field_tag :return_to, request.fullpath %>
+  <% workout_filter_params.each do |key, value| %>
+    <% if value.is_a?(Array) %>
+      <% value.each do |item| %><%= hidden_field_tag "#{key}[]", item %><% end %>
+    <% else %>
+      <%= hidden_field_tag key, value %>
+    <% end %>
+  <% end %>
+
+  <span class="allure-bulk-bar__count" role="status" aria-live="polite">
+    <strong data-bulk-selection-target="countNumber">0</strong>
+    <span data-bulk-selection-target="countOther"><%= t("workouts.bulk.bar.count.other") %></span>
+    <span data-bulk-selection-target="countOne" hidden><%= t("workouts.bulk.bar.count.one") %></span>
+  </span>
+
+  <% if at_cap %>
+    <span class="text-secondary small"><%= t("workouts.bulk.bar.limit_hint", max:) %></span>
+  <% elsif filtered_count > workouts_size %>
+    <label class="form-check mb-0">
+      <input type="checkbox" class="form-check-input" name="scope" value="filter"
+             data-bulk-selection-target="scope" data-action="change->bulk-selection#scopeChanged">
+      <span class="form-check-label"><%= t("workouts.bulk.bar.select_filtered", count: filtered_count) %></span>
+    </label>
+  <% end %>
+
+  <div class="ms-auto d-flex flex-wrap align-items-center gap-2">
+    <% quick_groups = {
+         t("workouts.bulk.bar.groups.commute") => [
+           [ t("workouts.bulk.bar.commute_on"), "commute_on" ],
+           [ t("workouts.bulk.bar.commute_off"), "commute_off" ]
+         ]
+       } %>
+    <% active_equipments = equipments.select(&:is_active?) %>
+    <% if active_equipments.any? %>
+      <% quick_groups[t("workouts.bulk.bar.groups.equipment_add")] =
+           active_equipments.map { |equipment| [ t("workouts.bulk.bar.equipment_add", label: equipment.label), "equipment_add:#{equipment.id}" ] } %>
+    <% end %>
+    <% if equipments.any? %>
+      <% quick_groups[t("workouts.bulk.bar.groups.equipment_remove")] =
+           equipments.map { |equipment| [ t("workouts.bulk.bar.equipment_remove", label: equipment.label), "equipment_remove:#{equipment.id}" ] } %>
+    <% end %>
+    <%= select_tag :quick_operation, grouped_options_for_select(quick_groups, nil, prompt: t("workouts.bulk.bar.quick_prompt")),
+          class: "form-select form-select-sm allure-bulk-bar__action",
+          aria: { label: t("workouts.bulk.bar.quick_label") } %>
+    <button type="submit" class="btn btn-sm btn-primary" name="_method" value="patch"
+            data-bulk-selection-target="apply">
+      <%= t("workouts.bulk.bar.apply") %>
+    </button>
+    <button type="submit" class="btn btn-sm btn-outline-secondary"
+            formaction="<%= review_workout_bulk_operations_path %>" name="operation" value="sport_change">
+      <%= t("workouts.bulk.bar.sport") %>
+    </button>
+    <button type="submit" class="btn btn-sm btn-outline-danger"
+            formaction="<%= review_workout_bulk_operations_path %>" name="operation" value="delete">
+      <%= t("workouts.bulk.bar.delete") %>
+    </button>
+  </div>
+<% end %>

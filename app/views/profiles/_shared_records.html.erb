@@ -1,0 +1,68 @@
+<section class="card profile-records" aria-labelledby="profile-records-title"
+         data-controller="paged-panels" data-action="turbo:before-cache@document->paged-panels#disconnect">
+  <div class="card-header">
+    <h2 class="card-title" id="profile-records-title"><%= t("profile.records.title") %></h2>
+  </div>
+  <div class="card-body border-bottom">
+    <p class="text-secondary small mb-0"><%= t("profile.records.hint") %></p>
+  </div>
+  <% if groups.many? %>
+    <div class="card-body border-bottom" data-paged-panels-target="navigation" hidden>
+      <fieldset class="allure-sport-filter mb-0">
+        <legend class="visually-hidden"><%= t("profile.records.sport_label") %></legend>
+        <div class="form-selectgroup paged-panels__choices" data-paged-panels-target="selector">
+          <% groups.each_with_index do |group, index| %>
+            <label class="form-selectgroup-item">
+              <%= radio_button_tag :profile_record_sport, group.sport.slug, index.zero?,
+                    id: "profile-record-sport-#{group.sport.slug}", class: "form-selectgroup-input",
+                    aria: { controls: "profile-records-#{group.sport.slug}" },
+                    data: { paged_panels_target: "choice", choice_name: sport_display_name(group.sport), action: "change->paged-panels#select" } %>
+              <span class="form-selectgroup-label">
+                <span class="allure-sport-filter__icon" aria-hidden="true"><%= sport_icon_tag(group.sport) %></span>
+                <span><%= sport_display_name(group.sport) %></span>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+      <p class="form-text mt-2 mb-0"><%= t("profile.records.swipe_hint") %></p>
+    </div>
+  <% end %>
+  <div class="paged-panels__viewport" data-paged-panels-target="viewport" data-action="scroll->paged-panels#scrolled">
+    <% groups.each do |group| %>
+      <section class="paged-panels__panel" id="profile-records-<%= group.sport.slug %>"
+               aria-labelledby="profile-records-name-<%= group.sport.slug %>" data-paged-panels-target="panel">
+        <h3 class="h4 px-3 pt-3" id="profile-records-name-<%= group.sport.slug %>">
+          <span class="d-inline-flex align-items-center gap-2"><%= sport_tile_tag(group.sport, size: :xs) %><%= sport_display_name(group.sport) %></span>
+        </h3>
+        <table class="table table-sm table-vcenter card-table allure-table-nums mb-3">
+          <caption class="visually-hidden"><%= sport_display_name(group.sport) %></caption>
+          <thead>
+            <tr>
+              <th scope="col"><%= t("records.index.record") %></th>
+              <th scope="col" class="text-end"><%= t("records.index.value") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% group.records.each do |record| %>
+              <tr>
+                <th scope="row" class="fw-normal"><%= record_label(record) %></th>
+                <td class="text-end text-nowrap"><strong><%= format_record_value(record) %></strong></td>
+              </tr>
+            <% end %>
+            <% if group.efforts.any? %>
+              <tr><th colspan="2" class="text-secondary fw-medium"><%= t("records.efforts.title") %></th></tr>
+              <% group.efforts.each do |record| %>
+                <tr>
+                  <th scope="row" class="fw-normal"><%= record_label(record) %></th>
+                  <td class="text-end text-nowrap"><strong><%= format_record_value(record) %></strong></td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
+    <% end %>
+  </div>
+  <span class="visually-hidden" role="status" aria-atomic="true" data-paged-panels-target="status"></span>
+</section>

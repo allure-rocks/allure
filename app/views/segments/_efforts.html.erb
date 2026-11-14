@@ -1,0 +1,66 @@
+<%# The viewer's own efforts, fastest first. The list is ordered like the
+    personal best (time, then the earlier start, then the earlier row), so the
+    first three of each sport are the record and the second and third best
+    time, marked with their trophy (DESIGN.md §10.4). Locals: `efforts`,
+    `segment`. %>
+<% if efforts.any? %>
+  <% sports = efforts.map(&:sport).uniq %>
+  <% seen = Hash.new(0) %>
+  <% places = efforts.to_h { |effort| [ effort.id, seen[effort.sport_id] += 1 ] } %>
+  <% pace_header = sports.one? ? leaderboard_pace_speed_header(sports.first) : t("segments.leaderboard.pace_speed") %>
+  <div class="table-responsive d-none d-md-block">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= local_assigns.fetch(:caption, t("segments.efforts.title")) %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("segments.efforts.workout") %></th>
+          <th scope="col"><%= t("segments.efforts.date") %></th>
+          <th scope="col" class="text-end"><%= t("segments.efforts.time") %></th>
+          <th scope="col" class="text-end"><%= t("segments.efforts.distance") %></th>
+          <th scope="col" class="text-end"><%= pace_header %></th>
+          <th scope="col" class="text-end"><%= t("segments.efforts.deviation") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% efforts.each do |effort| %>
+          <tr>
+            <td>
+              <%= link_to workout_display_title(effort.workout), workout_path(effort.workout) %>
+              <%= personal_place_icon(places[effort.id], segment.name, extra_classes: "ms-1") %>
+            </td>
+            <td><%= format_started_at(effort.started_at) %></td>
+            <td class="text-end"><strong><%= format_duration(effort.elapsed_time) %></strong></td>
+            <td class="text-end"><%= format_distance(effort.distance) %></td>
+            <td class="text-end"><%= pace_speed_cell(average_pace: effort.average_pace, average_speed: effort.average_speed, sport: effort.sport) %></td>
+            <td class="text-end"><%= format_distance(effort.deviation_meters) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush d-md-none allure-card-list">
+    <% efforts.each do |effort| %>
+      <li class="list-group-item">
+        <div class="d-flex justify-content-between align-items-baseline">
+          <span class="allure-card-title">
+            <%= link_to workout_display_title(effort.workout), workout_path(effort.workout), class: "text-reset" %>
+            <%= personal_place_icon(places[effort.id], segment.name, extra_classes: "ms-1") %>
+          </span>
+          <strong class="allure-table-nums"><%= format_duration(effort.elapsed_time) %></strong>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          <%= format_started_at(effort.started_at) %> · ±<%= format_distance(effort.deviation_meters) %> ·
+          <%= pace_speed_cell(average_pace: effort.average_pace, average_speed: effort.average_speed, sport: effort.sport) %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="card-body">
+    <div class="empty">
+      <div class="empty-icon"><i class="ti ti-route fs-1 text-primary"></i></div>
+      <p class="empty-title"><%= t("segments.efforts.empty_title") %></p>
+      <p class="empty-subtitle text-secondary"><%= t("segments.efforts.empty_subtitle") %></p>
+    </div>
+  </div>
+<% end %>

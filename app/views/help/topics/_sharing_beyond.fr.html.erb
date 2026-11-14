@@ -1,0 +1,85 @@
+<% if Allure::Federation::Config.enabled? %>
+  <p class="text-secondary">Cette instance partage avec d'autres instances Allure.</p>
+<% else %>
+  <p class="text-secondary">
+    Cette instance ne partage pas avec d'autres instances pour le moment : tout
+    ce que vous publiez reste ici. Le reste de cette page s'applique dès que son
+    opérateur active le partage.
+  </p>
+<% end %>
+
+<p>
+  Les instances Allure peuvent communiquer entre elles. Un membre d'une autre
+  instance peut vous suivre, et vous pouvez le suivre, comme si vous étiez sur
+  le même serveur. Son adresse comprend son instance :
+  <code>@marie@allure.example.org</code>.
+</p>
+
+<h2>Suivre et être suivi</h2>
+<ul>
+  <li>Vous suivez quelqu'un depuis <%= link_to "Personnes", people_path %>, par
+    son adresse, ou depuis son profil.</li>
+  <li>Chaque demande d'abonnement attend une approbation, ici comme sur les
+    autres instances. Vous décidez qui vous suit.</li>
+  <li>Bloquer un compte arrête tout échange entre vous, dans les deux sens, et
+    met fin à son abonnement.</li>
+</ul>
+
+<h2>Être trouvé par son nom</h2>
+<p>
+  La recherche par nom est facultative et désactivée par défaut. Tant que vous ne
+  l'activez pas dans <%= link_to "votre profil", settings_profile_path %>, seules
+  les personnes qui saisissent votre identifiant complet peuvent vous trouver.
+  Quand vous l'activez, un résultat ne montre que votre avatar, votre nom et
+  votre identifiant : jamais votre biographie, vos lieux ou vos activités.
+</p>
+<p>
+  Les listes d'abonnés et d'abonnements ne sont pas publiées sur le réseau : qui
+  vous suit et qui vous suivez reste privé. Vous pouvez retirer un abonné depuis
+  <%= link_to "Personnes", people_path %> ; il ne verra plus vos publications
+  réservées à vos abonnés.
+</p>
+
+<h2>Ce que reçoivent les autres instances</h2>
+<p>
+  Quand vous publiez, chaque instance où quelqu'un vous suit reçoit une
+  <strong>copie</strong> de la publication — exactement celle que votre profil
+  de publication a produite, zones de confidentialité déjà appliquées — et la
+  conserve pour la montrer à vos abonnés de là-bas.
+</p>
+<ul>
+  <li>Les publications <strong>publiques</strong> vont à chaque instance où vous
+    avez un abonné accepté.</li>
+  <li>Les publications <strong>abonnés</strong> ne vont qu'aux instances que
+    l'opérateur de cette instance a approuvées, et seulement à vos abonnés
+    acceptés là-bas. Ailleurs, vos abonnés ne les reçoivent tout simplement
+    pas.</li>
+  <li>Les commentaires et les réactions laissés depuis d'autres instances vous
+    parviennent ici, et les commentaires sur vos publications publiques sont
+    transmis aux instances qui les ont reçues.</li>
+  <li>Rien d'autre ne sort : ni vos activités, ni vos fichiers d'origine, ni vos
+    zones, ni vos réglages privés, ni vos zones cardiaques et votre charge.</li>
+</ul>
+
+<h2>Ce qu'une suppression peut faire, et ce qu'elle ne peut pas</h2>
+<p>
+  Quand vous supprimez une publication, cessez de suivre quelqu'un, bloquez un
+  compte ou supprimez votre compte, cette instance prévient les autres, et
+  celles qui se comportent correctement suppriment leur copie. Mais une copie
+  partie ne peut pas être reprise de force.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  La règle est donc simple : publiez ce que vous accepteriez de voir conservé.
+  Le délai de publication et les zones de confidentialité sont là pour vous y
+  aider.
+</p>
+
+<h2>Votre adresse est permanente</h2>
+<p>
+  Les autres instances vous connaissent par votre nom d'utilisateur sur cette
+  instance. Il ne peut pas être changé, et une fois un compte supprimé, son nom
+  d'utilisateur n'est jamais attribué à quelqu'un d'autre.
+</p>

@@ -1,0 +1,42 @@
+<% content_for :title, t("dev_tools.impersonations.show.title") %>
+
+<% content_for :page_header do %>
+  <div class="page-pretitle"><%= t("dev_tools.pretitle") %></div>
+  <h1 class="page-title"><%= t("dev_tools.impersonations.show.title") %></h1>
+<% end %>
+
+<div class="row row-deck row-cards">
+  <div class="col-12 col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><%= t("dev_tools.impersonations.show.accounts") %></h2>
+      </div>
+      <div class="card-body text-secondary"><%= t("dev_tools.impersonations.show.intro") %></div>
+
+      <% if @accounts.empty? %>
+        <div class="empty">
+          <p class="empty-title"><%= t("dev_tools.impersonations.show.empty") %></p>
+        </div>
+      <% else %>
+        <div class="list-group list-group-flush">
+          <% @accounts.each do |account| %>
+            <div class="list-group-item d-flex align-items-center gap-3">
+              <%= avatar_tag(account, size: "sm") %>
+              <div class="flex-fill">
+                <div><%= account.display_name %></div>
+                <div class="text-secondary small">@<%= account.username %></div>
+              </div>
+              <%= button_to t("dev_tools.impersonations.show.start"), devtools_impersonation_path,
+                    params: { user_id: account.id }, class: "btn btn-outline-primary btn-sm",
+                    aria: { label: t("dev_tools.impersonations.show.start_aria", username: account.username) } %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if @more %>
+        <div class="card-footer text-secondary"><%= t("dev_tools.impersonations.show.more", limit: @limit) %></div>
+      <% end %>
+    </div>
+  </div>
+</div>

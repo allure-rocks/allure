@@ -1,0 +1,38 @@
+<% content_for :title, t("admin.invitations.new") %>
+
+<% content_for :page_header do %>
+  <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+  <h1 class="page-title"><%= t("admin.invitations.new") %></h1>
+<% end %>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <p class="text-secondary"><%= t("admin.invitations.new_hint") %></p>
+        <%= form_with url: admin_invitations_path, method: :post, class: "row g-3" do %>
+          <div class="col-12">
+            <%= label_tag "invitation_email_address", t("admin.invitations.table.email"), class: "form-label" %>
+            <%= email_field_tag "invitation[email_address]", nil, class: "form-control", required: true %>
+          </div>
+          <div class="col-12">
+            <%= label_tag "invitation_display_name", t("admin.invitations.display_name"), class: "form-label" %>
+            <%= text_field_tag "invitation[display_name]", nil, class: "form-control", maxlength: 60,
+                  autocomplete: "off" %>
+            <div class="form-text"><%= t("admin.invitations.display_name_hint") %></div>
+          </div>
+          <div class="col-12">
+            <%= label_tag "invitation_expires_in_days", t("admin.invitations.expires_in_days"), class: "form-label" %>
+            <%= number_field_tag "invitation[expires_in_days]", @default_expiry_days,
+                  class: "form-control", min: 1, max: @max_expiry_days %>
+            <div class="form-text"><%= t("admin.invitations.expires_hint", max: @max_expiry_days) %></div>
+          </div>
+          <div class="col-12">
+            <%= submit_tag t("admin.invitations.create"), class: "btn btn-primary" %>
+            <%= link_to t("admin.accounts.back"), admin_invitations_path, class: "btn btn-outline-secondary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

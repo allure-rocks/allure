@@ -1,0 +1,10 @@
+<%# Universal settings hub (DESIGN.md §8.5): /settings renders the grouped
+    collection on every breakpoint. Each entry keeps its own URL, so deep links
+    and browser history keep working. %>
+<%= render partial: "shared/section_hub", locals: {
+      pretitle: t("settings.hub.pretitle"),
+      title: t("settings.hub.title"),
+      intro: t("settings.hub.intro"),
+      groups: settings_navigation_groups,
+      id_prefix: "settings-hub"
+    } %>

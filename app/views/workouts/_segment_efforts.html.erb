@@ -1,0 +1,82 @@
+<% segment_ranks = local_assigns.fetch(:segment_ranks, {}) %>
+<% segment_places = local_assigns.fetch(:segment_places, {}) %>
+<% segment_gaps = local_assigns.fetch(:segment_gaps, {}) %>
+<% show_heart_rate = column_present?(efforts, :average_heart_rate) %>
+<% show_cadence = column_present?(efforts, :average_cadence) %>
+<%# A power-led virtual ride reads its watts in the effort column instead. %>
+<% show_power = column_present?(efforts, :average_power) && !workout.sport.power_led? %>
+<% if efforts.any? %>
+  <div class="table-responsive allure-analysis-table">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("workouts.show.segment_efforts.title") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("workouts.show.segment_efforts.segment") %></th>
+          <th scope="col" class="allure-col-extra"><%= t("workouts.show.segment_efforts.date") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.distance") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.time") %></th>
+          <th scope="col" class="text-end"><%= tag.span(t("workouts.show.segment_efforts.personal_best_gap"), tabindex: 0, data: tooltip_data(t("workouts.show.segment_efforts.personal_best_gap_title"))) %></th>
+          <th scope="col" class="text-end"><%= effort_column_label(workout.sport, scope: "workouts.show.laps") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.gain") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.loss") %></th>
+          <th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.segment_efforts.deviation") %></th>
+          <% if show_heart_rate %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.heart_rate") %></th><% end %>
+          <% if show_cadence %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.cadence") %></th><% end %>
+          <% if show_power %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.power") %></th><% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% efforts.each do |effort| %>
+          <% range = effort_analysis_range(workout, effort) %>
+          <tr <%= tag.attributes(analysis_row_attributes(range[0], range[1], source: "segment")) if range %>>
+            <td>
+              <%= link_to effort.segment.name, segment_path(effort.segment) %>
+              <% if (place = segment_places[effort.id]) %>
+                <%= render "workouts/segment_effort_marker", effort:, place:, segment_ranks: %>
+              <% end %>
+            </td>
+            <td class="allure-col-extra"><%= format_started_at(effort.started_at) %></td>
+            <td class="text-end"><%= format_distance(effort.distance) %></td>
+            <td class="text-end"><strong><%= format_duration(effort.elapsed_time) %></strong></td>
+            <td class="text-end"><%= render "workouts/segment_effort_gap", gap: segment_gaps[effort.id], place: segment_places[effort.id] %></td>
+            <td class="text-end"><%= effort_cell(average_pace: effort.average_pace, average_speed: effort.average_speed, average_power: effort.average_power, sport: workout.sport, grade_adjusted_pace: effort.grade_adjusted_pace) %></td>
+            <td class="text-end"><%= format_elevation(segment_effort_elevation(effort, :ascent)) %></td>
+            <td class="text-end"><%= format_elevation(segment_effort_elevation(effort, :descent)) %></td>
+            <td class="text-end allure-col-extra"><%= format_distance(effort.deviation_meters) %></td>
+            <% if show_heart_rate %><td class="text-end allure-col-extra"><%= effort.average_heart_rate || "—" %></td><% end %>
+            <% if show_cadence %><td class="text-end allure-col-extra"><%= effort.average_cadence ? metric_with_unit(effort.average_cadence, workout.sport.cadence_unit) : "—" %></td><% end %>
+            <% if show_power %><td class="text-end allure-col-extra"><%= format_power(effort.average_power) %></td><% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+    <% efforts.each do |effort| %>
+      <% range = effort_analysis_range(workout, effort) %>
+      <li class="list-group-item" <%= tag.attributes(analysis_row_attributes(range[0], range[1], source: "segment")) if range %>>
+        <div class="d-flex justify-content-between align-items-baseline">
+          <span class="allure-card-title">
+            <%= link_to effort.segment.name, segment_path(effort.segment), class: "text-reset" %>
+            <% if (place = segment_places[effort.id]) %>
+              <%= render "workouts/segment_effort_marker", effort:, place:, segment_ranks: %>
+            <% end %>
+          </span>
+          <span class="text-nowrap">
+            <strong class="allure-table-nums"><%= format_duration(effort.elapsed_time) %></strong>
+            <% if segment_gaps.key?(effort.id) %>
+              <small class="allure-table-nums ms-1"><%= render "workouts/segment_effort_gap", gap: segment_gaps[effort.id], place: segment_places[effort.id] %></small>
+            <% end %>
+          </span>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          <%= format_started_at(effort.started_at) %> · <%= format_distance(effort.distance) %>
+          · <%= effort_cell(average_pace: effort.average_pace, average_speed: effort.average_speed, average_power: effort.average_power, sport: workout.sport, grade_adjusted_pace: effort.grade_adjusted_pace) %>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          ↑ <%= format_elevation(segment_effort_elevation(effort, :ascent)) %> · ↓ <%= format_elevation(segment_effort_elevation(effort, :descent)) %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

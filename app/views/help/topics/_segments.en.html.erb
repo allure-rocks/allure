@@ -1,0 +1,67 @@
+<p>
+  A <strong>segment</strong> is a stretch of road or trail you want to compare
+  yourself on: a climb, a sprint, a lap of the park. Each time one of your
+  workouts covers it, Allure records an <strong>effort</strong>. Alongside
+  segments there are <strong>routes</strong> (a whole course to follow) and
+  <strong>loops</strong> (a course returning to its start).
+</p>
+
+<h2>Suggested routes</h2>
+<p>
+  When you have done the same complete route at least three times without
+  saving it, Allure suggests it on each of those activities. « Save as route »
+  opens the route form: the activities of the group will be attached to it.
+  « Dismiss » closes the suggestion for that route, and later repeats join it
+  silently. A suggestion is never published.
+</p>
+
+<h2>Who sees a segment</h2>
+<p>
+  Whoever creates it chooses: only themselves, their followers, or everyone on
+  this instance. A private segment has no leaderboard; it only collects your own
+  efforts. Anyone who can see a shared segment can copy it into their own
+  private segments, in either direction.
+</p>
+
+<h2>Who sees your efforts</h2>
+<p>
+  On a segment's page you only ever see your own efforts in full. The
+  <strong>leaderboard</strong> is different: it follows its reader.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.listing.notice") %>
+</div>
+<p>
+  So two people may see different leaderboards, and an unpublished workout, or
+  one published without its route, never puts you on one. On every segment where
+  you have an effort, a line tells you who sees you there — or why nobody does.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.leaderboard.residual_risk") %>
+</div>
+
+<h2>Leaving a leaderboard</h2>
+<ul>
+  <li><strong>Leave the leaderboard</strong>, on a segment's page, removes your
+    efforts from it at once, whatever their publication. You can come back
+    later.</li>
+  <li>A segment touched by one of your privacy zones never shows your
+    efforts.</li>
+  <li>Leaderboards never leave this instance.</li>
+</ul>
+
+<h2>Categories</h2>
+<p>
+  In your <%= link_to "profile settings", settings_profile_path %> you may
+  declare a leaderboard category (Women or Men). It is optional and adds a
+  filtered view to leaderboards that have enough athletes in it; you always stay
+  on the general leaderboard. Anyone reading a leaderboard you are on can see
+  the category you declared, even under an alias.
+</p>
+
+<h2>Your own places</h2>
+<p>
+  The trophy marks your own places — your record and your second and third best
+  times, against yourself. The laurel wreath marks a place on a leaderboard,
+  against others. Your second and third best times are shown to you only.
+</p>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<body>
+<h1>Sessions passées</h1>
+<div class="blockSessions">
+  <form method="post" id="delete-sessions-form" action="https://account.exrgame.com/sessions/delete">
+    <input type="hidden" name="_token" value="synthetic-token">
+    <table class="tableSessions">
+      <caption class="tableScreenreader">Sessions passées</caption>
+      <thead>
+        <tr><th></th><th>Date</th><th>Session</th><th>Distance</th><th>Durée</th><th colspan="2"></th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input class="checkSingle" type="checkbox" name="selectedSessions[]" id="00000000-0000-4000-8000-000000000001" value="00000000-0000-4000-8000-000000000001"/></td>
+          <td><time datetime="2026-09-30 17:51:15">2026/09/30 <span> - 17:51</span></time></td>
+          <td><label for="00000000-0000-4000-8000-000000000001" title="EXR | Regeneration Training 2 in Along Alamitos, Long Beach">EXR | Regeneration Training 2 in Along Alamitos, Long Beach</label></td>
+          <td>6&nbsp;km</td>
+          <td><time datetime="PTHMS">00:28:55</time></td>
+          <td><a class="btn downloadButton" href="https://account.exrgame.com/sessions/download/fit/00000000-0000-4000-8000-000000000001" download>Télécharger la session</a></td>
+          <td><button type="button" class="btnText btnPopup" data-id="00000000-0000-4000-8000-000000000001">Supprimer</button></td>
+        </tr>
+        <tr>
+          <td><input class="checkSingle" type="checkbox" name="selectedSessions[]" id="00000000-0000-4000-8000-000000000002" value="00000000-0000-4000-8000-000000000002"/></td>
+          <td><time datetime="2026-09-18 17:30:19">2026/09/18 <span> - 17:30</span></time></td>
+          <td><label for="00000000-0000-4000-8000-000000000002" title="EXR | 500m Race">EXR | 500m Race</label></td>
+          <td>0.53&nbsp;km</td>
+          <td><time datetime="PTHMS">00:02:00</time></td>
+          <td><a class="btn downloadButton" href="https://account.exrgame.com/sessions/download/fit/00000000-0000-4000-8000-000000000002" download>Télécharger la session</a></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><input class="checkSingle" type="checkbox" name="selectedSessions[]" id="00000000-0000-4000-8000-000000000003" value="00000000-0000-4000-8000-000000000003"/></td>
+          <td><time datetime="2026-09-18 17:30:19">2026/09/18 <span> - 17:30</span></time></td>
+          <td><label for="00000000-0000-4000-8000-000000000003" title="EXR | 500m Race">EXR | 500m Race</label></td>
+          <td>0.53&nbsp;km</td>
+          <td><time datetime="PTHMS">00:02:00</time></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="blockSessionsFooter">
+      <ul class="pagination" aria-label="Pagination navigation">
+        <li class="paginationPrevious paginationDisabled"><span></span><span>Previous page</span></li>
+        <li class="paginationCurrent">1</li>
+        <li><a href="https://account.exrgame.com/sessions/2">2</a></li>
+        <li><a href="https://account.exrgame.com/sessions/3">3</a></li>
+        <li class="paginationDots"><span></span><span>Dots</span></li>
+        <li><a href="https://account.exrgame.com/sessions/11">11</a></li>
+        <li class="paginationNext"><a href="https://account.exrgame.com/sessions/2"><span></span><span>Next page</span></a></li>
+      </ul>
+    </div>
+  </form>
+</div>
+</body>
+</html>

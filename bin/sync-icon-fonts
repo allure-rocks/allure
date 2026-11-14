@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+// Copies the Tabler icon webfont out of node_modules and into public/.
+//
+// Why not let Vite bundle it: the @font-face rule in
+// @tabler/icons-webfont ships `url('./fonts/tabler-icons.woff2?v3.49.0')`, and
+// the version query prevents Vite from rebasing that relative URL when the
+// stylesheet is @import-ed from node_modules. Serving it statically is simpler
+// and more predictable than fighting the rebase, and the ?v query the package
+// already emits handles cache busting.
+//
+// Only woff2 is copied — see app/frontend/styles/_brand.scss.
+
+import { copyFileSync, mkdirSync, existsSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const source = join(root, "node_modules/@tabler/icons-webfont/dist/fonts/tabler-icons.woff2");
+const targetDir = join(root, "public/fonts/tabler");
+const target = join(targetDir, "tabler-icons.woff2");
+
+if (!existsSync(source)) {
+  console.error(`[sync-icon-fonts] missing ${source} — run npm install first`);
+  process.exit(1);
+}
+
+mkdirSync(targetDir, { recursive: true });
+copyFileSync(source, target);
+
+console.log(`[sync-icon-fonts] ${target}`);

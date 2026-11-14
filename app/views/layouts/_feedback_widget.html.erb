@@ -1,0 +1,23 @@
+<% if signed_in? && Allure::Gitlab.config.configured? %>
+  <div data-controller="feedback"
+       data-feedback-submit-url-value="<%= feedback_path %>"
+       data-feedback-email-value="<%= current_user.email_address %>"
+       data-feedback-button-label-value="<%= t("feedback.button") %>"
+       data-feedback-capture-label-value="<%= t("feedback.capturing") %>"
+       data-feedback-modal-title-value="<%= t("feedback.title") %>"
+       data-feedback-close-label-value="<%= t("close") %>"
+       data-feedback-undo-label-value="<%= t("feedback.undo") %>"
+       data-feedback-clear-label-value="<%= t("feedback.clear") %>"
+       data-feedback-draw-hint-value="<%= t("feedback.draw_hint") %>"
+       data-feedback-description-label-value="<%= t("feedback.description_label") %>"
+       data-feedback-description-placeholder-value="<%= t("feedback.description_placeholder") %>"
+       data-feedback-privacy-warning-value="<%= t("feedback.privacy_warning") %>"
+       data-feedback-email-label-value="<%= t("feedback.email_label") %>"
+       data-feedback-cancel-label-value="<%= t("feedback.cancel") %>"
+       data-feedback-send-label-value="<%= t("feedback.send") %>"
+       data-feedback-description-required-value="<%= t("feedback.errors.description_required") %>"
+       data-feedback-capturing-error-value="<%= t("feedback.errors.capture_failed") %>"
+       data-feedback-creating-value="<%= t("feedback.creating") %>"
+       data-feedback-created-value="<%= t("feedback.created") %>"
+       data-feedback-submission-error-value="<%= t("feedback.errors.submission_failed") %>"></div>
+<% end %>

@@ -1,0 +1,9 @@
+<%# A top-level comment that left the thread while replies to it remain
+    (DESIGN.md §10.20): the replies keep their context, the words do not come
+    back. Locals: `comment`. %>
+<div class="allure-comment allure-comment--stub" id="<%= comment_dom_id(comment) %>">
+  <div class="allure-comment__avatar">
+    <span class="avatar avatar-sm bg-secondary-lt" aria-hidden="true"><i class="ti ti-message-off"></i></span>
+  </div>
+  <p class="allure-comment__stub mb-0"><%= comment_stub_text(comment) %></p>
+</div>

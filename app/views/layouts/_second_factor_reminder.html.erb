@@ -1,0 +1,15 @@
+<%# Grace-period reminder (PLAN_AUTH.md §5.3, DESIGN.md §10.7). Hidden for the
+    rest of the day once dismissed; the obligation itself does not move. %>
+<% if (policy = second_factor_reminder) %>
+  <div class="alert alert-warning second-factor-reminder" role="status">
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <i class="ti ti-shield-lock fs-2" aria-hidden="true"></i>
+      <div class="flex-fill">
+        <%= t("second_factor.reminder.copy", count: policy.days_left, date: l(policy.deadline.to_date, format: :day_month_year)) %>
+      </div>
+      <%= link_to t("second_factor.reminder.action"), settings_security_path(anchor: "second-factor"), class: "btn btn-warning btn-sm" %>
+      <%= button_to t("second_factor.reminder.dismiss"), settings_dismiss_second_factor_reminder_path,
+            class: "btn btn-ghost-secondary btn-sm" %>
+    </div>
+  </div>
+<% end %>

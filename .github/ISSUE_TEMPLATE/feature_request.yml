@@ -1,0 +1,47 @@
+name: Feature request
+description: Propose a behaviour Allure does not have yet.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the existing issues and the operator documentation first; the
+        developer documentation is being written up.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation, not only the solution you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - Web application
+        - Federation (ActivityPub)
+        - Import
+        - REST API, webhooks or MCP
+        - iOS companion
+        - Deployment and Docker
+        - Documentation
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched the existing issues.
+          required: true

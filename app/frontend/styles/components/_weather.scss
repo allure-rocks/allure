@@ -1,0 +1,109 @@
+// Weather card (PLAN_WEATHER.md §7, DESIGN.md §20.3): the condition icon
+// leads the temperature range, the wind arrow is an SVG rotated by attribute,
+// and the head / cross / tail exposure is one SVG bar with its legend.
+// The condition icon is a monochrome Meteocons SVG drawn in `currentColor`,
+// the brand primary, on the primary-tint tile (PLAN_WEATHER.md §7).
+.allure-weather-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: var(--border-radius-lg);
+  background: var(--primary-lt);
+  flex-shrink: 0;
+}
+
+.allure-weather-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--primary);
+  vertical-align: -0.35em;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// An animated icon carries its static twin; only one shows, as the reader's
+// motion preference allows (DESIGN.md §16).
+.allure-weather-icon--animated .allure-weather-icon__still {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .allure-weather-icon--animated .allure-weather-icon__motion {
+    display: none;
+  }
+
+  .allure-weather-icon--animated .allure-weather-icon__still {
+    display: block;
+  }
+}
+
+// In a table row the icon sits on the text, one step larger than the type.
+.allure-analysis-table .allure-weather-icon,
+.allure-card-list .allure-weather-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  vertical-align: middle;
+}
+
+// In a badge the drawing fills about two thirds of its square, so the icon is
+// drawn larger than the type but its negative margins keep the badge exactly
+// as tall as its neighbours.
+.allure-weather-badge .allure-weather-icon {
+  width: 1.5em;
+  height: 1.5em;
+  margin: -0.25em -0.1em;
+}
+
+.allure-wind-arrow {
+  flex-shrink: 0;
+  color: var(--allure-text-muted);
+}
+
+.allure-wind-exposure__bar {
+  display: block;
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--allure-surface-sunken);
+}
+
+.allure-wind-exposure__head {
+  fill: var(--primary);
+  background: var(--primary);
+}
+
+.allure-wind-exposure__cross {
+  fill: var(--allure-text-muted);
+  background: var(--allure-text-muted);
+  opacity: 0.55;
+}
+
+.allure-wind-exposure__tail {
+  fill: var(--success);
+  background: var(--success);
+}
+
+.allure-wind-exposure__swatch {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  margin-inline-end: 0.3rem;
+  vertical-align: baseline;
+}
+
+// The header badge links to the card, but reads as a badge: no underline.
+a.allure-weather-badge,
+a.allure-weather-badge:hover,
+a.allure-weather-badge:focus {
+  text-decoration: none;
+}

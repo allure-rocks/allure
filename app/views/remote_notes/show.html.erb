@@ -1,0 +1,86 @@
+<% content_for :title, @view.title %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col-auto"><%= actor_avatar_tag(@note.actor, size: "lg") %></div>
+    <div class="col">
+      <div class="page-pretitle"><%= t("remote_notes.pretitle") %></div>
+      <h1 class="page-title"><%= @view.title %></h1>
+      <div class="text-secondary small">
+        <% if @note.actor.tombstoned? %>
+          <%= actor_name(@note.actor) %> · <%= t("remote_notes.author_unavailable") %>
+        <% else %>
+          <%= link_to actor_name(@note.actor), actor_profile_path(@note.actor), class: "text-reset" %>
+          · <%= actor_handle(@note.actor) %>
+        <% end %>
+        <% if @view.started_at %>
+          · <%= format_started_at(@view.started_at) %>
+        <% end %>
+        <% if @view.device.present? %>
+          · <span class="text-nowrap"><i class="ti ti-device-watch me-1" aria-hidden="true"></i><%= @view.device %></span>
+        <% end %>
+      </div>
+      <div class="mt-1 d-flex flex-wrap align-items-center gap-2">
+        <%= render "workouts/record_badge", labels: snapshot_record_labels(@view.record_types, @view.record_distances) %>
+        <% if @view.commute %>
+          <%= render "workouts/commute_badge" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="row row-deck row-cards">
+  <div class="col-12">
+    <%= render "workouts/metrics", workout: @view, show_description: false,
+                                   record_labels: record_labels_from_types(@view.record_types) %>
+  </div>
+
+  <%# Reactions and, on phones, the way to the thread follow the figures
+      (DESIGN.md §10.17, §20.16). %>
+  <% comment_card = comment_card_for(@note) %>
+  <% social_row = render("comments/social_row", target: @note, card: comment_card,
+                                                reaction_summary: reaction_summary_for(@note), reactable: signed_in?) %>
+  <% if social_row.present? %>
+    <div class="col-12"><%= social_row %></div>
+  <% end %>
+  <% if @view.weather %>
+    <div class="col-12">
+      <%= render "weather/card", summary: @view.weather %>
+    </div>
+  <% end %>
+
+  <% if @note.content_html.present? || @note.description.present? %>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="h3"><%= t("workouts.show.description") %></h2>
+          <% if @note.content_html.present? %>
+            <%= Federation::RemoteText.sanitize(@note.content_html).to_s.html_safe %>
+          <% else %>
+            <%= simple_format(h(@note.description)) %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="col-12">
+    <turbo-frame id="remote-note-media"
+                 <%= %(data-controller="refresh" data-refresh-url-value="#{remote_note_path(@note)}" data-refresh-interval-value="4000").html_safe if @view.media_pending? %>>
+      <%= render "media", note: @note, view: @view, chart_table: @chart_table %>
+    </turbo-frame>
+  </div>
+
+  <% if @remote_participation %>
+    <section id="section-participation" class="col-12 allure-detail-section">
+      <%= render "remote_participations/card", participation: @remote_participation, note: @note %>
+    </section>
+  <% end %>
+
+  <%= render "comments/section", target: @note, card: comment_card, class_name: "col-12 allure-detail-section" %>
+
+  <div class="col-12">
+    <p class="text-secondary small mb-0"><%= t("remote_notes.from_instance", handle: actor_handle(@note.actor)) %></p>
+  </div>
+</div>

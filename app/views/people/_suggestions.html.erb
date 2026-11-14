@@ -1,0 +1,30 @@
+<%# Suggestions (PLAN_PEOPLE.md §4): each one names the reason it is offered,
+    and dismissing it is permanent for this account. %>
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("people.suggestions.title") %></h3>
+  </div>
+  <div class="list-group list-group-flush">
+    <% suggestions.each do |suggestion| %>
+      <div class="list-group-item d-flex align-items-center gap-2">
+        <%= suggestion.local? ? avatar_tag(suggestion.user, size: "sm") : actor_avatar_tag(suggestion.actor, size: "sm") %>
+        <div class="flex-fill min-w-0">
+          <%= link_to suggestion.name,
+                suggestion.local? ? profile_path(suggestion.user.username) : actor_profile_path(suggestion.actor),
+                class: "fw-bold text-reset" %>
+          <div class="text-secondary small text-truncate">
+            <%= suggestion.handle %> · <%= t("people.suggestions.reasons.#{suggestion.reason}") %>
+          </div>
+        </div>
+        <div class="allure-actions">
+          <%= render "follows/button", target: suggestion.target %>
+          <%= button_to t("people.suggestions.dismiss"), people_suggestion_path(suggestion.actor),
+                method: :delete, class: "btn btn-sm btn-ghost-secondary",
+                form: { data: { confirm_title: t("people.suggestions.dismiss_title"),
+                                confirm_body: t("people.suggestions.dismiss_body", name: suggestion.name),
+                                confirm_verb: t("people.suggestions.dismiss") } } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

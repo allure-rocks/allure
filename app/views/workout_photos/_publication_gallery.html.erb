@@ -1,0 +1,29 @@
+<%# A publication's frozen photos for its readers (PLAN_PHOTOS.md §5.4,
+    DESIGN.md §10.22): read-only, served by the publication's own media
+    endpoint, opening in the same lightbox. Locals: `view` (a
+    Workouts::PublicationView whose photos are visible). %>
+<% photos = view.photos %>
+<% map_visible = view.map_visible? %>
+<section id="section-photos" class="allure-detail-section card mb-3"
+         data-controller="photo-lightbox"
+         data-action="turbo:before-cache@document->photo-lightbox#close allure:photo-open@window->photo-lightbox#openById">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("workouts.publication.photos.gallery") %></h2>
+    <span class="card-subtitle ms-2 text-secondary"><%= t("workouts.publication.photos.count", count: photos.size) %></span>
+  </div>
+  <div class="card-body">
+    <div class="allure-photo-grid">
+      <% photos.each_with_index do |photo, index| %>
+        <button type="button" class="allure-photo-preview" data-action="photo-lightbox#open" data-photo-lightbox-target="photo"
+                data-photo-id="<%= photo.id %>"
+                data-src="<%= publication_photo_url(view.publication, photo) %>"
+                data-caption="<%= publication_photo_label(photo, index) %>"
+                data-meta="<%= publication_photo_lightbox_meta(photo) %>"
+                data-map="<%= "1" if map_visible && photo.distance %>">
+          <%= image_tag publication_photo_url(view.publication, photo, :thumbnail), alt: publication_photo_label(photo, index), loading: "lazy" %>
+        </button>
+      <% end %>
+    </div>
+    <%= render "workout_photos/lightbox", original: false %>
+  </div>
+</section>

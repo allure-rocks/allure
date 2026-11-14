@@ -1,0 +1,7 @@
+<%# The unread count, replaced in place by the badge poll. The trigger's
+    aria-label carries the count for assistive technology; the visual badge is
+    decorative, so it never double-announces. `data-label` carries the same
+    label to the iOS companion's native bell (DESIGN.md §7.7). %>
+<% if count.positive? %>
+  <span class="badge bg-red badge-sm text-white" data-label="<%= notification_bell_label(count) %>" data-count="<%= count %>"><%= count > 99 ? "99+" : count %></span>
+<% end %>

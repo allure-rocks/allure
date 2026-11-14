@@ -1,0 +1,27 @@
+<%# The Zwift sign-in (PLAN_REMOTE_IMPORTS.md §7d.2). The password goes to
+    Zwift once, from a background job, and is never kept; only the refresh
+    token is. A reconnection resumes the batches the previous token left
+    queued. Locals: connection. %>
+<% resume = connection.persisted? && connection.interrupted_batches.exists? %>
+<% waiting = resume ? connection.interrupted_entries_count : 0 %>
+<%= form_with url: connection_link_path("zwift"), method: :post do %>
+  <% if waiting.positive? %>
+    <p class="text-secondary"><%= t("settings.connections.zwift.pending_entries", count: waiting) %></p>
+  <% end %>
+  <div class="row g-2">
+    <div class="col-md-6">
+      <%= label_tag :zwift_email, t("settings.connections.zwift.email"), class: "form-label required" %>
+      <%= email_field_tag :email, nil, id: "zwift_email", required: true, autocomplete: "username", class: "form-control" %>
+    </div>
+    <div class="col-md-6">
+      <%= label_tag :zwift_password, t("settings.connections.zwift.password"), class: "form-label required" %>
+      <%= password_field_tag :password, nil, id: "zwift_password", required: true, autocomplete: "current-password",
+                             class: "form-control" %>
+    </div>
+  </div>
+  <small class="form-text d-block"><%= t("settings.connections.zwift.link_hint") %></small>
+  <div class="allure-actions mt-3">
+    <% label = if resume then "resume" elsif connection.needs_relink? then "relink" else "link" end %>
+    <%= submit_tag t("settings.connections.zwift.#{label}"), class: "btn btn-primary", name: nil %>
+  </div>
+<% end %>

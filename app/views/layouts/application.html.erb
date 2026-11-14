@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" data-bs-theme="<%= current_theme %>" data-bs-layout="fluid">
+  <head>
+    <title><%= page_title %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#c5426c">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="<%= pwa_manifest_path %>">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+
+    <%# Federation discovery. Mastodon and friends follow these from an HTML page
+        to the ActivityPub representation of whatever is being viewed. %>
+    <%= yield :federation_links %>
+
+    <%= vite_development_stylesheet_tag %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag "application" %>
+  </head>
+
+  <% native_classes = class_names("native-app": hotwire_native_app?,
+                                  "native-tabs": hotwire_native_app? && hotwire_native_bridge?(:tabs)) %>
+  <%= tag.body class: native_classes.presence do %>
+    <%= link_to t("navigation.skip_to_content"), "#main-content", class: "visually-hidden-focusable skip-to-content" %>
+    <div class="page">
+      <%# Development-only impersonation bar (AGENTS.md, "Development tools"):
+          the partial exists only while the devtools engine is loaded. %>
+      <%= render "layouts/dev_tools_bar" if lookup_context.exists?("dev_tools_bar", ["layouts"], true) %>
+      <%= render "layouts/demo_strip" if Allure::Demo.enabled? %>
+      <%= render "layouts/topbar" %>
+
+      <div class="page-wrapper">
+        <main id="main-content">
+          <% if content_for?(:page_header) %>
+            <div class="page-header d-print-none">
+              <div class="container-xl">
+                <%= yield :page_header %>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="page-body">
+            <div class="container-xl">
+              <%= render "layouts/flash" %>
+              <%= render "layouts/second_factor_reminder" %>
+              <%= yield %>
+            </div>
+          </div>
+        </main>
+
+        <%= render "layouts/footer" unless hotwire_native_app? %>
+      </div>
+    </div>
+    <%= render "layouts/bottom_bar" %>
+    <%= render "shared/confirm_modal" %>
+    <%= render "shared/unsaved_changes" %>
+    <%= render "shared/release_notes_modal" if signed_in? && current_release_notes.present? %>
+    <%= render "shared/about_modal" if signed_in? %>
+    <div id="toasts" class="allure-toasts" aria-live="polite" aria-atomic="false" data-controller="toasts"></div>
+    <%= render "layouts/feedback_widget" %>
+  <% end %>
+</html>

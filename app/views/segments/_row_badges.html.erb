@@ -1,0 +1,11 @@
+<%# The viewer's own course in the mixed Segments list: the « À moi » badge and
+    its sharing state, both state badges (DESIGN.md §20.6, §10.4) — the label
+    from `md` up, the icon and its tooltip below. Routes and loops are only
+    ever the viewer's own and private, so their rows carry no badge.
+    Locals: `segment`, `owner_view`. %>
+<% if owner_view && segment.kind == "segment" %>
+  <span class="d-inline-flex flex-shrink-0 gap-1 position-relative z-2">
+    <%= mine_badge(label: t("segments.card.mine")) %>
+    <%= segment_visibility_badge(segment.visibility) %>
+  </span>
+<% end %>

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://docs.allure.rocks
+    about: Install, configure and operate an instance.
+  - name: Security report
+    url: https://github.com/allure-rocks/allure/security/advisories/new
+    about: Report a vulnerability privately; do not open a public issue.

@@ -1,0 +1,24 @@
+<% total = rows.sum { |_name, values| values[metric.to_sym].to_f } %>
+
+<table class="table table-sm table-vcenter allure-table-nums mt-2">
+  <caption class="visually-hidden"><%= caption || t("me.mix.table_caption", metric: t("me.mix.metrics.#{metric}")) %></caption>
+  <thead>
+    <tr>
+      <th scope="col"><%= t("me.mix.table.sport") %></th>
+      <th scope="col" class="text-end"><%= t("me.mix.table.value") %></th>
+      <th scope="col" class="text-end"><%= t("me.mix.table.share") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% rows.each do |name, values| %>
+      <% value = values[metric.to_sym].to_f %>
+      <tr>
+        <th scope="row" class="fw-normal"><%= name %></th>
+        <td class="text-end"><%= mix_value(metric, value) %></td>
+        <td class="text-end text-secondary">
+          <%= total.positive? ? number_to_percentage(value / total * 100, precision: 0) : "—" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

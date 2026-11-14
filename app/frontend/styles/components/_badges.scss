@@ -1,0 +1,86 @@
+// Icon-only state pill (publication, mine, together, estimated elevation): the
+// label lives in the tooltip and a visually hidden span.
+.allure-badge-icon {
+  display: inline-grid;
+  min-width: 1.5rem;
+  padding-inline: 0.35rem;
+  place-items: center;
+  cursor: default;
+}
+
+// The responsive state badge (DESIGN.md §10.4): the icon alone below `md`,
+// the icon and its label above; the label collapses to the same square pill
+// and the tooltip takes over its name.
+//
+// Both breakpoints are written out — rather than taken from
+// `media-breakpoint-down(md)` / `media-breakpoint-up(md)` — and are the exact
+// query `BadgesHelper::ICON_ONLY_MEDIA` gates the tooltip on: the
+// label is visually hidden exactly while the tooltip exists, so no width
+// leaves either without the other. They overlap at 767.98px on purpose, since
+// a layout viewport can be fractional (zoom).
+.allure-badge-responsive {
+  justify-content: center;
+  cursor: default;
+
+  // Visually hidden, never removed: the state is read out at every width, so
+  // the colour is never the only cue (§18.6).
+  &__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 767.98px) {
+    min-width: 1.5rem;
+    padding-inline: 0.35rem;
+  }
+
+  @media (min-width: 767.98px) {
+    &__label {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+    }
+  }
+}
+
+// A badge that opens its source (the « Avec @X » badge) keeps the link cursor.
+a.allure-badge-responsive,
+a.allure-badge-icon {
+  cursor: pointer;
+}
+
+// The scheduled state waits out its delay: a slow pulse on the mark says so
+// without a second icon, and it is the one state its owner can still cancel
+// (DESIGN.md §19.19). The motion is decorative and always dropped for a reader
+// who asks for less of it.
+@keyframes allure-publication-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.allure-badge-pulse .ti {
+  animation: allure-publication-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .allure-badge-pulse .ti {
+    animation: none;
+  }
+}

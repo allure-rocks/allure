@@ -1,0 +1,45 @@
+<%# The reaction bar (DESIGN.md §10.17, PLAN_REACTIONS.md §4.4): one component
+    for a local publication and a received note. A signed-in entitled viewer
+    gets toggle buttons inside a Turbo Frame; the owner gets the
+    counts only, so a card never offers a gesture it cannot complete. A pill
+    with at least one reaction is emphasised (`--active`), an empty one is a
+    ghost, and the viewer's own reaction carries the brand tint (`--mine`).
+    A populated pill's tooltip names who reacted, an empty one names the
+    gesture (DESIGN.md §10.17).
+    Locals: `target` (Workout or RemoteNote), `summary`
+    (Reactions::Summaries::Summary), `reactable`. %>
+<% target = local_assigns.fetch(:target) %>
+<% summary = local_assigns.fetch(:summary) %>
+<% reactable = local_assigns.fetch(:reactable, false) %>
+<% class_name = local_assigns.fetch(:class_name, nil) %>
+<% kinds = reactable ? Reaction::KINDS : Reaction::KINDS.select { |kind| summary.count(kind).positive? } %>
+<% if kinds.any? %>
+  <turbo-frame id="<%= reaction_bar_dom_id(target) %>" class="<%= class_names("allure-reactions", class_name) %>">
+    <div class="allure-reactions__group" role="group" aria-label="<%= t("reactions.bar.label") %>">
+      <% kinds.each do |kind| %>
+        <% count = summary.count(kind) %>
+        <% mine = summary.mine?(kind) %>
+        <% pill_classes = reaction_pill_classes(count:, mine:) %>
+        <% if reactable %>
+          <%= button_to reaction_update_path_for(target),
+                method: :put,
+                params: { reaction: { kind: } },
+                form: { class: "allure-reactions__form" },
+                class: pill_classes,
+                data: reaction_pill_tooltip_data(summary, kind, target),
+                aria: { pressed: mine.to_s, label: reaction_button_label(kind, count) } do %>
+            <i class="ti <%= reaction_kind_icon(kind) %>" aria-hidden="true"></i>
+            <% if count.positive? %><span class="allure-reactions__count" aria-hidden="true"><%= count %></span><% end %>
+          <% end %>
+        <% else %>
+          <span class="<%= class_names(pill_classes, "allure-reactions__pill--readonly") %>"
+                <%= tag.attributes(data: reaction_pill_tooltip_data(summary, kind, target)) %>>
+            <i class="ti <%= reaction_kind_icon(kind) %>" aria-hidden="true"></i>
+            <span class="visually-hidden"><%= reaction_button_label(kind, count) %></span>
+            <span class="allure-reactions__count" aria-hidden="true"><%= count %></span>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  </turbo-frame>
+<% end %>

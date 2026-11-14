@@ -1,0 +1,32 @@
+<%# A linked service's unlink card (DESIGN.md §19.24): the deletion choice and
+    its consequence, last on the page as the danger zone. Locals: source,
+    connection. %>
+<% provider = t("workouts.batch_import.sources.#{source.key}.label") %>
+<% equipment = ImportConnections::Providers.supports?(source.key, :equipment) %>
+<div class="card mb-3">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("settings.connections.unlink.action") %></h3>
+  </div>
+  <div class="card-body">
+    <%= form_with url: connection_path(source.key), method: :delete,
+                  data: { confirm_title: t("settings.connections.unlink.confirm_title", provider:),
+                          confirm_body: t("settings.connections.unlink.confirm_body", provider:),
+                          confirm_verb: t("settings.connections.unlink.action") } do %>
+      <label class="form-check">
+        <%= hidden_field_tag :delete_data, "0", id: nil %>
+        <%= check_box_tag :delete_data, "1", true, class: "form-check-input", id: "delete-data-#{source.key}" %>
+        <span class="form-check-label">
+          <% if equipment %>
+            <%= t("settings.connections.unlink.delete_data", provider:, workouts: connection.workouts.count, equipments: connection.equipments.count) %>
+          <% else %>
+            <%= t("settings.connections.unlink.delete_workouts", provider:, count: connection.workouts.count) %>
+          <% end %>
+        </span>
+      </label>
+      <small class="form-text d-block mb-3"><%= t("settings.connections.unlink.delete_data_hint") %></small>
+      <div class="allure-actions">
+        <%= submit_tag t("settings.connections.unlink.action"), class: "btn btn-outline-danger", name: nil %>
+      </div>
+    <% end %>
+  </div>
+</div>

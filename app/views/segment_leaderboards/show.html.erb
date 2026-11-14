@@ -1,0 +1,66 @@
+<% content_for :title, t("segments.leaderboard.title", name: @segment.name) %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= @owner_view ? t("segments.leaderboard.pretitle") : t("segments.leaderboard.shared_pretitle") %></div>
+      <h1 class="page-title"><%= @segment.name %></h1>
+      <div class="text-secondary small">
+        <%= t("segments.created_by") %>
+        <%= link_to @segment.user.display_name, profile_path(@segment.user.username), class: "text-reset fw-medium" %>
+        <span>@<%= @segment.user.username %></span>
+      </div>
+    </div>
+    <% if @segment.viewable_by?(current_user) %>
+      <div class="col-auto"><%= link_to t("segments.leaderboard.back"), segment_path(@segment), class: "btn btn-outline-secondary" %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+  <%= segment_board_scope_nav(@board_scope) { |board| segment_leaderboard_path(@segment, board:, category: @category) } %>
+  <% if @offered_categories.any? %>
+    <%= segment_board_category_nav(@category, @offered_categories) { |category| segment_leaderboard_path(@segment, board: (@board_scope unless @board_scope == "everyone"), category:) } %>
+  <% end %>
+  <span class="text-secondary small"><%= t("segments.leaderboard.reader_hint") %></span>
+</div>
+
+<% unless @owner_view %>
+  <div class="alert alert-info"><%= t("segments.leaderboard.residual_risk") %></div>
+<% end %>
+
+<% @sections.each do |sport, efforts| %>
+  <div class="card mb-3">
+    <div class="card-header">
+      <h3 class="card-title">
+        <%= @sections.many? ? t("segments.leaderboard.sport_title", name: @segment.name, sport: sport_display_name(sport)) : t("segments.leaderboard.title", name: @segment.name) %>
+      </h3>
+      <div class="card-actions">
+        <span class="text-secondary small d-inline-flex align-items-center">
+          <%= sport_tile_tag(sport, size: :sm) %>
+          <span class="ms-2"><%= sport_display_name(sport) %></span>
+        </span>
+      </div>
+    </div>
+    <% if efforts %>
+      <%= render "segments/shared_efforts", efforts:, segment: @segment, owner_view: @owner_view, sport: sport %>
+    <% else %>
+      <div class="card-body">
+        <p class="text-secondary mb-0"><%= t("segments.leaderboard.categories.below_threshold", count: Segments::Categories::MIN_ATHLETES) %></p>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @sections.empty? %>
+  <div class="card">
+    <div class="card-header"><h3 class="card-title"><%= t("segments.leaderboard.title", name: @segment.name) %></h3></div>
+    <div class="card-body">
+      <div class="empty">
+        <div class="empty-icon"><i class="ti ti-users fs-1 text-primary" aria-hidden="true"></i></div>
+        <p class="empty-title"><%= @board_scope == "following" ? t("segments.leaderboard.following_empty_title") : t("segments.leaderboard.empty_title") %></p>
+        <p class="empty-subtitle text-secondary"><%= t("segments.leaderboard.empty_subtitle") %></p>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,126 @@
+<p>
+  Eine Aktivität, die du importierst, ist <strong>nicht veröffentlicht</strong>:
+  Ihre Details und ihre Route bleiben privat, bis du sie veröffentlichst. Wenn
+  du das Teilen von Statistiken oder Rekorden auf deinem Profil gesondert
+  einschaltest, können ihre Zahlen dennoch dazu beitragen. Keine Einstellung
+  veröffentlicht für dich, es sei denn, du schaltest sie selbst ein.
+</p>
+
+<h2>Eine Veröffentlichung ist eine Kopie</h2>
+<p>
+  Beim Veröffentlichen entsteht eine <strong>Veröffentlichung</strong>: eine
+  Kopie der Aktivität, in diesem Moment erstellt, die nur enthält, was du teilen
+  wolltest. Deine Follower und der Feed lesen diese Kopie, nie die Aktivität
+  selbst. Weil es eine Kopie ist:
+</p>
+<ul>
+  <li>ändert eine spätere Bearbeitung der Aktivität — Titel, Beschreibung oder
+    Sportart — die Veröffentlichung nicht;</li>
+  <li>um eine aktualisierte Fassung zu teilen, <strong>ersetzt du die
+    Veröffentlichung</strong>: Die alte wird gelöscht und eine neue
+    erstellt;</li>
+  <li>deine Originaldatei, deine privaten Notizen und die von deinen
+    Privatsphäre-Zonen verborgenen Punkte sind nie Teil davon.</li>
+</ul>
+
+<h2>Veröffentlichungsprofile</h2>
+<p>
+  Ein <strong>Veröffentlichungsprofil</strong> ist das Rezept für diese Kopie:
+  welche Messwerte sie enthält (Distanz, Zeit, Höhenmeter, Geschwindigkeit,
+  Herzfrequenz …), ob sie die Route, das Routenbild, die GPX-Datei, das Gerät,
+  das Wetter und deine Fotos zeigt, ob Kommentare möglich sind und ob Start und
+  Ziel ausgeblendet werden. Vor dem Veröffentlichen listet das Formular genau
+  auf, was geteilt wird und was nicht.
+</p>
+<p>
+  Du hast zwei eingebaute Profile, eines pro Publikum, und kannst unter
+  <%= link_to "Veröffentlichungsprofile", publishing_profiles_path %> eigene
+  anlegen. Eine Änderung an einem Profil wirkt sich nur auf künftige
+  Veröffentlichungen aus: Bestehende behalten die Einstellungen, mit denen sie
+  erstellt wurden.
+</p>
+<p>
+  Die Herzfrequenz ist eine Gesundheitsangabe: Neue Profile teilen sie erst,
+  wenn du sie ankreuzt.
+</p>
+
+<h2>Publikum</h2>
+<ul>
+  <li><strong>Öffentlich</strong> — alle Mitglieder dieser Instanz und, wenn
+    diese Instanz mit anderen teilt, die Konten, die dir dort folgen.</li>
+  <li><strong>Follower</strong> — nur die Konten, die dir folgen, sobald du sie
+    angenommen hast. Die auf dieser Instanz sehen sie immer; die auf anderen
+    Instanzen erhalten sie nur, wenn der Betreiber dieser Instanz es aktiviert
+    hat.</li>
+</ul>
+<p>
+  Eine Aktivität kann eine Veröffentlichung pro Publikum haben: zum Beispiel
+  eine ausführliche für deine Follower und eine knappere öffentliche. Alle
+  Lesenden sehen die Fassung, die für sie gedacht ist: Deine Follower lesen die
+  für Follower.
+</p>
+
+<h2>Warten, bevor sie erscheint</h2>
+<p>
+  Ein Profil kann Veröffentlichungen eine Zeit lang zurückhalten — einen Tag,
+  drei Tage, eine Woche, zwei Wochen oder einen Monat —, damit etwa ein Lauf
+  von zu Hause aus nicht sichtbar ist, während du noch unterwegs bist. Während
+  der Wartezeit ist die Veröffentlichung <strong>geplant</strong>: Niemand sieht
+  sie, und du kannst sie sofort veröffentlichen, das Datum ändern oder sie
+  abbrechen.
+</p>
+
+<h2>Automatisches Veröffentlichen</h2>
+<p>
+  Markierst du ein Profil als automatisch, wird jede neue Aktivität damit
+  veröffentlicht, sobald ihre Analyse abgeschlossen ist. Das gilt nie für
+  Aktivitäten, die älter als sieben Tage sind, für große Importe (ein Archiv,
+  ein Stapel Dateien) und, wenn du willst, nicht für Arbeitswege oder die
+  Sportarten, die du ausschließt. Eine ausstehende automatische Veröffentlichung
+  kannst du auf der Seite der Aktivität ablehnen.
+</p>
+
+<h2>Eine Veröffentlichung löschen</h2>
+<p>
+  Das Löschen einer Veröffentlichung entfernt sie von dieser Instanz und
+  fordert die anderen Server, die sie haben, auf, sie ebenfalls zu löschen.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  Das Löschen der Aktivität löscht ihre Veröffentlichungen auf dieselbe
+  Weise.
+</p>
+
+<h2>Statistiken und Rekorde auf deinem Profil</h2>
+<p>
+  Unter <%= link_to t("settings.profile.title"), settings_profile_path %> kannst
+  du unabhängig voneinander wählen, wer deine allgemeinen Statistiken nach
+  Sportart und deine persönlichen Rekorde sieht: deine bestätigten Follower oder
+  alle Mitglieder dieser Instanz. Standardmäßig wird kein Abschnitt geteilt.
+  Ausstehende Folgeanfragen erlauben keinen Zugriff auf Zahlen nur für Follower;
+  Entfolgen entzieht diesen Zugriff. Anonyme Besucher haben nie Zugriff.
+</p>
+<p>
+  Diese Abschnitte umfassen alle deine Aktivitäten über alle Jahre, auch
+  unveröffentlichte. Sie sind unabhängig von Veröffentlichungsprofilen und den
+  Filtern der Veröffentlichungen; das Einschalten veröffentlicht keine Aktivität.
+</p>
+<p>
+  Die Achsen des Netzdiagramms in der Statistikkarte sind die Sportarten. Du
+  wählst die Kennzahl — Aktivitäten, Distanz, Bewegungszeit oder Anstieg. Bei
+  weniger als drei passenden Sportarten ersetzen Balken das Netzdiagramm.
+</p>
+<p><%= t("profile.statistics.log_scale") %></p>
+<p>
+  <%= t("profile.statistics.reading_hint") %>
+  Der Hinweis zeigt den vollständigen Sportnamen und den tatsächlichen Wert in
+  deinen Einheiten, nie den Logarithmus. Am Ende jeder Achse kannst du auch
+  Nullwerte ablesen. Ein kurzes Tippen auf dem Handy zeigt dieselbe Information,
+  ohne das Wischen zwischen Kennzahlen oder das Scrollen der Seite zu blockieren.
+  Die Balken bieten dieselbe Anzeige, und die Tabellen enthalten alle Werte.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("settings.profile.sharing.privacy") %>
+</div>

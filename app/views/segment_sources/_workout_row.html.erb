@@ -1,0 +1,29 @@
+<%# One source activity of the course-creation picker (DESIGN.md §20.6): its
+    route image, sport, title, date, facts and places. The whole row is the
+    link to the selection step. Locals: `workout`. %>
+<% title = workout_display_title(workout) %>
+<% places = workout_place_label(workout) %>
+<% facts = [ sport_display_name(workout.sport), smart_started_at(workout.started_at), format_distance(workout.distance) ] %>
+<% facts << format_elevation(workout.ascent) if workout.ascent.present? %>
+<li class="list-group-item position-relative">
+  <div class="d-flex align-items-center gap-3">
+    <%= render "segment_sources/thumbnail", workout: %>
+    <div class="flex-fill min-w-0">
+      <div class="d-flex align-items-center gap-2 min-w-0">
+        <%= sport_tile_tag(workout.sport, size: :xs) %>
+        <%= link_to title, source_creation_path(workout),
+              class: "text-reset fw-medium text-truncate stretched-link",
+              aria: { label: t("segment_sources.new.choose", title:) } %>
+      </div>
+      <div class="text-secondary small allure-table-nums mt-1">
+        <%= safe_join(facts.map { |fact| tag.span(fact, class: "text-nowrap") }, " · ") %>
+      </div>
+      <% if places.present? %>
+        <div class="text-secondary small text-truncate">
+          <i class="ti ti-map-pin me-1" aria-hidden="true"></i><%= places %>
+        </div>
+      <% end %>
+    </div>
+    <i class="ti ti-chevron-right text-secondary flex-shrink-0" aria-hidden="true"></i>
+  </div>
+</li>

@@ -1,0 +1,14 @@
+<% content_for :title, t("segments.edit.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("segments.edit.pretitle") %></div>
+      <h1 class="page-title"><%= t("segments.edit.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<%= form_with model: @segment do |form| %>
+  <%= render "form", form: form %>
+<% end %>

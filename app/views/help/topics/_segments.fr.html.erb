@@ -1,0 +1,72 @@
+<p>
+  Un <strong>segment</strong> est une portion de route ou de chemin sur
+  laquelle vous voulez vous comparer : une montée, un sprint, un tour de parc.
+  Chaque fois qu'une de vos activités le parcourt, Allure enregistre un
+  <strong>effort</strong>. À côté des segments, il y a les
+  <strong>itinéraires</strong> (un parcours entier à suivre) et les
+  <strong>boucles</strong> (un parcours qui revient à son départ).
+</p>
+
+<h2>Itinéraires suggérés</h2>
+<p>
+  Quand vous avez fait au moins trois fois le même parcours complet sans
+  l'enregistrer, Allure le suggère sur chacune de ces activités.
+  « Enregistrer en itinéraire » ouvre le formulaire : les activités du groupe y
+  seront rattachées. « Ignorer » ferme la suggestion pour ce parcours, et les
+  sorties suivantes le rejoignent sans rien afficher. Une suggestion n'est
+  jamais publiée.
+</p>
+
+<h2>Qui voit un segment</h2>
+<p>
+  Celui qui le crée choisit : lui seul, ses abonnés ou tout le monde sur cette
+  instance. Un segment privé n'a pas de classement ; il ne réunit que vos
+  propres efforts. Quiconque voit un segment partagé peut le copier dans ses
+  propres segments privés, dans un sens ou dans l'autre.
+</p>
+
+<h2>Qui voit vos efforts</h2>
+<p>
+  Sur la page d'un segment, vous ne voyez jamais en détail que vos propres
+  efforts. Le <strong>classement</strong> est différent : il suit son lecteur.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.listing.notice") %>
+</div>
+<p>
+  Deux personnes peuvent donc voir des classements différents, et une activité
+  non publiée, ou publiée sans son parcours, ne vous y fait jamais figurer. Sur
+  chaque segment où vous avez un effort, une ligne vous dit qui vous y voit — ou
+  pourquoi personne ne vous y voit.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.leaderboard.residual_risk") %>
+</div>
+
+<h2>Quitter un classement</h2>
+<ul>
+  <li><strong>Ne plus figurer au classement</strong>, sur la page d'un segment,
+    en retire aussitôt vos efforts, quelle que soit leur publication. Vous
+    pouvez y revenir plus tard.</li>
+  <li>Un segment que touche une de vos zones de confidentialité ne montre
+    jamais vos efforts.</li>
+  <li>Les classements ne quittent jamais cette instance.</li>
+</ul>
+
+<h2>Catégories</h2>
+<p>
+  Dans les <%= link_to "réglages de votre profil", settings_profile_path %>,
+  vous pouvez déclarer une catégorie de classement (Femmes ou Hommes). C'est
+  facultatif et cela ajoute une vue filtrée aux classements qui comptent assez
+  d'athlètes dans cette catégorie ; vous restez toujours au classement général.
+  Toute personne qui lit un classement où vous figurez peut voir la catégorie
+  que vous avez déclarée, même sous un alias.
+</p>
+
+<h2>Vos propres places</h2>
+<p>
+  Le trophée marque vos propres places — votre record et vos deuxième et
+  troisième meilleurs temps, face à vous-même. La couronne de laurier marque
+  une place au classement, face aux autres. Vos deuxième et troisième meilleurs
+  temps ne sont montrés qu'à vous.
+</p>

@@ -1,0 +1,53 @@
+<%# The Strava archive panel (PLAN_STRAVA_ARCHIVE.md §8). It sits inside the
+    upload form like the remote panels and submits through its own button's
+    formaction; its fields carry their own names, so the file panel's fields
+    submitted alongside are ignored. %>
+<% errors = form.object.errors[:strava_archive] %>
+<div class="card mb-3">
+  <div class="card-body">
+    <p class="text-secondary"><%= t("workouts.batch_import.sources.strava_archive.intro") %></p>
+    <ol class="text-secondary small mb-3">
+      <li><%= t("workouts.batch_import.sources.strava_archive.steps.request") %></li>
+      <li><%= t("workouts.batch_import.sources.strava_archive.steps.download") %></li>
+      <li><%= t("workouts.batch_import.sources.strava_archive.steps.upload") %></li>
+    </ol>
+
+    <%= tag.div class: "mb-3",
+                data: { controller: "upload-size", upload_size_max_value: Allure::StravaArchive::MAX_BYTES,
+                        upload_size_text_value: t("workouts.batch_import.errors.source_too_large",
+                                                  max: Allure::StravaArchive::MAX_SIZE_LABEL) } do %>
+      <%= label_tag "workout_import_batch_strava_archive", t("workouts.batch_import.sources.strava_archive.file"), class: "form-label required" %>
+      <%= file_field_tag "workout_import_batch[strava_archive]", id: "workout_import_batch_strava_archive",
+                         accept: ".zip,application/zip",
+                         class: "form-control#{' is-invalid' if errors.present?}",
+                         aria: { describedby: "workout_import_batch_strava_archive_hint" },
+                         data: { action: "change->upload-size#changed", upload_size_target: "input" } %>
+      <div class="invalid-feedback" data-upload-size-target="message" aria-live="polite"></div>
+      <small class="form-text" id="workout_import_batch_strava_archive_hint"><%= t("workouts.batch_import.sources.strava_archive.file_hint", max: Allure::StravaArchive::MAX_SIZE_LABEL) %></small>
+      <% if errors.present? %>
+        <div class="invalid-feedback d-block"><%= errors.join(", ") %></div>
+      <% end %>
+    <% end %>
+
+    <div class="mb-3">
+      <%= label_tag "workout_import_batch_strava_sport_id", t("workouts.form.sport_fallback"), class: "form-label" %>
+      <%= select_tag "workout_import_batch[strava_sport_id]",
+                     options_for_select(sport_options_for_select, form.object.sport_id),
+                     include_blank: t("workouts.batch_import.sources.strava_archive.no_fallback"),
+                     id: "workout_import_batch_strava_sport_id", class: "form-select" %>
+      <small class="form-text"><%= t("workouts.batch_import.sources.strava_archive.sport_hint") %></small>
+    </div>
+
+    <div class="alert alert-info mb-3">
+      <p class="mb-1"><%= t("workouts.batch_import.sources.strava_archive.#{Allure::Photos::Config.enabled? ? "privacy_photos" : "privacy"}") %></p>
+      <p class="mb-0"><%= t("workouts.batch_import.sources.strava_archive.duration") %></p>
+    </div>
+
+    <div class="allure-actions">
+      <button type="submit" class="btn btn-primary" name="commit" value=""
+              formaction="<%= strava_archive_imports_path %>" formmethod="post" formnovalidate>
+        <%= t("workouts.batch_import.sources.strava_archive.submit") %>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<%# The thread's own page (DESIGN.md §10.20): the way back to the workout or
+    the received note it belongs to, then the comments card alone, with every
+    gesture it carries on the workout page. Locals: `target`, `card`,
+    `title` (the publication's title), `back_path`. %>
+<% content_for :title, t("comments.page.title", title:) %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle">
+        <%= link_to back_path, class: "text-reset d-inline-flex align-items-center gap-1" do %>
+          <i class="ti ti-chevron-left" aria-hidden="true"></i><%= t("comments.page.back", title:) %>
+        <% end %>
+      </div>
+      <h1 class="page-title"><%= t("comments.page.heading") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<section id="comments" class="allure-detail-section">
+  <%= render "comments/card", target:, card: %>
+</section>

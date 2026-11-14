@@ -1,0 +1,83 @@
+<%# The comments card (DESIGN.md §10.20, PLAN_COMMENTS.md §11.1): the thread
+    in posting order with one level of replies, the composer, and the owner's
+    live switch, all inside one Turbo Frame so a gesture re-renders only the
+    card. A reader who can no longer see the thread gets an empty frame.
+    Locals: `target` (the Workout this instance hosts the thread for, or a
+    received RemoteNote), `card` (CommentsHelper::CommentCard, computed
+    when absent), `composer` (a refused text to show again: `parent_id`,
+    `body`, `message`). %>
+<% card = local_assigns[:card] || comment_card_for(target) %>
+<% composer = local_assigns[:composer] || {} %>
+<% replyable_ids = card.postable? ? card.entries.reject(&:stub?).select { |entry| entry.comment.active? }.map { |entry| entry.comment.to_param } : [] %>
+<% reply_error = composer[:parent_id].present? && replyable_ids.include?(composer[:parent_id]) %>
+<turbo-frame id="<%= comments_frame_id(target) %>">
+  <% if card.visible? %>
+    <div class="card allure-comments">
+      <div class="card-header">
+        <h2 class="card-title"><%= t("comments.card.title", count: card.active_count) %></h2>
+        <% if card.switchable? %>
+          <div class="card-actions">
+            <%= button_to workout_comment_thread_path(target),
+                          method: :patch,
+                          params: { closed: !card.closed_live? },
+                          class: "btn btn-sm btn-ghost-primary" do %>
+              <i class="ti <%= card.closed_live? ? "ti-lock-open" : "ti-lock" %> me-1" aria-hidden="true"></i><%= t(card.closed_live? ? "comments.thread.reopen" : "comments.thread.close") %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div class="card-body">
+        <% if card.entries.any? %>
+          <ol class="allure-comments__thread">
+            <% card.entries.each do |entry| %>
+              <% root = entry.comment %>
+              <% reply_open = reply_error && composer[:parent_id] == root.to_param %>
+              <li class="allure-comments__entry">
+                <% if entry.stub? %>
+                  <%= render "comments/stub", comment: root %>
+                <% else %>
+                  <%= render "comments/comment", comment: root, card:,
+                             reply_target: (comment_reply_dom_id(root) if replyable_ids.include?(root.to_param)),
+                             reply_open: %>
+                <% end %>
+                <% if entry.replies.any? %>
+                  <ol class="allure-comments__replies">
+                    <% entry.replies.each do |reply| %>
+                      <li><%= render "comments/comment", comment: reply, card:, reply_target: nil, reply_open: false %></li>
+                    <% end %>
+                  </ol>
+                <% end %>
+                <% if replyable_ids.include?(root.to_param) %>
+                  <div class="collapse allure-comments__reply<%= " show" if reply_open %>"
+                       id="<%= comment_reply_dom_id(root) %>"
+                       data-controller="comment-reply"
+                       data-action="shown.bs.collapse->comment-reply#focus">
+                    <%= render "comments/composer", target:, card:, parent: root,
+                               body: (composer[:body] if reply_open),
+                               error: (composer[:message] if reply_open) %>
+                  </div>
+                <% end %>
+              </li>
+            <% end %>
+          </ol>
+        <% elsif card.postable? %>
+          <p class="text-secondary"><%= t("comments.empty") %></p>
+        <% end %>
+
+        <% if card.postable? %>
+          <%= render "comments/composer", target:, card:, parent: nil,
+                     body: (composer[:body] unless reply_error),
+                     error: (composer[:message] unless reply_error) %>
+        <% elsif card.closed? %>
+          <p class="allure-comments__notice text-secondary mb-0">
+            <i class="ti ti-lock me-1" aria-hidden="true"></i><%= comment_closed_text(card) %>
+          </p>
+        <% elsif card.owner && card.publication.nil? %>
+          <p class="allure-comments__notice text-secondary mb-0">
+            <i class="ti ti-eye-off me-1" aria-hidden="true"></i><%= t("comments.unpublished") %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</turbo-frame>

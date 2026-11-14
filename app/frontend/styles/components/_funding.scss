@@ -1,0 +1,13 @@
+// Supporter badge (DESIGN.md §9.6): the tier pictogram overlays the avatar's
+// lower right; the shared overlay geometry lives in _avatar.scss. Closed
+// palette: white ink clears 4.5:1 on every colour in either theme.
+.funding-badge {
+  right: -8%;
+
+  &--primary { background: #a93459; }
+  &--blue { background: #245caa; }
+  &--teal { background: #176c67; }
+  &--orange { background: #9c4917; }
+  &--purple { background: #7441a3; }
+  &--slate { background: #4c586b; }
+}

@@ -1,0 +1,50 @@
+<% content_for :title, t("sessions.new.title") %>
+
+<div class="card card-md">
+  <div class="card-body">
+    <h1 class="h2 text-center mb-4"><%= t("sessions.new.title") %></h1>
+
+    <%= form_with url: session_path, data: credential_form_data do |form| %>
+      <div class="mb-3">
+        <%= form.label :email_address, t("sessions.new.email"), class: "form-label" %>
+        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username",
+              class: "form-control", value: params[:email_address] %>
+      </div>
+      <div class="mb-3"
+           data-controller="password-visibility"
+           data-password-visibility-show-label-value="<%= t("forms.password.show") %>"
+           data-password-visibility-hide-label-value="<%= t("forms.password.hide") %>">
+        <%= form.label :password, t("sessions.new.password"), class: "form-label" %>
+        <div class="input-group">
+          <%= form.password_field :password, required: true, autocomplete: "current-password",
+                maxlength: 72, size: nil, class: "form-control",
+                data: { password_visibility_target: "input" } %>
+          <button class="btn btn-outline-secondary" type="button"
+                  data-action="password-visibility#toggle"
+                  data-password-visibility-target="button"
+                  aria-pressed="false"
+                  aria-label="<%= t("forms.password.show") %>"
+                  data-controller="tooltip"
+                  data-bs-title="<%= t("forms.password.show") %>">
+            <i class="ti ti-eye" data-password-visibility-target="icon" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      <div class="form-footer">
+        <%= form.submit t("sessions.new.submit"), class: "btn btn-primary w-100" %>
+      </div>
+    <% end %>
+    <%= render "sessions/providers", intent: "sign_in" %>
+  </div>
+</div>
+
+<div class="text-center text-secondary mt-3">
+  <%= render "sessions/demo_credentials" %>
+  <%= link_to t("sessions.new.forgot_password"), new_password_path %>
+  <% if Allure::Registration.open? %>
+    <span aria-hidden="true"> · </span>
+    <%= link_to t("sessions.new.sign_up"), new_registration_path %>
+  <% else %>
+    <div class="mt-2"><%= t("sessions.new.registration_closed") %></div>
+  <% end %>
+</div>

@@ -1,0 +1,42 @@
+<%# Identity-provider buttons (PLAN_AUTH.md §6, DESIGN.md §20.15). In a browser
+    each one POSTs to OmniAuth with the Rails authenticity token and leaves
+    Turbo, since the answer is a redirect to the provider. Providers refuse
+    embedded web views, so the iOS companion signs in through its system
+    browser instead (§9): its buttons start the `auth-session` bridge, and an
+    older app without that component gets none.
+    Locals: intent, providers (default: every enabled one), invitation_token,
+    prompt, max_age, divider. %>
+<% companion = hotwire_native_app? %>
+<% providers = local_assigns.fetch(:providers) { Allure::Auth::Providers.enabled } %>
+<% if companion %>
+  <% providers = hotwire_native_bridge?("auth-session") ? providers & Allure::Auth::Providers.for_companion : [] %>
+<% end %>
+<% if providers.any? %>
+  <% if local_assigns.fetch(:divider, true) %>
+    <div class="hr-text"><%= t("sessions.providers.or") %></div>
+  <% end %>
+  <%# The intent and the invitation travel in the query string, which OmniAuth
+      keeps for the callback; the form body would be lost. %>
+  <% query = { intent: local_assigns[:intent], invitation_token: local_assigns[:invitation_token],
+               prompt: local_assigns[:prompt], max_age: local_assigns[:max_age] }.compact_blank %>
+  <div class="d-grid gap-2">
+    <% providers.each do |provider| %>
+      <% label = capture do %>
+        <i class="ti <%= { "google" => "ti-brand-google", "apple" => "ti-brand-apple" }.fetch(provider.name, "ti-login-2") %> me-2" aria-hidden="true"></i>
+        <%= t(local_assigns[:intent] == "link" ? "sessions.providers.link" : "sessions.providers.continue", provider: provider.label) %>
+      <% end %>
+      <% if companion %>
+        <%= tag.button label, type: "button", class: "btn w-100",
+              data: { controller: "bridge--auth-session", action: "bridge--auth-session#start",
+                      bridge__auth_session_start_url_value:
+                        Allure::Federation.config.base_url + companion_provider_start_path(provider: provider.name, **query),
+                      bridge__auth_session_handoff_url_value: session_handoff_path } %>
+      <% else %>
+        <%= button_to "/auth/#{provider.name}#{"?#{query.to_query}" if query.any?}",
+              class: "btn w-100", form: { data: { turbo: false } } do %>
+          <%= label %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

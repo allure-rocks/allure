@@ -1,0 +1,53 @@
+<%# The webhook form (DESIGN.md §20.18, §19.26 third text). %>
+<div class="card">
+  <%= form_with model: endpoint, scope: :webhook_endpoint,
+                url: (endpoint.persisted? ? settings_webhook_path(endpoint) : settings_webhooks_path),
+                method: (endpoint.persisted? ? :patch : :post) do |form| %>
+    <div class="card-body">
+      <%= render "shared/form_errors", form: form %>
+
+      <div class="mb-3">
+        <%= form.label :url, t("settings.webhooks.form.url"), class: "form-label required" %>
+        <%= form.url_field :url, required: true, maxlength: 2048, size: nil, autocomplete: "off", placeholder: "https://",
+              class: class_names("form-control font-monospace", "is-invalid": endpoint.errors[:url].any?),
+              aria: { describedby: "webhook_url_hint" } %>
+        <div id="webhook_url_hint" class="form-hint"><%= t("settings.webhooks.form.url_hint") %></div>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :description, t("settings.webhooks.form.description"), class: "form-label" %>
+        <%= form.text_field :description, maxlength: 200, size: nil, class: "form-control" %>
+      </div>
+
+      <fieldset class="mb-3" id="<%= form.field_id(:events) %>">
+        <legend class="form-label required"><%= t("settings.webhooks.form.events") %></legend>
+        <label class="form-check mb-3">
+          <%= check_box_tag "webhook_endpoint[events][]", WebhookEndpoint::ALL_EVENTS, endpoint.all_events?,
+                id: "webhook_event_all", class: "form-check-input" %>
+          <span class="form-check-label fw-medium"><%= t("settings.webhooks.all_events") %></span>
+          <span class="form-check-description"><%= t("settings.webhooks.form.all_events_hint") %></span>
+        </label>
+        <% WebhookEndpoint::EVENT_GROUPS.each do |group, types| %>
+          <div class="mb-2">
+            <div class="small text-secondary text-uppercase fw-medium mb-1"><%= t("settings.webhooks.groups.#{group}") %></div>
+            <% types.each do |type| %>
+              <% key = type.tr(".", "_") %>
+              <label class="form-check">
+                <%= check_box_tag "webhook_endpoint[events][]", type, endpoint.events.include?(type),
+                      id: "webhook_event_#{key}", class: "form-check-input" %>
+                <span class="form-check-label"><%= t("settings.webhooks.events.#{key}") %>
+                  <code class="ms-1 small text-secondary"><%= type %></code></span>
+              </label>
+            <% end %>
+          </div>
+        <% end %>
+      </fieldset>
+
+      <div class="alert alert-warning mb-0" role="note"><%= t("settings.webhooks.form.warning") %></div>
+    </div>
+    <div class="card-footer allure-actions">
+      <%= form.submit (endpoint.persisted? ? t("settings.webhooks.form.save") : t("settings.webhooks.form.create")), class: "btn btn-primary" %>
+      <%= link_to t("settings.api_tokens.new.cancel"), (endpoint.persisted? ? settings_webhook_path(endpoint) : settings_api_path), class: "btn btn-link" %>
+    </div>
+  <% end %>
+</div>

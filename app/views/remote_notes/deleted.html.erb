@@ -1,0 +1,24 @@
+<% content_for :title, t("remote_notes.deleted.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("remote_notes.pretitle") %></div>
+      <h1 class="page-title"><%= t("remote_notes.deleted.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<div class="row row-deck row-cards">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="empty">
+          <div class="empty-icon"><i class="ti ti-world-off fs-1 text-secondary" aria-hidden="true"></i></div>
+          <p class="empty-title"><%= t("remote_notes.deleted.title") %></p>
+          <p class="empty-subtitle text-secondary"><%= t("remote_notes.deleted.body") %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

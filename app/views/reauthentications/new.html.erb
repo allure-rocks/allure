@@ -1,0 +1,64 @@
+<% content_for :title, t("reauthentications.new.title") %>
+
+<div class="card card-md">
+  <div class="card-body">
+    <h1 class="h2 text-center mb-2"><%= t("reauthentications.new.title") %></h1>
+    <p class="text-secondary text-center mb-4">
+      <%= t("reauthentications.new.#{@copy}", minutes: Allure::Auth::Config.reauthentication_window.in_minutes.to_i) %>
+    </p>
+
+    <% if !current_user.password? && !@enrolled %>
+      <%# prompt=login and max_age=0 both ask the provider to authenticate the
+          person again; a provider reporting auth_time is then held to it. %>
+      <%= render "sessions/providers", intent: "reauthenticate", providers: @reauth_providers, prompt: "login",
+                                       max_age: "0", divider: false %>
+    <% else %>
+    <%= form_with url: reauthentication_path,
+          data: credential_form_data(controller: "webauthn", webauthn_mode_value: "get",
+                                     webauthn_options_url_value: options_reauthentication_path,
+                                     webauthn_cancelled_message_value: t("second_factor.passkey.cancelled"),
+                                     webauthn_failed_message_value: t("second_factor.passkey.failed")) do |form| %>
+      <%# Password managers skip read-only fields: this one names the login they fill. %>
+      <%= hidden_field_tag :username, current_user.email_address, id: nil, autocomplete: "username" %>
+      <div class="mb-3">
+        <%= form.label :email_address, t("reauthentications.new.account"), class: "form-label" %>
+        <%= form.email_field :email_address, value: current_user.email_address, readonly: true,
+              autocomplete: "username", class: "form-control-plaintext" %>
+      </div>
+      <% if current_user.password? %>
+      <div class="mb-3"
+           data-controller="password-visibility"
+           data-password-visibility-show-label-value="<%= t("forms.password.show") %>"
+           data-password-visibility-hide-label-value="<%= t("forms.password.hide") %>">
+        <%= form.label :password, t("reauthentications.new.password"), class: "form-label" %>
+        <div class="input-group">
+          <%= form.password_field :password, required: true, autofocus: true, autocomplete: "current-password",
+                maxlength: 72, size: nil, class: "form-control",
+                data: { password_visibility_target: "input" } %>
+          <button class="btn btn-outline-secondary" type="button"
+                  data-action="password-visibility#toggle"
+                  data-password-visibility-target="button"
+                  aria-pressed="false"
+                  aria-label="<%= t("forms.password.show") %>"
+                  data-controller="tooltip"
+                  data-bs-title="<%= t("forms.password.show") %>">
+            <i class="ti ti-eye" data-password-visibility-target="icon" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+      <% end %>
+      <% if @enrolled %>
+        <%= render "second_factor/challenge_fields", form: form, totp: @totp, passkeys: @passkeys, recovery: @recovery,
+                                                     switch_path: new_reauthentication_path(recovery: (1 unless @recovery)) %>
+      <% end %>
+      <div class="form-footer">
+        <%= form.submit t("reauthentications.new.submit"), class: "btn btn-primary w-100" %>
+      </div>
+    <% end %>
+    <% end %>
+  </div>
+</div>
+
+<div class="text-center text-secondary mt-3">
+  <%= link_to t("reauthentications.new.cancel"), return_path %>
+</div>

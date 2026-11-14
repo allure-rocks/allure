@@ -1,0 +1,27 @@
+<%# A Garmin Connect link in progress: the sign-in running, a verification
+    code awaited, or the code being checked. Locals: connection. %>
+<% linking = ImportConnections::Linking.new(connection) %>
+<% if connection.status == "mfa_pending" && !linking.verifying? %>
+  <%= form_with url: connection_mfa_path("garmin_connect"), method: :post do %>
+    <%= label_tag :garmin_code, t("settings.connections.garmin_connect.code"), class: "form-label required" %>
+    <div class="col-sm-6 col-lg-4">
+      <%= text_field_tag :code, nil, id: "garmin_code", required: true, autocomplete: "one-time-code",
+                         inputmode: "numeric", class: "form-control" %>
+    </div>
+    <small class="form-text">
+      <%= t("settings.connections.garmin_connect.code_hint.#{connection.credential(:mfa_method) == 'sms' ? 'sms' : 'email'}") %>
+    </small>
+    <div class="allure-actions mt-3">
+      <%= submit_tag t("settings.connections.garmin_connect.verify"), class: "btn btn-primary", name: nil %>
+    </div>
+  <% end %>
+<% else %>
+  <p class="text-secondary" role="status">
+    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+    <%= t(linking.verifying? ? "settings.connections.garmin_connect.verifying" : "settings.connections.garmin_connect.signing_in") %>
+  </p>
+<% end %>
+<div class="allure-actions mt-2">
+  <%= button_to t("settings.connections.link.cancel"), connection_link_path("garmin_connect"),
+        method: :delete, class: "btn btn-link" %>
+</div>

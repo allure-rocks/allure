@@ -1,0 +1,17 @@
+<%# Next-page skeleton for the endless table view (DESIGN.md §11.1): three
+    rows with the sport tile, the title and the secondary line, the shape of
+    both the desktop rows and the phone list. Revealed by
+    infinite_scroll_controller only while a page fetch is in flight. %>
+<div class="card placeholder-glow text-start" data-infinite-scroll-target="skeleton" hidden>
+  <ul class="list-group list-group-flush">
+    <% 3.times do %>
+      <li class="list-group-item d-flex align-items-center gap-2">
+        <span class="avatar avatar-square avatar-xs bg-secondary-lt"></span>
+        <span class="flex-fill">
+          <span class="placeholder col-6 d-block mb-1"></span>
+          <span class="placeholder placeholder-xs col-4 d-block"></span>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+</div>

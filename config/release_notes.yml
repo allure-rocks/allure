@@ -1,0 +1,641 @@
+# Curated user-facing release notes, shown in the footer's what's-new dialog.
+#
+# This is editorial content, not UI copy: it is updated in the same release
+# commit as CHANGELOG.md and config/version.rb, in every locale below. A
+# release with no entry here simply shows no dialog; that is legitimate.
+#
+# One locale root, one exact Allure::VERSION key per release, a list of short
+# sentences. Do not move existing entries: a user's seen marker is the version.
+fr:
+  "0.10.0":
+    - "Le code, les tickets et les contributions d'Allure vivent maintenant sur github.com/allure-rocks/allure."
+    - "Une instance de démonstration publique est disponible sur demo.allure.rocks : les identifiants sont affichés sur la page de connexion, et tout est remis à zéro chaque nuit."
+    - "Les images Docker officielles sont publiées sur Docker Hub : allurerocks/allure et allurerocks/allure-route-image."
+    - "La documentation de l'opérateur reste sur docs.allure.rocks."
+  "0.9.10":
+    - "Quitter une page qui contient des modifications non enregistrées demande maintenant confirmation, et le retour arrière ne montre plus un choix non enregistré comme s'il l'était."
+    - "Après trois sorties sur le même parcours complet, une bannière propose « Enregistrer en itinéraire », avec un nom tiré du départ et de l'arrivée. Rien n'est créé tant que vous ne le décidez pas."
+    - "Les photos ont leur page de gestion : le parcours à gauche, une ligne par photo avec sa légende, son heure et son placement, et un ordre qui suit l'heure de prise de vue jusqu'à ce que vous le changiez."
+    - "Choisissez le cadrage de votre avatar : une fenêtre carrée sur l'image, un masque rond qui montre exactement le résultat, et « Recentrer » pour revenir au centre. L'image n'est plus écrasée, et les photos jusqu'à 20 Mo sont acceptées."
+    - "Un profil de publication automatique peut laisser certains sports de côté, comme il laisse déjà les trajets : leurs activités restent non publiées, et vous pouvez toujours les publier à la main."
+    - "Le fond autour de la carte d'un monde virtuel suit maintenant le thème sombre, au lieu de rester bleu."
+  "0.9.9":
+    - "La page Records montre un sport à la fois : choisissez une pastille ou balayez, et chaque sport affiche ses records et ses meilleurs efforts côte à côte. Elle s'ouvre sur votre sport principal, et la carte prend la hauteur du sport affiché."
+    - "Les services connectés ont leur propre page, à côté des réglages : chaque service garde sa connexion, sa récupération, ses préférences et sa déconnexion, sans plus rafraîchir les autres."
+    - "Une sortie virtuelle met ses watts en avant : puissance moyenne à la place de la vitesse dans le résumé et sur la carte d'activité, parcours colorié par la puissance, et chaque split porte sa puissance moyenne."
+    - "Les photos d'une activité Zwift arrivent avec l'activité, dans sa galerie et sur la carte."
+    - "La carte des photos est réparée : visionneuse lisible dans les deux thèmes, heure et distance de prise de vue, lien vers le lieu sur la carte, et un envoi qui ne coupe plus une visionneuse ouverte."
+  "0.9.8":
+    - "Les cartes de Watopia et de Paris sont à jour : l'archipel du nord-ouest où démarrent les courses du Tour of Watopia, et l'extension parisienne de juillet 2026 avec Montmartre, le parc Monceau et la Madeleine. Les images de parcours des activités concernées sont refaites après la mise à jour."
+    - "Une synchronisation Zwift lancée pendant que vous roulez n'importe plus l'activité en cours : elle attend la fin de la sortie et arrive complète, avec son vrai nom."
+    - "Une téléportation ne compte plus comme une montée : le saut n'entre plus dans la plus grande montée ni dans les records de dénivelé."
+  "0.9.7":
+    - "Trouver des personnes devient une recherche par nom facultative et minimale : l'onglet Personnes réunit vos abonnements, vos abonnés et les demandes, et suggère des comptes à partir de ce que vous pouvez déjà voir. Votre profil est invisible dans la recherche par défaut ; activez-le dans Réglages › Profil."
+    - "« Synchroniser maintenant » fonctionne même quand la synchronisation automatique est désactivée."
+    - "Une activité Zwift en vidéo ne trace plus de ligne droite à travers la carte quand le jeu vous téléporte : le parcours est coupé au saut et les vitesses restent justes."
+  "0.9.6":
+    - "Connectez un compte Withings ou Zwift depuis Réglages › Services connectés : vos séances arrivent avec leur fichier original, et la synchronisation horaire fait le reste. Votre mot de passe n'est jamais conservé."
+    - "Une activité Zwift se dessine sur la carte de son monde — Watopia, Londres, Paris… —, avec la couleur et la mention du jeu, au lieu d'un fond réel."
+    - "Le dénivelé d'une activité virtuelle est celui de son profil, plus le total peu fiable annoncé par la plateforme : la tuile D+ et le graphique s'accordent."
+    - "Le profil « Abonnés » est toujours disponible : vos abonnés sur cette instance le lisent même quand la fédération est désactivée, et le réglage ne décide plus que de son envoi vers les autres instances."
+    - "Personnes, suivre et ne plus suivre un compte de cette instance, et répondre à une demande d'abonnement fonctionnent de nouveau quand la fédération est désactivée."
+    - "Les enregistrements dont la position GPS n'arrive que toutes les quelques secondes (Suunto, COROS) retrouvent leur parcours à l'import."
+    - "La démo utilise une image dédiée et un mot de passe d'opérateur stable ; sa base n'est déclarée prête qu'une fois qu'elle accepte les connexions."
+  "0.9.5":
+    - "Dans Réglages › Profil, choisissez séparément qui voit vos totaux par sport et vos records : vos abonnés, tous les membres ou personne. Ces blocs restent sur cette instance."
+    - "Les profils regroupent le journal des publications, les totaux par sport en radar et les records, avec leurs filtres et leurs panneaux à parcourir."
+    - "Réglages s'ouvre sur un sommaire de toutes les rubriques, sur téléphone comme sur ordinateur."
+    - "Le nom que vous donnez à une boucle est conservé quand ses doublons sont regroupés."
+    - "L'import des séances EXR fonctionne de nouveau, et l'analyse des tours ne bloque plus sur une activité sans GPS."
+    - "Un mode de démonstration propose un compte partagé et une remise à zéro nocturne. N'y importez aucune donnée personnelle."
+  "0.9.4":
+    - "Un seul tour complet suffit désormais pour reconnaître une boucle déjà connue, même après une approche. Il faut toujours deux tours pour découvrir une nouvelle boucle."
+    - "Les anciennes activités sont recalculées en arrière-plan : les boucles en double sont regroupées en conservant leur nom et leur historique. Vos publications ne changent pas."
+  "0.9.3":
+    - "Soutenez cette instance : une contribution annuelle volontaire, par paliers, affiche un badge sur votre avatar. Rien n'est verrouillé derrière : c'est un geste envers l'hébergeur, pas un abonnement."
+    - "L'avatar de l'opérateur de l'instance porte un badge distinctif."
+    - "Un parcours qui rejoint une boucle, la parcourt plusieurs fois, puis rentre chez vous reconnaît maintenant la boucle au lieu d'en créer une seconde."
+    - "La première importation depuis l'application iOS réussit désormais du premier coup."
+  "0.9.2":
+    - "Allure parle allemand, espagnol et néerlandais : choisissez votre langue dans Apparence, ou depuis les pages de connexion, qui suivent désormais la langue de votre navigateur."
+    - "Un fichier au nom ou à la description très longs s'importe désormais, au lieu d'être refusé, et la page d'import signale un fichier trop volumineux avant de l'envoyer."
+    - "Trois imports de fichiers et une archive Strava peuvent attendre à la fois, jusqu'à 6 Go par jour ; les fichiers envoyés sont supprimés une fois l'import terminé, chaque activité gardant son original."
+  "0.9.1":
+    - "Les zones cardiaques des statistiques se filtrent comme la page Moi, par sport et par semaine ou par mois, et se lisent bien sur téléphone."
+    - "Sur téléphone, la page Records défile sans accrocher, les fenêtres comme À propos ne passent plus sous la barre du bas, et la page Segments garde ses boutons à côté du titre."
+  "0.9.0":
+    - "Importez votre archive Strava : chaque activité arrive avec son nom, son type, sa description, son équipement et ses photos, sans doublon avec ce que vous aviez déjà importé."
+    - "Une rubrique Aide, dans le menu du compte, explique en quelques pages la publication, les zones de confidentialité, le partage avec d'autres instances, les classements et la charge d'entraînement."
+    - "À propos, dans le même menu, présente cette instance, les services extérieurs qu'elle utilise et ce qui leur parvient, et le code source d'Allure."
+    - "Vos nouvelles sorties sont traitées avant les gros imports en cours, les vôtres comme ceux des autres."
+  "0.8.7":
+    - "La fréquence cardiaque est mesurée sur le temps réellement enregistré, pauses exclues, et la charge d'entraînement s'explique : comment lire condition, fatigue et forme, pourquoi une activité n'a pas de zones, et un aperçu de vos zones pendant que vous les réglez."
+    - "La fédération tient mieux quand une autre instance est lente, arrêtée ou réinitialisée : plus aucune publication ni demande de suivi n'est perdue en route."
+    - "Un compte qui vous retire de ses abonnés, que vous bloquez ou qui est supprimé disparaît de vos relations dans Personnes."
+  "0.8.6":
+    - "Vous pouvez de nouveau ne plus suivre un compte dont l'instance a disparu ou changé d'adresse, et suivre à nouveau quelqu’un qui vous suivait déjà est accepté aussitôt."
+    - "Le compteur de notifications reste accroché au coin de la cloche."
+  "0.8.5":
+    - "Vos zones cardiaques : renseignez votre fréquence maximale dans Réglages › Fréquence cardiaque, et chaque activité enregistrée avec un cardiofréquencemètre montre le temps passé dans chaque zone, dans l'onglet « Zones cardiaques » de l'analyse. Survolez une zone pour voir où vous l'avez roulée sur la carte et le profil."
+    - "La page Moi affiche votre charge d'entraînement — condition, fatigue et forme sur 90 jours — et les statistiques le temps par zone, semaine après semaine."
+    - "La fréquence cardiaque est une donnée de santé : les nouveaux profils de publication ne la partagent plus par défaut. Vos profils existants n'ont pas changé ; vérifiez-les dans Réglages › Profils de publication. Vos zones ne sont jamais publiées."
+    - "Les segments prennent leur altitude du service de terrain quand l'instance en propose un. Leur pente est signée : une descente se lit en négatif."
+  "0.8.4":
+    - "Survolez une réaction pour voir qui l'a donnée : les trois dernières personnes, puis le nombre des autres. Une réaction donnée en tant qu'abonné ne nomme son auteur qu'aux autres abonnés."
+    - "L'appareil d'enregistrement est mieux reconnu, modèle compris pour les Garmin, et les compteurs iGPSPORT sont enfin nommés."
+    - "Les icônes météo s'affichent de nouveau."
+  "0.8.3":
+    - "Les icônes météo sont redessinées, animées, aux couleurs du thème ; elles montrent la nuit quand le soleil était couché."
+    - "Quand un parcours repasse au même endroit avec une altitude différente, l'onglet « Qualité des données » le signale ; un dénivelé faussé par cet écart ne compte plus dans vos records."
+    - "Sur téléphone, les commentaires d'une activité s'ouvrent sur leur propre page, depuis la ligne sous le résumé qui porte aussi les réactions."
+    - "Pour créer un segment ou un itinéraire, choisissez d'abord l'activité dans la page Segments."
+    - "La carte Découvrir distingue les parcours superposés par des nuances et montre leur sens ; un clic liste tous ceux qui passent sous le pointeur."
+    - "Le réglage « Fond des cartes et images des parcours » s'applique désormais à toutes les cartes."
+  "0.8.2":
+    - "La météo de vos sorties en extérieur : activez-la dans Réglages › Météo. Chaque activité affiche les conditions, la température, le vent et la part de vent de face, de dos et de côté, avec un badge dans l'en-tête et les changements de temps marqués sur le profil et la carte dans l'onglet « Météo » de l'analyse."
+    - "Vous pouvez partager un résumé de la météo dans un profil de publication ; il n'est jamais partagé par défaut."
+    - "La température mesurée par votre appareil s'affiche aussi, sur la carte Météo et sur le profil."
+    - "Le départ et l'arrivée d'un parcours portent le nom du village où ils se trouvent, plutôt que celui d'un lieu-dit voisin."
+  "0.8.1":
+    - "Saisissez une activité à la main depuis la page d'import, onglet « Saisie manuelle » : elle compte dans vos totaux et vos statistiques, sans fichier ni parcours."
+    - "Dans Réglages › Compte, exportez toutes vos données en une archive ZIP réimportable, ou supprimez votre compte : il reste désactivé sept jours, le temps de changer d'avis."
+    - "Les classements complets des segments proposent une vue Femmes ou Hommes, si vous déclarez votre catégorie dans votre profil."
+    - "L'éditeur de zone de confidentialité cherche un lieu par son nom."
+  "0.8.0":
+    - "Les graphiques sont redessinés avec une nouvelle bibliothèque libre, et les pages sans graphique se chargent plus vite. Profil, progression, intensité, répartition et statistiques gardent leurs gestes : survol synchronisé avec la carte, zoom en glissant (appui long au doigt), thème clair ou sombre."
+    - "Sur le profil, le nom d'un lieu ou d'une montée s'affiche dans l'infobulle quand le pointeur passe dessus. La légende de la répartition des sports se parcourt au clavier, et les statistiques par sport deviennent des barres horizontales."
+    - "À la création d'un segment, les points de départ et d'arrivée saisis à la main s'affichent désormais sur le profil."
+  "0.7.3":
+    - "Une sortie faite avec quelqu'un d'une autre instance Allure compte maintenant pour vous deux : invitez son compte (@nom@instance) depuis la carte Participants. Il confirme depuis votre publication, et la sortie rejoint ses activités avec ses mesures."
+    - "Le mot de passe oublié se réinitialise de nouveau : le nouveau mot de passe n'était pas enregistré."
+  "0.7.2":
+    - "Sur iPhone, l'application peut maintenant vous prévenir : activez « Recevoir sur cet iPhone » dans les réglages des notifications. Le contenu est chiffré pour l'iPhone — ni le relais ni Apple ne peuvent le lire — et vous pouvez choisir de le masquer."
+    - "Les réactions à une même activité tiennent en une seule notification : « Marie et 3 autres personnes ont réagi à votre activité »."
+  "0.7.1":
+    - "Les séances sans GPS s'importent : home trainer, tapis de course, rameur, piscine ou séance en salle prennent leur distance et leur allure de l'appareil lui-même. Deux sports rejoignent la liste : « Renforcement musculaire » et « Fitness »."
+    - "Les longues montées sont reconnues : l'Alpe d'Huez ou le Ventoux apparaissent enfin dans l'onglet « Montées » et sur le profil, et leur descente n'est plus découpée en morceaux."
+    - "Les icônes de sport sont redessinées sur une même grille et un même trait, et l'état de partage d'une activité tient en un seul badge, partout où il apparaît."
+  "0.7.0":
+    - "Une sortie partagée compte enfin pour ceux qui ne l'ont pas enregistrée : une fois le crédit confirmé, elle rejoint vos activités avec ses mesures — statistiques, records, meilleurs efforts et segments — tandis que la trace, le cardio et l'appareil restent à la personne qui l'a enregistrée."
+    - "Vous avez aussi enregistré la sortie ? Liez votre propre activité, à la confirmation ou plus tard : les deux activités portent « Avec @X » et rien n'est compté deux fois."
+    - "Allure repère les sorties faites ensemble avec les comptes que vous suivez et qui vous suivent, et vous propose de les lier. Rien n'est lié sans votre confirmation, et les suggestions se désactivent dans les paramètres de notifications."
+    - "Si la personne supprime son activité, vous gardez la vôtre avec ses mesures."
+    - "Les graphiques de progression et de statistiques s'affichent de nouveau en anglais, et l'analyse des très longues sorties est bien plus rapide."
+  "0.6.5":
+    - "Les classements de segments suivent leur lecteur : votre passage apparaît dès que l'activité est publiée avec son tracé, auprès de tous ceux qui peuvent la voir. Un bouton « Mes abonnements » resserre le classement sur les comptes que vous suivez, et votre ligne dit qui vous voit."
+    - "La page Segments devient une liste triable : lieu, distance, D+, pente, profil, record et votre meilleur temps sur chaque ligne."
+    - "Les boutons d'action sont à gauche sur grand écran et à droite, sous le pouce, sur téléphone, avec l'action principale toujours au bord."
+    - "Dans l'application iOS, les fichiers GPX et originaux se téléchargent et s'ouvrent dans la feuille de partage."
+  "0.6.4":
+    - "Les assistants IA et l'API REST répondent désormais sur votre instance : leurs requêtes échouaient depuis la mise à jour précédente."
+  "0.6.3":
+    - "Confiez l'analyse de vos activités à un assistant IA : créez un jeton dans « Paramètres → API et webhooks », collez la configuration proposée dans votre assistant (Claude Code, opencode, LM Studio…), et il lit le contexte complet d'une activité — mesures, tours, montées, efforts, segments et entraînement des semaines précédentes."
+    - "Chaque jeton dit ce que l'assistant peut recevoir de vos tracés : aucune localisation (par défaut), les tracés sans vos zones de confidentialité, ou les tracés complets pour un modèle qui tourne chez vous."
+  "0.6.2":
+    - "Une API REST pour vos propres outils : créez un jeton dans « Paramètres → API et webhooks », lisez vos activités, importez des fichiers, modifiez et publiez. La référence interactive s'ouvre depuis le lien « API » en pied de page."
+    - "Les webhooks appellent votre adresse quand une activité est importée, analysée ou publiée, quand vous battez un record, et quand quelqu'un commente, réagit ou demande à vous suivre. Chaque appel est signé."
+    - "L'onglet Segments de l'analyse compare chaque passage à votre meilleur temps sur le segment."
+    - "Le fuseau horaire s'enregistre correctement depuis les paramètres."
+  "0.6.1":
+    - "Publication automatique : marquez un profil de publication comme automatique et chaque nouvel import récent est publié avec lui, une fois son altitude, ses segments, ses lieux et son image de parcours prêts. Vous pouvez exclure les trajets domicile-travail ou refuser une publication en attente."
+    - "Allure repère les mesures douteuses d'un enregistrement — positions GPS qui sautent, vitesse impossible, fréquence cardiaque figée… Un chiffre faussé affiche sa valeur plausible et ne détient plus de record ; le reste vous attend dans l'onglet « Qualité des données »."
+    - "Les séances EXR prennent la distance réellement ramée : une course de 500 m à Bled n'affiche plus 1 000 m."
+    - "Le graphique « Progression » trace une tendance qui ne se laisse plus dévier par un mauvais jour, un graphique par sport, et place chaque trophée à côté de son point."
+  "0.6.0":
+    - "Sécurité renforcée : après le mot de passe, une double authentification (application, clé d'accès ou code de secours) est demandée, les sessions expirent, et vous pouvez vous connecter avec Google, Apple ou un fournisseur OpenID Connect, y compris depuis l'application iOS."
+    - "Importez vos activités Garmin Connect et vos séances EXR depuis « Services connectés » : récupérez une période, puis laissez la synchronisation horaire faire le reste. Votre mot de passe n'est jamais conservé."
+    - "Sur un segment, un itinéraire ou une boucle, un graphique « Progression » montre l'évolution de vos temps, vos trois meilleurs et la tendance."
+    - "Les réglages sont réunis sur une seule page, avec leurs rubriques à côté, et la page Sécurité est réorganisée."
+  "0.5.2":
+    - "Publiez une activité auprès de vos abonnés et du public à la fois : chaque publication garde ses propres actions, son propre fil de commentaires et sa propre audience, et chaque lecteur reçoit la version la plus restreinte à laquelle il a droit."
+    - "La liste des activités et le hub personnel sont réorganisés : titre et compteur de résultats en tête, pilules de sport défilables, période et tri sur une même ligne, filtres rares dans un panneau qui s'ouvre à la demande, et une semaine ou un jour sélectionné ouvre un encart flottant au-dessus du graphique."
+    - "Les nombres suivent les règles de chaque langue, et les cartes se teintent au survol au lieu de souligner leur titre."
+    - "Sur téléphone, la barre du bas mène aux Personnes ; les Paramètres restent dans le menu du compte."
+  "0.5.1":
+    - "La page d'une activité est repensée pour l'ordinateur, le téléphone et l'application iOS : la carte reste à gauche pendant la lecture, le profil d'altitude se zoome en sélectionnant une portion, et la carte « Publications » liste chaque publication avec ses propres actions."
+    - "Records et classements parlent la même langue : la coupe, c'est vous contre vous-même, le laurier, vous contre les autres ; l'or, l'argent et le bronze disent la place. Vos 2e et 3e meilleurs temps apparaissent désormais, pour vous seul."
+    - "Depuis l'iPhone, partagez un fichier GPX, FIT, TCX, KML ou KMZ vers Allure — depuis une autre app ou par AirDrop — et il arrive directement dans le formulaire d'import."
+  "0.5.0":
+    - "Commentez les activités publiées : chaque lecteur peut écrire un commentaire et répondre, le propriétaire retire un commentaire ou ferme la discussion, et un nouveau réglage « Commentaires » du profil de publication la ferme d'avance."
+    - "Les commentaires circulent entre instances Allure : un lecteur d'une autre instance commente une activité reçue, et l'instance d'origine transmet la discussion à toutes celles qui ont reçu la publication."
+    - "L'import iGPSPORT accepte désormais toute la gamme de compteurs (BSC100, BSC200, BSC300, BSC500, iGS630, iGS800, BiNavi), avec le BSC100S et le BSC500 vérifiés ; le panneau indique le modèle et signale ceux qui n'ont pas encore été testés."
+    - "Les statistiques et les records se retrouvent sous votre espace personnel (/me), et sur téléphone le filtre de sport devient une liste déroulante comme celui de la période."
+  "0.4.2":
+    - "Les images de parcours existent en version claire et sombre et suivent le thème de la page ; choisissez « Selon le thème », « Toujours claires » ou « Toujours sombres » dans Réglages › Apparence."
+    - "Depuis le tableau des activités, sélectionnez-en plusieurs pour changer leur trajet domicile-travail ou leur équipement d'un coup ; un changement de sport ou une suppression se préparent et se relisent avant de s'exécuter, chaque activité affichant son résultat."
+    - "L'import iGPSPORT fonctionne dans l'application iOS : le compteur se connecte en Bluetooth depuis l'iPhone, sans Chrome sur ordinateur."
+    - "L'application iOS dessine elle-même sa barre supérieure, son menu de compte, son avatar et sa barre d'onglets, et son propre réglage d'apparence s'applique à ses pages."
+    - "Sur le hub, un clic ou un appui sélectionne une semaine, un jour ou un sport et affiche son détail sous le graphique ; seul le bouton ouvre la liste, et un appui long fait glisser la sélection."
+  "0.4.1":
+    - "Votre instance devient réservée à ses membres : ouvrir un lien partagé vous mène à la connexion, puis vous ramène sur la page demandée ; les autres instances continuent de recevoir les publications publiques."
+    - "La courbe d'intensité du hub devient l'historique hebdomadaire complet : la période choisie reste rose, le passé en gris, et le défilement vers la gauche charge les semaines plus anciennes. Cliquez une semaine — ou validez-la au clavier — pour ouvrir ses activités."
+    - "Le pic de la période n'est plus marqué sur la courbe : la ligne de lecture le nomme, une période d'une seule semaine affiche simplement sa semaine et ses chiffres, et les semaines à plusieurs sports le disent."
+    - "La liste d'un profil suit désormais la politique de publication : ses abonnés acceptés y voient aussi les publications réservées aux abonnés lorsque la fédération restreinte est active."
+    - "Vous pouvez créer la copie inversée de votre propre segment ou itinéraire depuis le menu ⋯, et le répertoire « Mes classements » disparaît : le classement vit sur la page du parcours."
+  "0.4.0":
+    - "Chaque segment affiche désormais son profil d'altitude, figé à la création, à droite de la carte ; les parcours copiés en héritent aussi."
+    - "La page d'un segment est réorganisée : partage, copie et suppression passent dans le menu ⋯, l'état de publication devient un badge, et le classement (top 10 par sport) s'affiche directement sur la page."
+    - "Les classements mettent en avant leurs trois premiers avec le laurier de leur place, et « Mes efforts » affiche enfin l'allure ou la vitesse selon le sport."
+    - "Vous pouvez copier le parcours d'un autre compte dans vos segments privés, dans le sens enregistré ou inversé."
+    - "Sur la carte comme sur le profil, la même balle suit votre souris, et le pointeur s'efface près du tracé."
+  "0.3.7":
+    - "Chaque segment, itinéraire ou boucle porte désormais son image de parcours, dessinée sur le même moteur que celles des activités et servie selon sa visibilité."
+    - "La page Segments se simplifie : le type se choisit dans un sélecteur (Segments, Itinéraires, Boucles) et chaque parcours visible s'affiche en carte avec son image, ses chiffres et son podium."
+    - "Découvrir ouvre une carte seule de tous les parcours que vous pouvez lire — les vôtres compris — avec le nom, le sport, la distance et le nombre de participants au clic."
+    - "Le profil d'altitude replace ses repères sur la courbe — numéros de lieux, sommets des montées et descentes, arrêts — avec la timeline assortie ; le choix de la source d'altitude passe dans le menu ⋯."
+  "0.3.6":
+    - "Publier peut attendre : un profil de publication peut imposer un délai de sécurité (de 1 jour à 1 mois) que vous pouvez devancer, reprogrammer ou annuler — rien n'est partagé avant l'échéance."
+    - "Réagissez aux activités et aux notes reçues avec quatre humeurs — bière, énergie, café ou simple like ; l'auteur est prévenu, et chaque type se règle dans Réglages › Notifications."
+    - "Invitez une personne que vous suivez à une activité partagée : elle confirme ou refuse, et une invitation acceptée relie vos deux enregistrements ou vous crédite sans compter deux fois."
+    - "Allure reconnaît les séances EXR : l'appareil, le sport virtuel et le monde — Boston, Bled, Henley, EXR World — sont nommés, et aucune toponymie réelle n'est cherchée pour une séance virtuelle."
+    - "Réglages › Données et recalculs relance à la demande l'analyse, les images de parcours, les lieux et les altitudes de vos activités, avec les compteurs en direct ; l'opérateur dispose des mêmes recalculs en un clic."
+    - "La liste des activités parle la langue du hub — badge de partage, tableau triable, sections par mois et fenêtres de période — et le hub comme le fil s'adaptent mieux au téléphone."
+  "0.3.5":
+    - "Votre photo de profil se choisit dans Réglages › Profil : un envoi PNG, JPEG ou WebP recadré en 512×512, le Gravatar en secours si vous l'activez, ou l'avatar généré — tous servis par l'application."
+    - "Les avatars générés sont des motifs géométriques roses sans initiales, propres à chaque compte et renouvelables en un clic."
+    - "Les classements de segments passent en opt-out : choisissez la visibilité dès la création, chaque athlète publié est classé par défaut, et « Ne plus figurer au classement » vous en retire. Le réglage « Classements de segments » du profil de publication est l'interrupteur général."
+    - "Le fil réunit publications et notes reçues dans une même carte — auteur, tracé et chiffres clés — découpée par jour ; les visiteurs découvrent une carte de présentation."
+    - "La barre supérieure est simplifiée : le menu Réglages disparaît (il reste dans le menu du compte et la barre du bas) et l'interrupteur jour/nuit se place à côté de la cloche."
+    - "Suivre un compte distant accepte les handles nus (@marie@exemple.org), votre photo apparaît aussi dans la liste Personnes, et le dénivelé des fichiers FIT est lu aux bons champs de séance."
+  "0.3.4":
+    - "Une cloche de notifications apparaît dans la barre supérieure : elle indique le nombre non lu et ouvre les dernières notifications."
+    - "La page Notifications liste tout, avec les filtres Toutes / Non lues et « Tout marquer comme lu » ; ouvrir une notification la marque comme lue."
+    - "Vous êtes prévenu lorsqu'une demande de suivi vous est adressée, et lorsqu'une demande que vous avez envoyée est acceptée."
+    - "Chaque type se règle dans Réglages › Notifications ; une notification disparaît lorsque la relation se termine (décision, désabonnement, blocage ou compte distant supprimé)."
+    - "Le graphique d'altitude d'une activité reste lisible sur téléphone : légende complète, repères de lieux regroupés sous la courbe, et la ligne secondaire lissée à l'affichage sans changer les valeurs."
+  "0.3.3":
+    - "Le lissage d'affichage des tracés se règle depuis la carte, et son intensité dans Réglages › Apparence."
+    - "L'aviron et l'aviron virtuel affichent leur allure sur 500 m (2:00 /500m) au lieu de la vitesse, dans toutes les tuiles, tables et classements."
+    - "Les meilleurs efforts couvrent désormais l'aviron avec les distances Concept2 (500 m à marathon), et la course à pied jusqu'au marathon."
+    - "Le sens du parcours est redessiné en chevrons ouverts sur la carte et les images de parcours ; la carte résumé et l'en-tête d'une activité ont été affinés."
+    - "Importer des centaines d'activités ne bloque plus l'application : le calcul des meilleurs efforts sort des verrous d'écriture et les requêtes de records sont indexées."
+  "0.3.2":
+    - "Chaque activité affiche ses lieux — départ, étapes, arrivée — à partir de la toponymie déjà enregistrée, et la liste des activités se filtre par lieu avec autocomplétion."
+    - "La liste des activités s'affiche en cartes entièrement cliquables et charge la suite au fil du défilement ; la vue tableau garde sa pagination."
+    - "Les filtres se replient derrière le bouton Filtres de l'en-tête, qui indique le nombre de filtres actifs et bascule entre cartes et tableau."
+    - "Le sport aviron virtuel s'appelle désormais « Rameur » en français."
+    - "Les fichiers FIT dont l'appareil réutilise le même index de tour s'importent désormais correctement, et le calcul des segments est plus fiable."
+  "0.3.1":
+    - "Les bases existantes reçoivent le catalogue de sports à chaque démarrage : les nouveaux sports (vélo route, gravel, électrique, course virtuelle, aviron virtuel, natation en piscine, snowboard, ski de randonnée) apparaissent sans commande manuelle."
+    - "Le réglage Sports par défaut propose, pour chaque sport générique (vélo, course à pied, marche), une liste de choix pertinents triée alphabétiquement, avec le sport générique sélectionné par défaut (par exemple, plus de tennis ni de padel pour la course à pied)."
+    - "Toutes les listes de sports (formulaire d'activité, import, segments, filtres, classements) sont désormais triées par nom affiché."
+    - "Le sens du parcours est dessiné sur les tracés : de petits chevrons incrustés dans la ligne, sur la carte comme sur les images de parcours des cartes, du fil et des publications."
+    - "Les fichiers FIT du quotidien s'importent plus sûrement : petits sauts d'horloge, fichiers chaînés, longues sorties et correction de l'horloge de l'appareil en cours d'enregistrement."
+  "0.3.0":
+    - "Le catalogue compte désormais 36 sports : vélo route, gravel, vélo électrique, course à pied virtuelle, aviron virtuel, natation en piscine, snowboard et ski de randonnée rejoignent la liste, chacun avec sa propre icône."
+    - "Un interrupteur « Trajet domicile-travail » remplace l'ancien sport Vélo (transport) : il n'a aucun effet sur l'analyse, et un profil de publication peut le partager avec vos abonnés (désactivé par défaut)."
+    - "Les imports reconnaissent mieux les sous-types : vélo route, gravel, VTT, vélo électrique, activités virtuelles, tapis de course, natation en piscine, snowboard et ski de randonnée."
+    - "Vous pouvez choisir dans Réglages › Sports la variante utilisée quand un import détecte un sport générique (vélo, course à pied, marche). Cela ne remplace jamais un sport détecté précisément et ne modifie pas vos activités existantes."
+    - "Une activité sans altitude explique désormais pourquoi dans son résumé, avec l'action qui corrige la situation (activer l'estimation, choisir le profil du terrain ou réessayer)."
+    - "Les courbes de la page Moi suivent la période choisie — colonnes par jour, aire par mois ou par an — et chaque tuile comme le calendrier portent une infobulle d'explication ; les années sont ancrées sous le calendrier."
+    - "Les cartes d'activité sont entièrement cliquables, et les surfaces en attente (image du parcours, fil, aperçu de publication) affichent un squelette à la forme du contenu attendu."
+  "0.2.8":
+    - "Les activités sans altitude peuvent être enrichies depuis un service de terrain (OpenTopoData) lorsque l'opérateur l'a configuré et que vous l'activez dans Réglages › Altitudes ; vous pouvez aussi choisir le profil du terrain à la place de celui de l'appareil, activité par activité."
+    - "Le dénivelé privilégie désormais les totaux de votre appareil (tours enregistrés, sinon résumé FIT), et l'altitude estimée utilise un seuil adapté aux modèles numériques de terrain."
+    - "L'appareil d'enregistrement est affiché sur la page de l'activité, et un profil de publication peut le partager avec vos abonnés."
+  "0.2.7":
+    - "Le sport d'une activité peut être modifié depuis le formulaire d'édition : l'activité est réanalysée avec les seuils du nouveau sport, et les records, meilleurs efforts et segments sont recalculés. Les publications existantes ne changent pas."
+    - "La page d'import propose ses sources depuis un registre : en plus des fichiers, une source télécharge les activités FIT d'un compteur iGPSPORT BSC en Bluetooth depuis le navigateur (Chrome/Edge sur ordinateur), puis les confie au même import par lot."
+  "0.2.6":
+    - "Les distances et les dénivelés des activités GPS sont nettoyés des imprécisions du signal : les positions aberrantes sont écartées, le profil d'altitude est filtré et la vitesse affichée est lissée."
+    - "Les activités existantes sont recalculées par l'opérateur de l'instance après le déploiement ; republiez une publication active pour rafraîchir ses chiffres."
+    - "Les masques de départ et d'arrivée d'un profil de publication décident désormais du filtrage par zone : une extrémité non masquée reste visible jusqu'à la sortie de la zone, et la publication vous avertit lorsqu'elle se trouve dans une zone active."
+    - "L'import multiple découvre tous les fichiers avant de commencer : file d'attente, progression et notification de fin affichent le total réel dès le premier affichage."
+  "0.2.5":
+    - "Votre espace personnel a été entièrement repensé : filtres par sport et par période, tuiles comparées à la période précédente, calendrier d'activité enrichi, répartition des sports, régularité, derniers segments et records."
+    - "Les activités récentes sont désormais des cartes entièrement cliquables, avec une date relative et seulement les chiffres clés."
+    - "Les avatars des personnes sont ronds ; les tuiles de sport et les pastilles d'icônes sont des carrés arrondis teintés à la couleur de la marque."
+    - "L'instance expose des métriques Prometheus sur /metrics pour un tableau de bord Grafana, et applique ses migrations automatiquement au démarrage."
+  "0.2.4":
+    - "Le pied de page affiche désormais la version installée. Après chaque mise à jour, une fenêtre « Nouveautés » s'ouvre une fois par compte pour présenter ces notes ; la version du pied de page permet de la rouvrir à tout moment."
+    - "L'administrateur de l'instance dispose d'une console dédiée à /admin : tableau de bord, suivi en direct des tâches de fond, fédération, publications, comptes et invitations, imports, diagnostic système et journal des actions."
+    - "Le fil Publications inclut toujours vos propres publications, quel que soit leur public, avec un badge « Vous » et leur audience."
+  "0.2.3":
+    - "L'onglet « Meilleurs efforts » de la page d'activité marque chaque distance record d'un trophée. Survolez, focus ou épinglez une ligne pour mettre en évidence sa portion sur le graphique d'altitude et sur la carte."
+    - "Le badge de record de l'en-tête couvre désormais tous les records détenus par l'activité : types classiques, meilleurs efforts et plus grande ascension. Les tuiles de résumé portent le même trophée."
+    - "Un nouveau réglage « records » des profils de publication, désactivé par défaut, partage ces marqueurs avec vos abonnés. Aucun chiffre n'est publié, et les marqueurs ne se mettent à jour qu'à la republication."
+en:
+  "0.10.0":
+    - "Allure is now published on GitHub: the code, the issues and the contributions live at github.com/allure-rocks/allure."
+    - "A public demo instance is available at demo.allure.rocks: the credentials are on the sign-in page, and everything is reset every night."
+    - "Official Docker images are published on Docker Hub: allurerocks/allure and allurerocks/allure-route-image."
+    - "The operator documentation stays at docs.allure.rocks."
+  "0.9.10":
+    - "Leaving a page with unsaved changes now asks first, and going back no longer shows an unsaved choice as though it had been saved."
+    - "After three recordings of the same complete track, a banner offers to save it as a route, named after its departure and arrival. Nothing is created until you decide."
+    - "Photos have their own manager page: the route on the left, one row per photo with its caption, capture time and placement, and an order that follows the capture time until you change it."
+    - "Choose your avatar's framing: a square window over the image, a round mask showing exactly the result, and the recentre action to return to the centre. The image is no longer squashed, and photos up to 20 MB are accepted."
+    - "An automatic publishing profile can leave chosen sports out, as it already leaves out commutes: their activities stay unpublished, and you can still publish them by hand."
+    - "The background around a virtual world's map now follows the dark theme instead of staying blue."
+  "0.9.9":
+    - "The Records page shows one sport at a time: pick a sport or swipe, and each sport shows its records and best efforts side by side. It opens on your main sport, and the card takes the shown sport's height."
+    - "Connected services have their own page beside the settings: each service keeps its connection, retrieval, preferences and unlink, without refreshing the others."
+    - "A virtual ride leads with its watts: average power replaces speed in the summary and on the activity card, the route can be coloured by power, and each split carries its average power."
+    - "A Zwift activity's photos arrive with the activity, in its gallery and on the map."
+    - "The photo card is repaired: a readable viewer in both themes, the capture time and distance, a link to the photo's place on the map, and uploads that no longer interrupt an open viewer."
+  "0.9.8":
+    - "Watopia and Paris maps are up to date: the north-west archipelago where Tour of Watopia races start, and Paris's July 2026 expansion with Montmartre, Parc Monceau and the Madeleine. The route images of the affected activities are redrawn after the update."
+    - "A Zwift sync that runs while you are riding no longer imports the activity in progress: it waits for the ride to end and arrives complete, with its real name."
+    - "A teleport no longer counts as a climb: the jump is left out of the biggest climb and the elevation records."
+  "0.9.7":
+    - "Finding people is now an opt-in, minimal name search: the People tab brings your following, followers and requests together, and suggests accounts from what you can already see. Your profile is hidden from search by default; turn it on in Settings › Profile."
+    - "Sync now works even when automatic sync is off."
+    - "A Zwift video activity no longer draws a straight line across the map when the game teleports you: the route is split at the jump, and speeds stay correct."
+  "0.9.6":
+    - "Connect a Withings or Zwift account from Settings › Connected services: your sessions arrive with their original file, and the hourly sync does the rest. Your password is never kept."
+    - "A Zwift activity is drawn on its world's map — Watopia, London, Paris… — with the game's own colour and credit, instead of a real basemap."
+    - "A virtual activity's elevation comes from its own profile, not the platform's unreliable total: the D+ tile and the chart now agree."
+    - "The Followers profile is always available: your followers on this instance read it even when federation is off, and the setting now only decides whether it also reaches other instances."
+    - "People, following and unfollowing an account of this instance, and answering a follow request work again while federation is off."
+    - "Recordings whose GPS position arrives only every few seconds (Suunto, COROS) keep their route on import again."
+    - "The demo uses its own image and a stable operator password; its database is reported ready only once it accepts connections."
+  "0.9.5":
+    - "In Settings › Profile, choose separately who sees your sport totals and records: your followers, all members, or nobody. These blocks stay on this instance."
+    - "Profiles bring together the publication journal, sport totals in a radar chart, and records, with filters and panels to browse."
+    - "Settings opens on an overview of every section, on phones and desktop alike."
+    - "The name you give a loop is kept when its duplicates are merged."
+    - "EXR session imports work again, and lap analysis no longer fails on a workout without GPS."
+    - "A demo mode offers a shared account and a nightly reset. Do not import any personal data there."
+  "0.9.4":
+    - "One complete lap now recognizes a known loop, even after an approach. Discovering a new loop still requires two laps."
+    - "Older workouts are recalculated in the background: duplicate loops are merged, keeping their name and history. Your publications do not change."
+  "0.9.3":
+    - "Support this instance: a voluntary yearly contribution, in tiers, shows a badge on your avatar. Nothing is locked behind it: it is a gesture towards the host, not a membership."
+    - "The instance operator's avatar carries a distinctive badge."
+    - "A route that rides to a loop, laps it several times, then returns home now reuses the detected loop instead of creating a second one."
+    - "The first import from the iOS app now succeeds on the first try."
+  "0.9.2":
+    - "Allure speaks German, Spanish and Dutch: choose your language in Appearance, or from the sign-in pages, which now follow your browser's language."
+    - "A file with a very long name or description now imports instead of being refused, and the import page tells you a file is too large before sending it."
+    - "Three file imports and one Strava archive can wait at a time, up to 6 GB a day; uploaded files are deleted once the import ends, each workout keeping its original."
+  "0.9.1":
+    - "Heart-rate zones in the statistics filter like the Me page, by sport and by week or month, and read well on a phone."
+    - "On a phone, the Records page scrolls without catching, dialogs such as About no longer slip under the bottom bar, and the Segments page keeps its buttons beside the title."
+  "0.9.0":
+    - "Import your Strava archive: each workout arrives with its name, type, description, equipment and photos, with no duplicate of what you had already imported."
+    - "A Help section, in the account menu, explains in a few pages publishing, privacy zones, sharing with other instances, leaderboards and training load."
+    - "About, in the same menu, describes this instance, the outside services it uses and what reaches them, and Allure's source code."
+    - "Your new outings are processed before the large imports under way, yours and other people's."
+  "0.8.7":
+    - "Heart rate is measured against the time actually recorded, pauses excluded, and the training load explains itself: how to read fitness, fatigue and form, why a workout has no zones, and a preview of your zones while you set them."
+    - "Federation holds better when another instance is slow, down or reset: no publication or follow request is lost on the way any more."
+    - "An account that removes you from its followers, that you block or that is deleted leaves your relationships in People."
+  "0.8.6":
+    - "You can again unfollow an account whose instance has disappeared or changed address, and following again someone who already followed you is accepted at once."
+    - "The notification count stays pinned on the bell's corner."
+  "0.8.5":
+    - "Your heart-rate zones: enter your maximum in Settings › Heart rate, and every workout recorded with a heart-rate monitor shows the time spent in each zone, in the analysis card's « Heart-rate zones » tab. Hover a zone to see where you rode it on the map and the profile."
+    - "The Me page shows your training load — fitness, fatigue and form over 90 days — and the statistics the time per zone, week after week."
+    - "Heart rate is health data: new publishing profiles no longer share it by default. Your existing profiles have not changed; check them in Settings › Publishing profiles. Your zones are never published."
+    - "Courses take their elevation from the terrain service when the instance offers one. Their grade is signed: a descent reads negative."
+  "0.8.4":
+    - "Hover a reaction to see who gave it: the latest three people, then how many others. A reaction given as a follower names its author to other followers only."
+    - "The recording device is better recognised, model included for Garmin, and iGPSPORT computers are finally named."
+    - "The weather icons show again."
+  "0.8.3":
+    - "The weather icons are redrawn, animated, in the theme's colours; they show the night when the sun was down."
+    - "When a route passes the same place twice at a different altitude, the “Data quality” tab says so; an ascent inflated by that gap no longer counts in your records."
+    - "On phones, a workout's comments open on their own page, from the row under the summary that also carries the reactions."
+    - "To create a segment or a route, pick the activity first from the Segments page."
+    - "The Discover map tells stacked courses apart with shades and shows their direction; a click lists every course under the pointer."
+    - "The “Map background and route images” setting now applies to every map."
+  "0.8.2":
+    - "The weather of your outdoor workouts: turn it on in Settings › Weather. Each workout shows the conditions, temperature, wind and the share of headwind, tailwind and crosswind, with a badge in the header and the changes of weather marked on the profile and the map in the analysis's “Weather” tab."
+    - "You can share a weather summary through a publishing profile; it is never shared by default."
+    - "The temperature your device measured shows too, on the weather card and the profile."
+    - "A route's start and finish are named after the village they are in, rather than a nearby hamlet."
+  "0.8.1":
+    - "Enter an activity by hand from the import page's “Manual entry” tab: it counts in your totals and statistics, with no file and no route."
+    - "In Settings › Account, export all your data as a ZIP archive you can import again, or delete your account: it stays deactivated for seven days, time to change your mind."
+    - "Full segment leaderboards offer a Women or Men view when you declare your category in your profile."
+    - "The privacy-zone editor finds a place by its name."
+  "0.8.0":
+    - "Charts are redrawn with a new open-source library, and pages without a chart load faster. The profile, progression, intensity, sport mix and statistics keep their gestures: hover synchronised with the map, zoom by dragging (long press on touch), light or dark theme."
+    - "On the profile, a place's or climb's name shows in the tooltip when the pointer is on it. The sport-mix legend can be reached from the keyboard, and the statistics by sport are horizontal bars."
+    - "When creating a segment, start and end points typed by hand now show on the profile."
+  "0.7.3":
+    - "An outing done with someone on another Allure instance now counts for both of you: invite their account (@name@instance) from the Participants card. They confirm from your publication, and the outing joins their activities with its metrics."
+    - "Resetting a forgotten password works again: the new password was not being saved."
+  "0.7.2":
+    - "On iPhone, the app can now alert you: turn on « Receive on this iPhone » in the notification settings. The content is encrypted for the iPhone — neither the relay nor Apple can read it — and you can choose to hide it."
+    - "Reactions to the same activity fit in a single notification: « Marie and 3 other people reacted to your workout »."
+  "0.7.1":
+    - "Sessions without GPS now import: a trainer ride, a treadmill run, an erg, a pool swim or a gym session takes its distance and pace from the device itself. Two sports join the list: « Strength training » and « Fitness »."
+    - "Long climbs are recognised: the Alpe d'Huez or the Ventoux finally show in the Climbs tab and on the profile, and their descent no longer comes out in pieces."
+    - "Sport icons are redrawn on one grid and one stroke, and a workout's sharing state is a single badge wherever it shows."
+  "0.7.0":
+    - "A shared outing finally counts for those who did not record it: once the credit is confirmed, it joins your activities with its metrics — statistics, records, best efforts and segments — while the route, heart rate and device stay with whoever recorded it."
+    - "Recorded the outing too? Link your own activity, when confirming or later: both activities carry « Avec @X » and nothing is counted twice."
+    - "Allure spots outings done together with accounts you follow and that follow you, and suggests linking them. Nothing is linked without your confirmation, and suggestions can be turned off in the notification settings."
+    - "If the other person deletes their activity, you keep yours with its metrics."
+    - "Progression and statistics charts display again in English, and very long outings are analysed much faster."
+  "0.6.5":
+    - "Segment leaderboards follow their reader: your effort appears as soon as the workout is published with its route, to everyone who can see it. A « Following » switch narrows a board to the accounts you follow, and your own line says who sees you."
+    - "The Segments page is now a sortable list: place, distance, ascent, grade, profile, record and your best time on every row."
+    - "Action buttons sit on the left on large screens and on the right, under the thumb, on phones, with the primary action always at the edge."
+    - "In the iOS app, GPX and original files download and open in the share sheet."
+  "0.6.4":
+    - "AI assistants and the REST API now answer on your instance: their requests failed since the previous update."
+  "0.6.3":
+    - "Let an AI assistant study your workouts: create a token in Settings → API and webhooks, paste the configuration shown into your assistant (Claude Code, opencode, LM Studio…), and it reads a workout's full context — metrics, laps, climbs, efforts, segments and the weeks of training before."
+    - "Each token says what the assistant may receive of your tracks: no location (the default), tracks without your privacy zones, or complete tracks for a model running on your own machine."
+  "0.6.2":
+    - "A REST API for your own tools: create a token in Settings → API and webhooks, then read your workouts, import files, edit and publish. The interactive reference is behind the « API » link in the footer."
+    - "Webhooks call your address when a workout is imported, analysed or published, when you set a record, and when someone comments, reacts or asks to follow you. Every call is signed."
+    - "The Segments tab of the analysis compares each effort with your best time on the segment."
+    - "The time zone saves correctly from the settings."
+  "0.6.1":
+    - "Automatic publishing: mark a publishing profile as automatic and each new recent import is published with it once its elevation, segments, places and route image are ready. You can leave out commutes or decline a waiting publication."
+    - "Allure spots doubtful readings in a recording — jumping GPS positions, impossible speed, frozen heart rate… A distorted figure shows its plausible value and no longer holds a record; the rest waits in the Data quality tab."
+    - "EXR sessions take the distance actually rowed: a 500 m race at Bled no longer shows 1,000 m."
+    - "The Progression chart draws a trend a bad day no longer bends, one chart per sport, and sets each trophy beside its point."
+  "0.6.0":
+    - "Stronger security: after the password, two-step verification (an authenticator app, a passkey or a recovery code) is asked for, sessions expire, and you can sign in with Google, Apple or an OpenID Connect provider, from the iOS app too."
+    - "Import your Garmin Connect activities and your EXR sessions from Connected services: retrieve a period, then let the hourly sync do the rest. Your password is never kept."
+    - "On a segment, route or loop, a Progression chart shows how your times evolve, your three best and the trend."
+    - "Settings are gathered on one page with their sections alongside, and the Security page is reorganised."
+  "0.5.2":
+    - "Publish a workout to your followers and to the public at once: each publication keeps its own actions, its own comment thread and its own audience, and every reader is served the narrowest version they may read."
+    - "The workout list and the personal hub are reorganised: title and result count up top, scrollable sport pills, period and sort on one row, the rarely used filters in a drawer opened on demand, and selecting a week or a day opens a floating callout over the chart."
+    - "Numbers follow each language's own rules, and cards tint their frame on hover instead of underlining their title."
+    - "On phones, the bottom bar leads to People; Settings stays in the account menu."
+  "0.5.1":
+    - "The workout page is reworked for desktop, phones and the iOS app: the map stays on the left while you read, the elevation profile zooms by selecting a range, and the “Publications” card lists each publication with its own actions."
+    - "Records and rankings speak one language: the trophy is you against yourself, the laurel you against others, and gold, silver and bronze give the place. Your 2nd and 3rd best times now show too, for you only."
+    - "On iPhone, share a GPX, FIT, TCX, KML or KMZ file to Allure — from another app or by AirDrop — and it lands straight in the import form."
+  "0.5.0":
+    - "Comment on published workouts: every reader can write a comment and reply, the owner removes a comment or closes the thread, and a new “Comments” publishing-profile setting closes it in advance."
+    - "Comments travel between Allure instances: a reader on another instance comments on a received workout, and the origin passes the thread on to every instance that received the publication."
+    - "iGPSPORT import now accepts the whole range of bike computers (BSC100, BSC200, BSC300, BSC500, iGS630, iGS800, BiNavi), with the BSC100S and BSC500 verified; the panel names the model and flags those not tested yet."
+    - "Statistics and records now live under your personal space (/me), and on phones the sport filter becomes a dropdown like the period one."
+  "0.4.2":
+    - "Route images come in a light and a dark version and follow the page theme; choose “Match the theme”, “Always light” or “Always dark” in Settings › Appearance."
+    - "From the workout table, select several activities to change their commute flag or equipment at once; a sport change or a deletion is prepared and reviewed before it runs, with each activity reporting its outcome."
+    - "iGPSPORT import works in the iOS app: the bike computer connects over Bluetooth from the iPhone, no desktop Chrome required."
+    - "The iOS app draws its own topbar, account menu, avatar and tab bar, and its own appearance setting governs its pages."
+    - "On the hub, a click or press selects a week, day or sport and shows its detail under the chart; only the button opens the list, and a long press scrubs the selection."
+  "0.4.1":
+    - "Your instance is now members-only: opening a shared link takes you to sign-in, then back to the page you asked for; other instances keep receiving public publications."
+    - "The hub's intensity pulse becomes the full weekly history: the selected period stays pink, the past grey, and scrolling left loads older weeks. Click a week — or press Enter on it — to open its workouts."
+    - "The period's peak is no longer marked on the chart: the reading line names it, a single-week period simply prints its week and facts, and weeks with several sports say so."
+    - "A profile listing now follows the publication policy: its accepted followers also see followers-only publications there while restricted federation is enabled."
+    - "You can create the reversed copy of your own segment or route from the ⋯ menu, and the “My rankings” directory is gone: a course's standings live on its page."
+  "0.4.0":
+    - "Every segment now shows its elevation profile, frozen at creation, on the right of the map; copied courses inherit it too."
+    - "A segment page is reorganised: sharing, copying and deletion move into the ⋯ menu, the publication state becomes a badge, and the leaderboard (top 10 per sport) renders on the page."
+    - "Leaderboards lead their top three with the laurel of their place, and My efforts finally shows pace or speed by sport."
+    - "You can copy another account's course into your private segments, in the recorded direction or reversed."
+    - "On the map and the profile, the same ball follows your pointer, and the cursor hides near the track."
+  "0.3.7":
+    - "Every segment, route or loop now carries its own route image, drawn on the same engine as workout images and served at its visibility."
+    - "The Segments page is simplified: the kind is chosen in a segmented control (Segments, Routes, Loops) and every visible course renders as a card with its image, facts and podium."
+    - "Découvrir opens a map of every course you may read — your own included — with the name, sport, distance and participant count on click."
+    - "A workout's elevation profile puts its markers back on the curve — place numbers, climb and descent summits, stops — with a matching timeline; the elevation source switch moves into the ⋯ menu."
+  "0.3.6":
+    - "Publishing can wait: a publishing profile may impose a safety delay (1 day to 1 month) that you can bring forward, reschedule or cancel — nothing is shared before it ends."
+    - "React to workouts and received notes with four moods — beer, energy, coffee or a plain like; the author is notified, and each kind has its switch in Settings › Notifications."
+    - "Invite someone you follow to a shared activity: they confirm or decline, and an accepted invitation links your two recordings or credits you without counting twice."
+    - "Allure recognises EXR sessions: the device, the virtual sport and the world — Boston, Bled, Henley, EXR World — are named, and no real-world place is looked up for a virtual session."
+    - "Settings › Data and rebuilds reruns the analysis, route images, places and elevation of your workouts on demand, with live counters; the operator gets the same rebuilds in one click."
+    - "The workout list speaks the hub's language — a sharing badge, a sortable table, month sections and the hub's period windows — and both the hub and the feed fit phones better."
+  "0.3.5":
+    - "Your profile picture is chosen in Settings › Profile: a PNG, JPEG, or WebP upload cropped to 512×512, the Gravatar fallback when you enable it, or the generated avatar — all served by the application."
+    - "Generated avatars are pink geometric patterns with no initials, unique to each account and rotatable in one click."
+    - "Segment leaderboards are now opt-out: pick visibility at creation, every published athlete is ranked by default, and “Leave the leaderboard” removes you. The publishing profile's “Segment leaderboards” setting is the general switch."
+    - "The feed merges publications and received notes into one card — author, route and key figures — sectioned by day; visitors get an intro card."
+    - "The topbar is simplified: the Settings menu is gone (it stays in the account menu and the phone bottom bar) and the day/night toggle sits next to the bell."
+    - "Remote handles can be followed bare (@marie@example.org), your picture now also appears in the People list, and FIT file elevation is read from the right session fields."
+  "0.3.4":
+    - "A notification bell now sits in the topbar: it shows the unread count and opens the latest notifications."
+    - "The Notifications page lists everything, with All / Unread filters and Mark all as read; opening a notification marks it read."
+    - "You are notified when someone asks to follow you, and when a follow request you sent is accepted."
+    - "Each kind is controlled from Settings › Notifications; a notification disappears when its relationship ends (decision, unfollow, block, or a deleted remote account)."
+    - "A workout's elevation chart stays readable on phones: full legend, place markers gathered below the curve, and the secondary line display-smoothed without changing the values."
+  "0.3.3":
+    - "Track display smoothing is controlled from the map options, and its intensity from Settings › Appearance."
+    - "Rowing and virtual rowing show their 500 m pace (2:00 /500m) instead of speed in every tile, table and leaderboard."
+    - "Best efforts now cover rowing with the Concept2 distances (500 m to marathon), and running up to the marathon."
+    - "Direction of travel is redrawn as open chevrons on the map and route images; the summary card and the workout header have been refined."
+    - "Importing hundreds of activities no longer blocks the application: best-effort computation runs outside write locks and record queries are indexed."
+  "0.3.2":
+    - "Every workout shows its places — departure, waypoints, arrival — from the toponymy already recorded, and the workout list can be filtered by place with autocomplete."
+    - "The workout list renders fully clickable cards and loads the next page as you scroll; the table view keeps its pagination."
+    - "Filters are retracted behind the header's Filters button, which shows the active-filter count and switches between cards and table."
+    - "The virtual rowing sport is now labelled “Rameur” in French."
+    - "FIT files whose device reuses the same lap index now import correctly, and segment matching is more reliable."
+  "0.3.1":
+    - "Existing databases receive the sport catalog on every boot: the new sports (road cycling, gravel, electric, virtual running, virtual rowing, pool swimming, snowboarding, ski touring) appear without a manual command."
+    - "Default sports now offer, for each generic sport (cycling, running, walking), an alphabetical list of plausible choices with the generic sport selected by default (for example, no more tennis or padel for running)."
+    - "Every sport list (workout form, import, segments, filters, leaderboards) is now sorted by displayed name."
+    - "The direction of travel is drawn on tracks: small chevrons notched into the line, on the map and on the route images of cards, feeds, and publications."
+    - "Real-world FIT files import more reliably: minor clock glitches, chained files, long activities, and on-device clock corrections mid-recording."
+  "0.3.0":
+    - "The catalog now holds 36 sports: road cycling, gravel, e-bike, virtual running, virtual rowing, pool swimming, snowboarding, and ski touring join the list, each with its own icon."
+    - "A “Commute” switch replaces the old Cycling (Transport) sport: it never changes the analysis, and a publishing profile can share it with your followers (off by default)."
+    - "Imports recognise sub-types more accurately: road cycling, gravel, mountain biking, e-bike, virtual activities, treadmill runs, pool swimming, snowboarding, and ski touring."
+    - "Settings › Sports lets you pick the variant used when an import detects a generic sport (cycling, running, walking). It never replaces a precisely detected sport and never changes your existing workouts."
+    - "An elevation-less workout now explains why in its summary, with the one action that fixes it (enable estimation, choose the terrain profile, or retry)."
+    - "Me page trends follow the chosen period — daily columns, a monthly or yearly area — and every tile and the calendar carry an explanatory hint; years are anchored under the calendar."
+    - "Workout cards are clickable as a whole, and pending surfaces (route image, feed, publication preview) show a skeleton shaped like the expected content."
+  "0.2.8":
+    - "Elevation-less workouts can be enriched from a terrain service (OpenTopoData) when the operator configured one and you opt in from Settings › Elevation; you can also choose the terrain profile instead of the device profile, workout by workout."
+    - "Ascent now prefers your device's own totals (recorded laps, else the FIT session summary), and the estimated elevation uses a threshold suited to terrain models."
+    - "The recording device is shown on the workout page, and a publishing profile can share it with your followers."
+  "0.2.7":
+    - "A workout's sport can be changed from the edit form: the workout is re-analysed with the new sport's thresholds, and records, best efforts, and segments are rebuilt. Existing publications do not change."
+    - "The import page now offers its sources from a registry: besides files, one source downloads recorded FIT activities from an iGPSPORT BSC bike computer over Bluetooth in the browser (desktop Chrome/Edge), then hands them to the same batch import."
+  "0.2.6":
+    - "Distances and elevation gains of GPS activities are cleaned of signal noise: implausible positions are dropped, the elevation profile is filtered, and the displayed speed is smoothed."
+    - "Existing activities are recalculated by the instance operator after deploying; republish an active publication to refresh its figures."
+    - "A publishing profile's start and finish masks now decide privacy-zone filtering: an unmasked endpoint stays visible up to the zone exit, and publishing warns when it sits inside an active zone."
+    - "Batch import discovers every file before it starts: the waiting queue, the progress bar and the completion notice carry the real total from the first poll."
+  "0.2.5":
+    - "Your personal hub has been rebuilt: sport and period filters, tiles compared with the previous window, a richer activity calendar, sport mix, regularity, latest segments and records."
+    - "Recent workouts are now fully clickable cards with a relative date and only the key metrics."
+    - "People's avatars are round; sport tiles and icon badges are rounded squares tinted with the brand colour."
+    - "The instance exposes Prometheus metrics at /metrics for a Grafana dashboard, and applies its migrations automatically on boot."
+  "0.2.4":
+    - "The footer now shows the installed version. After each update, a What's new dialog opens once per account to present these notes; the footer version reopens it at any time."
+    - "The instance administrator gets a dedicated console at /admin: dashboard, live background jobs, federation, publications, accounts and invitations, imports, system diagnostics, and the action log."
+    - "The Publications feed always includes your own publications, whatever their audience, with a You badge and their audience."
+  "0.2.3":
+    - "The Best efforts tab on the workout page now marks every record distance with a trophy. Hover, focus or pin a row to highlight its window on the elevation chart and the map."
+    - "The header record badge now covers every record the workout holds: classic record types, best efforts and the biggest climb. The summary metric tiles carry the same trophy."
+    - "A new records setting on publishing profiles, off by default, shares those markers with your followers. No numeric value is published, and the markers only refresh on republishing."
+# Release 0.9.4 adds native notes for the remaining supported locales; older
+# releases continue to use the English fallback when no translation exists.
+de:
+  "0.10.0":
+    - "Allure ist jetzt auf GitHub veröffentlicht: Code, Issues und Beiträge liegen unter github.com/allure-rocks/allure."
+    - "Eine öffentliche Demo-Instanz ist unter demo.allure.rocks verfügbar: Die Zugangsdaten stehen auf der Anmeldeseite, und alles wird jede Nacht zurückgesetzt."
+    - "Offizielle Docker-Images werden auf Docker Hub veröffentlicht: allurerocks/allure und allurerocks/allure-route-image."
+    - "Die Betreiberdokumentation bleibt unter docs.allure.rocks."
+  "0.9.10":
+    - "Die Seite mit nicht gespeicherten Änderungen zu verlassen fragt jetzt zuerst nach, und Zurück zeigt eine ungespeicherte Auswahl nicht mehr als gespeichert."
+    - "Nach drei Aufzeichnungen derselben vollständigen Strecke bietet ein Banner an, sie als Route zu speichern, benannt nach Start und Ziel. Nichts wird angelegt, bevor du es entscheidest."
+    - "Fotos haben ihre eigene Verwaltungsseite: die Strecke links, eine Zeile pro Foto mit Bildunterschrift, Aufnahmezeit und Platzierung, und eine Reihenfolge, die der Aufnahmezeit folgt, bis du sie änderst."
+    - "Wähle den Ausschnitt deines Avatars: ein quadratisches Fenster über dem Bild, eine runde Maske, die genau das Ergebnis zeigt, und „Zentrieren“ für die Mitte. Das Bild wird nicht mehr gestaucht, und Fotos bis 20 MB werden angenommen."
+    - "Ein automatisches Veröffentlichungsprofil kann gewählte Sportarten auslassen, wie es bereits Arbeitswege auslässt: Deine Aktivitäten bleiben unveröffentlicht, du kannst sie aber weiterhin von Hand veröffentlichen."
+    - "Der Hintergrund um die Karte einer virtuellen Welt folgt jetzt dem dunklen Thema, statt blau zu bleiben."
+  "0.9.9":
+    - "Die Seite Rekorde zeigt eine Sportart nach der anderen: Wähle oben eine Sportart oder wische, und jede zeigt ihre Rekorde und Bestzeiten nebeneinander. Sie öffnet mit deiner Hauptsportart, und die Karte nimmt die Höhe der gezeigten Sportart an."
+    - "Verbundene Dienste haben ihre eigene Seite neben den Einstellungen: Jeder Dienst behält seine Verbindung, seinen Abruf, seine Einstellungen und sein Trennen, ohne die anderen neu zu laden."
+    - "Eine virtuelle Ausfahrt stellt ihre Watt in den Vordergrund: Durchschnittsleistung statt Geschwindigkeit in der Zusammenfassung und auf der Aktivitätskarte, die Strecke lässt sich nach Leistung färben, und jeder Split trägt seine Durchschnittsleistung."
+    - "Die Fotos einer Zwift-Aktivität kommen mit der Aktivität, in ihre Galerie und auf die Karte."
+    - "Die Fotokarte ist repariert: eine lesbare Ansicht in beiden Themes, Aufnahmezeit und Entfernung, ein Link zum Ort des Fotos auf der Karte, und Uploads, die eine offene Ansicht nicht mehr unterbrechen."
+  "0.9.8":
+    - "Die Karten von Watopia und Paris sind aktuell: der Archipel im Nordwesten, wo die Rennen der Tour of Watopia starten, und die Pariser Erweiterung vom Juli 2026 mit Montmartre, Parc Monceau und Madeleine. Die Streckenbilder der betroffenen Aktivitäten werden nach dem Update neu gezeichnet."
+    - "Eine Zwift-Synchronisierung während der Fahrt importiert nicht mehr die laufende Aktivität: Sie wartet auf das Ende der Ausfahrt und kommt vollständig an, mit ihrem richtigen Namen."
+    - "Eine Teleportation zählt nicht mehr als Anstieg: Der Sprung fließt nicht mehr in den größten Anstieg und die Höhenrekorde ein."
+  "0.9.7":
+    - "Personen zu finden ist jetzt eine optionale, minimale Namenssuche: Der Tab Personen vereint deine Abos, deine Follower und die Anfragen und schlägt Konten aus dem vor, was du bereits sehen kannst. Dein Profil ist standardmäßig nicht durchsuchbar; aktiviere es unter Einstellungen › Profil."
+    - "„Jetzt synchronisieren“ funktioniert auch, wenn die automatische Synchronisierung ausgeschaltet ist."
+    - "Eine Zwift-Videoaktivität zeichnet keine gerade Linie mehr über die Karte, wenn das Spiel dich teleportiert: Die Strecke wird am Sprung geteilt, und die Geschwindigkeiten bleiben korrekt."
+  "0.9.6":
+    - "Verbinde ein Withings- oder Zwift-Konto unter Einstellungen › Verbundene Dienste: Deine Einheiten kommen mit ihrer Originaldatei an, die stündliche Synchronisierung erledigt den Rest. Dein Passwort wird nie gespeichert."
+    - "Eine Zwift-Aktivität wird auf der Karte ihrer Welt gezeichnet — Watopia, London, Paris … —, mit der Farbe des Spiels und dem Hinweis darauf, statt auf einer echten Karte."
+    - "Die Höhenmeter einer virtuellen Aktivität stammen aus ihrem eigenen Profil, nicht aus der unzuverlässigen Gesamtsumme der Plattform: D+-Kachel und Diagramm stimmen jetzt überein."
+    - "Das Follower-Profil ist immer verfügbar: Deine Follower auf dieser Instanz lesen es auch bei ausgeschalteter Föderation, und die Einstellung entscheidet nur noch, ob es auch andere Instanzen erreicht."
+    - "Personen, das Folgen und Entfolgen eines Kontos dieser Instanz und das Beantworten einer Folgeanfrage funktionieren wieder, wenn die Föderation ausgeschaltet ist."
+    - "Aufzeichnungen, deren GPS-Position nur alle paar Sekunden ankommt (Suunto, COROS), behalten beim Import wieder ihre Strecke."
+    - "Die Demo nutzt ein eigenes Image und ein stabiles Betreiberpasswort; ihre Datenbank gilt erst als bereit, wenn sie Verbindungen annimmt."
+  "0.9.5":
+    - "Unter Einstellungen › Profil wählst du getrennt, wer deine Sport-Gesamtsummen und Rekorde sieht: deine Follower, alle Mitglieder oder niemand. Diese Bereiche bleiben auf dieser Instanz."
+    - "Profile vereinen das Veröffentlichungsjournal, Sport-Gesamtsummen als Radardiagramm und Rekorde, mit Filtern und durchblätterbaren Bereichen."
+    - "Die Einstellungen öffnen sich mit einer Übersicht aller Bereiche, auf dem Smartphone wie am Computer."
+    - "Der Name, den du einem Rundkurs gibst, bleibt erhalten, wenn seine Duplikate zusammengeführt werden."
+    - "EXR-Aktivitäten lassen sich wieder importieren, und die Rundenanalyse scheitert nicht mehr an einer Aktivität ohne GPS."
+    - "Ein Demomodus bietet ein gemeinsames Konto und wird jede Nacht zurückgesetzt. Importiere dort keine persönlichen Daten."
+  "0.9.4":
+    - "Eine vollständige Runde reicht jetzt aus, um einen bekannten Rundkurs wiederzuerkennen, auch nach einem Anlaufweg. Für einen neuen Rundkurs sind weiterhin zwei Runden nötig."
+    - "Ältere Aktivitäten werden im Hintergrund neu berechnet: Doppelte Rundkurse werden zusammengeführt, ihr Name und ihr Verlauf bleiben erhalten. Deine Veröffentlichungen ändern sich nicht."
+es:
+  "0.10.0":
+    - "El código, las incidencias y las contribuciones de Allure ya están en github.com/allure-rocks/allure."
+    - "Hay una instancia de demostración pública en demo.allure.rocks: las credenciales están en la página de inicio de sesión y todo se restablece cada noche."
+    - "Las imágenes oficiales de Docker se publican en Docker Hub: allurerocks/allure y allurerocks/allure-route-image."
+    - "La documentación para operadores sigue en docs.allure.rocks."
+  "0.9.10":
+    - "Salir de una página con cambios sin guardar ahora pide confirmación, y volver atrás ya no muestra una elección sin guardar como si se hubiera guardado."
+    - "Después de tres grabaciones del mismo recorrido completo, un aviso propone guardarlo como ruta, con un nombre tomado de la salida y la llegada. No se crea nada hasta que lo decidas."
+    - "Las fotos tienen su propia página de gestión: el recorrido a la izquierda, una fila por foto con su leyenda, su hora y su colocación, y un orden que sigue la hora de la foto hasta que lo cambies."
+    - "Elige el encuadre de tu avatar: una ventana cuadrada sobre la imagen, una máscara redonda que muestra exactamente el resultado, y « Centrar » para volver al centro. La imagen ya no se aplasta, y se aceptan fotos de hasta 20 MB."
+    - "Un perfil de publicación automática puede dejar fuera los deportes que elijas, como ya deja fuera los trayectos: sus actividades siguen sin publicarse, y puedes publicarlas a mano cuando quieras."
+    - "El fondo alrededor del mapa de un mundo virtual sigue ahora el tema oscuro en lugar de quedarse azul."
+  "0.9.9":
+    - "La página Récords muestra un deporte a la vez: elige un deporte arriba o desliza, y cada uno muestra sus récords y sus mejores esfuerzos uno al lado del otro. Se abre en tu deporte principal, y la tarjeta toma la altura del deporte mostrado."
+    - "Los servicios conectados tienen su propia página junto a los ajustes: cada servicio conserva su conexión, su recuperación, sus preferencias y su desvinculación, sin recargar los demás."
+    - "Una salida virtual destaca sus vatios: la potencia media sustituye a la velocidad en el resumen y en la tarjeta de actividad, la ruta se puede colorear por potencia, y cada parcial lleva su potencia media."
+    - "Las fotos de una actividad de Zwift llegan con la actividad, a su galería y al mapa."
+    - "La tarjeta de fotos está reparada: un visor legible en ambos temas, la hora y la distancia de la toma, un enlace al lugar de la foto en el mapa, y subidas que ya no interrumpen un visor abierto."
+  "0.9.8":
+    - "Los mapas de Watopia y París están al día: el archipiélago del noroeste donde arrancan las carreras del Tour of Watopia, y la ampliación parisina de julio de 2026 con Montmartre, el parque Monceau y la Madeleine. Las imágenes de ruta de las actividades afectadas se vuelven a dibujar tras la actualización."
+    - "Una sincronización de Zwift lanzada mientras pedaleas ya no importa la actividad en curso: espera al final de la salida y llega completa, con su nombre real."
+    - "Un teletransporte ya no cuenta como subida: el salto queda fuera de la mayor subida y de los récords de desnivel."
+  "0.9.7":
+    - "Encontrar personas es ahora una búsqueda por nombre opcional y mínima: la pestaña Personas reúne a quién sigues, tus seguidores y las solicitudes, y sugiere cuentas a partir de lo que ya puedes ver. Tu perfil está oculto a la búsqueda por defecto; actívalo en Ajustes › Perfil."
+    - "«Sincronizar ahora» funciona aunque la sincronización automática esté desactivada."
+    - "Una actividad de Zwift en vídeo ya no dibuja una línea recta por el mapa cuando el juego te teletransporta: la ruta se corta en el salto y las velocidades siguen siendo correctas."
+  "0.9.6":
+    - "Conecta una cuenta de Withings o Zwift desde Ajustes › Servicios conectados: tus sesiones llegan con su archivo original y la sincronización horaria hace el resto. Tu contraseña nunca se guarda."
+    - "Una actividad de Zwift se dibuja en el mapa de su mundo —Watopia, Londres, París…—, con el color y la mención del juego, en lugar de un mapa real."
+    - "El desnivel de una actividad virtual sale de su propio perfil, no del total poco fiable de la plataforma: la cifra D+ y el gráfico ahora coinciden."
+    - "El perfil «Seguidores» siempre está disponible: tus seguidores de esta instancia lo leen aunque la federación esté desactivada, y el ajuste solo decide si también llega a otras instancias."
+    - "Personas, seguir y dejar de seguir una cuenta de esta instancia, y responder a una solicitud de seguimiento vuelven a funcionar con la federación desactivada."
+    - "Las grabaciones cuya posición GPS solo llega cada pocos segundos (Suunto, COROS) recuperan su ruta al importar."
+    - "La demo usa su propia imagen y una contraseña de operador estable; su base de datos se declara lista solo cuando acepta conexiones."
+  "0.9.5":
+    - "En Ajustes › Perfil, elige por separado quién ve tus totales por deporte y tus récords: tus seguidores, todos los miembros o nadie. Estos bloques se quedan en esta instancia."
+    - "Los perfiles reúnen el diario de publicaciones, los totales por deporte en un gráfico de radar y los récords, con filtros y paneles para recorrer."
+    - "Ajustes se abre con un resumen de todas las secciones, tanto en el móvil como en el ordenador."
+    - "El nombre que das a un circuito se conserva cuando se agrupan sus duplicados."
+    - "La importación de sesiones EXR vuelve a funcionar, y el análisis de vueltas ya no falla en una actividad sin GPS."
+    - "Un modo de demostración ofrece una cuenta compartida y un reinicio nocturno. No importes ningún dato personal allí."
+  "0.9.4":
+    - "Una vuelta completa ya basta para reconocer un circuito conocido, incluso tras un tramo de aproximación. Para descubrir un circuito nuevo siguen haciendo falta dos vueltas."
+    - "Las actividades antiguas se recalculan en segundo plano: los circuitos duplicados se agrupan conservando su nombre y su historial. Tus publicaciones no cambian."
+nl:
+  "0.10.0":
+    - "Allure staat nu op GitHub: de code, de issues en de bijdragen leven op github.com/allure-rocks/allure."
+    - "Er is een openbare demo-instantie op demo.allure.rocks: de inloggegevens staan op de aanmeldpagina en alles wordt elke nacht gereset."
+    - "Officiële Docker-images worden gepubliceerd op Docker Hub: allurerocks/allure en allurerocks/allure-route-image."
+    - "De beheerdersdocumentatie blijft op docs.allure.rocks."
+  "0.9.10":
+    - "Een pagina met niet-opgeslagen wijzigingen verlaten vraagt nu eerst om bevestiging, en teruggaan toont een niet-opgeslagen keuze niet meer als opgeslagen."
+    - "Na drie opnames van dezelfde volledige route stelt een banner voor ze als route op te slaan, met een naam uit vertrek en aankomst. Er wordt niets aangemaakt tot je beslist."
+    - "Foto's hebben hun eigen beheerpagina: de route links, één rij per foto met haar onderschrift, opnametijd en plaatsing, en een volgorde die de opnametijd volgt tot je ze wijzigt."
+    - "Kies de kadrering van je avatar: een vierkant venster over de afbeelding, een ronde masker dat precies het resultaat toont, en « Centreren » om naar het midden terug te keren. De afbeelding wordt niet meer samengedrukt, en foto's tot 20 MB worden aanvaard."
+    - "Een automatisch publicatieprofiel kan gekozen sporten overslaan, zoals het al woon-werkverkeer overslaat: die activiteiten blijven ongepubliceerd, en je kunt ze nog steeds met de hand publiceren."
+    - "De achtergrond rond de kaart van een virtuele wereld volgt nu het donkere thema in plaats van blauw te blijven."
+  "0.9.9":
+    - "De pagina Records toont één sport tegelijk: kies bovenin een sport of veeg, en elke sport toont zijn records en beste prestaties naast elkaar. De pagina opent op je belangrijkste sport, en de kaart neemt de hoogte van de getoonde sport aan."
+    - "Verbonden diensten hebben hun eigen pagina naast de instellingen: elke dienst houdt zijn verbinding, zijn ophalen, zijn voorkeuren en zijn ontkoppelen, zonder de andere te vernieuwen."
+    - "Een virtuele rit zet zijn watts voorop: gemiddeld vermogen in plaats van snelheid in de samenvatting en op de activiteitskaart, de route kan op vermogen worden gekleurd, en elke split draagt zijn gemiddelde vermogen."
+    - "De foto's van een Zwift-activiteit komen mee met de activiteit, in de galerij en op de kaart."
+    - "De fotokaart is hersteld: een leesbare viewer in beide thema's, de opnametijd en afstand, een link naar de plek van de foto op de kaart, en uploads die een open viewer niet meer onderbreken."
+  "0.9.8":
+    - "De kaarten van Watopia en Parijs zijn bijgewerkt: de archipel in het noordwesten waar de races van de Tour of Watopia starten, en de Parijse uitbreiding van juli 2026 met Montmartre, Parc Monceau en Madeleine. De routeafbeeldingen van de betrokken activiteiten worden na de update opnieuw getekend."
+    - "Een Zwift-synchronisatie tijdens het fietsen importeert de lopende activiteit niet meer: ze wacht tot de rit voorbij is en komt volledig binnen, met haar echte naam."
+    - "Een teleportatie telt niet meer als klim: de sprong valt buiten de grootste klim en de hoogterecords."
+  "0.9.7":
+    - "Mensen vinden is nu een optionele, minimale naamzoekfunctie: het tabblad Personen brengt wie je volgt, je volgers en verzoeken samen, en stelt accounts voor op basis van wat je al kunt zien. Je profiel is standaard niet doorzoekbaar; zet het aan via Instellingen › Profiel."
+    - "‘Nu synchroniseren’ werkt ook als automatisch synchroniseren uit staat."
+    - "Een Zwift-videoactiviteit trekt geen rechte lijn meer over de kaart wanneer het spel je teleporteert: de route wordt bij de sprong gesplitst en de snelheden blijven kloppen."
+  "0.9.6":
+    - "Verbind een Withings- of Zwift-account via Instellingen › Gekoppelde diensten: je sessies komen binnen met hun originele bestand en de uurlijkse synchronisatie doet de rest. Je wachtwoord wordt nooit bewaard."
+    - "Een Zwift-activiteit wordt getekend op de kaart van haar wereld — Watopia, Londen, Parijs … —, met de kleur en vermelding van het spel in plaats van een echte kaart."
+    - "De hoogtemeters van een virtuele activiteit komen uit haar eigen profiel, niet uit het onbetrouwbare totaal van het platform: de D+-tegel en de grafiek kloppen nu met elkaar."
+    - "Het volgersprofiel is altijd beschikbaar: je volgers op deze instantie lezen het ook als federatie uit staat, en de instelling bepaalt alleen nog of het ook andere instanties bereikt."
+    - "Personen, een account van deze instantie volgen en ontvolgen, en een volgverzoek beantwoorden werken weer terwijl federatie uit staat."
+    - "Opnames waarvan de gps-positie maar om de paar seconden binnenkomt (Suunto, COROS) behouden bij het importeren weer hun route."
+    - "De demo gebruikt een eigen image en een stabiel beheerderswachtwoord; de database geldt pas als gereed wanneer ze verbindingen aanneemt."
+  "0.9.5":
+    - "Kies in Instellingen › Profiel apart wie je sporttotalen en records ziet: je volgers, alle leden of niemand. Deze blokken blijven op deze instantie."
+    - "Profielen brengen het publicatiedagboek, sporttotalen in een radardiagram en records samen, met filters en panelen om door te bladeren."
+    - "Instellingen opent met een overzicht van alle onderdelen, op je telefoon en op de computer."
+    - "De naam die je een lus geeft, blijft behouden wanneer dubbele lussen worden samengevoegd."
+    - "EXR-sessies importeren werkt weer, en de rondeanalyse loopt niet meer vast op een activiteit zonder GPS."
+    - "Een demomodus biedt een gedeeld account en wordt elke nacht gereset. Importeer daar geen persoonlijke gegevens."
+  "0.9.4":
+    - "Eén volledige ronde is nu genoeg om een bekende lus te herkennen, ook na een aanloop. Om een nieuwe lus te ontdekken zijn nog steeds twee rondes nodig."
+    - "Oudere activiteiten worden op de achtergrond opnieuw berekend: dubbele lussen worden samengevoegd met behoud van hun naam en geschiedenis. Je publicaties veranderen niet."

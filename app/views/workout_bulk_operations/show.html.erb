@@ -1,0 +1,16 @@
+<% content_for :title, bulk_operation_title(@operation.operation, @total) %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("workouts.bulk.progress.pretitle") %></div>
+      <h1 class="page-title"><%= bulk_operation_title(@operation.operation, @total) %></h1>
+    </div>
+  </div>
+<% end %>
+
+<div data-controller="bulk-operation"
+     data-bulk-operation-status-url-value="<%= status_workout_bulk_operation_path(@operation) %>">
+  <p class="visually-hidden" role="status" data-bulk-operation-target="announcer"></p>
+  <%= render "progress", operation: @operation, items: @items, counts: @counts, total: @total %>
+</div>

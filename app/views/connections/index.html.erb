@@ -1,0 +1,12 @@
+<%# Connected services hub (DESIGN.md §8.6): one row per service the account may
+    see, with its state, so a service's own page is one click away. %>
+<%= render partial: "shared/section_hub", locals: {
+      pretitle: t("settings.connections.pretitle"),
+      title: t("settings.connections.title"),
+      intro: t("settings.connections.intro"),
+      groups: connections_hub_groups(@cards),
+      id_prefix: "connections-hub",
+      extra: render("publishing_profiles/auto_publish_notice",
+                    profiles: current_user.publishing_profiles.automatic.order(:position, :id).to_a,
+                    context: :import)
+    } %>

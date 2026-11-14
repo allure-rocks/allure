@@ -1,0 +1,90 @@
+Allure
+Copyright (C) 2025-2026 Eric Daras and Allure contributors
+
+Allure is free software: you can redistribute it and/or modify it under the
+terms of the GNU Affero General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version. See `LICENSE`.
+
+This distribution includes the following third-party components. Their
+licences apply to those components, not to the rest of Allure. The full texts
+of the MIT, BSD-3-Clause, Apache-2.0 and SIL OFL 1.1 licences are in
+`LICENSES/`; CC BY 4.0 and ODbL are linked where they apply.
+
+## MIT License
+
+The following components are used under the MIT License
+(`LICENSES/MIT.txt`):
+
+- Tabler (<https://tabler.io>), Copyright 2018-2026 Paweł Kuna and Tabler
+  contributors.
+- Bootstrap (<https://getbootstrap.com>), Copyright 2011-2026 The Bootstrap
+  Authors.
+- python-garminconnect (<https://github.com/cyberjunky/python-garminconnect>),
+  Copyright 2018-2026 cyberjunky and contributors. `lib/allure/garmin_connect/`
+  is a Ruby port of its 0.3.11 plain-HTTP sign-in.
+- zwift-data (<https://github.com/andipaetzold/zwift-data>), Copyright
+  2021-2026 Andi Pätzold. The world anchors and image rectangles in
+  `lib/allure/virtual/platforms.rb` are derived from it.
+
+## Font Awesome Free
+
+The ski icons under `app/views/sports/icons/` are Font Awesome Free 7.3.1
+(<https://fontawesome.com>), Copyright 2026 Fonticons, Inc., licensed under
+CC BY 4.0 (<https://creativecommons.org/licenses/by/4.0/>). The icons are
+inlined as SVG and each file carries the attribution.
+
+## Map Icons
+
+The canoeing and white-water icons under `app/views/sports/icons/` are
+adapted from Map Icons by Scott de Jonge
+(<https://github.com/scottdejonge/map-icons>), licensed under the SIL Open
+Font License 1.1 (`LICENSES/OFL-1.1.txt`). They were obtained through SVG
+Repo (<https://www.svgrepo.com>).
+
+## Material Symbols
+
+The paragliding and stand-up paddleboarding icons under
+`app/views/sports/icons/` are Material Symbols by Google
+(<https://fonts.google.com/icons>), licensed under the Apache License 2.0
+(`LICENSES/Apache-2.0.txt`). They are scaled to the 1000×1000 grid the other
+sport icons use.
+
+## Meteocons
+
+The weather icons under `app/views/weather/icons/` are Meteocons by Bas Milius
+(<https://github.com/basmilius/weather-icons>), licensed under the MIT License.
+The licence text is in `app/views/weather/icons/LICENSE`.
+
+## Maps and charts
+
+- MapLibre GL JS (<https://maplibre.org>), BSD-3-Clause
+  (`LICENSES/BSD-3-Clause.txt`).
+- Apache ECharts (<https://echarts.apache.org>), Apache-2.0
+  (`LICENSES/Apache-2.0.txt`).
+- OpenFreeMap (<https://openfreemap.org>) vector tiles and OpenStreetMap data
+  (<https://www.openstreetmap.org/copyright>), ODbL. The map surfaces carry the
+  attribution.
+
+## Garmin FIT profile
+
+`lib/allure/fit/devices.rb` contains manufacturer and product tables generated
+from the Garmin FIT SDK profile, distributed under the FIT Protocol License
+(<https://developer.garmin.com/fit/>).
+
+## Provider marks
+
+The Garmin, EXR and iGPSPORT marks under `app/views/import_sources/icons/`
+identify the services they name. They belong to their owners, are used only
+to label the corresponding connection, and imply no affiliation or
+endorsement. The Garmin mark comes from Simple Icons (CC0), the EXR mark is
+the service's own favicon, and the iGPSPORT mark is a simplified trace of the
+manufacturer's icon.
+
+## Zwift world data
+
+The world anchors and image rectangles in `lib/allure/virtual/platforms.rb` are
+derived from the MIT-licensed zwift-data package
+(<https://github.com/andipaetzold/zwift-data>). The world map images under
+`public/virtual_worlds/zwift/` are Zwift's own artwork, taken from Zwift's map
+CDN and converted; the map credit is `© Zwift`.

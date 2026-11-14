@@ -1,0 +1,13 @@
+<%# Development-only impersonation bar (AGENTS.md, "Development tools"). The
+    partial only exists while the devtools engine is loaded, and it renders
+    nothing outside an impersonation. %>
+<% if impersonating? %>
+  <div class="alert alert-warning border-0 rounded-0 mb-0 px-4 py-2 d-flex align-items-center gap-3 flex-wrap" role="status">
+    <i class="ti ti-user-question fs-2" aria-hidden="true"></i>
+    <div class="flex-fill">
+      <%= t("dev_tools.bar.copy", username: current_user.username) %>
+    </div>
+    <%= button_to t("dev_tools.bar.stop", operator: impersonator.username),
+          devtools_impersonation_path, method: :delete, class: "btn btn-dark btn-sm" %>
+  </div>
+<% end %>

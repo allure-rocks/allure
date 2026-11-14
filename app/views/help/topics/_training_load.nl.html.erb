@@ -1,0 +1,80 @@
+<p>
+  Als je activiteiten hartslag registreren, kan Allure je vertellen hoe zwaar
+  elke activiteit was en hoe je training zich over de weken opstapelt. Alles
+  begint bij je hartslagprofiel.
+</p>
+
+<h2>Je hartslagprofiel en zones</h2>
+<p>
+  In <%= link_to "Hartslag", settings_heart_rate_path %> vul je je maximale
+  hartslag in en, als je die kent, je rusthartslag. Allure stelt de hoogste
+  hartslag voor die een van je opnames minstens tien seconden aanhield, vaak een
+  betere schatting dan een formule. Uit dat profiel volgen vijf
+  <strong>zones</strong>, Z1 (rustig) tot Z5 (maximaal), als percentage van je
+  maximum of van je hartslagreserve (tussen rust en maximum). Je kunt elke grens
+  zelf verschuiven.
+</p>
+<p>
+  Als je je profiel wijzigt, wordt je hele geschiedenis opnieuw berekend met de
+  nieuwe zones.
+</p>
+
+<h2>Tijd in zones</h2>
+<p>
+  Elke activiteit met hartslag krijgt een tabblad <strong>Hartslagzones</strong>:
+  de tijd die je in elke zone doorbracht. Een opname waarin de hartslag te
+  schaars is, of minder dan de helft van de tijd aanwezig, krijgt geen zones, en
+  het tabblad legt uit waarom. Waarden die een verschuivende borstband blijft
+  herhalen, worden apart gezet in plaats van meegeteld.
+</p>
+
+<h2>Belasting</h2>
+<p>
+  De <strong>belasting</strong> van een activiteit is het aantal minuten in elke
+  zone, vermenigvuldigd met het nummer van de zone (de methode van Edwards): tien
+  minuten in Z4 tellen voor 40 punten, tien minuten in Z1 voor 10. Tijd onder de
+  ondergrens van je zones — 50 % van je maximum met de standaardgrenzen — telt
+  niet mee.
+</p>
+
+<h2>Fitheid, vermoeidheid en vorm</h2>
+<p>
+  Op de pagina Ik volgt de kaart <strong>Trainingsbelasting</strong> drie cijfers
+  over de laatste 90 dagen, alle sporten samen:
+</p>
+<ul>
+  <li><strong>Fitheid</strong> — je gemiddelde dagelijkse belasting over 42
+    dagen, waarbij recente dagen zwaarder wegen. Wat je hebt opgebouwd.</li>
+  <li><strong>Vermoeidheid</strong> — hetzelfde gemiddelde over 7 dagen. Wat je
+    aan het verwerken bent.</li>
+  <li><strong>Vorm</strong> — de fitheid van gisteren min de vermoeidheid van
+    gisteren. Positief: je bent fris; negatief: je bouwt belasting op, wat
+    normaal is midden in een trainingsblok.</li>
+</ul>
+<p>
+  Beide gemiddelden beginnen bij nul bij je eerste activiteit met hartslag:
+  fitheid zegt pas iets na ongeveer zes weken.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[4] %>
+</div>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[5] %>
+</div>
+
+<h2>Zones door de tijd</h2>
+<p>
+  De statistiek <%= link_to "Hartslagzones", heart_rate_stats_path %> stapelt je tijd
+  in zones per week of per maand, in uren of in aandelen, en deelt die in in lage,
+  gemiddelde en hoge intensiteit. Gebruik het als oriëntatiepunt, niet als
+  voorschrift.
+</p>
+
+<h2>Het blijft privé</h2>
+<div class="alert alert-info" role="note">
+  <%= t("settings.heart_rate.privacy") %>
+</div>
+<p>
+  Een publicatieprofiel kan de gemiddelde en maximale hartslag van een activiteit
+  delen, maar alleen als je die aanvinkt.
+</p>

@@ -1,0 +1,102 @@
+<% content_for :title, t("stats.by_time.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("stats.by_time.pretitle") %></div>
+      <h1 class="page-title"><%= t("stats.by_time.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="btn-list">
+      <% %w[day week month year].each do |granularity| %>
+        <%= link_to t("stats.granularities.#{granularity}"), by_time_stats_path(time: granularity),
+              class: "btn #{granularity == @granularity ? 'btn-primary' : 'btn-outline-primary'}" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("stats.chart.distance_title") %></h3>
+  </div>
+  <div class="card-body">
+    <div data-controller="stats-chart"
+         data-stats-chart-url-value="<%= by_time_stats_path(time: @granularity, format: :json) %>"
+         data-stats-chart-granularity-value="<%= @granularity %>"
+         data-stats-chart-sports-value="<%= @buckets_by_sport.keys.to_h { |s| [ s.id, sport_display_name(s) ] }.to_json %>"
+         data-stats-chart-unit-system-value="<%= current_user.unit_system %>"
+         data-stats-chart-distance-label-value="<%= t("stats.chart.distance_title") %>"
+         data-stats-chart-unit-label-value="<%= t(current_user.unit_system == "imperial" ? "units.symbols.mile" : "units.symbols.kilometre") %>"
+         data-stats-chart-locale-value="<%= I18n.locale %>">
+      <div data-stats-chart-target="container"></div>
+      <div data-stats-chart-target="loading" class="text-secondary">
+        <i class="ti ti-loader me-1"></i><%= t("stats.chart.loading") %>
+      </div>
+      <div data-stats-chart-target="empty" class="text-secondary" hidden><%= t("stats.chart.empty") %></div>
+      <div data-stats-chart-target="error" class="text-danger" hidden><%= t("stats.chart.error") %></div>
+    </div>
+  </div>
+</div>
+
+<% if @buckets_by_sport.any? %>
+  <% @buckets_by_sport.each do |sport, buckets| %>
+    <% metric_keys = buckets.first.keys - [ :period ] %>
+    <div class="card mb-3">
+      <div class="card-header">
+        <h3 class="card-title d-flex align-items-center gap-2"><%= sport_tile_tag(sport, size: :xs) %><%= sport_display_name(sport) %></h3>
+      </div>
+      <div class="table-responsive d-none d-md-block">
+        <table class="table table-sm table-vcenter card-table allure-table-nums">
+          <caption class="visually-hidden"><%= sport_display_name(sport) %></caption>
+          <thead>
+            <tr>
+              <th scope="col"><%= t("stats.by_time.period") %></th>
+              <% metric_keys.each do |key| %>
+                <th scope="col" class="text-end"><%= t("stats.metrics.#{key}") %></th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% buckets.each do |bucket| %>
+              <tr>
+                <td><%= format_stat_period(bucket[:period], @granularity) %></td>
+                <% metric_keys.each do |key| %>
+                  <td class="text-end"><%= format_stat_value(key, bucket[key], sport:) %></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <ul class="list-group list-group-flush d-md-none allure-card-list">
+        <% buckets.each do |bucket| %>
+          <li class="list-group-item">
+            <div class="allure-card-title mb-1"><%= format_stat_period(bucket[:period], @granularity) %></div>
+            <% metric_keys.each do |key| %>
+              <div class="d-flex justify-content-between text-secondary small">
+                <span><%= t("stats.metrics.#{key}") %></span>
+                <span class="allure-table-nums"><%= format_stat_value(key, bucket[key], sport:) %></span>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+<% else %>
+  <div class="card">
+    <div class="card-body">
+      <div class="empty">
+        <div class="empty-icon"><i class="ti ti-chart-bar fs-1 text-primary"></i></div>
+        <p class="empty-title"><%= t("stats.empty.title") %></p>
+        <p class="empty-subtitle text-secondary"><%= t("stats.empty.subtitle") %></p>
+        <div class="empty-action"><%= link_to t("stats.empty.action"), new_workout_import_path, class: "btn btn-primary" %></div>
+      </div>
+    </div>
+  </div>
+<% end %>

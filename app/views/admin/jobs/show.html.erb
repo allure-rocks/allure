@@ -1,0 +1,318 @@
+<% content_for :title, t("admin.jobs.title") %>
+
+<% content_for :page_header do %>
+  <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+  <h1 class="page-title"><%= t("admin.jobs.title") %></h1>
+<% end %>
+
+<turbo-frame id="admin-jobs-live"
+             data-controller="live-frame"
+             data-live-frame-url-value="<%= admin_jobs_path %>"
+             data-live-frame-interval-value="4000">
+  <%= render "admin/jobs/live", snapshot: @snapshot %>
+</turbo-frame>
+
+<%# Outside the polling frame: these counts are workout-table queries and do
+    not need to refresh every few seconds. PLAN_DERIVATIONS.md §6. %>
+<div class="card mt-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("admin.jobs.rebuild.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% if @rebuild_count.positive? %>
+      <p class="mb-3"><%= t("admin.jobs.rebuild.outdated", count: @rebuild_count) %></p>
+      <%= button_to t("admin.jobs.rebuild.action"), admin_jobs_rebuild_path,
+            class: "btn btn-outline-primary",
+            form: { data: {
+              turbo_frame: "_top",
+              confirm_title: t("admin.jobs.rebuild.confirm_title"),
+              confirm_body: t("admin.jobs.rebuild.confirm_body", count: @rebuild_count),
+              confirm_verb: t("admin.jobs.rebuild.action")
+            } } %>
+    <% else %>
+      <p class="mb-0 text-secondary"><%= t("admin.jobs.rebuild.current") %></p>
+    <% end %>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("admin.jobs.route_images.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% if @route_images_backfill_count.positive? %>
+      <p class="mb-3"><%= t("admin.jobs.route_images.outdated", count: @route_images_backfill_count) %></p>
+      <%= button_to t("admin.jobs.route_images.action"), admin_jobs_backfill_route_images_path,
+            class: "btn btn-outline-primary",
+            form: { data: {
+              turbo_frame: "_top",
+              confirm_title: t("admin.jobs.route_images.confirm_title"),
+              confirm_body: t("admin.jobs.route_images.confirm_body", count: @route_images_backfill_count),
+              confirm_verb: t("admin.jobs.route_images.action")
+            } } %>
+    <% else %>
+      <p class="mb-0 text-secondary"><%= t("admin.jobs.route_images.current") %></p>
+    <% end %>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("admin.jobs.segment_route_images.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% if @segment_route_images_backfill_count.positive? %>
+      <p class="mb-3"><%= t("admin.jobs.segment_route_images.outdated", count: @segment_route_images_backfill_count) %></p>
+      <%= button_to t("admin.jobs.segment_route_images.action"), admin_jobs_backfill_segment_route_images_path,
+            class: "btn btn-outline-primary",
+            form: { data: {
+              turbo_frame: "_top",
+              confirm_title: t("admin.jobs.segment_route_images.confirm_title"),
+              confirm_body: t("admin.jobs.segment_route_images.confirm_body", count: @segment_route_images_backfill_count),
+              confirm_verb: t("admin.jobs.segment_route_images.action")
+            } } %>
+    <% else %>
+      <p class="mb-0 text-secondary"><%= t("admin.jobs.segment_route_images.current") %></p>
+    <% end %>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("admin.jobs.elevation_profiles.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% if @elevation_profiles_backfill_count.positive? %>
+      <p class="mb-3"><%= t("admin.jobs.elevation_profiles.outdated", count: @elevation_profiles_backfill_count) %></p>
+      <%= button_to t("admin.jobs.elevation_profiles.action"), admin_jobs_backfill_elevation_profiles_path,
+            class: "btn btn-outline-primary",
+            form: { data: {
+              turbo_frame: "_top",
+              confirm_title: t("admin.jobs.elevation_profiles.confirm_title"),
+              confirm_body: t("admin.jobs.elevation_profiles.confirm_body", count: @elevation_profiles_backfill_count),
+              confirm_verb: t("admin.jobs.elevation_profiles.action")
+            } } %>
+    <% else %>
+      <p class="mb-0 text-secondary"><%= t("admin.jobs.elevation_profiles.current") %></p>
+    <% end %>
+  </div>
+</div>
+
+<% if Allure::Elevation::Config.configured? %>
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("admin.jobs.segment_terrain_elevation.title") %></h2>
+    </div>
+    <div class="card-body">
+      <% if @segment_terrain_elevation_backfill_count.positive? %>
+        <p class="mb-3"><%= t("admin.jobs.segment_terrain_elevation.outdated", count: @segment_terrain_elevation_backfill_count) %></p>
+        <%= button_to t("admin.jobs.segment_terrain_elevation.action"), admin_jobs_backfill_segment_terrain_elevation_path,
+              class: "btn btn-outline-primary",
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("admin.jobs.segment_terrain_elevation.confirm_title"),
+                confirm_body: t("admin.jobs.segment_terrain_elevation.confirm_body", count: @segment_terrain_elevation_backfill_count),
+                confirm_verb: t("admin.jobs.segment_terrain_elevation.action")
+              } } %>
+      <% else %>
+        <p class="mb-0 text-secondary"><%= t("admin.jobs.segment_terrain_elevation.current") %></p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="card mt-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("admin.jobs.loop_reuse.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% if @loop_reuse_backfill_count.positive? %>
+      <p class="mb-3"><%= t("admin.jobs.loop_reuse.outdated", count: @loop_reuse_backfill_count) %></p>
+      <%= button_to t("admin.jobs.loop_reuse.action"), admin_jobs_backfill_loop_reuse_path,
+            class: "btn btn-outline-primary",
+            form: { data: {
+              turbo_frame: "_top",
+              confirm_title: t("admin.jobs.loop_reuse.confirm_title"),
+              confirm_body: t("admin.jobs.loop_reuse.confirm_body", count: @loop_reuse_backfill_count),
+              confirm_verb: t("admin.jobs.loop_reuse.action")
+            } } %>
+    <% else %>
+      <p class="mb-0 text-secondary"><%= t("admin.jobs.loop_reuse.current") %></p>
+    <% end %>
+  </div>
+</div>
+
+<% if Allure::Elevation::Config.configured? %>
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("admin.jobs.elevation.title") %></h2>
+    </div>
+    <div class="card-body">
+      <% if @elevation_backfill_count.positive? %>
+        <p class="mb-3"><%= t("admin.jobs.elevation.outdated", count: @elevation_backfill_count) %></p>
+        <%= button_to t("admin.jobs.elevation.action"), admin_jobs_backfill_elevation_path,
+              class: "btn btn-outline-primary",
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("admin.jobs.elevation.confirm_title"),
+                confirm_body: t("admin.jobs.elevation.confirm_body", count: @elevation_backfill_count),
+                confirm_verb: t("admin.jobs.elevation.action")
+              } } %>
+      <% else %>
+        <p class="mb-0 text-secondary"><%= t("admin.jobs.elevation.current") %></p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if Allure::Weather::Config.enabled? %>
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("admin.jobs.weather.title") %></h2>
+    </div>
+    <div class="card-body">
+      <p class="text-secondary"><%= t("admin.jobs.weather.budget", used: WorkoutWeather.fetched_since(24.hours.ago).sum(:requests_count), limit: Allure::Weather::Config.max_requests_per_day) %></p>
+      <% if @weather_backfill_count.positive? %>
+        <p class="mb-3"><%= t("admin.jobs.weather.outdated", count: @weather_backfill_count) %></p>
+        <%= button_to t("admin.jobs.weather.action"), admin_jobs_backfill_weather_path,
+              class: "btn btn-outline-primary",
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("admin.jobs.weather.confirm_title"),
+                confirm_body: t("admin.jobs.weather.confirm_body", count: @weather_backfill_count),
+                confirm_verb: t("admin.jobs.weather.action")
+              } } %>
+      <% else %>
+        <p class="mb-0 text-secondary"><%= t("admin.jobs.weather.current") %></p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if Allure::Toponyms::Config.configured? %>
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("admin.jobs.places.title") %></h2>
+    </div>
+    <div class="card-body">
+      <% if @places_backfill_count.positive? %>
+        <p class="mb-3"><%= t("admin.jobs.places.outdated", count: @places_backfill_count) %></p>
+        <%= button_to t("admin.jobs.places.action"), admin_jobs_backfill_places_path,
+              class: "btn btn-outline-primary",
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("admin.jobs.places.confirm_title"),
+                confirm_body: t("admin.jobs.places.confirm_body", count: @places_backfill_count),
+                confirm_verb: t("admin.jobs.places.action")
+              } } %>
+      <% else %>
+        <p class="mb-0 text-secondary"><%= t("admin.jobs.places.current") %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("admin.jobs.toponymy.title") %></h2>
+    </div>
+    <div class="card-body">
+      <% if @toponymy_backfill_count.positive? %>
+        <p class="mb-3"><%= t("admin.jobs.toponymy.outdated", count: @toponymy_backfill_count) %></p>
+        <%= button_to t("admin.jobs.toponymy.action"), admin_jobs_backfill_toponymy_path,
+              class: "btn btn-outline-primary",
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("admin.jobs.toponymy.confirm_title"),
+                confirm_body: t("admin.jobs.toponymy.confirm_body", count: @toponymy_backfill_count),
+                confirm_verb: t("admin.jobs.toponymy.action")
+              } } %>
+      <% else %>
+        <p class="mb-0 text-secondary"><%= t("admin.jobs.toponymy.current") %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("admin.jobs.segment_places.title") %></h2>
+    </div>
+    <div class="card-body">
+      <% if @segment_places_backfill_count.positive? %>
+        <p class="mb-3"><%= t("admin.jobs.segment_places.outdated", count: @segment_places_backfill_count) %></p>
+        <%= button_to t("admin.jobs.segment_places.action"), admin_jobs_backfill_segment_places_path,
+              class: "btn btn-outline-primary",
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("admin.jobs.segment_places.confirm_title"),
+                confirm_body: t("admin.jobs.segment_places.confirm_body", count: @segment_places_backfill_count),
+                confirm_verb: t("admin.jobs.segment_places.action")
+              } } %>
+      <% else %>
+        <p class="mb-0 text-secondary"><%= t("admin.jobs.segment_places.current") %></p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="card mt-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("admin.jobs.together_detection.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% if @together_detection_backfill_count.positive? %>
+      <p class="mb-3"><%= t("admin.jobs.together_detection.outdated", count: @together_detection_backfill_count) %></p>
+      <%= button_to t("admin.jobs.together_detection.action"), admin_jobs_backfill_together_detection_path,
+            class: "btn btn-outline-primary",
+            form: { data: {
+              turbo_frame: "_top",
+              confirm_title: t("admin.jobs.together_detection.confirm_title"),
+              confirm_body: t("admin.jobs.together_detection.confirm_body", count: @together_detection_backfill_count),
+              confirm_verb: t("admin.jobs.together_detection.action")
+            } } %>
+    <% else %>
+      <p class="mb-0 text-secondary"><%= t("admin.jobs.together_detection.current") %></p>
+    <% end %>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("admin.jobs.route_suggestions.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% if @route_suggestions_backfill_count.positive? %>
+      <p class="mb-3"><%= t("admin.jobs.route_suggestions.outdated", count: @route_suggestions_backfill_count) %></p>
+      <%= button_to t("admin.jobs.route_suggestions.action"), admin_jobs_backfill_route_suggestions_path,
+            class: "btn btn-outline-primary",
+            form: { data: {
+              turbo_frame: "_top",
+              confirm_title: t("admin.jobs.route_suggestions.confirm_title"),
+              confirm_body: t("admin.jobs.route_suggestions.confirm_body", count: @route_suggestions_backfill_count),
+              confirm_verb: t("admin.jobs.route_suggestions.action")
+            } } %>
+    <% else %>
+      <p class="mb-0 text-secondary"><%= t("admin.jobs.route_suggestions.current") %></p>
+    <% end %>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("admin.jobs.heart_rate.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% if @heart_rate_backfill_count.positive? %>
+      <p class="mb-3"><%= t("admin.jobs.heart_rate.outdated", count: @heart_rate_backfill_count) %></p>
+      <%= button_to t("admin.jobs.heart_rate.action"), admin_jobs_backfill_heart_rate_path,
+            class: "btn btn-outline-primary",
+            form: { data: {
+              turbo_frame: "_top",
+              confirm_title: t("admin.jobs.heart_rate.confirm_title"),
+              confirm_body: t("admin.jobs.heart_rate.confirm_body", count: @heart_rate_backfill_count),
+              confirm_verb: t("admin.jobs.heart_rate.action")
+            } } %>
+    <% else %>
+      <p class="mb-0 text-secondary"><%= t("admin.jobs.heart_rate.current") %></p>
+    <% end %>
+  </div>
+</div>

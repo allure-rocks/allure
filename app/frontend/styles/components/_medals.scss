@@ -1,0 +1,34 @@
+// Records and ranks (DESIGN.md §10.4). The shape says who you measure against
+// — the trophy is a personal place, the laurel wreath a leaderboard place —
+// and the tier colour says the place: gold, silver, bronze. The numeral, the
+// tooltips and the spoken labels mean colour is never the only encoding
+// (§18.6).
+.allure-rank-numeral {
+  font-variant-numeric: tabular-nums;
+}
+
+// A leaderboard place in the top three: the laurel before the numeral.
+.allure-rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+// The glyph of either shape, in its tier colour.
+@each $tier in gold, silver, bronze {
+  .allure-medal--#{$tier} {
+    color: var(--allure-medal-#{$tier});
+  }
+
+  // The summary-tile stamp (DESIGN.md §10.2): the same glyph on a soft disc
+  // of its tier, instead of Tabler's solid stamp colours.
+  .allure-stamp--#{$tier} {
+    color: var(--allure-medal-#{$tier});
+    background-color: color-mix(in srgb, var(--allure-medal-#{$tier}) 18%, transparent);
+  }
+}
+
+// The neutral pill holding a personal place (`Record`, `RP`, `2e`, `3e`).
+.allure-place-badge {
+  font-variant-numeric: tabular-nums;
+}

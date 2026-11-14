@@ -1,0 +1,61 @@
+<% content_for :title, @profile.name %>
+
+<% content_for :settings_actions do %>
+  <%= link_to t("publishing_profiles.actions.edit"), edit_publishing_profile_path(@profile), class: "btn btn-outline-primary" %>
+<% end %>
+
+<%= render layout: "settings/shell", locals: { title: @profile.name } do %>
+
+  <div class="row row-deck row-cards">
+    <div class="col-lg-7">
+      <div class="card h-100">
+        <div class="card-header">
+          <h3 class="card-title"><%= t("publishing_profiles.preview.title") %></h3>
+        </div>
+        <div class="card-body">
+          <% if @profile.audience == "followers" %>
+            <div class="alert alert-info" role="note"><%= followers_reach_notice %></div>
+          <% end %>
+          <p class="text-secondary"><%= t("publishing_profiles.preview.intro") %></p>
+          <dl class="row g-2 mb-0">
+            <dt class="col-sm-5"><%= t("publishing_profiles.preview.audience") %></dt>
+            <dd class="col-sm-7"><%= t("publishing_profiles.audiences.#{@profile.audience}") %></dd>
+            <dt class="col-sm-5"><%= t("publishing_profiles.preview.fields") %></dt>
+            <dd class="col-sm-7"><%= [@profile.settings["title"] && t("publishing_profiles.settings.title"), @profile.settings["description"] && t("publishing_profiles.settings.description"), @profile.settings["metrics"].present? && t("publishing_profiles.settings.metrics_title"), @profile.settings["route"] && t("publishing_profiles.settings.route"), @profile.settings["device"] && t("publishing_profiles.settings.device")].compact.join(", ") %></dd>
+            <dt class="col-sm-5"><%= t("publishing_profiles.preview.media") %></dt>
+            <dd class="col-sm-7"><%= [@profile.settings["gpx"] && t("publishing_profiles.settings.gpx"), @profile.settings["route_image"] && t("publishing_profiles.settings.route_image")].compact.presence || t("publishing_profiles.preview.none") %></dd>
+            <dt class="col-sm-5"><%= t("publishing_profiles.preview.comments") %></dt>
+            <dd class="col-sm-7"><%= t(PublishingProfile.setting_enabled?(@profile.settings, "comments") ? "publishing_profiles.preview.comments_open" : "publishing_profiles.preview.comments_closed") %></dd>
+            <dt class="col-sm-5"><%= t("publishing_profiles.preview.delay") %></dt>
+            <dd class="col-sm-7"><%= publishing_delay_label(@profile.publish_delay_seconds) %></dd>
+            <dt class="col-sm-5"><%= t("publishing_profiles.preview.auto") %></dt>
+            <dd class="col-sm-7">
+              <% if @profile.auto_publish? %>
+                <span class="badge bg-primary-lt"><%= t("publishing_profiles.status.automatic") %></span>
+                <div class="text-secondary small mt-1">
+                  <%= t("publishing_profiles.preview.auto_on", days: WorkoutAutoPublication::RECENT_WINDOW.in_days.to_i) %>
+                  <% if @profile.auto_publish_exclude_commute? %><%= t("publishing_profiles.preview.auto_commute_excluded") %><% end %>
+                  <% if (sports = auto_publish_excluded_sports_names(@profile)) %><%= t("publishing_profiles.preview.auto_sports_excluded", sports:) %><% end %>
+                </div>
+              <% else %>
+                <%= t("publishing_profiles.preview.auto_off") %>
+              <% end %>
+            </dd>
+            <dt class="col-sm-5"><%= t("publishing_profiles.preview.active_publications") %></dt>
+            <dd class="col-sm-7"><%= @active_publications %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="card h-100">
+        <div class="card-header">
+          <h3 class="card-title"><%= t("publishing_profiles.preview.safety_title") %></h3>
+        </div>
+        <div class="card-body">
+          <p class="mb-0 text-secondary"><%= t("publishing_profiles.preview.safety_text") %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

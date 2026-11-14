@@ -1,0 +1,180 @@
+<% content_for :title, t("settings.profile.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.hub.profile.title") } do %>
+
+  <%= form_with model: @user, url: settings_profile_path, method: :patch, multipart: true do |form| %>
+    <%= render "shared/form_errors", form: form %>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.profile.identity_title") %></h2>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <%= form.label :display_name, t("settings.profile.display_name"), class: "form-label" %>
+          <%= form.text_field :display_name, class: "form-control", maxlength: 60, size: nil, autocomplete: "nickname" %>
+        </div>
+        <div class="mb-0">
+          <%= form.label :bio, t("settings.profile.bio"), class: "form-label" %>
+          <%= form.text_area :bio, class: "form-control", rows: 3, maxlength: 1000 %>
+          <small class="form-text"><%= t("settings.profile.bio_hint") %></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3" <%= tag.attributes(
+          data: {
+            controller: "avatar-upload",
+            action: "turbo:before-cache@document->avatar-upload#beforeCache",
+            avatar_upload_max_bytes_value: Users::AvatarUpload::MAX_BYTES,
+            avatar_upload_max_dimension_value: Users::AvatarUpload::MAX_DIMENSION,
+            avatar_upload_allowed_types_value: Users::AvatarUpload::ALLOWED_TYPES,
+            avatar_upload_avatar_class_value: "avatar avatar-xl",
+            avatar_upload_regenerate_url_value: settings_profile_avatar_path,
+            avatar_upload_unsupported_type_message_value: t("settings.profile.avatar_errors.unsupported_type"),
+            avatar_upload_too_large_message_value: t("settings.profile.avatar_errors.too_large", max: Users::AvatarUpload::MAX_MEGABYTES),
+            avatar_upload_too_large_dimensions_message_value: t("settings.profile.avatar_errors.too_large_dimensions", max: Users::AvatarUpload::MAX_DIMENSION),
+            avatar_upload_unreadable_message_value: t("settings.profile.avatar_errors.unreadable")
+          }
+        ) %>>
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.profile.avatar_title") %></h2>
+      </div>
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div data-avatar-upload-target="preview"><%= render "settings/profiles/avatar_preview", user: @user %></div>
+          <div class="text-secondary small">
+            <%= @user.display_name %><br>@<%= @user.username %>
+            <% unless @user.avatar_image? %>
+              <div class="mt-2">
+                <%= tag.button t("settings.profile.avatar_regenerate"), type: "button",
+                      class: "btn btn-outline-primary btn-sm",
+                      data: { action: "avatar-upload#regenerate", avatar_upload_target: "regenerateButton" } %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="mb-3">
+          <%= form.label :avatar, t("settings.profile.avatar_upload"), class: "form-label" %>
+          <%= form.file_field :avatar, class: "form-control", accept: Users::AvatarUpload::ALLOWED_TYPES.join(","),
+                data: { avatar_upload_target: "input", action: "avatar-upload#preview" } %>
+          <small class="form-text"><%= t("settings.profile.avatar_upload_hint", max: Users::AvatarUpload::MAX_MEGABYTES) %></small>
+          <div class="text-danger small mt-1" role="alert" data-avatar-upload-target="error"></div>
+        </div>
+        <div class="allure-avatar-crop mb-3" data-avatar-upload-target="crop" hidden>
+          <div class="allure-avatar-crop__stage" tabindex="0" role="group"
+               aria-label="<%= t("settings.profile.avatar_crop.stage_label") %>"
+               aria-describedby="avatar-crop-hint"
+               data-avatar-upload-target="stage"
+               data-action="pointerdown->avatar-upload#dragStart pointermove->avatar-upload#dragMove pointerup->avatar-upload#dragEnd pointercancel->avatar-upload#dragEnd keydown->avatar-upload#key">
+            <img data-avatar-upload-target="cropImage" alt="" draggable="false">
+            <span class="allure-avatar-crop__mask" aria-hidden="true"></span>
+          </div>
+          <div class="d-flex align-items-center gap-2 mt-2">
+            <i class="ti ti-zoom-out text-secondary" aria-hidden="true"></i>
+            <input type="range" class="form-range flex-grow-1" min="0" max="1000" step="1" value="0"
+                   aria-label="<%= t("settings.profile.avatar_crop.zoom") %>"
+                   data-avatar-upload-target="zoom" data-action="input->avatar-upload#zoom">
+            <i class="ti ti-zoom-in text-secondary" aria-hidden="true"></i>
+            <button type="button" class="btn btn-ghost-secondary btn-sm" data-action="avatar-upload#recenter">
+              <i class="ti ti-focus-2 me-1" aria-hidden="true"></i><%= t("settings.profile.avatar_crop.recenter") %>
+            </button>
+          </div>
+          <small class="form-text" id="avatar-crop-hint"><%= t("settings.profile.avatar_crop.hint") %></small>
+          <%= hidden_field_tag "user[avatar_crop][x]", "", data: { avatar_upload_target: "cropX" } %>
+          <%= hidden_field_tag "user[avatar_crop][y]", "", data: { avatar_upload_target: "cropY" } %>
+          <%= hidden_field_tag "user[avatar_crop][size]", "", data: { avatar_upload_target: "cropSize" } %>
+          <%= hidden_field_tag "user[avatar_crop][width]", "", data: { avatar_upload_target: "cropWidth" } %>
+          <%= hidden_field_tag "user[avatar_crop][height]", "", data: { avatar_upload_target: "cropHeight" } %>
+        </div>
+        <% if @user.avatar.attached? %>
+          <label class="form-check mb-3">
+            <%= form.check_box :remove_avatar, class: "form-check-input" %>
+            <span class="form-check-label"><%= t("settings.profile.avatar_remove") %></span>
+          </label>
+        <% end %>
+        <label class="form-check">
+          <%= form.check_box :gravatar_opt_in, class: "form-check-input" %>
+          <span class="form-check-label"><%= t("settings.profile.gravatar_label") %></span>
+        </label>
+        <div class="alert alert-info mt-3 mb-0" role="note"><%= t("settings.profile.gravatar_hint") %></div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.profile.leaderboard_title") %></h2>
+      </div>
+      <div class="card-body">
+        <fieldset>
+          <legend class="form-label"><%= t("settings.profile.leaderboard_category") %></legend>
+          <% User::LEADERBOARD_CATEGORIES.each do |category| %>
+            <label class="form-check">
+              <%= form.radio_button :leaderboard_category, category, class: "form-check-input" %>
+              <span class="form-check-label"><%= t("settings.profile.leaderboard_categories.#{category}") %></span>
+            </label>
+          <% end %>
+        </fieldset>
+        <small class="form-text"><%= t("settings.profile.leaderboard_category_hint", count: Segments::Categories::MIN_ATHLETES) %></small>
+        <div class="alert alert-info mt-3 mb-0" role="note"><%= t("settings.profile.leaderboard_category_privacy") %></div>
+      </div>
+    </div>
+
+    <% if funding_available? %>
+      <div class="card mb-3">
+        <div class="card-header"><h2 class="card-title h3"><%= t("funding.badge.title") %></h2></div>
+        <div class="card-body">
+          <p class="text-secondary"><%= t("funding.explanation") %></p>
+          <label class="form-check mb-3">
+            <%= form.check_box :funding_badge_hidden, class: "form-check-input" %>
+            <span class="form-check-label"><%= t("funding.badge.hide") %></span>
+          </label>
+          <%= form.label :funding_badge_color, t("funding.badge.color"), class: "form-label" %>
+          <%= form.select :funding_badge_color, Allure::Funding::BADGE_COLORS.map { |color| [t("funding.colors.#{color}"), color] }, {}, class: "form-select" %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="form-footer">
+      <%= form.submit t("settings.profile.save"), class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <%= form_with model: @user, url: settings_profile_path, method: :patch, class: "mt-4" do |form| %>
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.profile.sharing.title") %></h2>
+      </div>
+      <div class="card-body">
+        <p class="text-secondary"><%= t("settings.profile.sharing.intro") %></p>
+        <%= form.label :profile_statistics_audience, t("settings.profile.sharing.statistics"), class: "form-label" %>
+        <%= form.select :profile_statistics_audience, User::PROFILE_SHARING_AUDIENCES.map { |audience| [t("settings.profile.sharing.audiences.#{audience}"), audience] }, {},
+              class: "form-select", aria: { describedby: "profile-statistics-hint profile-sharing-privacy" } %>
+        <p class="form-text mb-3" id="profile-statistics-hint"><%= t("settings.profile.sharing.statistics_hint") %></p>
+        <%= form.label :profile_records_audience, t("settings.profile.sharing.records"), class: "form-label" %>
+        <%= form.select :profile_records_audience, User::PROFILE_SHARING_AUDIENCES.map { |audience| [t("settings.profile.sharing.audiences.#{audience}"), audience] }, {},
+              class: "form-select", aria: { describedby: "profile-records-hint profile-sharing-privacy" } %>
+        <p class="form-text mb-3" id="profile-records-hint"><%= t("settings.profile.sharing.records_hint") %></p>
+        <fieldset class="mb-3">
+          <legend class="form-label"><%= t("settings.profile.discoverability.title") %></legend>
+          <% User::DISCOVERABILITY.each do |value| %>
+            <label class="form-check">
+              <%= form.radio_button :discoverable, value, class: "form-check-input",
+                    aria: { describedby: "profile-discoverability-hint" } %>
+              <span class="form-check-label">
+                <%= t("settings.profile.discoverability.options.#{value}") %>
+                <span class="d-block text-secondary small"><%= t("settings.profile.discoverability.descriptions.#{value}") %></span>
+              </span>
+            </label>
+          <% end %>
+          <p class="form-text mb-0" id="profile-discoverability-hint"><%= t("settings.profile.discoverability.hint") %></p>
+        </fieldset>
+        <div class="alert alert-info mb-0" role="note" id="profile-sharing-privacy"><%= t("settings.profile.sharing.privacy") %></div>
+        <p class="small mt-2 mb-0"><%= help_link("publishing") %></p>
+      </div>
+      <div class="card-footer allure-actions">
+        <%= form.submit t("settings.profile.sharing.save"), class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

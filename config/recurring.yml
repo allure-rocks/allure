@@ -1,0 +1,71 @@
+# examples:
+#   periodic_cleanup:
+#     class: CleanSoftDeletedRecordsJob
+#     queue: background
+#     args: [ 1000, { batch_size: 500 } ]
+#     schedule: every hour
+#   periodic_cleanup_with_command:
+#     command: "SoftDeletedRecord.due.delete_all"
+#     priority: 2
+#     schedule: at 5am every day
+
+production:
+  photo_recovery:
+    class: Workouts::PhotoRecoveryJob
+    queue: default
+    schedule: every 15 minutes
+  clear_solid_queue_finished_jobs:
+    command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
+    schedule: every hour at minute 12
+  prune_expired_sessions:
+    class: Users::PruneExpiredSessionsJob
+    queue: default
+    schedule: every day at 4:30am
+  prune_api_tokens:
+    class: ApiTokens::PruneJob
+    queue: default
+    schedule: every day at 4:40am
+  import_source_sweep:
+    class: Workouts::ImportSourceSweepJob
+    queue: default
+    schedule: every day at 4:45am
+  account_export_sweep:
+    class: Users::AccountExportSweepJob
+    queue: default
+    schedule: every day at 4:50am
+  account_deletion_sweep:
+    class: Users::AccountDeletionSweepJob
+    queue: default
+    schedule: every hour at minute 20
+  federation_recovery:
+    class: Federation::RecoveryJob
+    queue: federation
+    schedule: every 5 minutes
+  webhooks_recovery:
+    class: Webhooks::RecoveryJob
+    queue: webhooks
+    schedule: every 5 minutes
+  auto_publications_sweep:
+    class: Workouts::AutoPublicationSweepJob
+    queue: default
+    schedule: every 10 minutes
+  toponymy_recovery:
+    class: Workouts::ToponymyRecoveryJob
+    queue: default
+    schedule: every 15 minutes
+  weather_recovery:
+    class: Workouts::WeatherRecoveryJob
+    queue: default
+    schedule: every 15 minutes
+  segment_place_recovery:
+    class: Segments::PlaceRecoveryJob
+    queue: default
+    schedule: every 15 minutes
+  remote_imports_sync:
+    class: ImportConnections::SyncAllJob
+    queue: remote_imports
+    schedule: every hour at minute 5
+  funding_reconcile:
+    class: Funding::ReconcileJob
+    queue: default
+    schedule: every day at 5:10am

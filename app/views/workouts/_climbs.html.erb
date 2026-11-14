@@ -1,0 +1,67 @@
+<% show_heart_rate = column_present?(climbs, :average_heart_rate) %>
+<% show_power = column_present?(climbs, :average_power) %>
+<% max_climb_lap = local_assigns.fetch(:max_climb_lap, nil) %>
+<% if climbs.any? %>
+  <div class="table-responsive allure-analysis-table">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("workouts.show.laps.climbs.title") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("workouts.show.laps.climb") %></th>
+          <th scope="col"><%= t("workouts.show.laps.name") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.distance") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.time") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.gain") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.loss") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.grade") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.max_grade") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.vam") %></th>
+          <% if show_heart_rate %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.heart_rate") %></th><% end %>
+          <%# A power-led virtual ride leads with its watts, so the climb's own
+              power stays on phones too (PLAN_VIRTUAL.md §8). %>
+          <% if show_power %><th scope="col" class="text-end<%= " allure-col-extra" unless sport.power_led? %>"><%= t("workouts.show.laps.power") %></th><% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% climbs.each do |climb| %>
+          <tr <%= tag.attributes(analysis_row_attributes(climb.start_distance, climb.end_distance, source: "climb")) %>>
+            <td><%= climb.number %></td>
+            <td>
+              <%= climb.name.presence || "—" %>
+              <%= render "workouts/record_trophy", label: t("records.types.mc") if climb.id == max_climb_lap&.id %>
+            </td>
+            <td class="text-end"><%= format_distance(climb.distance) %></td>
+            <td class="text-end"><strong><%= format_duration(climb.elapsed_time) %></strong></td>
+            <td class="text-end"><%= format_elevation(climb.ascent) %></td>
+            <td class="text-end"><%= format_elevation(climb.descent) %></td>
+            <td class="text-end"><%= format_grade(climb.average_grade) %></td>
+            <td class="text-end"><%= format_grade(climb.max_grade) %></td>
+            <td class="text-end text-nowrap"><%= format_vam(climb) %></td>
+            <% if show_heart_rate %><td class="text-end allure-col-extra"><%= climb.average_heart_rate || "—" %></td><% end %>
+            <% if show_power %><td class="text-end<%= " allure-col-extra" unless sport.power_led? %>"><%= format_power(climb.average_power) %></td><% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+    <% climbs.each do |climb| %>
+      <li class="list-group-item" <%= tag.attributes(analysis_row_attributes(climb.start_distance, climb.end_distance, source: "climb")) %>>
+        <div class="d-flex justify-content-between align-items-baseline gap-3">
+          <span class="allure-card-title">
+            <%= climb_label(climb) %>
+            <%= render "workouts/record_trophy", label: t("records.types.mc") if climb.id == max_climb_lap&.id %>
+          </span>
+          <strong class="allure-table-nums"><%= format_duration(climb.elapsed_time) %></strong>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          <%= format_distance(climb.distance) %> · ↑ <%= format_elevation(climb.ascent) %>
+          · ↓ <%= format_elevation(climb.descent) %> · <%= format_grade(climb.average_grade) %>
+        </div>
+        <div class="text-secondary small allure-table-nums"><%= t("workouts.show.laps.vam") %> <%= format_vam(climb) %><% if sport.power_led? && climb.average_power %> · <%= format_power(climb.average_power) %><% end %></div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="card-body text-secondary"><%= t("workouts.show.laps.climbs.empty") %></div>
+<% end %>

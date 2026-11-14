@@ -1,0 +1,209 @@
+.feedback-widget-fab {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 1080;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  border-radius: 999px;
+  padding: .55rem .95rem;
+  transition: transform .2s ease;
+
+  // Scrolling down slides the button off the right edge; scrolling up brings
+  // it back. The controller never sets the class under reduced motion.
+  &.is-retracted:not(:focus-visible) {
+    transform: translateX(calc(100% + 1.5rem));
+  }
+}
+
+// An open dialog owns the screen: the button would sit over its actions.
+.modal-open .feedback-widget-fab {
+  display: none;
+}
+
+.feedback-widget-overlay {
+  position: fixed;
+  z-index: 1105;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  background: rgba(15, 23, 42, .5);
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+
+.feedback-widget-dialog {
+  width: 100%;
+  max-width: 1140px;
+  margin: auto;
+}
+
+.feedback-widget-content {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 1rem);
+  color: var(--body-color);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.feedback-widget-header,
+.feedback-widget-footer {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-color: var(--border-color);
+}
+
+.feedback-widget-header {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.feedback-widget-footer {
+  border-top: 1px solid var(--border-color);
+}
+
+.feedback-widget-title {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.feedback-widget-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 1.25rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.feedback-widget-toolbar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-bottom: .75rem;
+}
+
+.feedback-widget-toolbar button,
+.feedback-widget-footer button {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+
+.feedback-widget-draw-hint {
+  margin-left: auto;
+  color: var(--secondary);
+  font-size: .8125rem;
+}
+
+.feedback-widget-canvas-wrap {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: #0f172a;
+  line-height: 0;
+}
+
+.feedback-widget-base-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.feedback-widget-draw-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.feedback-widget-privacy {
+  display: flex;
+  gap: .4rem;
+  margin: .75rem 0 0;
+  font-size: .8125rem;
+}
+
+.feedback-widget-status {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.feedback-widget-toast {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 1110;
+  max-width: min(32rem, calc(100vw - 2.5rem));
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+// Phone and tablet: the bottom bar occupies the bottom edge, so the feedback
+// action retracts to an icon-only tab on the right edge, clear of the bar. The
+// toast follows it so asynchronous results never hide the bar either.
+@media (max-width: 991.98px) {
+  .feedback-widget-fab {
+    right: 0;
+    bottom: calc(3.5rem + env(safe-area-inset-bottom) + .5rem);
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: .5rem .7rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .feedback-widget-fab span {
+    display: none;
+  }
+
+  .feedback-widget-toast {
+    right: .75rem;
+    bottom: calc(3.5rem + env(safe-area-inset-bottom) + .5rem);
+    max-width: calc(100vw - 1.5rem);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .feedback-widget-overlay {
+    align-items: flex-start;
+    padding: .25rem;
+  }
+
+  .feedback-widget-content {
+    max-height: calc(100vh - .5rem);
+  }
+
+  .feedback-widget-header,
+  .feedback-widget-body,
+  .feedback-widget-footer {
+    padding: .9rem;
+  }
+
+  .feedback-widget-footer {
+    align-items: flex-end;
+    flex-direction: column;
+  }
+
+  .feedback-widget-draw-hint {
+    width: 100%;
+    margin-left: 0;
+  }
+}

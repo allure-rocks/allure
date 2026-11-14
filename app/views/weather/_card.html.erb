@@ -1,0 +1,107 @@
+<%# Weather card (PLAN_WEATHER.md §7, DESIGN.md §20.3). One partial for the
+    owner's workout, a publication that shares its weather and a received
+    note: only the summary renders, never a place or an hourly instant. The
+    owner alone sees the pending, failed and missing states and their
+    actions. Open-Meteo's licence asks for the attribution line. %>
+<% summary = local_assigns.fetch(:summary, {}) || {} %>
+<% state = local_assigns.fetch(:state, :ready) %>
+<% workout = local_assigns[:workout] %>
+<%# The device's own readings, owner-only (PLAN_WEATHER.md §11). %>
+<% device_temperature = local_assigns[:device_temperature] %>
+<div class="card mb-3 allure-weather-card">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("weather.card.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% case state %>
+    <% when :device_only %>
+      <dl class="allure-secondary-metrics mb-0">
+        <div>
+          <dt><%= t("weather.card.device_temperature") %></dt>
+          <dd><%= format_temperature(device_temperature[:mean]) %></dd>
+          <div class="text-secondary small"><%= format_temperature_range(device_temperature[:min], device_temperature[:max]) %></div>
+        </div>
+      </dl>
+      <p class="text-secondary small mt-3 mb-0"><%= t("weather.card.device_hint") %></p>
+    <% when :pending %>
+      <p class="text-secondary mb-0 d-flex align-items-center gap-2" role="status">
+        <i class="ti ti-loader" aria-hidden="true"></i><%= t("weather.card.pending") %>
+      </p>
+    <% when :failed, :missing %>
+      <p class="text-secondary mb-3 d-flex align-items-center gap-2">
+        <i class="ti <%= state == :failed ? "ti-alert-triangle text-warning" : "ti-cloud-off" %>" aria-hidden="true"></i>
+        <%= t("weather.card.#{state}") %>
+      </p>
+      <%= button_to t("weather.card.#{state == :failed ? "retry" : "fetch"}"), workout_weather_path(workout),
+                    class: "btn btn-sm btn-outline-primary", form: { data: { turbo_frame: "_top" } } %>
+    <% else %>
+      <% condition = summary["condition"] %>
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <span class="allure-weather-card__icon" aria-hidden="true"><%= weather_condition_icon(condition, day: summary["is_day"]) %></span>
+        <div>
+          <div class="h3 mb-0"><%= format_temperature_range(summary["temperature_min"], summary["temperature_max"]) %></div>
+          <% if (label = weather_condition_label(condition)) %>
+            <div class="text-secondary"><%= label %></div>
+          <% end %>
+        </div>
+      </div>
+      <dl class="allure-secondary-metrics mb-0">
+        <% unless summary["apparent_temperature"].nil? %>
+          <div>
+            <dt><%= t("weather.card.apparent") %></dt>
+            <dd><%= format_temperature(summary["apparent_temperature"]) %></dd>
+          </div>
+        <% end %>
+        <% unless summary["wind_speed"].nil? %>
+          <div>
+            <dt><%= t("weather.card.wind") %></dt>
+            <dd class="d-flex align-items-center gap-1">
+              <%= wind_arrow(summary["wind_direction"]) %>
+              <span><%= wind_label(summary["wind_speed"], summary["wind_direction"], gusts: summary["wind_gusts"]) %></span>
+            </dd>
+          </div>
+        <% end %>
+        <% unless summary["humidity"].nil? %>
+          <div>
+            <dt><%= t("weather.card.humidity") %></dt>
+            <dd><%= number_to_percentage(summary["humidity"], precision: 0) %></dd>
+          </div>
+        <% end %>
+        <% if device_temperature %>
+          <div>
+            <dt><%= t("weather.card.device_temperature") %></dt>
+            <dd><%= format_temperature(device_temperature[:mean]) %></dd>
+          </div>
+        <% end %>
+        <% if summary["precipitation"].to_f.positive? %>
+          <div>
+            <dt><%= t("weather.card.precipitation") %></dt>
+            <dd><%= format_precipitation(summary["precipitation"]) %></dd>
+          </div>
+        <% end %>
+      </dl>
+      <% exposure = summary["wind_exposure"] %>
+      <% if exposure.is_a?(Hash) && exposure.values_at("head", "tail", "cross").sum(&:to_f).positive? %>
+        <div class="allure-wind-exposure mt-3 pt-3 border-top">
+          <div class="text-secondary small mb-1"><%= t("weather.exposure.title") %></div>
+          <%= wind_exposure_bar(exposure) %>
+          <ul class="allure-wind-exposure__legend list-inline small mt-1 mb-0">
+            <% wind_exposure_shares(exposure).each_with_index do |share, index| %>
+              <li class="list-inline-item">
+                <span class="allure-wind-exposure__swatch allure-wind-exposure__<%= WeatherHelper::EXPOSURE_SECTORS[index] %>" aria-hidden="true"></span><%= share %>
+              </li>
+            <% end %>
+          </ul>
+          <% if (headwind = effective_headwind_label(exposure["headwind"])) %>
+            <div class="text-secondary small mt-1"><%= headwind %></div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <% if state == :ready %>
+    <div class="card-footer text-secondary small">
+      <%= t("weather.card.attribution_html", provider: link_to("Open-Meteo.com", "https://open-meteo.com/", rel: "noopener", target: "_blank")) %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,71 @@
+<% content_for :title, t("admin.invitations.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+      <h1 class="page-title"><%= t("admin.invitations.title") %></h1>
+    </div>
+    <div class="col-auto ms-auto">
+      <%= link_to t("admin.invitations.new"), admin_new_invitation_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm card-table">
+      <thead>
+        <tr>
+          <th scope="col"><%= t("admin.invitations.table.email") %></th>
+          <th scope="col"><%= t("admin.invitations.table.created_at") %></th>
+          <th scope="col"><%= t("admin.invitations.table.expires_at") %></th>
+          <th scope="col"><%= t("admin.invitations.table.state") %></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @invitations.each do |invitation| %>
+          <tr>
+            <td>
+              <div><%= invitation.email_address %></div>
+              <% if invitation.display_name.present? %>
+                <div class="text-secondary small"><%= invitation.display_name %></div>
+              <% end %>
+            </td>
+            <td class="text-secondary"><%= l(invitation.created_at, format: :long) %></td>
+            <td class="text-secondary"><%= l(invitation.expires_at, format: :long) %></td>
+            <td>
+              <% if invitation.accepted? %>
+                <span class="badge bg-success-lt"><%= t("admin.invitations.states.accepted") %></span>
+              <% elsif invitation.expired? %>
+                <span class="badge bg-secondary-lt"><%= t("admin.invitations.states.expired") %></span>
+              <% else %>
+                <span class="badge bg-info-lt"><%= t("admin.invitations.states.pending") %></span>
+              <% end %>
+            </td>
+            <td class="text-end">
+              <% unless invitation.accepted? %>
+                <%= button_to t("admin.invitations.revoke"), admin_invitation_path(invitation),
+                      method: :delete, class: "btn btn-sm btn-outline-danger",
+                      form: { data: {
+                        confirm_title: t("admin.invitations.revoke_confirm_title"),
+                        confirm_body: t("admin.invitations.revoke_confirm_body", email: invitation.email_address),
+                        confirm_verb: t("admin.invitations.revoke")
+                      } } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        <% if @invitations.empty? %>
+          <tr><td colspan="5" class="text-secondary"><%= t("admin.invitations.empty") %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if @pagy.pages > 1 %>
+    <div class="card-footer d-flex justify-content-center">
+      <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
+  <% end %>
+</div>

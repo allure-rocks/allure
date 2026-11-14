@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    services:
+      postgres:
+        image: imresamu/postgis:18-3.6
+        env:
+          POSTGRES_USER: allure
+          POSTGRES_PASSWORD: allure
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U allure -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 30
+    env:
+      RAILS_ENV: test
+      NODE_ENV: production
+      POSTGRES_HOST: localhost
+      POSTGRES_USER: allure
+      POSTGRES_PASSWORD: allure
+      BUNDLE_JOBS: "4"
+      BUNDLE_RETRY: "3"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system packages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install --no-install-recommends -y \
+            build-essential ca-certificates curl git libgeos-dev libproj-dev \
+            libpq-dev librsvg2-2 libvips-dev libyaml-dev pkg-config \
+            postgresql-client xz-utils
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0.7"
+          bundler-cache: true
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.22.0"
+          cache: npm
+
+      - name: Install JavaScript dependencies
+        run: npm ci --include=dev
+
+      - name: Prepare the test database
+        run: bin/rails db:prepare
+
+      - name: Build the frontend
+        run: bin/vite build
+
+      - name: Run the Node tests
+        run: |
+          npm run test:route-renderer
+          npm run test:igpsport
+          npm run test:shared-files
+          npm run test:import-source
+
+      - name: Run RSpec
+        run: bundle exec rspec
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
+      - name: Run Brakeman
+        run: bundle exec brakeman --quiet --no-pager --exit-on-warn --exit-on-error
+
+      - name: Run bundler-audit
+        run: bin/bundler-audit
+
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.22.0"
+          cache: npm
+          cache-dependency-path: docs/site/package-lock.json
+      - run: npm ci --include=dev --prefix docs/site
+      - run: npm --prefix docs/site run build

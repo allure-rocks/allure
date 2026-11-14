@@ -1,0 +1,536 @@
+.allure-workout-header {
+  .page-pretitle {
+    min-height: 1.5rem;
+    text-transform: none;
+  }
+}
+
+// Title block and actions share the first row at every width: the menu sits
+// beside the title on phones instead of taking a line of its own.
+.allure-workout-header__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.allure-workout-header__identity {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.allure-workout-header__actions {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+// The identity block leads with the sport tile; the text column must be able
+// to shrink so a long title wraps instead of pushing the header actions out.
+.allure-workout-header__identity > :last-child {
+  min-width: 0;
+}
+
+// The pin line is user-adjacent content too (geocoded names): a long
+// unbroken token wraps rather than widening the page.
+.allure-workout-header__places {
+  overflow-wrap: anywhere;
+}
+
+// The title's capitals start level with the top of the sport tile (and of the
+// actions): the line's leading above them is trimmed, where supported by
+// text-box, otherwise pulled up by the same amount.
+.allure-workout-header__identity .page-title {
+  margin-top: -0.45em;
+
+  @supports (text-box: trim-start cap alphabetic) {
+    margin-top: 0;
+    text-box: trim-start cap alphabetic;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .allure-workout-header .page-title {
+    font-size: 1.125rem;
+  }
+}
+
+// On phones and small tablets Publish and the ⋯ menu stack in a narrow
+// column, so the title keeps most of the first line.
+// The stacked column spans the title and the next line (places or badges), so
+// the space beside ⋯ is used instead of pushing that line down.
+@media (max-width: 767.98px) {
+  .allure-workout-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 0.75rem;
+  }
+
+  .allure-workout-header__top {
+    display: contents;
+  }
+
+  .allure-workout-header__identity {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .allure-workout-header__actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .allure-workout-header__places,
+  .allure-workout-header > .page-pretitle {
+    grid-column: 1;
+  }
+
+  .allure-workout-header > :not(.allure-workout-header__top, .allure-workout-header__places, .page-pretitle) {
+    grid-column: 1 / -1;
+  }
+
+  .allure-workout-header__actions .btn-list {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
+// "Show more" disclosures (disclosure controller): below `md` the collapsible
+// content waits behind its toggle; the toggle only exists once the controller
+// is connected, so nothing is ever hidden without JavaScript.
+.allure-disclosure-toggle {
+  display: none;
+
+  // A text toggle, identical folded or open: no filled hover, pressed or
+  // focus state (a tap on a phone leaves the button hovered and focused).
+  &,
+  &:hover,
+  &:active,
+  &:focus,
+  &.active {
+    color: var(--secondary);
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none;
+  }
+
+  &:hover {
+    color: var(--body-color);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
+
+.allure-disclosure-chevron {
+  transition: transform 0.15s ease;
+}
+
+.is-expanded > .allure-disclosure-toggle .allure-disclosure-chevron,
+.allure-disclosure-toggle[aria-expanded="true"] .allure-disclosure-chevron {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 767.98px) {
+  .is-disclosure-ready > .allure-disclosure-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .is-disclosure-ready .allure-collapsible-sm:not(.is-expanded) {
+    display: none;
+  }
+
+  // The toggle leads the secondary block in both states, under the same
+  // separator; the grid opens below it.
+  .allure-secondary-metrics-wrap.is-disclosure-ready {
+    margin-top: 0.75rem !important;
+    padding-top: 0.5rem !important;
+  }
+
+  .allure-secondary-metrics-wrap.is-expanded > .allure-disclosure-toggle {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .allure-disclosure-chevron {
+    transition: none;
+  }
+}
+
+// Non-interactive explanatory text inside an action menu (the publication
+// contract, a blocking warning): it wraps instead of stretching the menu.
+.allure-menu-text {
+  max-width: 19rem;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+.allure-detail-section {
+  scroll-margin-top: 1rem;
+}
+
+.allure-detail-layout,
+.allure-detail-before-map,
+.allure-detail-map,
+.allure-detail-after-map {
+  min-width: 0;
+}
+
+// The document remains the scroll container; the map rail stays in view and
+// fills the viewport height while the summary, profile and analysis content
+// scrolls beside it. From `lg` up, matching the desktop layout (DESIGN.md §7.1);
+// below it the map leads the single column.
+@media (min-width: 992px) {
+  .allure-detail-layout--split {
+    display: grid;
+    grid-template-areas:
+      "map before"
+      "map after";
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    column-gap: 1.5rem;
+    align-items: start;
+  }
+
+  // The rail spans both rows so its sticky child has somewhere to travel.
+  .allure-detail-map {
+    grid-area: map;
+    align-self: stretch;
+  }
+
+  .allure-detail-map-panel {
+    position: sticky;
+    top: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 2.5rem);
+
+    // The card chrome stays; the canvas takes every remaining pixel. The
+    // section between the rail and the card must pass the height through.
+    .card {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      min-height: 0;
+      // Bootstrap utilities are !important; the card's mb-3 must not leave a
+      // gap under the full-height rail.
+      margin-bottom: 0 !important;
+    }
+
+    .allure-visual {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .allure-map {
+      height: 100%;
+    }
+  }
+
+  .allure-detail-before-map {
+    grid-area: before;
+  }
+
+  .allure-detail-after-map {
+    grid-area: after;
+  }
+
+  // Inside the rail the map card's own mb-3 is suppressed so it can fill the
+  // viewport height; the full-width zone below the grid needs its own gap or
+  // the publication card sits flush against the map.
+  .allure-detail-fullwidth {
+    margin-top: 1.5rem;
+  }
+}
+
+.allure-primary-metrics,
+.allure-secondary-metrics {
+  display: grid;
+  padding: 0;
+}
+
+// The metric grids follow the width of their card, not the viewport: the
+// summary sits in the narrower right column of the split layout on desktop,
+// and full width on phones and tablets.
+.allure-workout-summary .card-body {
+  container-type: inline-size;
+}
+
+.allure-primary-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.allure-secondary-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 1.5rem;
+  row-gap: 1.25rem;
+}
+
+@media (max-width: 991.98px) {
+  .allure-primary-metrics,
+  .allure-secondary-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.allure-workout-summary {
+  .allure-primary-metrics,
+  .allure-secondary-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @container (min-width: 30rem) {
+    .allure-secondary-metrics {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @container (min-width: 34rem) {
+    .allure-primary-metrics {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @container (min-width: 44rem) {
+    .allure-secondary-metrics {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+}
+
+.allure-metric-tile {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 0;
+  padding: 1rem;
+  overflow: hidden;
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+// The mark of a contested figure, beside the metric's label (DESIGN.md
+// §15.5): small, its triangle the only warning colour, the sentence in the
+// triangle's tooltip so the summary keeps its size.
+.allure-anomaly-note {
+  display: inline-flex;
+  margin-left: 0.25rem;
+  cursor: default;
+}
+
+// A quieter line under a tile's value, such as the category rank under
+// « Mon rang » (PLAN_SEGMENTS.md §8.7).
+.allure-metric-caption {
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--secondary-color);
+}
+
+// A tile holding a record carries Tabler's card stamp (DESIGN.md §10.2): a
+// faded trophy in the top corner, decorative and pointer-transparent. The
+// accessible name stays on the tile through its tooltip and hidden sentence.
+.allure-metric-tile .card-stamp {
+  --stamp-size: 3.5rem;
+}
+
+.allure-primary-metrics dt,
+.allure-secondary-metrics dt {
+  margin-bottom: 0.25rem;
+  color: var(--secondary-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.allure-primary-metrics dd,
+.allure-secondary-metrics dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+// The value sticks to the bottom of its tile so the four values of a row
+// share one baseline even when a label wraps to a second line, and the unit
+// stays smaller than the value so long values still fit a narrow tile.
+.allure-primary-metrics dd {
+  margin-top: auto;
+  overflow: hidden;
+  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.allure-primary-metrics dd small {
+  font-size: 0.7em;
+}
+
+.allure-secondary-metrics dd {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.allure-workout-copy {
+  max-width: 70ch;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 575.98px) {
+  .allure-primary-metrics {
+    gap: 0.5rem;
+  }
+
+  .allure-metric-tile {
+    padding: 0.75rem;
+  }
+
+  .allure-secondary-metrics {
+    column-gap: 1rem;
+  }
+}
+
+// Analysis card (DESIGN.md §20.3, §12). The tabs keep one line at every width
+// and scroll sideways, the hidden side fading out; the tables and their
+// stacked lists switch on the card's own width, so the narrow right column of
+// the desktop layout gets the list rather than a clipped table.
+.allure-analysis-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link {
+    white-space: nowrap;
+  }
+
+}
+
+// Sideways-scrolling lines (scroll-fade controller): the edge that still
+// hides content fades out.
+[data-controller~="scroll-fade"] {
+  &.is-scrollable-end {
+    mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+  }
+
+  &.is-scrollable-start {
+    mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent);
+  }
+
+  &.is-scrollable-start.is-scrollable-end {
+    mask-image: linear-gradient(to right, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
+  }
+}
+
+.allure-analysis-card .tab-content {
+  container-type: inline-size;
+}
+
+.allure-analysis-table {
+  display: none;
+}
+
+.allure-analysis-table td.text-end {
+  white-space: nowrap;
+}
+
+@container (min-width: 36rem) {
+  .allure-analysis-table {
+    display: block;
+  }
+
+  .allure-analysis-list {
+    display: none;
+  }
+}
+
+// Heart rate, cadence, power, trigger and the effort date are the dropped
+// columns of §12.2: only a wide card has room for them.
+@container (max-width: 55.99rem) {
+  .allure-col-extra {
+    display: none;
+  }
+}
+
+// Compact stacked rows: title and time on the first line, every secondary
+// value on one wrapping line below.
+.allure-analysis-list {
+  .list-group-item {
+    padding-block: 0.6rem;
+  }
+
+  .list-group-item > .small {
+    display: inline;
+  }
+
+  .list-group-item > .small + .small::before {
+    margin-inline: 0.35em;
+    content: "·";
+  }
+
+  .list-group-item > .d-flex + .small {
+    display: inline-block;
+    margin-top: 0.15rem;
+  }
+
+  .list-group-item > .d-flex + .small + .small {
+    display: inline;
+  }
+
+  .d-block {
+    display: inline !important;
+  }
+}
+
+// Participant row (DESIGN.md §10.18): avatar and identity, then the kind,
+// state and withdraw action — beside them on wider screens, under the name
+// on phones.
+.allure-participant-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.allure-participant-row__identity {
+  flex: 1 1 10rem;
+  min-width: 0;
+}
+
+.allure-participant-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 575.98px) {
+  .allure-participant-row__meta {
+    flex-basis: 100%;
+    padding-left: 2.5rem;
+  }
+}
+
+// What a profile shares, as two short lists (DESIGN.md §19.1): the items
+// flow side by side and wrap, so a long profile stays a few lines tall.
+.allure-share-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 1rem;
+}
+
+// The comments card carries no bottom margin of its own (it closes other
+// pages); on the workout page it now sits above the sharing card.
+.allure-detail-fullwidth > #comments:not(:last-child) {
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,40 @@
+<%# Linked identity providers (PLAN_AUTH.md §6.5, DESIGN.md §8.5): each one signs
+    this account in on its own; linking goes through the provider, unlinking
+    asks for a recent proof of identity and never removes the last way in. %>
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("settings.identities.title") %></h3>
+  </div>
+  <div class="card-body">
+    <p class="text-secondary"><%= t(current_user.instance_operator? ? "settings.identities.copy_operator" : "settings.identities.copy") %></p>
+    <% if identities.any? %>
+      <div class="list-group list-group-flush mb-3">
+        <% identities.each do |identity| %>
+          <div class="list-group-item px-0 d-flex align-items-center gap-3 flex-wrap">
+            <i class="ti <%= { "google" => "ti-brand-google", "apple" => "ti-brand-apple" }.fetch(identity.provider, "ti-login-2") %> fs-2 text-secondary" aria-hidden="true"></i>
+            <div class="flex-fill">
+              <div class="fw-medium"><%= identity.label %></div>
+              <div class="text-secondary small">
+                <%= identity.email %> · <%= t("settings.identities.linked", date: l(identity.linked_at, format: :short)) %>
+                <% if identity.last_used_at %>
+                  · <%= t("settings.identities.last_used", date: l(identity.last_used_at, format: :short)) %>
+                <% end %>
+              </div>
+            </div>
+            <% if current_user.password? || identities.size > 1 %>
+              <%= button_to t("settings.identities.unlink"), settings_identity_path(identity), method: :delete,
+                    class: "btn btn-ghost-danger btn-sm",
+                    aria: { label: t("settings.identities.unlink_label", provider: identity.label) },
+                    form: { data: { confirm_title: t("settings.identities.unlink_title", provider: identity.label),
+                                    confirm_body: t("settings.identities.unlink_body", provider: identity.label),
+                                    confirm_verb: t("settings.identities.unlink") } } %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+    <% if linkable.any? %>
+      <%= render "sessions/providers", intent: "link", providers: linkable, divider: false %>
+    <% end %>
+  </div>
+</div>

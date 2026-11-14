@@ -1,0 +1,54 @@
+<% content_for :title, t("settings.weather.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.weather.title") } do %>
+  <%= form_with model: @user, url: settings_weather_path, method: :patch do |form| %>
+    <%= render "shared/form_errors", form: form %>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.weather.enrichment_title") %></h2>
+      </div>
+      <div class="card-body">
+        <p class="text-secondary"><%= t("settings.weather.description") %></p>
+        <label class="form-check form-switch">
+          <%= form.check_box :weather_enrichment_enabled, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.weather.enrichment_label") %></span>
+        </label>
+        <p class="text-secondary mt-3 mb-0">
+          <i class="ti ti-shield-lock me-1" aria-hidden="true"></i><%= t("settings.weather.privacy") %>
+        </p>
+      </div>
+      <div class="card-footer">
+        <%= form.submit t("settings.weather.save"), class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @user.weather_enrichment_enabled? %>
+    <% pending = Workouts::UserBackfillJob.pending_scope(@user, "weather").count %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("settings.weather.backfill.title") %></h3>
+        <p class="text-secondary"><%= t("settings.weather.backfill.description") %></p>
+        <p class="mb-3"><%= t("settings.data.count", count: pending) %></p>
+        <%= button_to t("settings.data.weather.action"), settings_data_weather_path,
+              class: "btn btn-outline-primary", disabled: pending.zero?,
+              form: { data: { turbo_frame: "_top" } } %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title"><%= t("settings.weather.stored.title") %></h3>
+      <p class="text-secondary"><%= t("settings.weather.stored.description", count: @stored_count) %></p>
+      <%= button_to t("settings.weather.stored.action"), settings_weather_path, method: :delete,
+            class: "btn btn-outline-danger", disabled: @stored_count.zero?,
+            form: { data: {
+              confirm_title: t("settings.weather.stored.confirm_title"),
+              confirm_body: t("settings.weather.stored.confirm_body", count: @stored_count),
+              confirm_verb: t("settings.weather.stored.action")
+            } } %>
+    </div>
+  </div>
+<% end %>

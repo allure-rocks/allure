@@ -1,0 +1,7 @@
+<%# A month of the date-sorted card list (DESIGN.md §20.4): an h2 rule that
+    spans the grid, like the feed's day separators. The ISO month feeds the
+    endless scroll's duplicate-header drop when a month spans two pages.
+    Local: `month` (a Date on the first of the month, viewer zone). %>
+<div class="col-12" data-workout-month="<%= month.iso8601 %>">
+  <h2 class="hr-text allure-list-separator"><%= l(month, format: :month_year) %></h2>
+</div>

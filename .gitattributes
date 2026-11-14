@@ -1,0 +1,14 @@
+* text=auto eol=lf
+
+*.gpx text
+*.fit binary
+*.png binary
+*.webp binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
+*.gz binary
+
+docs/** linguist-documentation
+spec/fixtures/** linguist-vendored
+public/virtual_worlds/** linguist-vendored

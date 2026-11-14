@@ -1,0 +1,317 @@
+<% content_for :title, t("settings.federation.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("settings.federation.pretitle") %></div>
+      <h1 class="page-title"><%= t("settings.federation.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<div class="row row-deck row-cards mb-3">
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("settings.federation.activity.inbox") %></h3>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <% @diagnostics.inbox_items.sort.each do |status, count| %>
+            <li class="d-flex justify-content-between">
+              <span><%= t("settings.federation.statuses.#{status}") %></span>
+              <span class="text-secondary"><%= count %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("settings.federation.activity.notes") %></h3>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <% @diagnostics.remote_notes.sort.each do |status, count| %>
+            <li class="d-flex justify-content-between">
+              <span><%= t("settings.federation.statuses.#{status}") %></span>
+              <span class="text-secondary"><%= count %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("settings.federation.activity.media") %></h3>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <% @diagnostics.media.sort.each do |status, count| %>
+            <li class="d-flex justify-content-between">
+              <span><%= t("settings.federation.statuses.#{status}") %></span>
+              <span class="text-secondary"><%= count %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("settings.federation.deliveries.title") %></h3>
+      </div>
+      <div class="card-body">
+        <% if @diagnostics.deliveries.any? %>
+          <div class="table-responsive">
+            <table class="table table-sm card-table">
+              <thead>
+                <tr>
+                  <th><%= t("settings.federation.deliveries.authority") %></th>
+                  <th><%= t("settings.federation.deliveries.state") %></th>
+                  <th class="text-end"><%= t("settings.federation.deliveries.count") %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @diagnostics.deliveries.each do |(status, domain), count| %>
+                  <tr>
+                    <td><%= domain %></td>
+                    <td><%= t("settings.federation.statuses.#{status}") %></td>
+                    <td class="text-end"><%= count %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <p class="text-secondary mb-0"><%= t("settings.federation.deliveries.empty") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row-deck row-cards">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("admin.federation.health.title") %></h3>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="text-secondary small text-uppercase"><%= t("admin.federation.health.pending_follows") %></div>
+            <div class="h3 mb-0"><%= @delivery_health.pending_follow_requests %></div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-secondary small text-uppercase"><%= t("admin.federation.health.oldest") %></div>
+            <div class="h3 mb-0">
+              <% if @delivery_health.oldest_open_at %>
+                <%= t("admin.federation.health.ago", duration: distance_of_time_in_words(@delivery_health.oldest_open_at, Time.current)) %>
+              <% else %>
+                <%= t("admin.federation.health.none") %>
+              <% end %>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-secondary small text-uppercase"><%= t("admin.federation.health.by_status") %></div>
+            <ul class="list-unstyled mb-0">
+              <% @delivery_health.delivery_counts.sort.each do |status, count| %>
+                <li class="d-flex justify-content-between">
+                  <span><%= t("settings.federation.statuses.#{status}", default: status) %></span>
+                  <span class="text-secondary"><%= count %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        <% if @delivery_health.failing_authorities.any? %>
+          <div class="table-responsive mt-3">
+            <table class="table table-sm card-table">
+              <thead>
+                <tr>
+                  <th><%= t("admin.federation.health.authority") %></th>
+                  <th class="text-end"><%= t("admin.federation.health.failures") %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @delivery_health.failing_authorities.each do |authority, count| %>
+                  <tr>
+                    <td><%= authority %></td>
+                    <td class="text-end"><%= count %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("settings.federation.activity.segments") %></h3>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <% @diagnostics.remote_segments.sort.each do |status, count| %>
+            <li class="d-flex justify-content-between">
+              <span><%= t("settings.federation.statuses.#{status}") %></span>
+              <span class="text-secondary"><%= count %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("settings.federation.blocks.domains") %></h3>
+      </div>
+      <div class="card-body">
+        <p class="text-secondary"><%= t("settings.federation.blocks.hint") %></p>
+        <%= form_with url: admin_federation_domain_blocks_path, scope: :domain_block, class: "row g-2 align-items-end mb-3" do |form| %>
+          <div class="col">
+            <%= form.label :domain, t("settings.federation.blocks.domain_label"), class: "form-label" %>
+            <%= form.text_field :domain, class: "form-control", required: true,
+                  placeholder: t("settings.federation.blocks.domain_placeholder") %>
+          </div>
+          <div class="col-auto">
+            <%= form.submit t("settings.federation.blocks.block"), class: "btn btn-danger" %>
+          </div>
+        <% end %>
+        <% if @diagnostics.domain_blocks.any? %>
+          <ul class="list-group">
+            <% @diagnostics.domain_blocks.each do |block| %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span><%= block.domain %></span>
+                <%= button_to t("settings.federation.blocks.unblock"),
+                      admin_federation_domain_block_path(block),
+                      method: :delete, class: "btn btn-sm btn-outline-secondary" %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-secondary mb-0"><%= t("settings.federation.blocks.empty_domains") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("settings.federation.blocks.actors") %></h3>
+      </div>
+      <div class="card-body">
+        <%= form_with url: admin_federation_actor_blocks_path, scope: :actor_block, class: "row g-2 align-items-end mb-3" do |form| %>
+          <div class="col">
+            <%= form.label :actor_uri, t("settings.federation.blocks.actor_label"), class: "form-label" %>
+            <%= form.text_field :actor_uri, class: "form-control", required: true,
+                  placeholder: t("settings.federation.blocks.actor_placeholder") %>
+          </div>
+          <div class="col-auto">
+            <%= form.submit t("settings.federation.blocks.block"), class: "btn btn-danger" %>
+          </div>
+        <% end %>
+        <% if @diagnostics.actor_blocks.any? %>
+          <ul class="list-group">
+            <% @diagnostics.actor_blocks.each do |block| %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span class="text-truncate"><%= block.actor_uri %></span>
+                <%= button_to t("settings.federation.blocks.unblock"),
+                      admin_federation_actor_block_path(block),
+                      method: :delete, class: "btn btn-sm btn-outline-secondary" %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-secondary mb-0"><%= t("settings.federation.blocks.empty_actors") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("settings.federation.policies.title") %></h3>
+      </div>
+      <div class="card-body">
+        <p class="text-secondary"><%= t("settings.federation.policies.hint") %></p>
+        <%= form_with url: admin_federation_peer_policies_path, scope: :peer_policy, class: "row g-2 align-items-end mb-3" do |form| %>
+          <div class="col">
+            <%= form.label :domain, t("settings.federation.policies.domain_label"), class: "form-label" %>
+            <%= form.text_field :domain, class: "form-control", required: true,
+                  placeholder: t("settings.federation.blocks.domain_placeholder") %>
+          </div>
+          <div class="col">
+            <%= form.label :capability_profile, t("settings.federation.policies.capability_label"), class: "form-label" %>
+            <%= form.select :capability_profile,
+                  %w[public_only restricted_fetch restricted_shared_inbox].map { |value|
+                    [ t("settings.federation.policies.capabilities.#{value}"), value ]
+                  },
+                  {}, class: "form-select" %>
+          </div>
+          <div class="col-auto">
+            <%= form.submit t("settings.federation.policies.add"), class: "btn btn-primary" %>
+          </div>
+        <% end %>
+        <% if @diagnostics.peer_policies.any? %>
+          <div class="table-responsive">
+            <table class="table table-sm card-table">
+              <thead>
+                <tr>
+                  <th><%= t("settings.federation.policies.domain_label") %></th>
+                  <th><%= t("settings.federation.policies.capability_label") %></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @diagnostics.peer_policies.each do |policy| %>
+                  <tr>
+                    <td><%= policy.domain %></td>
+                    <td><%= t("settings.federation.policies.capabilities.#{policy.capability_profile}") %></td>
+                    <td class="text-end">
+                      <%= button_to t("settings.federation.policies.remove"),
+                            admin_federation_peer_policy_path(policy),
+                            method: :delete, class: "btn btn-sm btn-outline-secondary" %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <p class="text-secondary mb-0"><%= t("settings.federation.policies.empty") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("settings.federation.media.title") %></h3>
+      </div>
+      <div class="card-body">
+        <p class="text-secondary"><%= t("settings.federation.media.hint") %></p>
+        <%= button_to t("settings.federation.media.retry"),
+              admin_federation_media_retry_path,
+              class: "btn btn-outline-primary",
+              disabled: @diagnostics.retryable_media.zero? %>
+        <% if @diagnostics.retryable_media.zero? %>
+          <p class="text-secondary mt-2 mb-0"><%= t("settings.federation.media.none") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

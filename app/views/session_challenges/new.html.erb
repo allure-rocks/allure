@@ -1,0 +1,27 @@
+<% content_for :title, t("session_challenges.new.title") %>
+
+<%= form_with url: session_challenge_path, class: "card card-md",
+      data: credential_form_data(controller: "webauthn", webauthn_mode_value: "get",
+                                 webauthn_options_url_value: options_session_challenge_path,
+                                 webauthn_cancelled_message_value: t("second_factor.passkey.cancelled"),
+                                 webauthn_failed_message_value: t("second_factor.passkey.failed")) do |form| %>
+  <div class="card-body">
+    <h1 class="card-title text-center mb-4"><%= t("session_challenges.new.title") %></h1>
+    <p class="my-4 text-center">
+      <%= t(@recovery ? "session_challenges.new.copy_recovery" : (@totp ? "session_challenges.new.copy" : "session_challenges.new.copy_passkey")) %>
+    </p>
+
+    <%= render "second_factor/challenge_fields", form: form, totp: @totp, passkeys: @passkeys, recovery: @recovery,
+                                                 autofocus: true,
+                                                 switch_path: new_session_challenge_path(recovery: (1 unless @recovery)) %>
+
+    <div class="form-footer flex-nowrap">
+      <% if @recovery || @totp %>
+        <%= form.button t("session_challenges.new.submit"), class: "btn btn-primary w-100" %>
+      <% end %>
+      <%# Inside the code form: the button posts to the cancel action instead. %>
+      <%= form.button t("session_challenges.new.cancel"), class: "btn w-100", type: "submit",
+            formaction: cancel_session_challenge_path, formnovalidate: true, name: nil %>
+    </div>
+  </div>
+<% end %>

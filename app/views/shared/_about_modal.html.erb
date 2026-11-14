@@ -1,0 +1,97 @@
+<%# About dialog (DESIGN.md §10.23), members only. Opened from the account
+    menu (web and the companion's native menu, bridge item `about`) and the
+    footer. Static content: no request when it opens. %>
+<div class="modal fade" id="about-modal" tabindex="-1" aria-hidden="true" aria-labelledby="about-modal-title">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex align-items-center gap-3">
+          <%= render "shared/brand_mark", size: "fs-1" %>
+          <div>
+            <h2 class="modal-title" id="about-modal-title"><%= t("about.title") %></h2>
+            <div class="text-secondary small">
+              <%= t("about.version", version: Allure::VERSION) %> · <%= t("footer.tagline") %>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<%= t("close") %>"></button>
+      </div>
+      <div class="modal-body">
+        <h3 class="h4"><%= t("about.instance.title") %></h3>
+        <dl class="row mb-4">
+          <dt class="col-5"><%= t("about.instance.name") %></dt>
+          <dd class="col-7"><%= Allure::Instance.name %></dd>
+          <dt class="col-5"><%= t("about.instance.address") %></dt>
+          <dd class="col-7 text-break"><%= Allure::Federation.config.domain %></dd>
+          <% if Allure::Instance.description %>
+            <dt class="col-5"><%= t("about.instance.description") %></dt>
+            <dd class="col-7"><%= Allure::Instance.description %></dd>
+          <% end %>
+          <% if Allure::Instance.hosted_by? %>
+            <dt class="col-5"><%= t("about.instance.host") %></dt>
+            <dd class="col-7">
+              <% if Allure::Instance.host_url %>
+                <%= link_to Allure::Instance.host_name, Allure::Instance.host_url, rel: "noopener", target: "_blank" %>
+              <% else %>
+                <%= Allure::Instance.host_name %>
+              <% end %>
+            </dd>
+          <% end %>
+          <% if (operator = about_operator) %>
+            <dt class="col-5"><%= t("about.instance.operator") %></dt>
+            <dd class="col-7"><%= link_to "@#{operator.username}", profile_path(operator.username) %></dd>
+          <% end %>
+        </dl>
+
+        <h3 class="h4"><%= t("about.services.title") %></h3>
+        <p class="text-secondary small"><%= t("about.services.intro") %></p>
+        <ul class="list-unstyled mb-4">
+          <% about_services.each do |service| %>
+            <li class="mb-2">
+              <div class="fw-medium"><%= t("about.services.#{service.key}.label") %></div>
+              <div class="text-secondary small">
+                <%= t("about.services.#{service.key}.what") %>
+                <% if service.hosts.any? %>
+                  <span class="text-body"><%= service.hosts.join(", ") %></span>
+                <% end %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+
+        <h3 class="h4"><%= t("about.software.title") %></h3>
+        <p class="mb-2"><%= t("about.software.licence") %></p>
+        <ul class="list-inline list-inline-dots mb-4">
+          <li class="list-inline-item">
+            <%= link_to t("about.software.source"), Allure::Instance.source_url, rel: "noopener", target: "_blank" %>
+          </li>
+          <li class="list-inline-item"><%= link_to t("navigation.help"), help_path %></li>
+          <li class="list-inline-item"><%= link_to t("footer.api"), developers_api_path %></li>
+          <li class="list-inline-item">
+            <%= link_to t("about.software.operator_docs"), "https://docs.allure.rocks", rel: "noopener", target: "_blank" %>
+          </li>
+        </ul>
+
+        <h3 class="h4"><%= t("about.credits.title") %></h3>
+        <ul class="small text-secondary mb-0">
+          <li><%= link_to "OpenStreetMap", "https://www.openstreetmap.org/copyright", rel: "noopener", target: "_blank" %> — <%= t("about.credits.osm") %></li>
+          <li><%= link_to "OpenFreeMap", "https://openfreemap.org", rel: "noopener", target: "_blank" %> — <%= t("about.credits.openfreemap") %></li>
+          <% if Allure::Weather::Config.enabled? %>
+            <li><%= link_to "Open-Meteo", "https://open-meteo.com", rel: "noopener", target: "_blank" %> — <%= t("about.credits.open_meteo") %></li>
+          <% end %>
+          <li><%= t("about.credits.software_html", list: safe_join([
+                link_to("Ruby on Rails", "https://rubyonrails.org", rel: "noopener", target: "_blank"),
+                link_to("Hotwire", "https://hotwired.dev", rel: "noopener", target: "_blank"),
+                link_to("Tabler", "https://tabler.io", rel: "noopener", target: "_blank"),
+                link_to("MapLibre GL JS", "https://maplibre.org", rel: "noopener", target: "_blank"),
+                link_to("Apache ECharts", "https://echarts.apache.org", rel: "noopener", target: "_blank"),
+                link_to("Meteocons", "https://github.com/basmilius/weather-icons", rel: "noopener", target: "_blank")
+              ], ", ")) %></li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><%= t("close") %></button>
+      </div>
+    </div>
+  </div>
+</div>

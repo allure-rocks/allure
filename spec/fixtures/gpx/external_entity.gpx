@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gpx [
+  <!ENTITY xxe SYSTEM "http://169.254.169.254/latest/meta-data/">
+]>
+<gpx version="1.1" creator="Allure Test Suite" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>XXE regression</name>
+    <trkseg>
+      <trkpt lat="45.0000" lon="6.4000"><ele>500.0</ele><time>&xxe;</time></trkpt>
+      <trkpt lat="45.0010" lon="6.4000"><ele>505.0</ele><time>2026-06-01T08:01:00Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

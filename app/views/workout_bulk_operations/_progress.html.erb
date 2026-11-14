@@ -1,0 +1,122 @@
+<%# The progress fragment (DESIGN.md §20.4, PLAN_BULK_ACTIONS.md §7): polled
+    through `status` while the operation is active. Counters are computed from
+    the item rows, never denormalized. %>
+<% processed = total - counts.fetch("queued", 0) %>
+<% percentage = total.zero? ? 0 : [ (processed * 100.0 / total).floor, 100 ].min %>
+<div data-bulk-operation-target="content"
+     data-bulk-operation-active="<%= operation.active? %>"
+     data-bulk-operation-status="<%= operation.status %>">
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
+        <h3 class="card-title mb-0"><%= t("workouts.bulk.progress.status_title") %></h3>
+        <span data-status-text><%= bulk_operation_status_badge(operation.status) %></span>
+      </div>
+
+      <div class="progress mb-2" role="progressbar" aria-valuenow="<%= percentage %>" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar" style="width: <%= percentage %>%"></div>
+      </div>
+      <div class="text-secondary small">
+        <%= t("workouts.bulk.progress.progress", processed: processed, total: total) %>
+        <% waiting = total - processed %>
+        <% if operation.active? && waiting.positive? %>
+          · <%= t("workouts.bulk.progress.waiting", count: waiting) %>
+        <% end %>
+      </div>
+
+      <% if processed.positive? || operation.terminal? %>
+        <p class="text-secondary small mt-2 mb-0" data-status-text>
+          <%= t("workouts.bulk.progress.summary",
+                modified: counts.fetch("modified", 0),
+                modified_label: bulk_modified_label(operation.operation),
+                skipped: counts.fetch("skipped", 0),
+                failed: counts.fetch("failed", 0),
+                cancelled: counts.fetch("cancelled", 0)) %>
+        </p>
+      <% end %>
+
+      <% if operation.terminal? %>
+        <div class="mt-3">
+          <%= link_to t("workouts.bulk.progress.back"),
+                operation.return_to || workouts_path(view: "table"), class: "btn btn-primary" %>
+        </div>
+      <% elsif operation.cancellation_requested? %>
+        <div class="alert alert-warning mt-3 mb-0"><%= t("workouts.bulk.progress.cancel_pending") %></div>
+      <% else %>
+        <%= button_to t("workouts.bulk.progress.cancel"), cancel_workout_bulk_operation_path(operation),
+              class: "btn btn-outline-danger mt-3" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title"><%= t("workouts.bulk.progress.activities") %></h3>
+    </div>
+    <% if items.any? %>
+      <div class="table-responsive d-none d-md-block">
+        <table class="table table-sm table-vcenter card-table">
+          <caption class="visually-hidden"><%= t("workouts.bulk.progress.activities") %></caption>
+          <thead>
+            <tr>
+              <th scope="col"><%= t("workouts.bulk.progress.columns.activity") %></th>
+              <th scope="col"><%= t("workouts.bulk.progress.columns.status") %></th>
+              <th scope="col"><%= t("workouts.bulk.progress.columns.reason") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% items.each do |item| %>
+              <tr>
+                <td>
+                  <% if item.workout %>
+                    <%= link_to workout_display_title(item.workout), workout_path(item.workout), class: "text-reset" %>
+                  <% else %>
+                    <span class="text-secondary"><%= t("workouts.bulk.progress.deleted_activity") %></span>
+                  <% end %>
+                </td>
+                <td><%= bulk_item_status_badge(item.status) %></td>
+                <td class="text-secondary small">
+                  <%= bulk_item_failure_label(item.failure_code) if item.failure_code.present? %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <ul class="list-group list-group-flush d-md-none allure-card-list">
+        <% items.each do |item| %>
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between align-items-baseline gap-2">
+              <span class="allure-card-title text-break">
+                <% if item.workout %>
+                  <%= link_to workout_display_title(item.workout), workout_path(item.workout), class: "text-reset" %>
+                <% else %>
+                  <%= t("workouts.bulk.progress.deleted_activity") %>
+                <% end %>
+              </span>
+              <span class="text-nowrap"><%= bulk_item_status_badge(item.status) %></span>
+            </div>
+            <% if item.failure_code.present? %>
+              <div class="text-secondary small"><%= bulk_item_failure_label(item.failure_code) %></div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="card-body text-secondary"><%= t("workouts.bulk.progress.empty") %></div>
+    <% end %>
+  </div>
+
+  <% if operation.terminal? %>
+    <span class="visually-hidden"
+          data-bulk-operation-notice
+          data-notice-title="<%= t("workouts.bulk.notices_terminal.#{operation.status}.title") %>"
+          data-notice-body="<%= t("workouts.bulk.notices_terminal.#{operation.status}.body",
+                                  modified: counts.fetch("modified", 0),
+                                  modified_label: bulk_modified_label(operation.operation),
+                                  skipped: counts.fetch("skipped", 0),
+                                  failed: counts.fetch("failed", 0),
+                                  cancelled: counts.fetch("cancelled", 0)) %>"
+          data-notice-level="<%= bulk_operation_notice_level(operation.status) %>"></span>
+  <% end %>
+</div>

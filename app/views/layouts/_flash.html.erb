@@ -1,0 +1,7 @@
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <div class="alert alert-<%= flash_css_class(type) %> alert-dismissible" role="alert">
+    <div><%= message %></div>
+    <a class="btn-close" data-bs-dismiss="alert" aria-label="<%= t("close") %>"></a>
+  </div>
+<% end %>

@@ -1,0 +1,73 @@
+<p>
+  Ein <strong>Segment</strong> ist ein Stück Straße oder Weg, auf dem du dich
+  vergleichen willst: ein Anstieg, ein Sprint, eine Runde im Park. Jedes Mal,
+  wenn eine deiner Aktivitäten es abdeckt, erfasst Allure einen
+  <strong>Durchgang</strong>. Neben Segmenten gibt es <strong>Routen</strong>
+  (eine ganze Strecke zum Nachfahren) und <strong>Rundkurse</strong> (eine Strecke,
+  die zu ihrem Start zurückführt).
+</p>
+
+<h2>Vorgeschlagene Strecken</h2>
+<p>
+  Wenn du dieselbe komplette Strecke mindestens dreimal gefahren bist, ohne sie
+  zu speichern, schlägt Allure sie bei jeder dieser Aktivitäten vor. « Als Route
+  speichern » öffnet das Formular: Die Aktivitäten der Gruppe werden daran
+  angehängt. « Ignorieren » schließt den Vorschlag für diese Strecke, und
+  spätere Fahrten schließen sich ihm still an. Ein Vorschlag wird nie
+  veröffentlicht.
+</p>
+
+<h2>Wer ein Segment sieht</h2>
+<p>
+  Wer es erstellt, entscheidet: nur man selbst, die eigenen Follower oder alle
+  auf dieser Instanz. Ein privates Segment hat keine Bestenliste; es sammelt
+  nur deine eigenen Durchgänge. Wer ein geteiltes Segment sehen kann, kann es
+  in die eigenen privaten Segmente kopieren, in beide Richtungen.
+</p>
+
+<h2>Wer deine Durchgänge sieht</h2>
+<p>
+  Auf der Seite eines Segments siehst du immer nur deine eigenen Durchgänge im
+  Detail. Die <strong>Bestenliste</strong> ist anders: Sie richtet sich nach
+  ihrem Leser.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.listing.notice") %>
+</div>
+<p>
+  Zwei Personen können also unterschiedliche Bestenlisten sehen, und eine nicht
+  veröffentlichte Aktivität oder eine ohne ihre Route veröffentlichte bringt
+  dich nie in eine. Auf jedem Segment, auf dem du einen Durchgang hast, sagt dir
+  eine Zeile, wer dich dort sieht — oder warum niemand.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.leaderboard.residual_risk") %>
+</div>
+
+<h2>Eine Bestenliste verlassen</h2>
+<ul>
+  <li><strong>Bestenliste verlassen</strong> auf der Seite eines Segments
+    entfernt deine Durchgänge sofort daraus, unabhängig von ihrer
+    Veröffentlichung. Du kannst später zurückkehren.</li>
+  <li>Ein Segment, das eine deiner Privatsphäre-Zonen berührt, zeigt deine
+    Durchgänge nie.</li>
+  <li>Bestenlisten verlassen diese Instanz nie.</li>
+</ul>
+
+<h2>Kategorien</h2>
+<p>
+  In deinen <%= link_to "Profileinstellungen", settings_profile_path %> kannst
+  du eine Bestenlisten-Kategorie angeben (Frauen oder Männer). Das ist freiwillig
+  und fügt Bestenlisten mit genügend Sportlerinnen und Sportlern dieser
+  Kategorie eine gefilterte Ansicht hinzu; du bleibst immer in der
+  Gesamtwertung. Alle, die eine Bestenliste lesen, in der du stehst, können die
+  angegebene Kategorie sehen, auch unter einem Alias.
+</p>
+
+<h2>Deine eigenen Plätze</h2>
+<p>
+  Der Pokal markiert deine eigenen Plätze — deinen Rekord sowie deine
+  zweit- und drittbeste Zeit, im Vergleich mit dir selbst. Der Lorbeerkranz
+  markiert einen Platz in einer Bestenliste, im Vergleich mit anderen. Deine
+  zweit- und drittbeste Zeit werden nur dir angezeigt.
+</p>

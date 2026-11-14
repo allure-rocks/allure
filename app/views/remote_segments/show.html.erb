@@ -1,0 +1,68 @@
+<% content_for :title, @view.name %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col-auto"><%= actor_avatar_tag(@segment.actor, size: "lg") %></div>
+    <div class="col">
+      <div class="page-pretitle"><%= t("remote_segments.pretitle") %></div>
+      <h1 class="page-title"><%= @view.name %></h1>
+      <div class="text-secondary small">
+        <% if @segment.actor.tombstoned? %>
+          <%= actor_name(@segment.actor) %> · <%= t("remote_segments.author_unavailable") %>
+        <% else %>
+          <%= link_to actor_name(@segment.actor), actor_profile_path(@segment.actor), class: "text-reset" %>
+          · <%= actor_handle(@segment.actor) %>
+        <% end %>
+        <% if @view.all_sports? %>
+          · <%= t("segments.details.all_sports") %>
+        <% else %>
+          · <span class="d-inline-flex align-items-center"><%= sport_tile_tag(@view.sport, size: :xs) %><span class="ms-1"><%= sport_display_name(@view.sport) %></span></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="row row-deck row-cards">
+  <div class="col-12">
+    <%= render "workouts/metrics", workout: @view, show_description: false %>
+  </div>
+
+  <% if @segment.content_html.present? || @segment.description.present? %>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="h3"><%= t("workouts.show.description") %></h2>
+          <% if @segment.content_html.present? %>
+            <%= Federation::RemoteText.sanitize(@segment.content_html).to_s.html_safe %>
+          <% else %>
+            <%= simple_format(h(@segment.description)) %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="col-12">
+    <turbo-frame id="remote-segment-media"
+                 <%= %(data-controller="refresh" data-refresh-url-value="#{remote_segment_path(@segment)}" data-refresh-interval-value="4000").html_safe if @view.media_pending? %>>
+      <%= render "media", segment: @segment, view: @view %>
+    </turbo-frame>
+  </div>
+
+  <% if @view.copyable? %>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header"><h3 class="card-title"><%= t("remote_segments.copy.title") %></h3></div>
+        <div class="card-body">
+          <p class="text-secondary small"><%= t("remote_segments.copy.body") %></p>
+          <%= button_to t("remote_segments.copy.action"), remote_segment_import_path(@segment), class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="col-12">
+    <p class="text-secondary small mb-0"><%= t("remote_segments.from_instance", handle: actor_handle(@segment.actor)) %></p>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="alert alert-info" role="note">
+  <%= t("privacy_zones.panel") %>
+</div>
+
+<h2>Wat een zone is</h2>
+<p>
+  Een cirkel die je tekent rond een plek die je niet wilt prijsgeven — je huis,
+  je werk, het huis van een familielid. Je maakt ze aan in
+  <%= link_to "Privacyzones", privacy_zones_path %>, door een plaats te zoeken
+  of op de kaart te klikken, en je kiest de straal. De zones zelf worden nooit
+  gedeeld.
+</p>
+
+<h2>Wat ze verbergt</h2>
+<p>
+  Als je publiceert, wordt elk punt van de route binnen een van je zones
+  weggeknipt voordat de kopie gemaakt wordt: uit de route op de kaart, de
+  kaartafbeelding, het GPX-bestand en de posities van foto's. De route wordt daar
+  met een onderbreking getekend, zodat niemand haar tot aan je deur kan volgen.
+</p>
+
+<h2>De start en de finish</h2>
+<p>
+  Bij de start en de finish verraadt een route het makkelijkst een plek, dus elk
+  publicatieprofiel beslist daar apart over, met <strong>Start verbergen</strong>
+  en <strong>Finish verbergen</strong>:
+</p>
+<ul>
+  <li><strong>Verbergen aangevinkt</strong> — de start (of de finish) moet in een
+    van je zones liggen, en wordt samen met die zone weggehaald. Als geen enkele
+    zone hem dekt, weigert Allure te publiceren en vertelt je waarom, in plaats
+    van hem te tonen.</li>
+  <li><strong>Verbergen niet aangevinkt</strong> — de start (of de finish) blijft
+    zichtbaar, <strong>ook binnen een zone</strong>. Handig voor routes die op
+    een openbare plek beginnen, zoals een parkeerplaats bij een wandelroute of
+    een club.</li>
+</ul>
+<p>
+  Als een deel van de opname een zone nooit verlaat, blijft er niets over dat
+  veilig getoond kan worden, en wordt de route niet gepubliceerd.
+</p>
+
+<h2>Wat ze nooit verandert</h2>
+<ul>
+  <li>Je eigen activiteit: je ziet nog altijd de hele route, en je meetwaarden
+    worden daaruit berekend.</li>
+  <li>Publicaties die al gemaakt zijn: dat zijn kopieën, vastgelegd op het moment
+    dat je publiceerde. Een zone die je later toevoegt, bereikt ze niet —
+    verwijder ze en publiceer opnieuw.</li>
+  <li>Een zone verwijderen onthult niets van wat al gepubliceerd is, maar je
+    volgende publicaties verbergen dat gebied dan niet meer.</li>
+</ul>
+
+<h2>Foto's en segmenten</h2>
+<ul>
+  <li>Een foto die binnen een zone is genomen, blijft buiten een publicatie
+    tenzij je hem uitdrukkelijk toevoegt; hij wordt dan zonder positie
+    gedeeld.</li>
+  <li>Je pogingen op een segment dat een van je zones raakt, verschijnen nooit
+    in het klassement ervan.</li>
+  <li>Een eigen parcours delen dat door een zone loopt, vraagt eerst je
+    bevestiging.</li>
+</ul>

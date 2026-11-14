@@ -1,0 +1,11 @@
+<%# Generated avatar art (DESIGN.md §9.2): deterministic pink geometry from the
+    persisted seed, rendered as inline SVG, never an image file, never with
+    initials — the adjacent account name is the identifier. %>
+<% recipe = Allure::Avatar::Generator.new(seed: seed).call %>
+<%= tag.svg class: classes, viewBox: "0 0 100 100", xmlns: "http://www.w3.org/2000/svg",
+           role: label ? "img" : nil, aria: label ? { label: label } : { hidden: true } do %>
+  <%= tag.rect width: 100, height: 100, fill: recipe[:background] %>
+  <% recipe[:shapes].each do |shape| %>
+    <%= tag.public_send(shape.delete(:kind), **shape) %>
+  <% end %>
+<% end %>

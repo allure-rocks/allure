@@ -1,0 +1,17 @@
+<%# Settings shell (DESIGN.md §8.5): the shared section shell with the settings
+    navigation, its « Paramètres » header and the return link to /settings.
+    Callers wrap their content and pass the section title:
+      render layout: "settings/shell", locals: { title: t("…") } do … end
+    Optional header actions are provided through content_for(:settings_actions). %>
+<%= render layout: "shared/section_shell", locals: {
+      title: title,
+      pretitle: t("settings.hub.pretitle"),
+      heading: t("settings.hub.title"),
+      back_path: settings_path,
+      back_label: t("settings.hub.back"),
+      groups: settings_navigation_groups(controller_path: controller_path),
+      nav_label: t("settings.hub.title"),
+      actions: content_for(:settings_actions)
+    } do %>
+  <%= yield %>
+<% end %>

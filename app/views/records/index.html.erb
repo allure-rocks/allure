@@ -1,0 +1,128 @@
+<% content_for :title, t("records.index.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("records.index.pretitle") %></div>
+      <h1 class="page-title" id="records-title"><%= t("records.index.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<% if @sports.any? %>
+  <section class="card paged-panels" aria-labelledby="records-title"
+           data-controller="paged-panels"
+           data-paged-panels-fit-value="true"
+           data-action="turbo:before-cache@document->paged-panels#disconnect">
+    <% if @sports.many? %>
+      <div class="card-body border-bottom" data-paged-panels-target="navigation" hidden>
+        <fieldset class="allure-sport-filter mb-0">
+          <legend class="visually-hidden"><%= t("records.index.sport_label") %></legend>
+          <div class="form-selectgroup paged-panels__choices" data-paged-panels-target="selector">
+            <% @sports.each do |sport| %>
+              <label class="form-selectgroup-item">
+                <%= radio_button_tag :record_sport, sport.slug, sport == @selected_sport,
+                      id: "record-sport-#{sport.slug}", class: "form-selectgroup-input",
+                      aria: { controls: "records-#{sport.slug}" },
+                      data: { paged_panels_target: "choice", choice_name: sport_display_name(sport), action: "change->paged-panels#select" } %>
+                <span class="form-selectgroup-label">
+                  <span class="allure-sport-filter__icon" aria-hidden="true"><%= sport_icon_tag(sport) %></span>
+                  <span><%= sport_display_name(sport) %></span>
+                </span>
+              </label>
+            <% end %>
+          </div>
+        </fieldset>
+        <p class="form-text mt-2 mb-0"><%= t("records.index.swipe_hint") %></p>
+      </div>
+    <% end %>
+    <div class="paged-panels__viewport" data-paged-panels-target="viewport" data-action="scroll->paged-panels#scrolled">
+      <% @sports.each do |sport| %>
+        <% records = @records_by_sport[sport] || [] %>
+        <% efforts = @effort_records_by_sport[sport] || [] %>
+        <section class="paged-panels__panel" id="records-<%= sport.slug %>"
+                 aria-labelledby="records-name-<%= sport.slug %>" data-paged-panels-target="panel">
+          <h2 class="h4 px-3 pt-3 mb-2" id="records-name-<%= sport.slug %>">
+            <span class="d-inline-flex align-items-center gap-2"><%= sport_tile_tag(sport, size: :xs) %><%= sport_display_name(sport) %></span>
+          </h2>
+          <div class="records-panel__tables">
+            <% if records.any? %>
+              <section class="records-panel__table" aria-labelledby="records-classic-<%= sport.slug %>">
+                <h3 class="h5 px-3 mb-1 text-secondary" id="records-classic-<%= sport.slug %>"><%= t("records.index.classic_title") %></h3>
+                <table class="table table-sm table-vcenter card-table allure-table-nums mb-0">
+                  <caption class="visually-hidden"><%= sport_display_name(sport) %> — <%= t("records.index.classic_title") %></caption>
+                  <thead>
+                    <tr>
+                      <th scope="col"><%= t("records.index.record") %></th>
+                      <th scope="col" class="text-end"><%= t("records.index.value") %></th>
+                      <th scope="col" class="text-end"><%= t("records.index.set_on") %></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% records.each do |record| %>
+                      <% type_label = t("records.types.#{record.record_type.downcase}") %>
+                      <tr>
+                        <td><%= type_label %></td>
+                        <td class="text-end text-nowrap"><strong><%= format_record_value(record) %></strong></td>
+                        <td class="text-end text-nowrap">
+                          <% if record.workout %>
+                            <%= link_to l(record.workout_started_at.to_date), workout_path(record.workout) %>
+                          <% else %>
+                            <%= l(record.workout_started_at.to_date) %>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </section>
+            <% end %>
+            <% if efforts.any? %>
+              <section class="records-panel__table" aria-labelledby="records-efforts-<%= sport.slug %>">
+                <h3 class="h5 px-3 mb-1 text-secondary" id="records-efforts-<%= sport.slug %>"><%= t("records.efforts.title") %></h3>
+                <table class="table table-sm table-vcenter card-table allure-table-nums mb-0">
+                  <caption class="visually-hidden"><%= sport_display_name(sport) %> — <%= t("records.efforts.title") %></caption>
+                  <thead>
+                    <tr>
+                      <th scope="col"><%= t("records.efforts.distance") %></th>
+                      <th scope="col" class="text-end"><%= t("records.index.value") %></th>
+                      <th scope="col" class="text-end"><%= t("records.index.set_on") %></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% efforts.each do |record| %>
+                      <% distance_label = t("records.distances.#{record.distance_key}") %>
+                      <tr>
+                        <td><%= distance_label %></td>
+                        <td class="text-end text-nowrap"><strong><%= format_duration(record.duration_seconds) %></strong></td>
+                        <td class="text-end text-nowrap">
+                          <% if record.workout %>
+                            <%= link_to l(record.workout_started_at.to_date), workout_path(record.workout) %>
+                          <% else %>
+                            <%= l(record.workout_started_at.to_date) %>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </section>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+    </div>
+    <span class="visually-hidden" role="status" aria-atomic="true" data-paged-panels-target="status"></span>
+  </section>
+<% else %>
+  <div class="card">
+    <div class="card-body">
+      <div class="empty">
+        <div class="empty-icon"><i class="ti ti-trophy fs-1 text-secondary" aria-hidden="true"></i></div>
+        <p class="empty-title"><%= t("records.index.empty_title") %></p>
+        <p class="empty-subtitle text-secondary"><%= t("records.index.empty_subtitle") %></p>
+        <div class="empty-action"><%= link_to t("records.index.empty_action"), new_workout_import_path, class: "btn btn-primary" %></div>
+      </div>
+    </div>
+  </div>
+<% end %>

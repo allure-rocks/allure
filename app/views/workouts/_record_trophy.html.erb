@@ -1,0 +1,6 @@
+<%# The trophy that marks a personal place beside the value it qualifies: a
+    secondary summary metric, a best-effort row, or the biggest climb. Gold for
+    the record, silver and bronze for the owner's second and third best time
+    (DESIGN.md §10.4). The primary summary tiles carry the card stamp instead
+    (§10.2). Locals: `label`, `place` (defaults to the record). %>
+<%= personal_place_icon(local_assigns.fetch(:place, 1), local_assigns.fetch(:label), extra_classes: "ms-1") %>

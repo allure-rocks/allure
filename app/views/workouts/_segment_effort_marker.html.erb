@@ -1,0 +1,15 @@
+<%# The personal place of an owned segment effort (DESIGN.md §10.4): the
+    trophy pill — gold `RP` for the record, silver `2e` and bronze `3e` for the
+    second and third best time — then, only for the record and only when the
+    board ranks it, the leaderboard laurel with the board size beside it: the
+    board places the athlete by their best effort. Locals: `effort`, `place`
+    (1–3), `segment_ranks` (Segments::Standings rows by [segment, sport]). %>
+<% standing = place == 1 ? segment_ranks[[ effort.segment_id, effort.sport_id ]] : nil %>
+<span class="text-nowrap ms-1">
+  <%= personal_place_badge(place, tooltip: personal_place_label(place, effort.segment.name),
+                                  text: (t("workouts.show.segment_efforts.personal_best") if place == 1),
+                                  extra_classes: "allure-record-badge") %>
+  <% if standing&.rank %>
+    <span class="allure-segment-effort-rank ms-1"><%= rank_medal(standing.rank, participants: standing.participants) %></span>
+  <% end %>
+</span>

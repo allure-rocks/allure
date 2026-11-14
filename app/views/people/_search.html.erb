@@ -1,0 +1,36 @@
+<%# Name search (PLAN_PEOPLE.md §3): one field that offers live suggestions
+    and still resolves an exact handle on submit. Without JavaScript the field
+    is a plain text input and the form posts to the resolve path. %>
+<div class="card" data-controller="people-search"
+     data-people-search-url-value="<%= search_people_path %>"
+     data-people-search-min-length-value="<%= People::Search::MIN_QUERY_LENGTH %>">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("people.search.title") %></h3>
+  </div>
+  <div class="card-body">
+    <%= form_with url: resolve_people_path, method: :post do |form| %>
+      <div class="dropdown">
+        <div class="input-group">
+          <%= form.search_field :target, class: "form-control", required: true,
+                placeholder: t(@federation_enabled ? "people.search.placeholder" : "people.search.local_placeholder"),
+                autocomplete: "off", "aria-label": t("people.search.title"),
+                "aria-controls": "people-search-results", "aria-expanded": "false",
+                data: { people_search_target: "input",
+                        action: "input->people-search#input focus->people-search#focus keydown->people-search#keydown" } %>
+          <%= form.submit t("people.search.submit"), class: "btn btn-primary" %>
+        </div>
+        <div class="dropdown-menu w-100" id="people-search-results" data-people-search-target="menu"></div>
+      </div>
+      <div class="form-text">
+        <%= t(@federation_enabled ? "people.search.hint" : "people.search.local_hint") %>
+        <%= help_link("sharing-beyond") %>
+      </div>
+    <% end %>
+    <% unless current_user.discoverable? %>
+      <div class="alert alert-info mt-3 mb-0" role="note">
+        <%= t("people.discoverability.hidden") %>
+        <%= link_to t("people.discoverability.action"), settings_profile_path %>
+      </div>
+    <% end %>
+  </div>
+</div>

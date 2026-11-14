@@ -1,0 +1,58 @@
+// Linked workout cards (DESIGN.md §6.5, §8.4): the title's stretched link must
+// cover the route image and the pending skeleton too, so the card body must not
+// be its containing block (Tabler sets .card-body position: relative). The
+// sport tile keeps its own link above the overlay via .sport-tile--link
+// z-index 2.
+.workout-card--linked > .card-body {
+  position: static;
+}
+
+// The whole card is the link, so the hover/focus state lives on the frame and
+// never on the title. Tabler ships that state for <a class="card">; these cards
+// are <div class="card"> with a stretched link, so it is stated once here for
+// the three surfaces that share the class (workout cards, feed items, segment
+// cards). The transition is bounded to 150ms (DESIGN.md §16) and the state is
+// mirrored on keyboard focus (§18.4).
+.workout-card--linked {
+  transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+
+  &:hover,
+  &:focus-within {
+    border-color: color-mix(in srgb, var(--primary) 40%, var(--allure-border));
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .stretched-link {
+    text-decoration: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workout-card--linked {
+    transition: none;
+  }
+}
+
+// The card header (DESIGN.md §8.4): the sport tile, the title and the badges
+// share one row. The badges are icon-only pills on a single line, so the title
+// keeps the width it needs.
+.workout-card__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.workout-card__badges {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+// Every card badge carries a hoverable tooltip, so the group is lifted above
+// the stretched link, the same rule as the feed card's .feed-item__lift.
+.workout-card--linked .workout-card__lift {
+  position: relative;
+  z-index: 2;
+}

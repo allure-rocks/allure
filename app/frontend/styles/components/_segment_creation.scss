@@ -1,0 +1,81 @@
+.segment-creation-workspace {
+  .row > [class*="col-"] {
+    min-width: 0;
+  }
+
+  .segment-creation-visuals,
+  .segment-creation-form {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .segment-creation-visuals {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .segment-creation-chart {
+    order: 1;
+  }
+
+  .segment-creation-map {
+    order: 2;
+
+    .allure-visual {
+      min-height: 36rem;
+    }
+  }
+
+  .segment-creation-form > .card,
+  .segment-creation-form .form-footer {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .segment-creation-form .card-header {
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .segment-creation-workspace {
+    .segment-creation-map {
+      order: 1;
+    }
+
+    .segment-creation-chart {
+      order: 2;
+    }
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .segment-creation-workspace .segment-creation-map {
+    .allure-visual {
+      min-height: 24rem;
+    }
+
+    .allure-map--tall {
+      height: 24rem;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .segment-creation-workspace {
+    .segment-creation-map {
+      .allure-visual {
+        min-height: 18rem;
+      }
+
+      .allure-map--tall {
+        height: 18rem;
+      }
+    }
+
+    .form-footer {
+      flex-wrap: wrap;
+    }
+  }
+}

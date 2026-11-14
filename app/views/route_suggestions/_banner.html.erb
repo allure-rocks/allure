@@ -1,0 +1,26 @@
+<%# A recurring route the owner has not saved yet (PLAN_SEGMENTS.md §7.7,
+    DESIGN.md §10.18): save it as a route, which accepts the suggestion, or
+    dismiss it for good. Owner-only; nothing here is published or federated. %>
+<% reference = suggestion.effective_reference_workout %>
+<% if reference %>
+  <div class="alert alert-info allure-route-suggestion mb-3" role="note">
+    <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
+      <div class="me-md-auto">
+        <h2 class="alert-title h4 mb-1"><%= t("route_suggestions.banner.title") %></h2>
+        <p class="mb-0">
+          <%= t("route_suggestions.banner.body",
+                count: suggestion.occurrences_count,
+                date: format_started_at(suggestion.latest_started_at)) %>
+        </p>
+      </div>
+      <div class="btn-list flex-nowrap">
+        <%= link_to t("route_suggestions.banner.save"),
+                    new_workout_route_path(reference, route_suggestion: suggestion.id),
+                    class: "btn btn-primary" %>
+        <%= button_to t("route_suggestions.banner.dismiss"),
+                      dismiss_route_suggestion_path(suggestion),
+                      method: :patch, class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+<% end %>

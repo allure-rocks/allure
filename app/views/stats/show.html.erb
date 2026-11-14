@@ -1,0 +1,40 @@
+<% content_for :title, t("stats.hub.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("stats.hub.pretitle") %></div>
+      <h1 class="page-title"><%= t("stats.hub.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<div class="row row-deck row-cards">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("stats.hub.by_time.title") %></h3>
+        <p class="text-secondary"><%= t("stats.hub.by_time.subtitle") %></p>
+        <%= link_to t("stats.hub.by_time.action"), by_time_stats_path, class: "btn btn-outline-primary" %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("stats.hub.by_sport.title") %></h3>
+        <p class="text-secondary"><%= t("stats.hub.by_sport.subtitle") %></p>
+        <%= link_to t("stats.hub.by_sport.action"), by_sport_stats_path, class: "btn btn-outline-primary" %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("stats.hub.heart_rate.title") %></h3>
+        <p class="text-secondary"><%= t("stats.hub.heart_rate.subtitle") %></p>
+        <%= link_to t("stats.hub.heart_rate.action"), heart_rate_stats_path, class: "btn btn-outline-primary" %>
+      </div>
+    </div>
+  </div>
+</div>

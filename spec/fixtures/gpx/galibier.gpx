@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Allure Test Suite" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>Col du Galibier</name>
+    <desc>Normal timed 3D route with known metrics</desc>
+    <trkseg>
+      <trkpt lat="45.0640" lon="6.4077"><ele>2000.0</ele><time>2026-06-01T08:00:00Z</time></trkpt>
+      <trkpt lat="45.0650" lon="6.4090"><ele>2050.0</ele><time>2026-06-01T08:01:00Z</time></trkpt>
+      <trkpt lat="45.0660" lon="6.4104"><ele>2120.0</ele><time>2026-06-01T08:02:00Z</time></trkpt>
+      <trkpt lat="45.0670" lon="6.4117"><ele>2100.0</ele><time>2026-06-01T08:03:00Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

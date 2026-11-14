@@ -1,0 +1,86 @@
+// Profiles keep the portrait and optional shared figures in the narrow left
+// rail, the publication journal in the wide right column (DESIGN.md §20.14).
+// On phones only the secondary sport chart follows the journal.
+.profile-layout {
+  display: grid;
+  gap: var(--page-padding);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.profile-journal,
+.profile-intro,
+.profile-sports {
+  min-width: 0;
+}
+
+.profile-intro {
+  display: grid;
+  gap: var(--page-padding);
+}
+
+.profile-bio {
+  overflow-wrap: anywhere;
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .profile-layout--sidebar {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-rows: auto 1fr;
+
+    .profile-journal {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+
+    .profile-intro,
+    .profile-sports {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    &.profile-layout--intro .profile-sports {
+      grid-row: 2;
+    }
+  }
+
+  .profile-layout:not(.profile-layout--sidebar) {
+    width: 75%;
+    margin-inline: auto;
+  }
+}
+
+// The same hub donut in a narrow rail: the legend uses its own full row.
+.profile-sports .hub-mix-legend {
+  flex-basis: 100%;
+}
+
+.profile-radar {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 4 / 3;
+  min-height: 220px;
+  max-height: 320px;
+  // A visual equivalent of the table, not a touch surface. Let native swipes
+  // and vertical page scrolling reach the surrounding panel strip.
+  pointer-events: none;
+}
+
+.profile-radar-visual {
+  position: relative;
+}
+
+.profile-radar-tooltip {
+  z-index: 5;
+  width: max-content;
+  max-width: calc(100% - 16px);
+  overflow-wrap: anywhere;
+
+  &[hidden] {
+    display: none;
+  }
+}

@@ -1,0 +1,12 @@
+<%= render "workouts/elevation_chart",
+           display: @segment,
+           chart_url: segment_chart_path(@segment),
+           table_points: @segment_chart_table,
+           available_series: [ :elevation ],
+           estimated_elevation: @segment.elevation_source == "dem",
+           title_label: t("segments.show.chart.title"),
+           loading_label: t("segments.show.chart.loading"),
+           empty_label: t("segments.show.chart.empty"),
+           error_label: t("segments.show.chart.error"),
+           data_label: t("segments.show.chart.data"),
+           data_description_label: t("segments.show.chart.data_description") %>
