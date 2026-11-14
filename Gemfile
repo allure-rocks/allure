@@ -26,14 +26,14 @@ gem "bcrypt", "~> 3.1.7"
 
 # Second factors (PLAN_AUTH.md §2): authenticator codes, their enrolment QR
 # code, and passkeys / security keys.
-gem "rotp", "~> 6.3"
+gem "rotp", "~> 6.4"
 gem "rqrcode", "~> 3.1"
-gem "webauthn", "~> 3.4"
+gem "webauthn", "~> 3.5"
 
 # Identity providers (PLAN_AUTH.md §6): the OmniAuth handshake with Rails CSRF
 # protection on its request phase, OpenID Connect for Google and a generic
 # provider, and Sign in with Apple's form-post flow.
-gem "omniauth", "~> 2.1"
+gem "omniauth", "~> 2.3"
 gem "omniauth-rails_csrf_protection", "~> 2.0"
 gem "omniauth_openid_connect", "~> 0.8"
 gem "omniauth-apple", "~> 1.3"
@@ -78,7 +78,7 @@ gem "httparty"
 gem "multipart-post"
 # The Model Context Protocol endpoint for AI assistants (PLAN_MCP.md), served
 # stateless from a controller; the official SDK tracks protocol revisions.
-gem "mcp", "~> 1.7"
+gem "mcp", "~> 1.10"
 # Push notifications for the iOS companion (PLAN_PUSH.md §5): RFC 8291
 # payload encryption and the VAPID header; the request itself goes through the
 # federation client and its SSRF guard.
@@ -89,7 +89,7 @@ gem "web-push", "~> 3.1"
 gem "vite_rails", "~> 3.11"
 
 group :development, :test do
-  gem "rspec-rails", "~> 8.0"
+  gem "rspec-rails", "~> 8.1"
   gem "factory_bot_rails", "~> 6.5"
   gem "faker", "~> 3.8"
   gem "dotenv-rails", "~> 3.2"
@@ -120,5 +120,5 @@ group :test do
   gem "vcr", "~> 6.4"
   # The public REST API's contract tests validate every request and response
   # against docs/openapi/v1.yaml (PLAN_API.md §12).
-  gem "openapi_first", "~> 4.2"
+  gem "openapi_first", "~> 4.4"
 end
