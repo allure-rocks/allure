@@ -1,0 +1,2 @@
+<% classes = { "succeeded" => "bg-success-lt", "pending" => "bg-warning-lt" }.fetch(delivery.status, "bg-danger-lt") %>
+<span class="badge <%= classes %>"><%= t("settings.webhooks.delivery_statuses.#{delivery.status}") %></span>

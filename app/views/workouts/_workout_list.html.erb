@@ -1,0 +1,36 @@
+<%# The phone form of the table view (DESIGN.md §12.1, §12.3): one <ul> of
+    stacked rows inside a card, not cards — the title is the row's stretched
+    link, the icon-only sharing badge closes the title line like on the cards
+    (no badge while unpublished), and the secondary line keeps the sport, the
+    date and the two primary values. No route image: this is the dense mode. %>
+<ul class="list-group list-group-flush allure-workout-list" data-infinite-scroll-target="items">
+  <% workouts.each do |workout| %>
+    <% display = workout_display(workout) %>
+    <% title = workout_display_title(display) %>
+    <% publication_badges = workout_publication_badges(workout, fit: :icon, unpublished: false) %>
+    <li class="list-group-item position-relative">
+      <div class="d-flex align-items-start gap-2">
+        <%= sport_tile_tag(display.sport, size: :xs) %>
+        <div class="flex-fill min-w-0">
+          <div class="d-flex align-items-center gap-2">
+            <div class="fw-bold text-truncate flex-fill min-w-0">
+              <%= link_to title, workout_path(workout),
+                    class: "text-reset stretched-link",
+                    aria: { label: "#{t('workouts.show.title')} : #{title}" } %>
+            </div>
+            <% if publication_badges.present? %>
+              <span class="flex-shrink-0 d-inline-flex gap-1 position-relative z-2"><%= publication_badges %></span>
+            <% end %>
+          </div>
+          <div class="text-secondary small allure-table-nums">
+            <%= sport_display_name(display.sport) %> · <%= smart_started_at(display.started_at) %>
+            <% if display.metrics_present? %>
+              · <span class="text-nowrap"><%= format_distance(display.distance) %></span>
+              · <span class="text-nowrap"><%= format_duration(display.duration) %></span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </li>
+  <% end %>
+</ul>

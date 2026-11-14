@@ -1,0 +1,13 @@
+<%# The record badge: one neutral pill holding the gold trophy and the short
+    label, naming every record the workout currently holds — whether the
+    viewer is the owner (live records) or a permitted viewer of a publication
+    snapshot. Only the gold place is ever a badge here; second and third
+    personal places stay in the owner's tables (DESIGN.md §10.4). Never
+    rendered when empty. `compact` keeps the trophy alone (workout cards). %>
+<% labels = Array(local_assigns.fetch(:labels, [])) %>
+<% if labels.any? %>
+  <%= personal_place_badge(1, tooltip: t("medals.records", records: labels.join(" · "), count: labels.size),
+                              text: t("workouts.show.records.badge_short"),
+                              extra_classes: "allure-record-badge",
+                              compact: local_assigns.fetch(:compact, false)) %>
+<% end %>

@@ -1,0 +1,84 @@
+// Allure — stylesheet entry point.
+//
+// Load order matters:
+//   1. brand tokens   (override Tabler's !default variables)
+//   2. Tabler         (which pulls in Bootstrap 5.3)
+//   3. vendor CSS     (MapLibre, icon font)
+//   4. our own layers
+
+@import "brand";
+
+@import "@tabler/core/scss/tabler";
+@import "@tabler/core/scss/tabler-themes";
+
+@import "@tabler/icons-webfont/dist/tabler-icons.scss";
+
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+@import "components/brand_wordmark";
+@import "components/avatar";
+@import "components/funding";
+@import "components/map";
+@import "components/sport";
+@import "components/workout_card";
+@import "components/segment_list";
+@import "components/feed_item";
+@import "components/chart";
+@import "components/calendar";
+@import "components/heart_rate";
+@import "components/hub";
+@import "components/demo";
+@import "components/profile";
+@import "components/paged_panels";
+@import "components/records";
+@import "components/actions";
+@import "components/modal";
+@import "components/settings";
+@import "components/feedback";
+@import "components/turbo";
+@import "components/bottom_bar";
+@import "components/frames";
+@import "components/tables";
+@import "components/medals";
+@import "components/badges";
+@import "components/toasts";
+@import "components/notifications";
+@import "components/topbar";
+@import "components/native_app";
+@import "components/reactions";
+@import "components/comments";
+@import "components/workout_detail";
+@import "components/segment_creation";
+@import "components/filters";
+@import "components/bulk_selection";
+@import "components/second_factor";
+@import "components/api_reference";
+@import "components/manual_entry";
+@import "components/weather";
+@import "components/photos";
+
+// 5. guards
+//
+// The page never slides sideways on touch. A long unbroken token — a pasted
+// address in a title, a device name without spaces — wraps instead of
+// widening its page, and the last-resort `clip` keeps any remaining stray
+// overflow from turning into a page-wide horizontal scroll. `clip` rather
+// than `hidden`: it does not make the body a scroll container, so the sticky
+// map rail and scroll anchoring keep working.
+
+.page-title,
+.page-pretitle {
+  overflow-wrap: anywhere;
+}
+
+// German and Dutch build long compounds (« Durchschnittspace »,
+// « Gemiddelde hartslag »): narrow labels hyphenate at a syllable instead of
+// breaking at an arbitrary letter. The page's `lang` picks the dictionary.
+:where(html:lang(de), html:lang(nl)) :is(.allure-metric-tile dt, .subheader, th, .form-label, .card-title) {
+  hyphens: auto;
+}
+
+html,
+body {
+  overflow-x: clip;
+}

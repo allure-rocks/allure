@@ -1,0 +1,58 @@
+{
+  "id": "https://allure-a.example/api/v1/trail/3nKq8rVv2xY4sT6uW9zA1b/activities/6f1c2d3e-4a5b-6c7d-8e9f-0a1b2c3d4e5f",
+  "type": "Create",
+  "actor": "https://allure-a.example/users/marie",
+  "object": {
+    "@context": "https://www.w3.org/ns/activitystreams",
+    "id": "https://allure-a.example/api/v1/trail/3nKq8rVv2xY4sT6uW9zA1b",
+    "type": "Note",
+    "attributedTo": "https://allure-a.example/users/marie",
+    "name": "Morning hike",
+    "startTime": "2026-08-26T12:00:00Z",
+    "location": {
+      "type": "Place",
+      "name": "Sanitized route",
+      "longitude": 6.4,
+      "latitude": 45.0
+    },
+    "content": "Morning hike<br>A short description",
+    "url": "https://allure-a.example/workouts/3nKq8rVv2xY4sT6uW9zA1b",
+    "published": "2026-08-26T12:00:00Z",
+    "to": [
+      "https://www.w3.org/ns/activitystreams#Public"
+    ],
+    "cc": [
+      "https://allure-a.example/users/marie/followers"
+    ],
+    "tag": [
+      { "type": "Note", "name": "category", "content": "Hiking" },
+      { "type": "Note", "name": "distance", "content": "23064.640055m" },
+      { "type": "Note", "name": "duration", "content": "22345.000000m" },
+      { "type": "Note", "name": "moving_time", "content": "20100.000000m" },
+      { "type": "Note", "name": "elevation_gain", "content": "1009.000000m" },
+      { "type": "Note", "name": "elevation_loss", "content": "1007.000000m" },
+      { "type": "Note", "name": "average_heart_rate", "content": "131.000000" },
+      { "type": "Note", "name": "commute", "content": "true" }
+    ],
+    "attachment": [
+      {
+        "type": "Image",
+        "mediaType": "image/png",
+        "name": "Route image",
+        "url": "https://allure-a.example/api/v1/trail/3nKq8rVv2xY4sT6uW9zA1b/media/route-image"
+      },
+      {
+        "type": "Document",
+        "mediaType": "application/xml+gpx",
+        "name": "GPX route",
+        "url": "https://allure-a.example/api/v1/trail/3nKq8rVv2xY4sT6uW9zA1b/media/gpx"
+      }
+    ]
+  },
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public"
+  ],
+  "cc": [
+    "https://allure-a.example/users/marie/followers"
+  ]
+}

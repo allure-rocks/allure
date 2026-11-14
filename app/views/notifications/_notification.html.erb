@@ -1,0 +1,24 @@
+<%# One inbox row, shared by the dropdown and the page (DESIGN.md §10.16). An
+    unread row carries a dot, a weight change, and hidden text, so colour is
+    never the only encoding; opening it reads it through the show action. %>
+<% unread = !notification.read? %>
+<a href="<%= notification_path(notification) %>"
+   data-turbo-frame="_top"
+   data-turbo-prefetch="false"
+   class="list-group-item list-group-item-action d-flex align-items-center gap-2">
+  <% if notification.actor %>
+    <%= actor_avatar_tag(notification.actor, size: "sm") %>
+  <% else %>
+    <span class="avatar avatar-sm bg-secondary-lt" aria-hidden="true"><i class="ti ti-bell"></i></span>
+  <% end %>
+  <span class="flex-fill">
+    <span class="d-block<%= " fw-semibold" if unread %>"><%= notification_text(notification) %></span>
+    <span class="d-block text-secondary small">
+      <% if notification.actor %><%= actor_handle(notification.actor) %> · <% end %><%= l(notification.created_at, format: :short_datetime) %>
+    </span>
+  </span>
+  <% if unread %>
+    <span class="status-dot status-dot-animated bg-primary" aria-hidden="true"></span>
+    <span class="visually-hidden"><%= t("notifications.unread") %></span>
+  <% end %>
+</a>

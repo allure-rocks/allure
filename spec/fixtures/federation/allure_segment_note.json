@@ -1,0 +1,57 @@
+{
+  "id": "https://allure-a.example/api/v1/segment/oZEq7ovRbLq6UnGMPwc8B5/activities/7a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+  "type": "Create",
+  "actor": "https://allure-a.example/users/marie",
+  "object": {
+    "@context": "https://www.w3.org/ns/activitystreams",
+    "id": "https://allure-a.example/api/v1/segment/oZEq7ovRbLq6UnGMPwc8B5",
+    "type": "Note",
+    "attributedTo": "https://allure-a.example/users/marie",
+    "name": "Col du Test",
+    "content": "Col du Test<br>Le versant nord",
+    "url": "https://allure-a.example/segments/2222222222222222222222",
+    "published": "2026-09-12T09:30:00Z",
+    "location": {
+      "type": "Place",
+      "name": "Segment start",
+      "longitude": 6.865,
+      "latitude": 45.923
+    },
+    "to": [
+      "https://www.w3.org/ns/activitystreams#Public"
+    ],
+    "cc": [
+      "https://allure-a.example/users/marie/followers"
+    ],
+    "tag": [
+      { "type": "Note", "name": "category", "content": "Cycling" },
+      { "type": "Note", "name": "sport_slug", "content": "cycling" },
+      { "type": "Note", "name": "segment_kind", "content": "segment" },
+      { "type": "Note", "name": "distance", "content": "2500.000000m" },
+      { "type": "Note", "name": "elevation_gain", "content": "180.000000m" },
+      { "type": "Note", "name": "elevation_loss", "content": "12.000000m" },
+      { "type": "Note", "name": "match_tolerance", "content": "25.000000m" },
+      { "type": "Note", "name": "average_grade", "content": "7.200000" }
+    ],
+    "attachment": [
+      {
+        "type": "Image",
+        "mediaType": "image/png",
+        "name": "Route image",
+        "url": "https://allure-a.example/api/v1/segment/oZEq7ovRbLq6UnGMPwc8B5/media/route-image"
+      },
+      {
+        "type": "Document",
+        "mediaType": "application/xml+gpx",
+        "name": "GPX course",
+        "url": "https://allure-a.example/api/v1/segment/oZEq7ovRbLq6UnGMPwc8B5/media/gpx"
+      }
+    ]
+  },
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public"
+  ],
+  "cc": [
+    "https://allure-a.example/users/marie/followers"
+  ]
+}

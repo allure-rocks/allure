@@ -1,0 +1,18 @@
+<%# Phone bottom navigation (DESIGN.md §7.3): exactly five labelled destinations,
+    fixed, signed-in only. Import lives in the topbar, not here. A companion
+    advertising `tabs` receives this bar hidden with the payload its native
+    tabs draw (DESIGN.md §7.7); the links stay for older companions. %>
+<% if signed_in? %>
+  <% bridged = hotwire_native_app? && hotwire_native_bridge?(:tabs) %>
+  <%= tag.nav class: class_names("bottom-bar d-lg-none d-print-none", "d-none": bridged),
+              aria: { label: t("navigation.bottom_bar") },
+              data: (bridged ? { controller: "bridge--tabs", bridge__tabs_payload_value: native_tabs_payload.to_json } : {}) do %>
+    <% bottom_bar_items.each do |item| %>
+      <%= link_to item[:path], class: class_names("bottom-bar-item", active: item[:active]),
+                  aria: { current: ("page" if item[:active]) } do %>
+        <i class="ti ti-<%= item[:icon] %> fs-2" aria-hidden="true"></i>
+        <span class="bottom-bar-label"><%= t("navigation.#{item[:key]}") %></span>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

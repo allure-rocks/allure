@@ -1,0 +1,16 @@
+<%# A linked service's retrieval card (PLAN_REMOTE_IMPORTS.md §8.2): the date
+    range and the fallback sport, submitted as a manual batch.
+    Locals: source, connection. %>
+<div class="card mb-3">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("settings.connections.retrieval.title") %></h3>
+  </div>
+  <div class="card-body">
+    <%= form_with url: connection_retrievals_path(source.key), method: :post do %>
+      <%= render "connections/retrieval_fields", source:, connection: %>
+      <div class="allure-actions mt-3">
+        <%= submit_tag t("settings.connections.retrieval.submit"), class: "btn btn-primary", name: nil %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,177 @@
+<%# A manual entry's form (PLAN_MANUAL_ENTRY.md §5, DESIGN.md §19.30): the
+    import page's « Saisie manuelle » panel and the entry's edit page. Every
+    figure is typed in the account's units and time zone; the ascent hides
+    and is disabled for a sport that measures no elevation. %>
+<% manual = local_assigns.fetch(:manual) %>
+<% equipments = local_assigns.fetch(:equipments, []) %>
+<% distance_unit = manual.imperial? ? t("workouts.manual.units.mi") : t("workouts.manual.units.km") %>
+<% ascent_unit = manual.imperial? ? t("workouts.manual.units.ft") : t("workouts.manual.units.m") %>
+<% sport_options = Sport.alphabetical.map do |sport|
+     [ sport_display_name(sport), sport.id,
+       { data: { records_elevation: sport.records_elevation } } ]
+   end %>
+<%= form_with model: manual, url: local_assigns.fetch(:url), method: local_assigns.fetch(:method, :post),
+              class: "workout-form", data: { controller: "manual-entry" } do |form| %>
+  <% if manual.errors.any? %>
+    <div class="alert alert-danger" role="alert" data-unsaved-changes="forced">
+      <h4 class="alert-title"><%= t("errors.unprocessable_entity.title") %></h4>
+      <ul class="mb-0">
+        <% manual.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="card mb-3">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("workouts.manual.form.activity") %></h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <%= form.label :sport_id, t("workouts.manual.fields.sport_id"), class: "form-label required" %>
+          <%= form.select :sport_id, options_for_select(sport_options, manual.sport_id),
+                          { prompt: t("workouts.form.sport_prompt") },
+                          class: class_names("form-select", "is-invalid": manual.errors[:sport_id].present?),
+                          data: { manual_entry_target: "sport", action: "manual-entry#sportChanged" } %>
+          <%= manual_entry_error(manual, :sport_id) %>
+        </div>
+        <div class="col-md-6 mb-3">
+          <%= form.label :started_at, t("workouts.manual.fields.started_at"), class: "form-label required" %>
+          <%= form.datetime_local_field :started_at, value: manual.started_at,
+                                        class: class_names("form-control", "is-invalid": manual.errors[:started_at].present?) %>
+          <small class="form-text"><%= t("workouts.manual.form.time_zone_hint", zone: manual.time_zone.tzinfo.identifier) %></small>
+          <%= manual_entry_error(manual, :started_at) %>
+        </div>
+      </div>
+
+      <div class="row">
+        <% { duration: "duration", moving_time: "moving" }.each do |field, prefix| %>
+          <div class="col-md-6 mb-3">
+            <% label_id = "manual-entry-#{field}-label" %>
+            <div class="form-label<%= " required" if field == :duration %>" id="<%= label_id %>"><%= t("workouts.manual.fields.#{field}") %></div>
+            <div class="input-group allure-duration-input" role="group" aria-labelledby="<%= label_id %>">
+              <% %w[hours minutes seconds].each do |part| %>
+                <%= form.number_field :"#{prefix}_#{part}", min: 0, max: (part == "hours" ? 168 : 59), step: 1, inputmode: "numeric",
+                                      class: class_names("form-control", "is-invalid": manual.errors[field].present?),
+                                      aria: { label: t("workouts.manual.form.parts.#{part}_label", field: t("workouts.manual.fields.#{field}")) } %>
+                <span class="input-group-text"><%= t("workouts.manual.form.parts.#{part}") %></span>
+              <% end %>
+            </div>
+            <% if field == :moving_time %>
+              <small class="form-text"><%= t("workouts.manual.form.moving_time_hint") %></small>
+            <% end %>
+            <%= manual_entry_error(manual, field) %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <%= form.label :distance, t("workouts.manual.fields.distance"), class: "form-label" %>
+          <div class="input-group">
+            <%= form.text_field :distance, inputmode: "decimal", autocomplete: "off",
+                                class: class_names("form-control", "is-invalid": manual.errors[:distance].present?) %>
+            <span class="input-group-text"><%= distance_unit %></span>
+          </div>
+          <small class="form-text"><%= t("workouts.manual.form.distance_hint") %></small>
+          <%= manual_entry_error(manual, :distance) %>
+        </div>
+        <div class="col-md-6 mb-3" data-manual-entry-target="elevation">
+          <%= form.label :ascent, t("workouts.manual.fields.ascent"), class: "form-label" %>
+          <div class="input-group">
+            <%= form.text_field :ascent, inputmode: "numeric", autocomplete: "off",
+                                class: class_names("form-control", "is-invalid": manual.errors[:ascent].present?) %>
+            <span class="input-group-text"><%= ascent_unit %></span>
+          </div>
+          <%= manual_entry_error(manual, :ascent) %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("workouts.manual.form.optional") %></h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <% { average_heart_rate: t("units.heart_rate.bpm"), max_heart_rate: t("units.heart_rate.bpm"),
+             calories: t("units.energy.kilocalorie"), average_power: t("units.power.watt") }.each do |field, unit| %>
+          <div class="col-sm-6 col-lg-3 mb-3">
+            <%= form.label field, t("workouts.manual.fields.#{field}"), class: "form-label" %>
+            <div class="input-group">
+              <%= form.number_field field, min: 0, step: 1, inputmode: "numeric",
+                                    class: class_names("form-control", "is-invalid": manual.errors[field].present?) %>
+              <span class="input-group-text"><%= unit %></span>
+            </div>
+            <%= manual_entry_error(manual, field) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="mb-3">
+        <%= form.label :title, t("workouts.form.title"), class: "form-label" %>
+        <%= form.text_field :title, class: "form-control", maxlength: 255, size: nil, placeholder: t("workouts.manual.form.title_hint") %>
+        <%= manual_entry_error(manual, :title) %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :description, t("workouts.form.description"), class: "form-label" %>
+        <%= form.text_area :description, class: "form-control", rows: 3, maxlength: 10_000 %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :notes, t("workouts.form.notes"), class: "form-label" %>
+        <%= form.text_area :notes, class: "form-control", rows: 2, maxlength: 500, placeholder: t("workouts.form.notes_hint") %>
+        <small class="form-text"><%= t("workouts.form.notes_hint") %></small>
+      </div>
+
+      <div class="mb-0">
+        <label class="form-check">
+          <%= form.check_box :commute, class: "form-check-input" %>
+          <span class="form-check-label"><%= t("workouts.form.commute") %></span>
+        </label>
+        <small class="form-text"><%= t("workouts.form.commute_hint") %></small>
+      </div>
+    </div>
+  </div>
+
+  <% if equipments.any? %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="form-label"><%= t("workouts.form.equipment") %></div>
+        <%= hidden_field_tag "manual_workout[equipment_ids][]", "", id: nil %>
+        <div class="row">
+          <% equipments.each do |equipment| %>
+            <% attached = manual.equipment_ids.map(&:to_s).include?(equipment.id.to_s) %>
+            <div class="col-sm-6 col-lg-4">
+              <label class="form-check mb-2">
+                <%= check_box_tag "manual_workout[equipment_ids][]", equipment.id, attached,
+                                  id: "manual_workout_equipment_#{equipment.id}",
+                                  class: "form-check-input", disabled: !equipment.is_active? && !attached %>
+                <span class="form-check-label">
+                  <%= equipment.label %>
+                  <% unless equipment.is_active? %>
+                    <span class="text-secondary small">(<%= t("workouts.form.equipment_inactive") %>)</span>
+                  <% end %>
+                </span>
+              </label>
+            </div>
+          <% end %>
+        </div>
+        <small class="form-text"><%= t("workouts.form.equipment_hint") %></small>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-footer">
+    <%= form.submit local_assigns.fetch(:submit_label), class: "btn btn-primary" %>
+    <%= link_to t("workouts.form.cancel"), local_assigns.fetch(:cancel_path), class: "btn btn-link" %>
+  </div>
+<% end %>

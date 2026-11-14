@@ -1,0 +1,26 @@
+<%# A credited participant's own recording of the same outing, found by
+    detection (PLAN_TOGETHER.md §8, DESIGN.md §10.18): link it, which replaces
+    the credit, or dismiss the suggestion for good. Until then the outing
+    counts twice, and the banner says so. %>
+<% source = participation.workout %>
+<% recording = participation.suggested_workout %>
+<div class="alert alert-info allure-link-suggestion mb-3" role="note">
+  <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
+    <div class="me-md-auto">
+      <h2 class="alert-title h4 mb-1"><%= t("workouts.participations.link_suggestion.title") %></h2>
+      <p class="mb-0">
+        <%= t("workouts.participations.link_suggestion.body",
+              recording: workout_display_title(recording),
+              date: format_started_at(recording.started_at),
+              credit: workout_display_title(source)) %>
+      </p>
+    </div>
+    <div class="btn-list flex-nowrap">
+      <%= button_to t("workouts.participations.convert"), convert_workout_participation_path(source, participation),
+                    method: :patch, params: { participant_workout_id: recording.to_param }, class: "btn btn-primary" %>
+      <%= button_to t("workouts.participations.link_suggestion.dismiss"),
+                    dismiss_link_suggestion_workout_participation_path(source, participation),
+                    method: :patch, class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
+</div>

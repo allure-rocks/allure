@@ -1,0 +1,37 @@
+<% content_for :title, t("settings.webhooks.show.title") %>
+
+<% content_for :settings_actions do %>
+  <%= render "settings/webhooks/menu", endpoint: @endpoint %>
+<% end %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.webhooks.show.title") } do %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-3"><%= t("settings.webhooks.table.address") %></dt>
+        <dd class="col-sm-9 font-monospace text-break"><%= @endpoint.url %></dd>
+        <% if @endpoint.description %>
+          <dt class="col-sm-3"><%= t("settings.webhooks.form.description") %></dt>
+          <dd class="col-sm-9"><%= @endpoint.description %></dd>
+        <% end %>
+        <dt class="col-sm-3"><%= t("settings.webhooks.table.state") %></dt>
+        <dd class="col-sm-9"><%= render "settings/webhooks/state", endpoint: @endpoint %></dd>
+        <dt class="col-sm-3"><%= t("settings.webhooks.table.events") %></dt>
+        <dd class="col-sm-9">
+          <% if @endpoint.all_events? %>
+            <%= t("settings.webhooks.all_events") %>
+          <% else %>
+            <% @endpoint.events.each do |type| %><code class="me-2"><%= type %></code><% end %>
+          <% end %>
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <%= tag.div id: "webhook-deliveries", class: "card",
+              data: { controller: ("live-frame" if @pending), live_frame_url_value: settings_webhook_path(@endpoint, page: (@page if @page > 1)),
+                      live_frame_interval_value: 5000 }.compact do %>
+    <%= render "settings/webhooks/deliveries", endpoint: @endpoint, deliveries: @deliveries, page: @page,
+                                               next_page: @next_page, pending: @pending %>
+  <% end %>
+<% end %>

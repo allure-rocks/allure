@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <title><%= t("apple_form_posts.create.title") %></title>
+  </head>
+  <body>
+    <form id="apple-return" method="post" action="/auth/apple/return">
+      <% @fields.each do |name, value| %>
+        <input type="hidden" name="<%= name %>" value="<%= value %>">
+      <% end %>
+      <noscript><button type="submit"><%= t("apple_form_posts.create.continue") %></button></noscript>
+    </form>
+    <%= javascript_tag nonce: true do %>document.getElementById("apple-return").submit();<% end %>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<% content_for :title, t("settings.appearance.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.appearance.title") } do %>
+
+  <%= form_with model: @user, url: settings_appearance_path, method: :patch do |form| %>
+    <%= render "shared/form_errors", form: form %>
+
+    <%# The companion owns its appearance in its own Apparence menu (DESIGN.md
+        §7.7): its cookie overrides this account theme, so the card would lie. %>
+    <% unless hotwire_native_app? %>
+      <div class="card mb-3">
+        <div class="card-header">
+          <h2 class="card-title h3"><%= t("settings.appearance.theme_title") %></h2>
+        </div>
+        <div class="card-body">
+          <% User::THEMES.each do |theme| %>
+            <label class="form-check">
+              <%= form.radio_button :theme, theme, class: "form-check-input" %>
+              <span class="form-check-label"><%= t("settings.appearance.themes.#{theme}") %></span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.appearance.locale_title") %></h2>
+      </div>
+      <div class="card-body">
+        <div class="mb-0">
+          <%= form.label :locale, t("settings.appearance.locale_label"), class: "form-label" %>
+          <%= form.select :locale, User::LOCALES.map { |value| [ t("settings.appearance.locales.#{value}"), value, { lang: value } ] }, {}, class: "form-select" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.appearance.maps_title") %></h2>
+      </div>
+      <div class="card-body">
+        <label class="form-check mb-3">
+          <%= form.check_box :smooth_tracks, class: "form-check-input" %>
+          <span class="form-check-label"><%= t("settings.appearance.smooth_tracks") %></span>
+        </label>
+        <div>
+          <%= form.label :track_smoothing_level, t("settings.appearance.smoothing_level_label"), class: "form-label" %>
+          <%= form.select :track_smoothing_level,
+                          User::TRACK_SMOOTHING_LEVELS.map { |level| [ t("settings.appearance.smoothing_levels.#{level}"), level ] },
+                          {}, class: "form-select" %>
+          <small class="form-text"><%= t("settings.appearance.smooth_tracks_hint") %></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.appearance.images_title") %></h2>
+      </div>
+      <div class="card-body">
+        <% User::ROUTE_IMAGE_THEMES.each do |theme| %>
+          <label class="form-check">
+            <%= form.radio_button :route_image_theme, theme, class: "form-check-input" %>
+            <span class="form-check-label"><%= t("settings.appearance.image_themes.#{theme}") %></span>
+          </label>
+        <% end %>
+        <small class="form-text"><%= t("settings.appearance.image_theme_hint") %></small>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <%= form.submit t("settings.appearance.save"), class: "btn btn-primary" %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2">
+  <Activities>
+    <Activity Sport="Running">
+      <Id>2026-08-28T08:00:00Z</Id>
+      <Lap StartTime="2026-08-28T08:00:00Z">
+        <TotalTimeSeconds>90</TotalTimeSeconds>
+        <DistanceMeters>405.0</DistanceMeters>
+        <MaximumSpeed>6.0</MaximumSpeed>
+        <Calories>20</Calories>
+        <AverageHeartRateBpm><Value>140</Value></AverageHeartRateBpm>
+        <MaximumHeartRateBpm><Value>160</Value></MaximumHeartRateBpm>
+        <Intensity>Active</Intensity>
+        <TriggerMethod>Manual</TriggerMethod>
+        <Track>
+          <Trackpoint><Time>2026-08-28T08:00:00Z</Time><Position><LatitudeDegrees>45.00000</LatitudeDegrees><LongitudeDegrees>6.40000</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:00:30Z</Time><Position><LatitudeDegrees>45.00000</LatitudeDegrees><LongitudeDegrees>6.40180</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:00:45Z</Time><Position><LatitudeDegrees>45.00055</LatitudeDegrees><LongitudeDegrees>6.40180</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:01:15Z</Time><Position><LatitudeDegrees>45.00055</LatitudeDegrees><LongitudeDegrees>6.40000</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:01:30Z</Time><Position><LatitudeDegrees>45.00000</LatitudeDegrees><LongitudeDegrees>6.40000</LongitudeDegrees></Position></Trackpoint>
+        </Track>
+      </Lap>
+      <Lap StartTime="2026-08-28T08:01:30Z">
+        <TotalTimeSeconds>90</TotalTimeSeconds>
+        <DistanceMeters>405.0</DistanceMeters>
+        <MaximumSpeed>6.2</MaximumSpeed>
+        <Calories>22</Calories>
+        <AverageHeartRateBpm><Value>145</Value></AverageHeartRateBpm>
+        <MaximumHeartRateBpm><Value>162</Value></MaximumHeartRateBpm>
+        <Intensity>Active</Intensity>
+        <TriggerMethod>Distance</TriggerMethod>
+        <Track>
+          <Trackpoint><Time>2026-08-28T08:02:00Z</Time><Position><LatitudeDegrees>45.00000</LatitudeDegrees><LongitudeDegrees>6.40180</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:02:15Z</Time><Position><LatitudeDegrees>45.00055</LatitudeDegrees><LongitudeDegrees>6.40180</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:02:45Z</Time><Position><LatitudeDegrees>45.00055</LatitudeDegrees><LongitudeDegrees>6.40000</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:03:00Z</Time><Position><LatitudeDegrees>45.00000</LatitudeDegrees><LongitudeDegrees>6.40000</LongitudeDegrees></Position></Trackpoint>
+        </Track>
+      </Lap>
+      <Lap StartTime="2026-08-28T08:03:00Z">
+        <TotalTimeSeconds>90</TotalTimeSeconds>
+        <DistanceMeters>405.0</DistanceMeters>
+        <MaximumSpeed>5.9</MaximumSpeed>
+        <Calories>21</Calories>
+        <AverageHeartRateBpm><Value>150</Value></AverageHeartRateBpm>
+        <MaximumHeartRateBpm><Value>165</Value></MaximumHeartRateBpm>
+        <Intensity>Active</Intensity>
+        <TriggerMethod>Time</TriggerMethod>
+        <Track>
+          <Trackpoint><Time>2026-08-28T08:03:30Z</Time><Position><LatitudeDegrees>45.00000</LatitudeDegrees><LongitudeDegrees>6.40180</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:03:45Z</Time><Position><LatitudeDegrees>45.00055</LatitudeDegrees><LongitudeDegrees>6.40180</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:04:15Z</Time><Position><LatitudeDegrees>45.00055</LatitudeDegrees><LongitudeDegrees>6.40000</LongitudeDegrees></Position></Trackpoint>
+          <Trackpoint><Time>2026-08-28T08:04:30Z</Time><Position><LatitudeDegrees>45.00000</LatitudeDegrees><LongitudeDegrees>6.40000</LongitudeDegrees></Position></Trackpoint>
+        </Track>
+      </Lap>
+      <Notes>Three recorded laps</Notes>
+    </Activity>
+  </Activities>
+  <Author><Name>Allure Test Suite</Name></Author>
+</TrainingCenterDatabase>

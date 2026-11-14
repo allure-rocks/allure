@@ -1,0 +1,73 @@
+<% metrics = profile_statistics_metrics(rows) %>
+<section class="card profile-statistics" aria-labelledby="profile-statistics-title"
+         data-controller="paged-panels" data-action="turbo:before-cache@document->paged-panels#disconnect">
+  <div class="card-header">
+    <h2 class="card-title" id="profile-statistics-title"><%= t("profile.statistics.title") %></h2>
+  </div>
+  <div class="card-body border-bottom">
+    <p class="text-secondary small mb-0"><%= t("profile.statistics.hint") %></p>
+  </div>
+  <% if metrics.many? %>
+    <div class="card-body border-bottom" data-paged-panels-target="navigation" hidden>
+      <fieldset class="mb-0">
+        <legend class="visually-hidden"><%= t("profile.statistics.metric_label") %></legend>
+        <div class="nav nav-segmented nav-sm paged-panels__choices" data-paged-panels-target="selector">
+          <% metrics.each_with_index do |metric, index| %>
+            <%= radio_button_tag :profile_statistics_metric, metric, index.zero?,
+                  id: "profile-statistic-choice-#{metric}", class: "nav-link-input visually-hidden",
+                  aria: { controls: "profile-statistic-#{metric}" },
+                  data: { paged_panels_target: "choice", choice_name: t("profile.statistics.metrics.#{metric}"), action: "change->paged-panels#select" } %>
+            <%= label_tag "profile-statistic-choice-#{metric}", t("profile.statistics.metrics.#{metric}"), class: "nav-link" %>
+          <% end %>
+        </div>
+      </fieldset>
+      <p class="form-text mt-2 mb-0"><%= t("profile.statistics.swipe_hint") %></p>
+    </div>
+  <% end %>
+  <div class="paged-panels__viewport" data-paged-panels-target="viewport" data-action="scroll->paged-panels#scrolled">
+    <% metrics.each do |metric| %>
+      <% payload = profile_statistics_payload(rows, metric) %>
+      <section class="paged-panels__panel card-body" id="profile-statistic-<%= metric %>"
+               aria-labelledby="profile-statistic-name-<%= metric %>" data-paged-panels-target="panel"
+               data-controller="profile-radar" data-profile-radar-payload-value="<%= h(payload.to_json) %>"
+               data-action="allure:theme-changed@window->profile-radar#render turbo:before-cache@document->profile-radar#disconnect paged-panels:change@window->profile-radar#clear paged-panels:scroll@window->profile-radar#clear scroll@window->profile-radar#clear pointerdown@document->profile-radar#dismiss keydown.esc@window->profile-radar#clear">
+        <h3 class="h4 mb-0" id="profile-statistic-name-<%= metric %>" data-profile-radar-target="label"><%= t("profile.statistics.metrics.#{metric}") %></h3>
+        <div class="profile-radar-visual" data-profile-radar-target="visual"
+             data-action="pointermove->profile-radar#pointerMove pointerleave->profile-radar#pointerLeave pointerdown->profile-radar#pointerDown pointerup->profile-radar#pointerUp pointercancel->profile-radar#clear" hidden>
+          <div class="profile-radar" data-profile-radar-target="chart" aria-hidden="true"></div>
+          <div class="allure-echarts-tooltip profile-radar-tooltip" role="tooltip" aria-hidden="true" data-profile-radar-target="tooltip" hidden>
+            <div class="hub-chart-tooltip">
+              <div class="hub-chart-tooltip-title" data-profile-radar-target="tooltipName"></div>
+              <div data-profile-radar-target="tooltipValue"></div>
+            </div>
+          </div>
+          <p class="small text-secondary text-center mb-2"><%= t("profile.statistics.maximum", value: payload[:maximum]) %></p>
+          <p class="small text-secondary mb-2"><%= t("profile.statistics.reading_hint") %></p>
+          <p class="small text-secondary"><%= t("profile.statistics.log_scale") %></p>
+        </div>
+        <p class="small text-secondary mt-2" data-profile-radar-target="error" hidden><%= t("profile.statistics.chart_error") %></p>
+        <details class="mt-2" data-profile-radar-target="data" open>
+          <summary class="btn btn-sm btn-ghost-secondary"><%= t("me.mix.show_data") %></summary>
+          <table class="table table-sm table-vcenter allure-table-nums mt-2 mb-0">
+            <caption class="visually-hidden"><%= t("profile.statistics.metrics.#{metric}") %></caption>
+            <thead>
+              <tr>
+                <th scope="col"><%= t("me.mix.table.sport") %></th>
+                <th scope="col" class="text-end"><%= t("profile.statistics.metrics.#{metric}") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% payload[:entries].each do |entry| %>
+                <tr>
+                  <th scope="row" class="fw-normal"><%= entry[:name] %></th>
+                  <td class="text-end text-nowrap"><%= entry[:formatted] %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </details>
+      </section>
+    <% end %>
+  </div>
+  <span class="visually-hidden" role="status" aria-atomic="true" data-paged-panels-target="status"></span>
+</section>

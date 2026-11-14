@@ -1,0 +1,7 @@
+<p><%= t("passwords_mailer.reset.greeting", name: @user.display_name) %></p>
+<p><%= t("passwords_mailer.reset.body") %></p>
+<p>
+  <%= link_to t("passwords_mailer.reset.action"), edit_password_url(@user.password_reset_token) %>
+</p>
+<p><%= t("passwords_mailer.reset.expiry", duration: distance_of_time_in_words(0, @user.password_reset_token_expires_in)) %></p>
+<p><%= t("passwords_mailer.reset.ignore") %></p>

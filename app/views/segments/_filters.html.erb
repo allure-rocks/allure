@@ -1,0 +1,52 @@
+<%# Segment index toolbar (DESIGN.md §10.6, §20.6): one GET form, so the whole
+    state stays in the URL. The sport select-group leads (one scrolling row on
+    phones), then the sort select — the phone list has no column headers, so
+    the select is its only sort control. A course with no sport stays listed
+    under every sport. Locals: `practiced_sports`. %>
+<div class="allure-filter-bar mb-3" data-controller="filter-bar">
+  <%= form_with url: segments_path, method: :get, data: { filter_bar_target: "form" } do %>
+    <%= hidden_field_tag :kind, @kind, id: nil unless @kind == "segment" %>
+    <% if practiced_sports.length > 1 %>
+      <fieldset class="allure-sport-filter mb-2">
+        <legend class="visually-hidden"><%= t("segments.index.filters.sport") %></legend>
+        <div class="form-selectgroup allure-sport-filter__options" data-controller="selectgroup-scroll">
+          <% practiced_sports.each do |entry| %>
+            <% label = "#{sport_display_name(entry[:sport])} — #{t('segments.index.filters.courses', count: entry[:count])}" %>
+            <label class="form-selectgroup-item">
+              <%= check_box_tag "sports[]", entry[:sport].id,
+                    list_query.sport_ids.include?(entry[:sport].id.to_s),
+                    class: "form-selectgroup-input",
+                    id: "segment_sport_filter_#{entry[:sport].id}",
+                    aria: { label: },
+                    data: { action: "change->filter-bar#submit" } %>
+              <span class="form-selectgroup-label">
+                <span class="allure-sport-filter__icon" aria-hidden="true"><%= sport_icon_tag(entry[:sport]) %></span>
+                <span><%= sport_display_name(entry[:sport]) %></span>
+                <span class="allure-sport-filter__count"><%= entry[:count] %></span>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+    <% end %>
+
+    <div class="allure-filter-bar__controls">
+      <div class="input-icon allure-filter-bar__select">
+        <span class="input-icon-addon"><i class="ti ti-arrows-sort" aria-hidden="true"></i></span>
+        <%= select_tag :sort,
+              options_for_select(list_query.sort_keys.map { |key| [ t("segments.index.filters.sorts.#{key}"), key ] }, list_query.sort_key),
+              class: "form-select form-select-sm",
+              aria: { label: t("segments.index.filters.sort") },
+              data: { action: "change->filter-bar#submit" } %>
+      </div>
+      <% if list_query.sport_ids.any? %>
+        <%= link_to t("segments.index.filters.clear"), segments_path(segment_list_params(sports: nil)),
+              class: "btn btn-sm btn-ghost-secondary ms-auto" %>
+      <% end %>
+    </div>
+
+    <noscript>
+      <%= submit_tag t("segments.index.filters.submit"), class: "btn btn-sm btn-primary mt-2", name: nil %>
+    </noscript>
+  <% end %>
+</div>

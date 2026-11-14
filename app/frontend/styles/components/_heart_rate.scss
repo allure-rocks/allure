@@ -1,0 +1,66 @@
+// Heart-rate zones (PLAN_HEART_RATE.md §3.5, DESIGN.md §10.21): the five
+// steps of the calendar's primary ramp, Z1 the palest. Solid mixes against the
+// sunken surface so the ramp reads the same in both themes; the zone number is
+// always printed or named, never carried by colour alone. The variables are
+// what the zone-distribution chart resolves (`cssColor`).
+:root,
+[data-bs-theme] {
+  --allure-zone-1: color-mix(in srgb, var(--primary) 20%, var(--allure-surface-sunken));
+  --allure-zone-2: color-mix(in srgb, var(--primary) 40%, var(--allure-surface-sunken));
+  --allure-zone-3: color-mix(in srgb, var(--primary) 60%, var(--allure-surface-sunken));
+  --allure-zone-4: color-mix(in srgb, var(--primary) 80%, var(--allure-surface-sunken));
+  --allure-zone-5: var(--primary);
+}
+
+@for $zone from 1 through 5 {
+  .allure-zone-#{$zone} {
+    background-color: var(--allure-zone-#{$zone});
+
+    @if $zone <= 2 {
+      color: var(--body-color);
+    } @else {
+      color: #fff;
+    }
+  }
+}
+
+.allure-zone-bar {
+  height: 1.5rem;
+
+  .progress-bar {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+// The zone page's phone list: a bar without labels, the values printed below.
+.allure-zone-bar--thin {
+  height: 0.5rem;
+}
+
+// The five zone values of one period, in one row of five equal columns.
+.allure-zone-values {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.25rem;
+  font-size: 0.75rem;
+
+  dt {
+    font-weight: normal;
+    color: var(--allure-text-muted);
+    white-space: nowrap;
+  }
+
+  dd {
+    margin: 0;
+    white-space: nowrap;
+  }
+}
+
+.allure-zone-swatch {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 2px;
+  vertical-align: -0.05em;
+}

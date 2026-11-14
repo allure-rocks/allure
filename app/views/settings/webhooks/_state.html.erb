@@ -1,0 +1,2 @@
+<% classes = { "active" => "bg-success-lt", "paused" => "bg-secondary-lt" }.fetch(endpoint.state, "bg-danger-lt") %>
+<span class="badge <%= classes %>"><%= t("settings.webhooks.states.#{endpoint.state}") %></span>

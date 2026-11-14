@@ -1,0 +1,40 @@
+# Wire-level signature fixture. It deliberately contains no private key,
+# authorization header, or live remote endpoint. The canonical inputs are
+# intentionally pinned before the signer implementation is introduced.
+post_activity:
+  method: POST
+  path: /users/marie/inbox
+  host: remote.example
+  date: Wed, 26 Aug 2026 12:00:00 GMT
+  body: '{"id":"https://wanderer.example/activities/follow-fixture","type":"Follow","actor":"https://wanderer.example/users/demo","object":"https://allure.example/users/marie"}'
+  digest: SHA-256=ZCTyXiHO+LqP0HpIBuGZi+dN/qDAAm7HU1kq3hTSAwU=
+  content_type: application/activity+json
+  signed_headers:
+    - (request-target)
+    - host
+    - date
+    - digest
+    - content-type
+  canonical: |-
+    (request-target): post /users/marie/inbox
+    host: remote.example
+    date: Wed, 26 Aug 2026 12:00:00 GMT
+    digest: SHA-256=ZCTyXiHO+LqP0HpIBuGZi+dN/qDAAm7HU1kq3hTSAwU=
+    content-type: application/activity+json
+
+get_empty_body:
+  method: GET
+  path: /api/v1/trail/fixture-trail/media/gpx
+  host: remote.example
+  date: Wed, 26 Aug 2026 12:00:00 GMT
+  digest: SHA-256=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
+  signed_headers:
+    - (request-target)
+    - host
+    - date
+    - digest
+  canonical: |-
+    (request-target): get /api/v1/trail/fixture-trail/media/gpx
+    host: remote.example
+    date: Wed, 26 Aug 2026 12:00:00 GMT
+    digest: SHA-256=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=

@@ -1,0 +1,131 @@
+<%# The publish form (DESIGN.md §19.1): profile, delay and submit, then what
+    the selected profile shares and leaves out, its readiness warnings, and
+    the delay and safety hints. Publishes for an audience no live publication
+    holds, or replaces one active publication (PLAN_AUDIENCES.md §4). Locals:
+    `workout`, `replaced` (the publication replaced, or nil), `profiles` (the
+    ones this form may use), `readiness`, `selected_profile`, `form_key` (keeps
+    the field ids unique when several forms share the page). %>
+<% replaced = local_assigns[:replaced] %>
+<% form_key = local_assigns.fetch(:form_key, "add") %>
+<% profile_field_id = "publishing_profile_id_#{form_key}" %>
+<% delay_field_id = "publish_delay_#{form_key}" %>
+<% selected_status = readiness.fetch(selected_profile.id.to_s, {}) %>
+<% selected_immediate = selected_profile.publish_delay_seconds.to_i.zero? %>
+<%= form_with url: replaced ? republish_workout_path(workout) : publish_workout_path(workout),
+              method: :post,
+              data: {
+                controller: "publication-preview",
+                publication_preview_readiness_value: readiness.to_json,
+                publication_preview_immediate_label_value: t(replaced ? "workouts.publication.replace" : "workouts.publication.publish"),
+                publication_preview_delayed_label_value: t(replaced ? "workouts.publication.schedule_replace" : "workouts.publication.schedule"),
+                **(replaced ? { confirm_title: t("workouts.publication.replace_confirm.title"), confirm_body: t("workouts.publication.replace_confirm.body"), confirm_verb: t("workouts.publication.replace_confirm.verb") } : {})
+              } do %>
+  <% if replaced %>
+    <%= hidden_field_tag :publication_id, replaced.to_param, id: nil %>
+  <% end %>
+  <div class="row g-3 align-items-end">
+    <div class="col-md">
+      <%= label_tag profile_field_id, t("workouts.publication.profile"), class: "form-label" %>
+      <%= select_tag :publishing_profile_id,
+                     options_for_select(profiles.map { |profile| [ profile.name, profile.id ] }, selected_profile.id),
+                     id: profile_field_id,
+                     class: "form-select",
+                     data: { publication_preview_target: "profile", action: "change->publication-preview#update" } %>
+    </div>
+    <div class="col-md">
+      <%= label_tag delay_field_id, t("workouts.publication.delay"), class: "form-label" %>
+      <%= select_tag :publish_delay,
+                     options_for_select(publishing_delay_options, selected_profile.publish_delay_seconds),
+                     id: delay_field_id,
+                     class: "form-select",
+                     data: { publication_preview_target: "delay", action: "change->publication-preview#updateLabel" } %>
+    </div>
+    <div class="col-md-auto">
+      <%= submit_tag t(selected_immediate ? (replaced ? "workouts.publication.replace" : "workouts.publication.publish") : (replaced ? "workouts.publication.schedule_replace" : "workouts.publication.schedule")),
+                     class: "btn #{replaced ? "btn-outline-primary" : "btn-primary"} w-100",
+                     disabled: selected_status["ready"] == false,
+                     data: { publication_preview_target: "submit" } %>
+    </div>
+  </div>
+  <%# What the selected profile shares (DESIGN.md §19.1): the shared
+      list, what it leaves out, and the sentence naming what is never
+      shared — all visible, refreshed live on a profile change. %>
+  <div class="row g-3 mt-1 allure-share-lists" role="note">
+    <div class="col-sm-6">
+      <p class="fw-semibold small mb-1"><%= t("workouts.publication.shared_heading") %></p>
+      <ul class="list-unstyled small mb-0 allure-share-list" data-publication-preview-target="shared">
+        <% Array(selected_status["shared"]).each do |field| %>
+          <li><i class="ti ti-check text-success me-1" aria-hidden="true"></i><%= field %></li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-sm-6">
+      <div data-publication-preview-target="withheldGroup" <%= "hidden" if Array(selected_status["withheld"]).empty? %>>
+        <p class="fw-semibold small mb-1"><%= t("workouts.publication.withheld_heading") %></p>
+        <ul class="list-unstyled small mb-2 allure-share-list" data-publication-preview-target="withheld">
+          <% Array(selected_status["withheld"]).each do |field| %>
+            <li><i class="ti ti-x text-secondary me-1" aria-hidden="true"></i><%= field %></li>
+          <% end %>
+        </ul>
+      </div>
+      <p class="small text-secondary mb-0">
+        <i class="ti ti-lock me-1" aria-hidden="true"></i><%= t("workouts.publish.preview.never") %>
+        <%= help_link("publishing") %>
+      </p>
+    </div>
+  </div>
+
+  <% photo_choices = publication_photo_choices(workout) %>
+  <% if photo_choices.any? %>
+    <%# PLAN_PHOTOS.md §5.2, DESIGN.md §19.35: the photos this publication
+        freezes, only when the chosen profile shares photos; a photo taken
+        inside a privacy zone starts unchecked and needs the acknowledgement.
+        The form says so instead of offering ticks that would share nothing. %>
+    <% photos_shared = selected_status["photos"] == true %>
+    <%= hidden_field_tag :photo_selection, "1", id: nil %>
+    <fieldset class="mt-3" data-publication-preview-target="photoChoice" <%= "hidden" unless photos_shared %>>
+      <legend class="fw-semibold small mb-1"><%= t("workouts.publication.photos.legend") %></legend>
+      <p class="small text-secondary mb-2"><%= t("workouts.publication.photos.hint") %></p>
+      <div class="allure-publish-photos">
+        <% photo_choices.each do |choice| %>
+          <% photo = choice[:photo] %>
+          <% field_id = "publish_photo_#{form_key}_#{photo.to_param}" %>
+          <label class="allure-publish-photo" for="<%= field_id %>">
+            <%= check_box_tag "photo_ids[]", photo.to_param, !choice[:sensitive], id: field_id, class: "form-check-input" %>
+            <%= image_tag workout_photo_path(workout, photo, variant: :thumbnail), alt: choice[:label], loading: "lazy" %>
+            <% if choice[:sensitive] %>
+              <span class="badge bg-warning-lt"><i class="ti ti-shield-lock me-1" aria-hidden="true"></i><%= t("workouts.publication.photos.sensitive") %></span>
+            <% end %>
+          </label>
+        <% end %>
+      </div>
+      <% if photo_choices.any? { it[:sensitive] } %>
+        <p class="small text-warning mt-2 mb-1"><%= t("workouts.publication.photos.sensitive_notice") %></p>
+        <label class="form-check small">
+          <%= check_box_tag :photos_acknowledged, "1", false, id: "photos_acknowledged_#{form_key}", class: "form-check-input" %>
+          <span class="form-check-label"><%= t("workouts.publication.photos.acknowledge") %></span>
+        </label>
+      <% end %>
+      <p class="small text-secondary mb-0"><i class="ti ti-camera me-1" aria-hidden="true"></i><%= t("workouts.publication.photos.reveal") %></p>
+    </fieldset>
+    <p class="small text-secondary mt-3 mb-0" data-publication-preview-target="photoOff" <%= "hidden" if photos_shared %>>
+      <i class="ti ti-photo-off me-1" aria-hidden="true"></i><%= t("workouts.publication.photos.not_shared") %>
+      <%= link_to t("workouts.publication.photos.manage"), publishing_profiles_path %>
+    </p>
+  <% end %>
+
+  <div class="alert alert-warning mt-3 mb-0<%= " visually-hidden" if Array(selected_status["warnings"]).empty? %>"
+       data-publication-preview-target="warnings" role="alert">
+    <% Array(selected_status["warnings"]).each do |warning| %><p class="mb-1"><%= warning %></p><% end %>
+  </div>
+  <% if replaced %>
+    <p class="form-text mt-3 mb-0"><%= t("workouts.publication.replace_hint") %></p>
+  <% elsif workout.live_audiences.any? %>
+    <p class="form-text mt-3 mb-0"><%= t("workouts.publication.add_hint") %></p>
+  <% end %>
+  <details class="mt-3 small text-secondary">
+    <summary><%= t("workouts.publication.more_info") %></summary>
+    <p class="mt-2 mb-1"><%= t("workouts.publication.delay_hint") %></p>
+    <p class="mb-0"><%= t("workouts.publish.safety_hint") %></p>
+  </details>
+<% end %>

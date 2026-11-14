@@ -1,0 +1,8 @@
+<% content_for :title, t("publishing_profiles.new.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("publishing_profiles.new.title") } do %>
+
+  <%= form_with model: @profile, url: publishing_profiles_path, class: "publishing-profile-form" do |form| %>
+    <%= render "form", form: form %>
+  <% end %>
+<% end %>

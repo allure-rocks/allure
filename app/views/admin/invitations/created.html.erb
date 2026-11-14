@@ -1,0 +1,24 @@
+<% content_for :title, t("admin.invitations.created.title") %>
+
+<% content_for :page_header do %>
+  <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+  <h1 class="page-title"><%= t("admin.invitations.created.title") %></h1>
+<% end %>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <p class="text-secondary"><%= t("admin.invitations.created.hint") %></p>
+        <div class="mb-2">
+          <%= label_tag "invitation_url", t("admin.invitations.created.link"), class: "form-label" %>
+          <%= text_field_tag "invitation_url", @invitation_url, class: "form-control", readonly: true %>
+        </div>
+        <p class="text-secondary small">
+          <%= t("admin.invitations.created.expires", date: l(@invitation.expires_at, format: :long), email: @invitation.email_address) %>
+        </p>
+        <%= link_to t("admin.invitations.created.back"), admin_invitations_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+</div>

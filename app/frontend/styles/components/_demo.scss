@@ -1,0 +1,31 @@
+// The demo strip and the sign-in page's credentials block (PLAN_DEMO.md §6,
+// DESIGN.md §20.21): one quiet line on every page that says the instance for
+// what it is, and its urgent state in the last five minutes before the
+// nightly reset.
+.demo-strip {
+  padding: 0.25rem 1rem;
+  font-size: 0.8125rem;
+  text-align: center;
+  color: var(--allure-text-muted);
+  background: var(--allure-surface-sunken);
+  border-bottom: 1px solid var(--allure-border);
+}
+
+.demo-strip-warning {
+  font-weight: 500;
+  color: var(--warning);
+}
+
+// The auth layout floats its language and theme controls at the top-right
+// corner; the strip occupies that band, so in demo mode the cluster replaces
+// the `top-0 m-3` utilities with this and sits below the strip instead of
+// overlapping it (DESIGN.md §20.21). Replacing, never fighting: the spacing
+// utilities carry !important.
+.demo-strip-offset {
+  top: 0;
+  margin: 2.8rem 1rem 1rem;
+}
+
+.demo-credentials code {
+  color: var(--allure-text);
+}

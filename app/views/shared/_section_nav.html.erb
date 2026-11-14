@@ -1,0 +1,16 @@
+<%# Section navigation for a section shell (DESIGN.md §8.5). From md up it is
+    the grouped vertical list in the left card; below md the shell hides this
+    column and shows a back link to the section hub instead.
+    Locals: groups, label. %>
+<nav class="settings-nav-menu" aria-label="<%= label %>">
+  <% groups.each_with_index do |group, index| %>
+    <h4 class="subheader d-none d-md-block<%= " mt-4" if index.positive? %>"><%= group[:title] %></h4>
+    <div class="list-group list-group-transparent">
+      <% group[:items].each do |item| %>
+        <%= link_to item[:label], item[:path],
+              class: class_names("list-group-item list-group-item-action", active: item[:active]),
+              aria: { current: (item[:active] ? "page" : nil) } %>
+      <% end %>
+    </div>
+  <% end %>
+</nav>

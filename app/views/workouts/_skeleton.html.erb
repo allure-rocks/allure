@@ -1,0 +1,20 @@
+<%# Next-page skeleton for the endless workout list (DESIGN.md §11.1): three
+    cards with the same 16x9 route block, title row and metric line as a real
+    card. Revealed by infinite_scroll_controller only while a page fetch is in
+    flight; purely decorative, so the whole block stays aria-hidden. %>
+<div class="row row-deck row-cards" data-infinite-scroll-target="skeleton" hidden>
+  <% 3.times do %>
+    <div class="col-sm-6 col-lg-4 col-xxl-3">
+      <div class="card placeholder-glow">
+        <div class="ratio ratio-16x9 bg-secondary-lt"><span class="placeholder"></span></div>
+        <div class="card-body">
+          <div class="d-flex align-items-start mb-2">
+            <span class="avatar avatar-square avatar-md bg-secondary-lt"></span>
+            <p class="ms-2 mb-0 flex-fill"><span class="placeholder col-8"></span></p>
+          </div>
+          <p class="mb-0"><span class="placeholder col-7"></span></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

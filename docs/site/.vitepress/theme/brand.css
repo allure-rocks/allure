@@ -1,0 +1,21 @@
+/* The application's primary colour (#c5426c) and its ramp. */
+:root {
+  --vp-c-brand-1: #b03a60;
+  --vp-c-brand-2: #c5426c;
+  --vp-c-brand-3: #c5426c;
+  --vp-c-brand-soft: rgba(197, 66, 108, 0.14);
+}
+
+/* Reference pages (frontmatter `pageClass: reference-page`, `aside: false`)
+   are mostly wide tables: give them the full content width. */
+.reference-page .VPDoc .container,
+.reference-page .VPDoc .content-container {
+  max-width: 100% !important;
+}
+
+.dark {
+  --vp-c-brand-1: #e07a9a;
+  --vp-c-brand-2: #d75f85;
+  --vp-c-brand-3: #c5426c;
+  --vp-c-brand-soft: rgba(197, 66, 108, 0.2);
+}

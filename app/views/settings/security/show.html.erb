@@ -1,0 +1,29 @@
+<% content_for :title, t("settings.security.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.security.title") } do %>
+
+  <%# Three groups, in the order they matter (DESIGN.md §20.15): the second
+      factor and its obligation, the ways in side by side, then the sessions
+      those ways opened, closed one by one or all at once. %>
+  <% providers_card = @identities.any? || @linkable_providers.any? %>
+  <div class="row row-deck row-cards">
+    <div class="col-12">
+      <%= render "settings/security/second_factor", policy: @policy, passkeys: @passkeys,
+                                                    recovery_codes_left: @recovery_codes_left %>
+    </div>
+
+    <div class="<%= providers_card ? "col-lg-6" : "col-12" %>">
+      <%= render "settings/security/password", user: @user, narrow: !providers_card %>
+    </div>
+
+    <% if providers_card %>
+      <div class="col-lg-6">
+        <%= render "settings/security/identities", identities: @identities, linkable: @linkable_providers %>
+      </div>
+    <% end %>
+
+    <div class="col-12">
+      <%= render "settings/security/sessions", sessions: @sessions, pagy: @pagy, sort: @session_sort %>
+    </div>
+  </div>
+<% end %>

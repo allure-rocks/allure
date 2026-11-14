@@ -1,0 +1,30 @@
+<%# An invitation from another instance's owner to confirm taking part in
+    the received note (PLAN_TOGETHER.md §7, DESIGN.md §10.18): Confirmer /
+    Refuser while pending, Retirer once confirmed. Only the invited account
+    sees it. %>
+<% pending = participation.pending? %>
+<div class="card mb-3 allure-participants-card">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("remote_participations.title") %></h2>
+  </div>
+  <div class="card-body">
+    <% if pending %>
+      <p class="text-secondary"><%= t("remote_participations.invited", name: actor_name(note.actor)) %></p>
+      <p class="text-secondary small"><%= t("remote_participations.confirm_notice") %></p>
+      <div class="allure-actions">
+        <%= button_to t("workouts.participations.confirm"), remote_participation_path(participation),
+                      method: :patch, params: { decision: "confirm" }, class: "btn btn-primary" %>
+        <%= button_to t("workouts.participations.decline"), remote_participation_path(participation),
+                      method: :patch, params: { decision: "decline" }, class: "btn btn-outline-secondary" %>
+      </div>
+    <% else %>
+      <p class="text-secondary mb-3"><%= t("remote_participations.confirmed", name: actor_name(note.actor)) %></p>
+      <%= button_to t("workouts.participations.withdraw"), remote_participation_path(participation),
+                    method: :patch, params: { decision: "withdraw" },
+                    form: { data: { confirm_title: t("workouts.participations.withdraw_confirm.title"),
+                                    confirm_body: t("remote_participations.withdraw_confirm_body"),
+                                    confirm_verb: t("workouts.participations.withdraw") } },
+                    class: "btn btn-outline-secondary" %>
+    <% end %>
+  </div>
+</div>

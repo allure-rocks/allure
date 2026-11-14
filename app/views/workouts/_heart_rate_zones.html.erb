@@ -1,0 +1,82 @@
+<%# Time in each heart-rate zone (PLAN_HEART_RATE.md §3.5, DESIGN.md §10.21).
+    Owner-only, never part of a publication. The bar is one image whose
+    accessible name lists every zone; the table below is its text
+    equivalent, and each row previews every stretch of its zone on the
+    profile and the map. A recording too thin to slice says why. %>
+<div class="card-body">
+  <p class="text-secondary small mb-2">
+    <%= heart_rate_basis_sentence(zones) %>
+    <%= link_to t("heart_rate.zones.edit"), settings_heart_rate_path %>
+  </p>
+
+  <% if state == :usable %>
+    <% visible = rows.select { |row| row[:seconds].to_i.positive? } %>
+    <div class="progress progress-separated allure-zone-bar" role="img"
+         aria-label="<%= t("heart_rate.zones.bar_label", zones: visible.map { |row| t("heart_rate.zones.segment_label", zone: row[:number], name: row[:name], time: format_duration(row[:seconds]), share: heart_rate_zone_share(row[:share])) }.join(", ")) %>">
+      <% visible.each do |row| %>
+        <div class="progress-bar allure-zone-<%= row[:number] %>" style="width: <%= row[:share].round(2) %>%"
+             title="<%= "Z#{row[:number]} · #{row[:name]} · #{format_duration(row[:seconds])}" %>">
+          <% if row[:share] >= 8 %>Z<%= row[:number] %><% end %>
+        </div>
+      <% end %>
+    </div>
+    <% if coverage < Allure::HeartRate::Histogram::FULL_COVERAGE %>
+      <p class="text-secondary small mt-2 mb-0">
+        <%= t("heart_rate.zones.coverage", share: number_to_percentage(coverage * 100, precision: 0)) %>
+      </p>
+    <% end %>
+  <% else %>
+    <p class="mb-0"><%= t("heart_rate.zones.unusable.#{state}",
+                          share: number_to_percentage(coverage * 100, precision: 0),
+                          minimum: number_to_percentage(Allure::HeartRate::Histogram::MIN_COVERAGE * 100, precision: 0)) %></p>
+  <% end %>
+
+  <% if frozen_seconds.positive? %>
+    <p class="text-secondary small mt-2 mb-0"><%= t("heart_rate.zones.frozen", time: format_duration(frozen_seconds)) %></p>
+  <% end %>
+  <% if anomalies %>
+    <p class="text-secondary small mt-2 mb-0"><%= t("heart_rate.zones.anomalies") %></p>
+  <% end %>
+</div>
+
+<% if state == :usable %>
+  <div class="table-responsive">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("heart_rate.zones.caption") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("heart_rate.zones.table.zone") %></th>
+          <th scope="col"><%= t("heart_rate.zones.table.name") %></th>
+          <th scope="col" class="text-end"><%= t("heart_rate.zones.table.range") %></th>
+          <th scope="col" class="text-end"><%= t("heart_rate.zones.table.time") %></th>
+          <th scope="col" class="text-end"><%= t("heart_rate.zones.table.share") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% rows.each do |row| %>
+          <tr <%= tag.attributes(heart_rate_zone_row_attributes(row)) %>>
+            <th scope="row" class="text-nowrap"><span class="allure-zone-swatch allure-zone-<%= row[:number] %>" aria-hidden="true"></span> Z<%= row[:number] %></th>
+            <td><%= row[:name] %></td>
+            <td class="text-end text-nowrap"><%= row[:range] %></td>
+            <td class="text-end"><%= format_duration(row[:seconds]) %></td>
+            <td class="text-end"><%= heart_rate_zone_share(row[:share]) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-body">
+    <p class="mb-1">
+      <%= t("heart_rate.zones.load", load: number_with_delimiter(load.round)) %>
+    </p>
+    <p class="text-secondary small mb-0">
+      <%= t("heart_rate.zones.load_hint") %>
+      <% if below_floor.positive? %>
+        <%= t("heart_rate.zones.below_floor", time: format_duration(below_floor), bpm: zones.load_floor) %>
+      <% end %>
+      <% if coverage < Allure::HeartRate::Histogram::FULL_COVERAGE %>
+        <%= t("heart_rate.zones.partial_load") %>
+      <% end %>
+    </p>
+  </div>
+<% end %>

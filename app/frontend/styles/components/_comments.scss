@@ -1,0 +1,161 @@
+// Comments card (DESIGN.md §10.20, PLAN_COMMENTS.md §11.1): a thread in
+// posting order with one level of replies, each comment an avatar beside its
+// author line, text and gestures. Replies hang off a rule under their root;
+// a withdrawn comment is muted, never restyled. While the frame submits, the
+// card dims instead of pretending the thread already changed.
+.allure-comments__thread,
+.allure-comments__replies {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.allure-comments__entry {
+  padding: 0.75rem 0;
+
+  & + & {
+    border-top: 1px solid var(--allure-border);
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.allure-comments__replies {
+  margin: 0.5rem 0 0 1rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--allure-border);
+
+  > li + li {
+    margin-top: 0.75rem;
+  }
+}
+
+.allure-comments__reply {
+  margin: 0.5rem 0 0 calc(2rem + 0.75rem);
+}
+
+.allure-comments__thread + .allure-comment-composer,
+.allure-comments__thread + .allure-comments__notice {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--allure-border);
+}
+
+.allure-comment {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.allure-comment__avatar {
+  flex-shrink: 0;
+}
+
+.allure-comment__main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.allure-comment__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.125rem 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.allure-comment__author {
+  color: var(--allure-text);
+  font-weight: 600;
+}
+
+a.allure-comment__author:hover {
+  text-decoration: underline;
+}
+
+// Long words and pasted links wrap instead of widening the card.
+.allure-comment__body {
+  margin-top: 0.125rem;
+  overflow-wrap: anywhere;
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.allure-comment__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.25rem 0 0 -0.5rem;
+
+  form {
+    margin: 0;
+  }
+}
+
+.allure-comment--withdrawn .allure-comment__body,
+.allure-comment__stub {
+  color: var(--allure-text-muted);
+}
+
+.allure-comment--stub {
+  align-items: center;
+}
+
+.allure-comment__stub {
+  font-style: italic;
+}
+
+.allure-comment-composer__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-top: 0.5rem;
+
+  // The submit stays on the right, even when it wraps under the hint.
+  > .btn {
+    margin-left: auto;
+  }
+
+  .form-hint {
+    flex: 1 1 16rem;
+    color: var(--allure-text-muted);
+  }
+}
+
+// Turbo marks the frame busy while a gesture is in flight.
+turbo-frame[aria-busy="true"] > .allure-comments {
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  turbo-frame[aria-busy="true"] > .allure-comments {
+    transition: none;
+  }
+}
+
+// Every gesture keeps the 44px touch target on coarse pointers (§18.4).
+@media (pointer: coarse) {
+  .allure-comment__actions .btn,
+  .allure-comment-composer .btn,
+  .allure-comments .card-actions .btn {
+    min-height: 2.75rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .allure-comments__replies {
+    margin-left: 0.25rem;
+    padding-left: 0.75rem;
+  }
+
+  .allure-comments__reply {
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,25 @@
+<%# The Garmin Connect sign-in (PLAN_REMOTE_IMPORTS.md §7.2). The password goes
+    to Garmin once, from a background job, and is never kept. Locals: connection. %>
+<%= form_with url: connection_link_path("garmin_connect"), method: :post do %>
+  <div class="row g-2">
+    <div class="col-md-6">
+      <%= label_tag :garmin_email, t("settings.connections.garmin_connect.email"), class: "form-label required" %>
+      <%= email_field_tag :email, nil, id: "garmin_email", required: true, autocomplete: "username", class: "form-control" %>
+    </div>
+    <div class="col-md-6">
+      <%= label_tag :garmin_password, t("settings.connections.garmin_connect.password"), class: "form-label required" %>
+      <%= password_field_tag :password, nil, id: "garmin_password", required: true, autocomplete: "current-password",
+                             class: "form-control" %>
+    </div>
+  </div>
+  <label class="form-check form-switch mt-3">
+    <%= hidden_field_tag :region, "com", id: nil %>
+    <%= check_box_tag :region, "cn", connection.region == "cn", class: "form-check-input", role: "switch", id: "garmin_region" %>
+    <span class="form-check-label"><%= t("settings.connections.garmin_connect.region_cn") %></span>
+  </label>
+  <small class="form-text d-block"><%= t("settings.connections.garmin_connect.link_hint") %></small>
+  <div class="allure-actions mt-3">
+    <%= submit_tag t(connection.needs_relink? ? "settings.connections.garmin_connect.relink" : "settings.connections.garmin_connect.link"),
+                   class: "btn btn-primary", name: nil %>
+  </div>
+<% end %>

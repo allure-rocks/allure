@@ -1,0 +1,65 @@
+<% bio = profile_bio %>
+<% mix = @journal.mix? %>
+<% intro = bio.present? || @shared_statistics.present? || @shared_records.present? %>
+<div class="profile-layout<%= " profile-layout--sidebar" if intro || mix %><%= " profile-layout--intro" if intro %>">
+  <% if intro %>
+    <div class="profile-intro">
+      <% if bio.present? %>
+        <section class="profile-about card" aria-labelledby="profile-about-title">
+          <div class="card-header">
+            <h2 class="card-title" id="profile-about-title"><%= t("profile.about") %></h2>
+          </div>
+          <div class="card-body profile-bio"><%= bio %></div>
+        </section>
+      <% end %>
+      <% if @shared_statistics.present? %>
+        <%= render "profiles/shared_statistics", rows: @shared_statistics %>
+      <% end %>
+      <% if @shared_records.present? %>
+        <%= render "profiles/shared_records", groups: @shared_records %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="profile-journal">
+    <section aria-labelledby="profile-journal-title">
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+        <h2 class="h3 mb-0" id="profile-journal-title"><%= t("profile.journal.title") %></h2>
+        <span class="text-secondary small" role="status"><%= t("profile.journal.count", count: @pagy.count) %></span>
+        <% if @journal.filtered? %>
+          <%= link_to t("profile.filters.clear"), profile_journal_path(period: "all", sport: nil), class: "btn btn-sm btn-ghost-secondary ms-auto" %>
+        <% end %>
+      </div>
+
+      <% if @journal.total_count.positive? %>
+        <%= render "shared/sport_period_toolbar", path: profile_journal_path(period: nil, sport: nil),
+                   period: @journal.period, periods: Profiles::Journal::PERIODS, sport_param: :sport,
+                   selected_sport: @journal.selected_sport&.key,
+                   sports: @journal.sports.map { |entry| { sport: entry.sport, key: entry.key } },
+                   selector_sports: @journal.selector_sports.map { |entry| { sport: entry.sport, key: entry.key, count: entry.count, active: entry.key == @journal.selected_sport&.key } } %>
+      <% end %>
+
+      <%= render "profiles/journal" %>
+    </section>
+
+    <% if @remote_segments&.any? %>
+      <section class="mt-4" aria-labelledby="profile-courses-title">
+        <h2 class="h3 mb-3" id="profile-courses-title"><%= t("remote_profiles.segments.title") %></h2>
+        <div class="row row-deck row-cards">
+          <%= render partial: "remote_segments/card", collection: @remote_segments, as: :segment %>
+        </div>
+        <% if @pagy_segments.last > 1 %>
+          <div class="d-flex justify-content-center mt-4"><%== pagy_bootstrap_nav(@pagy_segments) %></div>
+        <% end %>
+      </section>
+    <% end %>
+  </div>
+
+  <% if mix %>
+    <div class="profile-sports">
+      <%= render "me/sport_mix", payload: profile_sport_mix_payload, metrics: %w[workouts],
+                 heading: t("profile.sports.title"), heading_tag: :h2, chart_label: t("profile.sports.hint"), intro: t("profile.sports.hint"),
+                 caption: t("profile.sports.hint") %>
+    </div>
+  <% end %>
+</div>

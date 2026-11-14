@@ -1,0 +1,5 @@
+<% content_for :title, t("developers.api.reference_title") %>
+<div id="api-reference"
+     data-url="<%= api_rest_v1_openapi_path(format: :json) %>"
+     data-base-path="<%= Api::Rest::V1::Document::BASE_PATH %>"
+     data-locale="<%= I18n.locale %>"></div>

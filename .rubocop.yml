@@ -1,0 +1,18 @@
+# Omakase Ruby styling for Rails
+inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
+# Overwrite or add rules to create your own house style
+#
+# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
+# Layout/SpaceInsideArrayLiteralBrackets:
+#   Enabled: false
+
+inherit_mode:
+  merge:
+    - Exclude
+
+AllCops:
+  # The documentation site's own npm packages (docs/site/README.md) may ship
+  # Ruby files of their own; they are not Allure's code.
+  Exclude:
+    - "docs/site/node_modules/**/*"

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%# Not no-referrer: the browser would then send a null Origin, which the
+        request phase refuses as forged. %>
+    <meta name="referrer" content="same-origin">
+    <title><%= t("companion_provider_starts.show.title", provider: @provider.label) %></title>
+  </head>
+  <body>
+    <form id="provider-start" method="post" action="<%= @action %>">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <noscript><button type="submit"><%= t("companion_provider_starts.show.continue") %></button></noscript>
+    </form>
+    <%= javascript_tag nonce: true do %>document.getElementById("provider-start").submit();<% end %>
+  </body>
+</html>

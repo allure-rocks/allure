@@ -1,0 +1,12 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://wanderer.example/activities/undo-follow-fixture",
+  "type": "Undo",
+  "actor": "https://wanderer.example/users/demo",
+  "object": {
+    "id": "https://wanderer.example/activities/follow-fixture",
+    "type": "Follow",
+    "actor": "https://wanderer.example/users/demo",
+    "object": "https://allure.example/users/marie"
+  }
+}

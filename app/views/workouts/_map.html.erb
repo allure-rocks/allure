@@ -1,0 +1,23 @@
+<% display = local_assigns.fetch(:display) { workout } %>
+<% segment_count = local_assigns.fetch(:segment_count) { workout.track_segments.size } %>
+<% map_size = local_assigns.fetch(:map_size, nil) %>
+<% track_url = local_assigns.fetch(:track_url) { workout_track_path(workout) } %>
+<% basemap = local_assigns.fetch(:basemap) { display.respond_to?(:basemap_visible?) ? display.basemap_visible? : true } %>
+<% virtual_basemap = local_assigns.key?(:virtual_basemap) ? local_assigns[:virtual_basemap] : virtual_basemap_for(display, basemap: basemap) %>
+<%= render "shared/map",
+           url: track_url,
+           scope: "workouts.show.map",
+           summary: workout_map_summary(display, segment_count: segment_count),
+           summary_visible: false,
+           selection: local_assigns.fetch(:selection, false),
+           analysis: local_assigns.fetch(:analysis, true),
+           map_size: map_size,
+           basemap: basemap,
+           virtual_basemap: virtual_basemap,
+           power_led: display.sport&.power_led? || false,
+           smoothing: account_track_smoothing,
+           smoothing_level: account_track_smoothing_level,
+           smoothing_control: signed_in?,
+           smoothing_persist_url: (settings_appearance_path if signed_in?),
+           anomalies: local_assigns.fetch(:anomalies, []),
+           photos: local_assigns[:photos] %>

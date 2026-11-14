@@ -1,0 +1,14 @@
+#!/bin/bash -e
+
+# Demo instance boot (PLAN_DEMO.md §5), used as the demo Compose file's `rails`
+# command. A fresh volume is prepared, the reference catalogs are seeded, then
+# the whole demo dataset is re-seeded with its dates re-anchored on the
+# present. The server starts only once the demo is ready, so the first visitor
+# never sees a half-built instance.
+#
+# The normal entrypoint's migration branch matches `bin/rails server` only,
+# so every step runs here explicitly.
+./bin/rails db:prepare
+./bin/rails db:seed
+./bin/rails demo:reset
+exec ./bin/rails server -b 0.0.0.0 -p 3000

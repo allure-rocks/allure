@@ -1,0 +1,21 @@
+<% content_for :title, t("settings.account.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.account.title") } do %>
+  <p class="text-secondary"><%= t("settings.account.subtitle") %></p>
+
+  <div class="row row-cards">
+    <div class="col-12">
+      <turbo-frame id="settings-account-export"
+                   data-controller="live-frame"
+                   data-live-frame-url-value="<%= settings_account_path %>"
+                   data-live-frame-interval-value="4000">
+        <%= render "settings/account/export", export: @export, requestable: @export_requestable,
+                                              next_export_at: @next_export_at %>
+      </turbo-frame>
+    </div>
+
+    <div class="col-12">
+      <%= render "settings/account/deletion", user: @user, deletable: @deletable %>
+    </div>
+  </div>
+<% end %>

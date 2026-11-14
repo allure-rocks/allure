@@ -1,0 +1,61 @@
+<div class="alert alert-info" role="note">
+  <%= t("privacy_zones.panel") %>
+</div>
+
+<h2>Qué es una zona</h2>
+<p>
+  Un círculo que trazas alrededor de un lugar que no quieres revelar: tu casa,
+  tu lugar de trabajo, la casa de un familiar. Las creas en
+  <%= link_to "Zonas de privacidad", privacy_zones_path %>, buscando un lugar o
+  haciendo clic en el mapa, y eliges el radio. Las zonas en sí nunca se
+  comparten.
+</p>
+
+<h2>Qué oculta</h2>
+<p>
+  Cuando publicas, cada punto de la ruta que está dentro de una de tus zonas se
+  elimina antes de hacer la copia: de la ruta en el mapa, de la imagen del
+  mapa, del archivo GPX y de la posición de las fotos. La ruta se dibuja con un
+  hueco en ese tramo, así que nadie puede seguirla hasta tu puerta.
+</p>
+
+<h2>La salida y la llegada</h2>
+<p>
+  La salida y la llegada son donde una ruta delata un lugar con más facilidad,
+  así que cada perfil de publicación decide sobre ellas por separado, con
+  <strong>ocultar la salida</strong> y <strong>ocultar la llegada</strong>:
+</p>
+<ul>
+  <li><strong>Opción marcada</strong> — la salida (o la llegada) debe estar
+    dentro de una de tus zonas, y se elimina con ella. Si ninguna zona la
+    cubre, Allure se niega a publicar y te explica por qué, en lugar de
+    revelarla.</li>
+  <li><strong>Opción sin marcar</strong> — la salida (o la llegada) sigue
+    visible, <strong>incluso dentro de una zona</strong>. Úsala para rutas que
+    empiezan en un lugar público, como el inicio de un sendero o un club.</li>
+</ul>
+<p>
+  Si una parte de la grabación nunca sale de una zona, no queda nada que
+  mostrar sin riesgo, y la ruta no se publica.
+</p>
+
+<h2>Qué no cambia nunca</h2>
+<ul>
+  <li>Tu propia actividad: sigues viendo la ruta completa, y tus métricas se
+    calculan a partir de ella.</li>
+  <li>Las publicaciones ya hechas: son copias, congeladas en el momento en que
+    publicaste. Añadir una zona después no las alcanza: elimínalas y vuelve a
+    publicar.</li>
+  <li>Eliminar una zona no revela nada de lo ya publicado, pero tus próximas
+    publicaciones dejarán de ocultar esa zona.</li>
+</ul>
+
+<h2>Fotos y segmentos</h2>
+<ul>
+  <li>Una foto tomada dentro de una zona se deja fuera de la publicación salvo
+    que la incluyas expresamente, y entonces se comparte sin su posición.</li>
+  <li>Tus esfuerzos en un segmento que toca una de tus zonas nunca aparecen en
+    su clasificación.</li>
+  <li>Compartir un recorrido tuyo que cruza una zona te pide confirmación
+    primero.</li>
+</ul>

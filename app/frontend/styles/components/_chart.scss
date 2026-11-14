@@ -1,0 +1,295 @@
+// The plot takes as much of the card's width as it can: a thin side inset,
+// the axis labels doing the rest.
+.allure-chart-visual {
+  position: relative;
+  min-height: 20rem;
+  padding: 1rem 0.75rem 0.5rem;
+}
+
+// Zoom: the reset button sits over the top-right corner of the plot while
+// zoomed; the touch selection band mirrors the mouse's select-zoom.
+.allure-chart-zoom-reset {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.5rem;
+  z-index: 2;
+  color: var(--body-color);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// Whole-distance tick labels drawn in the row the chart keeps under its plot.
+.allure-chart-xticks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.allure-chart-xtick {
+  position: absolute;
+  font-size: 11px;
+  color: var(--body-color);
+  transform: translateX(-50%);
+  font-variant-numeric: tabular-nums;
+}
+
+// Flagged readings: short warning dashes along the foot of the plot, one row
+// per kind of reading (DESIGN.md §15.5). Only the dashes catch the pointer.
+.allure-chart-anomalies {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.allure-chart-anomaly {
+  position: absolute;
+  height: 5px;
+  background: repeating-linear-gradient(90deg, var(--warning) 0 4px, transparent 4px 7px) center / 100% 3px no-repeat;
+  pointer-events: auto;
+  cursor: help;
+}
+
+// The top value of each y axis, inside the plot's top corners.
+.allure-chart-ylabel {
+  position: absolute;
+  padding: 0 0.2rem;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--secondary);
+  background: color-mix(in srgb, var(--bg-surface) 75%, transparent);
+  border-radius: 2px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  &--end {
+    transform: translateX(-100%);
+  }
+}
+
+.allure-chart-touch-selection {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+  border-inline: 1px solid var(--primary);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.allure-elevation-chart {
+  width: 100%;
+  height: 18rem;
+}
+
+// A course's personal progression: the viewer's efforts over time, inside the
+// « Mes efforts » card, one chart per sport.
+.allure-progress-sport + .allure-progress-sport {
+  margin-top: 1.5rem;
+}
+
+.allure-progress-sport-title {
+  margin-top: 1rem;
+}
+
+.allure-progress-chart-visual {
+  position: relative;
+  min-height: 16rem;
+  margin-top: 0.5rem;
+}
+
+.allure-progress-chart {
+  width: 100%;
+  min-height: 16rem;
+}
+
+// Every ECharts tooltip wears the inverted Bootstrap tooltip surface
+// (lib/charts/tooltip.js). !important because ECharts writes its own inline
+// style on the wrapper.
+.allure-echarts-tooltip {
+  position: absolute;
+  padding: 0.25rem !important;
+  font-size: $tooltip-font-size !important;
+  color: $tooltip-color !important;
+  pointer-events: none;
+  background: $tooltip-bg !important;
+  border: 0 !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: none !important;
+
+  // ECharts creates the wrapper empty and unstyled, before its first show.
+  &:empty {
+    display: none;
+  }
+}
+
+// The profile's reading tooltip looks like every other tooltip on the page,
+// the anomaly dashes' included: the wrapper carries the inverted tooltip
+// surface, so the content stays transparent and only completes the
+// Bootstrap tooltip's padding and type.
+.allure-chart-tooltip {
+  display: grid;
+  gap: 0.125rem;
+  padding: 0 0.25rem;
+  line-height: 1.4285714286;
+  color: inherit;
+  background: transparent;
+
+  span {
+    display: block;
+  }
+}
+
+// A place or pictogram under the pointer names itself above the readings.
+.allure-chart-tooltip-place {
+  font-weight: 600;
+}
+
+.allure-route-timeline {
+  border-top: 1px solid var(--allure-border);
+}
+
+// One horizontal line at every width: it scrolls sideways when the steps do
+// not fit, so the card keeps its height whichever analysis tab is open.
+.allure-route-timeline__scroll {
+  padding-bottom: 0.25rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.allure-route-timeline__steps {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  // Each step is as wide as its own name (never cut mid-word), spare width
+  // spreads between the steps, and the line scrolls when they do not fit.
+  grid-auto-columns: minmax(4.5rem, max-content);
+  justify-content: space-between;
+  column-gap: 0.5rem;
+  width: max-content;
+  min-width: 100%;
+  min-height: 4.25rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  &::before {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.35rem;
+    left: 0.35rem;
+    height: 1px;
+    content: "";
+    background: var(--allure-border);
+  }
+}
+
+.allure-route-timeline__step {
+  position: relative;
+  min-width: 0;
+}
+
+.allure-route-timeline__button {
+  display: grid;
+  grid-template-rows: 1.15rem auto auto;
+  justify-items: center;
+  width: 100%;
+  padding: 0;
+  color: var(--allure-text);
+  text-align: center;
+  background: transparent;
+  border: 0;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--allure-focus);
+    outline-offset: 3px;
+    border-radius: $border-radius;
+  }
+}
+
+.allure-route-timeline__dot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 1.15rem;
+  height: 1.15rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--allure-text);
+  place-items: center;
+  background: var(--allure-surface-raised);
+  border: 2px solid var(--allure-border);
+  border-radius: 50%;
+}
+
+// Tab steps are the active analysis rows, not toponymy: the same circle as a
+// place dot, filled primary and carrying the tab's icon instead of a number,
+// so it sits centred on the timeline rule exactly like the numbered dots.
+.allure-route-timeline__dot--step {
+  color: #fff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.allure-route-timeline__name,
+.allure-route-timeline__detail {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// A place name stays on one line, whole; only a very long one (a segment
+// name) ends with an ellipsis.
+.allure-route-timeline__name,
+.allure-route-timeline__detail {
+  max-width: 12rem;
+  padding-inline: 0.25rem;
+}
+
+.allure-route-timeline__name {
+  margin-top: 0.35rem;
+  font-weight: 600;
+}
+
+.allure-route-timeline__detail {
+  font-size: 0.75rem;
+  color: var(--allure-text-muted);
+}
+
+@media (max-width: 575.98px) {
+  .allure-chart-visual {
+    min-height: 16rem;
+    padding: 0.5rem 0.5rem 0.25rem;
+  }
+
+  .allure-elevation-chart {
+    height: 15rem;
+  }
+}
+
+// On phones the data table is read by assistive technology only: its
+// card body takes no room.
+@media (max-width: 767.98px) {
+  .allure-chart-data {
+    padding: 0 !important;
+    border-top: 0 !important;
+  }
+}

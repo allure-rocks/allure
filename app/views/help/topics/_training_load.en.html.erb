@@ -1,0 +1,76 @@
+<p>
+  When your workouts record heart rate, Allure can tell you how hard each one
+  was and how your training adds up over weeks. It all starts from your
+  heart-rate profile.
+</p>
+
+<h2>Your heart-rate profile and zones</h2>
+<p>
+  In <%= link_to "Heart rate", settings_heart_rate_path %> you give your
+  maximum heart rate and, if you know it, your resting heart rate. Allure
+  proposes the highest rate one of your recordings held for at least ten
+  seconds, which is often a better guess than a formula. From that profile come
+  five <strong>zones</strong>, Z1 (easy) to Z5 (maximal), either as percentages
+  of your maximum or of your heart-rate reserve (between resting and maximum).
+  You can move each threshold yourself.
+</p>
+<p>
+  Changing your profile recomputes your whole history with the new zones.
+</p>
+
+<h2>Time in zones</h2>
+<p>
+  Each workout with heart rate gets a <strong>Heart-rate zones</strong> tab:
+  the time spent in each zone. A recording where the heart rate is too sparse,
+  or present for less than half the time, gets no zones, and the tab says why.
+  Values a slipping strap keeps repeating are set aside rather than counted.
+</p>
+
+<h2>Load</h2>
+<p>
+  The <strong>load</strong> of a workout is the minutes spent in each zone,
+  multiplied by the zone's number (the Edwards method): ten minutes in Z4 count
+  40 points, ten minutes in Z1 count 10. Time below the floor of your zones —
+  50 % of your maximum with the default thresholds — does not count.
+</p>
+
+<h2>Fitness, fatigue and form</h2>
+<p>
+  On your page, the <strong>Training load</strong> card follows three figures
+  over the last 90 days, all sports together:
+</p>
+<ul>
+  <li><strong>Fitness</strong> — your average daily load over 42 days, recent
+    days weighing more. What you have built.</li>
+  <li><strong>Fatigue</strong> — the same average over 7 days. What you are
+    absorbing.</li>
+  <li><strong>Form</strong> — yesterday's fitness minus yesterday's fatigue.
+    Positive, you are fresh; negative, you are loading, which is normal in the
+    middle of a training block.</li>
+</ul>
+<p>
+  Both averages start from zero at your first workout with heart rate: fitness
+  only means something after about six weeks.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[4] %>
+</div>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[5] %>
+</div>
+
+<h2>Zones over time</h2>
+<p>
+  <%= link_to "Heart-rate statistics", heart_rate_stats_path %> stacks your time
+  in zones per week or per month, in hours or in shares, and groups it into low,
+  moderate and high intensity. Use it as a landmark, not a prescription.
+</p>
+
+<h2>It stays private</h2>
+<div class="alert alert-info" role="note">
+  <%= t("settings.heart_rate.privacy") %>
+</div>
+<p>
+  A publishing profile can share a workout's average and maximum heart rate,
+  only if you tick them.
+</p>

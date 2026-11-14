@@ -1,0 +1,4 @@
+<%# A day of publications (DESIGN.md §8.3): the stream's sections are the days
+    items were published, in the viewer's zone. The ISO date lets the endless
+    scroll drop a separator the column already ends with. Local: `day`. %>
+<h2 class="hr-text allure-list-separator" data-feed-day="<%= day.iso8601 %>"><%= feed_day_label(day) %></h2>

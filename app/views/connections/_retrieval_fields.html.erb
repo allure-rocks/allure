@@ -1,0 +1,30 @@
+<%# The date range and fallback sport of a retrieval (PLAN_REMOTE_IMPORTS.md
+    §8.2), shared by the settings card and the import page's panel. A provider
+    whose files always name their sport offers no fallback sport.
+    Locals: source, connection. %>
+<% today = (Time.find_zone(current_user.time_zone) || Time.zone).today %>
+<% fallback = ImportConnections::Providers.supports?(source.key, :fallback_sport) %>
+<div class="row g-2">
+  <div class="col-sm-6 col-lg-4">
+    <%= label_tag "retrieval_from_#{source.key}", t("settings.connections.retrieval.from"), class: "form-label" %>
+    <%= date_field_tag "retrieval[from]", today - 30, max: today, required: true, class: "form-control",
+                       id: "retrieval_from_#{source.key}" %>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <%= label_tag "retrieval_to_#{source.key}", t("settings.connections.retrieval.to"), class: "form-label" %>
+    <%= date_field_tag "retrieval[to]", today, max: today, required: true, class: "form-control",
+                       id: "retrieval_to_#{source.key}" %>
+  </div>
+  <% if fallback %>
+    <div class="col-lg-4">
+      <%= label_tag "retrieval_sport_#{source.key}", t("settings.connections.retrieval.sport"), class: "form-label" %>
+      <%= select_tag "retrieval[sport_id]",
+                     options_for_select(sport_options_for_select, connection.fallback_sport_id),
+                     include_blank: t("settings.connections.preferences.no_fallback"), class: "form-select",
+                     id: "retrieval_sport_#{source.key}" %>
+    </div>
+  <% end %>
+</div>
+<% if fallback %>
+  <small class="form-text"><%= t("settings.connections.retrieval.hint") %></small>
+<% end %>

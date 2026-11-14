@@ -1,0 +1,23 @@
+<% content_for :title, t("passwords.new.title") %>
+
+<div class="card card-md">
+  <div class="card-body">
+    <h1 class="h2 text-center mb-4"><%= t("passwords.new.title") %></h1>
+    <p class="text-secondary"><%= t("passwords.new.subtitle") %></p>
+
+    <%= form_with url: passwords_path, data: credential_form_data do |form| %>
+      <div class="mb-3">
+        <%= form.label :email_address, t("passwords.new.email"), class: "form-label" %>
+        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username",
+              class: "form-control", value: params[:email_address] %>
+      </div>
+      <div class="form-footer">
+        <%= form.submit t("passwords.new.submit"), class: "btn btn-primary w-100" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="text-center text-secondary mt-3">
+  <%= link_to t("passwords.new.sign_in"), new_session_path %>
+</div>

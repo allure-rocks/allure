@@ -1,0 +1,204 @@
+# Allure — Tier-2 federation ring (PLAN.md §6).
+#
+# Two complete Allure instances that discover, follow and deliver to each other
+# over plain HTTP on the Compose network. No domain, no certificates, no tunnel.
+#
+# This file is always merged by dip, but every service sits behind the
+# `federation` profile, so ordinary `dip up` does not start any of it.
+#
+#   dip compose --profile federation up -d    start the ring
+#   dip fed_prepare_a && dip fed_prepare_b    create and seed both databases
+#   dip fed_test                              reset and verify the complete ring
+#   dip compose stop allure-a allure-b worker-a worker-b db-a db-b
+#
+# `docker compose down` is project-wide: it would also remove the ordinary
+# development stack and the network. Use `stop` to leave the ring alone.
+#
+# Host prerequisite, once:
+#
+#   127.0.0.1 allure-a.test allure-b.test    in /etc/hosts
+#
+# THE PORT IS PART OF THE ACTOR IDENTITY. Each node listens on the same port it
+# publishes, so one URL works both from the host browser and from inside the
+# Compose network. FitPub's own federation compose does not do this — it
+# advertises instance2.local:8081 while the container listens on 8080, which
+# cannot resolve container-to-container. Do not copy that.
+
+x-fed-app: &fed-app
+  build:
+    context: .
+    dockerfile: .dockerfiles/Dockerfile.dev
+  image: allure-dev:latest
+  profiles: [federation]
+  # On a fresh ring the nodes boot before their databases exist and exit. This
+  # lets them recover on their own once fed_prepare_* has run, instead of
+  # requiring a second manual `up`.
+  restart: unless-stopped
+  environment: &fed-env
+    RAILS_ENV: development
+    NODE_ENV: development
+    RAILS_LOG_TO_STDOUT: "1"
+    RAILS_LOG_LEVEL: ${FEDERATION_RING_LOG_LEVEL:-info}
+    # The acceptance ring must never consume credentials from the developer's
+    # .env or create feedback issues as a side effect of booting a node.
+    GITLAB_ENABLED: "false"
+    # Nor geocode the seeded demo rides against the developer's provider: no
+    # phase reads places, and a rate-limited provider kept the three worker
+    # threads retrying while federation jobs waited. An empty value wins over
+    # the .env entry.
+    GEOCODING_BASE_URL: ""
+    # The ring seeds the two-account dataset, not the full demo: a hundred
+    # imports and their route images on each node would keep the workers busy
+    # past the gate's polling bound (db/seeds/development.rb).
+    DEMO_DATASET: minimal
+    # With the files' own dates, so the gate seeds the same dataset whatever
+    # the day it runs (PLAN_DEMO.md §2).
+    DEMO_SEED_SHIFT: "0"
+    # The ring addresses itself by network alias over plain HTTP. Both of these
+    # are required together: the SSRF guard only permits an http:// target when
+    # the configured protocol is http AND private IPs are allowed.
+    FEDERATION_PROTOCOL: http
+    ALLOW_PRIVATE_IPS: "true"
+    # Off for the public ring; `dip fed_restricted_test` exports true so both
+    # nodes and workers boot with the restricted audience enabled.
+    FEDERATION_RESTRICTED_ENABLED: ${FEDERATION_RESTRICTED_ENABLED:-false}
+    # One shared Vite dev server: the frontend is identical on both nodes and
+    # each Rails instance proxies /vite-dev to it.
+    VITE_RUBY_HOST: vite
+  volumes:
+    - .:/app:cached
+    - bundle:/usr/local/bundle
+    - history:/usr/local/hist
+  tmpfs:
+    - /tmp
+
+x-fed-db: &fed-db
+  image: imresamu/postgis:18-3.6
+  profiles: [federation]
+  environment:
+    POSTGRES_USER: allure
+    POSTGRES_PASSWORD: allure
+    # Neutral database for the same reason as the primary stack: the PostGIS
+    # entrypoint enables extra extensions in POSTGRES_DB, and Rails must create
+    # the application databases from a clean template1.
+    POSTGRES_DB: postgres
+    PGPASSWORD: allure
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U allure -d postgres"]
+    interval: 5s
+    timeout: 5s
+    retries: 20
+    start_period: 20s
+
+services:
+  # --- Instance A ------------------------------------------------------------
+
+  db-a:
+    <<: *fed-db
+    volumes:
+      - pgdata_a:/var/lib/postgresql
+    ports:
+      - "${FED_A_POSTGRES_PORT:-5444}:5432"
+
+  allure-a:
+    <<: *fed-app
+    # A distinct pidfile: both nodes share the .:/app bind mount, so the default
+    # tmp/pids/server.pid would make the second node refuse to boot.
+    command: bin/rails server -b 0.0.0.0 -p 3002 -P tmp/pids/server-a.pid
+    ports:
+      - "3002:3002"
+    environment:
+      <<: *fed-env
+      FEDERATION_BASE_URL: http://allure-a.test:3002
+      POSTGRES_HOST: db-a
+      DATABASE_URL: postgis://allure:allure@db-a:5432/allure_development
+    volumes:
+      - .:/app:cached
+      - bundle:/usr/local/bundle
+      - history:/usr/local/hist
+      # Each instance owns its Active Storage blobs. Without this the two nodes
+      # would write sanitized publication media into the same directory.
+      - storage_a:/app/storage
+    networks:
+      default:
+        aliases:
+          - allure-a.test
+    depends_on:
+      db-a:
+        condition: service_healthy
+      vite:
+        condition: service_started
+
+  worker-a:
+    <<: *fed-app
+    command: bin/jobs
+    environment:
+      <<: *fed-env
+      FEDERATION_BASE_URL: http://allure-a.test:3002
+      POSTGRES_HOST: db-a
+      DATABASE_URL: postgis://allure:allure@db-a:5432/allure_development
+    volumes:
+      - .:/app:cached
+      - bundle:/usr/local/bundle
+      - history:/usr/local/hist
+      - storage_a:/app/storage
+    depends_on:
+      db-a:
+        condition: service_healthy
+
+  # --- Instance B ------------------------------------------------------------
+
+  db-b:
+    <<: *fed-db
+    volumes:
+      - pgdata_b:/var/lib/postgresql
+    ports:
+      - "${FED_B_POSTGRES_PORT:-5445}:5432"
+
+  allure-b:
+    <<: *fed-app
+    command: bin/rails server -b 0.0.0.0 -p 3003 -P tmp/pids/server-b.pid
+    ports:
+      - "3003:3003"
+    environment:
+      <<: *fed-env
+      FEDERATION_BASE_URL: http://allure-b.test:3003
+      POSTGRES_HOST: db-b
+      DATABASE_URL: postgis://allure:allure@db-b:5432/allure_development
+    volumes:
+      - .:/app:cached
+      - bundle:/usr/local/bundle
+      - history:/usr/local/hist
+      - storage_b:/app/storage
+    networks:
+      default:
+        aliases:
+          - allure-b.test
+    depends_on:
+      db-b:
+        condition: service_healthy
+      vite:
+        condition: service_started
+
+  worker-b:
+    <<: *fed-app
+    command: bin/jobs
+    environment:
+      <<: *fed-env
+      FEDERATION_BASE_URL: http://allure-b.test:3003
+      POSTGRES_HOST: db-b
+      DATABASE_URL: postgis://allure:allure@db-b:5432/allure_development
+    volumes:
+      - .:/app:cached
+      - bundle:/usr/local/bundle
+      - history:/usr/local/hist
+      - storage_b:/app/storage
+    depends_on:
+      db-b:
+        condition: service_healthy
+
+volumes:
+  pgdata_a:
+  pgdata_b:
+  storage_a:
+  storage_b:

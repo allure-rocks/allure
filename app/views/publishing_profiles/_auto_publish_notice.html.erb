@@ -1,0 +1,39 @@
+<%# Automatic publishing at a glance (PLAN_AUTO_PUBLISHING.md §7, DESIGN.md
+    §19.25). On the import surfaces it is shown only while a profile is
+    automatic, naming it and its delay; on the profile list it also introduces
+    the option while it is off. Locals: `profiles` (the automatic profiles),
+    `context` (:import or :profiles). %>
+<% if profiles.any? %>
+  <div class="alert alert-warning allure-auto-publish-notice" role="note">
+    <div class="d-flex gap-2">
+      <i class="ti ti-bolt mt-1" aria-hidden="true"></i>
+      <div>
+        <h4 class="alert-title mb-1"><%= t("publishing_profiles.auto_notice.on_title") %></h4>
+        <ul class="mb-1 ps-3">
+          <% profiles.each do |profile| %>
+            <li><%= t("publishing_profiles.auto_notice.profile",
+                      name: profile.name,
+                      audience: t("publishing_profiles.audiences.#{profile.audience}"),
+                      delay: auto_publish_delay_phrase(profile)) %><% if profile.auto_publish_exclude_commute? %><%= t("publishing_profiles.auto_notice.commute_excluded") %><% end %><% if (sports = auto_publish_excluded_sports_names(profile)) %><%= t("publishing_profiles.auto_notice.sports_excluded", sports:) %><% end %></li>
+          <% end %>
+        </ul>
+        <div class="text-secondary small">
+          <%= t("publishing_profiles.auto_notice.rules", days: WorkoutAutoPublication::RECENT_WINDOW.in_days.to_i, files: WorkoutAutoPublication::BULK_FILE_ENTRIES) %>
+          <% if context == :import %>
+            <%= link_to t("publishing_profiles.auto_notice.manage"), publishing_profiles_path %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% elsif context == :profiles %>
+  <div class="alert alert-info allure-auto-publish-notice" role="note">
+    <div class="d-flex gap-2">
+      <i class="ti ti-bolt mt-1" aria-hidden="true"></i>
+      <div>
+        <h4 class="alert-title mb-1"><%= t("publishing_profiles.auto_notice.off_title") %></h4>
+        <div class="text-secondary"><%= t("publishing_profiles.auto_notice.off_body", days: WorkoutAutoPublication::RECENT_WINDOW.in_days.to_i) %></div>
+      </div>
+    </div>
+  </div>
+<% end %>

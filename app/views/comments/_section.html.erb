@@ -1,0 +1,12 @@
+<%# The comments section of a workout or a received note (DESIGN.md §10.20,
+    §20.3, §20.16): the card under its anchor, rendered only when the viewer
+    has a thread to read. Below `lg` the page carries the social row's button
+    instead and the card lives on the thread's own page. Locals: `target`
+    (Workout or RemoteNote), `class_name` (the section's own classes), `card`
+    (computed when absent). %>
+<% card = local_assigns[:card] || comment_card_for(target) %>
+<% if card.visible? %>
+  <section id="comments" class="<%= class_names(local_assigns.fetch(:class_name, "allure-detail-section"), "d-none d-lg-block") %>">
+    <%= render "comments/card", target:, card: %>
+  </section>
+<% end %>

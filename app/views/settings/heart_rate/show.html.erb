@@ -1,0 +1,159 @@
+<% content_for :title, t("settings.heart_rate.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.heart_rate.title") } do %>
+  <p class="text-secondary"><%= t("settings.heart_rate.intro") %></p>
+
+  <% if @observed && @observed.bpm.between?(100, 220) %>
+    <div class="card mb-3">
+      <div class="card-body d-flex flex-wrap align-items-center gap-3">
+        <div class="flex-fill">
+          <h2 class="card-title h3 mb-1"><%= t("settings.heart_rate.observed.title") %></h2>
+          <p class="mb-1 text-secondary">
+            <%= t("settings.heart_rate.observed.body_html",
+                  bpm: metric_with_unit(@observed.bpm, t("units.heart_rate.bpm")),
+                  seconds: HeartRates::ObservedMaximum::HELD_SECONDS,
+                  workout: link_to(@observed.workout.title, workout_path(@observed.workout)),
+                  date: l(@observed.workout.started_at.in_time_zone(current_user.time_zone).to_date, format: :day_month_year)) %>
+            <% if current_user.max_heart_rate && @observed.bpm > current_user.max_heart_rate %>
+              <%= t("settings.heart_rate.observed.exceeds") %>
+            <% end %>
+          </p>
+          <p class="mb-0 text-secondary small"><%= t("settings.heart_rate.observed.floor") %></p>
+        </div>
+        <% unless current_user.max_heart_rate == @observed.bpm %>
+          <%= button_to t("settings.heart_rate.observed.action"), settings_heart_rate_path, method: :patch,
+                params: { user: { max_heart_rate: @observed.bpm } },
+                class: "btn btn-outline-primary" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div data-controller="heart-rate-zones-preview"
+       data-heart-rate-zones-preview-formats-value="<%= heart_rate_zone_preview_formats.to_json %>">
+    <%= form_with model: @user, url: settings_heart_rate_path, method: :patch,
+                  data: { action: "input->heart-rate-zones-preview#update change->heart-rate-zones-preview#update" } do |form| %>
+      <%= render "shared/form_errors", form: form %>
+
+      <div class="card mb-3">
+        <div class="card-header">
+          <h2 class="card-title h3"><%= t("settings.heart_rate.profile_title") %></h2>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6 mb-3">
+              <%= form.label :max_heart_rate, t("settings.heart_rate.max_label"), class: "form-label" %>
+              <div class="input-group">
+                <%= form.number_field :max_heart_rate, min: 100, max: 220, step: 1, class: "form-control",
+                                      aria: { describedby: "heart-rate-max-hint" },
+                                      data: { heart_rate_zones_preview_target: "max" } %>
+                <span class="input-group-text"><%= t("units.heart_rate.bpm") %></span>
+              </div>
+              <small class="form-text" id="heart-rate-max-hint"><%= t("settings.heart_rate.max_hint") %></small>
+            </div>
+            <div class="col-sm-6 mb-3">
+              <%= form.label :resting_heart_rate, t("settings.heart_rate.rest_label"), class: "form-label" %>
+              <div class="input-group">
+                <%= form.number_field :resting_heart_rate, min: 25, max: 120, step: 1, class: "form-control",
+                                      aria: { describedby: "heart-rate-rest-hint" },
+                                      data: { heart_rate_zones_preview_target: "rest" } %>
+                <span class="input-group-text"><%= t("units.heart_rate.bpm") %></span>
+              </div>
+              <small class="form-text" id="heart-rate-rest-hint"><%= t("settings.heart_rate.rest_hint") %></small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :heart_rate_zone_basis, t("settings.heart_rate.basis_label"), class: "form-label" %>
+            <%= form.select :heart_rate_zone_basis,
+                  Allure::HeartRate::Zones::BASES.map { [ t("settings.heart_rate.bases.#{it}"), it ] },
+                  {}, class: "form-select", aria: { describedby: "heart-rate-basis-hint" },
+                  data: { heart_rate_zones_preview_target: "basis" } %>
+            <small class="form-text" id="heart-rate-basis-hint"><%= t("settings.heart_rate.basis_hint") %></small>
+          </div>
+
+          <fieldset class="mb-1">
+            <legend class="form-label"><%= t("settings.heart_rate.bounds_label") %></legend>
+            <div class="row">
+              <% Array(@user.heart_rate_zone_bounds).each_with_index do |bound, index| %>
+                <div class="col-6 col-md-3 mb-2">
+                  <label class="form-label small text-secondary" for="heart-rate-bound-<%= index %>">
+                    <%= t("settings.heart_rate.bound_label", zone: index + 2, name: heart_rate_zone_name(index + 2)) %>
+                  </label>
+                  <div class="input-group">
+                    <input type="number" name="user[heart_rate_zone_bounds][]" id="heart-rate-bound-<%= index %>"
+                           value="<%= bound %>" min="30" max="99" step="1" class="form-control"
+                           data-heart-rate-zones-preview-target="bound">
+                    <span class="input-group-text">%</span>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <small class="form-text"><%= t("settings.heart_rate.bounds_hint") %></small>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="form-footer d-flex flex-wrap gap-2 mb-3">
+        <%= form.submit t("settings.heart_rate.save"), class: "btn btn-primary" %>
+        <%= form.submit t("settings.heart_rate.restore_defaults"), name: "restore_defaults", class: "btn btn-outline-secondary" %>
+      </div>
+    <% end %>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.heart_rate.zones_title") %></h2>
+      </div>
+      <div class="card-body pb-0">
+        <p class="text-secondary small mb-2" data-heart-rate-zones-preview-target="empty" <%= "hidden" if @zones %>><%= t("settings.heart_rate.empty") %></p>
+        <p class="text-secondary small mb-2"><%= t("settings.heart_rate.preview_hint") %></p>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-vcenter card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("heart_rate.zones.table.zone") %></th>
+              <th scope="col"><%= t("heart_rate.zones.table.name") %></th>
+              <th scope="col" class="text-end"><%= t("heart_rate.zones.table.range") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% (1..Allure::HeartRate::Zones::COUNT).each do |number| %>
+              <% row = @zones && heart_rate_zone_rows(@zones)[number - 1] %>
+              <tr>
+                <th scope="row" class="text-nowrap"><span class="allure-zone-swatch allure-zone-<%= number %>" aria-hidden="true"></span> Z<%= number %></th>
+                <td>
+                  <div><%= heart_rate_zone_name(number) %></div>
+                  <div class="text-secondary small"><%= heart_rate_zone_description(number) %></div>
+                </td>
+                <td class="text-end text-nowrap" data-heart-rate-zones-preview-target="range"><%= row ? row[:range] : "—" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-body">
+        <p class="text-secondary small mb-0" data-heart-rate-zones-preview-target="floor" <%= "hidden" unless @zones %>><%= heart_rate_load_floor_sentence(@zones) if @zones %></p>
+      </div>
+    </div>
+  </div>
+
+  <% if @pending_count.positive? %>
+    <div class="alert alert-info" role="status">
+      <%= t("settings.heart_rate.pending", count: @pending_count) %>
+      <%= link_to t("settings.heart_rate.pending_action"), settings_data_path, class: "alert-link" %>
+    </div>
+  <% end %>
+
+  <p class="text-secondary"><i class="ti ti-lock me-1" aria-hidden="true"></i><%= t("settings.heart_rate.privacy") %> <%= help_link("training-load") %></p>
+
+  <% if current_user.heart_rate_profile? %>
+    <%= button_to t("settings.heart_rate.destroy.action"), settings_heart_rate_path, method: :delete,
+          class: "btn btn-outline-danger",
+          form: { data: {
+            confirm_title: t("settings.heart_rate.destroy.confirm_title"),
+            confirm_body: t("settings.heart_rate.destroy.confirm_body"),
+            confirm_verb: t("settings.heart_rate.destroy.action")
+          } } %>
+  <% end %>
+<% end %>

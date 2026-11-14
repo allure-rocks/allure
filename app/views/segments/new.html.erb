@@ -1,0 +1,36 @@
+<% content_for :title, t("segments.new.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("segments.new.pretitle") %></div>
+      <h1 class="page-title"><%= t("segments.new.title") %></h1>
+      <div class="text-secondary small"><%= link_to workout_display_title(@workout), workout_path(@workout) %></div>
+    </div>
+  </div>
+<% end %>
+
+<div class="segment-creation-workspace"
+     data-controller="segment-selection"
+     data-action="allure:segment-selection@window->segment-selection#update"
+     data-segment-selection-hint-value="<%= t('segments.form.selection_hint') %>"
+     data-segment-selection-selected-value="<%= t('segments.form.selection_selected') %>"
+     data-segment-selection-invalid-value="<%= t('segments.form.selection_invalid') %>">
+  <div class="row row-cards align-items-start">
+    <div class="col-12 col-xl-8">
+      <div class="segment-creation-visuals">
+        <div class="segment-creation-chart">
+          <%= render "workouts/elevation_chart", workout: @workout, selection: true %>
+        </div>
+        <div class="segment-creation-map">
+          <%= render "workouts/map", workout: @workout, selection: true, map_size: "tall" %>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-xl-4">
+      <%= form_with model: [@workout, @segment], class: "segment-creation-form" do |form| %>
+        <%= render "selection_form", form: form %>
+      <% end %>
+    </div>
+  </div>
+</div>

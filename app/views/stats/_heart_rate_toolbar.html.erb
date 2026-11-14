@@ -1,0 +1,84 @@
+<%# Zone page toolbar, the hub's pattern (DESIGN.md §8.4, §10.6, §10.15).
+    From md up: the sport pills — « Tous » first, then every sport with heart
+    rate in the window and its recording count — and the week/month choice as
+    a segmented control. On phones: one row of two native selects, sport then
+    period. No frame, and every choice is a plain GET URL keeping the scale. %>
+<div class="hub-toolbar mb-3">
+  <% if @selector_sports.any? || @sport %>
+    <%= form_with url: heart_rate_stats_path, method: :get, class: "hub-toolbar__sports d-none d-md-block",
+                  data: { controller: "autosubmit", turbo_action: "advance" } do %>
+      <%= hidden_field_tag :time, @granularity, id: nil %>
+      <%= hidden_field_tag :scale, @scale, id: nil %>
+      <fieldset class="allure-sport-filter">
+        <legend class="visually-hidden"><%= t("stats.heart_rate.toolbar.sport_label") %></legend>
+        <div class="form-selectgroup allure-sport-filter__options" data-controller="selectgroup-scroll">
+          <% total = @selector_sports.sum { |entry| entry[:count] } %>
+          <label class="form-selectgroup-item">
+            <%= radio_button_tag :sport_id, "", @sport.nil?, id: "heart_rate_sport_all",
+                  class: "form-selectgroup-input",
+                  aria: { label: "#{t('stats.heart_rate.all_sports')} — #{t('stats.heart_rate.toolbar.recordings', count: total)}" },
+                  data: { action: "change->autosubmit#submit" } %>
+            <span class="form-selectgroup-label">
+              <i class="ti ti-category allure-sport-filter__icon" aria-hidden="true"></i>
+              <span><%= t("stats.heart_rate.toolbar.all") %></span>
+              <span class="allure-sport-filter__count"><%= format_decimal(total) %></span>
+            </span>
+          </label>
+          <% @selector_sports.each do |entry| %>
+            <label class="form-selectgroup-item">
+              <%= radio_button_tag :sport_id, entry[:sport].id, entry[:active], id: "heart_rate_sport_#{entry[:sport].id}",
+                    class: "form-selectgroup-input",
+                    aria: { label: "#{sport_display_name(entry[:sport])} — #{t('stats.heart_rate.toolbar.recordings', count: entry[:count])}" },
+                    data: { action: "change->autosubmit#submit" } %>
+              <span class="form-selectgroup-label">
+                <span class="allure-sport-filter__icon" aria-hidden="true"><%= sport_icon_tag(entry[:sport]) %></span>
+                <span><%= sport_display_name(entry[:sport]) %></span>
+                <span class="allure-sport-filter__count"><%= format_decimal(entry[:count]) %></span>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+      <noscript><%= submit_tag t("stats.heart_rate.toolbar.apply"), name: nil, class: "btn btn-sm btn-outline-secondary mt-2" %></noscript>
+    <% end %>
+  <% end %>
+
+  <nav class="nav nav-segmented nav-sm hub-period-switch d-none d-md-flex ms-auto" aria-label="<%= t("stats.heart_rate.toolbar.granularity_label") %>">
+    <% StatsController::HEART_RATE_WINDOWS.each_key do |granularity| %>
+      <%= link_to t("stats.heart_rate.granularities.#{granularity}"),
+            heart_rate_stats_path(time: granularity, scale: @scale, sport_id: @sport&.id),
+            class: class_names("nav-link", active: granularity == @granularity),
+            aria: { current: (granularity == @granularity ? "true" : nil) } %>
+    <% end %>
+  </nav>
+
+  <div class="hub-toolbar__phone d-flex d-md-none">
+    <% if @sports.any? %>
+      <%= form_with url: heart_rate_stats_path, method: :get, class: "hub-sport-select d-flex align-items-center gap-2",
+                    data: { controller: "autosubmit", turbo_action: "advance" } do |form| %>
+        <%= form.hidden_field :time, value: @granularity, id: nil %>
+        <%= form.hidden_field :scale, value: @scale, id: nil %>
+        <%= form.select :sport_id,
+              [ [ t("stats.heart_rate.all_sports"), "" ] ] + @sports.map { |sport| [ sport_display_name(sport), sport.id ] },
+              { selected: @sport&.id },
+              class: "form-select form-select-sm", id: "heart_rate_sport_select",
+              aria: { label: t("stats.heart_rate.toolbar.sport_label") },
+              data: { action: "change->autosubmit#submit" } %>
+        <noscript><%= form.submit t("stats.heart_rate.toolbar.apply"), class: "btn btn-sm btn-outline-secondary" %></noscript>
+      <% end %>
+    <% end %>
+
+    <%= form_with url: heart_rate_stats_path, method: :get, class: "hub-period-select ms-auto d-flex align-items-center gap-2",
+                  data: { controller: "autosubmit", turbo_action: "advance" } do |form| %>
+      <%= form.hidden_field :sport_id, value: @sport.id, id: nil if @sport %>
+      <%= form.hidden_field :scale, value: @scale, id: nil %>
+      <%= form.select :time,
+            StatsController::HEART_RATE_WINDOWS.keys.map { |granularity| [ t("stats.heart_rate.granularities.#{granularity}"), granularity ] },
+            { selected: @granularity },
+            class: "form-select form-select-sm", id: "heart_rate_granularity_select",
+            aria: { label: t("stats.heart_rate.toolbar.granularity_label") },
+            data: { action: "change->autosubmit#submit" } %>
+      <noscript><%= form.submit t("stats.heart_rate.toolbar.apply"), class: "btn btn-sm btn-outline-secondary" %></noscript>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,176 @@
+<% active = batch.active? %>
+<div data-batch-import-target="content"
+     data-batch-import-active="<%= active %>"
+     data-batch-import-status="<%= batch.status %>">
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
+        <h3 class="card-title mb-0"><%= t("workouts.batch_import.status.title") %></h3>
+        <span data-status-text><%= import_batch_status_badge(batch.status) %></span>
+      </div>
+
+      <% if batch.total_entries.positive? %>
+        <div class="progress mb-2" role="progressbar" aria-valuenow="<%= batch.progress_percentage %>" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-bar" style="width: <%= batch.progress_percentage %>%"></div>
+        </div>
+        <div class="text-secondary small">
+          <%= t("workouts.batch_import.status.progress", processed: batch.processed_entries, total: batch.total_entries) %>
+          <% waiting = batch.total_entries - batch.processed_entries %>
+          <% if active && waiting.positive? %>
+            · <%= t("workouts.batch_import.status.waiting", count: waiting) %>
+          <% end %>
+        </div>
+        <% current = entries.find { |entry| entry.status == "processing" } %>
+        <% if current %>
+          <div class="text-secondary small mt-1">
+            <%= t("workouts.batch_import.status.current", name: current.source_path.presence || current.source_name) %>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="text-secondary mb-0">
+          <%= import_batch_discovery_text(batch) %>
+        </p>
+      <% end %>
+
+      <% if batch.processed_entries.positive? || batch.terminal? %>
+        <p class="text-secondary small mt-2 mb-0" data-status-text>
+          <%= t("workouts.batch_import.status.summary", imported: batch.imported_entries, failed: batch.failed_entries, duplicates: batch.duplicate_entries, cancelled: batch.cancelled_entries) %><% if batch.skipped_entries.positive? %>, <%= t("workouts.batch_import.status.skipped", count: batch.skipped_entries) %><% end %>
+        </p>
+      <% end %>
+
+      <% if (created = import_batch_created_equipment(entries)).any? %>
+        <p class="text-secondary small mt-1 mb-0">
+          <%= t("workouts.batch_import.status.created_equipment", count: created.length, labels: created.to_sentence) %>
+        </p>
+      <% end %>
+
+      <% if (photos = import_batch_photo_line(entries)) %>
+        <p class="text-secondary small mt-1 mb-0"><%= photos %></p>
+      <% end %>
+
+      <% if batch.terminal? %>
+        <div class="mt-3">
+          <%= link_to t("workouts.batch_import.status.view_workouts"), workouts_path, class: "btn btn-primary" %>
+        </div>
+      <% end %>
+
+      <% if active && batch.paused? %>
+        <div class="alert alert-info mt-3 mb-0">
+          <i class="ti ti-hourglass me-1" aria-hidden="true"></i><%= t("workouts.batch_import.status.paused", provider: import_batch_source_label(batch), time: l(batch.paused_until.in_time_zone(Time.find_zone(batch.user.time_zone) || Time.zone), format: :short)) %>
+        </div>
+      <% end %>
+
+      <% if active && batch.import_connection&.needs_relink? %>
+        <div class="alert alert-warning mt-3 mb-0">
+          <i class="ti ti-plug-connected-x me-1" aria-hidden="true"></i>
+          <%= t("workouts.batch_import.status.session_ended",
+                 provider: import_batch_source_label(batch)) %>
+          <%= link_to t("workouts.batch_import.status.reconnect"),
+                connection_path(batch.import_connection.provider),
+                class: "alert-link" %>
+        </div>
+      <% end %>
+
+      <% if batch.cancellation_requested? && active %>
+        <div class="alert alert-warning mt-3 mb-0"><%= t("workouts.batch_import.cancel.pending") %></div>
+      <% elsif active %>
+        <%= button_to t("workouts.batch_import.cancel.button"), cancel_workout_import_path(batch), method: :post, class: "btn btn-outline-danger mt-3" %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if batch.error_message.present? %>
+    <div class="alert alert-danger"><%= batch.error_message %></div>
+  <% end %>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title"><%= t("workouts.batch_import.entries.title") %></h3>
+    </div>
+    <% if entries.any? %>
+      <div class="table-responsive d-none d-md-block">
+        <table class="table table-sm table-vcenter card-table">
+          <caption class="visually-hidden"><%= t("workouts.batch_import.entries.title") %></caption>
+          <thead>
+            <tr>
+              <th scope="col"><%= t("workouts.batch_import.entries.file") %></th>
+              <th scope="col"><%= t("workouts.batch_import.entries.type") %></th>
+              <th scope="col" class="text-end"><%= t("workouts.batch_import.entries.distance") %></th>
+              <th scope="col"><%= t("workouts.batch_import.entries.status") %></th>
+              <th scope="col"><%= t("workouts.batch_import.entries.error") %></th>
+              <th scope="col"><span class="visually-hidden"><%= t("workouts.batch_import.entries.view") %></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% entries.each do |entry| %>
+              <tr>
+                <td>
+                  <div><%= entry.source_name %></div>
+                  <% if entry.source_path.present? %>
+                    <div class="text-secondary small"><%= entry.source_path %></div>
+                  <% end %>
+                </td>
+                <td>
+                  <% if entry.workout.present? %>
+                    <div><%= sport_display_name(entry.workout.sport) %></div>
+                    <% if entry.fallback_sport? %>
+                      <div class="text-secondary small"><%= t("workouts.batch_import.entries.fallback") %></div>
+                    <% end %>
+                  <% else %>
+                    <span class="text-secondary"><%= t("workouts.batch_import.entries.not_available") %></span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= entry.workout.present? ? format_distance(entry.workout.distance) : t("workouts.batch_import.entries.not_available") %>
+                </td>
+                <td><%= import_entry_status_badge(entry.status) %></td>
+                <td><%= import_entry_detail(entry) %><%= import_entry_auto_publication(entry) %></td>
+                <td class="text-end">
+                  <% if entry.workout.present? %>
+                    <%= link_to t("workouts.batch_import.entries.view"), workout_path(entry.workout), class: "btn btn-sm btn-ghost-primary" %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <ul class="list-group list-group-flush d-md-none allure-card-list">
+        <% entries.each do |entry| %>
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between align-items-baseline">
+              <span class="allure-card-title text-break"><%= entry.source_name %></span>
+              <span class="text-nowrap ms-2"><%= import_entry_status_badge(entry.status) %></span>
+            </div>
+            <div class="text-secondary small">
+              <% if entry.workout.present? %>
+                <%= sport_display_name(entry.workout.sport) %>
+              <% else %>
+                <%= t("workouts.batch_import.entries.not_available") %>
+              <% end %>
+              <% if (detail = import_entry_detail(entry)) %>
+                · <%= detail %>
+              <% end %>
+            </div>
+            <%= import_entry_auto_publication(entry) %>
+            <% if entry.workout.present? %>
+              <div class="mt-1">
+                <%= link_to t("workouts.batch_import.entries.view"), workout_path(entry.workout), class: "btn btn-sm btn-ghost-primary" %>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="card-body text-secondary"><%= t("workouts.batch_import.entries.empty") %></div>
+    <% end %>
+  </div>
+
+  <% if batch.terminal? %>
+    <span class="visually-hidden"
+          data-batch-import-notice
+          data-notice-title="<%= t("workouts.batch_import.notices.#{batch.status}.title") %>"
+          data-notice-body="<%= t("workouts.batch_import.notices.#{batch.status}.body", imported: batch.imported_entries, failed: batch.failed_entries, duplicates: batch.duplicate_entries, cancelled: batch.cancelled_entries) %>"
+          data-notice-level="<%= import_batch_notice_level(batch.status) %>"></span>
+  <% end %>
+</div>

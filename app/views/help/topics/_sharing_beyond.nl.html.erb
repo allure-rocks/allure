@@ -1,0 +1,82 @@
+<% if Allure::Federation::Config.enabled? %>
+  <p class="text-secondary">Deze instantie deelt met andere Allure-instanties.</p>
+<% else %>
+  <p class="text-secondary">
+    Deze instantie deelt op dit moment niet met andere instanties: alles wat je
+    publiceert blijft hier. De rest van deze pagina geldt zodra de beheerder het
+    delen inschakelt.
+  </p>
+<% end %>
+
+<p>
+  Allure-instanties kunnen met elkaar praten. Iemand op een andere instantie kan
+  je volgen, en jij kunt hem volgen, alsof jullie op dezelfde server zitten. Zijn
+  adres bevat zijn instantie: <code>@marie@allure.example.org</code>.
+</p>
+
+<h2>Volgen en gevolgd worden</h2>
+<ul>
+  <li>Je volgt iemand vanuit <%= link_to "Mensen", people_path %>, via zijn
+    adres, of vanaf zijn profiel.</li>
+  <li>Elk volgverzoek wacht op goedkeuring, hier en op andere instanties. Jij
+    beslist wie je volgt.</li>
+  <li>Een account blokkeren stopt alles tussen jullie, in beide richtingen, en
+    beëindigt het volgen.</li>
+</ul>
+
+<h2>Gevonden worden op naam</h2>
+<p>
+  De naamzoekopdracht is optioneel en standaard uit. Zolang je ze niet aanzet in
+  <%= link_to "je profiel", settings_profile_path %>, kunnen alleen mensen die je
+  volledige handle intypen je vinden. Zodra je ze aanzet, toont een resultaat
+  alleen je avatar, je naam en je handle: nooit je biografie, je plaatsen of je
+  activiteiten.
+</p>
+<p>
+  Volgers- en volglijsten worden niet op het netwerk gepubliceerd: wie je volgt en
+  wie jou volgt blijft privé. Je kunt een volger verwijderen via
+  <%= link_to "Accounts", people_path %>; die persoon ziet je publicaties die
+  alleen voor volgers bestemd zijn dan niet meer.
+</p>
+
+<h2>Wat andere instanties ontvangen</h2>
+<p>
+  Als je publiceert, ontvangt elke instantie waar iemand je volgt een
+  <strong>kopie</strong> van de publicatie — precies de kopie die je
+  publicatieprofiel heeft gemaakt, met je privacyzones al toegepast — en bewaart
+  die om haar daar aan je volgers te tonen.
+</p>
+<ul>
+  <li><strong>Openbare</strong> publicaties gaan naar elke instantie waar je een
+    geaccepteerde volger hebt.</li>
+  <li>Publicaties voor <strong>volgers</strong> gaan alleen naar instanties die
+    de beheerder van deze instantie heeft goedgekeurd, en alleen naar je
+    geaccepteerde volgers daar. Elders ontvangen je volgers ze gewoon niet.</li>
+  <li>Opmerkingen en reacties die mensen vanaf andere instanties achterlaten,
+    komen hier bij je aan, en opmerkingen bij je openbare publicaties worden
+    doorgegeven aan de instanties die ze ontvangen hebben.</li>
+  <li>Verder vertrekt er niets: niet je activiteiten, je originele bestanden, je
+    zones, je privé-instellingen, of je hartslagzones en belasting.</li>
+</ul>
+
+<h2>Wat verwijderen wel en niet kan</h2>
+<p>
+  Als je een publicatie verwijdert, iemand ontvolgt, een account blokkeert of je
+  account verwijdert, laat deze instantie dat aan de andere instanties weten, en
+  instanties die zich aan de regels houden verwijderen hun kopie. Maar een kopie
+  die vertrokken is, kan niet met dwang worden teruggehaald.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  De regel is dus eenvoudig: publiceer wat je gerust bewaard zou zien worden. De
+  publicatievertraging en de privacyzones helpen je daarbij.
+</p>
+
+<h2>Je adres is blijvend</h2>
+<p>
+  Andere instanties kennen je aan je gebruikersnaam op deze instantie. Je
+  gebruikersnaam kan niet worden gewijzigd, en als een account verwijderd is,
+  wordt de gebruikersnaam nooit aan iemand anders gegeven.
+</p>

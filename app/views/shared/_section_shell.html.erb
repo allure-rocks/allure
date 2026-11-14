@@ -1,0 +1,44 @@
+<%# Section shell (DESIGN.md §8.5): one card, the grouped section navigation in
+    a bordered md-3 column beside the content in the md-9 column, exactly like
+    the Tabler settings pages (settings.html / settings-plan.html). Page cards
+    stay nested inside the content card-body. Below md the navigation column is
+    hidden and a back link leads to the section's hub.
+    Locals: title (the section's own h2, may be blank), pretitle, heading,
+    back_path, back_label, groups, nav_label; optional `actions` (header
+    actions markup).
+    Callers wrap their content:
+      render layout: "shared/section_shell", locals: { … } do … end %>
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= pretitle %></div>
+      <h1 class="page-title"><%= heading %></h1>
+    </div>
+    <% if (header_actions = local_assigns[:actions]).present? %>
+      <div class="col-auto ms-auto"><%= header_actions %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="d-md-none mb-3">
+  <%= link_to back_path, class: "btn btn-outline-secondary settings-back d-inline-flex align-items-center gap-2" do %>
+    <i class="ti ti-chevron-left" aria-hidden="true"></i>
+    <span><%= back_label %></span>
+  <% end %>
+</div>
+
+<div class="card">
+  <div class="row g-0">
+    <div class="col-12 col-md-3 settings-nav">
+      <div class="card-body">
+        <%= render "shared/section_nav", groups: groups, label: nav_label %>
+      </div>
+    </div>
+    <div class="col-12 col-md-9 d-flex flex-column settings-content">
+      <div class="card-body">
+        <% if title.present? %><h2 class="mb-4"><%= title %></h2><% end %>
+        <%= yield %>
+      </div>
+    </div>
+  </div>
+</div>

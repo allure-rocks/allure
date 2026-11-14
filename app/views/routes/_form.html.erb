@@ -1,0 +1,35 @@
+<% if form.object.errors.any? %>
+  <div class="alert alert-danger" role="alert" data-unsaved-changes="forced">
+    <h4 class="alert-title"><%= t("errors.unprocessable_entity.title") %></h4>
+    <ul class="mb-0">
+      <% form.object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="mb-3">
+      <%= form.label :name, t("routes.form.name"), class: "form-label required" %>
+      <%= form.text_field :name, class: "form-control", maxlength: 120, size: nil, required: true, autofocus: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :description, t("routes.form.description"), class: "form-label" %>
+      <%= form.text_area :description, class: "form-control", rows: 3, maxlength: 2_000 %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :match_tolerance_meters, t("routes.form.tolerance"), class: "form-label" %>
+      <%= form.number_field :match_tolerance_meters, class: "form-control", min: 5, max: 100, step: 1, required: true %>
+      <small class="form-text"><%= t("routes.form.tolerance_hint") %></small>
+    </div>
+  </div>
+</div>
+
+<div class="form-footer">
+  <%= form.submit t("routes.form.submit"), class: "btn btn-primary" %>
+  <%= link_to t("routes.form.cancel"), workout_path(@workout), class: "btn btn-link" %>
+</div>

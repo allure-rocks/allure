@@ -1,0 +1,267 @@
+<% content_for :title, @account.display_name %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col-auto"><%= avatar_tag(@account, size: "lg") %></div>
+    <div class="col">
+      <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+      <h1 class="page-title">
+        <%= @account.display_name %>
+        <% if @account.suspended? %>
+          <span class="badge bg-danger-lt align-middle"><%= t("admin.accounts.states.suspended") %></span>
+        <% end %>
+        <% if @account.deletion_scheduled? %>
+          <span class="badge bg-warning-lt align-middle"><%= t("admin.accounts.states.deletion_scheduled") %></span>
+        <% end %>
+      </h1>
+      <div class="text-secondary">@<%= @account.username %> · <%= @account.email_address %></div>
+    </div>
+    <div class="col-auto ms-auto">
+      <%= link_to t("admin.accounts.back"), admin_accounts_path, class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
+<% end %>
+
+<div class="row row-deck row-cards mb-3">
+  <div class="col-md-6 col-xl-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-secondary small text-uppercase"><%= t("admin.accounts.table.workouts") %></div>
+        <div class="h2 mt-1 mb-0"><%= @workouts_count %></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-secondary small text-uppercase"><%= t("admin.accounts.table.publications") %></div>
+        <div class="h2 mt-1 mb-0"><%= @publications_count %></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-secondary small text-uppercase"><%= t("admin.accounts.courses") %></div>
+        <div class="h2 mt-1 mb-0"><%= @segments_count %></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-secondary small text-uppercase"><%= t("admin.accounts.sessions") %></div>
+        <div class="h2 mt-1 mb-0"><%= @account.sessions.count %></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row-deck row-cards">
+  <% if funding_admin_available? %>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header"><h2 class="card-title"><%= t("funding.admin.title") %></h2></div>
+        <div class="card-body">
+          <%= form_with url: admin_account_funding_path(@account), class: "d-flex align-items-end gap-3 flex-wrap" do |form| %>
+            <div>
+              <%= form.label :tier, t("funding.admin.tier"), class: "form-label" %>
+              <%= form.select :tier, Allure::Funding::TIERS.map { |tier| [t("reactions.kinds.#{tier}"), tier] }, {}, class: "form-select" %>
+            </div>
+            <%= form.submit t("funding.admin.grant"), class: "btn btn-primary" %>
+          <% end %>
+          <div class="mt-3"><%= link_to t("funding.admin.title"), admin_funding_path %></div>
+          <%= render "admin/funding/table", contributions: @account.funding_contributions.latest_first %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <% if Allure::Photos::Config.enabled? %>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header"><h2 class="card-title"><%= t("photos.admin.title") %></h2></div>
+        <div class="card-body">
+          <% quota = Workouts::PhotoQuota.new(user: @account) %>
+          <p><%= t("photos.usage", used: number_to_human_size(quota.used), quota: number_to_human_size(quota.limit)) %></p>
+          <%= form_with url: admin_account_photo_quota_path(@account), method: :patch do %>
+            <%= label_tag :quota_mb, t("photos.admin.quota_mb"), class: "form-label" %>
+            <%= number_field_tag :quota_mb, @account.photo_quota_bytes&.div(Allure::Photos::Config::MEGABYTE), min: 0, step: 1, class: "form-control" %>
+            <p class="form-hint"><%= t("photos.admin.hint") %></p>
+            <%= submit_tag t("photos.admin.save"), class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.accounts.details") %></h2></div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-5"><%= t("admin.accounts.table.email") %></dt>
+          <dd class="col-7"><%= @account.email_address %></dd>
+          <dt class="col-5"><%= t("admin.accounts.locale") %></dt>
+          <dd class="col-7"><%= @account.locale %></dd>
+          <dt class="col-5"><%= t("admin.accounts.time_zone") %></dt>
+          <dd class="col-7"><%= @account.time_zone %></dd>
+          <dt class="col-5"><%= t("admin.accounts.table.created_at") %></dt>
+          <dd class="col-7"><%= l(@account.created_at, format: :long) %></dd>
+          <dt class="col-5"><%= t("admin.accounts.sign_in_methods") %></dt>
+          <dd class="col-7"><%= admin_sign_in_methods(@account) %></dd>
+          <dt class="col-5"><%= t("admin.accounts.second_factor") %></dt>
+          <dd class="col-7"><%= admin_second_factor_state(@account, @second_factor) %></dd>
+          <% if @account.suspended? %>
+            <dt class="col-5"><%= t("admin.accounts.suspended_at") %></dt>
+            <dd class="col-7"><%= l(@account.suspended_at, format: :long) %></dd>
+            <dt class="col-5"><%= t("admin.accounts.reason") %></dt>
+            <dd class="col-7"><%= @account.suspension_reason.presence || t("admin.accounts.no_reason") %></dd>
+          <% end %>
+          <% if @account.deletion_scheduled? %>
+            <dt class="col-5"><%= t("admin.accounts.deletion.scheduled_at") %></dt>
+            <dd class="col-7">
+              <%= l(@account.deletion_scheduled_at, format: :long) %>
+              · <%= t("admin.accounts.deletion.by.#{@account.deletion_requested_by}") %>
+            </dd>
+          <% end %>
+          <dt class="col-5"><%= t("admin.accounts.export.title") %></dt>
+          <dd class="col-7">
+            <% if @export %>
+              <%= t("admin.accounts.export.states.#{@export.status}") %>
+              · <%= l(@export.created_at, format: :long) %>
+            <% else %>
+              <span class="text-secondary"><%= t("admin.accounts.export.none") %></span>
+            <% end %>
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.accounts.federation") %></h2></div>
+      <div class="card-body">
+        <% if @actor %>
+          <dl class="row mb-0">
+            <dt class="col-5"><%= t("admin.accounts.acct") %></dt>
+            <dd class="col-7"><%= @actor.acct.presence || @actor.handle %></dd>
+            <dt class="col-5"><%= t("admin.accounts.actor_uri") %></dt>
+            <dd class="col-7 text-break"><%= @actor.uri %></dd>
+            <dt class="col-5"><%= t("admin.accounts.capability") %></dt>
+            <dd class="col-7"><%= @actor.capability_profile %></dd>
+            <dt class="col-5"><%= t("admin.accounts.tombstoned") %></dt>
+            <dd class="col-7"><%= @actor.tombstoned? %></dd>
+          </dl>
+        <% else %>
+          <p class="text-secondary mb-0"><%= t("admin.accounts.no_actor") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <%= render "admin/accounts/api", account: @account, tokens: @api_tokens, webhooks: @webhooks %>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.accounts.sessions") %></h2></div>
+      <div class="table-responsive">
+        <table class="table table-sm card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.accounts.session_created") %></th>
+              <th scope="col"><%= t("admin.accounts.session_ip") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @sessions.each do |session| %>
+              <tr>
+                <td class="text-secondary"><%= l(session.created_at, format: :long) %></td>
+                <td class="text-secondary"><%= session.ip_address %></td>
+              </tr>
+            <% end %>
+            <% if @sessions.empty? %>
+              <tr><td colspan="2" class="text-secondary"><%= t("admin.accounts.no_sessions") %></td></tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.accounts.actions") %></h2></div>
+      <div class="card-body">
+        <% if @account.suspended? %>
+          <p class="text-secondary"><%= t("admin.accounts.reinstate_hint") %></p>
+          <%= button_to t("admin.accounts.reinstate"), admin_account_reinstate_path(@account),
+                class: "btn btn-outline-success",
+                form: { data: {
+                  confirm_title: t("admin.accounts.reinstate_confirm_title"),
+                  confirm_body: t("admin.accounts.reinstate_confirm_body", username: @account.username),
+                  confirm_verb: t("admin.accounts.reinstate")
+                } } %>
+        <% elsif @account == current_user %>
+          <p class="text-secondary mb-0"><%= t("admin.accounts.self_hint") %></p>
+        <% else %>
+          <p class="text-secondary"><%= t("admin.accounts.suspend_hint") %></p>
+          <%= form_with url: admin_account_suspend_path(@account), method: :post,
+                data: {
+                  confirm_title: t("admin.accounts.suspend_confirm_title"),
+                  confirm_body: t("admin.accounts.suspend_confirm_body", username: @account.username),
+                  confirm_verb: t("admin.accounts.suspend")
+                } do %>
+            <div class="mb-2">
+              <%= label_tag "account_suspension_reason", t("admin.accounts.reason"), class: "form-label" %>
+              <%= text_area_tag "account[suspension_reason]", nil, class: "form-control", rows: 2,
+                    placeholder: t("admin.accounts.reason_placeholder") %>
+            </div>
+            <%= submit_tag t("admin.accounts.suspend"), class: "btn btn-danger" %>
+          <% end %>
+        <% end %>
+        <% if @account != current_user && !@account.instance_operator? %>
+          <hr>
+          <% if @account.deletion_scheduled? %>
+            <p class="text-secondary">
+              <%= t("admin.accounts.deletion.scheduled_hint", date: l(@account.deletion_scheduled_at, format: :long)) %>
+            </p>
+            <% unless @account.deletion_started? %>
+              <%= button_to t("admin.accounts.deletion.cancel"), admin_account_deletion_path(@account), method: :delete,
+                    class: "btn btn-outline-success",
+                    form: { data: {
+                      confirm_title: t("admin.accounts.deletion.cancel_confirm_title"),
+                      confirm_body: t("admin.accounts.deletion.cancel_confirm_body", username: @account.username),
+                      confirm_verb: t("admin.accounts.deletion.cancel")
+                    } } %>
+            <% end %>
+          <% else %>
+            <p class="text-secondary">
+              <%= t("admin.accounts.deletion.hint", days: Users::DeletionSchedule::GRACE.in_days.to_i) %>
+            </p>
+            <%= button_to t("admin.accounts.deletion.schedule"), admin_account_deletion_path(@account),
+                  class: "btn btn-outline-danger",
+                  form: { data: {
+                    confirm_title: t("admin.accounts.deletion.schedule_confirm_title"),
+                    confirm_body: t("admin.accounts.deletion.schedule_confirm_body", username: @account.username,
+                                                                                     days: Users::DeletionSchedule::GRACE.in_days.to_i),
+                    confirm_verb: t("admin.accounts.deletion.schedule")
+                  } } %>
+          <% end %>
+        <% end %>
+        <% if @account != current_user %>
+          <hr>
+          <p class="text-secondary"><%= t("admin.accounts.reset_second_factor_hint") %></p>
+          <%= button_to t("admin.accounts.reset_second_factor"), admin_account_reset_second_factor_path(@account),
+                class: "btn btn-outline-danger",
+                form: { data: {
+                  confirm_title: t("admin.accounts.reset_second_factor_confirm_title"),
+                  confirm_body: t("admin.accounts.reset_second_factor_confirm_body", username: @account.username),
+                  confirm_verb: t("admin.accounts.reset_second_factor")
+                } } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

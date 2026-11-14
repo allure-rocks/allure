@@ -1,0 +1,80 @@
+<p>
+  Quand vos activités enregistrent la fréquence cardiaque, Allure peut vous
+  dire à quel point chacune a été exigeante et comment votre entraînement
+  s'accumule au fil des semaines. Tout part de votre profil cardiaque.
+</p>
+
+<h2>Votre profil cardiaque et vos zones</h2>
+<p>
+  Dans <%= link_to "Fréquence cardiaque", settings_heart_rate_path %>, vous
+  indiquez votre fréquence cardiaque maximale et, si vous la connaissez, votre
+  fréquence au repos. Allure propose la fréquence la plus haute qu'un de vos
+  enregistrements a tenue au moins dix secondes, souvent plus juste qu'une
+  formule. De ce profil découlent cinq <strong>zones</strong>, de Z1 (facile) à
+  Z5 (maximale), en pourcentage de votre maximum ou de votre réserve cardiaque
+  (entre le repos et le maximum). Vous pouvez déplacer chaque seuil vous-même.
+</p>
+<p>
+  Modifier votre profil recalcule tout votre historique avec les nouvelles
+  zones.
+</p>
+
+<h2>Le temps par zone</h2>
+<p>
+  Chaque activité avec fréquence cardiaque reçoit un onglet <strong>Zones
+  cardiaques</strong> : le temps passé dans chaque zone. Un enregistrement où la
+  fréquence cardiaque est trop espacée, ou présente moins de la moitié du
+  temps, n'a pas de zones, et l'onglet dit pourquoi. Les valeurs qu'une
+  ceinture qui décroche répète sont mises de côté plutôt que comptées.
+</p>
+
+<h2>La charge</h2>
+<p>
+  La <strong>charge</strong> d'une activité, ce sont les minutes passées dans
+  chaque zone, multipliées par le numéro de la zone (méthode d'Edwards) : dix
+  minutes en Z4 comptent 40 points, dix minutes en Z1 en comptent 10. Le temps
+  sous le plancher de vos zones — 50 % de votre maximum avec les seuils par
+  défaut — ne compte pas.
+</p>
+
+<h2>Condition, fatigue et forme</h2>
+<p>
+  Sur votre page, la carte <strong>Charge d'entraînement</strong> suit trois
+  chiffres sur les 90 derniers jours, tous sports confondus :
+</p>
+<ul>
+  <li><strong>Condition</strong> — la moyenne de votre charge quotidienne sur
+    42 jours, les jours récents pesant davantage. C'est ce que vous avez
+    construit.</li>
+  <li><strong>Fatigue</strong> — la même moyenne sur 7 jours. C'est ce que vous
+    encaissez.</li>
+  <li><strong>Forme</strong> — la condition de la veille moins sa fatigue.
+    Positive, vous êtes frais ; négative, vous êtes en pleine charge, ce qui est
+    normal au milieu d'un bloc d'entraînement.</li>
+</ul>
+<p>
+  Les deux moyennes partent de zéro à votre première activité avec fréquence
+  cardiaque : la condition n'est représentative qu'après environ six semaines.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[4] %>
+</div>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[5] %>
+</div>
+
+<h2>Les zones dans le temps</h2>
+<p>
+  <%= link_to "Statistiques cardiaques", heart_rate_stats_path %> empile votre
+  temps par zone, par semaine ou par mois, en heures ou en parts, et le regroupe
+  en intensité basse, modérée et haute. C'est un repère, pas une prescription.
+</p>
+
+<h2>Cela reste privé</h2>
+<div class="alert alert-info" role="note">
+  <%= t("settings.heart_rate.privacy") %>
+</div>
+<p>
+  Un profil de publication peut partager la fréquence cardiaque moyenne et
+  maximale d'une activité, seulement si vous les cochez.
+</p>

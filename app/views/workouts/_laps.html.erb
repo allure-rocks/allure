@@ -1,0 +1,46 @@
+<%# Merged laps card: only sources with data render a tab, and the card opens
+    on the first one. Elevation tabs expose pictogram markers, the others
+    dashed boundaries, both consumed by the elevation chart. Owner-only, never
+    part of a publication. %>
+<% tabs = workout_lap_tabs(workout: workout, efforts: efforts, recorded: laps, laps: detected_laps, climbs: climbs,
+                           descents: descents, stops: stops, intervals: intervals, splits: splits,
+                           best_efforts: local_assigns.fetch(:best_efforts, []),
+                           best_effort_places: local_assigns.fetch(:best_effort_places, {}),
+                           max_climb_lap: local_assigns.fetch(:max_climb_lap, nil),
+                           segment_ranks: local_assigns.fetch(:segment_ranks, {}),
+                           segment_places: local_assigns.fetch(:segment_places, {}),
+                           segment_gaps: local_assigns.fetch(:segment_gaps, {}),
+                           anomalies: local_assigns.fetch(:anomalies, [])) %>
+<div class="card mb-3 allure-analysis-card" data-controller="workout-tabs"
+     data-action="mouseover->workout-tabs#rowOver mouseout->workout-tabs#rowOut focusin->workout-tabs#rowOver focusout->workout-tabs#rowOut click->workout-tabs#rowClick keydown.esc->workout-tabs#escape allure:analysis-step-preview@window->workout-tabs#previewStep">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("workouts.show.laps.title") %></h2>
+  </div>
+  <div class="card-header pt-0">
+    <ul class="nav nav-tabs card-header-tabs allure-analysis-tabs" role="tablist" data-workout-tabs-target="tablist" data-controller="scroll-fade">
+      <% tabs.each_with_index do |tab, index| %>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link<%= " active" if index.zero? %>" id="workout-laps-tab-<%= tab[:key] %>" type="button" role="tab"
+                  aria-controls="<%= tab[:pane] %>" aria-selected="<%= index.zero? %>" tabindex="<%= index.zero? ? 0 : -1 %>"
+                  data-workout-tabs-target="tab" data-pane="<%= tab[:pane] %>"
+                  data-action="click->workout-tabs#select keydown->workout-tabs#keydown">
+            <i class="ti ti-<%= tab[:icon] %> me-1" aria-hidden="true"></i><%= t("workouts.show.laps.tabs.#{tab[:key]}") %>
+            <% unless tab[:count].nil? %><span class="badge bg-secondary-lt ms-1"><%= tab[:count] %></span><% end %>
+          </button>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="tab-content">
+    <% tabs.each_with_index do |tab, index| %>
+      <div class="tab-pane fade<%= " show active" if index.zero? %>" id="<%= tab[:pane] %>" role="tabpanel"
+           aria-labelledby="workout-laps-tab-<%= tab[:key] %>" <%= "hidden" unless index.zero? %>
+           data-workout-tabs-target="pane"
+           <% if tab[:boundaries] %>data-boundaries="<%= json_escape(tab[:boundaries].to_json) %>"<% end %>
+           <% if tab[:markers] %>data-markers="<%= json_escape(tab[:markers].to_json) %>"<% end %>
+           <% if tab[:steps] %>data-analysis-steps="<%= json_escape(tab[:steps].to_json) %>"<% end %>>
+        <%= render partial: tab[:partial], locals: tab[:locals] %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<%# One comment in the thread (DESIGN.md §10.20): the author's avatar, name and
+    handle, when it was written, the text, and the viewer's gestures — reply
+    on a top-level comment, delete on their own, remove on someone else's when
+    they own the workout. The viewer's own comment taken out of the thread
+    stays visible to them, muted, with its state. Locals: `comment`, `card`,
+    `reply_target` (the reply composer's id, or nil), `reply_open`. %>
+<% actor = comment.actor %>
+<% author_path = comment_author_path(actor) %>
+<% handle = comment_author_handle(actor) %>
+<% withdrawn = !comment.active? %>
+<%# The same rules as Comments::Delete and Comments::Remove, read from the
+    card so a long thread costs no query per comment. %>
+<% own = current_user&.actor.present? && current_user.actor.id == comment.actor_id %>
+<% deletable = !withdrawn && own %>
+<% removable = !withdrawn && !own && card.owner %>
+<article class="<%= class_names("allure-comment", "allure-comment--withdrawn": withdrawn) %>" id="<%= comment_dom_id(comment) %>">
+  <div class="allure-comment__avatar"><%= comment_author_avatar_tag(actor) %></div>
+  <div class="allure-comment__main">
+    <div class="allure-comment__meta">
+      <% if author_path %>
+        <%= link_to comment_author_name(actor), author_path, class: "allure-comment__author" %>
+      <% else %>
+        <span class="allure-comment__author"><%= comment_author_name(actor) %></span>
+      <% end %>
+      <% if handle %><span class="text-secondary"><%= handle %></span><% end %>
+      <time class="text-secondary" datetime="<%= comment.published_at.iso8601 %>"><%= smart_started_at(comment.published_at) %></time>
+      <% if card.several_audiences? && comment.audience == "followers" && !comment.reply? %>
+        <%= publication_badge("followers") %>
+      <% end %>
+      <% if withdrawn %>
+        <span class="badge bg-secondary-lt"><i class="ti ti-eye-off me-1" aria-hidden="true"></i><%= comment_state_label(comment) %></span>
+      <% end %>
+    </div>
+    <div class="allure-comment__body"><%= comment_body(comment) %></div>
+    <% if reply_target || deletable || removable %>
+      <div class="allure-comment__actions">
+        <% if reply_target %>
+          <button type="button" class="btn btn-sm btn-ghost-secondary"
+                  data-bs-toggle="collapse" data-bs-target="#<%= reply_target %>"
+                  aria-controls="<%= reply_target %>" aria-expanded="<%= reply_open ? "true" : "false" %>">
+            <i class="ti ti-arrow-back-up me-1" aria-hidden="true"></i><%= t("comments.actions.reply") %>
+          </button>
+        <% end %>
+        <% if deletable %>
+          <%= button_to comment_path(comment), method: :delete,
+                        form: { class: "d-inline-flex",
+                                data: { confirm_title: t("comments.confirm.delete.title"),
+                                        confirm_body: t("comments.confirm.delete.body"),
+                                        confirm_verb: t("comments.actions.delete") } },
+                        class: "btn btn-sm btn-ghost-secondary" do %>
+            <i class="ti ti-trash me-1" aria-hidden="true"></i><%= t("comments.actions.delete") %>
+          <% end %>
+        <% end %>
+        <% if removable %>
+          <%= button_to comment_path(comment), method: :delete,
+                        form: { class: "d-inline-flex",
+                                data: { confirm_title: t("comments.confirm.remove.title"),
+                                        confirm_body: t("comments.confirm.remove.body"),
+                                        confirm_verb: t("comments.actions.remove") } },
+                        class: "btn btn-sm btn-ghost-secondary" do %>
+            <i class="ti ti-eye-off me-1" aria-hidden="true"></i><%= t("comments.actions.remove") %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</article>

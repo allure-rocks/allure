@@ -1,0 +1,209 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+readonly PROFILE=federation
+readonly TIMEOUT="${FEDERATION_RING_TIMEOUT:-60}"
+readonly RING_SERVICES=(db-a db-b allure-a allure-b worker-a worker-b)
+readonly APP_SERVICES=(allure-a allure-b worker-a worker-b)
+readonly SCENARIO="${1:-public}"
+
+if ! [[ "$TIMEOUT" =~ ^[1-9][0-9]*$ ]]; then
+  printf 'FEDERATION_RING_TIMEOUT must be a positive integer\n' >&2
+  exit 2
+fi
+
+if [[ "$SCENARIO" != "public" && "$SCENARIO" != "restricted" ]]; then
+  printf 'unknown scenario: %s (expected public or restricted)\n' "$SCENARIO" >&2
+  exit 2
+fi
+
+compose() {
+  dip compose --profile "$PROFILE" "$@"
+}
+
+run_phase() {
+  local service="$1"
+  local phase="$2"
+  shift 2
+  compose run --rm -T --no-deps -e RAILS_LOG_LEVEL=warn -e GITLAB_ENABLED=false \
+    -e FEDERATION_RING_TIMEOUT="$TIMEOUT" \
+    "$@" "$service" bin/rails runner script/federation_ring_test.rb "$phase"
+}
+
+reset_node() {
+  local service="$1"
+  compose run --rm -T --no-deps -e RAILS_LOG_LEVEL=warn -e GITLAB_ENABLED=false \
+    "$service" bin/rails db:drop >/dev/null
+  compose run --rm -T --no-deps -e RAILS_LOG_LEVEL=warn -e GITLAB_ENABLED=false \
+    "$service" bin/rails db:prepare >/dev/null
+  compose run --rm -T --no-deps -e RAILS_LOG_LEVEL=warn -e GITLAB_ENABLED=false \
+    "$service" bin/rails db:seed >/dev/null
+}
+
+diagnostics() {
+  compose ps --all "${RING_SERVICES[@]}" || true
+  compose logs --no-color --tail 200 "${APP_SERVICES[@]}" || true
+}
+
+cleanup() {
+  local status=$?
+  trap - EXIT INT TERM
+  if (( status != 0 )); then
+    printf '\n[federation-ring] failed; service diagnostics follow\n' >&2
+    diagnostics >&2
+  fi
+  compose stop "${RING_SERVICES[@]}" >/dev/null 2>&1 || true
+  exit "$status"
+}
+
+trap cleanup EXIT INT TERM
+
+printf '[federation-ring] resetting isolated databases\n'
+compose stop "${RING_SERVICES[@]}" >/dev/null 2>&1 || true
+compose up -d --wait --no-deps db-a db-b
+reset_node allure-a
+reset_node allure-b
+
+printf '[federation-ring] starting two Rails nodes and workers\n'
+compose up -d --no-deps "${APP_SERVICES[@]}"
+run_phase allure-a provision
+run_phase allure-b provision
+run_phase allure-a wait_for_peer -e FEDERATION_RING_PEER=http://allure-b.test:3003/users/marie
+run_phase allure-b wait_for_peer -e FEDERATION_RING_PEER=http://allure-a.test:3002/users/marie
+
+printf '[federation-ring] checking Follow approval and Accept\n'
+run_phase allure-a follow
+run_phase allure-b approve_follow
+run_phase allure-a assert_follow_a
+run_phase allure-b assert_follow_b
+
+if [[ "$SCENARIO" == "restricted" ]]; then
+  printf '[federation-ring] checking restricted followers delivery\n'
+  run_phase allure-b promote_peer
+  run_phase allure-b publish_followers
+  run_phase allure-b render_route_image
+  run_phase allure-b assert_followers_delivery_b
+  run_phase allure-a assert_restricted_create_a
+  run_phase allure-a assert_restricted_media_a
+  run_phase allure-a assert_restricted_page_a
+  run_phase allure-a assert_signed_object_a
+  run_phase allure-a comment_restricted_note_a
+  run_phase allure-b assert_restricted_comment_b
+  run_phase allure-b assert_no_relay_b
+  run_phase allure-a assert_restricted_comment_object_a
+  printf '[federation-ring] checking one Note per peer beside a public publication\n'
+  run_phase allure-b publish_public_beside_followers
+  run_phase allure-b assert_public_withheld_b
+  run_phase allure-a assert_single_note_a
+  run_phase allure-b publish_followers_segment
+  run_phase allure-b render_segment_route_image
+  run_phase allure-a assert_restricted_segment_a
+  run_phase allure-a assert_restricted_segment_page_a
+  run_phase allure-a assert_signed_segment_object_a
+  run_phase allure-a unfollow_b
+  run_phase allure-a assert_restricted_revoked_a
+  run_phase allure-a assert_restricted_segment_revoked_a
+else
+  printf '[federation-ring] checking that a followers publication stays home without restricted federation\n'
+  run_phase allure-b publish_unfederated_followers
+  run_phase allure-b assert_followers_withheld_b
+  run_phase allure-a assert_no_followers_note_a
+
+  printf '[federation-ring] checking sanitized Create delivery and remote media\n'
+  run_phase allure-b publish
+  run_phase allure-b render_route_image
+  run_phase allure-b assert_create_b
+  run_phase allure-a assert_create_a
+  run_phase allure-a assert_representation_a
+  run_phase allure-a assert_media_a
+  run_phase allure-a assert_isolation_a
+
+  printf '[federation-ring] checking duplicate delivery and received pages\n'
+  run_phase allure-b redeliver_create_b
+  run_phase allure-a assert_duplicate_a
+  run_phase allure-a assert_received_page_a
+
+  printf '[federation-ring] checking a reaction Like on the received note\n'
+  run_phase allure-a like_note_a
+  run_phase allure-a assert_like_delivery_a
+  run_phase allure-b assert_like_b
+
+  printf '[federation-ring] checking a comment, its relay, the host reply, deletion, and a closed thread\n'
+  run_phase allure-a comment_note_a
+  run_phase allure-a assert_comment_delivery_a
+  run_phase allure-b assert_comment_b
+  run_phase allure-b assert_comment_relay_b
+  run_phase allure-a assert_comment_confirmed_a
+  run_phase allure-b reply_comment_b
+  run_phase allure-b assert_reply_delivery_b
+  run_phase allure-a assert_reply_a
+  run_phase allure-a delete_comment_a
+  run_phase allure-b assert_comment_deleted_b
+  run_phase allure-b assert_comment_unrelayed_b
+  run_phase allure-a assert_unrelay_ignored_a
+  run_phase allure-b close_comments_b
+  run_phase allure-a comment_closed_note_a
+  run_phase allure-b assert_comment_rejected_b
+  run_phase allure-a assert_reject_a
+  run_phase allure-b reopen_comments_b
+
+  printf '[federation-ring] checking a relayed third-party comment and its withdrawal\n'
+  run_phase allure-b comment_as_paul_b
+  run_phase allure-b assert_paul_relay_b
+  run_phase allure-a assert_relayed_comment_a
+  run_phase allure-b remove_paul_comment_b
+  run_phase allure-b assert_paul_unrelayed_b
+  run_phase allure-a assert_relay_withdrawn_a
+
+  printf '[federation-ring] checking a remote participation invitation and its credit\n'
+  run_phase allure-b invite_participant_b
+  run_phase allure-b assert_invite_delivery_b
+  run_phase allure-a assert_invite_a
+  run_phase allure-a confirm_invite_a
+  run_phase allure-b assert_accept_b
+
+  printf '[federation-ring] checking Delete delivery and withdrawal\n'
+  run_phase allure-b delete_publication
+  run_phase allure-b assert_delete_b
+  run_phase allure-a assert_delete_a
+  run_phase allure-a assert_credit_detached_a
+
+  printf '[federation-ring] checking blocked peer delivery\n'
+  run_phase allure-a block_b
+  run_phase allure-b publish_second
+  run_phase allure-b render_route_image
+  run_phase allure-b assert_blocked_delivery_b
+  run_phase allure-b publish_blocked_segment
+  run_phase allure-b assert_blocked_segment_b
+  run_phase allure-a assert_blocked_a
+
+  printf '[federation-ring] checking republish, unfollow, actor deletion, and courses\n'
+  run_phase allure-a unblock_b
+  run_phase allure-a refollow_b
+  run_phase allure-a assert_refollow_a
+  run_phase allure-b republish_publication
+  run_phase allure-b render_route_image
+  run_phase allure-a assert_new_identity_a
+  run_phase allure-b publish_segment
+  run_phase allure-b render_segment_route_image
+  run_phase allure-a assert_segment_create_a
+  run_phase allure-a assert_segment_media_a
+  run_phase allure-b redeliver_segment_create_b
+  run_phase allure-a assert_segment_duplicate_a
+  run_phase allure-a assert_segment_page_a
+  run_phase allure-a copy_segment_a
+  run_phase allure-b republish_segment
+  run_phase allure-b render_segment_route_image
+  run_phase allure-a assert_segment_identity_a
+  run_phase allure-b delete_segment
+  run_phase allure-a assert_segment_delete_a
+  run_phase allure-a unfollow_b
+  run_phase allure-a assert_withdrawal_a
+  run_phase allure-b delete_actor_b
+  run_phase allure-b assert_actor_delete_delivered_b
+  run_phase allure-a assert_actor_gone_a
+  run_phase allure-b retire_actor_key_b
+  run_phase allure-b assert_key_retired_b
+fi
+
+printf '[federation-ring] all checks passed\n'

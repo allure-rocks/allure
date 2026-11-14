@@ -1,0 +1,30 @@
+<% content_for :title, t("help.index.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <h1 class="page-title"><%= t("help.index.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<div class="row row-cards">
+  <div class="col-lg-8">
+    <p class="text-secondary"><%= t("help.index.intro") %></p>
+    <div class="card">
+      <div class="list-group list-group-flush">
+        <% @topics.each do |slug, topic| %>
+          <%= link_to help_topic_path(slug), class: "list-group-item list-group-item-action" do %>
+            <div class="d-flex align-items-center gap-3">
+              <i class="ti ti-<%= t("help.topics.#{topic}.icon") %> fs-2 text-primary" aria-hidden="true"></i>
+              <div>
+                <div class="fw-medium"><%= t("help.topics.#{topic}.title") %></div>
+                <div class="text-secondary"><%= t("help.topics.#{topic}.summary") %></div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

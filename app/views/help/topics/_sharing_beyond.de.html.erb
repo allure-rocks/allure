@@ -1,0 +1,88 @@
+<% if Allure::Federation::Config.enabled? %>
+  <p class="text-secondary">Diese Instanz teilt mit anderen Allure-Instanzen.</p>
+<% else %>
+  <p class="text-secondary">
+    Diese Instanz teilt derzeit nicht mit anderen Instanzen: Alles, was du
+    veröffentlichst, bleibt hier. Der Rest dieser Seite gilt, sobald ihr
+    Betreiber das Teilen einschaltet.
+  </p>
+<% end %>
+
+<p>
+  Allure-Instanzen können miteinander kommunizieren. Ein Mitglied einer anderen
+  Instanz kann dir folgen und du ihm, als wärt ihr auf demselben Server. Seine
+  Adresse enthält seine Instanz: <code>@marie@allure.example.org</code>.
+</p>
+
+<h2>Folgen und gefolgt werden</h2>
+<ul>
+  <li>Du folgst jemandem über <%= link_to "Personen", people_path %>, über
+    seine Adresse oder von seinem Profil aus.</li>
+  <li>Jede Folgeanfrage wartet auf Bestätigung, hier wie auf anderen Instanzen.
+    Du entscheidest, wer dir folgt.</li>
+  <li>Das Blockieren eines Kontos beendet alles zwischen euch, in beide
+    Richtungen, und beendet sein Folgen.</li>
+</ul>
+
+<h2>Über den Namen gefunden werden</h2>
+<p>
+  Die Namenssuche ist freiwillig und standardmäßig aus. Solange du sie nicht in
+  <%= link_to "deinem Profil", settings_profile_path %> aktivierst, finden dich
+  nur Menschen, die deinen vollständigen Handle eingeben. Danach zeigt ein
+  Ergebnis nur deinen Avatar, deinen Namen und deinen Handle: niemals deine
+  Biografie, deine Orte oder deine Aktivitäten.
+</p>
+<p>
+  Follower- und Folge-Listen werden nicht ins Netz veröffentlicht: Wer dir folgt
+  und wem du folgst, bleibt privat. Du kannst einen Follower unter
+  <%= link_to "Konten", people_path %> entfernen; diese Person sieht deine nur
+  für Follower bestimmten Veröffentlichungen dann nicht mehr.
+</p>
+
+<h2>Was andere Instanzen erhalten</h2>
+<p>
+  Wenn du veröffentlichst, erhält jede Instanz, auf der dir jemand folgt, eine
+  <strong>Kopie</strong> der Veröffentlichung — genau die Kopie, die dein
+  Veröffentlichungsprofil erzeugt hat, mit bereits angewendeten
+  Privatsphäre-Zonen — und behält sie, um sie deinen Followern dort zu
+  zeigen.
+</p>
+<ul>
+  <li><strong>Öffentliche</strong> Veröffentlichungen gehen an jede Instanz, auf
+    der du einen angenommenen Follower hast.</li>
+  <li>Veröffentlichungen für <strong>Follower</strong> gehen nur an Instanzen,
+    die der Betreiber dieser Instanz zugelassen hat, und dort nur an deine
+    angenommenen Follower. Anderswo erhalten deine Follower sie schlicht
+    nicht.</li>
+  <li>Kommentare und Reaktionen, die Personen von anderen Instanzen
+    hinterlassen, erreichen dich hier, und Kommentare zu deinen öffentlichen
+    Veröffentlichungen werden an die Instanzen weitergegeben, die sie erhalten
+    haben.</li>
+  <li>Sonst verlässt nichts die Instanz: weder deine Aktivitäten noch deine
+    Originaldateien, deine Zonen, deine privaten Einstellungen oder deine
+    Herzfrequenzzonen und deine Belastung.</li>
+</ul>
+
+<h2>Was ein Löschen kann und was nicht</h2>
+<p>
+  Wenn du eine Veröffentlichung löschst, jemandem nicht mehr folgst, ein Konto
+  blockierst oder dein Konto löschst, teilt diese Instanz das den anderen
+  Instanzen mit, und korrekt arbeitende Instanzen löschen ihre Kopie. Eine
+  Kopie, die einmal hinausgegangen ist, lässt sich aber nicht erzwungen
+  zurückholen.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  Die Regel ist also einfach: Veröffentliche nur, was du auch aufbewahrt sehen
+  möchtest. Die Veröffentlichungsverzögerung und die Privatsphäre-Zonen helfen
+  dir dabei.
+</p>
+
+<h2>Deine Adresse ist dauerhaft</h2>
+<p>
+  Andere Instanzen kennen dich unter deinem Benutzernamen auf dieser Instanz.
+  Dein Benutzername kann nicht geändert werden, und wenn ein Konto gelöscht ist,
+  wird sein Benutzername nie an jemand anderen vergeben.
+</p>

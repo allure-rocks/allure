@@ -1,0 +1,49 @@
+<%# A comment or reply composer (DESIGN.md §10.20, §19.21): one plain text
+    field, the mandatory privacy sentence, and the submit. The owner of a
+    workout published to several audiences picks the thread of a new comment
+    (PLAN_AUDIENCES.md §6); a reply joins its comment's. A refused text comes
+    back in the field with its explanation. Locals: `target`, `card`, `parent`
+    (the comment answered, or nil), `body`, `error`. %>
+<% parent = local_assigns[:parent] %>
+<% error = local_assigns[:error] %>
+<% field_id = parent ? "comment-body-#{parent.to_param}" : "comment-body-#{target.to_param}" %>
+<% hint_id = "#{field_id}-hint" %>
+<% error_id = "#{field_id}-error" %>
+<%= form_with url: comment_create_path(target), method: :post,
+              class: class_names("allure-comment-composer", "allure-comment-composer--reply": parent) do %>
+  <% if parent %>
+    <%= hidden_field_tag "comment[parent_id]", parent.to_param, id: nil %>
+  <% elsif card.owner && !card.audience_choice? && (only_audience = comment_audience_options(card).first&.last) %>
+    <%= hidden_field_tag "comment[audience]", only_audience, id: nil %>
+  <% end %>
+  <label class="<%= class_names("form-label", "visually-hidden": parent) %>" for="<%= field_id %>">
+    <%= parent ? t("comments.composer.reply_label", name: comment_author_name(parent.actor)) : t("comments.composer.label") %>
+  </label>
+  <%= text_area_tag "comment[body]", local_assigns[:body],
+                    id: field_id,
+                    rows: parent ? 2 : 3,
+                    maxlength: Comment::MAX_BODY_LENGTH,
+                    required: true,
+                    placeholder: (t("comments.composer.reply_placeholder") if parent),
+                    class: class_names("form-control", "is-invalid": error.present?),
+                    data: (parent ? { comment_reply_target: "field" } : {}),
+                    aria: { describedby: [ (error_id if error.present?), hint_id ].compact.join(" "),
+                            invalid: (error.present? ? "true" : nil) } %>
+  <% if error.present? %>
+    <div class="invalid-feedback" id="<%= error_id %>"><%= error %></div>
+  <% end %>
+  <div class="allure-comment-composer__footer">
+    <% if !parent && card.audience_choice? %>
+      <%= select_tag "comment[audience]", options_for_select(comment_audience_options(card)),
+                     id: "#{field_id}-audience",
+                     class: "form-select form-select-sm w-auto",
+                     aria: { label: t("comments.audience.label") } %>
+    <% end %>
+    <small class="form-hint" id="<%= hint_id %>"><%= comment_privacy_text(card, audience: parent&.audience) %></small>
+    <%= button_tag type: "submit",
+                   class: parent ? "btn btn-sm btn-outline-primary" : "btn btn-primary",
+                   data: { turbo_submits_with: t("comments.composer.sending") } do %>
+      <%= parent ? t("comments.composer.reply_submit") : t("comments.composer.submit") %>
+    <% end %>
+  </div>
+<% end %>

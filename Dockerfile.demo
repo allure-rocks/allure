@@ -1,0 +1,35 @@
+# syntax=docker/dockerfile:1
+# check=error=true
+
+# The public demo image (PLAN_DEMO.md, RUNBOOK_DEMO.md): the production app
+# image of the same commit plus what bin/demo-boot seeds from — the demo
+# loader, the GPX fixtures its manifests name and only the FIT corpus files
+# they name (db/seeds/demo/corpus_files.txt, ~50 MB of the corpus). The
+# production build context keeps all three out (spec/config/dockerfile_spec.rb);
+# Dockerfile.demo.dockerignore admits them for this build alone.
+#
+# The demo host builds it from a release tag (RUNBOOK_DEMO.md §1): the corpus
+# is third-party data with no licence, so CI never publishes this image.
+#
+#     ALLURE_IMAGE=<app image> docker compose ... build rails worker
+
+ARG APP_IMAGE=allure:production
+
+FROM docker.io/library/debian:trixie-slim AS corpus
+
+RUN apt-get update -qq \
+  && apt-get install --no-install-recommends -y ca-certificates git \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Only the list and the fetch script invalidate the corpus layer, so a commit
+# that does not touch the manifests reuses it from the build cache.
+COPY script/fetch-fit-corpus /corpus/fetch-fit-corpus
+COPY db/seeds/demo/corpus_files.txt /corpus/files.txt
+RUN FIT_CORPUS_DIR=/corpus/fit-test-files FIT_CORPUS_FILES=/corpus/files.txt bash /corpus/fetch-fit-corpus \
+  && rm -rf /corpus/fit-test-files/.git
+
+FROM ${APP_IMAGE} AS demo
+
+COPY --chown=rails:rails db/seeds/demo /rails/db/seeds/demo
+COPY --chown=rails:rails spec/fixtures/gpx /rails/spec/fixtures/gpx
+COPY --from=corpus --chown=rails:rails /corpus/fit-test-files /rails/references_apps/fit-test-files

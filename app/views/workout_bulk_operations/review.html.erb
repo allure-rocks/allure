@@ -1,0 +1,107 @@
+<% count = @report.count %>
+<% content_for :title, bulk_operation_title(@operation.operation, count) %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("workouts.bulk.review.pretitle") %></div>
+      <h1 class="page-title"><%= bulk_operation_title(@operation.operation, count) %></h1>
+    </div>
+  </div>
+<% end %>
+
+<div class="row row-deck row-cards">
+  <div class="col-12 col-lg-7">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("workouts.bulk.review.summary.title") %></h3>
+      </div>
+      <div class="card-body">
+        <p class="mb-2">
+          <strong><%= t("workouts.bulk.review.selection", count: count) %></strong>
+          <% if @report.started_at_range %>
+            <% first_day = @report.started_at_range.first.to_date %>
+            <% last_day = @report.started_at_range.last.to_date %>
+            <span class="text-secondary">
+              · <% if first_day == last_day %>
+                  <%= t("workouts.bulk.review.period_single", date: l(first_day, format: :day_month_year)) %>
+                <% else %>
+                  <%= t("workouts.bulk.review.period",
+                        from: l(first_day, format: :day_month_year),
+                        to: l(last_day, format: :day_month_year)) %>
+                <% end %>
+            </span>
+          <% end %>
+        </p>
+
+        <% if @report.sports.any? %>
+          <div class="mb-2 d-flex flex-wrap gap-1">
+            <% @report.sports.each do |sport, sport_count| %>
+              <span class="badge bg-secondary-lt"><%= sport_display_name(sport) %> × <%= sport_count %></span>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="text-secondary small">
+          <%= t("workouts.bulk.review.publications",
+                published: @report.published_count, scheduled: @report.scheduled_count) %>
+        </div>
+
+        <% if @operation.operation == "sport_change" && @report.without_original_count.positive? %>
+          <div class="alert alert-warning mt-3 mb-0">
+            <%= t("workouts.bulk.review.missing_original", count: @report.without_original_count) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-5">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("workouts.bulk.review.form.title") %></h3>
+      </div>
+      <%= form_with url: workout_bulk_operation_path(@operation), method: :patch do |form| %>
+        <div class="card-body">
+          <% if @operation.errors.any? %>
+            <div class="alert alert-danger" role="alert">
+              <ul class="mb-0">
+                <% @operation.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <% if @operation.operation == "sport_change" %>
+            <div class="mb-3">
+              <%= form.label :sport_id, t("workouts.form.sport"), class: "form-label required" %>
+              <%= form.select :sport_id, sport_options_for_select,
+                    { prompt: t("workouts.form.sport_prompt") },
+                    class: "form-select#{' is-invalid' if @operation.errors[:sport].present?}" %>
+              <% if @operation.errors[:sport].present? %>
+                <div class="invalid-feedback d-block"><%= @operation.errors[:sport].join(", ") %></div>
+              <% end %>
+            </div>
+            <div class="alert alert-info mb-0" role="note">
+              <%= t("workouts.bulk.review.sport_hint", count: count) %>
+            </div>
+          <% else %>
+            <div class="alert alert-danger mb-0" role="note">
+              <%= t("workouts.bulk.review.delete_notice", count: count) %>
+            </div>
+          <% end %>
+        </div>
+        <div class="card-footer allure-actions">
+          <% if @report.confirmable? %>
+            <button type="submit" class="btn <%= @operation.operation == "delete" ? "btn-danger" : "btn-primary" %>">
+              <%= bulk_operation_confirm_label(@operation.operation, count) %>
+            </button>
+          <% end %>
+          <%= link_to t("workouts.bulk.review.cancel"),
+                @operation.return_to || workouts_path(view: "table"), class: "btn btn-link" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

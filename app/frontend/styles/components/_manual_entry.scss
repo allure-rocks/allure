@@ -1,0 +1,14 @@
+// The manual entry's duration groups (PLAN_MANUAL_ENTRY.md §5): three number
+// fields and their units share one row, down to the narrowest phone.
+.allure-duration-input {
+  flex-wrap: nowrap;
+
+  .form-control {
+    min-width: 0;
+    padding-inline: 0.5rem;
+  }
+
+  .input-group-text {
+    padding-inline: 0.4rem;
+  }
+}

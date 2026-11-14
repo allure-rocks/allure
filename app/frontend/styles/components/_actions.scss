@@ -1,0 +1,29 @@
+// Action groups (DESIGN.md §14.1): the primary action comes first in the
+// markup. From md up the group sits on the left, primary left-most; below md it
+// sits on the right, primary right-most under the thumb. Only the visual order
+// changes, so keyboard and screen-reader order stay the same at every width.
+.form-footer,
+.modal-footer,
+.allure-actions {
+  display: flex;
+  flex-flow: row-reverse wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: .5rem;
+}
+
+.modal-footer > * {
+  margin: 0;
+}
+
+.allure-actions > form {
+  display: inline-flex;
+}
+
+@include media-breakpoint-up(md) {
+  .form-footer,
+  .modal-footer,
+  .allure-actions {
+    flex-direction: row;
+  }
+}

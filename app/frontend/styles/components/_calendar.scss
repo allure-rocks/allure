@@ -1,0 +1,98 @@
+// Personal-hub activity heatmap (DESIGN.md §15.3). The 13px cell is the
+// constant: the number of week columns follows the available width, so a
+// wider card shows more weeks instead of bigger squares, and a phone shows at
+// least twelve. There is no horizontal scroll.
+.stats-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--stats-calendar-weeks, 53), 13px);
+  gap: 3px;
+  width: max-content;
+}
+
+.stats-calendar-week {
+  display: grid;
+  grid-template-rows: repeat(7, 13px);
+  gap: 3px;
+}
+
+// Year anchors under the grid, sharing its column template: each year sits on
+// the column holding its first visible day (the window's first column, and
+// every column where January 1st falls). Decorative (aria-hidden) — the
+// printed range below the grid is the text equivalent. A label overflows into
+// the empty cells at its right; labels are at least a year apart.
+.stats-calendar-years {
+  display: grid;
+  grid-template-columns: repeat(var(--stats-calendar-weeks, 53), 13px);
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.stats-calendar-year {
+  font-size: 10px;
+  line-height: 1;
+  color: var(--allure-text-muted);
+  white-space: nowrap;
+}
+
+.stats-calendar-day {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 2px;
+  background-color: var(--allure-surface-sunken);
+}
+
+// Solid mixes against the sunken surface rather than transparent overlays, so
+// the ramp reads identically in light and dark themes.
+.stats-calendar-level-0 {
+  background-color: var(--allure-surface-sunken);
+}
+
+.stats-calendar-level-1 {
+  background-color: color-mix(in srgb, var(--primary) 25%, var(--allure-surface-sunken));
+}
+
+.stats-calendar-level-2 {
+  background-color: color-mix(in srgb, var(--primary) 50%, var(--allure-surface-sunken));
+}
+
+.stats-calendar-level-3 {
+  background-color: color-mix(in srgb, var(--primary) 75%, var(--allure-surface-sunken));
+}
+
+.stats-calendar-level-4 {
+  background-color: var(--primary);
+}
+
+.stats-calendar-future {
+  background-color: transparent;
+}
+
+// Selection (§15.3): every input selects a day instead of navigating, so the
+// grid is one pointer surface; a long press scrubs instead of opening the
+// system callout. The selected day carries an ink ring, never a new hue.
+.hub-calendar-grid {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+
+  .stats-calendar-day[data-date] {
+    cursor: pointer;
+  }
+}
+
+.stats-calendar-day.is-selected {
+  outline: 2px solid var(--body-color);
+  outline-offset: 1px;
+}
+
+// Legend and tooltip swatches carry the level colour at the same fixed size,
+// independent of the grid cell class.
+.hub-calendar-swatch {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 13px;
+  height: 13px;
+  border-radius: 2px;
+}

@@ -1,0 +1,71 @@
+<p>
+  Un <strong>segmento</strong> es un tramo de carretera o de camino en el que
+  quieres compararte: una subida, un sprint, una vuelta al parque. Cada vez que
+  una de tus actividades lo recorre, Allure registra un
+  <strong>esfuerzo</strong>. Junto a los segmentos están las
+  <strong>rutas</strong> (un recorrido completo que seguir) y los
+  <strong>circuitos</strong> (un recorrido que vuelve a su salida).
+</p>
+
+<h2>Rutas sugeridas</h2>
+<p>
+  Cuando has hecho al menos tres veces la misma ruta completa sin guardarla,
+  Allure la sugiere en cada una de esas actividades. « Guardar como ruta » abre
+  el formulario: las actividades del grupo se adjuntarán a ella. « Ignorar »
+  cierra la sugerencia para esa ruta, y las salidas posteriores se le unen sin
+  mostrarse. Una sugerencia nunca se publica.
+</p>
+
+<h2>Quién ve un segmento</h2>
+<p>
+  Quien lo crea elige: solo esa persona, sus seguidores o todo el mundo en
+  esta instancia. Un segmento privado no tiene clasificación; solo reúne tus
+  propios esfuerzos. Cualquiera que pueda ver un segmento compartido puede
+  copiarlo en sus propios segmentos privados, en un sentido o en el otro.
+</p>
+
+<h2>Quién ve tus esfuerzos</h2>
+<p>
+  En la página de un segmento solo ves en detalle tus propios esfuerzos. La
+  <strong>clasificación</strong> es distinta: se adapta a quien la lee.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.listing.notice") %>
+</div>
+<p>
+  Así que dos personas pueden ver clasificaciones distintas, y una actividad no
+  publicada, o publicada sin su ruta, nunca te incluye en una. En cada segmento
+  donde tienes un esfuerzo, una línea te dice quién te ve ahí, o por qué nadie
+  te ve.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.leaderboard.residual_risk") %>
+</div>
+
+<h2>Salir de una clasificación</h2>
+<ul>
+  <li><strong>Salir de la clasificación</strong>, en la página de un segmento,
+    retira tus esfuerzos de ella al instante, sea cual sea su publicación.
+    Puedes volver más adelante.</li>
+  <li>Un segmento que toca una de tus zonas de privacidad nunca muestra tus
+    esfuerzos.</li>
+  <li>Las clasificaciones nunca salen de esta instancia.</li>
+</ul>
+
+<h2>Categorías</h2>
+<p>
+  En los <%= link_to "ajustes de tu perfil", settings_profile_path %> puedes
+  declarar una categoría de clasificación (Mujeres u Hombres). Es opcional y
+  añade una vista filtrada a las clasificaciones que tienen suficientes
+  deportistas en ella; sigues apareciendo siempre en la clasificación general.
+  Cualquiera que lea una clasificación en la que apareces puede ver la
+  categoría que declaraste, incluso bajo un alias.
+</p>
+
+<h2>Tus propios puestos</h2>
+<p>
+  El trofeo marca tus propios puestos —tu récord y tu segundo y tercer mejor
+  tiempo—, frente a tus propios tiempos. La corona de laurel marca un puesto en una
+  clasificación, frente a los demás. Tu segundo y tercer mejor tiempo solo se
+  te muestran a ti.
+</p>

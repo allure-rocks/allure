@@ -1,0 +1,34 @@
+<%# The social row under a publication's figures (DESIGN.md §10.17, §10.20):
+    below `lg` the thread's button leads on the left and opens the thread's
+    own page, the reaction bar closes the row on the right. From `lg` the
+    thread is a card at the foot of the page, so the row keeps only the bar.
+    Locals: `target` (Workout or RemoteNote), `card` (the comments card, nil
+    when the page shows no thread), `reaction_summary` (nil without a
+    publication), `reactable`. %>
+<% card = local_assigns[:card] %>
+<% reaction_summary = local_assigns[:reaction_summary] %>
+<% reactable = local_assigns.fetch(:reactable, false) %>
+<% comments_visible = card&.visible? %>
+<% reactions_visible = !reaction_summary.nil? && (reaction_summary.any? || reactable) %>
+<% if comments_visible || reactions_visible %>
+  <div class="<%= class_names("allure-social-row", "d-lg-none": !reactions_visible) %>">
+    <% if comments_visible %>
+      <% count = card.active_count %>
+      <%= link_to comment_thread_path(target),
+                  class: class_names("allure-reactions__pill allure-social-row__comments d-lg-none",
+                                     "allure-reactions__pill--active": count.positive?,
+                                     "allure-reactions__pill--empty": count.zero?),
+                  aria: { label: t("comments.social.label", count:) } do %>
+        <i class="ti ti-message-circle" aria-hidden="true"></i>
+        <% if count.positive? %>
+          <span class="allure-reactions__count" aria-hidden="true"><%= count %></span>
+        <% else %>
+          <span aria-hidden="true"><%= t("comments.social.comment") %></span>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% if reactions_visible %>
+      <%= render "reactions/bar", target:, summary: reaction_summary, reactable:, class_name: "allure-social-row__reactions" %>
+    <% end %>
+  </div>
+<% end %>

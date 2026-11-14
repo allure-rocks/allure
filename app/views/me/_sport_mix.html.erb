@@ -1,0 +1,67 @@
+<% payload = local_assigns.fetch(:payload) { sport_mix_payload(@sport_mix) } %>
+<% metrics = local_assigns.fetch(:metrics, %w[duration distance workouts]) %>
+<% selected_metric = metrics.first %>
+<div class="card h-100"
+     data-controller="hub-pie"
+     data-hub-pie-metric-value="<%= selected_metric %>"
+     data-hub-pie-payload-value="<%= h(payload.to_json) %>">
+  <div class="card-header">
+    <%= content_tag local_assigns.fetch(:heading_tag, :h3), local_assigns.fetch(:heading) { t("me.mix.title") }, class: "card-title" %>
+    <% if metrics.many? %>
+      <div class="card-actions">
+        <%# Phones get a native select bound to the same action (DESIGN.md §10.15);
+            the controller keeps both controls in step. %>
+        <%= tag.select class: "form-select form-select-sm hub-mix-metric-select d-md-none",
+              aria: { label: t("me.mix.metric_label") },
+              data: { action: "change->hub-pie#selectMetric", hub_pie_target: "metric" } do %>
+          <% metrics.each do |metric| %>
+            <%= tag.option t("me.mix.metrics.#{metric}"), value: metric, selected: metric == selected_metric %>
+          <% end %>
+        <% end %>
+        <nav class="nav nav-segmented nav-sm d-none d-md-flex" aria-label="<%= t("me.mix.metric_label") %>"
+             data-action="change->hub-pie#selectMetric">
+          <% metrics.each do |metric| %>
+            <%= tag.input type: "radio", class: "nav-link-input", name: "mix_metric",
+                  id: "mix-metric-#{metric}", value: metric, checked: metric == selected_metric,
+                  data: { hub_pie_target: "metric" } %>
+            <%= tag.label t("me.mix.metrics.#{metric}"), for: "mix-metric-#{metric}", class: "nav-link" %>
+          <% end %>
+        </nav>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <% if local_assigns[:intro] %>
+      <p class="small text-secondary"><%= intro %></p>
+    <% end %>
+    <div class="hub-mix" data-hub-pie-target="container">
+      <div class="hub-mix-chart" data-hub-pie-target="chart" role="img"
+           aria-label="<%= local_assigns.fetch(:chart_label) { t("me.mix.label") } %>"></div>
+      <ul class="hub-mix-legend" data-hub-pie-target="legend" aria-label="<%= t("me.mix.legend_label") %>"></ul>
+    </div>
+    <div class="text-secondary" data-hub-pie-target="empty" hidden><%= t("me.mix.empty") %></div>
+
+    <%# The selected slice's panel (§15.1): selected by tapping a slice or its
+        legend entry, its button filters the hub to that sport. %>
+    <div class="hub-detail mt-2" data-hub-pie-target="detail" hidden>
+      <div class="hub-detail-body small" data-hub-pie-target="detailText" aria-live="polite"></div>
+      <div class="hub-pulse-actions">
+        <a class="btn btn-sm btn-outline-primary hub-touch-target" href="#" data-hub-pie-target="open"></a>
+        <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary hub-touch-target"
+                data-action="hub-pie#clear" aria-label="<%= t("me.mix.clear") %>">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <details class="mt-2">
+      <summary class="btn btn-sm btn-ghost-secondary"><%= t("me.mix.show_data") %></summary>
+      <% metrics.each do |metric| %>
+        <%= tag.div(data: { hub_pie_target: "table", metric: }, hidden: metric != selected_metric) do %>
+          <%= render "me/sport_mix_table", metric:, rows: payload[:slices].map { |slice| [ slice[:name], slice[:values] ] },
+                     caption: local_assigns[:caption] %>
+        <% end %>
+      <% end %>
+    </details>
+  </div>
+</div>

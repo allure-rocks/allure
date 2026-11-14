@@ -1,0 +1,16 @@
+<%# The source activity's own route image, small; a muted map tile while it
+    is still rendering. Decorative: the title carries the link and the label.
+    Locals: `workout`, optional `size` (`sm` default, `lg`). %>
+<% size = local_assigns.fetch(:size, "sm") %>
+<div class="allure-source-thumbnail allure-source-thumbnail--<%= size %>">
+  <% if workout.route_image.attached? %>
+    <%= route_image_tag(light_url: workout_route_image_path(workout),
+                        dark_url: workout_route_image_path(workout, theme: "dark"),
+                        width: Workouts::RouteImageRenderer::WIDTH,
+                        height: Workouts::RouteImageRenderer::HEIGHT,
+                        loading: "lazy",
+                        alt: "") %>
+  <% else %>
+    <span class="allure-source-thumbnail__pending" aria-hidden="true"><i class="ti ti-map-2"></i></span>
+  <% end %>
+</div>

@@ -1,0 +1,60 @@
+<%# The workout's own best efforts over standard distances. Owner-only, never
+    part of a publication. Each row carries the trophy of its personal place
+    among the athlete's own efforts over that distance — gold for the record
+    (the badge in the header names the same set), silver and bronze for the
+    second and third best time (DESIGN.md §10.4) — and previews its window on
+    the elevation chart and the map while hovered, focused, or pinned.
+    `places` maps a best-effort id to its place. %>
+<% places = local_assigns.fetch(:places, {}) %>
+<% if best_efforts.any? %>
+  <div class="table-responsive allure-analysis-table">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("workouts.show.best_efforts.title") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("workouts.show.best_efforts.distance") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.best_efforts.time") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.best_efforts.pace") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% best_efforts.each do |effort| %>
+          <% label = t("records.distances.#{effort.distance_key}") %>
+          <% range = if effort.start_offset_meters && effort.end_offset_meters
+                       analysis_row_attributes(effort.start_offset_meters, effort.end_offset_meters, source: "best_effort", label:)
+                     else
+                       {}
+                     end %>
+          <tr <%= tag.attributes(range) %>>
+            <td>
+              <%= label %>
+              <%= render "workouts/record_trophy", label:, place: places[effort.id] if places[effort.id] %>
+            </td>
+            <td class="text-end"><strong><%= format_duration(effort.duration_seconds) %></strong></td>
+            <td class="text-end"><%= format_pace(best_effort_pace(effort), sport: local_assigns[:sport]) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+    <% best_efforts.each do |effort| %>
+      <% label = t("records.distances.#{effort.distance_key}") %>
+      <% range = if effort.start_offset_meters && effort.end_offset_meters
+                   analysis_row_attributes(effort.start_offset_meters, effort.end_offset_meters, source: "best_effort", label:)
+                 else
+                   {}
+                 end %>
+      <li class="list-group-item" <%= tag.attributes(range) %>>
+        <div class="d-flex justify-content-between align-items-baseline gap-3">
+          <span class="allure-card-title">
+            <%= label %>
+            <%= render "workouts/record_trophy", label:, place: places[effort.id] if places[effort.id] %>
+          </span>
+          <strong class="allure-table-nums"><%= format_duration(effort.duration_seconds) %></strong>
+        </div>
+        <div class="text-secondary small allure-table-nums"><%= format_pace(best_effort_pace(effort), sport: local_assigns[:sport]) %></div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

@@ -1,0 +1,48 @@
+<% show_heart_rate = column_present?(stops, :average_heart_rate) %>
+<% if stops.any? %>
+  <div class="table-responsive allure-analysis-table">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("workouts.show.laps.tabs.stops") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("workouts.show.laps.stop") %></th>
+          <th scope="col"><%= t("workouts.show.laps.name") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.distance") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.time") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.gain") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.loss") %></th>
+          <% if show_heart_rate %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.heart_rate") %></th><% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% stops.each do |stop| %>
+          <tr <%= tag.attributes(analysis_row_attributes(stop.start_distance, stop.end_distance,
+                                                          source: "stop", label: format_duration(stop.elapsed_time))) %>>
+            <td><%= stop.number %></td>
+            <td><%= detected_lap_label(stop) %></td>
+            <td class="text-end"><%= format_distance(stop.distance) %></td>
+            <td class="text-end"><strong><%= format_duration(stop.elapsed_time) %></strong></td>
+            <td class="text-end"><%= format_elevation(stop.ascent) %></td>
+            <td class="text-end"><%= format_elevation(stop.descent) %></td>
+            <% if show_heart_rate %><td class="text-end allure-col-extra"><%= stop.average_heart_rate || "—" %></td><% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+    <% stops.each do |stop| %>
+      <li class="list-group-item" <%= tag.attributes(analysis_row_attributes(stop.start_distance, stop.end_distance,
+                                                                             source: "stop", label: format_duration(stop.elapsed_time))) %>>
+        <div class="d-flex justify-content-between align-items-baseline gap-3">
+          <span class="allure-card-title"><%= detected_lap_label(stop) %></span>
+          <strong class="allure-table-nums"><%= format_duration(stop.elapsed_time) %></strong>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          <%= format_distance(stop.distance) %> · ↑ <%= format_elevation(stop.ascent) %>
+          · ↓ <%= format_elevation(stop.descent) %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

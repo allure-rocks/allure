@@ -1,0 +1,5 @@
+<% content_for :title, t("settings.webhooks.edit.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.webhooks.edit.title") } do %>
+  <%= render "settings/webhooks/form", endpoint: @endpoint %>
+<% end %>

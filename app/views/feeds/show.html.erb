@@ -1,0 +1,119 @@
+<% content_for :title, t("feed.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <h1 class="page-title"><%= t("feed.title") %></h1>
+    </div>
+    <%# The switch is members-only like the feed itself. %>
+    <div class="col-auto ms-auto">
+      <%= form_with url: feed_path, method: :get,
+            data: { controller: "public-switch", public_switch_target: "form" } do %>
+        <div class="d-flex align-items-center gap-2">
+          <div class="form-check form-switch mb-0">
+            <%# The hidden field makes "off" an explicit URL choice; the
+                checkbox appends its value when checked. %>
+            <%= hidden_field_tag :public, "0", data: { public_switch_target: "hidden" } %>
+            <%= check_box_tag :public, "1", @include_public, id: "feed-public",
+                  class: "form-check-input",
+                  data: { public_switch_target: "checkbox", action: "change->public-switch#submit" } %>
+            <%= label_tag "feed-public", t("feed.public.label"), class: "form-check-label" %>
+          </div>
+          <button type="button"
+                  class="btn btn-icon btn-sm btn-ghost-secondary"
+                  aria-label="<%= t("feed.public.hint") %>"
+                  data-controller="tooltip"
+                  data-bs-toggle="tooltip"
+                  data-bs-trigger="hover focus click"
+                  data-bs-title="<%= t("feed.public.hint") %>">
+            <i class="ti ti-info-circle" aria-hidden="true"></i>
+          </button>
+          <noscript><%= submit_tag t("feed.public.apply"), class: "btn btn-sm btn-outline-secondary" %></noscript>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if @items.any? %>
+  <noscript>
+    <% if @pagy.last > 1 %>
+      <div class="d-flex justify-content-center mb-3">
+        <%== pagy_bootstrap_compact_nav(@pagy) %>
+      </div>
+    <% end %>
+  </noscript>
+
+  <div data-controller="infinite-scroll"
+       data-infinite-scroll-url-value="<%= @pagy.next ? pagy_url_for(@pagy, @pagy.next) : "" %>"
+       data-infinite-scroll-dedupe-attribute-value="data-feed-day">
+    <div id="feed-items" class="row justify-content-center">
+      <div class="col-12 col-lg-9 col-xxl-7" data-infinite-scroll-target="items">
+        <% feed_days(@items).each do |day, day_items| %>
+          <%= render "feeds/day_separator", day: %>
+          <%= render partial: "feeds/item", collection: day_items, as: :item %>
+        <% end %>
+      </div>
+    </div>
+    <div class="text-center py-3" data-infinite-scroll-target="sentinel" aria-hidden="true">
+      <%# Kept inside the observed sentinel, outside the items column, so a
+          fetched page can never append a second copy of it. %>
+      <%= render "feeds/skeleton" if @pagy.next %>
+    </div>
+  </div>
+
+  <noscript>
+    <% if @pagy.last > 1 %>
+      <div class="d-flex justify-content-center mt-4">
+        <%== pagy_bootstrap_nav(@pagy) %>
+      </div>
+    <% end %>
+  </noscript>
+<% else %>
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-9 col-xxl-7">
+      <% if @follows_anyone %>
+        <div class="card">
+          <div class="card-body">
+            <div class="empty">
+              <div class="empty-icon"><i class="ti ti-mailbox fs-1 text-secondary" aria-hidden="true"></i></div>
+              <p class="empty-title"><%= t("feed.nothing.title") %></p>
+              <p class="empty-subtitle text-secondary"><%= t("feed.nothing.subtitle") %></p>
+            </div>
+          </div>
+        </div>
+      <% elsif !@include_public %>
+        <div class="card">
+          <div class="card-body">
+            <div class="empty">
+              <div class="empty-icon"><i class="ti ti-users fs-1 text-primary" aria-hidden="true"></i></div>
+              <p class="empty-title"><%= t("feed.no_follows.title") %></p>
+              <p class="empty-subtitle text-secondary"><%= t("feed.no_follows.subtitle") %></p>
+              <p class="empty-subtitle text-secondary"><%= t("feed.no_follows.hint") %></p>
+              <div class="empty-action">
+                <%= link_to t("feed.no_follows.action"), people_path, class: "btn btn-primary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="card">
+          <div class="card-body">
+            <div class="empty">
+              <div class="empty-icon">
+                <i class="ti ti-world fs-1 text-primary" aria-hidden="true"></i>
+              </div>
+              <p class="empty-title"><%= t("feed.empty.title") %></p>
+              <p class="empty-subtitle text-secondary">
+                <%= t("feed.empty.subtitle") %>
+              </p>
+              <div class="empty-action">
+                <%= link_to t("feed.empty.import"), new_workout_import_path, class: "btn btn-primary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

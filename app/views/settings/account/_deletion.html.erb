@@ -1,0 +1,40 @@
+<%# The deletion card (PLAN_ACCOUNT.md §4.1, DESIGN.md §19.29). The request
+    needs the username typed again and the acknowledgment; the controller
+    asks for a recent proof of identity first. Locals: user, deletable. %>
+<div class="card" id="account-deletion">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("settings.account.deletion.title") %></h3>
+  </div>
+  <div class="card-body">
+    <% if deletable %>
+      <p><%= t("settings.account.deletion.window", days: Users::DeletionSchedule::GRACE.in_days.to_i) %></p>
+      <p><%= t("settings.account.deletion.consequences") %></p>
+      <p class="text-secondary"><%= t("settings.account.deletion.remote") %></p>
+      <p><%= link_to t("settings.account.deletion.export_first"), "#account-export" %></p>
+
+      <div class="row">
+      <div class="col-lg-8 col-xl-6">
+      <%= form_with url: settings_account_deletion_path, scope: :deletion, data: { turbo_frame: "_top" } do |form| %>
+        <div class="mb-3">
+          <%= form.label :username, t("settings.account.deletion.username_label", username: user.username), class: "form-label" %>
+          <%= form.text_field :username, required: true, autocomplete: "off", autocapitalize: "none",
+                spellcheck: false, class: "form-control", size: nil %>
+        </div>
+        <div class="mb-3">
+          <label class="form-check">
+            <%= form.check_box :acknowledged, class: "form-check-input", required: true %>
+            <span class="form-check-label"><%= t("settings.account.deletion.acknowledge") %></span>
+          </label>
+        </div>
+        <%= form.button t("settings.account.deletion.submit"), type: "submit", class: "btn btn-danger",
+              data: { confirm_title: t("settings.account.deletion.confirm_title"),
+                      confirm_body: t("settings.account.deletion.confirm_body", days: Users::DeletionSchedule::GRACE.in_days.to_i),
+                      confirm_verb: t("settings.account.deletion.submit") } %>
+      <% end %>
+      </div>
+      </div>
+    <% else %>
+      <p class="text-secondary mb-0"><%= t("settings.account.deletion.operator") %></p>
+    <% end %>
+  </div>
+</div>

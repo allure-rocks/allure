@@ -1,0 +1,16 @@
+<% content_for :title, t("settings.recovery_codes.show.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.recovery_codes.show.title") } do %>
+  <div class="card">
+    <div class="card-body">
+      <p><%= t("settings.recovery_codes.show.copy") %></p>
+      <div class="alert alert-warning" role="alert"><%= t("settings.recovery_codes.show.once") %></div>
+      <ol class="recovery-codes row row-cols-2 g-2 list-unstyled font-monospace fs-3 mb-4">
+        <% @codes.each do |code| %>
+          <li class="col"><%= code %></li>
+        <% end %>
+      </ol>
+      <%= link_to t("settings.recovery_codes.show.done"), settings_security_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

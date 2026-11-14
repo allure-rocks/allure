@@ -1,0 +1,134 @@
+<% name_errors = form.object.errors[:name] %>
+<% description_errors = form.object.errors[:description] %>
+<% tolerance_errors = form.object.errors[:match_tolerance_meters] %>
+
+<%= render "shared/form_errors", form: form %>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("segments.form.details_title") %></h2>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <%= form.label :name, t("segments.form.name"), class: "form-label required" %>
+      <%= form.text_field :name,
+                         class: "form-control#{' is-invalid' if name_errors.any?}",
+                         maxlength: 120,
+                         size: nil,
+                         required: true,
+                         autofocus: form.object.errors.empty?,
+                         aria: (name_errors.any? ? { describedby: "segment-name-error" } : {}) %>
+      <% if name_errors.any? %>
+        <div id="segment-name-error" class="invalid-feedback"><%= name_errors.to_sentence %></div>
+      <% end %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :description, t("segments.form.description"), class: "form-label" %>
+      <%= form.text_area :description,
+                        class: "form-control#{' is-invalid' if description_errors.any?}",
+                        rows: 3,
+                        maxlength: 2_000,
+                        aria: (description_errors.any? ? { describedby: "segment-description-error" } : {}) %>
+      <% if description_errors.any? %>
+        <div id="segment-description-error" class="invalid-feedback"><%= description_errors.to_sentence %></div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <div>
+      <h2 class="card-title"><%= t("segments.form.selection_title") %></h2>
+      <p class="card-subtitle mt-1"><%= t("segments.form.selection_hint") %></p>
+    </div>
+    <div class="card-actions">
+      <button type="button"
+              class="btn btn-ghost-secondary"
+              data-action="segment-selection#clear">
+        <%= t("segments.form.selection_clear") %>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row g-2 mb-3">
+      <div class="col-sm-6">
+        <%= form.label :source_start_index, t("segments.form.selection_start"), class: "form-label" %>
+        <%= form.number_field :source_start_index,
+                              class: "form-control",
+                              min: 0,
+                              step: 1,
+                              required: true,
+                              aria: { describedby: "segment-selection-hint segment-selection-error" },
+                              data: { segment_selection_target: "startIndex", action: "change->segment-selection#inputChanged" } %>
+      </div>
+      <div class="col-sm-6">
+        <%= form.label :source_end_index, t("segments.form.selection_end"), class: "form-label" %>
+        <%= form.number_field :source_end_index,
+                              class: "form-control",
+                              min: 1,
+                              step: 1,
+                              required: true,
+                              aria: { describedby: "segment-selection-hint segment-selection-error" },
+                              data: { segment_selection_target: "endIndex", action: "change->segment-selection#inputChanged" } %>
+      </div>
+    </div>
+    <p id="segment-selection-hint" class="form-text mb-3"><%= t("segments.form.selection_input_hint") %></p>
+    <div class="text-secondary small" data-segment-selection-target="summary" role="status" aria-live="polite" aria-atomic="true">
+      <%= t("segments.form.selection_hint") %>
+    </div>
+    <div id="segment-selection-error" class="text-danger small mt-1" data-segment-selection-target="error" role="alert" hidden></div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <h2 class="card-title"><%= t("segments.form.matching_title") %></h2>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <%= form.label :match_tolerance_meters, t("segments.form.tolerance"), class: "form-label" %>
+      <%= form.number_field :match_tolerance_meters,
+                            class: "form-control#{' is-invalid' if tolerance_errors.any?}",
+                            min: 5,
+                            max: 100,
+                            step: 1,
+                            required: true,
+                            aria: (tolerance_errors.any? ? { describedby: "segment-tolerance-error" } : {}) %>
+      <small class="form-text"><%= t("segments.form.tolerance_hint") %></small>
+      <% if tolerance_errors.any? %>
+        <div id="segment-tolerance-error" class="invalid-feedback"><%= tolerance_errors.to_sentence %></div>
+      <% end %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :sport_id, t("segments.form.sport"), class: "form-label" %>
+      <%= form.select :sport_id, sport_options_for_select,
+            { include_blank: t("segments.details.all_sports") }, class: "form-select" %>
+      <small class="form-text"><%= t("segments.form.sport_hint") %></small>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :visibility, t("segments.form.visibility"), class: "form-label" %>
+      <%= form.select :visibility, Allure::VisibilityLevel::LEVELS.map { |level| [ t("segments.visibility.#{level}"), level ] }, {}, class: "form-select" %>
+      <small class="form-text"><%= t("segments.form.visibility_hint") %></small>
+    </div>
+
+    <% if @corridor_intersects && form.object.visibility != "private" %>
+      <div class="alert alert-warning" role="alert">
+        <h4 class="alert-title"><%= t("segments.form.corridor.title") %></h4>
+        <p class="mb-0"><%= t("segments.form.corridor.body") %></p>
+      </div>
+      <label class="form-check mb-3">
+        <%= check_box_tag "segment[acknowledge_privacy_zones]", "1", false, class: "form-check-input", id: "segment_acknowledge_privacy_zones" %>
+        <span class="form-check-label"><%= t("segments.form.corridor.confirm") %></span>
+      </label>
+    <% end %>
+  </div>
+</div>
+
+<div class="form-footer">
+  <%= form.submit t("segments.form.submit"), class: "btn btn-primary", disabled: true, data: { segment_selection_target: "submit" } %>
+  <%= link_to t("segments.form.cancel"), workout_path(@workout), class: "btn btn-link" %>
+</div>

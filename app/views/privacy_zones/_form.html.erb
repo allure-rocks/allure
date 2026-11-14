@@ -1,0 +1,91 @@
+<% if form.object.errors.any? %>
+  <div class="alert alert-danger" data-unsaved-changes="forced">
+    <h4 class="alert-title"><%= t("errors.unprocessable_entity.title") %></h4>
+    <ul class="mb-0">
+      <% form.object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= render "privacy_zones/panel" %>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("privacy_zones.form.map_title") %></h3>
+  </div>
+  <div class="card-body">
+    <p class="text-secondary small"><%= t("privacy_zones.form.map_hint") %></p>
+    <% if Allure::Toponyms::Config.configured? %>
+      <div class="mb-3" data-zone-picker-target="search" hidden>
+        <label class="form-label" for="privacy_zone_search"><%= t("privacy_zones.form.search.label") %></label>
+        <div class="position-relative">
+          <div class="input-group">
+            <input type="search" id="privacy_zone_search" class="form-control" autocomplete="off"
+                   maxlength="200" placeholder="<%= t("privacy_zones.form.search.placeholder") %>"
+                   role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="privacy_zone_search_results"
+                   aria-describedby="privacy_zone_search_hint privacy_zone_search_status"
+                   data-zone-picker-target="searchInput" data-action="keydown->zone-picker#searchKeydown blur->zone-picker#closeSearchResults">
+            <button type="button" class="btn" data-zone-picker-target="searchButton" data-action="zone-picker#search">
+              <i class="ti ti-search me-1" aria-hidden="true"></i><%= t("privacy_zones.form.search.button") %>
+            </button>
+          </div>
+          <ul id="privacy_zone_search_results" class="dropdown-menu w-100 show" role="listbox"
+              aria-label="<%= t("privacy_zones.form.search.results") %>"
+              data-zone-picker-target="searchResults" hidden></ul>
+        </div>
+        <div id="privacy_zone_search_status" class="form-text" role="status" aria-live="polite" data-zone-picker-target="searchStatus"></div>
+        <small id="privacy_zone_search_hint" class="form-text"><%= t("privacy_zones.form.search.hint") %></small>
+      </div>
+    <% end %>
+    <div class="allure-map" data-bs-theme="<%= basemap_theme %>" data-zone-picker-target="map" role="application" aria-label="<%= t("privacy_zones.form.map_title") %>" hidden></div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="mb-3">
+      <%= form.label :name, t("privacy_zones.form.name"), class: "form-label" %>
+      <%= form.text_field :name, class: "form-control", maxlength: 120, size: nil %>
+      <small class="form-text"><%= t("privacy_zones.form.name_hint") %></small>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <%= form.label :latitude, t("privacy_zones.form.latitude"), class: "form-label required" %>
+        <%= form.number_field :latitude, class: "form-control", min: -90, max: 90, step: "any", required: true,
+              data: { zone_picker_target: "latitude", action: "change->zone-picker#coordinatesChanged" } %>
+      </div>
+      <div class="col-md-6 mb-3">
+        <%= form.label :longitude, t("privacy_zones.form.longitude"), class: "form-label required" %>
+        <%= form.number_field :longitude, class: "form-control", min: -180, max: 180, step: "any", required: true,
+              data: { zone_picker_target: "longitude", action: "change->zone-picker#coordinatesChanged" } %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :radius_meters, t("privacy_zones.form.radius"), class: "form-label required" %>
+      <div class="d-flex gap-2 align-items-center">
+        <input type="range" min="1" max="10000" step="1" value="<%= form.object.radius_meters || 100 %>"
+               class="form-range flex-grow-1" aria-label="<%= t("privacy_zones.form.radius") %>"
+               data-zone-picker-target="radiusRange" data-action="input->zone-picker#radiusFromSlider">
+        <%= form.number_field :radius_meters, class: "form-control", style: "max-width: 8rem;", min: 1, max: 10_000, step: 1, required: true,
+              data: { zone_picker_target: "radius", action: "change->zone-picker#radiusFromNumber" } %>
+      </div>
+      <small class="form-text"><%= t("privacy_zones.form.radius_hint") %></small>
+    </div>
+
+    <% unless form.object.new_record? %>
+      <label class="form-check">
+        <%= form.check_box :active, class: "form-check-input" %>
+        <span class="form-check-label"><%= t("privacy_zones.form.active") %></span>
+      </label>
+    <% end %>
+  </div>
+</div>
+
+<div class="form-footer">
+  <%= form.submit t("privacy_zones.form.save"), class: "btn btn-primary" %>
+  <%= link_to t("privacy_zones.form.cancel"), privacy_zones_path, class: "btn btn-link" %>
+</div>

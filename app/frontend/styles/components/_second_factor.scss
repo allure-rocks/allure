@@ -1,0 +1,11 @@
+// Second-factor enrolment (PLAN_AUTH.md §5.2, DESIGN.md §8.5). The QR code is
+// drawn on white in both themes so every camera reads it.
+.totp-qr svg {
+  display: block;
+  width: 11rem;
+  height: auto;
+}
+
+.recovery-codes li {
+  letter-spacing: 0.05em;
+}

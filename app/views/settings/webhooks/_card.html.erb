@@ -1,0 +1,60 @@
+<%# The Webhooks card of /settings/api (DESIGN.md §20.18). %>
+<div class="card mt-3">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("settings.webhooks.title") %></h3>
+    <div class="card-actions">
+      <%= link_to new_settings_webhook_path, class: "btn btn-primary btn-sm" do %>
+        <i class="ti ti-plus me-1" aria-hidden="true"></i><%= t("settings.webhooks.new_button") %>
+      <% end %>
+    </div>
+  </div>
+  <% if webhooks.empty? %>
+    <div class="card-body">
+      <div class="empty py-4">
+        <p class="empty-title"><%= t("settings.webhooks.empty") %></p>
+        <p class="empty-subtitle text-secondary"><%= t("settings.webhooks.empty_hint") %></p>
+      </div>
+    </div>
+  <% else %>
+    <div class="table-responsive">
+      <table class="table table-sm table-vcenter card-table">
+        <caption class="visually-hidden"><%= t("settings.webhooks.title") %></caption>
+        <thead>
+          <tr>
+            <th scope="col"><%= t("settings.webhooks.table.address") %></th>
+            <th scope="col"><%= t("settings.webhooks.table.events") %></th>
+            <th scope="col"><%= t("settings.webhooks.table.state") %></th>
+            <th scope="col"><%= t("settings.webhooks.table.last_delivery") %></th>
+            <th scope="col"><span class="visually-hidden"><%= t("settings.webhooks.table.actions") %></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% webhooks.each do |endpoint| %>
+            <% last = last_deliveries[endpoint.id] %>
+            <tr>
+              <td class="text-break">
+                <%= link_to truncate(endpoint.url.delete_prefix("https://"), length: 60), settings_webhook_path(endpoint), class: "fw-medium" %>
+                <% if endpoint.description %><div class="small text-secondary"><%= endpoint.description %></div><% end %>
+              </td>
+              <td>
+                <%= endpoint.all_events? ? t("settings.webhooks.all_events") : t("settings.webhooks.event_count", count: endpoint.events.size) %>
+              </td>
+              <td><%= render "settings/webhooks/state", endpoint: %></td>
+              <td>
+                <% if last %>
+                  <%= render "settings/webhooks/delivery_status", delivery: last %>
+                  <time class="small text-secondary ms-1" datetime="<%= (last.last_attempt_at || last.created_at).iso8601 %>">
+                    <%= t("settings.api.tokens.used_ago", time: time_ago_in_words(last.last_attempt_at || last.created_at)) %>
+                  </time>
+                <% else %>
+                  <span class="text-secondary"><%= t("settings.webhooks.never_delivered") %></span>
+                <% end %>
+              </td>
+              <td class="text-end"><%= render "settings/webhooks/menu", endpoint: %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

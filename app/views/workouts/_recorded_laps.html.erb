@@ -1,0 +1,61 @@
+<% ranges = recorded_lap_ranges(laps, total_distance) %>
+<% show_heart_rate = column_present?(laps, :average_heart_rate) %>
+<% show_cadence = column_present?(laps, :average_cadence) %>
+<%# A power-led virtual ride reads its watts in the effort column instead. %>
+<% show_power = column_present?(laps, :average_power) && !sport.power_led? %>
+<% show_trigger = column_present?(laps, :lap_trigger) %>
+<% if laps.any? %>
+  <div class="table-responsive allure-analysis-table">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("workouts.show.laps.recorded_title") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("workouts.show.laps.lap") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.distance") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.time") %></th>
+          <th scope="col" class="text-end"><%= effort_column_label(sport, scope: "workouts.show.laps") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.gain") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.loss") %></th>
+          <% if show_heart_rate %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.heart_rate") %></th><% end %>
+          <% if show_cadence %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.cadence") %></th><% end %>
+          <% if show_power %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.power") %></th><% end %>
+          <% if show_trigger %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.trigger") %></th><% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% laps.each_with_index do |lap, index| %>
+          <tr <%= tag.attributes(analysis_row_attributes(ranges[index][:start], ranges[index][:end], source: "recorded")) %>>
+            <td><%= lap.number %></td>
+            <td class="text-end"><%= format_distance(lap.distance) %></td>
+            <td class="text-end"><strong><%= format_duration(lap.elapsed_time) %></strong></td>
+            <td class="text-end"><%= effort_cell(average_pace: lap.average_pace, average_speed: lap.average_speed, average_power: lap.average_power, sport: sport) %></td>
+            <td class="text-end"><%= format_elevation(lap.ascent) %></td>
+            <td class="text-end"><%= format_elevation(lap.descent) %></td>
+            <% if show_heart_rate %><td class="text-end allure-col-extra"><%= lap.average_heart_rate || "—" %></td><% end %>
+            <% if show_cadence %><td class="text-end allure-col-extra"><%= lap.average_cadence ? metric_with_unit(lap.average_cadence, sport.cadence_unit) : "—" %></td><% end %>
+            <% if show_power %><td class="text-end allure-col-extra"><%= format_power(lap.average_power) %></td><% end %>
+            <% if show_trigger %><td class="text-end allure-col-extra"><%= lap.lap_trigger.presence || "—" %></td><% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+    <% laps.each_with_index do |lap, index| %>
+      <li class="list-group-item" <%= tag.attributes(analysis_row_attributes(ranges[index][:start], ranges[index][:end], source: "recorded")) %>>
+        <div class="d-flex justify-content-between align-items-baseline">
+          <span class="allure-card-title"><%= t("workouts.show.laps.lap") %> <%= lap.number %></span>
+          <strong class="allure-table-nums"><%= format_duration(lap.elapsed_time) %></strong>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          <%= format_distance(lap.distance) %> · <%= effort_cell(average_pace: lap.average_pace, average_speed: lap.average_speed, average_power: lap.average_power, sport: sport) %>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          ↑ <%= format_elevation(lap.ascent) %> · ↓ <%= format_elevation(lap.descent) %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="card-body text-secondary"><%= t("workouts.show.laps.recorded_empty") %></div>
+<% end %>

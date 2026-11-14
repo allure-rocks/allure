@@ -1,0 +1,128 @@
+<% discover_page = @kind == "discover" %>
+<% kind_suffix = @kind == "segment" || discover_page ? "" : "#{@kind}_" %>
+<% kind_icons = { "segment" => "route", "route" => "route-2", "loop" => "repeat", "discover" => "compass" } %>
+<% icon = kind_icons.fetch(@kind, "route") %>
+<% kind_title = discover_page ? t("segments.index.discover_title") : t("segments.index.#{kind_suffix}title") %>
+<% page_title = discover_page ? t("segments.index.discover_title") : t("segments.index.title") %>
+<% page_pretitle = discover_page ? t("segments.index.discover_pretitle") : t("segments.index.#{kind_suffix}pretitle") %>
+<%# Loops are detected, never created: only segments and routes offer the
+    creation step, which starts by choosing the source activity. %>
+<% creatable = %w[segment route].include?(@kind) %>
+<% new_button = creatable ? t("segments.index.#{kind_suffix}new_button") : nil %>
+<% new_button_short = creatable ? t("segments.index.#{kind_suffix}new_button_short") : nil %>
+<% new_path = creatable ? new_segment_path(kind: (@kind if @kind == "route")) : nil %>
+
+<%# The document title names the kind for the browser tab; the page keeps the
+    stable section heading and lets the pretitle carry the kind. %>
+<% content_for :title, kind_title %>
+
+<% content_for :page_header do %>
+  <%# The actions stay beside the title at every width, like the workout
+      header (DESIGN.md §20.3, §20.6): on phones they stack in a narrow
+      column at the top right, each at its natural width, and the primary
+      action reads « Nouveau ». %>
+  <div class="row g-2 align-items-start align-items-md-center flex-nowrap">
+    <div class="col min-w-0">
+      <div class="page-pretitle"><%= page_pretitle %></div>
+      <h1 class="page-title"><%= page_title %></h1>
+    </div>
+    <div class="col-auto">
+      <div class="btn-list allure-segments-header-actions">
+        <% if discover_page %>
+          <%# The way back to the list, mirroring the list's « Découvrir ». %>
+          <%= link_to segments_path, class: "btn btn-outline-secondary" do %>
+            <i class="ti ti-list me-1" aria-hidden="true"></i><%= t("segments.index.kinds.list") %>
+          <% end %>
+        <% else %>
+          <% if creatable %>
+            <%= link_to new_path, class: "btn btn-primary", aria: { label: new_button } do %>
+              <i class="ti ti-plus me-1" aria-hidden="true"></i><span class="d-md-none"><%= new_button_short %></span><span class="d-none d-md-inline"><%= new_button %></span>
+            <% end %>
+          <% end %>
+          <%= link_to segments_path(kind: SegmentsController::DISCOVER_TAB), class: "btn btn-outline-secondary" do %>
+            <i class="ti ti-compass me-1" aria-hidden="true"></i><%= t("segments.index.kinds.discover") %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% unless discover_page %>
+  <%# The kind switcher is the hub's period control (DESIGN.md §8.4/§10.15):
+      a segmented control of labelled links, active on the current kind, at
+      the regular size since it is the page's main choice, and spanning the
+      width in equal parts on phones. %>
+  <nav class="nav nav-segmented allure-segments-kind-switch mb-3" aria-label="<%= t("segments.index.kinds.label") %>">
+    <% SegmentsController::INDEX_KINDS.each do |kind| %>
+      <%= link_to t("segments.index.kinds.#{kind}"), segments_path(kind: kind),
+            class: class_names("nav-link", active: kind == @kind),
+            aria: { current: (kind == @kind ? "true" : nil) } %>
+    <% end %>
+  </nav>
+<% end %>
+
+<% if discover_page %>
+  <% if @discover_available %>
+    <%= render "discover_map" %>
+  <% else %>
+    <div class="card">
+      <div class="card-body">
+        <div class="empty">
+          <div class="empty-icon"><i class="ti ti-compass fs-1 text-primary"></i></div>
+          <p class="empty-title"><%= t("segments.index.discover_empty_title") %></p>
+          <p class="empty-subtitle text-secondary"><%= t("segments.index.discover_empty_subtitle") %></p>
+          <div class="empty-action"><%= link_to t("segments.index.discover_empty_action"), people_path, class: "btn btn-primary" %></div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% elsif @segments.any? %>
+  <%= render "filters", practiced_sports: @practiced_sports %>
+
+  <%# The list scrolls endlessly like the workout list (DESIGN.md §20.4,
+      §20.6): the desktop rows and the phone list are both item containers. %>
+  <div data-controller="infinite-scroll"
+       data-infinite-scroll-url-value="<%= @pagy.next ? pagy_url_for(@pagy, @pagy.next) : "" %>">
+    <%= render "segment_table", segments: @segments, podiums: @podiums %>
+    <div class="text-center py-3" data-infinite-scroll-target="sentinel" aria-hidden="true">
+      <%= render "workouts/table_skeleton" if @pagy.next %>
+    </div>
+  </div>
+
+  <noscript>
+    <% if @pagy.last > 1 %>
+      <div class="d-flex justify-content-center mt-4">
+        <%== pagy_bootstrap_nav(@pagy) %>
+      </div>
+    <% end %>
+  </noscript>
+<% elsif @unfiltered_count.to_i.positive? %>
+  <%= render "filters", practiced_sports: @practiced_sports %>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="empty">
+        <div class="empty-icon"><i class="ti ti-filter fs-1 text-secondary"></i></div>
+        <p class="empty-title"><%= t("segments.index.filtered_empty.title") %></p>
+        <div class="empty-action">
+          <%= link_to t("segments.index.filtered_empty.action"), segments_path(segment_list_params(sports: nil)),
+                class: "btn btn-outline-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="card-body">
+      <div class="empty">
+        <div class="empty-icon"><i class="ti ti-<%= icon %> fs-1 text-primary"></i></div>
+        <p class="empty-title"><%= @kind == "segment" ? t("segments.index.empty.title") : t("segments.index.#{kind_suffix}empty_title") %></p>
+        <p class="empty-subtitle text-secondary"><%= @kind == "segment" ? t("segments.index.empty.subtitle") : t("segments.index.#{kind_suffix}empty_subtitle") %></p>
+        <% if creatable %>
+          <div class="empty-action"><%= link_to new_button, new_path, class: "btn btn-primary" %></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

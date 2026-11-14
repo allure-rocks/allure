@@ -1,0 +1,85 @@
+<% content_for :title, t("admin.imports.show.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+      <h1 class="page-title"><%= t("admin.imports.show.title") %> #<%= @batch.id %></h1>
+      <div class="text-secondary">
+        @<%= @batch.user.username %> · <%= t("workouts.batch_import.status.labels.#{@batch.status}") %>
+      </div>
+    </div>
+    <div class="col-auto ms-auto">
+      <%= link_to t("admin.accounts.back"), admin_imports_path, class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
+<% end %>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="text-secondary small mb-1">
+      <%= t("workouts.batch_import.status.summary",
+            imported: @batch.imported_entries, failed: @batch.failed_entries,
+            duplicates: @batch.duplicate_entries, cancelled: @batch.cancelled_entries) %>
+    </div>
+    <div class="text-secondary small">
+      <%= t("workouts.batch_import.sources.#{@batch.source}.label") %> · <%= t("admin.imports.triggers.#{@batch.trigger}") %>
+      · <%= l(@batch.created_at, format: :long) %>
+    </div>
+    <% if @batch.range_from && @batch.range_to %>
+      <div class="text-secondary small">
+        <%= t("admin.imports.show.range", from: l(@batch.range_from, format: :long), to: l(@batch.range_to, format: :long)) %>
+      </div>
+    <% end %>
+    <% if @batch.error_message.present? %>
+      <div class="alert alert-danger mt-2 mb-0">
+        <div class="fw-bold"><%= t("admin.imports.show.error") %></div>
+        <div class="text-break"><%= @batch.error_message %></div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><h2 class="card-title"><%= t("admin.imports.show.entries") %></h2></div>
+  <div class="table-responsive">
+    <table class="table table-sm card-table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col"><%= t("admin.imports.show.source") %></th>
+          <th scope="col"><%= t("admin.imports.show.type") %></th>
+          <th scope="col"><%= t("admin.imports.show.status") %></th>
+          <th scope="col"><%= t("admin.imports.show.error") %></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @entries.each do |entry| %>
+          <tr>
+            <td class="text-secondary"><%= entry.position + 1 %></td>
+            <td class="text-break"><%= entry.source_name %></td>
+            <td class="text-secondary"><%= entry.sport_source %></td>
+            <td>
+              <span class="badge <%= entry.status == "failed" ? "bg-danger-lt" : "bg-secondary-lt" %>">
+                <%= t("workouts.batch_import.entries.labels.#{entry.status}") %>
+              </span>
+            </td>
+            <td class="text-break text-secondary small">
+              <%= entry.skip_reason.present? ? t("workouts.batch_import.entries.skip_reasons.#{entry.skip_reason}") : entry.error_message %>
+            </td>
+            <td class="text-end">
+              <% if entry.workout %>
+                <%= link_to t("admin.imports.show.view_workout"), workout_path(entry.workout),
+                      class: "btn btn-sm btn-outline-secondary" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        <% if @entries.empty? %>
+          <tr><td colspan="6" class="text-secondary"><%= t("admin.imports.show.empty") %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

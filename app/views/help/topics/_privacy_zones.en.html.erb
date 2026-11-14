@@ -1,0 +1,59 @@
+<div class="alert alert-info" role="note">
+  <%= t("privacy_zones.panel") %>
+</div>
+
+<h2>What a zone is</h2>
+<p>
+  A circle you draw around a place you do not want to reveal — your home, your
+  workplace, a relative's house. You create them in
+  <%= link_to "Privacy zones", privacy_zones_path %>, by searching a place or
+  clicking the map, and choose the radius. The zones themselves are never
+  shared.
+</p>
+
+<h2>What it hides</h2>
+<p>
+  When you publish, every point of the route inside one of your zones is cut out
+  before the copy is made: from the route on the map, the map image, the GPX
+  file, and the positions of photos. The route is drawn with a gap there, so
+  nobody can follow it to the door.
+</p>
+
+<h2>The start and the finish</h2>
+<p>
+  The start and the finish are where a route gives a place away most easily,
+  so each publishing profile decides about them separately, with
+  <strong>mask the start</strong> and <strong>mask the finish</strong>:
+</p>
+<ul>
+  <li><strong>Mask checked</strong> — the start (or the finish) must lie inside
+    one of your zones, and is removed with it. If no zone covers it, Allure
+    refuses to publish and tells you why, rather than reveal it.</li>
+  <li><strong>Mask unchecked</strong> — the start (or the finish) stays visible,
+    <strong>even inside a zone</strong>. Use it for routes that start somewhere
+    public, like a trailhead or a club.</li>
+</ul>
+<p>
+  If a part of the recording never leaves a zone, there is nothing left to show
+  safely, and the route is not published.
+</p>
+
+<h2>What it never changes</h2>
+<ul>
+  <li>Your own workout: you still see the whole route, and your figures are
+    computed from it.</li>
+  <li>Publications already made: they are copies, frozen when you published.
+    Adding a zone later does not reach them — delete them and publish again.</li>
+  <li>Deleting a zone does not reveal anything already published, but your next
+    publications will no longer hide that area.</li>
+</ul>
+
+<h2>Photos and segments</h2>
+<ul>
+  <li>A photo taken inside a zone is left out of a publication unless you
+    explicitly include it, and is then shared without its position.</li>
+  <li>Your efforts on a segment that one of your zones touches never appear on
+    its leaderboard.</li>
+  <li>Sharing a course of your own that crosses a zone asks for your
+    confirmation first.</li>
+</ul>

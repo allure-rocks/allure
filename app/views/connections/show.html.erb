@@ -1,0 +1,18 @@
+<%# One connected service (DESIGN.md §8.6, PLAN_REMOTE_IMPORTS.md §8.1): its own
+    page in the section shell, so a link or an unlink refreshes this service
+    alone and never wipes another one's form. %>
+<% content_for :title, t("workouts.batch_import.sources.#{@card[:source].key}.label") %>
+<%= render layout: "connections/shell", locals: { card: @card, cards: @cards } do %>
+  <%= render "publishing_profiles/auto_publish_notice",
+             profiles: current_user.publishing_profiles.automatic.order(:position, :id).to_a,
+             context: :import %>
+
+  <%# The cards refresh while this connection is linking or unlinking, and stop
+      as soon as it settles (live_frame_controller). %>
+  <turbo-frame id="connection-<%= @card[:source].key %>-live" target="_top"
+               data-controller="live-frame"
+               data-live-frame-url-value="<%= connection_path(@card[:source].key) %>"
+               data-live-frame-interval-value="3000">
+    <%= render "connections/live", card: @card %>
+  </turbo-frame>
+<% end %>

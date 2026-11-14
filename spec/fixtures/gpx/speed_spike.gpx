@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Allure Test Suite" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>Filtered maximum-speed regression</name>
+    <trkseg>
+      <trkpt lat="45.0000000" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:00Z</time></trkpt>
+      <trkpt lat="45.0000450" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:01Z</time></trkpt>
+      <trkpt lat="45.0000900" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:02Z</time></trkpt>
+      <trkpt lat="45.0001350" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:03Z</time></trkpt>
+      <trkpt lat="45.0021350" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:04Z</time></trkpt>
+      <trkpt lat="45.0002250" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:05Z</time></trkpt>
+      <trkpt lat="45.0002700" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:06Z</time></trkpt>
+      <trkpt lat="45.0003150" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:07Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

@@ -1,0 +1,47 @@
+<div class="table-responsive">
+  <table class="table table-sm card-table">
+    <thead><tr>
+      <% %w[account provider tier paid_at starts_at expires_at state reversals actions].each do |key| %>
+        <th scope="col"><%= t("funding.admin.#{key}") %></th>
+      <% end %>
+    </tr></thead>
+    <tbody>
+      <% contributions.each do |contribution| %>
+        <tr>
+          <td><%= contribution.user ? link_to(contribution.user.display_name, admin_account_path(contribution.user)) : t("funding.admin.unmatched") %></td>
+          <td><%= contribution.provider == "manual" ? t("funding.admin.manual") : contribution.provider %></td>
+          <td><%= t("reactions.kinds.#{contribution.tier}") %></td>
+          <td><%= l(contribution.paid_at, format: :long) %></td>
+          <td><%= l(contribution.starts_at, format: :long) %></td>
+          <td><%= l(contribution.expires_at, format: :long) %></td>
+          <td><%= t("funding.admin.states.#{contribution.effective_status}") %></td>
+          <td>
+            <% contribution.funding_reversals.latest_first.each do |reversal| %>
+              <% badge = case reversal.status
+                          when "won", "succeeded" then "bg-green-lt"
+                          when "lost", "failed" then "bg-red-lt"
+                          else "bg-orange-lt" end %>
+              <span class="badge <%= badge %>">
+                <%= t("funding.admin.reversal_kinds.#{reversal.kind}") %>
+                <%= t("funding.admin.reversal_statuses.#{reversal.status}") %>
+                <% if reversal.amount_cents && reversal.currency %>
+                  (<%= number_to_currency(reversal.amount_cents / 100.0, unit: reversal.currency, precision: 2) %>)
+                <% end %>
+              </span>
+            <% end %>
+          </td>
+          <td>
+            <% unless contribution.revoked? %>
+              <%= button_to t("funding.admin.revoke"), admin_funding_contribution_path(contribution), method: :delete,
+                  class: "btn btn-sm btn-outline-danger", form: { data: { confirm_title: t("funding.admin.revoke"),
+                  confirm_body: t("funding.admin.revoke_confirmation"), confirm_verb: t("funding.admin.revoke") } } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <% if contributions.empty? %>
+        <tr><td colspan="9" class="text-secondary"><%= t("funding.admin.empty") %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

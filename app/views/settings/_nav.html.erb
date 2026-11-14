@@ -1,0 +1,4 @@
+<%# Settings section navigation: the shared section nav fed with the settings
+    collection (DESIGN.md §8.5). %>
+<%= render "shared/section_nav", groups: settings_navigation_groups(controller_path: controller_path),
+                                 label: t("settings.hub.title") %>

@@ -1,0 +1,48 @@
+<%# The owner's photo manager (DESIGN.md §20.24): quota, camera clock, the
+    automatic order, and one row per photo. A frame request from the manager
+    itself renders this list alone. Locals: workout, photos, quota, placeable,
+    diagnoses, offset_minutes, error (optional). %>
+<turbo-frame id="<%= photo_manager_frame_id(workout) %>" refresh="morph"
+             data-controller="photo-gallery photo-lightbox photo-order photo-placement photo-rows"
+             data-action="turbo:frame-render->photo-gallery#refresh allure:photo-uploaded@window->photo-gallery#uploaded allure:photos-reordered@window->photo-gallery#reordered turbo:before-cache@document->photo-lightbox#close allure:photo-open@window->photo-rows#focusRow allure:photo-placed@window->photo-placement#placed allure:photo-reveal@window->photo-rows#reveal turbo:frame-render->photo-rows#rendered"
+             data-photo-gallery-url-value="<%= workout_photos_path(workout) %>"
+             data-photo-order-url-value="<%= order_workout_photos_path(workout) %>"
+             data-photo-order-error-value="<%= t('photos.errors.network') %>"
+             data-photo-placement-prompt-value="<%= t('photos.placement.prompt', photo: '%{photo}') %>"
+             data-photo-placement-error-value="<%= t('photos.errors.network') %>">
+  <%# A morphing frame render updates its children, never the frame's own
+      attributes: the values that change live on this hidden child. %>
+  <span hidden data-photo-gallery-pending="<%= photos.any?(&:processing?) %>"
+        data-photo-gallery-markers="<%= workout_photo_markers(workout, photos).to_json %>"></span>
+  <p class="small text-secondary mb-1"><%= t("photos.usage", used: number_to_human_size(quota.used), quota: number_to_human_size(quota.limit)) %></p>
+  <progress class="allure-photo-quota mb-3" value="<%= [quota.used, quota.limit].min %>" max="<%= [quota.limit, 1].max %>" aria-label="<%= t('photos.quota') %>"></progress>
+  <% if local_assigns[:error] %><p class="text-danger" role="alert"><%= error %></p><% end %>
+  <p class="text-danger" role="alert" data-photo-order-target="error"></p>
+  <% if photos.empty? %><p class="text-secondary"><%= t("photos.empty") %></p><% end %>
+  <% if placeable && photos.any? { it.taken_at_local.present? } %>
+    <%# The camera's clock is often a few minutes or a time zone off; every
+        photo placed from its capture time moves with this correction. %>
+    <%= form_with url: time_offset_workout_photos_path(workout), method: :patch, class: "allure-photo-offset mb-3" do %>
+      <%= label_tag "photo-offset-#{workout.to_param}", t("photos.placement.offset_label"), class: "form-label" %>
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <%= number_field_tag :offset_minutes, offset_minutes, id: "photo-offset-#{workout.to_param}",
+              min: -840, max: 840, step: 1, class: "form-control w-auto", aria: { describedby: "photo-offset-hint-#{workout.to_param}" } %>
+        <%= submit_tag t("photos.placement.offset_save"), class: "btn btn-sm btn-outline-secondary" %>
+      </div>
+      <p class="form-hint mb-0" id="photo-offset-hint-<%= workout.to_param %>"><%= t("photos.placement.offset_hint") %></p>
+    <% end %>
+  <% end %>
+  <% if workout.photos_ordered_by_owner? && photos.size > 1 %>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+      <%= button_to t("photos.sort"), sort_workout_photos_path(workout), method: :patch, class: "btn btn-sm btn-outline-secondary" %>
+      <span class="small text-secondary"><%= t("photos.sort_hint") %></span>
+    </div>
+  <% end %>
+  <ol class="allure-photo-rows list-unstyled mb-0" data-photo-order-target="list">
+    <% photos.each_with_index do |photo, index| %>
+      <%= render "workout_photos/row", workout: workout, photo: photo, index: index, photos_count: photos.size,
+                                       placeable: placeable, diagnosis: diagnoses[photo.id] %>
+    <% end %>
+  </ol>
+  <%= render "workout_photos/lightbox", original: true %>
+</turbo-frame>

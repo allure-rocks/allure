@@ -1,0 +1,80 @@
+<% content_for :title, t("publishing_profiles.index.title") %>
+
+<% content_for :settings_actions do %>
+  <%= link_to new_publishing_profile_path, class: "btn btn-primary" do %>
+    <i class="ti ti-plus me-1"></i><%= t("publishing_profiles.index.new_button") %>
+  <% end %>
+<% end %>
+
+<%= render layout: "settings/shell", locals: { title: t("publishing_profiles.index.title") } do %>
+  <%= render "publishing_profiles/auto_publish_notice", profiles: @profiles.select(&:auto_publish?), context: :profiles %>
+
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-sm table-vcenter card-table">
+        <caption class="visually-hidden"><%= t("publishing_profiles.index.title") %></caption>
+        <thead>
+          <tr>
+            <th scope="col"><%= t("publishing_profiles.index.table.profile") %></th>
+            <th scope="col" class="text-end"><%= t("publishing_profiles.index.table.publications") %></th>
+            <th scope="col"><span class="visually-hidden"><%= t("publishing_profiles.index.table.actions") %></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @profiles.each do |profile| %>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="avatar avatar-sm bg-primary-lt d-none d-sm-inline-flex"
+                        title="<%= t("publishing_profiles.audiences.#{profile.audience}") %>" aria-hidden="true">
+                    <i class="ti <%= profile.audience == "followers" ? "ti-users" : "ti-world" %>"></i>
+                  </span>
+                  <div class="min-width-0">
+                    <%= link_to publishing_profile_path(profile),
+                          class: "text-reset text-break d-block fw-medium" do %>
+                      <%= profile.name %><% if profile.built_in? %> <span class="fw-normal text-secondary">(<%= t("publishing_profiles.status.built_in") %>)</span><% end %>
+                    <% end %>
+                    <% if profile.auto_publish? %>
+                      <span class="badge bg-primary-lt mt-1"><i class="ti ti-bolt me-1" aria-hidden="true"></i><%= t("publishing_profiles.status.automatic") %></span>
+                    <% end %>
+                    <span class="visually-hidden"><%= t("publishing_profiles.audiences.#{profile.audience}") %></span>
+                  </div>
+                </div>
+              </td>
+              <td class="text-end"><%= profile.workout_publications.active.count %></td>
+              <td class="text-end">
+                <div class="d-flex justify-content-end gap-1">
+                  <%= link_to edit_publishing_profile_path(profile), class: "btn btn-sm btn-ghost-secondary btn-icon",
+                        aria: { label: "#{t("publishing_profiles.actions.edit")} : #{profile.name}" },
+                        title: t("publishing_profiles.actions.edit") do %>
+                    <i class="ti ti-pencil" aria-hidden="true"></i>
+                  <% end %>
+                  <% if profile.built_in? %>
+                    <%= button_to restore_defaults_publishing_profile_path(profile),
+                          method: :post, class: "btn btn-sm btn-ghost-secondary btn-icon",
+                          aria: { label: "#{t("publishing_profiles.actions.restore")} : #{profile.name}" },
+                          title: t("publishing_profiles.actions.restore") do %>
+                      <i class="ti ti-restore" aria-hidden="true"></i>
+                    <% end %>
+                  <% else %>
+                    <%= button_to publishing_profile_path(profile),
+                          method: :delete, class: "btn btn-sm btn-ghost-danger btn-icon",
+                          aria: { label: "#{t("publishing_profiles.actions.delete")} : #{profile.name}" },
+                          title: t("publishing_profiles.actions.delete"),
+                          form: { data: {
+                            confirm_title: t("publishing_profiles.actions.confirm.title"),
+                            confirm_body: t("publishing_profiles.actions.confirm.body"),
+                            confirm_verb: t("publishing_profiles.actions.confirm.verb")
+                          } } do %>
+                      <i class="ti ti-trash" aria-hidden="true"></i>
+                    <% end %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,96 @@
+<% calendar_sports = @practiced_sports.to_h do |sport|
+     [ sport.id, { name: sport_display_name(sport), icon: render(sport.icon) } ]
+   end %>
+<% day_url_options = @filter_sport ? { sports: [ @filter_sport.id ] } : {} %>
+
+<div class="card hub-calendar-card"
+     data-controller="calendar"
+     data-calendar-url-value="<%= by_time_stats_path(time: "day", format: :json, sport_id: @filter_sport&.id) %>"
+     data-calendar-workout-url-value="<%= workout_path("__id__") %>"
+     data-calendar-day-url-value="<%= workouts_path(period: "custom", from: "__date__", to: "__date__", **day_url_options) %>"
+     data-calendar-week-start-value="<%= current_user.week_start %>"
+     data-calendar-unit-system-value="<%= current_user.unit_system %>"
+     data-calendar-locale-value="<%= I18n.locale %>"
+     data-calendar-label-value="<%= t("stats.calendar.label") %>"
+     data-calendar-workout-one-value="<%= t("stats.calendar.workouts.one") %>"
+     data-calendar-workout-other-value="<%= t("stats.calendar.workouts.other") %>"
+     data-calendar-metric-value="duration"
+     data-calendar-sports-value="<%= h(calendar_sports.to_json) %>"
+     data-calendar-total-value="<%= t("stats.calendar.total") %>"
+     data-calendar-open-one-value="<%= t("stats.calendar.open.one") %>"
+     data-calendar-open-other-value="<%= t("stats.calendar.open.other") %>"
+     data-calendar-rest-value="<%= t("stats.calendar.rest") %>">
+  <div class="card-header flex-wrap flex-md-nowrap gap-2">
+    <div class="d-flex align-items-center gap-1">
+      <h3 class="card-title"><%= t("stats.calendar.label") %></h3>
+      <% hint = t("stats.calendar.hint") %>
+      <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" aria-label="<%= hint %>"
+              data-controller="tooltip" data-bs-toggle="tooltip"
+              data-bs-trigger="hover focus click" data-bs-placement="bottom"
+              data-bs-title="<%= hint %>">
+        <i class="ti ti-info-circle" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="card-actions d-flex align-items-center flex-nowrap">
+      <%# Phones get a native select bound to the same action (DESIGN.md §10.15);
+          the controller keeps both controls in step. %>
+      <%= tag.select class: "form-select form-select-sm hub-calendar-metric-select d-md-none",
+            aria: { label: t("stats.calendar.metric_label") },
+            data: { action: "change->calendar#selectMetric", calendar_target: "metric" } do %>
+        <% %w[duration distance count].each do |metric| %>
+          <%= tag.option t("stats.calendar.metrics.#{metric}"), value: metric, selected: metric == "duration" %>
+        <% end %>
+      <% end %>
+      <nav class="nav nav-segmented nav-sm d-none d-md-flex" aria-label="<%= t("stats.calendar.metric_label") %>"
+           data-action="change->calendar#selectMetric">
+        <% %w[duration distance count].each do |metric| %>
+          <%= tag.input type: "radio", class: "nav-link-input", name: "calendar_metric",
+                id: "calendar-metric-#{metric}", value: metric, checked: metric == "duration",
+                data: { calendar_target: "metric" } %>
+          <%= tag.label t("stats.calendar.metrics.#{metric}"), for: "calendar-metric-#{metric}", class: "nav-link" %>
+        <% end %>
+      </nav>
+      <div class="btn-list flex-nowrap ms-2">
+        <button type="button" class="btn btn-sm btn-ghost-secondary hub-touch-target" data-action="calendar#previousWindow"
+                aria-label="<%= t("stats.calendar.navigation.previous") %>">
+          <i class="ti ti-chevron-left" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-sm btn-ghost-secondary hub-touch-target" data-action="calendar#currentWindow"
+                data-calendar-target="today" hidden><%= t("stats.calendar.navigation.today") %></button>
+        <button type="button" class="btn btn-sm btn-ghost-secondary hub-touch-target" data-action="calendar#nextWindow"
+                data-calendar-target="next" aria-label="<%= t("stats.calendar.navigation.next") %>">
+          <i class="ti ti-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="hub-calendar-grid" data-calendar-target="container" data-action="click->calendar#select keydown->calendar#keydown"></div>
+    <%# The selected day's callout (§15.3): floating over the card and
+        pointing at the day, its per-sport detail and the one button into its
+        workouts. Selecting never navigates by itself, and never adds a line. %>
+    <div class="hub-callout" data-calendar-target="detail" hidden>
+      <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary hub-callout__close hub-touch-target"
+              data-action="calendar#clear" aria-label="<%= t("stats.calendar.clear") %>">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+      <div class="hub-callout__body" data-calendar-target="detailBody" aria-live="polite"></div>
+      <a class="btn btn-sm btn-ghost-primary hub-callout__open hub-touch-target" href="#" data-calendar-target="open" hidden><span data-calendar-target="openLabel"></span><i class="ti ti-chevron-right ms-1" aria-hidden="true"></i></a>
+    </div>
+    <div data-calendar-target="loading" class="text-secondary">
+      <i class="ti ti-loader me-1"></i><%= t("stats.chart.loading") %>
+    </div>
+    <div data-calendar-target="empty" class="text-secondary" hidden><%= t("stats.chart.empty") %></div>
+    <div data-calendar-target="error" class="text-danger" hidden><%= t("stats.chart.error") %></div>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+      <div class="text-secondary small" data-calendar-target="range"></div>
+      <div class="hub-calendar-legend d-flex align-items-center gap-1 text-secondary small">
+        <span><%= t("stats.calendar.legend.less") %></span>
+        <% (1..4).each do |level| %>
+          <span class="hub-calendar-swatch stats-calendar-level-<%= level %>"></span>
+        <% end %>
+        <span><%= t("stats.calendar.legend.more") %></span>
+      </div>
+    </div>
+  </div>
+</div>

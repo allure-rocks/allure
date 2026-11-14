@@ -1,0 +1,42 @@
+<%# Unsaved changes (DESIGN.md §14.3). The dialog that asks before a
+    navigation, a reload or another form's save would drop entries the server
+    has not seen. Driven by the `unsaved-changes` controller below.
+
+    Rendered once per page, outside `.page` (whose `contain: layout` would
+    otherwise become the containing block of the fixed modal). The messages
+    travel as one JSON value so the controller can swap the dialog's verb with
+    its context. %>
+<% messages = {
+     leave: {
+       title: t("unsaved_changes.leave.title"),
+       body: t("unsaved_changes.leave.body"),
+       action: t("unsaved_changes.leave.action")
+     },
+     other: {
+       title: t("unsaved_changes.other.title"),
+       body: t("unsaved_changes.other.body"),
+       action: t("unsaved_changes.other.action")
+     }
+   } %>
+<div data-controller="unsaved-changes"
+     data-unsaved-changes-messages-value="<%= messages.to_json %>">
+  <div class="modal fade" id="unsaved-changes-modal" tabindex="-1" aria-hidden="true"
+       data-unsaved-changes-target="modal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" data-unsaved-changes-target="title"><%= t("unsaved_changes.leave.title") %></h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="<%= t("close") %>"></button>
+        </div>
+        <div class="modal-body" data-unsaved-changes-target="body"><%= t("unsaved_changes.leave.body") %></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-action="unsaved-changes#confirm"
+                  data-unsaved-changes-target="confirm"><%= t("unsaved_changes.leave.action") %></button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                  data-unsaved-changes-target="cancel"><%= t("confirm_modal.cancel") %></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<% if Allure::Federation::Config.enabled? %>
+  <p class="text-secondary">Esta instancia comparte con otras instancias de Allure.</p>
+<% else %>
+  <p class="text-secondary">
+    Esta instancia no comparte con otras instancias por ahora: todo lo que
+    publicas se queda aquí. El resto de esta página se aplica en cuanto su
+    operador active el uso compartido.
+  </p>
+<% end %>
+
+<p>
+  Las instancias de Allure pueden comunicarse entre sí. Un miembro de otra
+  instancia puede seguirte, y tú puedes seguir a esa cuenta, como si
+  estuviera en tu mismo servidor. Su dirección incluye su instancia:
+  <code>@marie@allure.example.org</code>.
+</p>
+
+<h2>Seguir y que te sigan</h2>
+<ul>
+  <li>Sigues a alguien desde <%= link_to "Personas", people_path %>, por su
+    dirección, o desde su perfil.</li>
+  <li>Toda solicitud de seguimiento espera aprobación, aquí y en otras
+    instancias. Tú decides quién te sigue.</li>
+  <li>Bloquear una cuenta corta todo contacto entre esa cuenta y tú, en ambos sentidos, y pone
+    fin a su seguimiento.</li>
+</ul>
+
+<h2>Que te encuentren por tu nombre</h2>
+<p>
+  La búsqueda por nombre es opcional y está desactivada por defecto. Mientras no
+  la actives en <%= link_to "tu perfil", settings_profile_path %>, solo pueden
+  encontrarte quienes escriban tu identificador completo. Cuando la actives, un
+  resultado solo muestra tu avatar, tu nombre y tu identificador: nunca tu
+  biografía, tus lugares ni tus actividades.
+</p>
+<p>
+  Las listas de seguidores y de seguidos no se publican en la red: quién te sigue
+  y a quién sigues sigue siendo privado. Puedes quitar a un seguidor desde
+  <%= link_to "Cuentas", people_path %>; dejará de ver tus publicaciones
+  reservadas a tus seguidores.
+</p>
+
+<h2>Qué reciben las otras instancias</h2>
+<p>
+  Cuando publicas, cada instancia donde alguien te sigue recibe una
+  <strong>copia</strong> de la publicación —exactamente la copia que produjo tu
+  perfil de publicación, con las zonas de privacidad ya aplicadas— y la
+  conserva para mostrársela allí a tus seguidores.
+</p>
+<ul>
+  <li>Las publicaciones <strong>públicas</strong> van a cada instancia donde
+    tienes un seguidor aceptado.</li>
+  <li>Las publicaciones para <strong>seguidores</strong> solo van a las
+    instancias que ha aprobado el operador de esta instancia, y solo a tus
+    seguidores aceptados allí. En otros lugares, tus seguidores simplemente no
+    las reciben.</li>
+  <li>Los comentarios y reacciones que se dejan desde otras instancias te
+    llegan aquí, y los comentarios en tus publicaciones públicas se transmiten
+    a las instancias que las recibieron.</li>
+  <li>Nada más sale: ni tus actividades, ni tus archivos originales, ni tus
+    zonas, ni tus ajustes privados, ni tus zonas de frecuencia cardíaca y tu carga.</li>
+</ul>
+
+<h2>Qué puede hacer una eliminación y qué no</h2>
+<p>
+  Cuando eliminas una publicación, dejas de seguir a alguien, bloqueas una
+  cuenta o eliminas tu cuenta, esta instancia avisa a las demás, y las que se
+  comportan correctamente eliminan su copia. Pero una copia que ya ha salido
+  no se puede recuperar por la fuerza.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  Así que la regla es sencilla: publica lo que no te importaría ver
+  conservado. El retraso de publicación y las zonas de privacidad están ahí
+  para ayudarte.
+</p>
+
+<h2>Tu dirección es permanente</h2>
+<p>
+  Las otras instancias te conocen por tu nombre de usuario en esta instancia.
+  Tu nombre de usuario no se puede cambiar y, una vez eliminada una cuenta, su
+  nombre de usuario nunca se asigna a nadie más.
+</p>

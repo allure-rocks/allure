@@ -1,0 +1,13 @@
+<%# Manual entry marker (PLAN_MANUAL_ENTRY.md §7, DESIGN.md §10.4): a workout
+    typed in by hand, shown to its owner only. `compact` keeps the icon alone,
+    named by its tooltip (workout cards). %>
+<% if local_assigns.fetch(:compact, false) %>
+  <span class="badge bg-secondary-lt allure-badge-icon" role="img" tabindex="0"
+        aria-label="<%= t("workouts.manual.badge") %>" <%= tag.attributes(data: tooltip_data(t("workouts.manual.badge"))) %>>
+    <i class="ti ti-pencil" aria-hidden="true"></i>
+  </span>
+<% else %>
+  <span class="badge bg-secondary-lt">
+    <i class="ti ti-pencil me-1" aria-hidden="true"></i><%= t("workouts.manual.badge") %>
+  </span>
+<% end %>

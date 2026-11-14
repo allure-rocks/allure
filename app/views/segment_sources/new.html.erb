@@ -1,0 +1,131 @@
+<%# Course creation, step one (DESIGN.md §20.6): choose the source activity.
+    The most recent one leads as a shortcut; the others follow, newest first,
+    filtered by a recorded place. Choosing one opens the selection step. %>
+<% back_path = source_kind == "route" ? segments_path(kind: "route") : segments_path %>
+<% content_for :title, t("segment_sources.new.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("segment_sources.new.pretitle.#{source_kind}") %></div>
+      <h1 class="page-title"><%= t("segment_sources.new.title") %></h1>
+    </div>
+    <div class="col-auto">
+      <%= link_to t("segment_sources.new.cancel"), back_path, class: "btn btn-ghost-secondary" %>
+    </div>
+  </div>
+<% end %>
+
+<% if @any_source %>
+  <p class="text-secondary"><%= t("segment_sources.new.hint.#{source_kind}") %></p>
+
+  <% if @latest && @pagy.page == 1 %>
+    <% latest_title = workout_display_title(@latest) %>
+    <% latest_places = workout_place_label(@latest) %>
+    <section class="card mb-3" aria-labelledby="segment-source-latest">
+      <div class="card-body">
+        <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-3">
+          <%= render "segment_sources/thumbnail", workout: @latest, size: "lg" %>
+          <div class="flex-fill min-w-0">
+            <div class="text-secondary small text-uppercase fw-medium" id="segment-source-latest"><%= t("segment_sources.new.latest") %></div>
+            <div class="d-flex align-items-center gap-2 mt-1 min-w-0">
+              <%= sport_tile_tag(@latest.sport, size: :xs) %>
+              <span class="fw-bold text-truncate"><%= latest_title %></span>
+            </div>
+            <div class="text-secondary small allure-table-nums mt-1">
+              <% facts = [ sport_display_name(@latest.sport), smart_started_at(@latest.started_at), format_distance(@latest.distance) ] %>
+              <% facts << format_elevation(@latest.ascent) if @latest.ascent.present? %>
+              <%= safe_join(facts.map { |fact| tag.span(fact, class: "text-nowrap") }, " · ") %>
+            </div>
+            <% if latest_places.present? %>
+              <div class="text-secondary small text-truncate">
+                <i class="ti ti-map-pin me-1" aria-hidden="true"></i><%= latest_places %>
+              </div>
+            <% end %>
+          </div>
+          <div class="flex-shrink-0">
+            <%= link_to source_creation_path(@latest), class: "btn btn-primary w-100",
+                  aria: { label: t("segment_sources.new.choose", title: latest_title) } do %>
+              <%= t("segment_sources.new.use_latest") %><i class="ti ti-arrow-right ms-1" aria-hidden="true"></i>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </section>
+  <% end %>
+
+  <%= form_with url: new_segment_path, method: :get, class: "mb-3", role: "search" do %>
+    <%= hidden_field_tag :kind, source_kind if source_kind != "segment" %>
+    <%= label_tag :place, t("segment_sources.new.search_label"), class: "form-label" %>
+    <div class="d-flex gap-2">
+      <div class="allure-place-field flex-fill"
+           data-controller="place-autocomplete"
+           data-place-autocomplete-url-value="<%= workout_place_suggestions_path %>"
+           data-place-autocomplete-no-results-value="<%= t('workouts.index.filters.place_no_results') %>">
+        <div class="input-icon">
+          <span class="input-icon-addon"><i class="ti ti-map-pin" aria-hidden="true"></i></span>
+          <%= search_field_tag :place, source_place, class: "form-control",
+                placeholder: t("workouts.index.filters.place_placeholder"),
+                autocomplete: "off", role: "combobox",
+                aria: { autocomplete: "list", expanded: "false", controls: "segment-source-place-suggestions" },
+                data: { place_autocomplete_target: "input",
+                        action: "input->place-autocomplete#input keydown->place-autocomplete#keydown " \
+                                "focus->place-autocomplete#focus blur->place-autocomplete#blur" } %>
+        </div>
+        <ul class="dropdown-menu allure-place-suggestions" id="segment-source-place-suggestions" role="listbox"
+            data-place-autocomplete-target="list" hidden></ul>
+      </div>
+      <%= submit_tag t("segment_sources.new.search_submit"), class: "btn btn-outline-primary", name: nil %>
+    </div>
+  <% end %>
+
+  <% if @workouts.any? %>
+    <h2 class="h4 mb-2">
+      <%= source_place.present? ? t("segment_sources.new.results", place: source_place) : t("segment_sources.new.others") %>
+    </h2>
+    <div data-controller="infinite-scroll"
+         data-infinite-scroll-url-value="<%= @pagy.next ? pagy_url_for(@pagy, @pagy.next) : "" %>">
+      <div class="card">
+        <ul class="list-group list-group-flush allure-source-list" data-infinite-scroll-target="items">
+          <%= render partial: "segment_sources/workout_row", collection: @workouts, as: :workout %>
+        </ul>
+      </div>
+      <div class="text-center py-3" data-infinite-scroll-target="sentinel" aria-hidden="true">
+        <%= render "workouts/table_skeleton" if @pagy.next %>
+      </div>
+    </div>
+
+    <noscript>
+      <% if @pagy.last > 1 %>
+        <div class="d-flex justify-content-center mt-4">
+          <%== pagy_bootstrap_nav(@pagy) %>
+        </div>
+      <% end %>
+    </noscript>
+  <% elsif source_place.present? %>
+    <div class="card">
+      <div class="card-body">
+        <div class="empty">
+          <div class="empty-icon"><i class="ti ti-filter fs-1 text-secondary"></i></div>
+          <p class="empty-title"><%= t("segment_sources.new.filtered_empty", place: source_place) %></p>
+          <div class="empty-action">
+            <%= link_to t("segments.index.filtered_empty.action"),
+                  new_segment_path(kind: (source_kind if source_kind != "segment")),
+                  class: "btn btn-outline-primary" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="card">
+    <div class="card-body">
+      <div class="empty">
+        <div class="empty-icon"><i class="ti ti-map-off fs-1 text-primary"></i></div>
+        <p class="empty-title"><%= t("segment_sources.new.empty.title") %></p>
+        <p class="empty-subtitle text-secondary"><%= t("segment_sources.new.empty.subtitle") %></p>
+        <div class="empty-action"><%= link_to t("segment_sources.new.empty.action"), new_workout_import_path, class: "btn btn-primary" %></div>
+      </div>
+    </div>
+  </div>
+<% end %>

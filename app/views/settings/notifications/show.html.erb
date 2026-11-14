@@ -1,0 +1,146 @@
+<% content_for :title, t("settings.notifications.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.hub.notifications.title") } do %>
+
+  <%= form_with model: @user, url: settings_notifications_path, method: :patch do |form| %>
+    <%= render "shared/form_errors", form: form %>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.notifications.inbox_title") %></h2>
+      </div>
+      <div class="card-body">
+        <label class="form-check form-switch">
+          <%= form.check_box :notify_follow_requests, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.follow_requests_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.follow_requests_hint") %></small>
+
+        <label class="form-check form-switch mt-2">
+          <%= form.check_box :notify_follow_accepted, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.follow_accepted_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.follow_accepted_hint") %></small>
+
+        <label class="form-check form-switch mt-2">
+          <%= form.check_box :notify_publication_activated, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.publication_activated_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.publication_activated_hint") %></small>
+
+        <label class="form-check form-switch mt-2">
+          <%= form.check_box :notify_auto_published, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.auto_published_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.auto_published_hint") %></small>
+
+        <label class="form-check form-switch mt-2">
+          <%= form.check_box :notify_auto_publication_failed, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.auto_publication_failed_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.auto_publication_failed_hint") %></small>
+
+        <label class="form-check form-switch mt-2">
+          <%= form.check_box :notify_reactions, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.reactions_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.reactions_hint") %></small>
+
+        <label class="form-check form-switch mt-2">
+          <%= form.check_box :notify_comments, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.comments_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.comments_hint") %></small>
+
+        <label class="form-check form-switch mt-2">
+          <%= form.check_box :notify_participation_requests, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.participation_requests_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.participation_requests_hint") %></small>
+
+        <label class="form-check form-switch mt-2">
+          <%= form.check_box :notify_participation_confirmed, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.participation_confirmed_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.participation_confirmed_hint") %></small>
+
+        <%# Not a notice switch: it decides whether detection compares this
+            account's recordings at all (PLAN_TOGETHER.md §8). %>
+        <label class="form-check form-switch mt-2">
+          <%= form.check_box :together_detection_enabled, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.notifications.together_detection_label") %></span>
+        </label>
+        <small class="form-text"><%= t("settings.notifications.together_detection_hint") %></small>
+
+        <% if Allure::RemoteImports::Config.any_enabled? || current_user.import_connections.exists? %>
+          <label class="form-check form-switch mt-2">
+            <%= form.check_box :notify_import_connections, class: "form-check-input", role: "switch" %>
+            <span class="form-check-label"><%= t("settings.notifications.import_connections_label") %></span>
+          </label>
+          <small class="form-text"><%= t("settings.notifications.import_connections_hint") %></small>
+        <% end %>
+
+        <% if current_user.webhook_endpoints.exists? %>
+          <label class="form-check form-switch mt-2">
+            <%= form.check_box :notify_webhooks, class: "form-check-input", role: "switch" %>
+            <span class="form-check-label"><%= t("settings.notifications.webhooks_label") %></span>
+          </label>
+          <small class="form-text"><%= t("settings.notifications.webhooks_hint") %></small>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <%= form.submit t("settings.notifications.save"), class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <%# Push on the iOS companion (PLAN_PUSH.md §6): only for an app that
+      registers the `push` bridge component, and only once the instance is
+      configured. Both switches act at once through the bridge, outside the
+      preferences form. %>
+  <% if Allure::Push::Config.enabled? && hotwire_native_bridge?(:push) %>
+    <% push_subscription = Current.session&.push_subscription %>
+    <%= tag.div class: "card mt-3", id: "push-settings",
+                data: { controller: "bridge--push",
+                        "bridge--push-url-value": settings_push_subscription_path,
+                        "bridge--push-vapid-key-value": Allure::Push::Config.public_key_param,
+                        "bridge--push-server-digest-value": push_subscription&.endpoint_digest.to_s } do %>
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.notifications.push.title") %></h2>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info" data-bridge--push-target="unavailable" hidden>
+          <%= t("settings.notifications.push.unavailable") %>
+        </div>
+        <div class="alert alert-warning" data-bridge--push-target="denied" hidden>
+          <%= t("settings.notifications.push.denied") %>
+        </div>
+        <div class="alert alert-danger" role="alert" data-bridge--push-target="failed" hidden>
+          <%= t("settings.notifications.push.failed") %>
+        </div>
+
+        <label class="form-check form-switch">
+          <input type="checkbox" class="form-check-input" role="switch" disabled
+                 aria-describedby="push-receive-hint"
+                 data-bridge--push-target="receive" data-action="change->bridge--push#toggle">
+          <span class="form-check-label"><%= t("settings.notifications.push.receive_label") %></span>
+        </label>
+        <small class="form-text" id="push-receive-hint"><%= t("settings.notifications.push.receive_hint") %></small>
+
+        <label class="form-check form-switch mt-2">
+          <%= tag.input type: "checkbox", class: "form-check-input", role: "switch", disabled: true,
+                        checked: push_subscription&.hide_content?,
+                        aria: { describedby: "push-hide-hint" },
+                        data: { "bridge--push-target": "hide", action: "change->bridge--push#hide" } %>
+          <span class="form-check-label"><%= t("settings.notifications.push.hide_content_label") %></span>
+        </label>
+        <small class="form-text" id="push-hide-hint"><%= t("settings.notifications.push.hide_content_hint") %></small>
+
+        <p class="text-secondary small mt-3 mb-0">
+          <i class="ti ti-lock me-1" aria-hidden="true"></i><%= t("settings.notifications.push.privacy") %>
+        </p>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

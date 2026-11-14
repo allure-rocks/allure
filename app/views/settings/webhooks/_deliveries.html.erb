@@ -1,0 +1,57 @@
+<%# The delivery table, also the live frame's fragment while one is pending. %>
+<div class="card-header">
+  <h3 class="card-title"><%= t("settings.webhooks.show.deliveries") %></h3>
+</div>
+<% if deliveries.empty? %>
+  <div class="card-body">
+    <div class="empty py-4">
+      <p class="empty-title"><%= t("settings.webhooks.show.no_deliveries") %></p>
+      <p class="empty-subtitle text-secondary"><%= t("settings.webhooks.show.no_deliveries_hint") %></p>
+    </div>
+  </div>
+<% else %>
+  <div class="table-responsive">
+    <table class="table table-sm table-vcenter card-table">
+      <caption class="visually-hidden"><%= t("settings.webhooks.show.deliveries") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("settings.webhooks.show.table.event") %></th>
+          <th scope="col"><%= t("settings.webhooks.show.table.time") %></th>
+          <th scope="col"><%= t("settings.webhooks.show.table.status") %></th>
+          <th scope="col" class="text-end"><%= t("settings.webhooks.show.table.code") %></th>
+          <th scope="col" class="text-end"><%= t("settings.webhooks.show.table.attempts") %></th>
+          <th scope="col"><span class="visually-hidden"><%= t("settings.webhooks.table.actions") %></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% deliveries.each do |delivery| %>
+          <tr>
+            <td><code><%= delivery.webhook_event.event_type %></code></td>
+            <td><time datetime="<%= delivery.created_at.iso8601 %>"><%= l(delivery.created_at.in_time_zone(current_user.time_zone), format: :short) %></time></td>
+            <td>
+              <%= render "settings/webhooks/delivery_status", delivery: %>
+              <% if delivery.last_error %>
+                <div class="small text-secondary"><%= t("settings.webhooks.errors.#{delivery.last_error}", default: delivery.last_error) %></div>
+              <% end %>
+            </td>
+            <td class="text-end font-monospace"><%= delivery.last_status_code || "—" %></td>
+            <td class="text-end"><%= delivery.attempts %></td>
+            <td class="text-end">
+              <% unless delivery.pending? || !endpoint.deliverable? %>
+                <%= button_to t("settings.webhooks.redeliver.button"), settings_webhook_delivery_redelivery_path(delivery),
+                              class: "btn btn-sm btn-outline-secondary" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if page > 1 || next_page %>
+    <div class="card-footer d-flex justify-content-between">
+      <% if page > 1 %><%= link_to t("settings.webhooks.show.newer"), settings_webhook_path(endpoint, page: page - 1), class: "btn btn-link" %><% else %><span></span><% end %>
+      <% if next_page %><%= link_to t("settings.webhooks.show.older"), settings_webhook_path(endpoint, page: page + 1), class: "btn btn-link" %><% end %>
+    </div>
+  <% end %>
+<% end %>
+<% unless pending %><span data-live-frame-done hidden></span><% end %>

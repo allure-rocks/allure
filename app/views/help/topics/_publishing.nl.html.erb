@@ -1,0 +1,121 @@
+<p>
+  Een activiteit die je importeert is <strong>niet gepubliceerd</strong>: de
+  details en de route blijven privé totdat je haar publiceert. Als je het delen
+  van statistieken of records op je profiel apart inschakelt, kunnen de cijfers
+  wel aan die onderdelen bijdragen. Geen enkele instelling publiceert voor je,
+  tenzij je die zelf inschakelt.
+</p>
+
+<h2>Een publicatie is een kopie</h2>
+<p>
+  Publiceren maakt een <strong>publicatie</strong>: een kopie van de activiteit,
+  gemaakt op dat moment, met alleen wat je hebt gekozen te delen. Je volgers en
+  de feed lezen die kopie, nooit de activiteit zelf. Omdat het een kopie is:
+</p>
+<ul>
+  <li>verandert het achteraf bewerken van de activiteit — de titel, beschrijving
+    of sport — de publicatie niet;</li>
+  <li>om een bijgewerkte versie te delen, <strong>vervang je de
+    publicatie</strong>: de oude wordt verwijderd en er wordt een nieuwe
+    gemaakt;</li>
+  <li>maken je originele bestand, je privénotities en de punten die je
+    privacyzones verbergen er nooit deel van uit.</li>
+</ul>
+
+<h2>Publicatieprofielen</h2>
+<p>
+  Een <strong>publicatieprofiel</strong> is het recept voor die kopie: welke
+  meetwaarden ze bevat (afstand, tijd, hoogtemeters, snelheid, hartslag…), of ze
+  de route, de kaartafbeelding, het GPX-bestand, het apparaat, het weer en je
+  foto's toont, of opmerkingen open staan, en of de start en de finish verborgen
+  worden. Voor je publiceert, toont het formulier precies wat wel en wat niet
+  gedeeld wordt.
+</p>
+<p>
+  Je krijgt twee ingebouwde profielen, één per publiek, en je kunt je eigen
+  profielen maken in <%= link_to "Publicatieprofielen", publishing_profiles_path %>.
+  Een profiel wijzigen geldt alleen voor toekomstige publicaties: bestaande
+  publicaties houden de instellingen waarmee ze gemaakt zijn.
+</p>
+<p>
+  Hartslag is gezondheidsinformatie: nieuwe profielen delen die pas als je haar
+  aanvinkt.
+</p>
+
+<h2>Publiek</h2>
+<ul>
+  <li><strong>Openbaar</strong> — iedereen met een account op deze instantie en,
+    als deze instantie met andere deelt, de accounts die je daar volgen.</li>
+  <li><strong>Volgers</strong> — alleen de accounts die je volgen, nadat je ze
+    hebt geaccepteerd. Die op deze instantie zien ze altijd; die op andere
+    instanties ontvangen ze alleen als de beheerder van deze instantie het heeft
+    ingeschakeld.</li>
+</ul>
+<p>
+  Een activiteit kan één publicatie per publiek hebben: bijvoorbeeld een
+  uitgebreide voor je volgers en een lichtere openbare. Elke lezer ziet de
+  versie die voor hem bedoeld is: je volgers lezen die voor volgers.
+</p>
+
+<h2>Wachten voor ze verschijnt</h2>
+<p>
+  Een profiel kan publicaties een tijdje tegenhouden — een dag, drie dagen, een
+  week, twee weken of een maand — zodat bijvoorbeeld een hardlooprondje vanaf huis niet
+  zichtbaar is terwijl je nog weg bent. Tijdens het wachten is de publicatie
+  <strong>gepland</strong>: niemand ziet haar, en je kunt haar meteen
+  publiceren, de datum wijzigen of haar annuleren.
+</p>
+
+<h2>Automatisch publiceren</h2>
+<p>
+  Als je een profiel automatisch maakt, wordt elke nieuwe activiteit ermee
+  gepubliceerd zodra de analyse klaar is. Dat geldt nooit voor activiteiten van
+  meer dan zeven dagen oud, voor grote imports (een archief, een reeks bestanden)
+  en, als je dat kiest, ook niet voor woon-werkritten of de sporten die je
+  uitsluit. Je kunt een wachtende automatische publicatie weigeren vanaf de
+  pagina van de activiteit.
+</p>
+
+<h2>Een publicatie verwijderen</h2>
+<p>
+  Een publicatie verwijderen haalt haar van deze instantie en vraagt de andere
+  servers die haar hebben om haar ook te verwijderen.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  De activiteit verwijderen verwijdert haar publicaties op dezelfde manier.
+</p>
+
+<h2>Statistieken en records op je profiel</h2>
+<p>
+  In <%= link_to t("settings.profile.title"), settings_profile_path %> kun je
+  apart kiezen wie je algemene statistieken per sport en je persoonlijke records
+  ziet: je geaccepteerde volgers of alle leden van deze instantie. Standaard wordt
+  geen onderdeel gedeeld. Openstaande volgverzoeken geven geen toegang tot
+  cijfers alleen voor volgers; ontvolgen trekt die toegang in. Anonieme bezoekers
+  hebben nooit toegang.
+</p>
+<p>
+  Deze onderdelen omvatten je volledige activiteitengeschiedenis over alle jaren,
+  ook niet-gepubliceerde activiteiten. Ze staan los van publicatieprofielen en de
+  filters bij publicaties; ze inschakelen publiceert geen enkele activiteit.
+</p>
+<p>
+  De assen van het radardiagram in de statistieken zijn de sporten. Je kiest de
+  maatstaf — activiteiten, afstand, beweegtijd of hoogtemeters. Bij minder dan
+  drie toepasselijke sporten vervangen balken het radardiagram.
+</p>
+<p><%= t("profile.statistics.log_scale") %></p>
+<p>
+  <%= t("profile.statistics.reading_hint") %>
+  De tooltip toont de volledige sportnaam en de werkelijke waarde in jouw
+  eenheden, nooit de logaritme. Aan het uiteinde van elke as kun je ook nulwaarden
+  aflezen. Een korte tik op je telefoon toont hetzelfde zonder het vegen tussen
+  maatstaven of het scrollen van de pagina te blokkeren. De balken bieden dezelfde
+  weergave en de tabellen bevatten alle waarden.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("settings.profile.sharing.privacy") %>
+</div>

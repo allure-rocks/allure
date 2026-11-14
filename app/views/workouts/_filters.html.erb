@@ -1,0 +1,157 @@
+<%# Workout list toolbar (DESIGN.md §10.6, §13.2, §20.4): one GET form carries
+    every control, so the whole state stays in the URL. The sport select-group
+    leads (one scrolling row on phones, wrapped from md up), then one row holds
+    the period, the sort and the drawer toggle. The drawer owns the rarely used
+    filters — custom dates, publication, commute, place, search — and never
+    opens by itself: an off-canvas panel from the right, a bottom sheet on
+    phones, so it never pushes the list down. Its chips stay visible below. %>
+<% panel_count = workout_panel_filter_count %>
+<div class="allure-filter-bar mb-3" data-controller="filter-bar">
+  <%= form_with url: workouts_path, method: :get, data: { filter_bar_target: "form" } do %>
+    <%= workout_view_field %>
+    <% if practiced_sports.any? %>
+      <fieldset class="allure-sport-filter mb-2">
+        <legend class="visually-hidden"><%= t("workouts.index.filters.sport") %></legend>
+        <div class="form-selectgroup allure-sport-filter__options" data-controller="selectgroup-scroll">
+          <% practiced_sports.each do |entry| %>
+            <% label = "#{sport_display_name(entry[:sport])} — #{t('me.sports.workouts', count: entry[:count])}" %>
+            <label class="form-selectgroup-item">
+              <%= check_box_tag "sports[]", entry[:sport].id,
+                    workout_active_sport_ids.include?(entry[:sport].id.to_s),
+                    class: "form-selectgroup-input",
+                    id: "sport_filter_#{entry[:sport].id}",
+                    aria: { label: },
+                    data: { action: "change->filter-bar#submit" } %>
+              <span class="form-selectgroup-label">
+                <span class="allure-sport-filter__icon" aria-hidden="true"><%= sport_icon_tag(entry[:sport]) %></span>
+                <span><%= sport_display_name(entry[:sport]) %></span>
+                <span class="allure-sport-filter__count"><%= entry[:count] %></span>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+    <% end %>
+
+    <div class="allure-filter-bar__controls">
+      <div class="input-icon allure-filter-bar__select">
+        <span class="input-icon-addon"><i class="ti ti-calendar" aria-hidden="true"></i></span>
+        <%= select_tag :period,
+              options_for_select(WorkoutsController::FILTER_PERIODS.map { |key| [ t("workouts.index.filters.periods.#{key}"), key ] }, filter_period),
+              class: "form-select form-select-sm",
+              aria: { label: t("workouts.index.filters.period") },
+              data: { action: "change->filter-bar#period", filter_bar_target: "period" } %>
+      </div>
+      <div class="input-icon allure-filter-bar__select allure-filter-bar__select--compact">
+        <span class="input-icon-addon"><i class="ti ti-arrows-sort" aria-hidden="true"></i></span>
+        <%= select_tag :sort,
+              options_for_select(WorkoutsController::FILTER_SORT_KEYS.map { |key| [ t("workouts.index.filters.sorts.#{key}"), key ] }, filter_sort_key),
+              class: "form-select form-select-sm",
+              aria: { label: t("workouts.index.filters.sort") },
+              data: { action: "change->filter-bar#submit" } %>
+      </div>
+      <button class="filter-toggle btn btn-sm btn-outline-secondary ms-auto" type="button"
+              data-bs-toggle="offcanvas" data-bs-target="#workout-filters" aria-controls="workout-filters">
+        <i class="ti ti-adjustments-horizontal" aria-hidden="true"></i>
+        <span class="allure-filter-bar__toggle-label"><%= t("workouts.index.filters.toggle") %></span>
+        <% if panel_count.positive? %>
+          <span class="badge bg-primary text-primary-fg ms-1"><%= panel_count %></span>
+        <% end %>
+      </button>
+    </div>
+
+    <% chips = workout_filter_chips %>
+    <% if chips.any? || workout_filters_active? %>
+      <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
+        <% chips.each do |chip| %>
+          <span class="badge bg-primary-lt">
+            <%= chip[:label] %>
+            <%= link_to chip[:url],
+                  class: "ms-1 text-reset", aria: { label: t("workouts.index.filters.remove_filter", filter: chip[:label]) } do %>
+              <i class="ti ti-x" aria-hidden="true"></i>
+            <% end %>
+          </span>
+        <% end %>
+        <%= link_to t("workouts.index.filters.clear"), workout_clear_filters_path,
+              class: "btn btn-sm btn-ghost-secondary" %>
+      </div>
+    <% end %>
+
+    <div class="offcanvas offcanvas-end allure-filter-sheet" id="workout-filters" tabindex="-1"
+         aria-labelledby="workout-filters-title" data-filter-bar-target="sheet">
+      <div class="offcanvas-header">
+        <h2 class="offcanvas-title h3" id="workout-filters-title"><%= t("workouts.index.filters.toggle") %></h2>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="<%= t("close") %>"></button>
+      </div>
+      <div class="offcanvas-body">
+        <fieldset class="mb-3" data-filter-bar-target="range" <%= "hidden" unless filter_period == "custom" %>>
+          <legend class="form-label"><%= t("workouts.index.filters.dates") %></legend>
+          <div class="row g-2">
+            <div class="col-6">
+              <%= label_tag :from, t("workouts.index.filters.from"), class: "form-label small text-secondary" %>
+              <%= date_field_tag :from, params[:from], class: "form-control",
+                    disabled: filter_period != "custom", data: { filter_bar_target: "date" } %>
+            </div>
+            <div class="col-6">
+              <%= label_tag :to, t("workouts.index.filters.to"), class: "form-label small text-secondary" %>
+              <%= date_field_tag :to, params[:to], class: "form-control",
+                    disabled: filter_period != "custom", data: { filter_bar_target: "date" } %>
+            </div>
+          </div>
+        </fieldset>
+        <div class="mb-3">
+          <%= label_tag :publication, t("workouts.index.filters.publication"), class: "form-label" %>
+          <%= select_tag :publication,
+                options_for_select(WorkoutsController::FILTER_PUBLICATIONS.map { |key| [ t("workouts.index.filters.publications.#{key}"), key ] }, filter_publication),
+                class: "form-select" %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag :commute, t("workouts.index.filters.commute"), class: "form-label" %>
+          <%= select_tag :commute,
+                options_for_select(WorkoutsController::FILTER_COMMUTES.map { |key| [ t("workouts.index.filters.commutes.#{key}"), key ] }, filter_commute),
+                class: "form-select" %>
+        </div>
+        <div class="mb-3">
+          <%= label_tag :place, t("workouts.index.filters.place"), class: "form-label" %>
+          <div class="allure-place-field"
+               data-controller="place-autocomplete"
+               data-place-autocomplete-url-value="<%= workout_place_suggestions_path %>"
+               data-place-autocomplete-no-results-value="<%= t('workouts.index.filters.place_no_results') %>">
+            <%= text_field_tag :place, filter_place, class: "form-control",
+                  placeholder: t("workouts.index.filters.place_placeholder"),
+                  autocomplete: "off", role: "combobox",
+                  aria: { autocomplete: "list", expanded: "false", controls: "place-suggestions" },
+                  data: { place_autocomplete_target: "input",
+                          action: "input->place-autocomplete#input keydown->place-autocomplete#keydown " \
+                                  "focus->place-autocomplete#focus blur->place-autocomplete#blur" } %>
+            <ul class="dropdown-menu allure-place-suggestions" id="place-suggestions" role="listbox"
+                data-place-autocomplete-target="list" hidden></ul>
+          </div>
+          <small class="form-hint"><%= t("workouts.index.filters.place_hint") %></small>
+        </div>
+        <div class="mb-3">
+          <%= label_tag :q, t("workouts.index.filters.search_label"), class: "form-label" %>
+          <%= search_field_tag :q, filter_query, class: "form-control",
+                placeholder: t("workouts.index.filters.search_placeholder") %>
+        </div>
+      </div>
+      <div class="allure-filter-sheet__footer">
+        <% if panel_count.positive? %>
+          <%= link_to t("workouts.index.filters.reset"),
+                workouts_path(workout_filter_params(period: (filter_period == "custom" ? nil : params[:period]),
+                                                    from: nil, to: nil, publication: nil, commute: nil, place: nil, q: nil)),
+                class: "btn btn-ghost-secondary" %>
+        <% end %>
+        <%= submit_tag t("workouts.index.filters.submit"), class: "btn btn-primary ms-auto", name: nil %>
+      </div>
+    </div>
+  <% end %>
+
+  <noscript>
+    <style>
+      .allure-filter-sheet.offcanvas { position: static; visibility: visible; transform: none; width: auto; height: auto; max-height: none; border: 1px solid var(--border-color); border-radius: var(--border-radius); margin-top: 0.5rem; }
+      .allure-filter-sheet [data-filter-bar-target="range"][hidden] { display: block; }
+      .filter-toggle, .allure-filter-sheet .btn-close { display: none; }
+    </style>
+  </noscript>
+</div>

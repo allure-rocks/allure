@@ -1,0 +1,17 @@
+<%# The Scalar reference document (PLAN_API.md §13.2), embedded by
+    /developers/api. Deliberately without the application stylesheet: Tabler's
+    utility classes collide with Scalar's. %>
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" data-theme="<%= current_theme %>">
+  <head>
+    <title><%= content_for(:title) %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag "api_reference" %>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>

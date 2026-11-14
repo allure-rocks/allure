@@ -1,0 +1,161 @@
+version: '8.3.0'
+
+# NOTE: deliberately no top-level `environment: RAILS_ENV:`.
+# dip exports top-level environment to the commands it spawns during
+# `dip provision`, where it then overrides any per-command `environment:` —
+# silently running the test-database setup against development. Each command
+# that needs a non-default environment declares it itself.
+
+compose:
+  files:
+    - docker-compose.yml
+    # Always merged, never started by accident: every service in it sits behind
+    # the `federation` profile.
+    - docker-compose.fed.yml
+  project_name: allure
+
+interaction:
+  sh:
+    description: Open a shell in the app container
+    service: rails
+    command: /bin/bash
+    compose:
+      run_options: [no-deps]
+
+  bundle:
+    description: Run Bundler
+    service: rails
+    command: bundle
+
+  npm:
+    description: Run npm
+    service: rails
+    command: npm
+    compose:
+      run_options: [no-deps]
+
+  rails:
+    description: Run Rails commands
+    service: rails
+    command: bin/rails
+    subcommands:
+      s:
+        description: Start the Rails server
+        service: rails
+        compose:
+          run_options: [service-ports, use-aliases]
+      c:
+        description: Start the Rails console
+        service: rails
+        command: bin/rails console
+
+  vite:
+    description: Run Vite
+    service: vite
+    command: bin/vite
+
+  rspec:
+    description: Run the test suite
+    service: rails
+    environment:
+      RAILS_ENV: test
+    command: bundle exec rspec
+
+  # `maintain_test_schema!` can load a schema but cannot conjure a database that
+  # has never existed, so a freshly provisioned checkout needs this once.
+  prepare_test_db:
+    description: Create and load the test database
+    service: rails
+    environment:
+      RAILS_ENV: test
+    command: bin/rails db:prepare
+
+  rubocop:
+    description: Run RuboCop
+    service: rails
+    command: bundle exec rubocop
+
+  brakeman:
+    description: Run Brakeman
+    service: rails
+    command: bundle exec brakeman
+
+  # Operator documentation (docs/site, VitePress): its own package, never in
+  # the production image.
+  docs_install:
+    description: Install the documentation site's dependencies
+    service: rails
+    command: npm ci --include=dev --prefix docs/site
+    compose:
+      run_options: [no-deps]
+
+  docs:
+    description: Serve the operator documentation on http://localhost:5173
+    service: rails
+    command: npm --prefix docs/site run dev
+    compose:
+      run_options: [no-deps, publish=5173:5173]
+
+  docs_build:
+    description: Build the operator documentation (fails on dead links)
+    service: rails
+    command: npm --prefix docs/site run build
+    compose:
+      run_options: [no-deps]
+
+  psql:
+    description: Open a psql session on the development database
+    service: db
+    command: psql -h db -U allure -d allure_development
+
+  psql_test:
+    description: Open a psql session on the test database
+    service: db
+    command: psql -h db -U allure -d allure_test
+
+  # Multi-node ActivityPub ring — see PLAN.md §6 (Tier 2).
+  # Plain HTTP over a Docker network, no domain and no certificates required.
+  # Services live in docker-compose.fed.yml behind the `federation` profile, so
+  # they stay dormant during ordinary development.
+  #
+  #   dip compose --profile federation up -d      start the ring
+  #   dip fed_prepare_a && dip fed_prepare_b      create and seed both databases
+  #   dip fed_test                                reset and verify the complete ring
+  #   dip compose stop allure-a allure-b worker-a worker-b db-a db-b
+  #
+  # Stop with `stop`, not `down`: `docker compose down` is project-wide and
+  # would remove the ordinary development stack too.
+  #
+  # Requires `127.0.0.1 allure-a.test allure-b.test` in the host /etc/hosts.
+  fed_a:
+    description: Rails console on federation ring instance A (allure-a.test:3002)
+    command: dip compose --profile federation exec allure-a bin/rails console
+
+  fed_b:
+    description: Rails console on federation ring instance B (allure-b.test:3003)
+    command: dip compose --profile federation exec allure-b bin/rails console
+
+  fed_prepare_a:
+    description: Create and seed the federation ring database for instance A
+    command: dip compose --profile federation run --rm -T allure-a bin/rails db:prepare db:seed
+
+  fed_prepare_b:
+    description: Create and seed the federation ring database for instance B
+    command: dip compose --profile federation run --rm -T allure-b bin/rails db:prepare db:seed
+
+  fed_test:
+    description: Reset and verify the Tier-2 federation ring
+    command: bin/federation-ring-test
+
+  fed_restricted_test:
+    description: Reset and verify the gated restricted-federation ring scenario
+    command: FEDERATION_RESTRICTED_ENABLED=true bin/federation-ring-test restricted
+
+provision:
+  - dip compose down --volumes --remove-orphans
+  - dip compose build
+  - dip bundle install
+  - dip npm install
+  - dip compose up -d db
+  - dip rails db:prepare
+  - dip prepare_test_db

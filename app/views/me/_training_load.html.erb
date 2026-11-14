@@ -1,0 +1,100 @@
+<%# Training load (PLAN_HEART_RATE.md §4, DESIGN.md §15.1): fitness, fatigue
+    and form from the heart rate of every sport, over the last 90 days. The
+    chart is drawn by training-load-chart; the weekly table is its text
+    equivalent. Owner-only. %>
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex align-items-center gap-1">
+      <h3 class="card-title"><%= t("me.training_load.title") %></h3>
+      <% hint = t("me.training_load.hint") %>
+      <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" aria-label="<%= hint %>"
+              data-controller="tooltip" data-bs-toggle="tooltip"
+              data-bs-trigger="hover focus click" data-bs-placement="bottom"
+              data-bs-title="<%= hint %>">
+        <i class="ti ti-info-circle" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="card-actions">
+      <%= link_to heart_rate_stats_path, class: "btn btn-sm btn-ghost-primary" do %><%= t("me.training_load.zones_action") %><i class="ti ti-chevron-right ms-1" aria-hidden="true"></i><% end %>
+    </div>
+  </div>
+  <div class="card-body">
+    <% if training_load[:profile] %>
+      <% today = training_load[:today] %>
+      <div class="row g-3 text-center mb-3">
+        <div class="col-4">
+          <div class="h2 mb-0"><%= training_load_figure(today.fitness) %></div>
+          <div class="text-secondary small"><%= t("me.training_load.fitness") %></div>
+        </div>
+        <div class="col-4">
+          <div class="h2 mb-0"><%= training_load_figure(today.fatigue) %></div>
+          <div class="text-secondary small"><%= t("me.training_load.fatigue") %></div>
+        </div>
+        <div class="col-4">
+          <div class="h2 mb-0"><%= training_load_form(today.form) %></div>
+          <div class="text-secondary small"><%= t("me.training_load.form") %></div>
+        </div>
+      </div>
+
+      <div data-controller="training-load-chart"
+           data-training-load-chart-payload-value="<%= training_load_payload(training_load[:days], warmup_until: training_load[:warmup_until]).to_json %>"
+           data-training-load-chart-locale-value="<%= I18n.locale %>">
+        <div data-training-load-chart-target="chart" role="img" aria-label="<%= t("me.training_load.chart_label") %>"></div>
+        <p class="text-danger small mb-0" data-training-load-chart-target="error" hidden><%= t("stats.chart.error") %></p>
+      </div>
+
+      <% if training_load[:warmup_until] %>
+        <p class="text-secondary small mt-2 mb-0"><%= t(training_load[:warming_up] ? "me.training_load.warming_up" : "me.training_load.warmup_shaded") %></p>
+      <% end %>
+      <% if training_load[:without].positive? %>
+        <p class="text-secondary small mt-2 mb-0"><%= t("me.training_load.without", count: training_load[:without]) %></p>
+      <% end %>
+      <% if training_load[:partial].positive? %>
+        <p class="text-secondary small mt-2 mb-0"><%= t("me.training_load.partial", count: training_load[:partial]) %></p>
+      <% end %>
+
+      <details class="mt-2">
+        <summary class="btn btn-sm btn-ghost-secondary"><%= t("me.training_load.how_title") %></summary>
+        <ul class="text-secondary small mt-2 mb-0 ps-3">
+          <% t("me.training_load.how").each do |line| %>
+            <li class="mb-1"><%= line %></li>
+          <% end %>
+        </ul>
+        <p class="small mt-2 mb-0"><%= help_link("training-load") %></p>
+      </details>
+
+      <details class="mt-1">
+        <summary class="btn btn-sm btn-ghost-secondary"><%= t("me.mix.show_data") %></summary>
+        <div class="table-responsive">
+          <table class="table table-sm table-vcenter allure-table-nums mt-2">
+            <caption class="visually-hidden"><%= t("me.training_load.table_caption") %></caption>
+            <thead>
+              <tr>
+                <th scope="col"><%= t("me.training_load.week") %></th>
+                <th scope="col" class="text-end"><%= t("me.training_load.load") %></th>
+                <th scope="col" class="text-end"><%= t("me.training_load.fitness") %></th>
+                <th scope="col" class="text-end"><%= t("me.training_load.fatigue") %></th>
+                <th scope="col" class="text-end"><%= t("me.training_load.form") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% training_load_weeks(training_load[:days], today: today.date).each do |week| %>
+                <tr>
+                  <th scope="row" class="fw-normal"><%= training_load_week_label(week) %></th>
+                  <td class="text-end"><%= training_load_figure(week[:load]) %></td>
+                  <td class="text-end"><%= training_load_figure(week[:day].fitness) %></td>
+                  <td class="text-end"><%= training_load_figure(week[:day].fatigue) %></td>
+                  <td class="text-end"><%= training_load_form(week[:day].form) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-secondary small mb-0"><%= t("me.training_load.table_note") %></p>
+      </details>
+    <% else %>
+      <p class="text-secondary mb-3"><%= t("me.training_load.empty") %></p>
+      <%= link_to t("me.training_load.empty_action"), settings_heart_rate_path, class: "btn btn-outline-primary" %>
+    <% end %>
+  </div>
+</div>

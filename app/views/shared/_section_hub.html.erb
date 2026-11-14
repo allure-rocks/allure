@@ -1,0 +1,54 @@
+<%# A section hub (DESIGN.md §8.5): the grouped collection as full-width cards
+    on every breakpoint, one icon + label + chevron link per sub-page.
+    Locals: pretitle, title, intro, groups, id_prefix; optional `extra` (markup
+    rendered between the intro and the groups). A group is
+    { key:, title:, items:, empty: }; an item is
+    { label:, path:, icon: | icon_html:, detail:, badge: } — `icon` is a Tabler
+    name, `icon_html` a rendered mark that replaces it, `detail` and `badge`
+    are optional. %>
+<% content_for :title, title %>
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= pretitle %></div>
+      <h1 class="page-title"><%= title %></h1>
+    </div>
+  </div>
+<% end %>
+
+<p class="text-secondary"><%= intro %></p>
+
+<%= local_assigns[:extra] %>
+
+<div class="settings-hub">
+  <% groups.each do |group| %>
+    <section class="card mb-3" aria-labelledby="<%= id_prefix %>-<%= group[:key] %>">
+      <div class="card-header">
+        <h2 class="card-title" id="<%= id_prefix %>-<%= group[:key] %>"><%= group[:title] %></h2>
+      </div>
+      <% if group[:items].empty? %>
+        <div class="card-body text-secondary"><%= group[:empty] %></div>
+      <% else %>
+        <div class="list-group list-group-flush list-group-hoverable">
+          <% group[:items].each do |item| %>
+            <%= link_to item[:path], class: "list-group-item list-group-item-action d-flex align-items-center gap-3" do %>
+              <% if item[:icon_html].present? %>
+                <span class="fs-2 text-secondary"><%= item[:icon_html] %></span>
+              <% else %>
+                <i class="ti ti-<%= item[:icon] %> fs-2 text-primary" aria-hidden="true"></i>
+              <% end %>
+              <span class="flex-fill">
+                <span class="fw-medium d-block"><%= item[:label] %></span>
+                <% if item[:detail].present? %>
+                  <span class="text-secondary small"><%= item[:detail] %></span>
+                <% end %>
+              </span>
+              <%= item[:badge] if item[:badge].present? %>
+              <i class="ti ti-chevron-right text-secondary" aria-hidden="true"></i>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </section>
+  <% end %>
+</div>

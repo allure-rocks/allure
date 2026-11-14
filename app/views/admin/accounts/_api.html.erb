@@ -1,0 +1,87 @@
+<%# The account's API tokens and webhooks (PLAN_API.md §14). Prefixes and
+    hosts only: never a secret, never a webhook's path. %>
+<div class="card" id="api">
+  <div class="card-header"><h2 class="card-title"><%= t("admin.accounts.api.title") %></h2></div>
+  <% if tokens.empty? && webhooks.empty? %>
+    <div class="card-body text-secondary"><%= t("admin.accounts.api.empty") %></div>
+  <% else %>
+    <% if tokens.any? %>
+      <h3 class="card-subtitle px-3 pt-3 mb-2"><%= t("admin.accounts.api.tokens") %></h3>
+      <div class="table-responsive">
+        <table class="table table-sm table-vcenter card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("settings.api.tokens.table.name") %></th>
+              <th scope="col"><%= t("settings.api.tokens.table.permissions") %></th>
+              <th scope="col"><%= t("settings.api.tokens.table.expires") %></th>
+              <th scope="col"><%= t("settings.api.tokens.table.last_used") %></th>
+              <th scope="col"><span class="visually-hidden"><%= t("settings.api.tokens.table.actions") %></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% tokens.each do |token| %>
+              <tr class="<%= "text-secondary" unless token.usable? %>">
+                <td><span class="text-break"><%= token.name %></span> <code class="small"><%= token.token_prefix %>…</code></td>
+                <td><% token.scopes.each do |scope| %><span class="badge bg-secondary-lt me-1"><%= scope %></span><% end %></td>
+                <td>
+                  <% if token.revoked? %>
+                    <span class="badge bg-danger-lt"><%= t("settings.api.tokens.status.revoked") %></span>
+                  <% elsif token.expired? %>
+                    <span class="badge bg-secondary-lt"><%= t("settings.api.tokens.status.expired") %></span>
+                  <% else %>
+                    <%= l(token.expires_at.to_date, format: :day_month_year) %>
+                  <% end %>
+                </td>
+                <td><%= token.last_used_at ? t("settings.api.tokens.used_ago", time: time_ago_in_words(token.last_used_at)) : t("settings.api.tokens.never_used") %></td>
+                <td class="text-end">
+                  <% if token.usable? %>
+                    <%= button_to t("settings.api.tokens.revoke"), admin_account_api_token_revocation_path(account, token),
+                          class: "btn btn-sm btn-outline-danger",
+                          form: { data: { confirm_title: t("admin.accounts.api.revoke_confirm.title"),
+                                          confirm_body: t("admin.accounts.api.revoke_confirm.body", name: token.name, username: account.username),
+                                          confirm_verb: t("settings.api.tokens.revoke") } } %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+    <% if webhooks.any? %>
+      <h3 class="card-subtitle px-3 pt-3 mb-2"><%= t("admin.accounts.api.webhooks") %></h3>
+      <div class="table-responsive">
+        <table class="table table-sm table-vcenter card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.accounts.api.host") %></th>
+              <th scope="col"><%= t("settings.webhooks.table.events") %></th>
+              <th scope="col"><%= t("settings.webhooks.table.state") %></th>
+              <th scope="col" class="text-end"><%= t("admin.accounts.api.failures") %></th>
+              <th scope="col"><span class="visually-hidden"><%= t("settings.webhooks.table.actions") %></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% webhooks.each do |endpoint| %>
+              <tr>
+                <td class="font-monospace"><%= endpoint.host %></td>
+                <td><%= endpoint.all_events? ? t("settings.webhooks.all_events") : t("settings.webhooks.event_count", count: endpoint.events.size) %></td>
+                <td><%= render "settings/webhooks/state", endpoint: %></td>
+                <td class="text-end"><%= endpoint.consecutive_failures %></td>
+                <td class="text-end">
+                  <% unless endpoint.disabled? %>
+                    <%= button_to t("admin.accounts.api.disable"), admin_account_webhook_disabling_path(account, endpoint),
+                          class: "btn btn-sm btn-outline-danger",
+                          form: { data: { confirm_title: t("admin.accounts.api.disable_confirm.title"),
+                                          confirm_body: t("admin.accounts.api.disable_confirm.body", host: endpoint.host, username: account.username),
+                                          confirm_verb: t("admin.accounts.api.disable") } } %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  <% end %>
+</div>

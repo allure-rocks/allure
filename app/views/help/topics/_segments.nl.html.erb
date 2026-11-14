@@ -1,0 +1,70 @@
+<p>
+  Een <strong>segment</strong> is een stuk weg of pad waarop je jezelf wilt
+  vergelijken: een klim, een sprint, een rondje door het park. Telkens als een van
+  je activiteiten het aflegt, legt Allure een <strong>poging</strong> vast. Naast
+  segmenten zijn er <strong>routes</strong> (een volledig parcours om te volgen)
+  en <strong>lussen</strong> (een parcours dat terugkeert naar het
+  vertrekpunt).
+</p>
+
+<h2>Voorgestelde routes</h2>
+<p>
+  Als je dezelfde complete route minstens drie keer hebt gedaan zonder hem op te
+  slaan, stelt Allure hem voor bij elk van die activiteiten. « Opslaan als
+  route » opent het formulier: de activiteiten van de groep worden eraan
+  gekoppeld. « Negeren » sluit de suggestie voor die route, en latere tochten
+  sluiten zich er stil bij aan. Een suggestie wordt nooit gepubliceerd.
+</p>
+
+<h2>Wie een segment ziet</h2>
+<p>
+  Wie het maakt, kiest: alleen zichzelf, de eigen volgers, of iedereen op deze
+  instantie. Een privésegment heeft geen klassement; het verzamelt alleen je
+  eigen pogingen. Iedereen die een gedeeld segment kan zien, kan het kopiëren
+  naar de eigen privésegmenten, in beide richtingen.
+</p>
+
+<h2>Wie je pogingen ziet</h2>
+<p>
+  Op de pagina van een segment zie je alleen je eigen pogingen volledig. Het
+  <strong>klassement</strong> is anders: het hangt af van wie het leest.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.listing.notice") %>
+</div>
+<p>
+  Twee mensen kunnen dus een verschillend klassement zien, en een niet
+  gepubliceerde activiteit, of een die zonder route is gepubliceerd, zet je er
+  nooit in. Op elk segment waar je een poging hebt, vertelt een regel je wie je
+  daar ziet — of waarom niemand dat doet.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("segments.leaderboard.residual_risk") %>
+</div>
+
+<h2>Een klassement verlaten</h2>
+<ul>
+  <li><strong>Klassement verlaten</strong>, op de pagina van een segment, haalt
+    je pogingen er meteen uit, ongeacht hun publicatie. Je kunt later
+    terugkomen.</li>
+  <li>Een segment dat een van je privacyzones raakt, toont je pogingen
+    nooit.</li>
+  <li>Klassementen verlaten deze instantie nooit.</li>
+</ul>
+
+<h2>Categorieën</h2>
+<p>
+  In de instellingen onder <%= link_to "Profiel", settings_profile_path %> kun je een
+  klassementscategorie opgeven (Vrouwen of Mannen). Dat is optioneel en voegt een
+  gefilterde weergave toe aan klassementen met genoeg sporters in die categorie;
+  je blijft altijd in het algemene klassement staan. Iedereen die een klassement
+  leest waarin je staat, kan de categorie zien die je hebt opgegeven, ook onder
+  een alias.
+</p>
+
+<h2>Je eigen plaatsen</h2>
+<p>
+  De trofee markeert je eigen plaatsen — je record en je op één na en op twee na
+  beste tijd, tegen jezelf. De lauwerkrans markeert een plaats in een klassement,
+  tegen anderen. Je op één na en op twee na beste tijd zie alleen jij.
+</p>

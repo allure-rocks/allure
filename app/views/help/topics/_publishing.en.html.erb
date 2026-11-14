@@ -1,0 +1,115 @@
+<p>
+  A workout you import is <strong>not published</strong>: its details and route
+  stay private until you publish it. If you separately turn on statistics or
+  record sharing on your profile, its figures can still contribute to those
+  sections. No setting publishes for you unless you turn it on yourself.
+</p>
+
+<h2>A publication is a copy</h2>
+<p>
+  Publishing creates a <strong>publication</strong>: a copy of the workout,
+  made at that moment, holding only what you chose to share. Your followers and
+  the feed read that copy, never the workout itself. Because it is a copy:
+</p>
+<ul>
+  <li>editing the workout afterwards — its title, description or sport — does
+    not change the publication;</li>
+  <li>to share an updated version, you <strong>replace the publication</strong>:
+    the old one is deleted and a new one is created;</li>
+  <li>your original file, your private notes and the points hidden by your
+    privacy zones are never part of it.</li>
+</ul>
+
+<h2>Publishing profiles</h2>
+<p>
+  A <strong>publishing profile</strong> is the recipe for that copy: which
+  measures it carries (distance, time, elevation, speed, heart rate…), whether
+  it shows the route, the map image, the GPX file, the device, the weather,
+  your photos, whether comments are open, and whether the start and the finish
+  are masked. Before you publish, the form lists exactly what will be shared and
+  what will not.
+</p>
+<p>
+  You get two built-in profiles, one per audience, and can create your own in
+  <%= link_to "Publishing profiles", publishing_profiles_path %>. Changing a
+  profile only affects future publications: existing ones keep the settings
+  they were made with.
+</p>
+<p>
+  Heart rate is health data: new profiles do not share it until you tick it.
+</p>
+
+<h2>Audiences</h2>
+<ul>
+  <li><strong>Public</strong> — every member of this instance and, when this
+    instance shares with others, the accounts that follow you there.</li>
+  <li><strong>Followers</strong> — only the accounts that follow you, once you
+    have accepted them. Those on this instance always see them; those on other
+    instances receive them only if this instance's operator has enabled it.</li>
+</ul>
+<p>
+  A workout can have one publication per audience: a detailed one for your
+  followers and a lighter public one, for example. Each reader sees the version
+  meant for them: your followers read the followers' one.
+</p>
+
+<h2>Waiting before it goes out</h2>
+<p>
+  A profile can hold publications back for a while — a day, three days, a week,
+  two weeks or a month — so that, say, a run from home is not visible while you
+  are still away. During the wait the publication is <strong>scheduled</strong>:
+  nobody sees it, and you can publish it now, change the date or cancel it.
+</p>
+
+<h2>Automatic publishing</h2>
+<p>
+  If you mark a profile as automatic, each new workout is published with it as
+  soon as its analysis is finished. It never applies to workouts older than
+  seven days, to large imports (an archive, a batch of files), or, if you
+  choose, to commutes or to the sports you exclude. You can decline a pending
+  automatic publication from the workout page.
+</p>
+
+<h2>Deleting a publication</h2>
+<p>
+  Deleting a publication removes it from this instance and tells the other
+  servers that have it to delete it too.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  Deleting the workout withdraws its publications the same way.
+</p>
+
+<h2>Statistics and records on your profile</h2>
+<p>
+  In <%= link_to t("settings.profile.title"), settings_profile_path %>, you can
+  choose separately who can see your general statistics by sport and your
+  personal records: your accepted followers or every member of this instance.
+  Neither section is shared by default. Pending follow requests do not grant
+  access to followers-only figures; unfollowing removes that access. Anonymous
+  visitors never have access.
+</p>
+<p>
+  These sections cover your whole workout history, across all years, even if the
+  workouts are not published. They are independent of publishing profiles and
+  journal filters; turning them on does not publish any workout.
+</p>
+<p>
+  The statistics card's radar axes are the sports: choose the measure to show —
+  workout count, distance, moving time or ascent. With fewer than three applicable
+  sports, bars replace the radar.
+</p>
+<p><%= t("profile.statistics.log_scale") %></p>
+<p>
+  <%= t("profile.statistics.reading_hint") %>
+  The tooltip shows the full sport name and the real value in your units, never
+  the logarithm. Each axis end also lets you read zero values. A brief tap on
+  mobile shows the same information without blocking swipes between measures
+  or page scrolling. The bars offer the same reading, and the tables keep every
+  value.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("settings.profile.sharing.privacy") %>
+</div>

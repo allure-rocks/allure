@@ -1,0 +1,52 @@
+<% view = local_assigns.fetch(:view) { Federation::RemoteSegmentView.new(segment) } %>
+<div class="col-12">
+  <article class="card">
+    <div class="card-body">
+      <div class="d-flex align-items-start mb-3">
+        <%= link_to actor_profile_path(segment.actor), class: "me-2 flex-shrink-0" do %>
+          <%= actor_avatar_tag(segment.actor, size: "md") %>
+        <% end %>
+        <div class="flex-fill">
+          <div class="d-flex flex-wrap align-items-baseline gap-2">
+            <span class="fw-bold"><%= link_to actor_name(segment.actor), actor_profile_path(segment.actor), class: "text-reset" %></span>
+            <span class="text-secondary small"><%= actor_handle(segment.actor) %></span>
+          </div>
+          <div class="text-secondary small">
+            <% if view.metrics_present? %>
+              <%= format_distance(view.distance) %>
+              <% if view.metric_visible?(:ascent) %> · <%= format_elevation(view.ascent) %><% end %>
+            <% end %>
+          </div>
+        </div>
+        <span class="text-secondary small d-inline-flex align-items-center ms-2">
+          <% if view.all_sports? %>
+            <%= t("segments.details.all_sports") %>
+          <% else %>
+            <%= sport_tile_tag(view.sport, size: :sm) %>
+            <span class="ms-2"><%= sport_display_name(view.sport) %></span>
+          <% end %>
+        </span>
+      </div>
+
+      <h2 class="h4 mb-2">
+        <%= link_to view.name, remote_segment_path(segment), class: "text-reset" %>
+      </h2>
+
+      <% if view.route_image_visible? %>
+        <%= link_to remote_segment_path(segment), class: "d-block mb-3" do %>
+          <%= route_image_tag light_url: remote_segment_route_image_path(segment),
+                                     dark_url: remote_segment_route_image_path(segment, theme: "dark"),
+                                     class: "img-fluid rounded border w-100",
+                                     loading: "lazy",
+                                     alt: t("workouts.route_image.alt", title: view.name) %>
+        <% end %>
+      <% end %>
+
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <div class="ms-auto">
+          <%= link_to t("remote_segments.open"), remote_segment_path(segment), class: "btn btn-sm btn-outline-primary" %>
+        </div>
+      </div>
+    </div>
+  </article>
+</div>

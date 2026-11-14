@@ -1,0 +1,34 @@
+<% content_for :title, t("photos.page.title", title: workout_display_title(@workout)) %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle">
+        <%= link_to workout_path(@workout), class: "text-reset d-inline-flex align-items-center gap-1" do %>
+          <i class="ti ti-chevron-left" aria-hidden="true"></i><%= t("photos.page.back", title: workout_display_title(@workout)) %>
+        <% end %>
+      </div>
+      <h1 class="page-title"><%= t("photos.page.heading") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<%# The route stays beside the list from lg up (DESIGN.md §20.24); below it,
+    the map leads the single column, as on the workout page. A positionless
+    recording or a manual entry has no map and no placement. %>
+<div class="<%= class_names("allure-photo-manager", "allure-photo-manager--split": @placeable) %>">
+  <% if @placeable %>
+    <div class="allure-photo-manager__map">
+      <section id="section-map" class="allure-detail-section">
+        <%= render "workouts/map", workout: @workout, photos: workout_photo_markers(@workout, @photos) %>
+      </section>
+    </div>
+  <% end %>
+  <div class="allure-photo-manager__panel" <%= photo_upload_attributes(@workout, frame_id: photo_manager_frame_id(@workout)) %>>
+    <p class="text-secondary small"><%= t("photos.privacy") %></p>
+    <%= render "workout_photos/upload", workout: @workout %>
+    <%= render "workout_photos/manager", workout: @workout, photos: @photos, quota: @quota,
+                                         placeable: @placeable, diagnoses: @diagnoses,
+                                         offset_minutes: @offset_minutes %>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+// iOS companion chrome (DESIGN.md §7.7). The native bar names the current
+// section and the page keeps its own heading and spacing, as on the web.
+.native-app {
+  // The companion draws the phone bottom bar as native tabs (DESIGN.md §7.7):
+  // the web bar is hidden, and the native bar is the whole bottom safe area
+  // (the floating island plus the home indicator). The page reserves that
+  // height at its end so form footers, pagination and card actions clear the
+  // bar; content still scrolls behind it. `env()` follows the device and the
+  // system version: a classic tab bar on older iOS, an iPad tab bar on top
+  // (home indicator only), a home-button phone.
+  &.native-tabs {
+    @media (max-width: 991.98px) {
+      .page-wrapper {
+        padding-bottom: calc(env(safe-area-inset-bottom) + .5rem);
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+<% show_heart_rate = column_present?(descents, :average_heart_rate) %>
+<% if descents.any? %>
+  <div class="table-responsive allure-analysis-table">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("workouts.show.laps.tabs.descents") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("workouts.show.laps.descent") %></th>
+          <th scope="col"><%= t("workouts.show.laps.name") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.distance") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.time") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.loss") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.gain") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.grade") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.max_grade") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.descent_rate") %></th>
+          <% if show_heart_rate %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.heart_rate") %></th><% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% descents.each do |descent| %>
+          <tr <%= tag.attributes(analysis_row_attributes(descent.start_distance, descent.end_distance, source: "descent")) %>>
+            <td><%= descent.number %></td>
+            <td><%= descent.name.presence || "—" %></td>
+            <td class="text-end"><%= format_distance(descent.distance) %></td>
+            <td class="text-end"><strong><%= format_duration(descent.elapsed_time) %></strong></td>
+            <td class="text-end"><%= format_elevation(descent.descent) %></td>
+            <td class="text-end"><%= format_elevation(descent.ascent) %></td>
+            <td class="text-end"><%= format_grade(descent.average_grade) %></td>
+            <td class="text-end"><%= format_grade(descent.max_grade) %></td>
+            <td class="text-end text-nowrap"><%= format_descent_rate(descent) %></td>
+            <% if show_heart_rate %><td class="text-end allure-col-extra"><%= descent.average_heart_rate || "—" %></td><% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+    <% descents.each do |descent| %>
+      <li class="list-group-item" <%= tag.attributes(analysis_row_attributes(descent.start_distance, descent.end_distance, source: "descent")) %>>
+        <div class="d-flex justify-content-between align-items-baseline gap-3">
+          <span class="allure-card-title"><%= detected_lap_label(descent) %></span>
+          <strong class="allure-table-nums"><%= format_duration(descent.elapsed_time) %></strong>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          <%= format_distance(descent.distance) %> · ↓ <%= format_elevation(descent.descent) %>
+          · ↑ <%= format_elevation(descent.ascent) %> · <%= format_grade(descent.average_grade) %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

@@ -1,0 +1,44 @@
+<%# Next-page skeleton for the endless feed (DESIGN.md §11.1): two cards with
+    the same author header, 16x9 media block, tile-and-title row and four
+    metric tiles as a real feed item. Revealed by infinite_scroll_controller
+    only while a page fetch is in flight; purely decorative, so the whole
+    block stays aria-hidden. The profile's editorial variant omits the author
+    and metrics, like the cards it is waiting for. %>
+<% editorial = local_assigns.fetch(:editorial, false) %>
+<div class="row justify-content-center" data-infinite-scroll-target="skeleton" hidden>
+  <div class="col-12<%= " col-lg-9 col-xxl-7" unless editorial %>">
+    <% 2.times do %>
+      <article class="card mb-3 placeholder-glow">
+        <% unless editorial %>
+          <div class="card-header">
+            <span class="avatar avatar-md me-2 flex-shrink-0 bg-secondary-lt"></span>
+            <div class="flex-fill">
+              <p class="mb-1"><span class="placeholder col-4"></span></p>
+              <p class="mb-0"><span class="placeholder col-3"></span></p>
+            </div>
+          </div>
+        <% end %>
+        <div class="ratio ratio-16x9"><span class="placeholder"></span></div>
+        <div class="card-body">
+          <div class="d-flex align-items-start mb-2">
+            <span class="avatar avatar-square avatar-md bg-secondary-lt flex-shrink-0"></span>
+            <p class="mb-0 ms-2 flex-fill"><span class="placeholder col-7 placeholder-lg"></span></p>
+          </div>
+          <p class="mb-3"><span class="placeholder col-3"></span></p>
+          <% if editorial %>
+            <p class="mb-0"><span class="placeholder col-10"></span></p>
+          <% else %>
+            <div class="allure-primary-metrics allure-feed-metrics">
+              <% 4.times do %>
+                <div class="allure-metric-tile">
+                  <span class="placeholder col-6 placeholder-xs mb-2"></span>
+                  <span class="placeholder col-8"></span>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </article>
+    <% end %>
+  </div>
+</div>

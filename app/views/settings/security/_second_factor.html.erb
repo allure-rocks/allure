@@ -1,0 +1,132 @@
+<%# Second factors (PLAN_AUTH.md §5, DESIGN.md §8.5): the authenticator app,
+    passkeys, and recovery codes, with the account's obligation stated first. %>
+<div class="card" id="second-factor">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("settings.second_factor.title") %></h3>
+    <div class="card-actions">
+      <% if policy.satisfied? && current_user.second_factor_enrolled? %>
+        <span class="badge bg-success-lt"><%= t("settings.second_factor.status.active") %></span>
+      <% end %>
+    </div>
+  </div>
+  <div class="card-body">
+    <% if enrolment_only_session? || policy.required? %>
+      <div class="alert alert-danger" role="alert"><%= t("settings.second_factor.status.required") %></div>
+    <% elsif policy.grace? %>
+      <div class="alert alert-warning" role="alert">
+        <%= t("settings.second_factor.status.grace", date: l(policy.deadline.to_date, format: :day_month_year), count: policy.days_left) %>
+      </div>
+    <% end %>
+    <p class="text-secondary"><%= t(current_user.password? ? "settings.second_factor.copy" : "settings.second_factor.copy_passwordless") %></p>
+
+    <div class="list-group list-group-flush">
+      <div class="list-group-item px-0">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <i class="ti ti-device-mobile fs-2 text-secondary" aria-hidden="true"></i>
+          <div class="flex-fill">
+            <div class="fw-medium"><%= t("settings.second_factor.totp.title") %></div>
+            <div class="text-secondary small">
+              <% if current_user.totp_enrolled? %>
+                <%= t("settings.second_factor.totp.enrolled", date: l(current_user.otp_enrolled_at, format: :short)) %>
+              <% else %>
+                <%= t("settings.second_factor.totp.description") %>
+              <% end %>
+            </div>
+          </div>
+          <% if current_user.totp_enrolled? %>
+            <%= link_to t("settings.second_factor.totp.replace"), new_settings_totp_path, class: "btn btn-outline-secondary btn-sm" %>
+            <% if !enrolment_only_session? && Auth::FactorChanges.removable?(current_user) %>
+              <%= button_to t("settings.second_factor.totp.remove"), settings_totp_path, method: :delete,
+                    class: "btn btn-ghost-danger btn-sm",
+                    form: { data: { confirm_title: t("settings.second_factor.totp.remove_title"),
+                                    confirm_body: t("settings.second_factor.totp.remove_body"),
+                                    confirm_verb: t("settings.second_factor.totp.remove") } } %>
+            <% end %>
+          <% else %>
+            <%= link_to t("settings.second_factor.totp.set_up"), new_settings_totp_path, class: "btn btn-primary btn-sm" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="list-group-item px-0">
+        <div class="d-flex align-items-start gap-3">
+          <i class="ti ti-fingerprint fs-2 text-secondary" aria-hidden="true"></i>
+          <div class="flex-fill">
+            <div class="fw-medium"><%= t("settings.second_factor.passkeys.title") %></div>
+            <div class="text-secondary small mb-2"><%= t("settings.second_factor.passkeys.description") %></div>
+            <% if passkeys.any? %>
+              <ul class="list-unstyled mb-3">
+                <% passkeys.each do |passkey| %>
+                  <li class="d-flex align-items-center gap-2 py-1">
+                    <i class="ti ti-key text-secondary" aria-hidden="true"></i>
+                    <div class="flex-fill">
+                      <div><%= passkey.nickname %></div>
+                      <div class="text-secondary small">
+                        <%= t("settings.second_factor.passkeys.added", date: l(passkey.created_at, format: :short)) %>
+                        <% if passkey.last_used_at %>
+                          · <%= t("settings.second_factor.passkeys.last_used", date: l(passkey.last_used_at, format: :short)) %>
+                        <% end %>
+                      </div>
+                    </div>
+                    <% if !enrolment_only_session? && Auth::FactorChanges.removable?(current_user) %>
+                      <%= button_to t("settings.second_factor.passkeys.remove"), settings_passkey_path(passkey), method: :delete,
+                            class: "btn btn-ghost-danger btn-sm",
+                            aria: { label: t("settings.second_factor.passkeys.remove_label", name: passkey.nickname) },
+                            form: { data: { confirm_title: t("settings.second_factor.passkeys.remove_title"),
+                                            confirm_body: t("settings.second_factor.passkeys.remove_body", name: passkey.nickname),
+                                            confirm_verb: t("settings.second_factor.passkeys.remove") } } %>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+            <%= form_with url: settings_passkeys_path,
+                  data: { controller: "webauthn", webauthn_mode_value: "create",
+                          webauthn_options_url_value: options_settings_passkeys_path,
+                          webauthn_cancelled_message_value: t("second_factor.passkey.cancelled"),
+                          webauthn_failed_message_value: t("second_factor.passkey.failed") } do |form| %>
+              <%= form.hidden_field :credential, value: nil, data: { webauthn_target: "field" } %>
+              <div data-webauthn-target="available" hidden>
+                <div class="row g-2 align-items-end">
+                  <div class="col-sm">
+                    <%= form.label :nickname, t("settings.second_factor.passkeys.nickname"), class: "form-label" %>
+                    <%= form.text_field :nickname, maxlength: WebauthnCredential::NICKNAME_MAXIMUM, size: nil,
+                          placeholder: t("settings.second_factor.passkeys.nickname_placeholder"), class: "form-control" %>
+                  </div>
+                  <div class="col-sm-auto">
+                    <button type="button" class="btn btn-outline-primary" data-action="webauthn#start">
+                      <%= t("settings.second_factor.passkeys.add") %>
+                    </button>
+                  </div>
+                </div>
+                <div class="text-danger small mt-2" role="alert" data-webauthn-target="error" hidden></div>
+              </div>
+              <div class="text-secondary small" data-webauthn-target="unavailable" hidden>
+                <%= t("settings.second_factor.passkeys.unavailable") %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <% if current_user.second_factor_enrolled? %>
+        <div class="list-group-item px-0">
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <i class="ti ti-lifebuoy fs-2 text-secondary" aria-hidden="true"></i>
+            <div class="flex-fill">
+              <div class="fw-medium"><%= t("settings.second_factor.recovery.title") %></div>
+              <div class="text-secondary small"><%= t("settings.second_factor.recovery.left", count: recovery_codes_left) %></div>
+            </div>
+            <% unless enrolment_only_session? %>
+              <%= button_to t("settings.second_factor.recovery.regenerate"), settings_recovery_codes_path,
+                    class: "btn btn-outline-secondary btn-sm",
+                    form: { data: { confirm_title: t("settings.second_factor.recovery.regenerate_title"),
+                                    confirm_body: t("settings.second_factor.recovery.regenerate_body"),
+                                    confirm_verb: t("settings.second_factor.recovery.regenerate") } } %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

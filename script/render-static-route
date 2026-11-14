@@ -1,0 +1,249 @@
+#!/usr/bin/env node
+
+import { createServer } from "node:http";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { constants as fsConstants } from "node:fs";
+import { delimiter, dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { randomBytes } from "node:crypto";
+import { chromium } from "playwright-core";
+import {
+  staticRouteResourceAllowed,
+  validateStaticRouteInput,
+} from "../app/frontend/lib/static_route_renderer.js";
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const MAPLIBRE_DIST = join(ROOT, "node_modules/maplibre-gl/dist");
+const RENDERER_PATH = join(ROOT, "app/frontend/lib/static_route_renderer.js");
+const DEFAULT_TIMEOUT_MS = 30_000;
+const WIDTH = 800;
+const HEIGHT = 450;
+
+const HELP = `Usage: script/render-static-route [--timeout MS] OUTPUT.png
+       script/render-static-route --validate
+
+Reads one JSON object from stdin with segments, lineColour, styleUrl (or a
+virtualBasemap image object), and an optional allowedOrigins array for style
+resources hosted on other origins. Launches Chromium at device scale factor 2
+and writes a 1600x900 PNG.
+
+Environment:
+  CHROMIUM_EXECUTABLE_PATH  Path to a Chromium or Chrome executable (required)
+`;
+
+async function main() {
+  const options = parseArguments(process.argv.slice(2));
+  if (options.help) {
+    process.stdout.write(HELP);
+    return;
+  }
+
+  const input = validateStaticRouteInput(JSON.parse(await readStdin()));
+  if (options.validate) {
+    process.stdout.write("Input is valid\n");
+    return;
+  }
+
+  const executablePath = await chromiumExecutable();
+  const token = randomBytes(24).toString("hex");
+  const browser = await chromium.launch({
+    executablePath,
+    headless: true,
+    args: ["--disable-dev-shm-usage", "--enable-unsafe-swiftshader", "--use-angle=swiftshader"],
+  });
+  let server;
+
+  try {
+    server = await startServer(token);
+    const context = await browser.newContext({
+      viewport: { width: WIDTH, height: HEIGHT },
+      deviceScaleFactor: 2,
+      acceptDownloads: false,
+      serviceWorkers: "block",
+    });
+    const localOrigin = `http://127.0.0.1:${server.address().port}`;
+    await context.route("**/*", async (route) => {
+      const allowed = staticRouteResourceAllowed(route.request().url(), {
+        localOrigin,
+        styleUrl: input.styleUrl,
+        allowedOrigins: input.allowedOrigins,
+      });
+      if (allowed) await route.continue();
+      else await route.abort("blockedbyclient");
+    });
+    const page = await context.newPage();
+    const failures = [];
+    page.on("pageerror", (error) => failures.push(error));
+    page.on("console", (message) => {
+      if (message.type() === "error") failures.push(new Error(`Browser console: ${message.text()}`));
+    });
+    page.on("requestfailed", (request) => {
+      failures.push(new Error(`Request failed: ${request.url()} (${request.failure()?.errorText})`));
+    });
+    page.on("response", (response) => {
+      if (response.status() >= 400) failures.push(new Error(`HTTP ${response.status()}: ${response.url()}`));
+    });
+
+    await page.goto(`${localOrigin}/${token}/`, {
+      waitUntil: "domcontentloaded",
+      timeout: options.timeoutMs,
+    });
+    await page.evaluate(async ({ route, timeoutMs }) => {
+      await window.renderRoute(route, timeoutMs);
+    }, { route: input, timeoutMs: options.timeoutMs });
+
+    if (failures.length > 0) throw failures[0];
+    const png = await page.screenshot({ type: "png", scale: "device" });
+    if (png.readUInt32BE(16) !== 1600 || png.readUInt32BE(20) !== 900) {
+      throw new Error("Chromium returned a PNG with unexpected dimensions");
+    }
+
+    await mkdir(dirname(options.outputPath), { recursive: true });
+    await writeFile(options.outputPath, png, { flag: "w" });
+    await context.close();
+  } finally {
+    await browser.close();
+    if (server) {
+      await new Promise((resolveClose, rejectClose) => {
+        server.close((error) => error ? rejectClose(error) : resolveClose());
+      });
+    }
+  }
+}
+
+function parseArguments(args) {
+  let outputPath;
+  let timeoutMs = DEFAULT_TIMEOUT_MS;
+  let validate = false;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === "--help" || argument === "-h") return { help: true };
+    if (argument === "--validate") {
+      validate = true;
+    } else if (argument === "--timeout") {
+      timeoutMs = Number.parseInt(args[index += 1], 10);
+      if (!Number.isInteger(timeoutMs) || timeoutMs < 1_000 || timeoutMs > 120_000) {
+        throw new Error("--timeout must be between 1000 and 120000 milliseconds");
+      }
+    } else if (argument.startsWith("-")) {
+      throw new Error(`Unknown option: ${argument}`);
+    } else if (outputPath) {
+      throw new Error("Only one output path may be supplied");
+    } else {
+      outputPath = resolve(argument);
+    }
+  }
+
+  if (!validate && !outputPath) throw new Error("An output path is required");
+  if (validate && outputPath) throw new Error("--validate does not accept an output path");
+  return { outputPath, timeoutMs, validate, help: false };
+}
+
+async function readStdin() {
+  const chunks = [];
+  for await (const chunk of process.stdin) chunks.push(chunk);
+  const input = Buffer.concat(chunks).toString("utf8").trim();
+  if (!input) throw new Error("Expected route JSON on stdin");
+  return input;
+}
+
+async function chromiumExecutable() {
+  const configured = process.env.CHROMIUM_EXECUTABLE_PATH;
+  if (configured) {
+    await access(configured, fsConstants.X_OK);
+    return configured;
+  }
+
+  const candidates = (process.env.PATH ?? "").split(delimiter).flatMap((directory) => [
+    join(directory, "chromium"),
+    join(directory, "chromium-browser"),
+    join(directory, "google-chrome"),
+    join(directory, "google-chrome-stable"),
+  ]);
+  if (process.platform === "darwin") {
+    candidates.push("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
+    candidates.push("/Applications/Chromium.app/Contents/MacOS/Chromium");
+  }
+
+  for (const candidate of candidates) {
+    try {
+      await access(candidate, fsConstants.X_OK);
+      return candidate;
+    } catch {
+      // Try the next system installation.
+    }
+  }
+  throw new Error("Chromium was not found; set CHROMIUM_EXECUTABLE_PATH");
+}
+
+async function startServer(token) {
+  const assets = new Map([
+    [`/${token}/renderer.js`, [RENDERER_PATH, "text/javascript"]],
+    [`/${token}/direction_chevrons.js`, [join(ROOT, "app/frontend/lib/direction_chevrons.js"), "text/javascript"]],
+    [`/${token}/loop_exterior.js`, [join(ROOT, "app/frontend/lib/loop_exterior.js"), "text/javascript"]],
+    [`/${token}/map_overlay_anchor.js`, [join(ROOT, "app/frontend/lib/map_overlay_anchor.js"), "text/javascript"]],
+    [`/${token}/track_smoothing.js`, [join(ROOT, "app/frontend/lib/track_smoothing.js"), "text/javascript"]],
+    [`/${token}/virtual_world.js`, [join(ROOT, "app/frontend/lib/virtual_world.js"), "text/javascript"]],
+    [`/${token}/maplibre/maplibre-gl.mjs`, [join(MAPLIBRE_DIST, "maplibre-gl.mjs"), "text/javascript"]],
+    [`/${token}/maplibre/maplibre-gl-shared.mjs`, [join(MAPLIBRE_DIST, "maplibre-gl-shared.mjs"), "text/javascript"]],
+    [`/${token}/maplibre/maplibre-gl-worker.mjs`, [join(MAPLIBRE_DIST, "maplibre-gl-worker.mjs"), "text/javascript"]],
+    [`/${token}/maplibre/maplibre-gl.css`, [join(MAPLIBRE_DIST, "maplibre-gl.css"), "text/css"]],
+  ]);
+  const html = pageHtml(token);
+  const server = createServer(async (request, response) => {
+    try {
+      const path = new URL(request.url, "http://127.0.0.1").pathname;
+      if (path === `/${token}/` && request.method === "GET") {
+        response.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" });
+        response.end(html);
+        return;
+      }
+
+      const asset = assets.get(path);
+      if (!asset || request.method !== "GET") {
+        response.writeHead(404).end();
+        return;
+      }
+      response.writeHead(200, { "Content-Type": asset[1], "Cache-Control": "no-store" });
+      response.end(await readFile(asset[0]));
+    } catch {
+      response.writeHead(500).end();
+    }
+  });
+
+  await new Promise((resolveListen, rejectListen) => {
+    server.once("error", rejectListen);
+    server.listen(0, "127.0.0.1", resolveListen);
+  });
+  return server;
+}
+
+function pageHtml(token) {
+  return `<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/${token}/maplibre/maplibre-gl.css">
+<style>
+html,body,#map{width:${WIDTH}px;height:${HEIGHT}px;margin:0;overflow:hidden}
+#map{background:#f4f6fa}
+.route-marker{width:14px;height:14px;border:2px solid #fff;border-radius:50%;box-sizing:border-box;box-shadow:0 0 0 1px rgb(0 0 0 / 15%)}
+.route-marker--start{background:#2fb344}.route-marker--finish{background:repeating-conic-gradient(#111827 0% 25%,#ffffff 0% 50%) 50%/5px 5px}
+</style></head><body><div id="map"></div>
+<script type="module">
+import * as maplibre from "/${token}/maplibre/maplibre-gl.mjs";
+import { renderStaticRoute } from "/${token}/renderer.js";
+window.renderRoute = (route, timeoutMs) => renderStaticRoute({
+  ...route,
+  container: document.getElementById("map"),
+  maplibre,
+  workerUrl: new URL("/${token}/maplibre/maplibre-gl-worker.mjs", location.href).href,
+  timeoutMs,
+});
+</script></body></html>`;
+}
+
+main().catch((error) => {
+  process.stderr.write(`render-static-route: ${error.message}\n`);
+  process.exitCode = 1;
+});

@@ -1,0 +1,15 @@
+<% content_for :title, t("errors.#{@status}.title") %>
+
+<div class="empty">
+  <div class="empty-header"><%= @code %></div>
+  <h1 class="empty-title"><%= t("errors.#{@status}.title") %></h1>
+  <p class="empty-subtitle text-secondary">
+    <%= t("errors.#{@status}.subtitle") %>
+  </p>
+  <div class="empty-action">
+    <%= link_to root_path, class: "btn btn-primary" do %>
+      <i class="ti ti-arrow-left me-1"></i>
+      <%= t("errors.back_home") %>
+    <% end %>
+  </div>
+</div>

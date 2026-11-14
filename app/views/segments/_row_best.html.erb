@@ -1,0 +1,13 @@
+<%# The viewer's personal best on the course in the row's sport (DESIGN.md
+    §20.6), with their standing on the shown board rendered by
+    `rank_medal` when they rank on it. Locals: `podium`. %>
+<% if podium.viewer_effort %>
+  <span class="d-inline-flex flex-wrap align-items-baseline column-gap-1 flex-md-column align-items-md-end">
+    <span class="text-nowrap"><%= format_duration(podium.viewer_effort.elapsed_time) %></span>
+    <% if podium.viewer_ranked %>
+      <span class="small"><%= rank_medal(podium.viewer_rank, participants: podium.participants) %></span>
+    <% end %>
+  </span>
+<% else %>
+  <span class="text-secondary">—</span>
+<% end %>

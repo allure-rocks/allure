@@ -1,0 +1,14 @@
+<%# The time against the athlete's personal best on the segment: slower
+    efforts show the gap to the record, muted; the record shows its margin
+    over the second best time; a first effort has no reference. Locals:
+    `gap` (seconds or nil), `place` (personal place or nil). %>
+<% if gap.nil? %>
+  <%= tag.span("—", class: "text-secondary", tabindex: 0,
+                    aria: { label: t("workouts.show.segment_efforts.personal_best_gap_none") },
+                    data: tooltip_data(t("workouts.show.segment_efforts.personal_best_gap_none"))) %>
+<% elsif place == 1 %>
+  <%= tag.span(format_duration_delta(gap), class: "text-success", tabindex: 0,
+                                           data: tooltip_data(t("workouts.show.segment_efforts.personal_best_margin"))) %>
+<% else %>
+  <span class="text-secondary"><%= format_duration_delta(gap) %></span>
+<% end %>

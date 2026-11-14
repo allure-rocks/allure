@@ -1,0 +1,18 @@
+// Dialogs (DESIGN.md §10.9). Tabler gives the header no vertical padding and
+// only a minimum height, so a header that wraps (the about dialog's tagline on
+// a phone) touches the dialog's top edge. A one-line header keeps its height.
+.modal-header {
+  padding-block: .75rem;
+}
+
+// Phones: the page is laid out under the notch and the bottom chrome
+// (`viewport-fit=cover`), so a full-height dialog keeps a visible margin and
+// stays inside the device safe areas: its footer clears the companion's native
+// tabs, the home indicator and the browser toolbar.
+@include media-breakpoint-down(sm) {
+  .modal {
+    --modal-margin: 1rem;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+             env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+}

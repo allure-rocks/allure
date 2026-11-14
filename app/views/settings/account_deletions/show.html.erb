@@ -1,0 +1,28 @@
+<% content_for :title, t("settings.account.pending.title") %>
+
+<div class="card card-md">
+  <div class="card-body">
+    <h1 class="h2 text-center mb-3"><%= t("settings.account.pending.title") %></h1>
+    <p>
+      <%= t("settings.account.pending.scheduled",
+            date: l(@user.deletion_scheduled_at.in_time_zone(@user.time_zone), format: :long)) %>
+    </p>
+    <p class="text-secondary"><%= t("settings.account.pending.hidden") %></p>
+    <% if @user.deletion_requested_by == "operator" %>
+      <p class="text-secondary"><%= t("settings.account.pending.by_operator") %></p>
+    <% else %>
+      <%= button_to t("settings.account.pending.cancel"), settings_account_deletion_path, method: :delete,
+            class: "btn btn-primary w-100", form_class: "mb-3" %>
+    <% end %>
+
+    <% if @export %>
+      <%= link_to download_settings_account_export_path(@export), class: "btn btn-outline-secondary w-100 mb-3",
+                                                                   data: { turbo: false } do %>
+        <i class="ti ti-download me-1" aria-hidden="true"></i><%= t("settings.account.pending.download") %>
+      <% end %>
+    <% end %>
+
+    <%= button_to t("settings.account.pending.sign_out"), session_path, method: :delete,
+          class: "btn btn-link w-100" %>
+  </div>
+</div>

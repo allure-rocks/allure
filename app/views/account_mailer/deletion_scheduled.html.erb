@@ -1,0 +1,9 @@
+<p><%= t("account_mailer.greeting", name: @user.display_name) %></p>
+<% if @user.deletion_requested_by == "operator" %>
+  <p><%= t("account_mailer.deletion_scheduled.by_operator", date: @date) %></p>
+<% else %>
+  <p><%= t("account_mailer.deletion_scheduled.body", date: @date) %></p>
+  <p><%= t("account_mailer.deletion_scheduled.cancel") %></p>
+  <p><%= link_to t("account_mailer.deletion_scheduled.action"), settings_account_deletion_url %></p>
+  <p><%= t("account_mailer.deletion_scheduled.not_you") %></p>
+<% end %>

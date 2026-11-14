@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "node ./bin/sync-icon-fonts",
+    "render:route": "node ./script/render-static-route",
+    "test:route-renderer": "node --test spec/frontend/static_route_renderer_test.js spec/frontend/static_route_assets_test.js spec/frontend/direction_chevrons_test.js spec/frontend/map_overlay_anchor_test.js spec/frontend/track_smoothing_test.js spec/frontend/chart_smoothing_test.js spec/frontend/chart_scale_test.js spec/frontend/course_overlaps_test.js spec/frontend/basemap_theme_test.js spec/frontend/avatar_crop_test.js",
+    "test:igpsport": "node --test spec/frontend/igpsport_protocol_test.js spec/frontend/igpsport_link_test.js spec/frontend/igpsport_native_link_test.js",
+    "test:shared-files": "node --test spec/frontend/shared_files_test.js",
+    "test:import-source": "node --test spec/frontend/import_single_file_test.js"
+  },
+  "dependencies": {
+    "@hotwired/hotwire-native-bridge": "^1.2.2",
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo-rails": "^8.0.23",
+    "@scalar/api-reference": "1.75.0",
+    "@tabler/core": "1.6.1",
+    "@tabler/icons-webfont": "3.49.0",
+    "echarts": "^6.1.0",
+    "html2canvas": "^1.4.1",
+    "maplibre-gl": "^6.14.0",
+    "playwright-core": "1.64.1",
+    "stimulus-vite-helpers": "^3.1.0"
+  },
+  "devDependencies": {
+    "sass": "^1.105.2",
+    "vite": "^8.3.4",
+    "vite-plugin-ruby": "^5.2.6"
+  }
+}

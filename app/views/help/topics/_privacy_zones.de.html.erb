@@ -1,0 +1,63 @@
+<div class="alert alert-info" role="note">
+  <%= t("privacy_zones.panel") %>
+</div>
+
+<h2>Was eine Zone ist</h2>
+<p>
+  Ein Kreis, den du um einen Ort ziehst, den du nicht preisgeben willst — dein
+  Zuhause, deinen Arbeitsplatz, das Haus von Angehörigen. Du legst sie unter
+  <%= link_to "Privatsphäre-Zonen", privacy_zones_path %> an, indem du einen Ort
+  suchst oder auf die Karte klickst, und wählst den Radius. Die Zonen selbst
+  werden nie geteilt.
+</p>
+
+<h2>Was sie verbirgt</h2>
+<p>
+  Wenn du veröffentlichst, wird jeder Punkt der Route innerhalb einer deiner
+  Zonen entfernt, bevor die Kopie entsteht: aus der Route auf der Karte, dem
+  Routenbild, der GPX-Datei und den Positionen der Fotos. Die Route wird dort
+  mit einer Lücke gezeichnet, sodass niemand ihr bis zur Haustür folgen kann.
+</p>
+
+<h2>Start und Ziel</h2>
+<p>
+  Start und Ziel verraten am leichtesten einen Ort. Deshalb entscheidet jedes
+  Veröffentlichungsprofil getrennt darüber, mit <strong>Start
+  ausblenden</strong> und <strong>Ziel ausblenden</strong>:
+</p>
+<ul>
+  <li><strong>Ausblenden aktiviert</strong> — der Start (oder das Ziel) muss in
+    einer deiner Zonen liegen und wird mit ihr entfernt. Deckt keine Zone ihn
+    ab, verweigert Allure die Veröffentlichung und sagt dir warum, statt ihn
+    preiszugeben.</li>
+  <li><strong>Ausblenden deaktiviert</strong> — der Start (oder das Ziel) bleibt
+    sichtbar, <strong>auch innerhalb einer Zone</strong>. Nutze das für Routen,
+    die an einem öffentlichen Ort beginnen, etwa an einem Wanderparkplatz oder
+    beim Verein.</li>
+</ul>
+<p>
+  Verlässt ein Teil der Aufzeichnung nie eine Zone, bleibt nichts übrig, das
+  sich sicher zeigen ließe, und die Route wird nicht veröffentlicht.
+</p>
+
+<h2>Was sie nie ändert</h2>
+<ul>
+  <li>Deine eigene Aktivität: Du siehst weiterhin die ganze Route, und deine
+    Werte werden daraus berechnet.</li>
+  <li>Bereits erstellte Veröffentlichungen: Sie sind Kopien, eingefroren zum
+    Zeitpunkt der Veröffentlichung. Eine später hinzugefügte Zone erreicht sie
+    nicht — lösche sie und veröffentliche erneut.</li>
+  <li>Das Löschen einer Zone legt nichts bereits Veröffentlichtes offen, aber
+    deine nächsten Veröffentlichungen verbergen diesen Bereich nicht mehr.</li>
+</ul>
+
+<h2>Fotos und Segmente</h2>
+<ul>
+  <li>Ein Foto, das innerhalb einer Zone aufgenommen wurde, bleibt außerhalb
+    einer Veröffentlichung, es sei denn, du nimmst es ausdrücklich auf; dann
+    wird es ohne seine Position geteilt.</li>
+  <li>Deine Durchgänge auf einem Segment, das eine deiner Zonen berührt,
+    erscheinen nie in seiner Bestenliste.</li>
+  <li>Wenn du eine eigene Strecke teilst, der eine Zone durchquert, wirst du
+    zuerst um Bestätigung gebeten.</li>
+</ul>

@@ -1,0 +1,130 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "json"
+require "optparse"
+require_relative "../config/environment"
+
+def numeric(point, key)
+  value = point[key]
+  value.to_f if value.is_a?(Numeric) && value.to_f.finite?
+end
+
+def normalize(name)
+  I18n.transliterate(name.to_s).downcase.strip
+end
+
+def resample(points, spacing)
+  total_distance = points.last.fetch(:distance)
+  targets = (0..(total_distance / spacing).floor).map { |index| index * spacing }
+  targets << total_distance if targets.last < total_distance
+
+  cursor = 0
+  sampled = targets.map do |target|
+    cursor += 1 while cursor + 1 < points.length &&
+      (points[cursor + 1].fetch(:distance) - target).abs <= (points[cursor].fetch(:distance) - target).abs
+    points[cursor]
+  end
+  boundaries = points.group_by { |point| point.fetch(:segment_position) }.values.flat_map { |segment| [ segment.first, segment.last ] }
+
+  (sampled + boundaries).uniq { |point| [ point.fetch(:distance), point.fetch(:latitude), point.fetch(:longitude) ] }
+    .sort_by { |point| point.fetch(:distance) }
+end
+
+options = { interval: 0.1, max_points: nil, spacing: nil }
+parser = OptionParser.new do |arguments|
+  arguments.banner = "Usage: script/probe-toponymy SHORT_ID [options]"
+  arguments.on("--interval SECONDS", Float, "Delay between requests (default: 0.1)") do |value|
+    abort "--interval must be non-negative" if value.negative?
+
+    options[:interval] = value
+  end
+  arguments.on("--max-points COUNT", Integer, "Only query the first COUNT points") do |value|
+    abort "--max-points must be positive" unless value.positive?
+
+    options[:max_points] = value
+  end
+  arguments.on("--spacing METRES", Float, "Resample the route at this spacing") do |value|
+    abort "--spacing must be positive" unless value.positive?
+
+    options[:spacing] = value
+  end
+  arguments.on("-h", "--help", "Show this help") do
+    puts arguments
+    exit
+  end
+end
+
+parser.parse!(ARGV)
+short_id = ARGV.shift
+abort parser.to_s unless short_id && ARGV.empty?
+
+workout = Workout.find_by_short_id!(short_id)
+base_url = ENV["GEOCODING_BASE_URL"].presence
+abort "GEOCODING_BASE_URL is required" unless base_url
+
+client = Allure::Toponyms::Nominatim.new(base_url:)
+distance_offset = 0.0
+points = workout.track_segments.flat_map do |segment|
+  segment_points = Array(segment.points).filter_map do |point|
+    latitude = numeric(point, "lat")
+    longitude = numeric(point, "lon")
+    distance = numeric(point, "d")
+    next unless latitude && longitude && distance
+
+    {
+      latitude:, longitude:, distance: (distance_offset + distance).round(1), elevation: numeric(point, "ele"),
+      role: "route", segment_position: segment.position
+    }
+  end
+  distance_offset += segment.distance.to_f
+  segment_points
+end.sort_by { |point| point.fetch(:distance) }
+
+raw_points_count = points.length
+points = resample(points, options[:spacing]) if options[:spacing]
+points = points.first(options[:max_points]) if options[:max_points]
+results = []
+failures = []
+started_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+last_request_at = nil
+
+points.each_with_index do |point, index|
+  if last_request_at
+    wait = options[:interval] - (Process.clock_gettime(Process::CLOCK_MONOTONIC) - last_request_at)
+    sleep(wait) if wait.positive?
+  end
+  last_request_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
+  results << client.reverse(longitude: point.fetch(:longitude), latitude: point.fetch(:latitude))
+rescue Allure::Toponyms::Nominatim::UnavailableError => error
+  failures << { index:, distance: point.fetch(:distance), error: error.message }
+  results << nil
+ensure
+  warn "Queried #{index + 1}/#{points.length}" if (index + 1).modulo(100).zero?
+end
+
+elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started_at
+builder = Allure::Toponyms::CandidateBuilder.new(samples: points, results:)
+candidates = builder.call
+dinant_candidates = candidates.select { |candidate| normalize(candidate[:name]) == "dinant" }
+
+report = {
+  short_id:,
+  uuid: workout.uuid,
+  distance_metres: workout.distance.to_f,
+  source_points: raw_points_count,
+  queried_points: points.length,
+  spacing_metres: options[:spacing],
+  requests: results.length,
+  successful_responses: results.count(&:present?),
+  failures:,
+  elapsed_seconds: elapsed.round(1),
+  requests_per_second: (results.length / elapsed).round(2),
+  current_markers: Array(workout.toponymy&.markers),
+  dinant_candidates: dinant_candidates.map { |candidate| candidate.slice(:name, :kind, :distance, :coverage, :occurrences, :ancestors) },
+  candidate_count: candidates.length,
+  candidates: candidates.map { |candidate| candidate.slice(:name, :kind, :distance, :coverage, :occurrences, :ancestors) }
+}
+
+puts JSON.pretty_generate(report)

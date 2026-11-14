@@ -1,0 +1,33 @@
+<%# In-app notifications (PLAN_NOTIFICATIONS.md, DESIGN.md §10.16). The trigger
+    is static so Bootstrap's dropdown binding survives; only the badge polls,
+    and the dropdown body is a Turbo Frame loaded when it opens. %>
+<div class="nav-item dropdown d-flex" data-controller="notification-menu">
+  <a href="#" class="nav-link px-0 me-1 d-flex align-items-center"
+     data-bs-toggle="dropdown" aria-expanded="false"
+     data-action="show.bs.dropdown->notification-menu#refresh"
+     aria-label="<%= notification_bell_label(unread_notifications_count) %>">
+    <i class="ti ti-bell fs-2" aria-hidden="true"></i>
+    <span id="notification-badge" aria-hidden="true"
+          data-controller="live-frame" data-bridge--topbar-target="badge"
+          data-live-frame-url-value="<%= badge_notifications_path %>"
+          data-live-frame-interval-value="60000">
+      <%= render "notifications/badge", count: unread_notifications_count %>
+    </span>
+  </a>
+
+  <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card notification-menu-card">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title"><%= t("notifications.dropdown.title") %></h3>
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="dropdown"
+                aria-label="<%= t("close") %>"></button>
+      </div>
+      <turbo-frame id="notification-menu" data-notification-menu-url="<%= menu_notifications_path %>">
+        <div class="card-body text-secondary d-flex align-items-center gap-2">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <%= t("notifications.dropdown.loading") %>
+        </div>
+      </turbo-frame>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+// Turbo Drive draws its navigation progress bar from a stylesheet it injects
+// at the top of <head>, with `background: #0076ff`. One later rule is enough
+// to repaint it in the Allure primary, in both themes: this file is injected
+// after Turbo in development and its production <link> precedes the injected
+// style, so equal specificity is already in our favour. The bar carries no
+// text, so there is nothing to translate.
+.turbo-progress-bar {
+  background: var(--primary);
+}

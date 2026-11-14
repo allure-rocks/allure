@@ -1,0 +1,12 @@
+<%# The row's sport in the index table: the sport tile, named by its tooltip
+    and accessible label; an all-sports course nobody ran gets the neutral
+    tile. Locals: `sport` (nil for that neutral row). %>
+<% label = sport ? sport_display_name(sport) : t("segments.details.all_sports") %>
+<% if sport %>
+  <%= sport_tile_tag(sport, size: :xs, label:) %>
+<% else %>
+  <%= tag.span class: "avatar avatar-square avatar-xs sport-tile", role: "img",
+               aria: { label: }, data: tooltip_data(label) do %>
+    <i class="ti ti-category" aria-hidden="true"></i>
+  <% end %>
+<% end %>

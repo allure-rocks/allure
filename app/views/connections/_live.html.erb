@@ -1,0 +1,20 @@
+<%# One service's cards; re-rendered in place while the connection is linking or
+    unlinking (live_frame_controller). A settled page carries the done marker,
+    so polling never replaces a form being filled in. Locals: card. %>
+<% source = card[:source] %>
+<% connection = card[:connection] %>
+<% state = import_connection_state(connection, enabled: card[:enabled]) %>
+<%= render "connections/status", source:, connection:, enabled: card[:enabled], state: %>
+<% if state == "linked" %>
+  <%= render "connections/retrieval", source:, connection: %>
+  <%= render "connections/preferences", source:, connection: %>
+<% end %>
+<%# An expired, revoked or operator-disabled connection keeps its unlink card:
+    it is the only way to revoke the access and choose what to do with what was
+    imported. %>
+<% if connection.persisted? && !connection.disconnected? && !connection.pending? && !connection.unlinking? %>
+  <%= render "connections/unlink", source:, connection: %>
+<% end %>
+<% unless import_connection_transitional?(connection) %>
+  <span data-live-frame-done hidden></span>
+<% end %>

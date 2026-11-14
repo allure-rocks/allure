@@ -1,0 +1,17 @@
+<%# Signed-out language switcher (DESIGN.md §10.24). Each language is named in
+    itself; choosing one reloads the page with `?locale=`, which the
+    application remembers for this browser. %>
+<div class="dropdown">
+  <%= tag.button type: "button", class: "btn btn-ghost-secondary btn-sm dropdown-toggle",
+        data: { bs_toggle: "dropdown" }, aria: { expanded: false, label: t("language_switcher.label") } do %>
+    <i class="ti ti-language fs-3 me-1" aria-hidden="true"></i>
+    <span lang="<%= I18n.locale %>"><%= t("settings.appearance.locales.#{I18n.locale}") %></span>
+  <% end %>
+  <div class="dropdown-menu dropdown-menu-end">
+    <% I18n.available_locales.each do |locale| %>
+      <%= link_to t("settings.appearance.locales.#{locale}"), language_switcher_path(locale),
+            class: "dropdown-item#{' active' if locale == I18n.locale}", lang: locale, hreflang: locale,
+            aria: { current: (locale == I18n.locale ? "true" : nil) } %>
+    <% end %>
+  </div>
+</div>

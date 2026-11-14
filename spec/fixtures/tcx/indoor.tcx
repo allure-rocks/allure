@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2"
+  xmlns:ns3="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
+  <Activities>
+    <Activity Sport="Biking">
+      <Id>2026-08-28T17:30:00Z</Id>
+      <Lap StartTime="2026-08-28T17:30:00Z">
+        <TotalTimeSeconds>600</TotalTimeSeconds>
+        <DistanceMeters>5000</DistanceMeters>
+        <Calories>180</Calories>
+        <TriggerMethod>Manual</TriggerMethod>
+        <Track>
+          <Trackpoint>
+            <Time>2026-08-28T17:30:00Z</Time>
+            <DistanceMeters>0</DistanceMeters>
+            <HeartRateBpm><Value>118</Value></HeartRateBpm>
+            <Cadence>82</Cadence>
+            <Extensions><ns3:TPX><ns3:Speed>8.0</ns3:Speed><ns3:Watts>190</ns3:Watts></ns3:TPX></Extensions>
+          </Trackpoint>
+          <Trackpoint>
+            <Time>2026-08-28T17:35:00Z</Time>
+            <DistanceMeters>2500</DistanceMeters>
+            <HeartRateBpm><Value>132</Value></HeartRateBpm>
+            <Cadence>85</Cadence>
+            <Extensions><ns3:TPX><ns3:Speed>8.4</ns3:Speed><ns3:Watts>210</ns3:Watts></ns3:TPX></Extensions>
+          </Trackpoint>
+          <Trackpoint>
+            <Time>2026-08-28T17:40:00Z</Time>
+            <DistanceMeters>5000</DistanceMeters>
+            <HeartRateBpm><Value>141</Value></HeartRateBpm>
+            <Cadence>87</Cadence>
+            <Extensions><ns3:TPX><ns3:Speed>8.2</ns3:Speed><ns3:Watts>225</ns3:Watts></ns3:TPX></Extensions>
+          </Trackpoint>
+        </Track>
+      </Lap>
+    </Activity>
+  </Activities>
+  <Author><Name>Allure Test Suite</Name></Author>
+</TrainingCenterDatabase>

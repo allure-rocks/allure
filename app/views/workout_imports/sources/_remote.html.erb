@@ -1,0 +1,35 @@
+<%# A remote source's panel (PLAN_REMOTE_IMPORTS.md §8.2). The panel sits inside
+    the upload form, so a linked account's retrieval submits through its own
+    button's formaction rather than a nested form. %>
+<% provider = t("workouts.batch_import.sources.#{source.key}.label") %>
+<% connection = current_user.import_connections.find_by(provider: source.key) %>
+<div class="card mb-3">
+  <div class="card-body">
+    <% if connection&.linked? %>
+      <p class="text-secondary">
+        <%= import_source_icon_tag(source) %>
+        <%= t("workouts.batch_import.remote.linked", provider:, account: connection.external_account_name.presence || provider) %>
+      </p>
+      <%= render "connections/retrieval_fields", source:, connection: %>
+      <div class="allure-actions mt-3">
+        <button type="submit" class="btn btn-primary" name="commit" value=""
+                formaction="<%= connection_retrievals_path(source.key) %>" formmethod="post" formnovalidate>
+          <%= t("settings.connections.retrieval.submit") %>
+        </button>
+        <%= link_to t("workouts.batch_import.remote.manage"), connection_path(source.key), class: "btn btn-outline-secondary" %>
+      </div>
+    <% else %>
+      <p class="text-secondary">
+        <%= import_source_icon_tag(source) %>
+        <% if connection&.needs_relink? %>
+          <%= t("workouts.batch_import.remote.relink", provider:) %>
+        <% else %>
+          <%= t("workouts.batch_import.remote.not_linked", provider:) %>
+        <% end %>
+      </p>
+      <div class="allure-actions">
+        <%= link_to t("workouts.batch_import.remote.manage"), connection_path(source.key), class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+<%# One photo in the manager (DESIGN.md §20.24). Locals: workout, photo, index,
+    photos_count, placeable, diagnosis. %>
+<li id="photo-<%= photo.to_param %>" class="allure-photo-row" data-photo-tile data-photo-id="<%= photo.to_param %>"
+    data-action="dragstart->photo-order#start dragend->photo-order#end dragover->photo-order#over drop->photo-order#drop">
+  <button type="button" class="allure-photo-row__handle" data-action="pointerdown->photo-order#grab"
+          aria-hidden="true" tabindex="-1">
+    <i class="ti ti-grip-vertical" aria-hidden="true"></i>
+  </button>
+  <% if photo.ready? %>
+    <button type="button" class="allure-photo-row__thumb" data-action="photo-lightbox#open" data-photo-lightbox-target="photo"
+            data-photo-id="<%= photo.to_param %>"
+            data-src="<%= workout_photo_path(workout, photo, variant: :display) %>"
+            data-original="<%= workout_photo_path(workout, photo, variant: :original) %>"
+            data-caption="<%= workout_photo_label(photo, index) %>"
+            data-meta="<%= workout_photo_lightbox_meta(photo) %>"
+            data-edit="<%= workout_photos_path(workout, anchor: "photo-#{photo.to_param}") %>">
+      <%= image_tag workout_photo_path(workout, photo, variant: :thumbnail), alt: workout_photo_label(photo, index), loading: "lazy" %>
+    </button>
+  <% elsif photo.processing? %>
+    <div class="allure-photo-row__thumb allure-photo-row__thumb--pending" role="status" aria-label="<%= t("photos.processing") %>">
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+    </div>
+  <% else %>
+    <div class="allure-photo-row__thumb allure-photo-row__thumb--failed">
+      <i class="ti ti-photo-off" aria-hidden="true"></i>
+    </div>
+  <% end %>
+  <div class="allure-photo-row__body">
+    <%= form_with url: workout_photo_path(workout, photo), method: :patch, class: "allure-photo-caption",
+                  data: { controller: "photo-caption",
+                          photo_caption_url_value: workout_photo_path(workout, photo),
+                          photo_caption_saved_value: t("photos.caption_saved"),
+                          photo_caption_error_value: t("photos.errors.network") } do %>
+      <%= label_tag "caption-#{photo.to_param}", t("photos.caption"), class: "visually-hidden" %>
+      <%= text_area_tag "photo[caption]", photo.caption, id: "caption-#{photo.to_param}", class: "form-control", rows: 2, maxlength: 500,
+            placeholder: t("photos.caption"),
+            data: { photo_caption_target: "field", action: "blur->photo-caption#save keydown.enter->photo-caption#keydown" } %>
+      <p class="allure-photo-caption__status small mb-0" data-photo-caption-target="status" role="status"></p>
+      <noscript><%= submit_tag t("photos.save"), class: "btn btn-sm btn-outline-secondary mt-1" %></noscript>
+    <% end %>
+    <% if photo.taken_at_local.present? %>
+      <p class="small text-secondary mb-1"><%= t("photos.captured_at", time: l(photo.taken_at_local, format: :photo)) %></p>
+    <% end %>
+    <% if photo.ready? %>
+      <p class="small text-secondary mb-1">
+        <i class="ti ti-map-pin me-1" aria-hidden="true"></i><%= workout_photo_placement_text(photo) %>
+      </p>
+      <% if placeable && !photo.placed? %>
+        <p class="small text-warning mb-1"><%= workout_photo_unplaced_reason(photo, diagnosis) %></p>
+      <% end %>
+    <% elsif photo.processing? %>
+      <p class="small text-secondary mb-1"><%= t("photos.processing") %></p>
+    <% else %>
+      <p class="small text-danger mb-1"><%= t("photos.errors.#{photo.failure_reason || 'processing_error'}") %></p>
+    <% end %>
+    <div class="d-flex flex-wrap gap-1 align-items-center">
+      <% if photo.ready? && placeable %>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="photo-placement#start"
+                data-photo-placement-id-param="<%= photo.to_param %>"
+                data-photo-placement-url-param="<%= placement_workout_photo_path(workout, photo) %>"
+                data-photo-placement-label-param="<%= workout_photo_label(photo, index) %>"><%= t("photos.placement.place") %></button>
+      <% end %>
+      <% if photo.failed? %>
+        <%= button_to t("photos.retry"), retry_workout_photo_path(workout, photo), class: "btn btn-sm btn-outline-secondary" %>
+      <% end %>
+      <div class="dropdown ms-auto">
+        <button class="btn btn-sm btn-ghost-secondary btn-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                aria-label="<%= t("photos.actions", label: workout_photo_label(photo, index)) %>">
+          <i class="ti ti-dots" aria-hidden="true"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end">
+          <% if photo.ready? && placeable && photo.placed? %>
+            <%= button_to t("photos.placement.clear"), placement_workout_photo_path(workout, photo), method: :patch,
+                  params: { mode: "clear" }, class: "dropdown-item" %>
+          <% end %>
+          <% if photo.ready? && placeable && %w[manual cleared].include?(photo.location_source) %>
+            <%= button_to t("photos.placement.auto"), placement_workout_photo_path(workout, photo), method: :patch,
+                  params: { mode: "auto" }, class: "dropdown-item" %>
+          <% end %>
+          <button type="button" class="dropdown-item" data-action="photo-order#move" data-direction="-1" <%= "disabled" if index.zero? %>><%= t("photos.before") %></button>
+          <button type="button" class="dropdown-item" data-action="photo-order#move" data-direction="1" <%= "disabled" if index == photos_count - 1 %>><%= t("photos.after") %></button>
+          <% if photo.ready? %>
+            <%= link_to t("photos.original"), workout_photo_path(workout, photo, variant: :original), class: "dropdown-item",
+                  data: { controller: "bridge--download", bridge__download_url_value: workout_photo_path(workout, photo, variant: :original), turbo: false } %>
+          <% end %>
+          <div class="dropdown-divider"></div>
+          <%= button_to t("photos.delete"), workout_photo_path(workout, photo), method: :delete, class: "dropdown-item text-danger",
+                form: { data: { confirm_title: t("photos.delete"), confirm_body: t("photos.delete_body"), confirm_verb: t("photos.delete") } } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>

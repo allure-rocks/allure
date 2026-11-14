@@ -1,0 +1,21 @@
+<%# The EXR sign-in (PLAN_REMOTE_IMPORTS.md §7b.2). The password goes to the EXR
+    account site once, from a background job, and is never kept; only the
+    site's remember cookie is. Locals: connection. %>
+<%= form_with url: connection_link_path("exr"), method: :post do %>
+  <div class="row g-2">
+    <div class="col-md-6">
+      <%= label_tag :exr_email, t("settings.connections.exr.email"), class: "form-label required" %>
+      <%= email_field_tag :email, nil, id: "exr_email", required: true, autocomplete: "username", class: "form-control" %>
+    </div>
+    <div class="col-md-6">
+      <%= label_tag :exr_password, t("settings.connections.exr.password"), class: "form-label required" %>
+      <%= password_field_tag :password, nil, id: "exr_password", required: true, autocomplete: "current-password",
+                             minlength: 8, class: "form-control" %>
+    </div>
+  </div>
+  <small class="form-text d-block"><%= t("settings.connections.exr.link_hint") %></small>
+  <div class="allure-actions mt-3">
+    <%= submit_tag t(connection.needs_relink? ? "settings.connections.exr.relink" : "settings.connections.exr.link"),
+                   class: "btn btn-primary", name: nil %>
+  </div>
+<% end %>

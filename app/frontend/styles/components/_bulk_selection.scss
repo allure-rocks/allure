@@ -1,0 +1,32 @@
+// Bulk selection (DESIGN.md §10.19, PLAN_BULK_ACTIONS.md §7).
+//
+// The bar exists only in the table card and only while a row is checked. The
+// `:has()` reveal needs no JavaScript; the controller adds a class for the
+// browsers that lack it, and the live count on top.
+.allure-bulk-bar {
+  display: none;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.allure-table-card:has(.allure-bulk-check:checked) .allure-bulk-bar,
+.allure-table-card--selected .allure-bulk-bar {
+  display: flex;
+}
+
+// The selection column is a control, not data: it shrinks to the checkbox and
+// never wraps.
+.allure-bulk-cell {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.allure-bulk-bar__count {
+  font-variant-numeric: tabular-nums;
+}
+
+.allure-bulk-bar__action {
+  width: auto;
+  max-width: 22rem;
+}

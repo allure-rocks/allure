@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Allure Test Suite" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>Antimeridian crossing</name>
+    <trkseg>
+      <trkpt lat="0.0000" lon="179.9990"><ele>0.0</ele><time>2026-06-01T08:00:00Z</time></trkpt>
+      <trkpt lat="0.0000" lon="-179.9990"><ele>0.0</ele><time>2026-06-01T08:01:00Z</time></trkpt>
+      <trkpt lat="0.0000" lon="-179.9980"><ele>0.0</ele><time>2026-06-01T08:02:00Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

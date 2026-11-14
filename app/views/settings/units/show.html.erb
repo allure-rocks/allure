@@ -1,0 +1,43 @@
+<% content_for :title, t("settings.units.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.units.title") } do %>
+
+  <%= form_with model: @user, url: settings_units_path, method: :patch do |form| %>
+    <%= render "shared/form_errors", form: form %>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.units.system_title") %></h2>
+      </div>
+      <div class="card-body">
+        <% User::UNIT_SYSTEMS.each do |system| %>
+          <label class="form-check">
+            <%= form.radio_button :unit_system, system, class: "form-check-input" %>
+            <span class="form-check-label"><%= t("settings.units.systems.#{system}") %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.units.time_title") %></h2>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <%= form.label :time_zone, t("settings.units.time_zone"), class: "form-label" %>
+          <%= form.select :time_zone, time_zone_options_for(@user.time_zone), {}, class: "form-select" %>
+        </div>
+        <div class="mb-0">
+          <%= form.label :week_start, t("settings.units.week_start"), class: "form-label" %>
+          <%= form.select :week_start, User::WEEK_STARTS.map { |value| [ t("settings.units.week_starts.#{value}"), value ] }, {}, class: "form-select" %>
+          <small class="form-text"><%= t("settings.units.week_start_hint") %></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <%= form.submit t("settings.units.save"), class: "btn btn-primary" %>
+    </div>
+  <% end %>
+<% end %>

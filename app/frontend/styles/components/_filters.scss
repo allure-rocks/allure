@@ -1,0 +1,218 @@
+// Workout filter bar (DESIGN.md §10.6): the controls use the compact size so
+// the retractable bar stays light. On coarse pointers the hit area returns to
+// the 44px touch target required by §18.4, the same principle as the hub tile
+// hint in `_hub.scss`.
+@media (pointer: coarse) {
+  .allure-filter-bar,
+  .hub-toolbar {
+    .form-select-sm,
+    .form-control-sm,
+    .btn-sm,
+    .form-selectgroup-label {
+      min-height: 44px;
+    }
+  }
+}
+
+// Sport filter (DESIGN.md §13.2): the account's own sports above the toolbar
+// row, as a Tabler form-selectgroup. The selector, checked state, focus ring
+// and dark mode come from Tabler; this layer aligns the glyph with the label
+// and mutes the count. Below `md` the pills keep their name and count and
+// stay on one row that scrolls sideways, fading at the trailing edge.
+.allure-sport-filter {
+  min-width: 0;
+
+  .form-selectgroup-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+  }
+
+  &__icon {
+    // One step above the pill's own text (§10.6): the sport glyph is the
+    // pill's identifier, not a text decoration.
+    font-size: 1.25em;
+  }
+
+  &__icon svg {
+    display: block;
+    width: 1em;
+    height: 1em;
+  }
+
+  &__count {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 767.98px) {
+    &__options {
+      display: flex;
+      flex-wrap: nowrap;
+      width: 100%;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+      mask-image: linear-gradient(to right, #000 calc(100% - 1.5rem), transparent);
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .form-selectgroup-item {
+      flex-shrink: 0;
+    }
+  }
+}
+
+// The profile form's sport exclusion list (PLAN_AUTO_PUBLISHING.md §7): the
+// filter bar's pills, wrapping in the card, at the 44px touch target on coarse
+// pointers (§18.4).
+.allure-sport-filter--form {
+  @media (pointer: coarse) {
+    .form-selectgroup-label {
+      min-height: 44px;
+    }
+  }
+}
+
+// The toolbar row (DESIGN.md §10.6): period and sort selects, each led by its
+// icon, then the drawer toggle at the trailing edge. The selects size to
+// their option; on phones they share the row and truncate, and the toggle
+// keeps its icon and badge only.
+.allure-filter-bar__controls {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.allure-filter-bar__select {
+  flex: 0 1 auto;
+  min-width: 0;
+
+  .form-select {
+    width: auto;
+    max-width: 100%;
+  }
+
+  // Tabler sizes the addon to the regular input height; the compact select
+  // (or its 44px coarse-pointer form) sets the row height instead.
+  .input-icon-addon {
+    height: auto;
+    font-size: 1rem;
+  }
+}
+
+.allure-filter-bar__toggle-label {
+  margin-left: 0.25rem;
+}
+
+@media (max-width: 575.98px) {
+  .allure-filter-bar__select {
+    flex: 1 1 0;
+
+    .form-select {
+      width: 100%;
+    }
+  }
+
+  // The sort shrinks to its icon: the native select still covers the whole
+  // square, so a tap opens the picker, and its aria-label names it.
+  .allure-filter-bar__select--compact {
+    flex: 0 0 auto;
+
+    .form-select {
+      width: 2.75rem;
+      min-width: 2.75rem;
+      padding-inline: 0;
+      color: transparent;
+      background-image: none;
+    }
+
+    .form-select option {
+      color: var(--body-color);
+    }
+
+    .input-icon-addon {
+      width: 100%;
+      min-width: 0;
+      color: var(--body-color);
+    }
+  }
+
+  .allure-filter-bar__controls .filter-toggle {
+    min-width: 2.75rem;
+    justify-content: center;
+  }
+
+  .allure-filter-bar__toggle-label {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+  }
+}
+
+// The filter drawer: Bootstrap's off-canvas panel from the right, turned
+// into a bottom sheet below `md` so a thumb reaches its controls and its
+// apply button. The footer keeps the actions in view while the body scrolls.
+.allure-filter-sheet {
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem var(--offcanvas-padding-x);
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    border-top: var(--border-width) solid var(--border-color);
+  }
+
+  @media (max-width: 767.98px) {
+    &.offcanvas-end {
+      top: auto;
+      right: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      max-height: 85vh;
+      max-height: 85dvh;
+      border-left: 0;
+      border-top: var(--offcanvas-border-width) solid var(--offcanvas-border-color);
+      border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+      transform: translateY(100%);
+    }
+
+    &.offcanvas-end.showing,
+    &.offcanvas-end.show:not(.hiding) {
+      transform: none;
+    }
+  }
+}
+
+// Place autocomplete (DESIGN.md §13.3): the list is a Tabler dropdown-menu,
+// so the surface, border, radius, shadow, dark mode and option states come
+// from Tabler; we only anchor it under the field and bound its height. The
+// listbox lives outside the dropdown component's JS, so `[hidden]` stays our
+// only toggle.
+.allure-place-field {
+  position: relative;
+
+  .allure-place-suggestions {
+    top: calc(100% + 0.25rem);
+    right: 0;
+    left: 0;
+    max-height: 16rem;
+    overflow-y: auto;
+
+    &:not([hidden]) {
+      display: block;
+    }
+
+    .dropdown-item {
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+<div class="row g-2 align-items-center">
+  <div class="col-auto">
+    <%= @profile_account.is_a?(User) ? avatar_tag(@profile_account, size: "lg") : actor_avatar_tag(@profile_account, size: "lg") %>
+  </div>
+  <div class="col min-w-0">
+    <h1 class="page-title"><%= profile_name %></h1>
+    <div class="text-secondary small mt-1"><%= profile_handle %></div>
+  </div>
+  <div class="col-auto">
+    <% if own_profile? %>
+      <%= link_to t("profile.edit"), settings_profile_path, class: "btn btn-sm btn-outline-secondary" %>
+    <% elsif @profile_account.is_a?(User) || Allure::Federation::Config.enabled? %>
+      <% target = @profile_account.is_a?(User) ? @profile_account.username : (@profile_account.acct.presence || @profile_account.handle) %>
+      <%= render "follows/button", target:, following: @following %>
+    <% end %>
+  </div>
+</div>

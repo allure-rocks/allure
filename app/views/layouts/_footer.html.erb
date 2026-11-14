@@ -1,0 +1,51 @@
+<footer class="footer footer-transparent d-print-none">
+  <div class="container-xl">
+    <div class="row text-center align-items-center flex-row-reverse">
+      <div class="col-lg-auto ms-lg-auto">
+        <ul class="list-inline list-inline-dots mb-0">
+          <li class="list-inline-item">
+            <span class="text-secondary"><%= Allure::Federation.config.domain %></span>
+          </li>
+          <% if Allure::Instance.hosted_by? %>
+            <li class="list-inline-item">
+              <% if Allure::Instance.host_url %>
+                <%= link_to t("footer.hosted_by", name: Allure::Instance.host_name),
+                      Allure::Instance.host_url, class: "link-secondary" %>
+              <% else %>
+                <span class="text-secondary"><%= t("footer.hosted_by", name: Allure::Instance.host_name) %></span>
+              <% end %>
+            </li>
+          <% end %>
+          <% if signed_in? %>
+            <li class="list-inline-item">
+              <%= link_to t("footer.api"), developers_api_path, class: "link-secondary" %>
+            </li>
+            <li class="list-inline-item">
+              <button type="button" class="btn btn-link link-secondary p-0 align-baseline"
+                      data-bs-toggle="modal" data-bs-target="#about-modal" aria-haspopup="dialog">
+                <%= t("navigation.about") %>
+              </button>
+            </li>
+          <% end %>
+          <li class="list-inline-item">
+            <% if signed_in? && current_release_notes.present? %>
+              <button type="button" class="btn btn-link link-secondary p-0 align-baseline"
+                      data-bs-toggle="modal" data-bs-target="#release-notes-modal"
+                      aria-haspopup="dialog"
+                      aria-label="<%= t("release_notes.footer_trigger", version: Allure::VERSION) %>">
+                <%= t("release_notes.footer_version", version: Allure::VERSION) %>
+              </button>
+            <% else %>
+              <span class="text-secondary">
+                <%= t("release_notes.footer_version", version: Allure::VERSION) %>
+              </span>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+      <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+        <span class="text-secondary"><%= t("footer.tagline") %></span>
+      </div>
+    </div>
+  </div>
+</footer>

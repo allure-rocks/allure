@@ -1,0 +1,99 @@
+<% content_for :title, current_user.display_name %>
+
+<% content_for :page_header do %>
+  <%# The avatar leads the title like the other pages' tiles, in the iOS
+      companion too; the handle and the workout count sit under the name
+      (DESIGN.md §20.2). The public profile link is not repeated here: the
+      account menu owns it (DESIGN.md §8.1). %>
+  <div class="row g-2 align-items-center">
+    <div class="col-auto">
+      <%= avatar_tag(current_user, size: "lg") %>
+    </div>
+    <div class="col min-w-0">
+      <h1 class="page-title text-truncate"><%= current_user.display_name %></h1>
+      <div class="text-secondary small mt-1">
+        @<%= current_user.username %>
+        <% if @has_workouts %>
+          · <%= t("me.sports.workouts", count: @workouts_count) %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= render "me/toolbar" %>
+
+<div class="row row-deck row-cards">
+  <%= render "me/pulse" %>
+
+  <div class="col-12">
+    <%= render "me/calendar" %>
+  </div>
+
+  <% if @has_workouts %>
+    <% if @sport_mix %>
+      <div class="col-lg-8">
+        <%= render "me/sport_mix" %>
+      </div>
+      <div class="col-lg-4">
+        <%= render "me/regularity" %>
+      </div>
+    <% else %>
+      <div class="col-12">
+        <%= render "me/regularity" %>
+      </div>
+    <% end %>
+
+    <% if @training_load %>
+      <div class="col-12">
+        <%= render "me/training_load", training_load: @training_load %>
+      </div>
+    <% end %>
+
+    <div class="col-md-6">
+      <%= render "me/segments" %>
+    </div>
+  <% end %>
+  <div class="col-md-6">
+    <%= render "me/records" %>
+  </div>
+
+  <% if @recent_workouts.any? %>
+    <%# A section heading between card rows: extra room above, so it reads as
+        the head of the cards below rather than the foot of the card above. %>
+    <div class="col-12 pt-3">
+      <div class="d-flex align-items-center w-100">
+        <h3 class="mb-0"><%= t("me.recent.title") %></h3>
+        <%# The list opens on the same window and sport the hub shows (§20.4). %>
+        <% view_all_params = {} %>
+        <% view_all_params[:sports] = [ @filter_sport.id ] if @filter_sport %>
+        <% view_all_params[:period] = @period if @period != "all" %>
+        <%= link_to workouts_path(view_all_params), class: "btn btn-sm btn-ghost-primary ms-auto" do %><%= t("me.recent.view_all") %><i class="ti ti-chevron-right ms-1" aria-hidden="true"></i><% end %>
+      </div>
+    </div>
+    <%# The recent-workout tiles get their own grid: they keep the page cards'
+        deck behaviour but breathe one step more (DESIGN.md §8.4). %>
+    <div class="col-12">
+      <div class="row row-deck row-cards hub-recent-workouts">
+        <%= render partial: "workouts/workout_card", collection: @recent_workouts, as: :workout, locals: { linked: true } %>
+      </div>
+    </div>
+  <% else %>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="empty">
+            <div class="empty-icon">
+              <i class="ti ti-activity fs-1 text-primary"></i>
+            </div>
+            <p class="empty-title"><%= t("me.empty.title") %></p>
+            <p class="empty-subtitle text-secondary"><%= t("me.empty.subtitle") %></p>
+            <div class="empty-action">
+              <%= link_to t("me.empty.import"), new_workout_import_path, class: "btn btn-primary" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

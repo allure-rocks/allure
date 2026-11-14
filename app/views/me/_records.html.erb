@@ -1,0 +1,34 @@
+<div class="card h-100">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("me.records.latest_title") %></h3>
+    <% records_href = @filter_sport ? records_path(sport_id: @filter_sport.id) : records_path %>
+    <div class="card-actions"><%= link_to records_href, class: "btn btn-sm btn-ghost-primary" do %><%= t("me.records.action") %><i class="ti ti-chevron-right ms-1" aria-hidden="true"></i><% end %></div>
+  </div>
+  <% if @latest_records.any? %>
+    <%# Each record is one row; the whole row opens the workout that holds it
+        (DESIGN.md §8.4), so no trailing icon competes with the value. %>
+    <div class="list-group list-group-flush allure-table-nums">
+      <% @latest_records.each do |record| %>
+        <% content = capture do %>
+          <span class="flex-fill min-w-0">
+            <span class="d-block text-truncate"><%= record_label(record) %></span>
+            <span class="d-block text-secondary small text-truncate"><%= sport_display_name(record.sport) %></span>
+          </span>
+          <strong class="text-nowrap"><%= format_record_value(record) %></strong>
+        <% end %>
+        <% if record.workout %>
+          <%= link_to workout_path(record.workout),
+                class: "list-group-item list-group-item-action d-flex align-items-center gap-3",
+                aria: { label: "#{sport_display_name(record.sport)} · #{record_label(record)} · #{format_record_value(record)} — #{t('me.records.view_workout')} : #{workout_display_title(record.workout)}" } do %>
+            <%= content %>
+            <i class="ti ti-chevron-right text-secondary" aria-hidden="true"></i>
+          <% end %>
+        <% else %>
+          <div class="list-group-item d-flex align-items-center gap-3"><%= content %></div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="card-body text-secondary"><%= t("me.records.empty") %></div>
+  <% end %>
+</div>

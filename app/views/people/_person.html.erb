@@ -1,0 +1,17 @@
+<%# One relationship row (following or follower). The follower list carries
+    the removal control (PLAN_PEOPLE.md §5). Tabler 1.6 has no list-group
+    slots, so the row is the shared flex layout. %>
+<div class="list-group-item d-flex align-items-center gap-2">
+  <%= actor_avatar_tag(actor, size: "sm") %>
+  <div class="flex-fill min-w-0">
+    <%= link_to actor_name(actor), actor_profile_path(actor), class: "fw-bold text-reset" %>
+    <div class="text-secondary small text-truncate"><%= actor_handle(actor) %></div>
+  </div>
+  <% if local_assigns.fetch(:removable, false) && following %>
+    <%= button_to t("people.followers.remove"), people_follower_path(following), method: :delete,
+          class: "btn btn-sm btn-ghost-danger",
+          form: { data: { confirm_title: t("people.followers.remove_title", name: actor_name(actor)),
+                          confirm_body: t("people.followers.remove_body"),
+                          confirm_verb: t("people.followers.remove") } } %>
+  <% end %>
+</div>

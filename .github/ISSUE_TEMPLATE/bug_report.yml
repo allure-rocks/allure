@@ -1,0 +1,60 @@
+name: Bug report
+description: Something behaves differently from what the documentation says.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Remove secrets, private routes and personal data
+        from anything you paste. For a security vulnerability, use the private
+        channel in [SECURITY.md](https://github.com/allure-rocks/allure/blob/main/SECURITY.md)
+        instead of opening an issue.
+  - type: input
+    id: version
+    attributes:
+      label: Allure version
+      description: The release tag, or the version in the footer.
+      placeholder: v0.10.0
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - Web application
+        - Federation (ActivityPub)
+        - Import
+        - REST API, webhooks or MCP
+        - iOS companion
+        - Deployment and Docker
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+      description: The exact steps, and any log line or screenshot that helps.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, database, reverse proxy, and anything unusual.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched the existing issues.
+          required: true
+        - label: This is not a security vulnerability (see SECURITY.md).
+          required: true

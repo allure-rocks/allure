@@ -1,0 +1,137 @@
+<%# The period in one card (DESIGN.md §8.4, §10.2, §15.1): four bare figures
+    with their previous-window deltas, then the weekly intensity pulse — a
+    mirrored waveform over the whole history whose selected period keeps the
+    primary ramp while the rest of the history is a neutral grey — with its
+    navigation, reading line and the screen-reader values table as the text
+    equivalent (§18.7). %>
+<% figures = [
+  { metric: :workouts, label: t("me.summary.workouts"), value: format_decimal(@summary[:workouts].to_i) },
+  { metric: :distance, label: t("me.summary.distance"), value: format_distance(@summary[:distance], precision: 1) },
+  { metric: :ascent, label: t("me.summary.ascent"), value: format_elevation(@summary[:ascent]) },
+  { metric: :duration, label: t("me.summary.duration"), value: format_duration_human(@summary[:duration]) }
+] %>
+<% peak = @intensity.peak(@pulse_period) %>
+<%# A peak of one is not a peak: a single-week period prints the week and
+    its facts alone, without the "Pic" wording. %>
+<% single_week = @intensity.total_count(@pulse_period) == 1 %>
+
+<div class="col-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="hub-figures">
+        <% figures.each do |figure| %>
+          <div class="hub-figure">
+            <div class="hub-figure-value allure-table-nums"><%= figure[:value] %></div>
+            <div class="hub-figure-label">
+              <span><%= figure[:label] %></span>
+              <%= comparison_badge(@comparison&.fetch(figure[:metric], nil)) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @has_workouts %>
+        <% hint = pulse_hint %>
+        <div class="hub-pulse" data-controller="hub-pulse"
+             data-hub-pulse-payload-value="<%= h(pulse_chart_payload(@intensity, period_range: @pulse_period, points: @pulse_points, older_url: @pulse_older_url).to_json) %>">
+          <div class="d-flex align-items-center gap-1 text-secondary small text-uppercase">
+            <span><%= t("me.pulse.title") %></span>
+            <button type="button" class="hub-tile-hint" aria-label="<%= hint %>"
+                    data-controller="tooltip" data-bs-toggle="tooltip"
+                    data-bs-trigger="hover focus click" data-bs-placement="bottom"
+                    data-bs-title="<%= hint %>">
+              <i class="ti ti-info-circle" aria-hidden="true"></i>
+            </button>
+            <span class="hub-pulse-count ms-auto allure-table-nums">
+              <%= t("me.pulse.active.week", count: @intensity.active_count(@pulse_period), total: @intensity.total_count(@pulse_period)) %>
+            </span>
+            <span class="btn-group btn-group-sm hub-pulse-nav ms-1" role="group"
+                  aria-label="<%= t("me.pulse.navigation.label") %>">
+              <button type="button" class="btn btn-ghost-secondary" data-action="hub-pulse#previous"
+                      data-hub-pulse-target="previous" aria-label="<%= t("me.pulse.navigation.previous") %>">
+                <i class="ti ti-chevron-left" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="btn btn-ghost-secondary" data-action="hub-pulse#latest"
+                      data-hub-pulse-target="latest" hidden>
+                <%= t("me.pulse.navigation.latest") %>
+              </button>
+              <button type="button" class="btn btn-ghost-secondary" data-action="hub-pulse#next"
+                      data-hub-pulse-target="next" aria-label="<%= t("me.pulse.navigation.next") %>">
+                <i class="ti ti-chevron-right" aria-hidden="true"></i>
+              </button>
+            </span>
+          </div>
+
+          <div class="hub-pulse-scroller" data-hub-pulse-target="scroll">
+            <span class="hub-pulse-sentinel" data-hub-pulse-target="sentinel" aria-hidden="true"></span>
+            <span class="hub-pulse-skeleton" data-hub-pulse-target="skeleton" hidden aria-hidden="true"></span>
+            <div class="hub-pulse-charts" role="img" tabindex="0"
+                 aria-label="<%= t("me.pulse.chart_label") %>"
+                 data-hub-pulse-target="charts"
+                 data-action="click->hub-pulse#select keydown->hub-pulse#keydown focus->hub-pulse#focus">
+            </div>
+          </div>
+
+          <%# The reading line is fixed (§15.1): it names the period's peak as
+              information. A week selected by tap, click, long-press scrub or
+              keyboard opens the callout instead — floating over the card,
+              pointing at the week, with its facts and the one button into
+              its workouts — so a selection never adds a line under the chart. %>
+          <div class="hub-pulse-reading">
+            <div class="hub-pulse-reading-line text-secondary small">
+              <% if peak && single_week %>
+                <span><%= tag.strong(pulse_week_label(peak[:period]), class: "text-body") %></span>
+                <span class="d-none d-md-inline" aria-hidden="true">·</span>
+                <span><%= pulse_detail(peak) %></span>
+              <% elsif peak %>
+                <span>
+                  <i class="ti ti-bolt text-primary" aria-hidden="true"></i>
+                  <%= t("me.pulse.peak_html", label: tag.strong(pulse_peak_label(peak), class: "text-body")) %>
+                </span>
+                <span class="d-none d-md-inline" aria-hidden="true">·</span>
+                <span><%= pulse_detail(peak) %></span>
+              <% else %>
+                <span><%= t("me.pulse.none") %></span>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="hub-callout" data-hub-pulse-target="callout" hidden>
+            <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary hub-callout__close hub-touch-target"
+                    data-action="hub-pulse#clear" aria-label="<%= t("me.pulse.clear") %>">
+              <i class="ti ti-x" aria-hidden="true"></i>
+            </button>
+            <div class="hub-callout__body small" data-hub-pulse-target="calloutBody"></div>
+            <a class="btn btn-sm btn-ghost-primary hub-callout__open hub-touch-target" href="#" data-hub-pulse-target="open" hidden><span data-hub-pulse-target="openLabel"></span><i class="ti ti-chevron-right ms-1" aria-hidden="true"></i></a>
+          </div>
+
+          <div class="visually-hidden" aria-live="polite" data-hub-pulse-target="live"></div>
+
+          <%# The wrapper, not the table, carries `visually-hidden`: a table
+              keeps its min-content width and would overflow the page. %>
+          <div class="visually-hidden">
+            <table>
+              <caption><%= t("me.pulse.table_caption", period: t("me.period.#{@period}")) %></caption>
+              <thead>
+                <tr>
+                  <th scope="col"><%= t("me.pulse.table.period") %></th>
+                  <th scope="col"><%= t("me.pulse.table.intensity") %></th>
+                  <th scope="col"><%= t("me.pulse.table.detail") %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @intensity.within(@pulse_period).each do |row| %>
+                  <tr>
+                    <th scope="row" class="fw-normal"><%= pulse_week_label(row[:period]) %></th>
+                    <td><%= row[:rest] ? "—" : pulse_score(row) %></td>
+                    <td><%= pulse_detail(row) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

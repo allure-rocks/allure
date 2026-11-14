@@ -1,0 +1,13 @@
+<%# The demo strip (PLAN_DEMO.md §6): every page names the instance for what it
+    is — a demo that is recreated every night. The next reset travels as an
+    absolute instant; the demo-reset controller turns the warning line on by
+    itself inside the last five minutes, without any reload. %>
+<div class="demo-strip d-print-none" data-controller="demo-reset"
+     data-demo-reset-at-value="<%= Allure::Demo.reset_at.iso8601 %>"
+     data-demo-reset-window-value="<%= Allure::Demo::RESET_WARNING_WINDOW.to_i %>"
+     role="note">
+  <span><%= t("demo.strip.reset", time: l(Allure::Demo.reset_at, format: "%H:%M")) %></span>
+  <span class="demo-strip-warning d-none" data-demo-reset-target="warning">
+    <%= t("demo.strip.warning") %>
+  </span>
+</div>

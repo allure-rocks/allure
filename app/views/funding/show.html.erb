@@ -1,0 +1,60 @@
+<% content_for :title, t("funding.title") %>
+<% content_for :page_header do %>
+  <div class="page-header"><h1 class="page-title"><%= t("funding.title") %></h1></div>
+<% end %>
+<p><%= t("funding.explanation") %></p>
+<% if @automatic_flow %>
+  <div class="alert alert-info" role="note"><%= t("funding.automatic_renewal") %></div>
+<% end %>
+<% if @manual_flow %>
+  <div class="alert alert-info" role="note"><%= t("funding.manual_confirmation") %></div>
+<% end %>
+<% if @live_subscriptions.any? %>
+  <div class="row row-deck row-cards">
+    <% @live_subscriptions.each do |subscription| %>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">
+              <i class="ti <%= ReactionsHelper::ICONS.fetch(subscription.tier) %> me-2" aria-hidden="true"></i>
+              <%= t("reactions.kinds.#{subscription.tier}") %>
+            </h2>
+            <p class="mb-1">
+              <%= t("funding.manage.status", status: t("funding.manage.statuses.#{subscription.status}")) %>
+            </p>
+            <% if subscription.cancel_at_period_end? %>
+              <p class="mb-1"><%= t("funding.manage.cancellation_scheduled") %></p>
+            <% end %>
+            <% if @badge_expires_at %>
+              <p class="mb-3"><%= t("funding.manage.badge_until", date: l(@badge_expires_at, format: :long)) %></p>
+            <% end %>
+            <%= button_to t("funding.manage.portal"), funding_portal_path(subscription), class: "btn btn-primary",
+                form: { data: { turbo: false } } %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="row row-deck row-cards">
+    <% Allure::Funding::TIERS.each do |tier| %>
+      <% checkout = @checkouts[tier] %>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title"><i class="ti <%= ReactionsHelper::ICONS.fetch(tier) %> me-2" aria-hidden="true"></i><%= t("reactions.kinds.#{tier}") %></h2>
+            <% if checkout %>
+              <%= link_to(checkout[:automatic] ? t("funding.subscribe") : t("funding.contribute"), checkout[:url],
+                    class: "btn btn-primary", data: { turbo: false }, rel: "noreferrer") %>
+              <p class="mt-2 mb-0 text-secondary">
+                <%= checkout[:automatic] ? t("funding.tier_automatic") : t("funding.tier_manual") %>
+              </p>
+            <% else %>
+              <p class="text-secondary mb-0"><%= t("funding.unavailable") %></p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,23 @@
+<%# Destructive confirmation modal (DESIGN.md §10.10). Rendered once in the
+    application layout. Destructive buttons carry data-confirm-title,
+    data-confirm-body and data-confirm-verb; the confirm controller opens this
+    modal instead of the browser-native data-turbo-confirm dialog, which cannot
+    state consequences and cannot be translated. %>
+<div class="modal fade" id="confirm-modal" tabindex="-1" aria-hidden="true" data-controller="confirm" data-action="click@window->confirm#maybeAsk">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" data-confirm-target="title"></h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<%= t("close") %>"></button>
+      </div>
+      <div class="modal-body" data-confirm-target="body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-action="click->confirm#confirm" data-confirm-target="submit">
+        </button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" data-confirm-target="cancel">
+          <%= t("confirm_modal.cancel") %>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

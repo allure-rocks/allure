@@ -1,0 +1,178 @@
+<% settings = form.object.settings.presence || PublishingProfile::DEFAULT_SETTINGS %>
+
+<div class="alert alert-info" role="note"><%= t("publishing_profiles.form.profile_changes") %> <%= help_link("publishing", class: "alert-link") %></div>
+
+<% if form.object.errors.any? %>
+  <div class="alert alert-danger" data-unsaved-changes="forced">
+    <h4 class="alert-title"><%= t("errors.unprocessable_entity.title") %></h4>
+    <ul class="mb-0">
+      <% form.object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="mb-3">
+      <%= form.label :name, t("publishing_profiles.form.name"), class: "form-label required" %>
+      <%= form.text_field :name, class: "form-control", maxlength: 120, size: nil, required: true, autofocus: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :audience, t("publishing_profiles.form.audience"), class: "form-label required" %>
+      <% if form.object.built_in? %>
+        <div class="form-control-plaintext"><%= t("publishing_profiles.audiences.#{form.object.audience}") %></div>
+      <% else %>
+        <%= form.select :audience,
+              [[ t("publishing_profiles.audiences.public"), "public" ],
+               [ t("publishing_profiles.form.audience_builtin_followers"), "followers", { disabled: true } ]],
+              {}, class: "form-select", aria: { describedby: "publishing-profile-audience-hint" } %>
+        <small class="form-text" id="publishing-profile-audience-hint"><%= t("publishing_profiles.form.audience_hint") %></small>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("publishing_profiles.form.representations_title") %></h3>
+  </div>
+  <div class="card-body">
+    <% PublishingProfile::BOOLEAN_SETTING_KEYS.first(2).each do |key| %>
+      <label class="form-check mb-3">
+        <%= check_box_tag "publishing_profile[settings][#{key}]", "1", settings[key.to_s] == true, class: "form-check-input" %>
+        <span class="form-check-label"><%= t("publishing_profiles.settings.#{key}") %></span>
+      </label>
+    <% end %>
+
+    <div class="mb-3">
+      <div class="form-label"><%= t("publishing_profiles.settings.metrics_title") %></div>
+      <% PublishingProfile::METRIC_GROUPS.each do |group, metrics| %>
+        <fieldset class="mb-2">
+          <legend class="form-label small text-secondary mb-1"><%= t("publishing_profiles.settings.metric_groups.#{group}") %></legend>
+          <div class="row">
+            <% metrics.each do |metric| %>
+              <div class="col-sm-6 col-lg-4">
+                <label class="form-check mb-2">
+                  <%= check_box_tag "publishing_profile[settings][metrics][]", metric, Array(settings["metrics"]).include?(metric),
+                                    id: "publishing_profile_settings_metrics_#{metric}", class: "form-check-input",
+                                    aria: ({ describedby: "publishing-profile-health-hint" } if PublishingProfile::HEALTH_METRIC_KEYS.include?(metric)) %>
+                  <span class="form-check-label"><%= publishing_profile_metric_label(metric) %></span>
+                </label>
+              </div>
+            <% end %>
+          </div>
+          <% if group == "sensors" %>
+            <small class="form-text d-block" id="publishing-profile-health-hint"><%= t("publishing_profiles.settings.health_hint") %></small>
+          <% end %>
+        </fieldset>
+      <% end %>
+    </div>
+
+    <% PublishingProfile::BOOLEAN_SETTING_KEYS.drop(2).each do |key| %>
+      <% hint_key = "#{key}_hint" %>
+      <% has_hint = %w[route basemap records device commute weather comments photos photo_positions].include?(key.to_s) %>
+      <% hint_id = "publishing_profile_settings_#{hint_key}" %>
+      <label class="form-check <%= has_hint ? "mb-1" : "mb-3" %>">
+        <%= check_box_tag "publishing_profile[settings][#{key}]", "1", PublishingProfile.setting_enabled?(settings, key),
+                          class: "form-check-input",
+                          aria: ({ describedby: hint_id } if has_hint) %>
+        <span class="form-check-label"><%= t("publishing_profiles.settings.#{key}") %></span>
+      </label>
+      <% if has_hint %>
+        <small class="form-text d-block mb-3" id="<%= hint_id %>"><%= t("publishing_profiles.settings.#{hint_key}") %></small>
+      <% end %>
+    <% end %>
+    <div class="form-text"><%= t("publishing_profiles.form.safety_hint") %></div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("publishing_profiles.form.delay_title") %></h3>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <%= form.label :publish_delay_seconds, t("publishing_profiles.form.delay_label"), class: "form-label required" %>
+      <%= form.select :publish_delay_seconds, publishing_delay_options, {}, class: "form-select" %>
+    </div>
+    <div class="alert alert-info mb-0" role="note"><%= t("publishing_profiles.form.delay_hint") %></div>
+  </div>
+</div>
+
+<%# Automatic publishing (PLAN_AUTO_PUBLISHING.md, DESIGN.md §19.25): off by
+    default; turning it on asks for an explicit acknowledgement in the same
+    submission. %>
+<% profile = form.object %>
+<% auto_holder = current_user.publishing_profiles.automatic.where(audience: profile.audience).where.not(id: profile.id).first %>
+<div class="card mb-3" id="auto-publish">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("publishing_profiles.form.auto_title") %></h3>
+  </div>
+  <div class="card-body">
+    <div class="alert alert-warning" role="note">
+      <p class="mb-2"><%= t("publishing_profiles.form.auto_notice", days: WorkoutAutoPublication::RECENT_WINDOW.in_days.to_i, files: WorkoutAutoPublication::BULK_FILE_ENTRIES) %></p>
+      <p class="mb-0"><%= t("publishing_profiles.form.auto_irrevocable") %></p>
+    </div>
+
+    <label class="form-check form-switch mb-1">
+      <%= form.check_box :auto_publish, class: "form-check-input", role: "switch",
+                                        disabled: auto_holder.present? && !profile.auto_publish?,
+                                        aria: { describedby: "publishing-profile-auto-publish-hint" } %>
+      <span class="form-check-label"><%= t("publishing_profiles.form.auto_label") %></span>
+    </label>
+    <small class="form-text d-block mb-3" id="publishing-profile-auto-publish-hint">
+      <% if auto_holder && !profile.auto_publish? %>
+        <%= t("publishing_profiles.form.auto_taken", name: auto_holder.name) %>
+      <% else %>
+        <%= t("publishing_profiles.form.auto_hint") %>
+      <% end %>
+    </small>
+
+    <label class="form-check mb-1">
+      <%= form.check_box :auto_publish_exclude_commute, class: "form-check-input",
+                                                        aria: { describedby: "publishing-profile-auto-commute-hint" } %>
+      <span class="form-check-label"><%= t("publishing_profiles.form.auto_exclude_commute") %></span>
+    </label>
+    <small class="form-text d-block mb-3" id="publishing-profile-auto-commute-hint"><%= t("publishing_profiles.form.auto_exclude_commute_hint") %></small>
+
+    <%# The sports an automatic profile leaves out, as the commute exclusion
+        above (PLAN_AUTO_PUBLISHING.md §2, §7): the filter bar's sport pills,
+        every active sport offered. The hidden empty value keeps the key
+        submitted, so unticking every sport clears the list. %>
+    <fieldset class="allure-sport-filter allure-sport-filter--form mb-1"
+              aria-describedby="publishing-profile-auto-sports-hint">
+      <legend class="form-label"><%= t("publishing_profiles.form.auto_exclude_sports") %></legend>
+      <%= hidden_field_tag "publishing_profile[auto_publish_excluded_sports][]", "", id: nil %>
+      <div class="form-selectgroup">
+        <% Sport.alphabetical.each do |sport| %>
+          <label class="form-selectgroup-item">
+            <%= check_box_tag "publishing_profile[auto_publish_excluded_sports][]", sport.slug,
+                              profile.auto_publish_excluded_sports.include?(sport.slug),
+                              id: "publishing_profile_auto_publish_excluded_sports_#{sport.slug}",
+                              class: "form-selectgroup-input" %>
+            <span class="form-selectgroup-label">
+              <span class="allure-sport-filter__icon" aria-hidden="true"><%= sport_icon_tag(sport) %></span>
+              <span><%= sport_display_name(sport) %></span>
+            </span>
+          </label>
+        <% end %>
+      </div>
+    </fieldset>
+    <small class="form-text d-block mb-3" id="publishing-profile-auto-sports-hint"><%= t("publishing_profiles.form.auto_exclude_sports_hint") %></small>
+
+    <% unless profile.auto_publish_in_database %>
+      <label class="form-check mb-0">
+        <%= form.check_box :auto_publish_acknowledged, class: "form-check-input" %>
+        <span class="form-check-label"><%= t("publishing_profiles.form.auto_acknowledge") %></span>
+      </label>
+    <% end %>
+  </div>
+</div>
+
+<div class="form-footer">
+  <%= form.submit t("publishing_profiles.form.save"), class: "btn btn-primary" %>
+  <%= link_to t("publishing_profiles.form.cancel"), publishing_profiles_path, class: "btn btn-link" %>
+</div>

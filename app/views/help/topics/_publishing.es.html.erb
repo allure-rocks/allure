@@ -1,0 +1,123 @@
+<p>
+  Una actividad que importas está <strong>no publicada</strong>: sus detalles y
+  su recorrido siguen siendo privados hasta que la publiques. Si activas por
+  separado las estadísticas o los récords compartidos en tu perfil, sus cifras
+  sí pueden contribuir a esas secciones. Ningún ajuste publica por ti salvo que
+  lo actives tú.
+</p>
+
+<h2>Una publicación es una copia</h2>
+<p>
+  Publicar crea una <strong>publicación</strong>: una copia de la actividad,
+  hecha en ese momento, que solo contiene lo que elegiste compartir. Tus
+  seguidores y la página Publicaciones leen esa copia, nunca la actividad en
+  sí. Como es
+  una copia:
+</p>
+<ul>
+  <li>editar la actividad después —su título, su descripción o su deporte— no
+    cambia la publicación;</li>
+  <li>para compartir una versión actualizada, <strong>reemplazas la
+    publicación</strong>: la anterior se elimina y se crea una nueva;</li>
+  <li>tu archivo original, tus notas privadas y los puntos ocultos por tus
+    zonas de privacidad nunca forman parte de ella.</li>
+</ul>
+
+<h2>Perfiles de publicación</h2>
+<p>
+  Un <strong>perfil de publicación</strong> es la receta de esa copia: qué
+  métricas lleva (distancia, tiempo, desnivel, velocidad, frecuencia
+  cardíaca…), si muestra la ruta, la imagen del mapa, el archivo GPX, el
+  dispositivo, la meteorología, tus fotos, si los comentarios están
+  abiertos y si se ocultan la salida y la llegada. Antes de publicar, el
+  formulario enumera exactamente lo que se compartirá y lo que no.
+</p>
+<p>
+  Tienes dos perfiles integrados, uno por audiencia, y puedes crear los tuyos
+  en <%= link_to "Perfiles de publicación", publishing_profiles_path %>.
+  Cambiar un perfil solo afecta a las publicaciones futuras: las existentes
+  conservan los ajustes con los que se hicieron.
+</p>
+<p>
+  La frecuencia cardíaca es un dato de salud: los perfiles nuevos no la
+  comparten hasta que la marques.
+</p>
+
+<h2>Audiencias</h2>
+<ul>
+  <li><strong>Pública</strong> — todos los miembros de esta instancia y, cuando
+    esta instancia comparte con otras, las cuentas que te siguen allí.</li>
+  <li><strong>Seguidores</strong> — solo las cuentas que te siguen, una vez que
+    las has aceptado. Las de esta instancia siempre las ven; las de otras
+    instancias solo las reciben si el operador de esta instancia lo ha
+    activado.</li>
+</ul>
+<p>
+  Una actividad puede tener una publicación por audiencia: una detallada para
+  tus seguidores y una pública más ligera, por ejemplo. Cada persona ve la
+  versión que le corresponde: tus seguidores leen la de seguidores.
+</p>
+
+<h2>Esperar antes de que salga</h2>
+<p>
+  Un perfil puede retener las publicaciones durante un tiempo —un día, tres
+  días, una semana, dos semanas o un mes— para que, por ejemplo, una salida
+  desde casa no sea visible mientras sigues fuera. Durante la espera, la
+  publicación está <strong>programada</strong>: nadie la ve, y puedes
+  publicarla ya, cambiar la fecha o cancelarla.
+</p>
+
+<h2>Publicación automática</h2>
+<p>
+  Si marcas un perfil como automático, cada actividad nueva se publica con él
+  en cuanto termina su análisis. Nunca se aplica a actividades de hace más de
+  siete días, a importaciones grandes (un archivo comprimido, un lote de
+  archivos) ni, si así lo eliges, a los trayectos diarios o a los deportes que
+  excluyas. Puedes rechazar una publicación automática pendiente desde la página
+  de la actividad.
+</p>
+
+<h2>Eliminar una publicación</h2>
+<p>
+  Eliminar una publicación la quita de esta instancia y pide a los demás
+  servidores que la tienen que también la eliminen.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("workouts.publication.confirm.body") %>
+</div>
+<p>
+  Eliminar la actividad retira sus publicaciones de la misma manera.
+</p>
+
+<h2>Estadísticas y récords en tu perfil</h2>
+<p>
+  En <%= link_to t("settings.profile.title"), settings_profile_path %> puedes
+  elegir por separado quién ve tus estadísticas generales por deporte y tus
+  récords personales: tus seguidores aceptados o todos los miembros de esta
+  instancia. Por defecto, ninguna sección se comparte. Las solicitudes de
+  seguimiento pendientes no dan acceso a cifras solo para seguidores; dejar de
+  seguir retira ese acceso. Los visitantes anónimos nunca tienen acceso.
+</p>
+<p>
+  Estas secciones abarcan todo tu historial, de todos los años, aunque las
+  actividades no estén publicadas. Son independientes de los perfiles de
+  publicación y de los filtros de publicaciones; activarlas no publica ninguna
+  actividad.
+</p>
+<p>
+  Los ejes del gráfico de radar de las estadísticas son los deportes: eliges la
+  métrica — actividades, distancia, tiempo en movimiento o desnivel positivo.
+  Con menos de tres deportes pertinentes, unas barras sustituyen al radar.
+</p>
+<p><%= t("profile.statistics.log_scale") %></p>
+<p>
+  <%= t("profile.statistics.reading_hint") %>
+  La información emergente muestra el nombre completo del deporte y el valor
+  real en tus unidades, nunca el logaritmo. El extremo de cada eje también
+  permite leer los ceros. Un toque breve en el móvil muestra lo mismo sin
+  bloquear los deslizamientos entre métricas ni el desplazamiento de la página.
+  Las barras ofrecen la misma lectura y las tablas conservan todos los valores.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("settings.profile.sharing.privacy") %>
+</div>

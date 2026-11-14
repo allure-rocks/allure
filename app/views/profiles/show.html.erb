@@ -1,0 +1,12 @@
+<% content_for :title, @user.display_name %>
+<% if Allure::Federation::Config.enabled? %>
+  <% content_for :federation_links do %>
+    <link rel="alternate" type="<%= Allure::Federation::MediaTypes::ACTIVITY_PUB %>" href="<%= user_actor_url(@user.username) %>">
+  <% end %>
+<% end %>
+
+<% content_for :page_header do %>
+  <%= render "profiles/header" %>
+<% end %>
+
+<%= render "profiles/page" %>

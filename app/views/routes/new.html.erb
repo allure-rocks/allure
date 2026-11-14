@@ -1,0 +1,31 @@
+<% content_for :title, t("routes.new.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("routes.new.pretitle") %></div>
+      <h1 class="page-title"><%= t("routes.new.title") %></h1>
+      <div class="text-secondary small"><%= link_to workout_display_title(@workout), workout_path(@workout) %></div>
+    </div>
+  </div>
+<% end %>
+
+<% reference = @route_suggestion&.effective_reference_workout %>
+<% if reference %>
+  <div class="alert alert-info mb-3" role="note">
+    <%= t("routes.new.suggestion_note",
+          date: format_started_at(reference.started_at),
+          count: @route_suggestion.occurrences_count) %>
+  </div>
+<% end %>
+
+<div class="row row-deck row-cards">
+  <div class="col-lg-7">
+    <%= render "workouts/map", workout: @workout %>
+  </div>
+  <div class="col-lg-5">
+    <%= form_with model: @route, url: workout_routes_path(@workout, route_suggestion: @route_suggestion&.id), scope: :route do |form| %>
+      <%= render "form", form: form %>
+    <% end %>
+  </div>
+</div>

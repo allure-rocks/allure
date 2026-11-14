@@ -1,0 +1,79 @@
+<p>
+  Cuando tus actividades registran la frecuencia cardíaca, Allure puede decirte
+  lo exigente que fue cada una y cómo se acumula tu entrenamiento a lo largo de
+  las semanas. Todo parte de tu perfil cardíaco.
+</p>
+
+<h2>Tu perfil cardíaco y tus zonas</h2>
+<p>
+  En <%= link_to "Frecuencia cardíaca", settings_heart_rate_path %> indicas tu
+  frecuencia cardíaca máxima y, si la conoces, tu frecuencia en reposo. Allure
+  propone la frecuencia más alta que una de tus grabaciones mantuvo al menos
+  diez segundos, que suele ser mejor estimación que una fórmula. De ese perfil
+  salen cinco <strong>zonas</strong>, de Z1 (suave) a Z5 (máxima), como
+  porcentajes de tu máximo o de tu reserva cardíaca (entre el reposo y el
+  máximo). Puedes ajustar cada umbral a mano.
+</p>
+<p>
+  Cambiar tu perfil recalcula todo tu historial con las nuevas zonas.
+</p>
+
+<h2>Tiempo en cada zona</h2>
+<p>
+  Cada actividad con frecuencia cardíaca tiene una pestaña <strong>Zonas de
+  frecuencia cardíaca</strong>: el tiempo pasado en cada zona. Una grabación en la que la
+  frecuencia cardíaca es demasiado escasa, o está presente menos de la mitad
+  del tiempo, no tiene zonas, y la pestaña explica por qué. Los valores que
+  repite una banda que se desliza se dejan aparte en lugar de contarse.
+</p>
+
+<h2>Carga</h2>
+<p>
+  La <strong>carga</strong> de una actividad son los minutos pasados en cada
+  zona, multiplicados por el número de la zona (el método de Edwards): diez
+  minutos en Z4 cuentan 40 puntos; diez minutos en Z1, 10. El tiempo por debajo
+  del umbral inferior de tus zonas —el 50 % de tu máximo con los umbrales por
+  defecto— no cuenta.
+</p>
+
+<h2>Forma física, fatiga y estado de forma</h2>
+<p>
+  En la página Yo, la tarjeta <strong>Carga de entrenamiento</strong> sigue tres
+  cifras durante los últimos 90 días, todos los deportes juntos:
+</p>
+<ul>
+  <li><strong>Forma física</strong> — tu carga diaria media en 42 días, con más
+    peso para los días recientes. Lo que has construido.</li>
+  <li><strong>Fatiga</strong> — la misma media en 7 días. Lo que estás
+    asimilando.</li>
+  <li><strong>Estado de forma</strong> — la forma física de ayer menos la fatiga de ayer.
+    Si es positivo, llegas con frescura; si es negativo, estás acumulando carga, algo
+    normal en mitad de un bloque de entrenamiento.</li>
+</ul>
+<p>
+  Ambas medias empiezan desde cero en tu primera actividad con frecuencia
+  cardíaca: la forma física solo es representativa al cabo de unas seis semanas.
+</p>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[4] %>
+</div>
+<div class="alert alert-info" role="note">
+  <%= t("me.training_load.how")[5] %>
+</div>
+
+<h2>Las zonas a lo largo del tiempo</h2>
+<p>
+  <%= link_to "Estadísticas de frecuencia cardíaca", heart_rate_stats_path %> apila tu
+  tiempo en cada zona por semana o por mes, en horas o en proporciones, y lo
+  agrupa en intensidad baja, moderada y alta. Úsalo como referencia, no como
+  una prescripción.
+</p>
+
+<h2>Sigue siendo privado</h2>
+<div class="alert alert-info" role="note">
+  <%= t("settings.heart_rate.privacy") %>
+</div>
+<p>
+  Un perfil de publicación puede compartir la frecuencia cardíaca media y
+  máxima de una actividad, solo si las marcas.
+</p>

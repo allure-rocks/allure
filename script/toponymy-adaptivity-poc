@@ -1,0 +1,143 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "json"
+require_relative "../config/environment"
+
+WORKOUT_IDS = [
+  "UcwLKjbcghDdvrvr3oTSQ4",
+  "59avQqPMArpedeKmtaZ3s8"
+].freeze
+
+DENSE_RADIUS = 2_000.0
+SPARSE_RADIUS = 5_000.0
+MIN_SPACING_METRES = 1_000.0
+
+def numeric(point, key)
+  value = point[key]
+  value.to_f if value.is_a?(Numeric) && value.to_f.finite?
+end
+
+def normalize(name)
+  I18n.transliterate(name.to_s).downcase.strip
+end
+
+def speed_for(workout)
+  moving_time = workout.moving_time.to_f
+  return 0.0 if moving_time <= 0
+
+  (workout.distance.to_f / moving_time) * 3.6
+end
+
+def sample_points(workout)
+  Allure::Toponyms::SampleTrack.new(segments: workout.track_segments).call
+end
+
+def results_for(toponymy)
+  toponymy.samples.each_with_object({}) do |sample, hash|
+    distance = sample["distance"].to_f
+    hash[distance.round(1)] = sample["result"] if sample["result"].is_a?(Hash)
+  end
+end
+
+def enriched_samples(samples, results)
+  samples.map do |sample|
+    result = results[sample[:distance].round(1)] || { feature: nil, hierarchy: [] }
+    sample.merge(result:)
+  end
+end
+
+def candidates_for(samples)
+  results = samples.map { |sample| sample[:result] || { feature: nil, hierarchy: [] } }
+  Allure::Toponyms::CandidateBuilder.new(samples:, results:).call
+end
+
+def density_for(candidates, candidate)
+  point = candidate.fetch(:distance)
+  candidates.count { |other| (other.fetch(:distance) - point).abs <= DENSE_RADIUS }
+end
+
+def local_density_score(candidates, candidate)
+  point = candidate.fetch(:distance)
+  dense = candidates.count { |other| (other.fetch(:distance) - point).abs <= DENSE_RADIUS }
+  sparse = candidates.count { |other| (other.fetch(:distance) - point).abs <= SPARSE_RADIUS }
+  { dense:, sparse: }
+end
+
+def adapt_spacing(candidates, total_distance)
+  return MIN_SPACING_METRES if candidates.empty?
+
+  avg_density = candidates.sum { |candidate| density_for(candidates, candidate) } / candidates.length.to_f
+  if avg_density > 3
+    [ 1_000.0, total_distance * 0.08 ].max
+  elsif avg_density > 1
+    [ 2_000.0, total_distance * 0.10 ].max
+  else
+    [ 3_000.0, total_distance * 0.12 ].max
+  end
+end
+
+def marker_limit(total_distance, avg_density)
+  if avg_density > 3
+    [ 5, (total_distance / 1_000.0).ceil ].min
+  elsif avg_density > 1
+    [ 4, (total_distance / 2_000.0).ceil ].min
+  else
+    [ 4, (total_distance / 3_000.0).ceil ].min
+  end
+end
+
+WORKOUT_IDS.each do |short_id|
+  workout = Workout.find_by_short_id!(short_id)
+  toponymy = workout.toponymy
+  speed = speed_for(workout)
+
+  samples = sample_points(workout)
+  results = results_for(toponymy)
+  enriched = enriched_samples(samples, results)
+  candidates = candidates_for(enriched)
+
+  start_name = toponymy&.start_place&.dig("name")
+  finish_name = toponymy&.finish_place&.dig("name")
+
+  current_selector = Allure::Toponyms::Selector.new(
+    candidates:,
+    total_distance: workout.distance,
+    start_name:,
+    finish_name:
+  )
+  current_markers = current_selector.call
+
+  if candidates.any?
+    avg_density = candidates.sum { |candidate| density_for(candidates, candidate) } / candidates.length.to_f
+    adaptive_spacing = adapt_spacing(candidates, workout.distance)
+    limit = marker_limit(workout.distance, avg_density)
+  else
+    avg_density = 0.0
+    adaptive_spacing = 3_000.0
+    limit = 4
+  end
+
+  puts "=" * 80
+  puts "Workout: #{short_id}"
+  puts "Distance: #{workout.distance.round(1)} m"
+  puts "Speed: #{speed.round(1)} km/h"
+  puts "Samples: #{samples.length}"
+  puts "Candidates: #{candidates.length}"
+  puts "Average density (2 km radius): #{avg_density.round(2)}"
+  puts "Adaptive spacing: #{adaptive_spacing.round(0)} m"
+  puts "Adaptive limit: #{limit}"
+  puts ""
+  puts "Current markers (#{current_markers.length}):"
+  current_markers.each do |marker|
+    d = local_density_score(candidates, marker)
+    puts "  - #{marker[:name]} (#{marker[:kind]}) @ #{marker[:distance].round(0)} m, rank #{marker[:rank]}, dense=#{d[:dense]}, sparse=#{d[:sparse]}"
+  end
+  puts ""
+  puts "Dinant candidates:"
+  candidates.select { |candidate| normalize(candidate[:name]) == "dinant" }.each do |candidate|
+    d = local_density_score(candidates, candidate)
+    puts "  - #{candidate[:kind]} @ #{candidate[:distance].round(0)} m, coverage=#{candidate[:coverage].round(0)}, occurrences=#{candidate[:occurrences]}, climb_summit=#{candidate[:climb_summit]}, dense=#{d[:dense]}, sparse=#{d[:sparse]}"
+  end
+  puts ""
+end

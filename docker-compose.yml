@@ -1,0 +1,262 @@
+name: allure
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: .dockerfiles/Dockerfile.dev
+    target: development
+  image: allure-dev:latest
+  environment: &env
+    RAILS_ENV: ${RAILS_ENV:-development}
+    NODE_ENV: ${NODE_ENV:-development}
+    DATABASE_URL: postgis://allure:allure@db:5432/allure_${RAILS_ENV:-development}
+    # Federation identity. Scheme + host + PORT together form the actor URI
+    # namespace, and are permanent once anything has been federated.
+    # See PLAN.md §6 — the point of no return is the M5 exit gate.
+    RAILS_LOG_TO_STDOUT: "1"
+    FEDERATION_BASE_URL: ${FEDERATION_BASE_URL:-http://allure.test:3001}
+    # Local-ring escape hatches. Production defaults are the opposite.
+    FEDERATION_PROTOCOL: ${FEDERATION_PROTOCOL:-http}
+    ALLOW_PRIVATE_IPS: ${ALLOW_PRIVATE_IPS:-false}
+    # The separately gated restricted audience. Off by default; set it to true
+    # only to exercise followers-only publishing locally.
+    FEDERATION_RESTRICTED_ENABLED: ${FEDERATION_RESTRICTED_ENABLED:-false}
+    # The single operator account for the administration console. Development
+    # defaults to the seeded marie account so the console is reachable locally;
+    # production must set this explicitly (or leave it unset to disable it).
+    INSTANCE_OPERATOR_USERNAME: ${INSTANCE_OPERATOR_USERNAME:-marie}
+    # Session idle timeout and absolute lifetime in days (PLAN_AUTH.md §8).
+    AUTH_SESSION_IDLE_DAYS: ${AUTH_SESSION_IDLE_DAYS:-}
+    AUTH_SESSION_MAX_DAYS: ${AUTH_SESSION_MAX_DAYS:-}
+    # Two-step verification grace period in days, and the iOS app identifiers
+    # allowed to use passkeys (PLAN_AUTH.md §3).
+    AUTH_2FA_GRACE_DAYS: ${AUTH_2FA_GRACE_DAYS:-}
+    IOS_APP_IDS: ${IOS_APP_IDS:-}
+    # Demo mode (PLAN_DEMO.md): off unless the env file turns it on — a
+    # throwaway instance whose shared accounts and reset strip only exist for
+    # testing or a public demo.
+    DEMO_INSTANCE: ${DEMO_INSTANCE:-}
+    DEMO_ACCOUNTS: ${DEMO_ACCOUNTS:-}
+    DEMO_PASSWORD: ${DEMO_PASSWORD:-}
+    DEMO_OPERATOR_PASSWORD: ${DEMO_OPERATOR_PASSWORD:-}
+    DEMO_RESET_AT: ${DEMO_RESET_AT:-}
+    # Identity providers (PLAN_AUTH.md §3); each is enabled only when all its
+    # keys are set. The `oidc` profile's Dex answers the generic provider.
+    AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID:-}
+    AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET:-}
+    AUTH_APPLE_SERVICES_ID: ${AUTH_APPLE_SERVICES_ID:-}
+    AUTH_APPLE_TEAM_ID: ${AUTH_APPLE_TEAM_ID:-}
+    AUTH_APPLE_KEY_ID: ${AUTH_APPLE_KEY_ID:-}
+    AUTH_APPLE_PRIVATE_KEY: ${AUTH_APPLE_PRIVATE_KEY:-}
+    AUTH_OIDC_ISSUER: ${AUTH_OIDC_ISSUER:-}
+    AUTH_OIDC_CLIENT_ID: ${AUTH_OIDC_CLIENT_ID:-}
+    AUTH_OIDC_CLIENT_SECRET: ${AUTH_OIDC_CLIENT_SECRET:-}
+    AUTH_OIDC_LABEL: ${AUTH_OIDC_LABEL:-}
+    AUTH_OIDC_REQUIRED_ACR: ${AUTH_OIDC_REQUIRED_ACR:-}
+    AUTH_OIDC_REQUIRED_AMR: ${AUTH_OIDC_REQUIRED_AMR:-}
+    # Prometheus /metrics bearer token. Unset disables the endpoint (404).
+    METRICS_TOKEN: ${METRICS_TOKEN:-}
+    # Push notifications for the iOS companion (PLAN_PUSH.md §5). Off until
+    # the three VAPID values are set (`bin/rails push:vapid_keys`).
+    VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+    VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+    VAPID_SUBJECT: ${VAPID_SUBJECT:-}
+    PUSH_RELAY_ORIGINS: ${PUSH_RELAY_ORIGINS:-}
+    # Ceiling on the location an API token may hand an AI assistant through
+    # /mcp: none, filtered or raw. Unset means no ceiling (PLAN_MCP.md §4).
+    MCP_GEOMETRY_MAX: ${MCP_GEOMETRY_MAX:-}
+    # Public presentation metadata (footer, NodeInfo, PWA description). All
+    # unset by default; nothing is invented for the operator.
+    INSTANCE_NAME: ${INSTANCE_NAME:-}
+    INSTANCE_DESCRIPTION: ${INSTANCE_DESCRIPTION:-}
+    INSTANCE_HOST_NAME: ${INSTANCE_HOST_NAME:-}
+    INSTANCE_HOST_URL: ${INSTANCE_HOST_URL:-}
+    MAP_STYLE_URL: ${MAP_STYLE_URL:-}
+    MAP_STYLE_URL_DARK: ${MAP_STYLE_URL_DARK:-}
+    MAP_RASTER_TEMPLATE: ${MAP_RASTER_TEMPLATE:-}
+    ROUTE_IMAGE_MAP_ORIGINS: ${ROUTE_IMAGE_MAP_ORIGINS:-}
+    ROUTE_IMAGE_RENDER_TIMEOUT_MS: ${ROUTE_IMAGE_RENDER_TIMEOUT_MS:-30000}
+    GEOCODING_BASE_URL: ${GEOCODING_BASE_URL:-}
+    ELEVATION_BASE_URL: ${ELEVATION_BASE_URL:-}
+    ELEVATION_DATASET: ${ELEVATION_DATASET:-}
+    ELEVATION_INTERPOLATION: ${ELEVATION_INTERPOLATION:-}
+    ELEVATION_SAMPLE_METRES: ${ELEVATION_SAMPLE_METRES:-}
+    ELEVATION_REQUESTS_PER_SECOND: ${ELEVATION_REQUESTS_PER_SECOND:-}
+    ELEVATION_MAX_REQUESTS_PER_WORKOUT: ${ELEVATION_MAX_REQUESTS_PER_WORKOUT:-}
+    PHOTOS_ENABLED: ${PHOTOS_ENABLED:-true}
+    PHOTOS_QUOTA_MB: ${PHOTOS_QUOTA_MB:-2048}
+    WEATHER_ENABLED: ${WEATHER_ENABLED:-}
+    FUNDING_ENABLED: ${FUNDING_ENABLED:-}
+    FUNDING_LINK_COFFEE: ${FUNDING_LINK_COFFEE:-}
+    FUNDING_LINK_BEER: ${FUNDING_LINK_BEER:-}
+    FUNDING_LINK_ENERGY: ${FUNDING_LINK_ENERGY:-}
+    FUNDING_STRIPE_SECRET_KEY: ${FUNDING_STRIPE_SECRET_KEY:-}
+    FUNDING_STRIPE_WEBHOOK_SECRET: ${FUNDING_STRIPE_WEBHOOK_SECRET:-}
+    FUNDING_STRIPE_PRICE_COFFEE: ${FUNDING_STRIPE_PRICE_COFFEE:-}
+    FUNDING_STRIPE_PRICE_BEER: ${FUNDING_STRIPE_PRICE_BEER:-}
+    FUNDING_STRIPE_PRICE_ENERGY: ${FUNDING_STRIPE_PRICE_ENERGY:-}
+    FUNDING_STRIPE_LINK_COFFEE: ${FUNDING_STRIPE_LINK_COFFEE:-}
+    FUNDING_STRIPE_LINK_BEER: ${FUNDING_STRIPE_LINK_BEER:-}
+    FUNDING_STRIPE_LINK_ENERGY: ${FUNDING_STRIPE_LINK_ENERGY:-}
+    WEATHER_FORECAST_URL: ${WEATHER_FORECAST_URL:-}
+    WEATHER_ARCHIVE_URL: ${WEATHER_ARCHIVE_URL:-}
+    WEATHER_FORECAST_SINCE: ${WEATHER_FORECAST_SINCE:-}
+    WEATHER_API_KEY: ${WEATHER_API_KEY:-}
+    WEATHER_REQUESTS_PER_SECOND: ${WEATHER_REQUESTS_PER_SECOND:-}
+    WEATHER_MAX_REQUESTS_PER_DAY: ${WEATHER_MAX_REQUESTS_PER_DAY:-}
+    GARMIN_CONNECT_IMPORT_ENABLED: ${GARMIN_CONNECT_IMPORT_ENABLED:-}
+    EXR_IMPORT_ENABLED: ${EXR_IMPORT_ENABLED:-}
+    WITHINGS_IMPORT_ENABLED: ${WITHINGS_IMPORT_ENABLED:-}
+    ZWIFT_IMPORT_ENABLED: ${ZWIFT_IMPORT_ENABLED:-}
+  volumes:
+    # node_modules is deliberately NOT a named volume: it must stay readable on
+    # the host for editor tooling, and for reading Tabler's SCSS sources and
+    # demo markup while porting the layout.
+    - .:/app:cached
+    - bundle:/usr/local/bundle
+    - history:/usr/local/hist
+  tmpfs:
+    - /tmp
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  db:
+    # NOTE: the official postgis/postgis images are amd64-only and would run
+    # emulated on Apple Silicon. imresamu publishes a multi-arch build.
+    image: imresamu/postgis:18-3.6
+    environment:
+      POSTGRES_USER: allure
+      POSTGRES_PASSWORD: allure
+      # Deliberately NOT allure_development. The PostGIS entrypoint enables
+      # postgis + topology + tiger_geocoder + fuzzystrmatch in POSTGRES_DB, and
+      # those would then leak into schema.rb on every dump. Letting Rails create
+      # the application databases (from the clean template1) keeps the schema to
+      # exactly the one extension we actually declare in a migration.
+      POSTGRES_DB: postgres
+      # So that `dip psql` works without prompting.
+      PGPASSWORD: allure
+    volumes:
+      # PostgreSQL 18+ images store data in a major-version subdirectory, so the
+      # mount goes at /var/lib/postgresql — NOT the pre-18 /var/lib/postgresql/data,
+      # which the entrypoint now rejects outright.
+      - pgdata:/var/lib/postgresql
+    # Published only for host-side GUI clients. Deliberately not 5432, which
+    # commonly collides with a local Postgres or another project's container.
+    ports:
+      - "${POSTGRES_PORT:-5443}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U allure -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  rails:
+    <<: *app
+    # Keep the Puma pidfile outside the bind mount so an abrupt Docker shutdown
+    # cannot leave a stale PID 1 that blocks the next container start.
+    #
+    # db:prepare runs before Puma so a migration pulled into the bind mount is
+    # applied on the next `dip up` instead of surfacing as the pending-migration
+    # error page. It migrates an existing database and creates a missing one;
+    # on a brand-new database it loads the schema and seeds, exactly like
+    # `dip provision`. `exec` keeps Puma as PID 1 so `docker stop` reaches it.
+    # `dip rails ...` overrides this command entirely. Workers start in
+    # parallel, so a migration with breaking DDL can briefly fail their jobs;
+    # that is acceptable in development.
+    command:
+      - bash
+      - -c
+      - bin/rails db:prepare && exec bin/rails server -b 0.0.0.0 -p 3001 -P /tmp/server.pid
+    ports:
+      - "3001:3001"
+    # The identity URL resolves inside the network too, so a provider's
+    # redirect back to FEDERATION_BASE_URL reaches Rails from Playwright.
+    networks:
+      default:
+        aliases:
+          - allure.test
+    environment:
+      <<: *env
+      VITE_RUBY_HOST: vite
+      # The GitLab token belongs only in the Rails container; it is never
+      # passed to Vite, the worker, or the browser.
+      GITLAB_ENABLED: ${GITLAB_ENABLED:-false}
+      GITLAB_API_URL: ${GITLAB_API_URL:-https://gitlab.com/api/v4}
+      GITLAB_PROJECT_ID: ${GITLAB_PROJECT_ID:-}
+      GITLAB_TOKEN: ${GITLAB_TOKEN:-}
+      GITLAB_LABELS: ${GITLAB_LABELS:-feedback,allure}
+      GITLAB_CONFIDENTIAL: ${GITLAB_CONFIDENTIAL:-false}
+
+  vite:
+    <<: *app
+    command: bin/vite dev
+    ports:
+      - "3037:3037"
+    environment:
+      <<: *env
+      VITE_RUBY_HOST: 0.0.0.0
+
+  worker:
+    <<: *app
+    command: bin/jobs
+    environment:
+      <<: *env
+      SOLID_QUEUE_QUEUES: default,solid_queue_recurring,federation,federation_media,remote_imports,webhooks,photos
+
+  route-image-worker:
+    <<: *app
+    image: allure-route-image-worker-dev:latest
+    build:
+      context: .
+      dockerfile: .dockerfiles/Dockerfile.dev
+      target: route-image-worker
+    command: bin/jobs
+    init: true
+    cpus: 1
+    mem_limit: 2g
+    security_opt:
+      - no-new-privileges
+    environment:
+      <<: *env
+      CHROMIUM_EXECUTABLE_PATH: /usr/bin/chromium
+      SOLID_QUEUE_QUEUES: route_images
+      SOLID_QUEUE_THREADS: 1
+
+  # Development OpenID Connect provider (PLAN_AUTH.md §10), outside `dip up`:
+  #   dip compose --profile oidc up -d dex
+  # with AUTH_OIDC_ISSUER=http://dex.test:5556/dex, AUTH_OIDC_CLIENT_ID=allure-dev
+  # and AUTH_OIDC_CLIENT_SECRET=allure-dev-secret in .env (user rider@dex.test,
+  # password "password"). The host browser needs `127.0.0.1 dex.test`.
+  dex:
+    image: ghcr.io/dexidp/dex:v2.44.0
+    profiles: [oidc]
+    command: ["dex", "serve", "/etc/dex/config.yaml"]
+    volumes:
+      - ./.dockerfiles/dex/config.yaml:/etc/dex/config.yaml:ro
+    ports:
+      - "5556:5556"
+    networks:
+      default:
+        aliases:
+          - dex.test
+
+  playwright:
+    image: mcr.microsoft.com/playwright/mcp:latest
+    command: ["--allowed-hosts", "*", "--host", "0.0.0.0", "--port", "8932"]
+    init: true
+    cpus: 1
+    mem_limit: 2g
+    security_opt:
+      - no-new-privileges
+    volumes:
+      - ./tmp:/tmp
+    ports:
+      - "8932:8932"
+
+volumes:
+  bundle:
+  pgdata:
+  history:

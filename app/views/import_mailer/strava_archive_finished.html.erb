@@ -1,0 +1,14 @@
+<% scope = "import_mailer.strava_archive_finished" %>
+<p><%= t("import_mailer.greeting", name: @user.display_name) %></p>
+<% if @batch.status == "completed" %>
+  <p><%= t("#{scope}.completed.body", imported: @batch.imported_entries, duplicates: @batch.duplicate_entries,
+                                      skipped: @batch.skipped_entries, failed: @batch.failed_entries) %></p>
+  <% if @photos %>
+    <p><%= t("#{scope}.completed.photos", attached: @photos["photos"], missing: @photos["photos_missing"],
+                                          refused: @photos["photos_refused"]) %></p>
+  <% end %>
+  <p><%= t("#{scope}.completed.enrichment") %></p>
+<% else %>
+  <p><%= t("#{scope}.failed.body", error: @batch.error_message.presence || t("#{scope}.failed.unknown")) %></p>
+<% end %>
+<p><%= link_to t("#{scope}.action"), workout_import_url(@batch) %></p>

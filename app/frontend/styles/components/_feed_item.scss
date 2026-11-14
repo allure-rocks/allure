@@ -1,0 +1,99 @@
+// Feed item (DESIGN.md §8.3, §20.1): the linked workout-card anatomy with an
+// author header. The title's stretched link covers the whole card; only the
+// author links, the sport tile (see _sport.scss) and the badge group are
+// lifted above it, because they link elsewhere or carry a hoverable tooltip.
+.feed-item > .card-body {
+  position: static;
+}
+
+.feed-item__link,
+.feed-item__lift,
+.feed-item .allure-reactions,
+.feed-item__comments {
+  position: relative;
+  z-index: 2;
+}
+
+// The reaction bar closes the card on the right, the side the metric grid and
+// the card's own actions already end on (DESIGN.md §10.17).
+.feed-item .allure-reactions__group {
+  justify-content: flex-end;
+}
+
+// With a thread, its count pill leads the same right-aligned row
+// (DESIGN.md §10.20). Only the pills are lifted: the row's empty start stays
+// part of the card's link.
+.feed-item__social {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.375rem;
+
+  // Every frame is full width (frames.scss); beside the pill, the bar keeps
+  // the width of its pills so both share one row.
+  > .allure-reactions {
+    width: auto;
+  }
+}
+
+.feed-item__author {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+// The route image sits between the author header and the body: full width,
+// no radius of its own, on the sunken surface with the same border as any
+// other media (§15.4).
+.feed-item__image,
+.feed-item__media-state {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--allure-surface-sunken);
+  border-bottom: 1px solid var(--allure-border);
+}
+
+.feed-item__title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+// Three lines of the published description, then nothing: the card is a
+// summary, the detail page carries the whole text.
+.feed-item__excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Compact tiles: the same atom as the workout summary (§10.2), smaller
+// padding and value so four fit a 720px card, two per row on phones.
+.allure-feed-metrics {
+  gap: 0.5rem;
+
+  .allure-metric-tile {
+    padding: 0.5rem 0.75rem;
+
+    .card-stamp {
+      --stamp-size: 2.5rem;
+    }
+  }
+
+  dt {
+    margin-bottom: 0.125rem;
+    font-size: 0.65rem;
+  }
+
+  dd {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .allure-feed-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

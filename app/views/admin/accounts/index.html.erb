@@ -1,0 +1,79 @@
+<% content_for :title, t("admin.accounts.title") %>
+
+<% content_for :page_header do %>
+  <div class="page-pretitle"><%= t("admin.pretitle") %></div>
+  <h1 class="page-title"><%= t("admin.accounts.title") %></h1>
+<% end %>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <%= form_with url: admin_accounts_path, method: :get, class: "row g-2 align-items-end" do %>
+      <div class="col">
+        <%= label_tag :q, t("admin.accounts.search"), class: "form-label" %>
+        <%= text_field_tag :q, @query, class: "form-control", placeholder: t("admin.accounts.search_placeholder") %>
+      </div>
+      <div class="col-auto">
+        <%= label_tag :state, t("admin.accounts.state"), class: "form-label" %>
+        <%= select_tag :state,
+              options_for_select(%w[all active suspended].map { |value| [ t("admin.accounts.states.#{value}"), value ] }, @state),
+              class: "form-select" %>
+      </div>
+      <div class="col-auto">
+        <%= submit_tag t("admin.accounts.apply"), class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-sm card-table">
+      <thead>
+        <tr>
+          <th scope="col"><%= t("admin.accounts.table.account") %></th>
+          <th scope="col"><%= t("admin.accounts.table.email") %></th>
+          <th scope="col"><%= t("admin.accounts.table.created_at") %></th>
+          <th scope="col" class="text-end"><%= t("admin.accounts.table.workouts") %></th>
+          <th scope="col" class="text-end"><%= t("admin.accounts.table.publications") %></th>
+          <th scope="col"><%= t("admin.accounts.table.state") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @accounts.each do |account| %>
+          <tr>
+            <td>
+              <%= link_to admin_account_path(account) do %>
+                <div><%= account.display_name %></div>
+                <div class="text-secondary small">@<%= account.username %></div>
+              <% end %>
+              <% if account == current_user %>
+                <span class="badge bg-primary-lt"><%= t("admin.accounts.operator") %></span>
+              <% end %>
+            </td>
+            <td class="text-secondary"><%= account.email_address %></td>
+            <td class="text-secondary"><%= l(account.created_at, format: :long) %></td>
+            <td class="text-end"><%= @workout_counts[account.id].to_i %></td>
+            <td class="text-end"><%= @publication_counts[account.id].to_i %></td>
+            <td>
+              <% if account.deletion_scheduled? %>
+                <span class="badge bg-warning-lt"><%= t("admin.accounts.states.deletion_scheduled") %></span>
+              <% elsif account.suspended? %>
+                <span class="badge bg-danger-lt"><%= t("admin.accounts.states.suspended") %></span>
+              <% else %>
+                <span class="badge bg-success-lt"><%= t("admin.accounts.states.active") %></span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        <% if @accounts.empty? %>
+          <tr><td colspan="6" class="text-secondary"><%= t("admin.accounts.empty") %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if @pagy.pages > 1 %>
+    <div class="card-footer d-flex justify-content-center">
+      <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
+  <% end %>
+</div>

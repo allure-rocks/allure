@@ -1,0 +1,40 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://wanderer.example/api/v1/trail/fixture-trail",
+  "type": "Note",
+  "attributedTo": "https://wanderer.example/users/demo",
+  "name": "Morning hike",
+  "startTime": "2026-08-26T12:00:00Z",
+  "location": {
+    "type": "Place",
+    "name": "Sanitized route",
+    "longitude": 6.1234,
+    "latitude": 45.1234
+  },
+  "content": "Morning hike",
+  "url": "https://wanderer.example/api/v1/trail/fixture-trail",
+  "published": "2026-08-26T12:00:00Z",
+  "to": [ "https://www.w3.org/ns/activitystreams#Public" ],
+  "cc": [ "https://wanderer.example/users/demo/followers" ],
+  "tag": [
+    { "type": "Note", "name": "category", "content": "Hiking" },
+    { "type": "Note", "name": "distance", "content": "23064.640055m" },
+    { "type": "Note", "name": "elevation_gain", "content": "1009.000000m" },
+    { "type": "Note", "name": "elevation_loss", "content": "1007.000000m" },
+    { "type": "Note", "name": "duration", "content": "22345.000000m" }
+  ],
+  "attachment": [
+    {
+      "type": "Image",
+      "mediaType": "image/png",
+      "name": "Route image",
+      "url": "https://wanderer.example/api/v1/trail/fixture-trail/media/route-image"
+    },
+    {
+      "type": "Document",
+      "mediaType": "application/xml+gpx",
+      "name": "GPX route",
+      "url": "https://wanderer.example/api/v1/trail/fixture-trail/media/gpx"
+    }
+  ]
+}

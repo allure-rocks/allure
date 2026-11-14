@@ -1,0 +1,61 @@
+<% show_heart_rate = column_present?(intervals, :average_heart_rate) %>
+<%# A power-led virtual ride reads its watts in the effort column instead. %>
+<% show_power = column_present?(intervals, :average_power) && !sport.power_led? %>
+<% show_cadence = column_present?(intervals, :average_cadence) %>
+<% if intervals.any? %>
+  <div class="table-responsive allure-analysis-table">
+    <table class="table table-sm table-vcenter card-table allure-table-nums">
+      <caption class="visually-hidden"><%= t("workouts.show.laps.tabs.intervals") %></caption>
+      <thead>
+        <tr>
+          <th scope="col"><%= t("workouts.show.laps.interval") %></th>
+          <th scope="col"><%= t("workouts.show.laps.kind") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.distance") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.time") %></th>
+          <th scope="col" class="text-end"><%= effort_column_label(sport, scope: "workouts.show.laps") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.gain") %></th>
+          <th scope="col" class="text-end"><%= t("workouts.show.laps.loss") %></th>
+          <% if show_heart_rate %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.heart_rate") %></th><% end %>
+          <% if show_power %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.power") %></th><% end %>
+          <% if show_cadence %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.cadence") %></th><% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% intervals.each do |interval| %>
+          <tr <%= tag.attributes(analysis_row_attributes(interval.start_distance, interval.end_distance, source: interval.source)) %>>
+            <td><%= interval.number %></td>
+            <td><span class="badge bg-secondary-lt"><%= t("workouts.show.laps.sources.#{interval.source}") %></span></td>
+            <td class="text-end"><%= format_distance(interval.distance) %></td>
+            <td class="text-end"><strong><%= format_duration(interval.elapsed_time) %></strong></td>
+            <td class="text-end"><%= effort_cell(average_pace: interval.average_pace, average_speed: interval.average_speed, average_power: interval.average_power, sport: sport, grade_adjusted_pace: interval.grade_adjusted_pace) %></td>
+            <td class="text-end"><%= format_elevation(interval.ascent) %></td>
+            <td class="text-end"><%= format_elevation(interval.descent) %></td>
+            <% if show_heart_rate %><td class="text-end allure-col-extra"><%= interval.average_heart_rate || "—" %></td><% end %>
+            <% if show_power %><td class="text-end allure-col-extra"><%= format_power(interval.average_power) %></td><% end %>
+            <% if show_cadence %><td class="text-end allure-col-extra"><%= interval.average_cadence ? metric_with_unit(interval.average_cadence, sport.cadence_unit) : "—" %></td><% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list-group list-group-flush allure-card-list allure-analysis-list">
+    <% intervals.each do |interval| %>
+      <li class="list-group-item" <%= tag.attributes(analysis_row_attributes(interval.start_distance, interval.end_distance, source: interval.source)) %>>
+        <div class="d-flex justify-content-between align-items-baseline gap-3">
+          <span class="allure-card-title">
+            <span class="badge bg-secondary-lt me-1"><%= t("workouts.show.laps.sources.#{interval.source}") %></span>
+            <%= interval.number %>
+          </span>
+          <strong class="allure-table-nums"><%= format_duration(interval.elapsed_time) %></strong>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          <%= format_distance(interval.distance) %> · <%= effort_cell(average_pace: interval.average_pace, average_speed: interval.average_speed, average_power: interval.average_power, sport: sport, grade_adjusted_pace: interval.grade_adjusted_pace) %>
+          <% if interval.average_power && !sport.power_led? %><span class="ms-1">· <%= format_power(interval.average_power) %></span><% end %>
+        </div>
+        <div class="text-secondary small allure-table-nums">
+          ↑ <%= format_elevation(interval.ascent) %> · ↓ <%= format_elevation(interval.descent) %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

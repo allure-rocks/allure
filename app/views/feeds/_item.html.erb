@@ -1,0 +1,149 @@
+<%# The feed card (DESIGN.md §8.3, §20.1): the linked workout-card anatomy
+    with an author header, for a local publication and a received note alike.
+    The whole card is the link; only the author links, the sport tile and the
+    record badge sit above the stretched link. Locals: `item`
+    (Federation::FollowingFeed::Item), `show_author` (false on a profile page
+    that already names the author), `editorial` (the profile's story and media,
+    without performance tiles, records or the device line). %>
+<% show_author = local_assigns.fetch(:show_author, true) %>
+<% editorial = local_assigns.fetch(:editorial, false) %>
+<% presentation = feed_item_for(item) %>
+<% view = presentation.view %>
+<% title = workout_display_title(view) %>
+<% author = show_author ? feed_author_for(item) : nil %>
+<% record_labels = editorial ? {} : record_labels_from_types(view.record_types) %>
+<% badge_labels = editorial ? [] : snapshot_record_labels(view.record_types, view.record_distances) %>
+<% excerpt = feed_excerpt(view.description) %>
+<article class="card mb-3 position-relative workout-card--linked feed-item">
+  <% if author %>
+    <div class="card-header feed-item__author">
+      <%= link_to author.path, class: "me-2 flex-shrink-0 feed-item__link" do %>
+        <%= feed_author_avatar_tag(author, size: "md") %>
+      <% end %>
+      <div class="d-flex flex-wrap align-items-center gap-2 min-w-0">
+        <span class="fw-bold"><%= link_to author.name, author.path, class: "text-reset feed-item__link" %></span>
+        <span class="text-secondary small text-truncate"><%= author.handle %></span>
+        <% if presentation.owner_view %>
+          <%= mine_badge(label: t("feed.you")) %>
+          <%= publication_badge(presentation.audience) %>
+        <% end %>
+        <% if author.remote %>
+          <span class="badge bg-secondary-lt">
+            <i class="ti ti-world me-1" aria-hidden="true"></i><%= t("feed.remote_badge") %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if view.route_image_visible? %>
+    <%= route_image_tag light_url: presentation.image_path,
+                               dark_url: presentation.image_path_dark,
+                               class: "feed-item__image",
+                               width: Workouts::RouteImageRenderer::WIDTH,
+                               height: Workouts::RouteImageRenderer::HEIGHT,
+                               loading: "lazy",
+                               alt: t("workouts.route_image.alt", title:) %>
+  <% elsif view.route_image_pending? %>
+    <%# Same 16x9 skeleton as the workout card until the image is attached
+        (DESIGN.md §11.1); the sentence carries the meaning. %>
+    <div class="ratio ratio-16x9 bg-secondary-lt placeholder-glow feed-item__media-state" role="status">
+      <span class="placeholder" aria-hidden="true"></span>
+      <div class="d-flex align-items-center justify-content-center">
+        <span class="small text-secondary"><%= t("workouts.route_image.pending") %></span>
+      </div>
+    </div>
+  <% elsif view.route_image_unavailable? %>
+    <%# A remote image that could not be fetched: a partial state (DESIGN.md
+        §11.3), warning on the icon only so the card stays calm. %>
+    <div class="ratio ratio-16x9 bg-secondary-lt feed-item__media-state" role="status">
+      <div class="d-flex flex-column align-items-center justify-content-center gap-2 px-3 text-center">
+        <i class="ti ti-photo-off fs-1 text-warning" aria-hidden="true"></i>
+        <span class="small text-secondary"><%= t("remote_notes.media.unavailable") %></span>
+      </div>
+    </div>
+  <% end %>
+
+  <% strip = feed_photo_strip(view) %>
+  <% if strip[:photos].any? %>
+    <%# The first shared photos (PLAN_PHOTOS.md §5.4); the card's link opens
+        the publication and its gallery. %>
+    <div class="allure-feed-photos" aria-label="<%= t("workouts.publication.photos.count", count: strip[:total]) %>">
+      <% strip[:photos].each do |photo| %>
+        <%= image_tag photo[:thumbnail], alt: photo[:label], loading: "lazy" %>
+      <% end %>
+      <% if strip[:total] > strip[:photos].size %>
+        <span class="allure-feed-photos__more" aria-hidden="true"><%= t("workouts.publication.photos.more", count: strip[:total] - strip[:photos].size) %></span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="card-body">
+    <div class="d-flex align-items-start mb-2">
+      <%= sport_tile_tag(view.sport, label: sport_display_name(view.sport), href: presentation.href) %>
+      <h3 class="h4 mb-0 ms-2 feed-item__title">
+        <%= link_to title, presentation.href, class: "text-reset stretched-link",
+              aria: { label: "#{presentation.open_label} : #{title}" } %>
+      </h3>
+      <% if view.commute || badge_labels.any? || (editorial && presentation.audience) %>
+        <div class="ms-auto d-flex align-items-center gap-1 flex-shrink-0 feed-item__lift">
+          <% if view.commute %>
+            <%= render "workouts/commute_badge" %>
+          <% end %>
+          <%= render "workouts/record_badge", labels: badge_labels %>
+          <%= publication_badge(presentation.audience, fit: :icon) if editorial && presentation.audience %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="text-secondary small allure-table-nums">
+      <%= smart_started_at(view.started_at) %>
+      <%# The shared weather summary, when the author's profile shared it
+          (PLAN_WEATHER.md §7). %>
+      <% if (weather = view.weather) %>
+        <%= render "weather/badge", summary: weather, class_name: "ms-1 feed-item__lift" %>
+      <% end %>
+    </div>
+
+    <% primary_metrics = !editorial && view.metrics_present? ? feed_primary_metrics(view) : [] %>
+    <% if primary_metrics.any? %>
+      <dl class="allure-primary-metrics allure-feed-metrics mt-3 mb-0">
+        <% primary_metrics.each do |metric| %>
+          <% record_label = record_labels[metric[:key]] %>
+          <%= render "workouts/metric_tile", metric:,
+                     trophy_label: (record_label && t("medals.record", record: record_label)) %>
+        <% end %>
+      </dl>
+    <% end %>
+
+    <% if excerpt %>
+      <p class="feed-item__excerpt text-secondary mt-3 mb-0"><%= excerpt %></p>
+    <% end %>
+
+    <% if !editorial && view.device.present? %>
+      <div class="text-secondary small mt-2">
+        <i class="ti ti-device-watch me-1" aria-hidden="true"></i><%= view.device %>
+      </div>
+    <% end %>
+
+    <% reactable = current_user.present? && !presentation.owner_view %>
+    <% comment_count = comment_count_for(item.record) %>
+    <% if comment_count.positive? %>
+      <%# The thread's size sits beside the reactions, in the same pill, and
+          opens the thread's own page (DESIGN.md §10.20). %>
+      <div class="feed-item__social mt-3">
+        <%= link_to comment_thread_path(item.record),
+                    class: "allure-reactions__pill allure-reactions__pill--active feed-item__comments",
+                    data: tooltip_data(t("comments.count.open")),
+                    aria: { label: t("comments.count.label", count: comment_count) } do %>
+          <i class="ti ti-message-circle" aria-hidden="true"></i>
+          <span class="allure-reactions__count" aria-hidden="true"><%= comment_count %></span>
+        <% end %>
+        <%= render "reactions/bar", target: item.record, summary: reaction_summary_for(item.record), reactable: %>
+      </div>
+    <% else %>
+      <%= render "reactions/bar", target: item.record, summary: reaction_summary_for(item.record), reactable:,
+                                  class_name: "mt-3" %>
+    <% end %>
+  </div>
+</article>

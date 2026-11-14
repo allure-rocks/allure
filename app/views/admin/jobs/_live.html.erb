@@ -1,0 +1,269 @@
+<%# Live jobs fragment. Re-rendered in place every few seconds by
+    live_frame_controller; keep it read-only apart from the audited action
+    forms, and keep every query bounded (Admin::Jobs::Snapshot). %>
+<div data-live-jobs>
+  <p class="text-secondary small" role="status" aria-live="polite">
+    <%= t("admin.jobs.live_hint") %>
+    <%= t("admin.jobs.refreshed_at", time: l(Time.current, format: :long)) %>
+  </p>
+
+  <div class="row row-deck row-cards mb-3">
+    <div class="col-sm-6 col-xl-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="text-secondary small text-uppercase"><%= t("admin.jobs.summary.ready") %></div>
+          <div class="h2 mt-1 mb-0"><%= snapshot.queues.sum(&:ready) %></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="text-secondary small text-uppercase"><%= t("admin.jobs.summary.scheduled") %></div>
+          <div class="h2 mt-1 mb-0"><%= snapshot.queues.sum(&:scheduled) %></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="text-secondary small text-uppercase"><%= t("admin.jobs.summary.in_flight") %></div>
+          <div class="h2 mt-1 mb-0"><%= snapshot.queues.sum(&:claimed) + snapshot.queues.sum(&:blocked) %></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="text-secondary small text-uppercase"><%= t("admin.jobs.summary.failed") %></div>
+          <div class="h2 mt-1 mb-0 <%= "text-danger" if snapshot.failed_count.positive? %>"><%= snapshot.failed_count %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header"><h2 class="card-title"><%= t("admin.jobs.queues.title") %></h2></div>
+    <div class="table-responsive">
+      <table class="table table-sm card-table">
+        <thead>
+          <tr>
+            <th scope="col"><%= t("admin.jobs.queues.name") %></th>
+            <th scope="col" class="text-end"><%= t("admin.jobs.queues.ready") %></th>
+            <th scope="col" class="text-end"><%= t("admin.jobs.queues.scheduled") %></th>
+            <th scope="col" class="text-end"><%= t("admin.jobs.queues.claimed") %></th>
+            <th scope="col" class="text-end"><%= t("admin.jobs.queues.blocked") %></th>
+            <th scope="col" class="text-end"><%= t("admin.jobs.queues.failed") %></th>
+            <th scope="col"><%= t("admin.jobs.queues.latency") %></th>
+            <th scope="col"><%= t("admin.jobs.queues.state") %></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% snapshot.queues.each do |queue| %>
+            <tr>
+              <td><code><%= queue.name %></code></td>
+              <td class="text-end"><%= queue.ready %></td>
+              <td class="text-end"><%= queue.scheduled %></td>
+              <td class="text-end"><%= queue.claimed %></td>
+              <td class="text-end"><%= queue.blocked %></td>
+              <td class="text-end <%= "text-danger" if queue.failed.positive? %>"><%= queue.failed %></td>
+              <td class="text-secondary">
+                <%= queue.latency.positive? ? t("admin.jobs.queues.latency_value", duration: distance_of_time_in_words(queue.latency)) : t("admin.jobs.queues.no_wait") %>
+              </td>
+              <td>
+                <% if queue.paused %>
+                  <span class="badge bg-warning-lt"><%= t("admin.jobs.queues.paused") %></span>
+                <% else %>
+                  <span class="badge bg-success-lt"><%= t("admin.jobs.queues.running") %></span>
+                <% end %>
+              </td>
+              <td class="text-end">
+                <% if queue.paused %>
+                  <%= button_to t("admin.jobs.queues.resume"), admin_queue_resume_path(queue.name),
+                        class: "btn btn-sm btn-outline-success",
+                        form: { data: { turbo_frame: "_top" } } %>
+                <% else %>
+                  <%= button_to t("admin.jobs.queues.pause"), admin_queue_pause_path(queue.name),
+                        class: "btn btn-sm btn-outline-warning",
+                        form: { data: { turbo_frame: "_top" } } %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if snapshot.queues.empty? %>
+            <tr><td colspan="9" class="text-secondary"><%= t("admin.jobs.queues.empty") %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header"><h2 class="card-title"><%= t("admin.jobs.processes.title") %></h2></div>
+    <div class="table-responsive">
+      <table class="table table-sm card-table">
+        <thead>
+          <tr>
+            <th scope="col"><%= t("admin.jobs.processes.kind") %></th>
+            <th scope="col"><%= t("admin.jobs.processes.name") %></th>
+            <th scope="col"><%= t("admin.jobs.processes.queues") %></th>
+            <th scope="col"><%= t("admin.jobs.processes.pool") %></th>
+            <th scope="col"><%= t("admin.jobs.processes.heartbeat") %></th>
+            <th scope="col"><%= t("admin.jobs.processes.state") %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% snapshot.processes.each do |process| %>
+            <% alive = process.last_heartbeat_at >= snapshot.alive_threshold.ago %>
+            <tr>
+              <td><%= process.kind %></td>
+              <td><code><%= process.name %></code></td>
+              <td class="text-secondary"><%= Array(process.metadata["queues"]).join(", ") %></td>
+              <td class="text-secondary">
+                <%= [ process.metadata["pool_size"], process.metadata["pool_type"] ].compact.join(" ") %>
+              </td>
+              <td class="text-secondary"><%= t("admin.jobs.processes.ago", duration: distance_of_time_in_words(process.last_heartbeat_at, Time.current)) %></td>
+              <td>
+                <% if alive %>
+                  <span class="badge bg-success-lt"><%= t("admin.jobs.processes.alive") %></span>
+                <% else %>
+                  <span class="badge bg-danger-lt"><%= t("admin.jobs.processes.stale") %></span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if snapshot.processes.empty? %>
+            <tr><td colspan="6" class="text-secondary"><%= t("admin.jobs.processes.empty") %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <% if snapshot.recurring_tasks.any? %>
+    <div class="card mb-3">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.jobs.recurring.title") %></h2></div>
+      <div class="table-responsive">
+        <table class="table table-sm card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.jobs.recurring.key") %></th>
+              <th scope="col"><%= t("admin.jobs.recurring.schedule") %></th>
+              <th scope="col"><%= t("admin.jobs.recurring.queue") %></th>
+              <th scope="col"><%= t("admin.jobs.recurring.last_run") %></th>
+              <th scope="col"><%= t("admin.jobs.recurring.next_run") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% snapshot.recurring_tasks.each do |task| %>
+              <tr>
+                <td><code><%= task.key %></code></td>
+                <td class="text-secondary"><code><%= task.schedule %></code></td>
+                <td class="text-secondary"><%= task.queue_name %></td>
+                <td class="text-secondary"><%= task.last_enqueued_time ? l(task.last_enqueued_time, format: :long) : t("admin.jobs.recurring.never") %></td>
+                <td class="text-secondary"><%= task.next_time ? l(task.next_time, format: :long) : "—" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <% if snapshot.scheduled_executions.any? %>
+    <div class="card mb-3">
+      <div class="card-header"><h2 class="card-title"><%= t("admin.jobs.scheduled.title") %></h2></div>
+      <div class="table-responsive">
+        <table class="table table-sm card-table">
+          <thead>
+            <tr>
+              <th scope="col"><%= t("admin.jobs.failed.job") %></th>
+              <th scope="col"><%= t("admin.jobs.failed.queue") %></th>
+              <th scope="col"><%= t("admin.jobs.scheduled.at") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% snapshot.scheduled_executions.each do |execution| %>
+              <tr>
+                <td><code><%= execution.job.class_name %></code></td>
+                <td class="text-secondary"><%= execution.queue_name %></td>
+                <td class="text-secondary"><%= l(execution.scheduled_at, format: :long) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="card mb-3" id="failed">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("admin.jobs.failed.title") %></h2>
+      <% if snapshot.failed_count.positive? %>
+        <div class="card-actions btn-list ms-auto">
+          <%= button_to t("admin.jobs.failed.retry_all", count: snapshot.failed_count), admin_jobs_retry_all_path,
+                class: "btn btn-sm btn-outline-primary",
+                form: { data: { turbo_frame: "_top" } } %>
+          <%= button_to t("admin.jobs.failed.discard_all", count: snapshot.failed_count), admin_jobs_discard_all_path,
+                class: "btn btn-sm btn-outline-danger",
+                form: { data: {
+                  turbo_frame: "_top",
+                  confirm_title: t("admin.jobs.failed.discard_all_confirm_title"),
+                  confirm_body: t("admin.jobs.failed.discard_all_confirm_body", count: snapshot.failed_count),
+                  confirm_verb: t("admin.jobs.failed.discard_all_verb")
+                } } %>
+        </div>
+      <% end %>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm card-table">
+        <thead>
+          <tr>
+            <th scope="col"><%= t("admin.jobs.failed.job") %></th>
+            <th scope="col"><%= t("admin.jobs.failed.queue") %></th>
+            <th scope="col"><%= t("admin.jobs.failed.error") %></th>
+            <th scope="col"><%= t("admin.jobs.failed.failed_at") %></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% snapshot.failed_executions.each do |failure| %>
+            <tr>
+              <td><code><%= failure.job.class_name %></code></td>
+              <td class="text-secondary"><%= failure.job.queue_name %></td>
+              <td>
+                <div class="text-danger"><%= failure.exception_class %></div>
+                <div class="text-secondary small"><%= truncate(failure.message.to_s, length: 160) %></div>
+              </td>
+              <td class="text-secondary"><%= l(failure.created_at, format: :long) %></td>
+              <td class="text-end">
+                <div class="btn-list justify-content-end">
+                  <%= button_to t("admin.jobs.failed.retry"), admin_job_retry_path(failure),
+                        class: "btn btn-sm btn-outline-primary",
+                        form: { data: { turbo_frame: "_top" } } %>
+                  <%= button_to t("admin.jobs.failed.discard"), admin_job_discard_path(failure),
+                        class: "btn btn-sm btn-outline-danger",
+                        form: { data: {
+                          turbo_frame: "_top",
+                          confirm_title: t("admin.jobs.failed.discard_confirm_title"),
+                          confirm_body: t("admin.jobs.failed.discard_confirm_body", job: failure.job.class_name),
+                          confirm_verb: t("admin.jobs.failed.discard_verb")
+                        } } %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+          <% if snapshot.failed_executions.empty? %>
+            <tr><td colspan="5" class="text-secondary"><%= t("admin.jobs.failed.empty") %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% if snapshot.failed_count > snapshot.failed_executions.size %>
+      <div class="card-footer text-secondary small">
+        <%= t("admin.jobs.failed.more", shown: snapshot.failed_executions.size, total: snapshot.failed_count) %>
+      </div>
+    <% end %>
+  </div>
+</div>

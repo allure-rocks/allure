@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Allure Test Suite" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>Route repeat</name>
+    <trkseg>
+      <trkpt lat="45.00000" lon="6.40000"><ele>200</ele><time>2026-09-01T08:00:00Z</time></trkpt>
+      <trkpt lat="45.00000" lon="6.40150"><ele>210</ele><time>2026-09-01T08:00:30Z</time></trkpt>
+      <trkpt lat="45.00010" lon="6.40300"><ele>220</ele><time>2026-09-01T08:01:00Z</time></trkpt>
+      <trkpt lat="45.00160" lon="6.40300"><ele>230</ele><time>2026-09-01T08:01:30Z</time></trkpt>
+      <trkpt lat="45.00200" lon="6.40150"><ele>225</ele><time>2026-09-01T08:02:00Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

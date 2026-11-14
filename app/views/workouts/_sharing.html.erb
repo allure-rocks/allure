@@ -1,0 +1,135 @@
+<%# Sharing (DESIGN.md §19, §20.3): one card listing the workout's
+    publications — one per audience at most (PLAN_AUDIENCES.md §2), the
+    scheduled ones inside their safety delay, then the active ones, narrowest
+    first — each with its own actions, then « Ajouter une publication », which
+    unfolds the publish form for an audience no publication holds yet. The
+    header withdraws every active publication. Without any publication the
+    publish form opens the card directly; a row's « Remplacer » unfolds the
+    same form under the list. What a profile shares is listed, never
+    projected. Automatic publications (PLAN_AUTO_PUBLISHING.md §7) lead the
+    card while they wait, with « Ne pas publier »; a publication they made is
+    marked, and one they did not make says why. Locals: `workout`,
+    `active_publications`, `scheduled_publications`, `profiles`, `readiness`,
+    `delivery_summaries`, `auto_publications`. %>
+<%# A positionless recording has no route to share, so the card states why
+    instead of offering the form (PLAN_NO_GPS.md §7, §9). %>
+<% positionless = workout.recording? && !workout.positioned? %>
+<% add_profile = @selected_profile %>
+<% add_form_id = "workout-publish-form-add" %>
+<% listed = active_publications.any? || scheduled_publications.any? %>
+<% auto_publications = local_assigns.fetch(:auto_publications, []) %>
+<% automatic_ids = auto_publications.select(&:published?).filter_map(&:workout_publication_id) %>
+<% live_audiences = (active_publications + scheduled_publications).map(&:audience) %>
+<% auto_waiting = auto_publications.select(&:waiting?) %>
+<% auto_unpublished = auto_publications.select do |row|
+     (row.skipped? || row.failed?) && !row.reason.in?(%w[cancelled_by_owner already_published]) && !live_audiences.include?(row.audience)
+   end %>
+<div class="card mb-3 allure-sharing-card">
+  <div class="card-header">
+    <div>
+      <h2 class="card-title"><%= t("workouts.publication.list_title") %></h2>
+      <% unless listed %>
+        <div class="text-secondary small mt-1"><%= t("workouts.publication.not_published") %></div>
+      <% end %>
+    </div>
+    <% if active_publications.any? %>
+      <div class="card-actions">
+        <%= button_to publication_workout_path(workout), method: :delete,
+                      form: { data: { confirm_title: t("workouts.publication.confirm_all.title"), confirm_body: t("workouts.publication.confirm_all.body"), confirm_verb: t("workouts.publication.confirm_all.verb") } },
+                      class: "btn btn-sm btn-ghost-danger" do %>
+          <i class="ti ti-trash me-1" aria-hidden="true"></i><%= t("workouts.publication.delete_all") %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if auto_waiting.any? || auto_unpublished.any? %>
+    <ul class="list-group list-group-flush allure-auto-publication-list">
+      <% auto_waiting.each do |row| %>
+        <li class="list-group-item allure-auto-publication">
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <i class="ti ti-hourglass text-secondary" aria-hidden="true"></i>
+            <div class="me-auto">
+              <div class="fw-semibold"><%= auto_publication_text(row) %></div>
+              <div class="text-secondary small"><%= t("auto_publications.waiting_hint") %></div>
+            </div>
+            <%= button_to t("auto_publications.cancel.button"), auto_publication_workout_path(workout), method: :delete,
+                          params: { audience: row.audience },
+                          form: { data: { confirm_title: t("auto_publications.cancel.confirm.title"), confirm_body: t("auto_publications.cancel.confirm.body"), confirm_verb: t("auto_publications.cancel.confirm.verb") } },
+                          class: "btn btn-sm btn-outline-secondary" %>
+          </div>
+        </li>
+      <% end %>
+      <% auto_unpublished.each do |row| %>
+        <li class="list-group-item allure-auto-publication">
+          <div class="d-flex align-items-start gap-2 small <%= row.failed? ? "text-warning" : "text-secondary" %>">
+            <i class="ti ti-<%= auto_publication_icon(row) %> mt-1" aria-hidden="true"></i>
+            <span><%= auto_publication_text(row) %><% if row.failed? && row.detail.present? %> — <%= row.detail %><% end %></span>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if positionless %>
+    <div class="card-body text-secondary">
+      <i class="ti ti-map-off me-1" aria-hidden="true"></i><%= t("workouts.publication.no_position") %>
+    </div>
+  <% elsif listed %>
+    <% replace_forms = active_publications.filter_map do |publication|
+         replace_profiles = publish_form_profiles(workout, profiles, replaced: publication)
+         replace_selected = replace_profiles.find { |profile| profile.id == publication.publishing_profile_id && profile.publishable? } ||
+                            replace_profiles.find(&:publishable?)
+         [ publication, replace_profiles, replace_selected, "workout-publish-form-#{publication.to_param}" ] if replace_selected
+       end %>
+    <ul class="list-group list-group-flush allure-publication-list">
+      <% scheduled_publications.each do |publication| %>
+        <%= render "scheduled", workout:, publication:, automatic: automatic_ids.include?(publication.id) %>
+      <% end %>
+      <% active_publications.each do |publication| %>
+        <% replace_form = replace_forms.find { |entry| entry.first == publication } %>
+        <%= render "publication_row", workout:, publication:,
+                                      delivery_summary: delivery_summaries[publication.id],
+                                      automatic: automatic_ids.include?(publication.id),
+                                      form_id: replace_form&.last %>
+      <% end %>
+      <li class="list-group-item">
+        <% if add_profile %>
+          <button type="button" class="btn btn-sm btn-outline-primary collapsed" data-bs-toggle="collapse"
+                  data-bs-target="#<%= add_form_id %>" aria-expanded="false" aria-controls="<%= add_form_id %>">
+            <i class="ti ti-plus me-1" aria-hidden="true"></i><%= t("workouts.publication.add") %>
+          </button>
+        <% else %>
+          <% unavailable = t("workouts.publication.add_unavailable") %>
+          <span class="d-inline-block" tabindex="0" <%= tag.attributes(data: tooltip_data(unavailable)) %>>
+            <button type="button" class="btn btn-sm btn-outline-secondary" disabled>
+              <i class="ti ti-plus me-1" aria-hidden="true"></i><%= t("workouts.publication.add") %>
+            </button>
+          </span>
+          <span class="visually-hidden"><%= unavailable %></span>
+        <% end %>
+      </li>
+    </ul>
+    <% replace_forms.each do |publication, replace_profiles, replace_selected, form_id| %>
+      <div id="<%= form_id %>" class="collapse">
+        <div class="card-body border-top">
+          <%= render "publish_form", workout:, replaced: publication, profiles: replace_profiles, readiness:,
+                                     selected_profile: replace_selected, form_key: publication.to_param %>
+        </div>
+      </div>
+    <% end %>
+    <% if add_profile %>
+      <div id="<%= add_form_id %>" class="collapse">
+        <div class="card-body border-top">
+          <%= render "publish_form", workout:, replaced: nil, profiles: publish_form_profiles(workout, profiles),
+                                     readiness:, selected_profile: add_profile, form_key: "add" %>
+        </div>
+      </div>
+    <% end %>
+  <% elsif add_profile %>
+    <div class="card-body">
+      <%= render "publish_form", workout:, replaced: nil, profiles: publish_form_profiles(workout, profiles),
+                                 readiness:, selected_profile: add_profile, form_key: "add" %>
+    </div>
+  <% end %>
+</div>

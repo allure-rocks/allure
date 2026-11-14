@@ -1,0 +1,52 @@
+<% if view.media_pending? %>
+  <div class="card mb-3" data-media-pending>
+    <div class="card-body d-flex align-items-center gap-3" role="status" aria-live="polite">
+      <span class="spinner-border spinner-border-sm text-secondary" aria-hidden="true"></span>
+      <p class="text-secondary mb-0"><%= t("remote_notes.media.pending") %></p>
+    </div>
+  </div>
+<% elsif view.media_unavailable? %>
+  <div class="alert alert-warning mb-3" role="alert">
+    <%= t("remote_notes.media.unavailable") %>
+  </div>
+<% end %>
+
+<% if view.map_visible? %>
+  <%= render "workouts/map", display: view,
+             segment_count: Array(view.track["features"]).size,
+             track_url: remote_note_track_path(note) %>
+<% elsif view.route_image_visible? %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <%= route_image_tag light_url: remote_note_route_image_path(note),
+                                 dark_url: remote_note_route_image_path(note, theme: "dark"),
+                                 class: "img-fluid rounded border w-100",
+                                 loading: "lazy",
+                                 alt: t("workouts.route_image.alt", title: view.title) %>
+    </div>
+  </div>
+<% end %>
+
+<% if view.chart_visible? %>
+  <%= render "workouts/elevation_chart", display: view,
+             chart_url: remote_note_chart_path(note),
+             table_points: local_assigns.fetch(:chart_table, []) %>
+<% end %>
+
+<% if view.gpx_visible? || view.route_image_visible? %>
+  <div class="card mb-3">
+    <div class="card-body d-flex flex-wrap gap-2">
+      <% if view.gpx_visible? %>
+        <%= link_to remote_note_gpx_path(note), class: "btn btn-outline-secondary btn-sm",
+                    data: { controller: "bridge--download", bridge__download_url_value: remote_note_gpx_path(note) } do %>
+          <i class="ti ti-file-download me-1" aria-hidden="true"></i><%= t("remote_notes.media.gpx") %>
+        <% end %>
+      <% end %>
+      <% if view.route_image_visible? %>
+        <%= link_to remote_note_route_image_path(note), class: "btn btn-outline-secondary btn-sm" do %>
+          <i class="ti ti-photo me-1" aria-hidden="true"></i><%= t("remote_notes.media.route_image") %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

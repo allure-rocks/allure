@@ -1,0 +1,143 @@
+<% content_for :title, t("workouts.batch_import.new.title") %>
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <h1 class="page-title"><%= t("workouts.batch_import.new.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<% sources = Allure::ImportSources.enabled %>
+<% initial_source = @initial_source.presence || sources.first.key %>
+
+<%= render "publishing_profiles/auto_publish_notice", profiles: current_user.publishing_profiles.automatic.order(:position, :id).to_a, context: :import %>
+
+<%# A manual entry has its own form (PLAN_MANUAL_ENTRY.md §5): its panel sits
+    after the upload form, which hides while it is selected. %>
+<div data-controller="import-source" data-import-source-initial-value="<%= initial_source %>">
+  <% if sources.many? %>
+    <div class="card mb-3">
+      <div class="card-body py-2">
+        <ul class="nav nav-pills" role="tablist">
+          <% sources.each do |source| %>
+            <% active = source.key == initial_source %>
+            <li class="nav-item" role="presentation">
+              <button type="button" class="nav-link<%= " active" if active %>" role="tab"
+                      id="import-source-tab-<%= source.key %>"
+                      aria-controls="import-source-panel-<%= source.key %>"
+                      aria-selected="<%= active %>"
+                      data-import-source-target="tab" data-source="<%= source.key %>" data-kind="<%= source.kind %>"
+                      data-action="import-source#select">
+                <%= import_source_icon_tag(source) %><%= t("workouts.batch_import.sources.#{source.key}.label") %>
+              </button>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <%= form_with model: @batch, url: workout_imports_path, multipart: true, class: "workout-form",
+                hidden: Allure::ImportSources.for(initial_source)&.manual?,
+                data: { import_source_target: "batch" } do |form| %>
+    <% if form.object.errors.any? %>
+      <div class="alert alert-danger" data-unsaved-changes="forced">
+        <h4 class="alert-title"><%= t("errors.unprocessable_entity.title") %></h4>
+        <ul class="mb-0">
+          <% form.object.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% sources.reject(&:manual?).each do |source| %>
+      <div id="import-source-panel-<%= source.key %>" role="tabpanel"
+           aria-labelledby="import-source-tab-<%= source.key %>"
+           data-import-source-target="panel" data-source="<%= source.key %>" <%= "hidden" unless source.key == initial_source %>>
+        <%= render "workout_imports/sources/#{source.key}", form: form %>
+      </div>
+    <% end %>
+
+    <div class="card mb-3" data-import-source-target="localOnly">
+      <div class="card-body">
+        <%# The title applies to the single activity a single-file import
+            produces; the controller reveals it when exactly one file is
+            selected (PLAN_IMPORT_SOURCES.md §2). %>
+        <div class="mb-3" data-import-source-target="single" hidden>
+          <%= form.label :title, t("workouts.form.title"), class: "form-label" %>
+          <%= form.text_field :title, class: "form-control", maxlength: 255, size: nil, placeholder: t("workouts.form.title_hint") %>
+          <small class="form-text"><%= t("workouts.batch_import.form.title_hint") %></small>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :sport_id, t("workouts.form.sport_fallback"), class: "form-label required" %>
+          <%= form.select :sport_id, sport_options_for_select, { prompt: t("workouts.form.sport_prompt") }, class: "form-select#{' is-invalid' if form.object.errors[:sport].present?}" %>
+          <small class="form-text"><%= t("workouts.form.sport_fallback_hint") %></small>
+          <% if form.object.errors[:sport].present? %>
+            <div class="invalid-feedback d-block"><%= form.object.errors[:sport].join(", ") %></div>
+          <% end %>
+        </div>
+
+        <% if @equipments.any? %>
+          <div class="mb-3">
+            <div class="form-label"><%= t("workouts.form.equipment") %></div>
+            <%= hidden_field_tag "workout_import_batch[equipment_ids][]", "", id: nil %>
+            <div class="row">
+              <% @equipments.each do |equipment| %>
+                <% attached = form.object.equipment_ids.include?(equipment.id) %>
+                <div class="col-sm-6 col-lg-4">
+                  <label class="form-check mb-2">
+                    <%= check_box_tag "workout_import_batch[equipment_ids][]", equipment.id, attached,
+                                      id: "workout_import_batch_equipment_#{equipment.id}",
+                                      class: "form-check-input", disabled: !equipment.is_active? && !attached %>
+                    <span class="form-check-label">
+                      <%= equipment.label %>
+                      <% unless equipment.is_active? %>
+                        <span class="text-secondary small">(<%= t("workouts.form.equipment_inactive") %>)</span>
+                      <% end %>
+                    </span>
+                  </label>
+                </div>
+              <% end %>
+            </div>
+            <small class="form-text"><%= t("workouts.batch_import.form.equipment_hint") %></small>
+          </div>
+        <% end %>
+
+        <div class="mb-3">
+          <label class="form-check">
+            <%= form.check_box :commute, class: "form-check-input" %>
+            <span class="form-check-label"><%= t("workouts.form.commute") %></span>
+          </label>
+          <small class="form-text"><%= t("workouts.batch_import.form.commute_hint") %></small>
+        </div>
+
+        <div class="mb-0">
+          <%= form.label :notes, t("workouts.form.notes"), class: "form-label" %>
+          <%= form.text_area :notes, class: "form-control", rows: 2, maxlength: 500, placeholder: t("workouts.form.notes_hint") %>
+          <small class="form-text"><%= t("workouts.batch_import.form.notes_hint") %></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <span data-import-source-target="submit">
+        <%= form.submit t("workouts.batch_import.new.submit"), class: "btn btn-primary" %>
+      </span>
+      <%= link_to t("workouts.form.cancel"), workouts_path, class: "btn btn-link" %>
+    </div>
+  <% end %>
+
+  <% sources.select(&:manual?).each do |source| %>
+    <div id="import-source-panel-<%= source.key %>" role="tabpanel"
+         aria-labelledby="import-source-tab-<%= source.key %>"
+         data-import-source-target="panel" data-source="<%= source.key %>" <%= "hidden" unless source.key == initial_source %>>
+      <%= render "workout_imports/sources/#{source.key}", form: nil %>
+    </div>
+  <% end %>
+</div>

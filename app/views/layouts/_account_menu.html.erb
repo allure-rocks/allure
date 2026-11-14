@@ -1,0 +1,58 @@
+<%# Account dropdown, shared by the product and administration topbars. The
+    administration entry is rendered only for the configured operator, so a
+    member's HTML never contains an admin link (PLAN_ADMIN.md §2). `admin: true`
+    suppresses the self-link while already inside the console; `compact: true`
+    drops the identity block to leave room for the console menu. The
+    `data-bridge-item` ids are the controls the iOS companion's account menu
+    clicks (DESIGN.md §7.7), and the companion's account button shows the
+    avatar its `bridge--topbar` controller draws from this toggle. %>
+<% admin = local_assigns.fetch(:admin, false) %>
+<% compact = local_assigns.fetch(:compact, false) %>
+<div class="nav-item dropdown">
+  <a href="#" class="nav-link d-flex lh-1 p-0 px-2" data-bs-toggle="dropdown"
+     data-bridge--topbar-target="avatar"
+     aria-label="<%= t("navigation.account_menu") %>">
+    <%= avatar_tag(current_user, size: "sm") %>
+    <% unless compact %>
+      <div class="d-none d-xl-block ps-2">
+        <div><%= current_user.display_name %></div>
+        <div class="mt-1 small text-secondary">@<%= current_user.username %></div>
+      </div>
+    <% end %>
+  </a>
+  <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+    <%= link_to t("navigation.profile"), profile_path(current_user.username), class: "dropdown-item",
+                data: { bridge_item: "profile" } %>
+    <%= link_to t("navigation.settings"), settings_path, class: "dropdown-item",
+                data: { bridge_item: "settings" } %>
+    <% if connections_available? %>
+      <%= link_to t("navigation.connections"), connections_path, class: "dropdown-item",
+                  data: { bridge_item: "connections" } %>
+    <% end %>
+    <%= link_to t("navigation.help"), help_path, class: "dropdown-item",
+                data: { bridge_item: "help" } %>
+    <% if funding_available? %>
+      <%= link_to t("funding.title"), funding_path, class: "dropdown-item" %>
+    <% end %>
+    <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#about-modal"
+            aria-haspopup="dialog" data-bridge-item="about"><%= t("navigation.about") %></button>
+    <% if instance_operator? && !admin %>
+      <div class="dropdown-divider"></div>
+      <%= link_to t("navigation.administration"), admin_root_path, class: "dropdown-item",
+                  data: { bridge_item: "administration" } %>
+    <% end %>
+    <%# Development-only impersonation entry (AGENTS.md, "Development tools"):
+        the partial exists only while the devtools engine is loaded. %>
+    <%= render "layouts/dev_tools_menu" if lookup_context.exists?("dev_tools_menu", ["layouts"], true) %>
+    <% if hotwire_native_app? %>
+      <div class="dropdown-divider"></div>
+      <%# Intercepted by the iOS companion, which opens its server chooser
+          (DESIGN.md §7.7); this path is never requested from Rails. %>
+      <%= link_to t("navigation.server"), ApplicationHelper::NATIVE_SERVER_PATH, class: "dropdown-item",
+                  data: { turbo_prefetch: false, bridge_item: "server" } %>
+    <% end %>
+    <div class="dropdown-divider"></div>
+    <%= button_to t("navigation.sign_out"), session_path, method: :delete,
+                  class: "dropdown-item", data: { bridge_item: "sign_out" } %>
+  </div>
+</div>

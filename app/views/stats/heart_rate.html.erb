@@ -1,0 +1,161 @@
+<% content_for :title, t("stats.heart_rate.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("stats.heart_rate.pretitle") %></div>
+      <h1 class="page-title"><%= t("stats.heart_rate.title") %></h1>
+    </div>
+  </div>
+<% end %>
+
+<% if @zones.nil? %>
+  <div class="card">
+    <div class="empty">
+      <div class="empty-icon"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i></div>
+      <p class="empty-title"><%= t("stats.heart_rate.no_profile_title") %></p>
+      <p class="empty-subtitle text-secondary"><%= t("me.training_load.empty") %></p>
+      <div class="empty-action">
+        <%= link_to t("me.training_load.empty_action"), settings_heart_rate_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <p class="text-secondary">
+    <%= t("stats.heart_rate.intro") %>
+    <%= heart_rate_basis_sentence(@zones) %>
+    <%= link_to t("heart_rate.zones.edit"), settings_heart_rate_path %>
+  </p>
+
+  <%= render "stats/heart_rate_toolbar" %>
+
+  <% if @periods.empty? %>
+    <div class="card mb-3">
+      <div class="empty">
+        <p class="empty-title"><%= t("stats.heart_rate.empty_title") %></p>
+        <p class="empty-subtitle text-secondary"><%= t("stats.heart_rate.empty") %></p>
+      </div>
+    </div>
+  <% else %>
+    <% rows = zone_distribution_rows(@periods, @granularity) %>
+    <% split = zone_intensity_split(@periods) %>
+    <% if split %>
+      <%# The window in three intensities, as a figure strip (DESIGN.md §10.2). %>
+      <div class="card mb-3">
+        <div class="card-header">
+          <h3 class="card-title"><%= t("stats.heart_rate.split.title") %></h3>
+        </div>
+        <div class="card-body">
+          <div class="hub-figures hub-figures--three">
+            <% %i[low moderate high].each do |key| %>
+              <div class="hub-figure">
+                <div class="hub-figure-value allure-table-nums"><%= number_to_percentage(split[key], precision: 0) %></div>
+                <div class="hub-figure-label"><span><%= t("stats.heart_rate.split.#{key}") %></span></div>
+              </div>
+            <% end %>
+          </div>
+          <p class="text-secondary small mt-3 mb-0"><%= t("stats.heart_rate.split.hint") %></p>
+        </div>
+      </div>
+    <% end %>
+
+    <%# The hours/share choice belongs to the card it changes (DESIGN.md
+        §10.15): a segmented control from md up, a native select on phones so
+        the header stays on one line. Both keep the period and the sport. %>
+    <div class="card mb-3">
+      <div class="card-header flex-nowrap gap-2">
+        <h3 class="card-title text-truncate min-w-0"><%= t("stats.heart_rate.chart_titles.#{@scale}") %></h3>
+        <div class="card-actions flex-shrink-0">
+          <%= form_with url: heart_rate_stats_path, method: :get, class: "d-flex align-items-center gap-2 d-md-none",
+                        data: { controller: "autosubmit", turbo_action: "advance" } do |form| %>
+            <%= form.hidden_field :time, value: @granularity, id: nil %>
+            <%= form.hidden_field :sport_id, value: @sport.id, id: nil if @sport %>
+            <%= form.select :scale,
+                  StatsController::HEART_RATE_SCALES.map { |scale| [ t("stats.heart_rate.scales.#{scale}"), scale ] },
+                  { selected: @scale },
+                  class: "form-select form-select-sm hub-mix-metric-select w-auto", id: "heart_rate_scale_select",
+                  aria: { label: t("stats.heart_rate.toolbar.scale_label") },
+                  data: { action: "change->autosubmit#submit" } %>
+            <noscript><%= form.submit t("stats.heart_rate.toolbar.apply"), class: "btn btn-sm btn-outline-secondary" %></noscript>
+          <% end %>
+          <nav class="nav nav-segmented nav-sm d-none d-md-flex" aria-label="<%= t("stats.heart_rate.toolbar.scale_label") %>">
+            <% StatsController::HEART_RATE_SCALES.each do |scale| %>
+              <%= link_to t("stats.heart_rate.scales.#{scale}"),
+                    heart_rate_stats_path(time: @granularity, scale:, sport_id: @sport&.id),
+                    class: class_names("nav-link", active: scale == @scale),
+                    aria: { current: (scale == @scale ? "true" : nil) } %>
+            <% end %>
+          </nav>
+        </div>
+      </div>
+      <div class="card-body">
+        <div data-controller="zone-distribution-chart"
+             data-zone-distribution-chart-payload-value="<%= zone_distribution_payload(rows, scale: @scale).to_json %>">
+          <div data-zone-distribution-chart-target="chart" role="img" aria-label="<%= t("stats.heart_rate.chart_titles.#{@scale}") %>"></div>
+          <p class="text-danger small mb-0" data-zone-distribution-chart-target="error" hidden><%= t("stats.chart.error") %></p>
+        </div>
+      </div>
+
+      <% listed = rows.reverse.reject { |row| row[:seconds].sum.zero? } %>
+      <%# From md up a table; on phones a stacked list (DESIGN.md §12): each
+          period with its total, a zone bar and the five values. %>
+      <div class="table-responsive d-none d-md-block">
+        <table class="table table-sm table-vcenter card-table allure-table-nums">
+          <caption class="visually-hidden"><%= t("stats.heart_rate.table_caption") %></caption>
+          <thead>
+            <tr>
+              <th scope="col"><%= t("stats.by_time.period") %></th>
+              <% (1..5).each do |zone| %>
+                <th scope="col" class="text-end text-nowrap">
+                  <span class="allure-zone-swatch allure-zone-<%= zone %>" aria-hidden="true"></span>
+                  <abbr title="<%= heart_rate_zone_name(zone) %>">Z<%= zone %></abbr>
+                </th>
+              <% end %>
+              <th scope="col" class="text-end"><%= t("stats.heart_rate.total") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% listed.each do |row| %>
+              <% total = row[:seconds].sum %>
+              <tr>
+                <th scope="row" class="fw-normal text-nowrap"><%= row[:label] %></th>
+                <% row[:seconds].each do |seconds| %>
+                  <td class="text-end"><%= zone_distribution_value(seconds, total, @scale) %></td>
+                <% end %>
+                <td class="text-end"><%= format_duration(total) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <ul class="list-group list-group-flush d-md-none allure-card-list" aria-label="<%= t("stats.heart_rate.table_caption") %>">
+        <% listed.each do |row| %>
+          <% total = row[:seconds].sum %>
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between align-items-baseline gap-2 mb-2">
+              <span class="allure-card-title"><%= row[:label] %></span>
+              <span class="text-secondary small allure-table-nums"><%= format_duration(total) %></span>
+            </div>
+            <div class="progress progress-separated allure-zone-bar allure-zone-bar--thin mb-2" role="img"
+                 aria-label="<%= t("heart_rate.zones.bar_label", zones: row[:seconds].each_with_index.filter_map { |seconds, index| t("heart_rate.zones.segment_label", zone: index + 1, name: heart_rate_zone_name(index + 1), time: format_duration(seconds), share: number_to_percentage(seconds * 100.0 / total, precision: 0)) if seconds.positive? }.join(", ")) %>">
+              <% row[:seconds].each_with_index do |seconds, index| %>
+                <% next unless seconds.positive? %>
+                <div class="progress-bar allure-zone-<%= index + 1 %>" style="width: <%= (seconds * 100.0 / total).round(2) %>%"></div>
+              <% end %>
+            </div>
+            <dl class="allure-zone-values mb-0">
+              <% row[:seconds].each_with_index do |seconds, index| %>
+                <div>
+                  <dt><span class="allure-zone-swatch allure-zone-<%= index + 1 %>" aria-hidden="true"></span> <abbr title="<%= heart_rate_zone_name(index + 1) %>">Z<%= index + 1 %></abbr></dt>
+                  <dd class="allure-table-nums"><%= zone_distribution_value(seconds, total, @scale) %></dd>
+                </div>
+              <% end %>
+            </dl>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p class="text-secondary"><i class="ti ti-lock me-1" aria-hidden="true"></i><%= t("settings.heart_rate.privacy") %></p>
+<% end %>

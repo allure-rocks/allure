@@ -1,0 +1,72 @@
+// Paged panels (DESIGN.md §10.25): a selector over whole pages, one page
+// visible at a time. Shared by the profile statistics and records and by the
+// owner's records page. The selector keeps one sideways-scrolling line; the
+// viewport pages whole panels with native touch scrolling.
+.paged-panels__choices {
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  padding-block: 0.25rem;
+
+  // Tabler hides segmented radios with display:none. Keep these native
+  // controls focusable and put the visible ring on their associated label.
+  .nav-link-input {
+    display: block;
+  }
+
+  .nav-link-input:focus-visible + .nav-link {
+    outline: 2px solid var(--allure-focus);
+    outline-offset: -2px;
+  }
+
+  .form-selectgroup-item {
+    flex-shrink: 0;
+  }
+
+  .form-selectgroup-label,
+  .nav-link {
+    min-height: 44px;
+  }
+}
+
+.paged-panels__panel {
+  min-width: 0;
+
+  th[scope="row"] {
+    overflow-wrap: anywhere;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--allure-focus);
+    outline-offset: -2px;
+  }
+}
+
+// Native touch scrolling, one complete page at a time. A single grid row
+// keeps the tallest page's height, so selecting another never shifts what
+// follows. Without the controller, pages remain stacked and readable.
+.paged-panels--interactive .paged-panels__viewport {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+
+  .paged-panels__panel {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+// The owner's records page fits the viewport to the selected sport: a short
+// sport leaves no blank space under its rows. Pages keep their natural height
+// so the controller's measurement never reads the height it sets; a taller
+// inactive page is clipped until the swipe settles.
+.paged-panels--fit .paged-panels__viewport {
+  align-items: start;
+  overflow-y: hidden;
+}

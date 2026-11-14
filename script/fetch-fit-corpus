@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# FIT_CORPUS_FILES names a file listing corpus-relative paths, one per line
+# (db/seeds/demo/corpus_files.txt): only those are checked out, which is how
+# Dockerfile.demo carries the demo's files without the whole corpus.
+repository="https://github.com/ThomasKuehne/FIT-test-files.git"
+repository_ref="${FIT_CORPUS_REF:-3d895613ef90fdcf958d9518da942385271128e5}"
+repository_dir="${FIT_CORPUS_DIR:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)/references_apps/fit-test-files}"
+selected_files="${FIT_CORPUS_FILES:-}"
+
+if [[ -n "$selected_files" ]]; then
+  selected=()
+  while IFS= read -r path || [[ -n "$path" ]]; do
+    selected+=("$path")
+  done < "$selected_files"
+  if [[ "${#selected[@]}" -eq 0 ]]; then
+    printf 'No corpus file listed in %s\n' "$selected_files" >&2
+    exit 1
+  fi
+  for path in "${selected[@]}"; do
+    # Each line becomes a sparse-checkout pattern: refuse anything that could widen it.
+    if [[ ! "$path" =~ ^Activity/[A-Za-z0-9,._-]+(/[A-Za-z0-9,._-]+)*\.fit$ || "$path" == *..* ]]; then
+      printf 'Refusing corpus path: %s\n' "$path" >&2
+      exit 1
+    fi
+  done
+fi
+
+if [[ -e "$repository_dir" && ! -d "$repository_dir/.git" ]]; then
+  printf 'Refusing to use existing non-repository path: %s\n' "$repository_dir" >&2
+  exit 1
+fi
+
+if [[ ! -d "$repository_dir/.git" ]]; then
+  git clone --filter=blob:none --no-checkout "$repository" "$repository_dir"
+fi
+
+remote_repository="$(git -C "$repository_dir" remote get-url origin)"
+if [[ "$remote_repository" != "$repository" ]]; then
+  printf 'Refusing repository with unexpected origin: %s\n' "$remote_repository" >&2
+  exit 1
+fi
+
+git -C "$repository_dir" fetch --depth=1 origin "$repository_ref"
+if [[ -n "$selected_files" ]]; then
+  printf '/%s\n' "${selected[@]}" | git -C "$repository_dir" sparse-checkout set --no-cone --stdin
+else
+  git -C "$repository_dir" sparse-checkout set --no-cone '/Activity/' '/AllFitMessageTypes.fit' '/README.md'
+fi
+git -C "$repository_dir" checkout --detach "$repository_ref"
+git -C "$repository_dir" sparse-checkout reapply
+
+if [[ -n "$selected_files" ]]; then
+  for path in "${selected[@]}"; do
+    if [[ ! -f "$repository_dir/$path" ]]; then
+      printf 'The selected corpus revision does not contain %s\n' "$path" >&2
+      exit 1
+    fi
+  done
+elif [[ ! -f "$repository_dir/AllFitMessageTypes.fit" ]]; then
+  printf 'The selected corpus revision does not contain AllFitMessageTypes.fit\n' >&2
+  exit 1
+fi
+
+printf 'FIT corpus ready at %s (revision %s)\n' "$repository_dir" "$repository_ref"

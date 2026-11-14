@@ -1,0 +1,22 @@
+de:
+  dev_tools:
+    pretitle: Entwicklung
+    menu: Handeln als …
+    bar:
+      copy: "Entwicklungsmodus: Du handelst als @%{username}."
+      stop: Zurück zu @%{operator}
+    impersonations:
+      show:
+        title: Handeln als …
+        accounts: Konten
+        intro: "Öffnet eine Sitzung als dieses Konto, ohne Passwort und ohne zweiten Faktor. Die Schaltfläche in der Leiste führt dann zum Konto des Betreibers zurück."
+        start: Handeln als
+        start_aria: Handeln als @%{username}
+        empty: Kein anderes Konto zum Öffnen.
+        more: Nur die ersten %{limit} Konten werden aufgeführt.
+      create:
+        started: "Du handelst als @%{username}."
+        self_refused: Du bist bereits dieses Konto.
+        suspended_refused: Ein gesperrtes Konto kann nicht geöffnet werden.
+      destroy:
+        stopped: "Du handelst wieder als @%{username}."

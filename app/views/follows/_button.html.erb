@@ -1,0 +1,22 @@
+<% following = local_assigns.fetch(:following, nil) %>
+<% if following&.accepted? %>
+  <%= button_to t("follows.actions.unfollow"), federation_follow_path,
+                params: { target: target }, method: :delete,
+                class: "btn btn-outline-secondary" %>
+<% elsif following&.pending? %>
+  <div class="d-flex align-items-center gap-2">
+    <span class="badge bg-secondary-lt"><%= t("follows.states.pending") %></span>
+    <%# A local request has no federation event to retry; only a remote
+        request can be re-sent. %>
+    <% if following.followed_actor.remote? %>
+      <%= button_to t("follows.actions.retry"), federation_follow_path,
+                    params: { target: target }, class: "btn btn-ghost-secondary btn-sm" %>
+    <% end %>
+    <%= button_to t("follows.actions.cancel_request"), federation_follow_path,
+                  params: { target: target }, method: :delete,
+                  class: "btn btn-ghost-secondary btn-sm" %>
+  </div>
+<% else %>
+  <%= button_to t("follows.actions.follow"), federation_follow_path,
+                params: { target: target }, class: "btn btn-primary" %>
+<% end %>

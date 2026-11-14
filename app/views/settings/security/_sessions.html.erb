@@ -1,0 +1,83 @@
+<%# Active sessions (PLAN_AUTH.md §8): the device, how and when it signed in,
+    its last activity, and closing it; closing every session, this one
+    included, sits in the header behind the §10.10 confirmation.
+    Locals: sessions, pagy, sort. %>
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title" id="sessions-title"><%= t("settings.security.sessions.title") %></h3>
+    <div class="card-actions">
+      <%= button_to t("settings.security.revoke_all.submit"), settings_destroy_all_security_sessions_path,
+            method: :delete, class: "btn btn-sm btn-outline-danger",
+            form: { data: { confirm_title: t("settings.security.revoke_all.confirm_title"),
+                            confirm_body: t("settings.security.revoke_all.copy"),
+                            confirm_verb: t("settings.security.revoke_all.submit") } } %>
+    </div>
+  </div>
+  <% if sessions.any? %>
+    <div class="table-responsive">
+      <table class="table table-vcenter card-table" aria-labelledby="sessions-title">
+        <thead>
+          <tr>
+            <%= settings_sort_header t("settings.security.sessions.device"), "device",
+                  route: :settings_security_path, current_sort: sort %>
+            <th scope="col" class="d-none d-md-table-cell"><%= t("settings.security.sessions.signed_in") %></th>
+            <%= settings_sort_header t("settings.security.sessions.last_seen"), "last_seen",
+                  route: :settings_security_path, current_sort: sort, cell_class: "d-none d-sm-table-cell" %>
+            <th scope="col"><span class="visually-hidden"><%= t("settings.security.sessions.actions") %></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% sessions.each do |session| %>
+            <tr>
+              <td>
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-md-2">
+                  <span class="text-truncate session-device" title="<%= session.user_agent %>">
+                    <%= session.user_agent.presence || t("settings.security.sessions.unknown_device") %>
+                  </span>
+                  <% if session == Current.session %>
+                    <span class="badge bg-primary-lt flex-shrink-0"><%= t("settings.security.sessions.current") %></span>
+                  <% end %>
+                </div>
+                <div class="text-secondary small"><%= session.ip_address %></div>
+                <%# Phones have no last-activity column. %>
+                <div class="text-secondary small d-sm-none">
+                  <%= t("settings.security.sessions.last_seen") %> · <%= l(session.last_seen_at, format: :short) %>
+                </div>
+              </td>
+              <td class="text-nowrap d-none d-md-table-cell">
+                <div><%= l(session.created_at, format: :short) %></div>
+                <div class="text-secondary small">
+                  <%= session.provider ? Allure::Auth::Providers.label_for(session.provider) : t("settings.security.sessions.password") %>
+                </div>
+              </td>
+              <td class="text-nowrap d-none d-sm-table-cell"><%= l(session.last_seen_at, format: :short) %></td>
+              <td class="text-end">
+                <% unless session == Current.session %>
+                  <%= button_to settings_security_session_path(session),
+                        method: :delete, class: "btn btn-sm btn-ghost-danger",
+                        params: { page: pagy.page, sort: },
+                        aria: { label: t("settings.security.sessions.revoke_label", ip: session.ip_address) } do %>
+                    <i class="ti ti-x d-md-none" aria-hidden="true"></i>
+                    <span class="d-none d-md-inline"><%= t("settings.security.sessions.revoke") %></span>
+                  <% end %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% if pagy.last > 1 %>
+      <div class="card-footer d-flex justify-content-center">
+        <%== pagy_bootstrap_nav(pagy) %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="card-body text-secondary"><%= t("settings.security.sessions.empty") %></div>
+  <% end %>
+  <div class="card-footer text-secondary small">
+    <%= t("settings.security.sessions.lifetime",
+          idle: Allure::Auth::Config.session_idle_timeout.in_days.to_i,
+          max: Allure::Auth::Config.session_max_lifetime.in_days.to_i) %>
+  </div>
+</div>

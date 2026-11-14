@@ -1,0 +1,20 @@
+{
+  "version": "2.1",
+  "software": {
+    "name": "allure",
+    "version": "0.2.1"
+  },
+  "protocols": [ "activitypub" ],
+  "usage": {
+    "users": {
+      "total": 1,
+      "activeMonth": 1,
+      "activeHalfyear": 1
+    },
+    "localPosts": 1
+  },
+  "openRegistrations": false,
+  "metadata": {
+    "features": [ "workout-publications" ]
+  }
+}

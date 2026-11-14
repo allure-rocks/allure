@@ -1,0 +1,3 @@
+<%# Graphical spelling only (DESIGN.md §5.2). The containing link names Allure
+    through app.name; the rose punctuation is not part of its accessible name. %>
+<span class="<%= class_names("allure-wordmark", "allure-wordmark--responsive": local_assigns.fetch(:responsive, false)) %>" aria-hidden="true"><%= t("app.name").downcase %><span class="allure-wordmark-dot">.</span></span>

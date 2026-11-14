@@ -1,0 +1,51 @@
+<% content_for :title, t("notifications.title") %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= t("notifications.pretitle") %></div>
+      <h1 class="page-title"><%= t("notifications.title") %></h1>
+    </div>
+    <% if @unread_count.positive? %>
+      <div class="col-auto">
+        <%= button_to t("notifications.mark_all_read.action"), mark_all_read_notifications_path,
+                      method: :post, class: "btn btn-outline-secondary" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="row row-deck row-cards">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="btn-list">
+          <%= link_to t("notifications.filters.all"), notifications_path,
+                class: "btn btn-sm #{@filter == 'all' ? 'btn-primary' : 'btn-ghost-secondary'}" %>
+          <%= link_to t("notifications.filters.unread"), notifications_path(filter: "unread"),
+                class: "btn btn-sm #{@filter == 'unread' ? 'btn-primary' : 'btn-ghost-secondary'}" %>
+        </div>
+      </div>
+
+      <% if @notifications.any? %>
+        <div class="list-group list-group-flush list-group-hoverable">
+          <%= render partial: "notifications/notification", collection: @notifications %>
+        </div>
+      <% else %>
+        <div class="card-body">
+          <div class="empty">
+            <div class="empty-icon"><i class="ti ti-bell fs-1 text-primary"></i></div>
+            <p class="empty-title"><%= t("notifications.empty.title") %></p>
+            <p class="empty-subtitle text-secondary"><%= t("notifications.empty.subtitle") %></p>
+          </div>
+        </div>
+      <% end %>
+
+      <% if @pagy.last > 1 %>
+        <div class="card-footer d-flex justify-content-center">
+          <%== pagy_bootstrap_nav(@pagy) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

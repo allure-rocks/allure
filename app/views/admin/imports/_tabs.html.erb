@@ -1,0 +1,15 @@
+<%# Navigation links between the imports panel's views, not an ARIA tab
+    widget: the current one carries `aria-current="page"` (DESIGN.md §10.15).
+    Locals: current (:batches or :connections). %>
+<ul class="nav nav-tabs card-header-tabs" aria-label="<%= t("admin.imports.tabs.label") %>">
+  <li class="nav-item">
+    <%= link_to t("admin.imports.tabs.batches"), admin_imports_path,
+          class: class_names("nav-link", active: current == :batches),
+          aria: { current: (current == :batches ? "page" : nil) } %>
+  </li>
+  <li class="nav-item">
+    <%= link_to t("admin.imports.tabs.connections"), admin_import_connections_path,
+          class: class_names("nav-link", active: current == :connections),
+          aria: { current: (current == :connections ? "page" : nil) } %>
+  </li>
+</ul>

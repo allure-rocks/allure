@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="card-header"><%= t("funding.admin.unmatched_subscriptions") %></div>
+  <div class="table-responsive">
+    <table class="table table-sm card-table">
+      <thead><tr>
+        <% %w[provider tier subscription_state actions].each do |key| %>
+          <th scope="col"><%= t("funding.admin.#{key}") %></th>
+        <% end %>
+      </tr></thead>
+      <tbody>
+        <% subscriptions.each do |subscription| %>
+          <tr>
+            <td><%= subscription.provider %></td>
+            <td><%= t("reactions.kinds.#{subscription.tier}") %></td>
+            <td><%= t("funding.admin.subscription_states.#{subscription.status}") %></td>
+            <td>
+              <%= form_with url: admin_funding_subscription_attachment_path(subscription), method: :post, class: "d-flex gap-2" do %>
+                <%= select_tag :account_id, options_from_collection_for_select(@accounts, :id, :display_name),
+                    aria: { label: t("funding.admin.account") } %>
+                <%= submit_tag t("funding.admin.attach"), class: "btn btn-sm btn-outline-primary" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        <% if subscriptions.empty? %>
+          <tr><td colspan="4" class="text-secondary"><%= t("funding.admin.no_unmatched_subscriptions") %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<%# A service's connection card (DESIGN.md §8.6, PLAN_REMOTE_IMPORTS.md §8.1):
+    its state, the link form or the linked account's facts, the sync actions and
+    the privacy copy. Locals: source, connection, enabled, state. %>
+<% provider = t("workouts.batch_import.sources.#{source.key}.label") %>
+<% zone = Time.find_zone(current_user.time_zone) || Time.zone %>
+<% equipment = ImportConnections::Providers.supports?(source.key, :equipment) %>
+<div class="card mb-3" id="connection-<%= source.key %>">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("settings.connections.connection") %></h3>
+    <div class="card-actions"><%= import_connection_badge(connection, enabled:) %></div>
+  </div>
+
+  <div class="card-body">
+    <% if state == "disabled" %>
+      <p class="text-secondary mb-0"><%= t("settings.connections.disabled", provider:) %></p>
+    <% else %>
+      <p><%= t("settings.connections.#{source.key}.description") %></p>
+
+      <% if connection.last_sync_error.present? && state != "unlinking" %>
+        <div class="alert alert-warning" role="status"><%= connection.last_sync_error %></div>
+      <% end %>
+
+      <% case state %>
+      <% when "disconnected", "expired", "revoked" %>
+        <% if connection.needs_relink? %>
+          <p class="text-secondary"><%= t("settings.connections.relink", provider:) %></p>
+        <% end %>
+        <%= render "connections/#{source.key}/link_form", connection: %>
+      <% when "pending", "mfa_pending" %>
+        <%= render "connections/#{source.key}/pending", connection: %>
+      <% when "unlinking" %>
+        <p class="text-secondary mb-0" role="status">
+          <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span><%= t("settings.connections.unlink.in_progress") %>
+        </p>
+      <% when "linked" %>
+        <dl class="row mb-0">
+          <dt class="col-sm-5 text-secondary fw-normal"><%= t("settings.connections.account") %></dt>
+          <dd class="col-sm-7 mb-2"><%= connection.external_account_name.presence || provider %></dd>
+          <dt class="col-sm-5 text-secondary fw-normal"><%= t("settings.connections.linked_at") %></dt>
+          <dd class="col-sm-7 mb-2"><%= connection.linked_at ? l(connection.linked_at.in_time_zone(zone), format: :long) : "—" %></dd>
+          <dt class="col-sm-5 text-secondary fw-normal"><%= t("settings.connections.last_synced_at") %></dt>
+          <dd class="col-sm-7 mb-2"><%= connection.last_synced_at ? l(connection.last_synced_at.in_time_zone(zone), format: :long) : t("settings.connections.never") %></dd>
+          <dt class="col-sm-5 text-secondary fw-normal"><%= t("settings.connections.imported") %></dt>
+          <dd class="col-sm-7 mb-0">
+            <% if equipment %>
+              <%= t("settings.connections.imported_counts", workouts: connection.workouts.count, equipments: connection.equipments.count) %>
+            <% else %>
+              <%= t("settings.connections.imported_workouts", count: connection.workouts.count) %>
+            <% end %>
+          </dd>
+          <% if ImportConnections::Providers.supports?(source.key, :session_expiry) && connection.token_expires_at %>
+            <dt class="col-sm-5 text-secondary fw-normal mt-2"><%= t("settings.connections.valid_until") %></dt>
+            <% ends_at = connection.token_expires_at.in_time_zone(zone) %>
+            <%# A day-long session (Withings) needs its hour; a years-long one its date. %>
+            <dd class="col-sm-7 mb-0 mt-2"><%= ends_at < 7.days.from_now ? l(ends_at, format: :long) : l(ends_at.to_date, format: :long) %></dd>
+          <% end %>
+        </dl>
+      <% end %>
+
+      <p class="text-secondary small mt-4 mb-0"><%= t("settings.connections.#{source.key}.privacy") %></p>
+    <% end %>
+  </div>
+
+  <% if state == "linked" %>
+    <div class="card-footer">
+      <div class="allure-actions">
+        <%= button_to t("settings.connections.sync.action"), connection_sync_path(source.key),
+              method: :post, class: "btn btn-outline-secondary" %>
+        <% if equipment %>
+          <%= button_to t("settings.connections.equipment.action"), connection_equipment_path(source.key),
+                method: :post, class: "btn btn-outline-secondary" %>
+        <% end %>
+      </div>
+      <% if equipment && connection.sync_equipment? %>
+        <p class="form-text text-end text-md-start mb-0"><%= t("settings.connections.equipment.enabled_hint") %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

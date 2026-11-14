@@ -1,0 +1,78 @@
+<% content_for :title, @equipment.label %>
+
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle"><%= equipment_type_name(@equipment.equipment_type) %></div>
+      <h1 class="page-title"><%= @equipment.label %></h1>
+    </div>
+    <div class="col-auto ms-auto d-print-none">
+      <div class="btn-list">
+        <%= button_to t("equipments.refresh.submit"), refresh_equipment_path(@equipment), method: :post, class: "btn btn-outline-primary" %>
+        <%= link_to t("equipments.actions.edit"), edit_equipment_path(@equipment), class: "btn btn-outline-primary" %>
+        <%= button_to t("equipments.actions.delete"), equipment_path(@equipment), method: :delete, form: { data: { confirm_title: t("equipments.actions.confirm.title"), confirm_body: t("equipments.actions.confirm.body"), confirm_verb: t("equipments.actions.confirm.verb") } }, class: "btn btn-outline-danger" %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if @equipment.description.present? %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <p class="mb-0"><%= simple_format(h(@equipment.description)) %></p>
+    </div>
+  </div>
+<% end %>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("equipments.details.title") %></h3>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-vcenter card-table">
+      <caption class="visually-hidden"><%= @equipment.label %></caption>
+      <tbody>
+        <tr>
+          <td><%= t("equipments.details.status") %></td>
+          <td class="text-end"><%= @equipment.is_active? ? t("equipments.details.active") : t("equipments.details.inactive") %></td>
+        </tr>
+        <tr>
+          <td><%= t("equipments.totals.distance") %></td>
+          <td class="text-end"><%= format_distance(@equipment.total_distance) %></td>
+        </tr>
+        <tr>
+          <td><%= t("equipments.totals.duration") %></td>
+          <td class="text-end"><%= format_duration(@equipment.total_duration) %></td>
+        </tr>
+        <tr>
+          <td><%= t("equipments.totals.moving") %></td>
+          <td class="text-end"><%= format_duration(@equipment.total_moving) %></td>
+        </tr>
+        <tr>
+          <td><%= t("equipments.totals.workouts") %></td>
+          <td class="text-end"><%= @equipment.total_workouts %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("equipments.attached.title") %></h3>
+  </div>
+  <% if @workouts.any? %>
+    <div class="list-group list-group-flush">
+      <% @workouts.each do |workout| %>
+        <%= link_to workout_path(workout), class: "list-group-item list-group-item-action" do %>
+          <div class="row align-items-center">
+            <div class="col text-truncate"><%= workout_display_title(workout) %></div>
+            <div class="col-auto text-secondary small"><%= format_started_at(workout.started_at) %></div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="card-body text-secondary"><%= t("equipments.attached.empty") %></div>
+  <% end %>
+</div>

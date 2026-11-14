@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Allure Test Suite" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>Invalid segments ignored</name>
+    <trkseg>
+      <trkpt lat="45.0000" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:00:00Z</time></trkpt>
+    </trkseg>
+    <trkseg>
+      <trkpt lat="45.0100" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:10:00Z</time></trkpt>
+      <trkpt lat="45.0110" lon="6.4000"><ele>505.0</ele><time>2026-06-01T08:11:00Z</time></trkpt>
+    </trkseg>
+    <trkseg>
+      <trkpt lat="45.0200" lon="6.4000"><ele>500.0</ele><time>2026-06-01T08:20:00Z</time></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

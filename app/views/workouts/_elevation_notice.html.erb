@@ -1,0 +1,24 @@
+<%# Owner elevation-absence notice (PLAN_ELEVATION.md §6): one sentence that
+    explains why the workout has no elevation and the single action that fixes
+    it where one exists. %>
+<% notice = local_assigns.fetch(:notice) %>
+<% warning = %i[failed unavailable].include?(notice) %>
+<% live = %i[pending failed unavailable].include?(notice) %>
+<% copy_key = { pending: "workouts.elevation.pending", unavailable: "workouts.elevation.unavailable" }
+     .fetch(notice, "workouts.elevation.notice.#{notice}") %>
+<div id="elevation-notice" class="<%= class_names("small d-flex flex-wrap align-items-center gap-2", warning ? "text-warning" : "text-secondary") %>"
+     <%= tag.attributes(role: live ? "status" : nil) %>>
+  <span class="d-inline-flex align-items-center gap-1">
+    <i class="ti <%= notice == :pending ? "ti-loader" : "ti-mountain-off" %>" aria-hidden="true"></i>
+    <%= t(copy_key) %>
+  </span>
+  <% if notice == :opt_out %>
+    <%= link_to t("settings.hub.elevation.action"), settings_elevation_path, class: "btn btn-sm btn-outline-primary" %>
+  <% elsif %i[failed unavailable].include?(notice) %>
+    <%= button_to t("workouts.elevation.notice.retry"), workout_elevation_source_path(workout), method: :patch,
+          params: { elevation_source: "dem" }, class: "btn btn-sm btn-outline-primary" %>
+  <% elsif notice == :idle %>
+    <%= button_to t("workouts.elevation.notice.estimate"), workout_elevation_source_path(workout), method: :patch,
+          params: { elevation_source: "dem" }, class: "btn btn-sm btn-outline-primary" %>
+  <% end %>
+</div>

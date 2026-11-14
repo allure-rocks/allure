@@ -1,0 +1,109 @@
+<div class="card h-100">
+  <div class="card-header">
+    <h3 class="card-title"><%= t("me.segments.title") %></h3>
+    <div class="card-actions"><%= link_to segments_path, class: "btn btn-sm btn-ghost-primary" do %><%= t("me.segments.action") %><i class="ti ti-chevron-right ms-1" aria-hidden="true"></i><% end %></div>
+  </div>
+  <% if @recent_segments.any? %>
+    <div class="table-responsive d-none d-md-block">
+      <table class="table table-sm table-vcenter card-table allure-table-nums hub-segments-table">
+        <caption class="visually-hidden"><%= t("me.segments.title") %></caption>
+        <thead>
+          <tr>
+            <th scope="col"><%= t("me.segments.date") %></th>
+            <th scope="col"><%= t("me.segments.segment") %></th>
+            <th scope="col">
+              <span class="d-none d-md-inline"><%= t("me.segments.sport") %></span>
+              <span class="visually-hidden d-md-none"><%= t("me.segments.sport") %></span>
+            </th>
+            <th scope="col" class="text-end"><%= t("me.segments.time") %></th>
+            <%# Two ranks, never one: where this effort stands among the viewer's
+                own attempts, and the viewer's standing on the board (§20.7). %>
+            <th scope="col" class="text-end">
+              <span data-controller="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" tabindex="0"
+                    data-bs-title="<%= t("me.segments.personal_rank_hint") %>"><%= t("me.segments.personal_rank") %></span>
+            </th>
+            <th scope="col" class="text-end">
+              <span data-controller="tooltip" data-bs-toggle="tooltip" data-bs-placement="top" tabindex="0"
+                    data-bs-title="<%= t("me.segments.board_rank_hint") %>"><span class="d-none d-md-inline"><%= t("me.segments.board_rank") %></span><span class="d-md-none"><%= t("me.segments.board_rank_short") %></span></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_segments.each do |entry| %>
+            <% effort = entry[:effort] %>
+            <% segment = entry[:segment] %>
+            <% standing = entry[:standing] %>
+            <tr>
+              <td class="text-secondary text-nowrap"><%= l(effort.started_at.to_date, format: :short) %></td>
+              <td>
+                <% if segment.viewable_by?(current_user) %>
+                  <%= link_to segment.name, segment_path(segment), class: "text-reset" %>
+                <% else %>
+                  <%= segment.name %>
+                <% end %>
+              </td>
+              <%# The effort's own sport, never the segment's: a segment without a
+                  sport is eligible for every sport (PLAN_SEGMENTS.md). %>
+              <td class="text-nowrap">
+                <span class="sport-icon"><%= sport_icon_tag(effort.sport) %></span>
+                <%# Phones keep the glyph and drop the name, which stays readable to assistive technology. %>
+                <span class="d-none d-md-inline"><%= sport_display_name(effort.sport) %></span>
+                <span class="visually-hidden d-md-none"><%= sport_display_name(effort.sport) %></span>
+              </td>
+              <td class="text-end"><%= format_duration(effort.elapsed_time) %></td>
+              <td class="text-end">
+                <span class="text-nowrap">
+                  <%= personal_place_icon(entry[:personal_rank], segment.name, extra_classes: "me-1") %>
+                  <%= entry[:personal_rank] %><span class="text-secondary small"> / <%= entry[:personal_total] %></span>
+                </span>
+              </td>
+              <td class="text-end">
+                <% if entry[:personal_rank] == 1 && standing&.rank %>
+                  <%= rank_medal(standing.rank, participants: standing.participants) %>
+                <% else %>
+                  <span class="text-secondary">—</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <%# Phones get the §12.3 stacked rows instead of the six columns: the
+        sport tile and the name on one truncated line, then the date, the
+        time and the two ranks. %>
+    <ul class="list-group list-group-flush hub-segment-list d-md-none">
+      <% @recent_segments.each do |entry| %>
+        <% effort = entry[:effort] %>
+        <% segment = entry[:segment] %>
+        <% standing = entry[:standing] %>
+        <li class="list-group-item position-relative">
+          <div class="d-flex align-items-center gap-2">
+            <%= sport_tile_tag(effort.sport, size: :xs) %>
+            <div class="flex-fill min-w-0">
+              <div class="fw-bold text-truncate">
+                <% if segment.viewable_by?(current_user) %>
+                  <%= link_to segment.name, segment_path(segment), class: "text-reset stretched-link" %>
+                <% else %>
+                  <%= segment.name %>
+                <% end %>
+              </div>
+              <div class="text-secondary small allure-table-nums d-flex flex-wrap align-items-center column-gap-2">
+                <span><%= l(effort.started_at.to_date, format: :short) %></span>
+                <span class="text-body fw-medium"><%= format_duration(effort.elapsed_time) %></span>
+                <span class="text-nowrap" title="<%= t("me.segments.personal_rank_hint") %>">
+                  <%= personal_place_icon(entry[:personal_rank], segment.name, extra_classes: "me-1") %><%= t("me.segments.personal_rank") %> <%= entry[:personal_rank] %>/<%= entry[:personal_total] %>
+                </span>
+                <% if entry[:personal_rank] == 1 && standing&.rank %>
+                  <span class="text-nowrap position-relative z-2"><%= rank_medal(standing.rank, participants: standing.participants) %></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="card-body text-secondary"><%= t("me.segments.empty") %></div>
+  <% end %>
+</div>

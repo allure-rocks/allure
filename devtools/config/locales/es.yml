@@ -1,0 +1,22 @@
+es:
+  dev_tools:
+    pretitle: Desarrollo
+    menu: Actuar como…
+    bar:
+      copy: "Modo de desarrollo: estás actuando como @%{username}."
+      stop: Volver a @%{operator}
+    impersonations:
+      show:
+        title: Actuar como…
+        accounts: Cuentas
+        intro: "Abre una sesión como esta cuenta, sin contraseña y sin verificación en dos pasos. El botón de la barra vuelve después a la cuenta del operador de la instancia."
+        start: Actuar como
+        start_aria: Actuar como @%{username}
+        empty: No hay ninguna otra cuenta que abrir.
+        more: Solo se muestran las primeras %{limit} cuentas.
+      create:
+        started: "Estás actuando como @%{username}."
+        self_refused: Ya eres esta cuenta.
+        suspended_refused: No se puede abrir una cuenta suspendida.
+      destroy:
+        stopped: "Vuelves a actuar como @%{username}."

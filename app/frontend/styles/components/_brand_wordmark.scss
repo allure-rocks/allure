@@ -1,0 +1,36 @@
+// Shared product identity (DESIGN.md §5.2), matching the product website.
+.allure-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// The administration menu expands at xxl and carries nine destinations plus
+// its exit action. Its compact identity remains until that complete row fits.
+.navbar-expand-xxl .allure-wordmark--responsive {
+  @media (max-width: 1799.98px) {
+    display: none;
+  }
+}
+
+.allure-wordmark {
+  display: inline-flex;
+  color: var(--allure-text);
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+
+  &-dot {
+    color: var(--primary);
+  }
+
+  // Preserve the existing compact topbar and its action targets on phones,
+  // tablets and smaller desktops. The auth shell keeps the complete wordmark.
+  &--responsive {
+    @include media-breakpoint-down(xl) {
+      display: none;
+    }
+  }
+}

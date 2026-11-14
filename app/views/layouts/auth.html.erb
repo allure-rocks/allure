@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" data-bs-theme="<%= current_theme %>" data-bs-layout="fluid">
+  <head>
+    <title><%= page_title %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#c5426c">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="<%= pwa_manifest_path %>">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <% unless hotwire_native_app? %>
+      <%# A Turbo visit swaps <body> under password managers, which then never see these fields. %>
+      <meta name="turbo-visit-control" content="reload">
+    <% end %>
+
+    <%= vite_development_stylesheet_tag %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag "application" %>
+  </head>
+
+  <%= tag.body class: ("native-app" if hotwire_native_app?) do %>
+    <a href="#main-content" class="visually-hidden-focusable skip-to-content"><%= t("navigation.skip_to_content") %></a>
+
+    <% unless hotwire_native_app? %>
+      <div class="position-absolute end-0 z-3 d-flex align-items-center gap-2 <%= Allure::Demo.enabled? ? "demo-strip-offset" : "top-0 m-3" %>">
+        <%= render "layouts/language_switcher" unless signed_in? %>
+        <%= render "layouts/theme_toggle" %>
+      </div>
+    <% end %>
+
+    <%= render "layouts/demo_strip" if Allure::Demo.enabled? %>
+    <div class="page page-center">
+      <div class="container-xl py-4">
+        <div class="row justify-content-center">
+          <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+            <div class="text-center mb-4">
+              <%= link_to root_path, class: "text-decoration-none allure-brand", aria: { label: t("app.name") } do %>
+                <%= render "shared/brand_mark", size: "fs-1" %>
+                <%= render "shared/brand_wordmark" %>
+              <% end %>
+              <div class="text-secondary small mt-1"><%= Allure::Federation.config.domain %></div>
+            </div>
+
+            <main id="main-content">
+              <%= render "layouts/flash" %>
+              <%= yield %>
+            </main>
+
+            <div class="text-center text-secondary small mt-4">
+              <%= t("footer.tagline") %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</html>

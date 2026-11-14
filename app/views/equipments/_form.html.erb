@@ -1,0 +1,41 @@
+<% if form.object.errors.any? %>
+  <div class="alert alert-danger" role="alert" data-unsaved-changes="forced">
+    <h4 class="alert-title"><%= t("errors.unprocessable_entity.title") %></h4>
+    <ul class="mb-0">
+      <% form.object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="mb-3">
+      <%= form.label :label, t("equipments.form.label"), class: "form-label required" %>
+      <%= form.text_field :label, class: "form-control", maxlength: 50, size: nil, required: true, autofocus: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :description, t("equipments.form.description"), class: "form-label" %>
+      <%= form.text_area :description, class: "form-control", rows: 3, maxlength: 2_000 %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :equipment_type_id, t("equipments.form.equipment_type"), class: "form-label required" %>
+      <%= form.select :equipment_type_id,
+            @equipment_types.map { |type| [ equipment_type_name(type), type.id ] },
+            {}, class: "form-select", required: true %>
+    </div>
+
+    <label class="form-check">
+      <%= form.check_box :is_active, class: "form-check-input" %>
+      <span class="form-check-label"><%= t("equipments.form.active") %></span>
+    </label>
+  </div>
+</div>
+
+<div class="form-footer">
+  <%= form.submit t("equipments.form.save"), class: "btn btn-primary" %>
+  <%= link_to t("equipments.form.cancel"), equipments_path, class: "btn btn-link" %>
+</div>

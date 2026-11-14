@@ -1,0 +1,21 @@
+<%# The bell dropdown body (PLAN_NOTIFICATIONS.md). Served as a Turbo Frame and
+    fetched whenever the dropdown opens, so the list is never stale. %>
+<turbo-frame id="notification-menu" data-notification-menu-url="<%= menu_notifications_path %>">
+  <% if notifications.any? %>
+    <div class="list-group list-group-flush list-group-hoverable">
+      <%= render partial: "notifications/notification", collection: notifications %>
+    </div>
+  <% else %>
+    <div class="card-body text-secondary"><%= t("notifications.empty.dropdown") %></div>
+  <% end %>
+
+  <div class="card-footer d-flex align-items-center gap-2">
+    <% if unread_count.positive? %>
+      <%= button_to t("notifications.mark_all_read.action"), mark_all_read_notifications_path,
+                    method: :post, class: "btn btn-sm btn-ghost-secondary",
+                    form: { data: { turbo_frame: "_top" } } %>
+    <% end %>
+    <%= link_to t("notifications.view_all"), notifications_path,
+                data: { turbo_frame: "_top" }, class: "btn btn-sm btn-primary ms-auto" %>
+  </div>
+</turbo-frame>

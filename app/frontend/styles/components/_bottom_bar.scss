@@ -1,0 +1,86 @@
+// Phone bottom navigation (DESIGN.md §7.3). Fixed, five labelled items, thumb
+// reachable. Content reserves room below so the bar never occludes the last
+// row, including sticky form footers.
+.bottom-bar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+  display: flex;
+  background-color: var(--allure-surface-raised);
+  border-top: 1px solid var(--allure-border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-bar-item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  min-height: 44px;
+  color: var(--allure-text-muted);
+  text-decoration: none;
+
+  // Bootstrap's `a:hover` underlines and tints any hovered link, and a tap on
+  // a touch device leaves that hover state stuck until the next tap. The bar
+  // stays flat in every state; only keyboard focus gets an indicator.
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:active {
+    color: var(--allure-text-muted);
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--allure-focus);
+    outline-offset: -2px;
+  }
+
+  &.active {
+    color: var(--primary);
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &:active {
+      color: var(--primary);
+    }
+  }
+}
+
+.bottom-bar-label {
+  font-size: 0.625rem;
+  line-height: 1;
+}
+
+// Reserve room for the fixed bar on everything below the desktop breakpoint,
+// where the sidebar is no longer a visible rail.
+@media (max-width: 991.98px) {
+  .page-wrapper {
+    padding-bottom: 76px;
+  }
+}
+
+.skip-to-content {
+  z-index: 1050;
+
+  &:focus {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    width: auto;
+    height: auto;
+    padding: 8px 16px;
+    clip-path: none;
+    background-color: var(--allure-surface-raised);
+    border: 1px solid var(--allure-border);
+  }
+}

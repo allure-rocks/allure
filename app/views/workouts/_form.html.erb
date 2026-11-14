@@ -1,0 +1,87 @@
+<% if form.object.errors.any? %>
+  <div class="alert alert-danger" data-unsaved-changes="forced">
+    <h4 class="alert-title"><%= t("errors.unprocessable_entity.title") %></h4>
+    <ul class="mb-0">
+      <% form.object.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="mb-3">
+        <%= form.label :sport_id, t("workouts.form.sport"), class: "form-label required" %>
+        <%= form.select :sport_id, sport_options_for_select, {},
+                        class: "form-select#{' is-invalid' if form.object.errors[:sport].present?}" %>
+        <small class="form-text"><%= t("workouts.form.sport_change_hint") %></small>
+        <% if form.object.errors[:sport].present? %>
+          <div class="invalid-feedback d-block"><%= form.object.errors[:sport].join(", ") %></div>
+        <% end %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :title, t("workouts.form.title"), class: "form-label" %>
+        <%= form.text_field :title, class: "form-control", maxlength: 255, size: nil, placeholder: t("workouts.form.title_hint") %>
+        <small class="form-text"><%= t("workouts.form.title_hint") %></small>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :description, t("workouts.form.description"), class: "form-label" %>
+        <%= form.text_area :description, class: "form-control", rows: 3, maxlength: 10_000, placeholder: t("workouts.form.description_hint") %>
+      </div>
+
+      <div class="mb-3">
+        <%= form.label :notes, t("workouts.form.notes"), class: "form-label" %>
+        <%= form.text_area :notes, class: "form-control", rows: 2, maxlength: 500, placeholder: t("workouts.form.notes_hint") %>
+        <small class="form-text"><%= t("workouts.form.notes_hint") %></small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-check">
+          <%= form.check_box :commute, class: "form-check-input" %>
+          <span class="form-check-label"><%= t("workouts.form.commute") %></span>
+        </label>
+        <small class="form-text"><%= t("workouts.form.commute_hint") %></small>
+      </div>
+    </div>
+  </div>
+
+  <% if @equipments.any? %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="mb-3">
+          <%= form.label :equipment_ids, t("workouts.form.equipment"), class: "form-label" %>
+          <%= hidden_field_tag "workout[equipment_ids][]", "" %>
+          <div class="row">
+            <% @equipments.each do |equipment| %>
+              <% attached = form.object.equipment_ids.include?(equipment.id) %>
+              <div class="col-sm-6 col-lg-4">
+                <label class="form-check mb-2">
+                  <%= check_box_tag "workout[equipment_ids][]", equipment.id, attached,
+                        class: "form-check-input",
+                        disabled: !equipment.is_active? && !attached %>
+                  <span class="form-check-label">
+                    <%= equipment.label %>
+                    <% unless equipment.is_active? %>
+                      <span class="text-secondary small">(<%= t("workouts.form.equipment_inactive") %>)</span>
+                    <% end %>
+                  </span>
+                </label>
+              </div>
+            <% end %>
+          </div>
+          <small class="form-text"><%= t("workouts.form.equipment_hint") %></small>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+</div>
+
+<div class="form-footer">
+  <%= form.submit t("workouts.edit.submit"), class: "btn btn-primary" %>
+  <%= link_to t("workouts.form.cancel"), workout_path(form.object), class: "btn btn-link" %>
+</div>

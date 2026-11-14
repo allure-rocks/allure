@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>Evening walk</name>
+    <Lap><Time>2026-08-28T10:00:00Z</Time><dist>500.0</dist></Lap>
+    <Placemark>
+      <name>Evening walk</name>
+      <gx:Track>
+        <when>2026-08-28T10:00:00Z</when>
+        <gx:coord>6.4200 45.0800</gx:coord>
+        <when>2026-08-28T10:05:00Z</when>
+        <gx:coord>6.4210 45.0810</gx:coord>
+        <when>2026-08-28T10:10:00Z</when>
+        <gx:coord>6.4220 45.0820</gx:coord>
+      </gx:Track>
+    </Placemark>
+  </Document>
+</kml>

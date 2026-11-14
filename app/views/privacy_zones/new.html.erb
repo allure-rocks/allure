@@ -1,0 +1,19 @@
+<% content_for :title, t("privacy_zones.new.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("privacy_zones.new.title") } do %>
+
+  <%= form_with model: @privacy_zone, data: {
+        controller: "zone-picker",
+        action: "allure:theme-changed@window->zone-picker#themeChanged",
+        zone_picker_style_url_value: map_style_url,
+        zone_picker_style_url_dark_value: map_dark_style_url,
+        zone_picker_unit_system_value: current_user&.unit_system || "metric",
+        zone_picker_locale_value: map_control_locale.to_json,
+        zone_picker_basemap_theme_value: basemap_theme_preference,
+        zone_picker_search_url_value: search_privacy_zones_path,
+        zone_picker_focus_search_value: true,
+        zone_picker_search_messages_value: zone_search_messages.to_json
+      } do |form| %>
+    <%= render "form", form: form %>
+  <% end %>
+<% end %>

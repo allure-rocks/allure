@@ -1,0 +1,29 @@
+<%# The photo intake zone (DESIGN.md §10.22): a labelled picker button and a
+    drop target, never the browser's own file control. The element that owns
+    the upload controller carries the limits and the drag handlers. The card
+    renders it compact, its header carrying the picker. %>
+<% compact = local_assigns.fetch(:compact, false) %>
+<% if compact %>
+  <div class="allure-photo-drop allure-photo-drop--compact mb-3">
+    <p class="small text-secondary mb-1"><i class="ti ti-photo-plus me-1" aria-hidden="true"></i><%= t("photos.drop_hint") %></p>
+    <p class="form-hint mb-0"><%= t("photos.hint", formats: Allure::Photos::Config.heic_supported? ? "JPEG, PNG, WebP, HEIC" : "JPEG, PNG, WebP",
+                                  size: Allure::Photos::Config.max_megabytes, count: Allure::Photos::Config::MAX_PER_WORKOUT) %></p>
+    <input type="file" id="photos-input-<%= workout.to_param %>" hidden multiple
+           accept="<%= Allure::Photos::Config.content_types.join(",") %>" data-photo-upload-target="input" data-action="change->photo-upload#pick">
+  </div>
+<% else %>
+  <div class="allure-photo-drop mb-3">
+    <p class="allure-photo-drop__title"><i class="ti ti-photo-plus me-1" aria-hidden="true"></i><%= t("photos.add") %></p>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+      <button type="button" class="btn btn-sm btn-outline-primary" data-action="photo-upload#choose">
+        <%= t("photos.choose") %>
+      </button>
+      <span class="text-secondary small"><%= t("photos.drop_hint") %></span>
+    </div>
+    <input type="file" id="photos-input-<%= workout.to_param %>" hidden multiple
+           accept="<%= Allure::Photos::Config.content_types.join(",") %>" data-photo-upload-target="input" data-action="change->photo-upload#pick">
+    <p class="form-hint mb-0"><%= t("photos.hint", formats: Allure::Photos::Config.heic_supported? ? "JPEG, PNG, WebP, HEIC" : "JPEG, PNG, WebP",
+                                  size: Allure::Photos::Config.max_megabytes, count: Allure::Photos::Config::MAX_PER_WORKOUT) %></p>
+  </div>
+<% end %>
+<ul class="list-unstyled" aria-live="polite" data-photo-upload-target="progress"></ul>

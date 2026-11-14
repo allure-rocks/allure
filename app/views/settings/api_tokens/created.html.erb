@@ -1,0 +1,33 @@
+<% content_for :title, t("settings.api_tokens.created.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.api_tokens.created.title") } do %>
+  <div class="card">
+    <div class="card-body">
+      <p><%= t("settings.api_tokens.created.copy", name: @token.name) %></p>
+      <div class="alert alert-warning" role="note"><%= t("settings.api_tokens.created.once") %></div>
+      <div class="input-group mb-4" data-controller="clipboard"
+           data-clipboard-copied-label-value="<%= t("settings.api_tokens.created.copied") %>">
+        <input type="text" id="api_token_secret" class="form-control font-monospace" readonly
+               value="<%= @secret %>" data-clipboard-target="source"
+               aria-label="<%= t("settings.api_tokens.created.secret_label") %>">
+        <button type="button" class="btn" data-action="clipboard#copy">
+          <i class="ti ti-copy me-1" aria-hidden="true"></i><span data-clipboard-target="label"><%= t("settings.api_tokens.created.copy_button") %></span>
+        </button>
+      </div>
+      <dl class="row mb-4">
+        <dt class="col-sm-3"><%= t("settings.api.tokens.table.permissions") %></dt>
+        <dd class="col-sm-9"><%= @token.scopes.map { t("settings.api.scopes.#{it.tr(':', '_')}.label") }.to_sentence %></dd>
+        <dt class="col-sm-3"><%= t("settings.api_tokens.new.mcp_geometry.legend") %></dt>
+        <dd class="col-sm-9"><%= t("settings.api.mcp_geometry.#{@token.mcp_geometry}.label") %></dd>
+        <dt class="col-sm-3"><%= t("settings.api.tokens.table.expires") %></dt>
+        <dd class="col-sm-9"><%= l(@token.expires_at.to_date, format: :day_month_year) %></dd>
+      </dl>
+      <% if @token.scope?("read") %>
+        <h3 class="h4"><%= t("settings.api.mcp.title") %></h3>
+        <p class="text-secondary"><%= t("settings.api_tokens.created.mcp") %></p>
+        <%= render "settings/api/mcp_clients", secret: @secret, dom_suffix: "created" %>
+      <% end %>
+      <%= link_to t("settings.api_tokens.created.done"), settings_api_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

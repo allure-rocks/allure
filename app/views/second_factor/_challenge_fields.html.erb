@@ -1,0 +1,52 @@
+<%# The second-factor answer shared by the sign-in challenge and the
+    re-authentication page (PLAN_AUTH.md §5.1, DESIGN.md §20.15): Tabler's
+    six-slot code input for the authenticator app, or the recovery-code field
+    when the person asks for it, then a passkey when the account has one.
+    Locals: form, totp, passkeys, recovery, switch_path, autofocus. %>
+<%= form.hidden_field :assertion, value: nil, data: { webauthn_target: "field" } %>
+
+<% if recovery %>
+  <div class="mb-3">
+    <%= form.label :recovery_code, t("second_factor.recovery.label"), class: "form-label" %>
+    <%= form.text_field :recovery_code, value: nil, required: true, autofocus: local_assigns[:autofocus],
+          autocomplete: "off", autocapitalize: "off", spellcheck: false, maxlength: 16, size: nil,
+          placeholder: "xxxxx-xxxxx", class: "form-control font-monospace" %>
+    <small class="form-hint"><%= t("second_factor.recovery.hint") %></small>
+  </div>
+<% elsif totp %>
+  <fieldset class="my-4">
+    <legend class="visually-hidden"><%= t("second_factor.code.label") %></legend>
+    <div class="d-flex justify-content-center">
+      <div class="otp otp-lg" data-controller="otp">
+        <%# Not `required`: the passkey button submits the same form without a code. %>
+        <%= form.text_field :code, value: nil, maxlength: 6, size: nil,
+              autofocus: local_assigns[:autofocus], autocomplete: "one-time-code",
+              aria: { label: t("second_factor.code.label") } %>
+      </div>
+    </div>
+    <p class="form-hint text-center mt-2 mb-0"><%= t("second_factor.code.hint") %></p>
+  </fieldset>
+<% end %>
+
+<% if passkeys && !recovery %>
+  <div data-webauthn-target="available" hidden>
+    <% if totp %><div class="hr-text"><%= t("second_factor.or") %></div><% end %>
+    <button type="button" class="btn btn-outline-primary w-100" data-action="webauthn#start">
+      <i class="ti ti-fingerprint me-2" aria-hidden="true"></i><%= t("second_factor.passkey.use") %>
+    </button>
+    <div class="text-danger small mt-2" role="alert" data-webauthn-target="error" hidden></div>
+  </div>
+  <% unless totp %>
+    <p class="text-secondary small text-center mb-0" data-webauthn-target="unavailable" hidden>
+      <%= t("second_factor.passkey.unavailable") %>
+    </p>
+  <% end %>
+<% end %>
+
+<p class="text-center small mt-3 mb-0">
+  <% if recovery %>
+    <%= link_to t("second_factor.recovery.back"), switch_path %>
+  <% else %>
+    <%= link_to t("second_factor.recovery.use"), switch_path %>
+  <% end %>
+</p>

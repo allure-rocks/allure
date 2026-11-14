@@ -1,0 +1,183 @@
+<%# Live counters fragment, re-rendered in place by live_frame_controller.
+    Every count is scoped to the current account's workouts
+    (PLAN_DERIVATIONS.md §7); the buttons stay disabled while nothing is
+    pending. %>
+<p class="text-secondary small" role="status" aria-live="polite">
+  <%= t("settings.data.live_hint", time: l(Time.current, format: :short)) %>
+</p>
+
+<div class="row row-deck row-cards">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("settings.data.rebuild.title") %></h3>
+        <p class="text-secondary"><%= t("settings.data.rebuild.description") %></p>
+        <p class="mb-3"><%= t("settings.data.count", count: counts.fetch("rebuild")) %></p>
+        <%= button_to t("settings.data.rebuild.action"), settings_data_rebuild_path,
+              class: "btn btn-outline-primary",
+              disabled: counts.fetch("rebuild").zero?,
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("settings.data.rebuild.confirm_title"),
+                confirm_body: t("settings.data.rebuild.confirm_body", count: counts.fetch("rebuild")),
+                confirm_verb: t("settings.data.rebuild.action")
+              } } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("settings.data.route_images.title") %></h3>
+        <p class="text-secondary"><%= t("settings.data.route_images.description") %></p>
+        <p class="mb-3"><%= t("settings.data.count", count: counts.fetch("route_images")) %></p>
+        <%= button_to t("settings.data.route_images.action"), settings_data_route_images_path,
+              class: "btn btn-outline-primary",
+              disabled: counts.fetch("route_images").zero?,
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("settings.data.route_images.confirm_title"),
+                confirm_body: t("settings.data.route_images.confirm_body", count: counts.fetch("route_images")),
+                confirm_verb: t("settings.data.route_images.action")
+              } } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("settings.data.segment_images.title") %></h3>
+        <p class="text-secondary"><%= t("settings.data.segment_images.description") %></p>
+        <p class="mb-3"><%= t("settings.data.segment_count", count: counts.fetch("segment_images")) %></p>
+        <%= button_to t("settings.data.segment_images.action"), settings_data_segment_images_path,
+              class: "btn btn-outline-primary",
+              disabled: counts.fetch("segment_images").zero?,
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("settings.data.segment_images.confirm_title"),
+                confirm_body: t("settings.data.segment_images.confirm_body", count: counts.fetch("segment_images")),
+                confirm_verb: t("settings.data.segment_images.action")
+              } } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("settings.data.places.title") %></h3>
+        <p class="text-secondary"><%= t("settings.data.places.description") %></p>
+        <p class="mb-3"><%= t("settings.data.count", count: counts.fetch("places")) %></p>
+        <%= button_to t("settings.data.places.action"), settings_data_places_path,
+              class: "btn btn-outline-primary",
+              disabled: counts.fetch("places").zero?,
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("settings.data.places.confirm_title"),
+                confirm_body: t("settings.data.places.confirm_body", count: counts.fetch("places")),
+                confirm_verb: t("settings.data.places.action")
+              } } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("settings.data.loops.title") %></h3>
+        <p class="text-secondary"><%= t("settings.data.loops.description") %></p>
+        <p class="mb-3"><%= t("settings.data.count", count: counts.fetch("loops")) %></p>
+        <%= button_to t("settings.data.loops.action"), settings_data_loops_path,
+              class: "btn btn-outline-primary",
+              disabled: counts.fetch("loops").zero?,
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("settings.data.loops.confirm_title"),
+                confirm_body: t("settings.data.loops.confirm_body", count: counts.fetch("loops")),
+                confirm_verb: t("settings.data.loops.action")
+              } } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("settings.data.heart_rate.title") %></h3>
+        <p class="text-secondary"><%= t("settings.data.heart_rate.description") %></p>
+        <p class="mb-3"><%= t("settings.data.count", count: counts.fetch("heart_rate")) %></p>
+        <%= button_to t("settings.data.heart_rate.action"), settings_data_heart_rate_path,
+              class: "btn btn-outline-primary",
+              disabled: counts.fetch("heart_rate").zero?,
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("settings.data.heart_rate.confirm_title"),
+                confirm_body: t("settings.data.heart_rate.confirm_body", count: counts.fetch("heart_rate")),
+                confirm_verb: t("settings.data.heart_rate.action")
+              } } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title"><%= t("settings.data.route_suggestions.title") %></h3>
+      <p class="text-secondary"><%= t("settings.data.route_suggestions.description") %></p>
+      <p class="mb-3"><%= t("settings.data.count", count: counts.fetch("route_suggestions")) %></p>
+      <%= button_to t("settings.data.route_suggestions.action"), settings_data_route_suggestions_path,
+            class: "btn btn-outline-primary",
+            disabled: counts.fetch("route_suggestions").zero?,
+            form: { data: {
+              turbo_frame: "_top",
+              confirm_title: t("settings.data.route_suggestions.confirm_title"),
+              confirm_body: t("settings.data.route_suggestions.confirm_body", count: counts.fetch("route_suggestions")),
+              confirm_verb: t("settings.data.route_suggestions.action")
+            } } %>
+    </div>
+  </div>
+</div>
+
+<% if elevation_available %>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title"><%= t("settings.data.elevation.title") %></h3>
+          <p class="text-secondary"><%= t("settings.data.elevation.description") %></p>
+          <p class="mb-3"><%= t("settings.data.count", count: counts.fetch("elevation")) %></p>
+          <%= button_to t("settings.data.elevation.action"), settings_data_elevation_path,
+                class: "btn btn-outline-primary",
+                disabled: counts.fetch("elevation").zero?,
+                form: { data: {
+                  turbo_frame: "_top",
+                  confirm_title: t("settings.data.elevation.confirm_title"),
+                  confirm_body: t("settings.data.elevation.confirm_body", count: counts.fetch("elevation")),
+                  confirm_verb: t("settings.data.elevation.action")
+                } } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <% if local_assigns[:weather_available] %>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title"><%= t("settings.data.weather.title") %></h3>
+          <p class="text-secondary"><%= t("settings.data.weather.description") %></p>
+          <p class="mb-3"><%= t("settings.data.count", count: counts.fetch("weather")) %></p>
+          <%= button_to t("settings.data.weather.action"), settings_data_weather_path,
+                class: "btn btn-outline-primary",
+                disabled: counts.fetch("weather").zero?,
+                form: { data: {
+                  turbo_frame: "_top",
+                  confirm_title: t("settings.data.weather.confirm_title"),
+                  confirm_body: t("settings.data.weather.confirm_body", count: counts.fetch("weather")),
+                  confirm_verb: t("settings.data.weather.action")
+                } } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

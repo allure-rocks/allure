@@ -1,0 +1,139 @@
+<% content_for :title, t("workouts.index.title") %>
+
+<% total_count = @practiced_sports.sum { |entry| entry[:count] } %>
+
+<% content_for :page_header do %>
+  <%# The list header (DESIGN.md §20.4): the section tile leads the title like
+      the workout page's sport tile, the live result count sits under it, and
+      only the view switch stays at the top right. %>
+  <div class="d-flex align-items-center gap-3">
+    <span class="avatar avatar-square avatar-md sport-tile" aria-hidden="true">
+      <i class="ti ti-activity"></i>
+    </span>
+    <div class="flex-fill min-w-0">
+      <h1 class="page-title"><%= t("workouts.index.title") %></h1>
+      <% if total_count.positive? %>
+        <div class="text-secondary small mt-1 allure-table-nums" aria-live="polite">
+          <% if workout_filters_active? %>
+            <%= t("workouts.index.filters.count_filtered", count: @pagy.count, total: total_count) %>
+          <% else %>
+            <%= t("workouts.index.filters.count", count: @pagy.count) %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <% if total_count.positive? %>
+      <div class="ms-auto">
+        <%# The view switch is a plain Tabler segmented control (§10.15):
+            icon-only segments with tooltips, never restyled buttons. %>
+        <nav class="nav nav-segmented nav-sm" aria-label="<%= t("workouts.index.view.label") %>">
+          <%= link_to workouts_path(workout_filter_params(view: nil)),
+                class: class_names("nav-link", active: @view == "card"),
+                aria: { current: (@view == "card" ? "true" : nil), label: t("workouts.index.view.card") },
+                data: tooltip_data(t("workouts.index.view.card")) do %>
+            <i class="ti ti-layout-grid nav-link-icon" aria-hidden="true"></i>
+          <% end %>
+          <%= link_to workouts_path(workout_filter_params(view: "table", page: @pagy.page)),
+                class: class_names("nav-link", active: @view == "table"),
+                aria: { current: (@view == "table" ? "true" : nil), label: t("workouts.index.view.table") },
+                data: tooltip_data(t("workouts.index.view.table")) do %>
+            <i class="ti ti-list nav-link-icon" aria-hidden="true"></i>
+          <% end %>
+        </nav>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render "filters", practiced_sports: @practiced_sports if total_count.positive? %>
+
+<% if @workouts.any? %>
+  <% if @view == "table" %>
+    <%# The table scrolls endlessly like the cards (DESIGN.md §20.4): the
+        desktop rows and the phone list are both item containers. %>
+    <div data-controller="infinite-scroll"
+         data-infinite-scroll-url-value="<%= @pagy.next ? pagy_url_for(@pagy, @pagy.next) : "" %>">
+      <%= render "workout_table", workouts: @workouts, filtered_count: @pagy.count, equipments: @bulk_equipments %>
+      <div class="text-center py-3" data-infinite-scroll-target="sentinel" aria-hidden="true">
+        <%= render "table_skeleton" if @pagy.next %>
+      </div>
+    </div>
+
+    <noscript>
+      <% if @pagy.last > 1 %>
+        <div class="d-flex justify-content-center mt-4">
+          <%== pagy_bootstrap_nav(@pagy) %>
+        </div>
+      <% end %>
+    </noscript>
+  <% else %>
+    <noscript>
+      <% if @pagy.last > 1 %>
+        <div class="d-flex justify-content-center mb-3">
+          <%== pagy_bootstrap_compact_nav(@pagy) %>
+        </div>
+      <% end %>
+    </noscript>
+
+    <%# Month sections only make sense while the list is date-ordered; the
+        endless scroll drops a repeated leading separator (DESIGN.md §20.4). %>
+    <% month_sections = filter_sort == "date" %>
+    <div data-controller="infinite-scroll"
+         data-infinite-scroll-url-value="<%= @pagy.next ? pagy_url_for(@pagy, @pagy.next) : "" %>"
+         data-infinite-scroll-dedupe-attribute-value="<%= month_sections ? "data-workout-month" : "" %>">
+      <div class="row row-deck row-cards" data-infinite-scroll-target="items">
+        <% if month_sections %>
+          <% workout_months(@workouts).each do |month, month_workouts| %>
+            <%= render "month_separator", month: %>
+            <%= render partial: "workout_card", collection: month_workouts, as: :workout, locals: { linked: true } %>
+          <% end %>
+        <% else %>
+          <%= render partial: "workout_card", collection: @workouts, as: :workout, locals: { linked: true } %>
+        <% end %>
+      </div>
+      <div class="text-center py-3" data-infinite-scroll-target="sentinel" aria-hidden="true">
+        <%# Kept inside the observed sentinel, outside the items grid, so a
+            fetched page can never append a second copy of it. %>
+        <%= render "skeleton" if @pagy.next %>
+      </div>
+    </div>
+
+    <noscript>
+      <% if @pagy.last > 1 %>
+        <div class="d-flex justify-content-center mt-4">
+          <%== pagy_bootstrap_nav(@pagy) %>
+        </div>
+      <% end %>
+    </noscript>
+  <% end %>
+<% elsif workout_filters_active? %>
+  <div class="card">
+    <div class="card-body">
+      <div class="empty">
+        <div class="empty-icon">
+          <i class="ti ti-filter fs-1 text-secondary"></i>
+        </div>
+        <p class="empty-title"><%= t("workouts.index.filtered_empty.title") %></p>
+        <div class="empty-action">
+          <%= link_to t("workouts.index.filtered_empty.action"), workout_clear_filters_path,
+                class: "btn btn-outline-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="card-body">
+      <div class="empty">
+        <div class="empty-icon">
+          <i class="ti ti-activity fs-1 text-primary"></i>
+        </div>
+        <p class="empty-title"><%= t("workouts.index.empty.title") %></p>
+        <p class="empty-subtitle text-secondary"><%= t("workouts.index.empty.subtitle") %></p>
+        <div class="empty-action">
+          <%= link_to t("workouts.index.new_button"), new_workout_import_path, class: "btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
