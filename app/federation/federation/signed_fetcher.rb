@@ -4,7 +4,7 @@ require "uri"
 
 module Federation
   # Signs an outbound GET with a local actor so a restricted peer can
-  # authorize the fetch; public resources ignore the signature (PLAN_M5 §8.4).
+  # authorize the fetch; public resources ignore the signature (docs/dev/FEDERATION.md).
   # The Host header is derived from the URL authority including a non-default
   # port, exactly like the delivery path.
   class SignedFetcher

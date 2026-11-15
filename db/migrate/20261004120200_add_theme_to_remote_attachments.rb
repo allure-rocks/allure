@@ -2,7 +2,7 @@
 
 # The image theme of a received attachment. A route image is received in the
 # light and the dark variant, advertised as two Image attachments distinguished
-# by `allure:theme` (DESIGN.md §15.4, PLAN_M5.md §8.2). GPX rows keep the
+# by `allure:theme` (DESIGN.md §15.4, docs/dev/FEDERATION.md). GPX rows keep the
 # default `light`, which is meaningless for them but keeps the unique
 # descriptor key uniform.
 class AddThemeToRemoteAttachments < ActiveRecord::Migration[8.1]

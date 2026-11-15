@@ -6,7 +6,7 @@ require "uri"
 module Federation
   module Parsers
     # Turns an embedded Allure Note into an immutable normalized value
-    # (PLAN_M5 §8.2). Whole-document violations raise InvalidObject; malformed
+    # (docs/dev/FEDERATION.md). Whole-document violations raise InvalidObject; malformed
     # individual values are skipped and recorded as warnings. The preserved
     # raw object keeps unknown tags and non-Note entries.
     class RemoteNote
@@ -339,7 +339,7 @@ module Federation
           end
           # The fetch is signed with a local actor's key, so an attachment on
           # another authority would turn this instance into a confused deputy
-          # against a third party's followers-only media (PLAN_M5 §8.2).
+          # against a third party's followers-only media (docs/dev/FEDERATION.md).
           unless same_authority?(url)
             warn("attachment authority does not match the author")
             next

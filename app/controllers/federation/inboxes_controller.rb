@@ -3,7 +3,7 @@
 module Federation
   class InboxesController < ProtocolController
     UNAVAILABLE_RETRY_AFTER = 300
-    # Per client address, before any parsing (PLAN_M5 §12.2). Generous enough
+    # Per client address, before any parsing (docs/dev/FEDERATION.md). Generous enough
     # for a large instance's shared-inbox bursts; the per-authority limits
     # stay in Inbox::Admission and Safety::ResolutionAttempts.
     PER_IP_LIMIT = 300

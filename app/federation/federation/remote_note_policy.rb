@@ -4,7 +4,7 @@ module Federation
   # The single visibility boundary for received notes and their media,
   # mirroring Workouts::PublicationPolicy. Anonymous visitors never see remote
   # copies; a followers note additionally requires an active entitlement
-  # (PLAN_M5 §8.3, §14).
+  # (docs/dev/FEDERATION.md, §14).
   class RemoteNotePolicy
     RESOURCES = %i[note track chart media react comment].freeze
 

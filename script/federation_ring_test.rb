@@ -223,7 +223,7 @@ class FederationRingTest
   end
 
   # The received copy belongs to the follower; a second local account on the
-  # same instance must never see it (PLAN_M5 Slice 5 / §7).
+  # same instance must never see it (docs/dev/FEDERATION.md).
   def assert_isolation_a
     note = RemoteNote.order(:id).last
     other_actor = Federation::ActorProvisioner.new(user: User.find_by!(username: "paul")).call!
@@ -236,7 +236,7 @@ class FederationRingTest
   end
 
   # Sanitized representation: title, sport, metrics and a start location that
-  # is not one of the masked endpoints (PLAN_M5 §17.2).
+  # is not one of the masked endpoints (docs/dev/FEDERATION.md).
   def assert_representation_a
     note = RemoteNote.order(:id).last
     assert(note.present?, "no received note")
@@ -280,7 +280,7 @@ class FederationRingTest
   end
 
   # Re-POST the same Create. Admission must recognize the duplicate and persist
-  # nothing new (PLAN_M5 §17.2 item 8).
+  # nothing new (docs/dev/FEDERATION.md item 8).
   def redeliver_create_b
     event = event_for("Create")
     delivery = event&.deliveries&.first
@@ -299,7 +299,7 @@ class FederationRingTest
   end
 
   # A public note renders for any signed-in account, and its media is served
-  # through this instance's own endpoints (PLAN_M5 §17.2 items 7/9). The
+  # through this instance's own endpoints (docs/dev/FEDERATION.md items 7/9). The
   # entitlement-gated HTTP isolation check lives in the restricted scenario.
   def assert_received_page_a
     note = RemoteNote.order(:id).last
@@ -792,7 +792,7 @@ class FederationRingTest
     Federation::Safety::Blocking.new.unblock_domain!(domain: PEER_DOMAIN)
   end
 
-  # The block ended A's follow of the peer, locally (PLAN_M5 §12.1), and
+  # The block ended A's follow of the peer, locally (docs/dev/FEDERATION.md), and
   # unblocking restores nothing: A follows again. B still holds the accepted
   # relationship, so it accepts the renewed Follow at once.
   def refollow_b
@@ -807,7 +807,7 @@ class FederationRingTest
   end
 
   # The first workout's publication was withdrawn in the delete cycle; a fresh
-  # publish must produce a new object identity (PLAN_M5 §17.2 item 10).
+  # publish must produce a new object identity (docs/dev/FEDERATION.md item 10).
   def republish_publication
     workout = user.workouts.find_by!(title: "Federation ring route")
     assert(workout.active_publications.none?, "republish expects the first publication to be withdrawn")
@@ -1038,7 +1038,7 @@ class FederationRingTest
   end
 
   # Unfollow withdraws the entitlement immediately. The public note keeps its
-  # cached media (PLAN_M5 §9.6); the feed drops the author.
+  # cached media (docs/dev/FEDERATION.md); the feed drops the author.
   def assert_withdrawal_a
     local_actor = Federation::ActorProvisioner.new(user:).call!
     note = wait_for("A withdrew the entitlement") do
@@ -1076,7 +1076,7 @@ class FederationRingTest
   end
 
   # An explicit sweep replaces a development recurring entry: the key retires
-  # only after every event and delivery is terminal (PLAN_M5 §15 Slice 8).
+  # only after every event and delivery is terminal (docs/dev/FEDERATION.md).
   def retire_actor_key_b
     Federation::RecoveryJob.perform_now
   end
@@ -1213,7 +1213,7 @@ class FederationRingTest
   end
 
   # Entitlement-gated HTTP isolation: only the follower's account renders the
-  # followers note and its media; a second local account gets 404 (PLAN_M5
+  # followers note and its media; a second local account gets 404 (docs/dev/FEDERATION.md
   # §17.2 item 9).
   def assert_restricted_page_a
     note = RemoteNote.active.order(:id).last
@@ -1280,7 +1280,7 @@ class FederationRingTest
   def followers_workout = user.workouts.find_by!(title: "Federation ring followers route")
 
   # Public scenario, restricted federation off on both nodes: the followers
-  # audience is publishable for local followers (PLAN_M5 §13.1), and even a
+  # audience is publishable for local followers (docs/dev/FEDERATION.md), and even a
   # promoted peer is not sent it. The promotion is removed afterwards so the
   # rest of the public scenario runs against an unknown peer.
   def publish_unfederated_followers

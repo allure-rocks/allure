@@ -55,7 +55,7 @@ RSpec.describe Workouts::PublicationPolicy do
       expect(allowed?(public_publication, Workouts::PublicationPrincipal.browser(other_user))).to be(true)
     end
 
-    # PLAN_M5 §13.1: the local followers audience does not depend on the
+    # docs/dev/FEDERATION.md: the local followers audience does not depend on the
     # restricted-federation switch.
     it "serves followers publications to the owner and accepted local followers only, restricted federation off" do
       allow(Allure::Federation::Config).to receive(:restricted_enabled?).and_return(false)

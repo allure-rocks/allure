@@ -146,7 +146,7 @@ module Federation
     end
 
     # Random from the first Follow: a URI derived from the two actors could
-    # be computed by anyone and used to probe the social graph (PLAN_M5
+    # be computed by anyone and used to probe the social graph (docs/dev/FEDERATION.md
     # §12.6). Idempotency rests on the active relationship, not on the URI.
     def follow_idempotency_key(remote_actor) = "follow:#{remote_actor.uri}:#{SecureRandom.uuid}"
 

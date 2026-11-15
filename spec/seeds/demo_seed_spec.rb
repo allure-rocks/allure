@@ -162,7 +162,7 @@ RSpec.describe DemoSeed::Runner do
     # Its day-long delay ran out long ago: it went live when the delay ended.
     ride = marie.workouts.find_by!(title: "Galibier")
     expect(ride.scheduled_publications).to be_empty
-    # The followers audience is always publishable (PLAN_M5 §13.1).
+    # The followers audience is always publishable (docs/dev/FEDERATION.md).
     expect(ride.active_publications.map(&:audience)).to contain_exactly("public", "followers")
     ride_publication = ride.active_publications.find_by!(audience: "public")
     expect(ride_publication.published_at).to be > ride.started_at + ride.duration + 1.day

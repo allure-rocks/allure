@@ -5,7 +5,7 @@ require "stringio"
 module Federation
   module RemoteMedia
     # Verifies fetched bytes against the declared attachment kind before any of
-    # them are cached or parsed (PLAN_M5 §10.4). The GPX path returns the
+    # them are cached or parsed (docs/dev/FEDERATION.md). The GPX path returns the
     # already-parsed track so the pipeline never parses twice.
     class Verifier
       class InvalidContent < StandardError; end

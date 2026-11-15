@@ -59,7 +59,7 @@ module Federation
       followers_uri = "#{@actor.uri}/followers"
       # The payload is what receivers actually parse; the explicit recipients
       # list and the followers collection must be on the wire, not only on the
-      # outbox row (PLAN_M5 §8.7). Each destination receives only its own
+      # outbox row (docs/dev/FEDERATION.md). Each destination receives only its own
       # actors from that list (`Outbox::WireAudience`).
       payload = {
         "type" => "Delete",

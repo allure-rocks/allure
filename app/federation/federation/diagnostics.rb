@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Federation
-  # Operator-facing aggregates for the federation settings page (PLAN_M5
+  # Operator-facing aggregates for the federation settings page (docs/dev/FEDERATION.md
   # §12.5). Counts and identifiers only: it never returns coordinates, raw
   # payloads, inbox bodies, keys, or remote HTML.
   class Diagnostics

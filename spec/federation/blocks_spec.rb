@@ -19,7 +19,7 @@ RSpec.describe Federation::Safety::Blocks do
     expect(described_class.blocked?("https://blocked.example/users/demo")).to be(false)
   end
 
-  # PLAN_M5 §12.1: a blocked operator must not come back on a subdomain or
+  # docs/dev/FEDERATION.md: a blocked operator must not come back on a subdomain or
   # another port of the same domain.
   it "covers every subdomain and port of a domain blocked without a port" do
     create(:federation_domain_block, domain: "evil.example")

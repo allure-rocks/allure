@@ -82,7 +82,7 @@ class FederationOutboxEvent < ApplicationRecord
   validates :attempts, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   # Actor currency is an intent invariant, enforced when the event is created.
   # A deletion event must stay updatable after its own actor is tombstoned so
-  # its delivery can reach terminal state and the key can retire (PLAN_M5 §8.7).
+  # its delivery can reach terminal state and the key can retire (docs/dev/FEDERATION.md).
   validate :actor_is_current_local_actor, on: :create
   validate :uris_are_absolute
   validate :payload_and_audience_are_objects

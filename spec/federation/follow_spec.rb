@@ -38,7 +38,7 @@ RSpec.describe Federation::Follow do
     expect(Federation::ExpandOutboxEventJob).to have_been_enqueued
   end
 
-  # PLAN_M5 §12.6: a Follow URI derived from the two actors could be
+  # docs/dev/FEDERATION.md: a Follow URI derived from the two actors could be
   # computed by anyone and used to probe who follows whom.
   it "gives the first Follow an identity nobody can compute from the two actors" do
     following = service(remote.uri).call!

@@ -4,7 +4,7 @@ module Admin
   # Delivery and relationship health for the federation panel: open delivery
   # counts, the age of the oldest unattempted delivery, the authorities with
   # the most failures, and pending follow requests. Aggregates only, per the
-  # operator diagnostics privacy contract (PLAN_M5 §12.5).
+  # operator diagnostics privacy contract (docs/dev/FEDERATION.md).
   class FederationHealth
     FAILING_PREVIEW = 10
 

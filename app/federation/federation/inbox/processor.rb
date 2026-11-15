@@ -121,7 +121,7 @@ module Federation
       end
 
       # A rejection after earlier delivery withdraws the local follower's
-      # copies immediately; a followers-only object is purged (PLAN_M5 §9.6).
+      # copies immediately; a followers-only object is purged (docs/dev/FEDERATION.md).
       def withdraw_entitlements!(following)
         local_actor = following.follower_actor
         remote_actor = following.followed_actor

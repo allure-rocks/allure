@@ -99,7 +99,7 @@ RSpec.describe Federation::Delivery::RecipientAuthorizer do
   end
 
   # The followers audience is publishable for local followers whatever the
-  # switch says (PLAN_M5 §13.1); this is the gate that keeps it home.
+  # switch says (docs/dev/FEDERATION.md); this is the gate that keeps it home.
   it "denies followers-only Creates even to promoted peers while restricted federation is off" do
     allow(Allure::Federation::Config).to receive(:restricted_enabled?).and_return(false)
     remote.update!(
