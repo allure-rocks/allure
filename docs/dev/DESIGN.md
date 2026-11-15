@@ -1024,7 +1024,7 @@ M5 destinations (people, federation settings, Wanderer settings) attach where
 ### 8.3 `/feed` — Feed
 
 The feed is a **reverse-chronological publication feed**, not a dashboard.
-Viewing requires an account (`[devdoc:members-only]`): a visitor opening `/feed`
+Viewing requires an account ([ACCESS.md](ACCESS.md)): a visitor opening `/feed`
 or any publication link is redirected to sign-in and returned to the requested
 page. `/` sends members to `/me`.
 
@@ -1092,7 +1092,7 @@ drops a fetched page's leading separator when it repeats the day the column
 already ends with (§10.14).
 
 **Members only.** The feed renders only for a signed-in account
-(`[devdoc:members-only]`); an anonymous visitor is redirected to sign-in and
+([ACCESS.md](ACCESS.md)); an anonymous visitor is redirected to sign-in and
 returned to `/feed` afterwards. There is no visitor intro card and no
 signed-out empty state: the auth layout owns the pre-session experience.
 
@@ -4508,7 +4508,7 @@ explains what it adds and is keyboard-reachable.
 
 Empty: *"Aucune publication pour le moment. Les activités publiées de cette
 instance apparaîtront ici."* → `Importer une activité`. The feed is
-members-only (`[devdoc:members-only]`), so there is no signed-out empty state.
+members-only ([ACCESS.md](ACCESS.md)), so there is no signed-out empty state.
 
 ### 20.2 `/me` — Personal hub
 
@@ -5242,7 +5242,7 @@ another profile of the same audience is automatic (`[devdoc:auto-publishing]`).
 A **portrait and a journal of shared outings**, never a second training
 dashboard. The local profile and the cached remote profile compose the same
 header, bio, filters, editorial publication cards and optional sport mix.
-Viewing still requires membership (`[devdoc:members-only]`).
+Viewing still requires membership ([ACCESS.md](ACCESS.md)).
 
 ```
 ┌ (avatar lg) Display name                     [Suivre*] ┐

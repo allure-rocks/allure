@@ -2036,7 +2036,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Changed
 
-- Browser surfaces are members-only (`[devdoc:members-only]`): every readable
+- Browser surfaces are members-only ([ACCESS.md](docs/dev/ACCESS.md)): every readable
   page — feed, publications, courses, profiles, avatars, browser media — now
   requires a session, and a visitor is redirected to sign-in and returned to
   the requested page once authenticated. Public keeps its ActivityPub
