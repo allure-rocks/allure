@@ -6,7 +6,7 @@
 # Workouts::PublicationPolicy with a browser principal instead, so the owner
 # and another signed-in account never share the remote signed-actor
 # assumptions (PLAN_M4_5 Slice 2). Viewing requires an account
-# (PLAN_MEMBERS_ONLY.md), so no anonymous principal reaches the policy here.
+# (docs/dev/ACCESS.md), so no anonymous principal reaches the policy here.
 #
 # The route image is served in the viewer's requested variant, falling back to
 # the other one (DESIGN.md §15.4).

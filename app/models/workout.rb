@@ -256,7 +256,7 @@ class Workout < ApplicationRecord
     if: -> { saved_change_to_distance? || saved_change_to_moving_time? }
 
   # Workouts a viewer may see: their own plus active public publications.
-  # Viewing requires an account (PLAN_MEMBERS_ONLY.md), so `nil` sees nothing.
+  # Viewing requires an account (docs/dev/ACCESS.md), so `nil` sees nothing.
   def self.visible_to(user)
     return none unless user
 

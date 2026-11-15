@@ -31,7 +31,7 @@ module Segments
 
     # Public courses are readable by every signed-in account and by the public
     # wire protocol, but never by an anonymous browser visitor: public means
-    # registered locally (PLAN_MEMBERS_ONLY.md). Followers-only courses serve
+    # registered locally (docs/dev/ACCESS.md). Followers-only courses serve
     # the owner and an accepted local follower whatever the switches say, and
     # an accepted remote follower whose locally assigned capability is
     # promoted only while restricted federation is enabled; the request itself

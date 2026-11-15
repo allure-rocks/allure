@@ -4,7 +4,7 @@ class ProfilesController < ApplicationController
   include Pagy::Method
 
   # The account's portrait and publication journal, shown to members only
-  # (PLAN_MEMBERS_ONLY.md). The listing follows Workouts::PublicationPolicy:
+  # (docs/dev/ACCESS.md). The listing follows Workouts::PublicationPolicy:
   # public publications serve every account, followers publications serve the
   # owner and accepted local followers while restricted federation is enabled.
   # Drafts and scheduled publications live on /workouts and /me, never on this
