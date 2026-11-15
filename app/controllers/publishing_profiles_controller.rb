@@ -98,7 +98,7 @@ class PublishingProfilesController < ApplicationController
     # keeps the stored value instead of nulling the column.
     delay = Integer(permitted[:publish_delay_seconds], exception: false) if permitted[:publish_delay_seconds].present?
     attributes[:publish_delay_seconds] = delay if delay
-    # Automatic publishing (PLAN_AUTO_PUBLISHING.md) is a profile policy too;
+    # Automatic publishing (docs/dev/AUTO-PUBLISHING.md) is a profile policy too;
     # turning it on is refused by the model without the acknowledgement.
     %i[auto_publish auto_publish_exclude_commute auto_publish_acknowledged].each do |key|
       attributes[key] = ActiveModel::Type::Boolean.new.cast(permitted[key]) == true if permitted.key?(key)

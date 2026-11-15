@@ -314,9 +314,9 @@ RSpec.describe Federation::Inbox::Processor do
     expect(Reaction.last.audience).to eq("public")
   end
 
-  # M4.5 public-only gate: followers publications fail closed for Like targets
-  # too (PLAN_M4_5 §5.2, Slice 2). Restricted Likes are M5-only.
-  it "rejects a Like on a followers publication even from an accepted follower during M4.5" do
+  # Followers publications fail closed for Like targets while restricted
+  # federation is off (docs/dev/PUBLISHING.md).
+  it "rejects a Like on a followers publication even from an accepted follower while restricted federation is off" do
     workout = create(:workout)
     owner = Federation::ActorProvisioner.new(user: workout.user).call!
     publication = create(:workout_publication, :with_followers, workout:)

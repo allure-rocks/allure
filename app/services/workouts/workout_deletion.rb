@@ -9,7 +9,7 @@ module Workouts
       @workout = workout
     end
 
-    # Atomic lifecycle boundary (PLAN_M4_5 Slice 4): withdrawal persistence and
+    # Atomic lifecycle boundary (docs/dev/PUBLISHING.md): withdrawal persistence and
     # source destruction commit together, for every audience's publication
     # (docs/dev/PUBLISHING.md). A publication still inside its safety delay is
     # cancelled in the same transaction — no Delete activity exists for one,

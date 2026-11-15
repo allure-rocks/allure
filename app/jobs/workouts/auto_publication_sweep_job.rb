@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Recurring recovery for automatic publishing (PLAN_AUTO_PUBLISHING.md §5):
+  # Recurring recovery for automatic publishing (docs/dev/AUTO-PUBLISHING.md):
   # re-runs every workout that still has a waiting row, so a lost nudge is
   # recovered and an overdue wait fails with its notification.
   class AutoPublicationSweepJob < ApplicationJob

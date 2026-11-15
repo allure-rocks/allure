@@ -31,7 +31,7 @@ class PublishingProfile < ApplicationRecord
     "sensors" => %w[average_heart_rate max_heart_rate average_cadence max_cadence average_power max_power calories]
   }.freeze
   # The safety delay before a publication becomes visible or federated
-  # (PLAN_DELAYED_PUBLISHING.md). A profile policy, not a snapshot setting: the
+  # (docs/dev/DELAYED-PUBLISHING.md). A profile policy, not a snapshot setting: the
   # published representation is unchanged. `immediate` (0) is the default:
   # publishing is direct unless the owner opts into a hold. The owner may pick
   # another preset for one publish; the profile value is the default.
@@ -72,7 +72,7 @@ class PublishingProfile < ApplicationRecord
   has_many :workout_publications, inverse_of: :publishing_profile, dependent: :nullify
   has_many :workout_auto_publications, inverse_of: :publishing_profile, dependent: :nullify
 
-  # Automatic publishing (PLAN_AUTO_PUBLISHING.md) is a profile policy like the
+  # Automatic publishing (docs/dev/AUTO-PUBLISHING.md) is a profile policy like the
   # delay, never a snapshot setting. Off by default; turning it on requires the
   # owner to acknowledge what it does, once, in the same submission.
   attribute :auto_publish_acknowledged, :boolean, default: false
@@ -131,7 +131,7 @@ class PublishingProfile < ApplicationRecord
     super(value.is_a?(Hash) ? value.stringify_keys : value)
   end
 
-  # Automatic publishing's sport exclusion (PLAN_AUTO_PUBLISHING.md §2), a
+  # Automatic publishing's sport exclusion (docs/dev/AUTO-PUBLISHING.md), a
   # profile policy like the commute exclusion: the workouts of these sports are
   # never published by themselves. Sorted and unique, so saving the same choice
   # is not a change.

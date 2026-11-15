@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Settles a workout's waiting automatic publications (PLAN_AUTO_PUBLISHING.md
+  # Settles a workout's waiting automatic publications (docs/dev/AUTO-PUBLISHING.md
   # §5). Nothing happens until every enrichment has settled; past the deadline
   # the rows fail and the owner is told to publish by hand. Once ready, each row
   # goes through `Workouts::Publisher` with its profile — the same privacy

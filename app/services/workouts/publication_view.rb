@@ -8,7 +8,7 @@ module Workouts
 
     # `sport_catalog` (a Sport::Catalog) lets a list resolve the snapshot's
     # sport without one query per publication. `frozen:` is the owner-only
-    # projection of a scheduled publication (PLAN_DELAYED_PUBLISHING.md): the
+    # projection of a scheduled publication (docs/dev/DELAYED-PUBLISHING.md): the
     # policy still denies every reader, but the owner must review exactly what
     # was frozen before it activates, so resource visibility follows the
     # snapshot instead of the lifecycle status. Callers must have authorized

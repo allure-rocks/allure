@@ -933,7 +933,7 @@ module WorkoutsHelper
 
   # The profile page renders the published representation even for the owner
   # (`snapshot_only`), so the owner never reads complete source values from the
-  # public URL (PLAN_M4_5 §5.1).
+  # public URL (docs/dev/PUBLISHING.md).
   #
   # The publication shown is the narrowest serving the viewer
   # (docs/dev/PUBLISHING.md) unless the caller already chose it.

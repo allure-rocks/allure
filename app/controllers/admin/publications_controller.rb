@@ -26,7 +26,7 @@ module Admin
     def withdraw_workout
       publication = WorkoutPublication.find_by_short_id!(params[:id])
       # A scheduled publication was never shared, so operator takedown is a
-      # local cancellation with no Delete activity (PLAN_DELAYED_PUBLISHING.md).
+      # local cancellation with no Delete activity (docs/dev/DELAYED-PUBLISHING.md).
       if publication.scheduled?
         result = Workouts::ScheduledPublicationCancellation.new(user: current_user, publication:, operator: true).call!
         audit(result.publication, kind: "workout", action: :publication_schedule_cancelled)

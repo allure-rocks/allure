@@ -111,7 +111,7 @@ module Federation
         publication.active?
       end
 
-      # Reauthorizes immediately before POST (PLAN_M4_5 Slice 5) and recalculates
+      # Reauthorizes immediately before POST (docs/dev/PUBLISHING.md) and recalculates
       # the safe destination. A stale inbox_url is never used: single-recipient
       # or unanimous moves update in place, divergent inboxes split so each
       # delivery keeps one destination.

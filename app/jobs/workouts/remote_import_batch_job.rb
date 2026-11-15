@@ -158,7 +158,7 @@ module Workouts
         import_connection: connection,
         external_id: entry.external_id,
         # A retrieval over a date range is history; the scheduled sync and the
-        # webhooks bring new outings (PLAN_AUTO_PUBLISHING.md §3).
+        # webhooks bring new outings (docs/dev/AUTO-PUBLISHING.md).
         bulk: batch.trigger == "manual"
       ).call
 

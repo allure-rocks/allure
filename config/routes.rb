@@ -150,12 +150,12 @@ Rails.application.routes.draw do
       post :publish
       post :republish
       post :delivery_refresh
-      # Delayed publishing (PLAN_DELAYED_PUBLISHING.md): leave the safety
+      # Delayed publishing (docs/dev/DELAYED-PUBLISHING.md): leave the safety
       # delay early, move its planned moment, or cancel it with no trace.
       post :activate_publication
       patch :reschedule_publication
       delete :scheduled_publication, action: :destroy_scheduled_publication
-      # Automatic publishing (PLAN_AUTO_PUBLISHING.md): the owner declines a
+      # Automatic publishing (docs/dev/AUTO-PUBLISHING.md): the owner declines a
       # waiting automatic publication before it happens.
       delete :auto_publication, action: :destroy_auto_publication
       get :publication_preview

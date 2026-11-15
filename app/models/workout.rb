@@ -117,14 +117,14 @@ class Workout < ApplicationRecord
            -> { active.narrowest_first },
            class_name: "WorkoutPublication",
            inverse_of: :workout
-  # Frozen snapshots inside their publishing delay (PLAN_DELAYED_PUBLISHING.md).
+  # Frozen snapshots inside their publishing delay (docs/dev/DELAYED-PUBLISHING.md).
   # Invisible to every reader until they activate; the owner can cancel,
   # reschedule, or publish them now.
   has_many :scheduled_publications,
            -> { scheduled.narrowest_first },
            class_name: "WorkoutPublication",
            inverse_of: :workout
-  # The automatic publications an import scheduled (PLAN_AUTO_PUBLISHING.md):
+  # The automatic publications an import scheduled (docs/dev/AUTO-PUBLISHING.md):
   # one per audience, owner-only bookkeeping, never published or federated.
   has_many :auto_publications,
            class_name: "WorkoutAutoPublication",

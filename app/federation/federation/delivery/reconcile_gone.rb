@@ -12,7 +12,7 @@ module Federation
 
       # One 410 recovery per delivery. Recipients are regrouped by their current
       # safe inbox so divergent personal inboxes never share a delivery
-      # (PLAN_M4_5 Slice 5). Shared inboxes require explicit
+      # (docs/dev/PUBLISHING.md). Shared inboxes require explicit
       # restricted_shared_inbox capability, matching RecipientAuthorizer.
       def call!
         return :terminal unless @delivery.gone_recovery_used == false
@@ -65,7 +65,7 @@ module Federation
       end
 
       # Shared inboxes are only selected under explicit capability, never merely
-      # because sharedInbox exists (PLAN_M4_5 Slice 5).
+      # because sharedInbox exists (docs/dev/PUBLISHING.md).
       def safe_replacement_inbox(actor)
         if actor.capability_profile == "restricted_shared_inbox" && actor.shared_inbox_url.present?
           actor.shared_inbox_url

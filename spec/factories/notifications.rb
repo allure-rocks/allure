@@ -12,7 +12,7 @@ FactoryBot.define do
       kind { "follow_accepted" }
     end
 
-    # The actorless activation notice (PLAN_DELAYED_PUBLISHING.md §6).
+    # The actorless activation notice (docs/dev/DELAYED-PUBLISHING.md).
     trait :publication_activated do
       kind { "publication_activated" }
       actor { nil }

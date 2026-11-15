@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_DELAYED_PUBLISHING.md Slice 1. A `scheduled` publication is a frozen
+# docs/dev/DELAYED-PUBLISHING.md. A `scheduled` publication is a frozen
 # sanitized snapshot that is not yet shared: it is invisible locally and carries
 # no outbox activity until activation. `published_at` keeps its NOT NULL
 # semantics — for a scheduled row it holds the planned moment, and activation

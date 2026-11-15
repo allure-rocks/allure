@@ -188,7 +188,7 @@ module Workouts
     end
 
     # Every source is enumerated before the first import, so the frozen total
-    # already tells an archive from a few new outings (PLAN_AUTO_PUBLISHING.md
+    # already tells an archive from a few new outings (docs/dev/AUTO-PUBLISHING.md
     # §3).
     def bulk?(batch)
       batch.total_entries > WorkoutAutoPublication::BULK_FILE_ENTRIES

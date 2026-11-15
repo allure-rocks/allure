@@ -231,7 +231,7 @@ class WorkoutsController < ApplicationController
   end
 
   # The owner declines an automatic publication still waiting for the
-  # enrichments (PLAN_AUTO_PUBLISHING.md §7): it is settled as skipped and
+  # enrichments (docs/dev/AUTO-PUBLISHING.md): it is settled as skipped and
   # nothing is published. A publication it already made is withdrawn like any
   # other.
   def destroy_auto_publication

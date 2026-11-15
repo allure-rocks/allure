@@ -170,7 +170,7 @@ module Workouts
         elevation_source_requested: nil,
         # New track segments invalidate every point-indexed effort until the
         # matching job that follows each reanalysis stamps it again; automatic
-        # publishing waits for that (PLAN_AUTO_PUBLISHING.md §4).
+        # publishing waits for that (docs/dev/AUTO-PUBLISHING.md).
         loop_reuse_version: 0,
         route_image_version: route_image_version(metrics)
       }

@@ -2,7 +2,7 @@
 
 module Workouts
   # Settles a workout's waiting automatic publications
-  # (PLAN_AUTO_PUBLISHING.md §5). Enqueued by the importer and nudged by every
+  # (docs/dev/AUTO-PUBLISHING.md). Enqueued by the importer and nudged by every
   # enrichment job when it finishes; the recurring sweep recovers a lost nudge
   # and applies the deadline. Running it early is harmless: it does nothing
   # until the workout is ready.

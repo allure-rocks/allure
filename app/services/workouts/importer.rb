@@ -44,7 +44,7 @@ module Workouts
       @import_connection = import_connection
       @external_id = external_id
       # A bulk import (a large file batch, a date-range retrieval) is never
-      # published automatically (PLAN_AUTO_PUBLISHING.md §3).
+      # published automatically (docs/dev/AUTO-PUBLISHING.md).
       @bulk = bulk
       # The sport another service's metadata names, which outranks the file's
       # detection (PLAN_STRAVA_ARCHIVE.md §4).
