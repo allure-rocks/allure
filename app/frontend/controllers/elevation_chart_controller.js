@@ -113,7 +113,7 @@ export default class extends Controller {
     // the x axis then reads elapsed minutes, never a row of zeros.
     axisMode: { type: String, default: "distance" },
     // A power-led virtual ride opens on its watts, and keeps its own stored
-    // choice (PLAN_VIRTUAL.md §8).
+    // choice (docs/dev/VIRTUAL-PLATFORMS.md).
     powerLed: { type: Boolean, default: false },
     distanceLabel: String,
     elevationLabel: String,

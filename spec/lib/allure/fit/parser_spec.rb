@@ -258,7 +258,7 @@ RSpec.describe Allure::Fit::Parser do
   end
 
   # EXR draws its Bled race course at twice the distance rowed; the lap
-  # distance the ergometer recorded is authoritative (PLAN_VIRTUAL.md §7).
+  # distance the ergometer recorded is authoritative (docs/dev/VIRTUAL-PLATFORMS.md).
   describe "virtual platform distance" do
     let(:points) { (0..60).map { { time: start + it, lat: 46.368, lon: 14.1 - (it * 0.0001) } } }
     let(:drawn) do
@@ -290,7 +290,7 @@ RSpec.describe Allure::Fit::Parser do
   end
 
   # A video route can end by moving the athlete elsewhere without moving them
-  # (PLAN_VIRTUAL.md §7.1). The jump must not draw a line across the map or
+  # (docs/dev/VIRTUAL-PLATFORMS.md). The jump must not draw a line across the map or
   # contaminate the speeds around it.
   describe "virtual platform teleports" do
     let(:points) do

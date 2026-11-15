@@ -340,7 +340,7 @@ module Allure
         end
 
         # A virtual platform may draw the athlete somewhere else without moving
-        # them (PLAN_VIRTUAL.md §7.1). Those jumps close the recording segment
+        # them (docs/dev/VIRTUAL-PLATFORMS.md). Those jumps close the recording segment
         # like a timer stop, so no line crosses the map and no speed is
         # measured across them. An ordinary device keeps its timer stops only.
         def segment_marks(points)
@@ -391,7 +391,7 @@ module Allure
         end
 
         # A registered virtual platform draws its positions; the ergometer's
-        # recorded lap distance is the real one (PLAN_VIRTUAL.md §7).
+        # recorded lap distance is the real one (docs/dev/VIRTUAL-PLATFORMS.md).
         def calibrate_virtual_distance(segments)
           return segments unless Allure::Virtual::Platforms.for_file_id(@file_id)
 

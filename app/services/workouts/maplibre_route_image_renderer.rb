@@ -43,7 +43,7 @@ module Workouts
       @public_root = public_root
       # A virtual world replaces the tile style with its own map image, handed
       # over as a data URL so the renderer needs no network and no origin
-      # exception (PLAN_VIRTUAL.md).
+      # exception (docs/dev/VIRTUAL-PLATFORMS.md).
       if virtual_basemap
         raise ArgumentError, "invalid virtual basemap" unless virtual_basemap.is_a?(Allure::Virtual::Basemap)
 

@@ -2,7 +2,7 @@
 
 module Workouts
   # Names a virtual workout's place from the platform's venue catalog
-  # (PLAN_VIRTUAL.md): the world is recognised from the start point, and the
+  # (docs/dev/VIRTUAL-PLATFORMS.md): the world is recognised from the start point, and the
   # name is written to both the displayed list (`workouts.places`) and the
   # indexable `workout_place_names` rows the place filter searches. Nothing is
   # geocoded, and a workout whose world is unknown keeps an empty list rather

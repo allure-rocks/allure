@@ -5,7 +5,7 @@ require "net/http"
 require "uri"
 
 namespace :virtual do
-  # Regenerates the world map images under public/virtual_worlds/ (PLAN_VIRTUAL.md
+  # Regenerates the world map images under public/virtual_worlds/ (docs/dev/VIRTUAL-PLATFORMS.md
   # §2.1). The generated files are committed and ship in the production image;
   # the application never downloads an image at runtime.
   #

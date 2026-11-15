@@ -3,7 +3,7 @@
 module Allure
   module Virtual
     # Detects the jumps a virtual platform draws when it moves the athlete
-    # without moving them (PLAN_VIRTUAL.md §7.1): a video route that ends by
+    # without moving them (docs/dev/VIRTUAL-PLATFORMS.md): a video route that ends by
     # returning the rider to its start, a world change, a respawn. The
     # recorded positions then jump kilometres in one second while the
     # ergometer's own cumulative distance keeps advancing normally, and a

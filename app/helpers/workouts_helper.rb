@@ -246,7 +246,7 @@ module WorkoutsHelper
 
   # The effort column of the analysis tables. A power-led virtual ride reads
   # its watts first, with the speed as a quiet second line, exactly like its
-  # summary tiles (PLAN_VIRTUAL.md §8); every other sport keeps the pace/speed
+  # summary tiles (docs/dev/VIRTUAL-PLATFORMS.md); every other sport keeps the pace/speed
   # cell.
   def effort_cell(average_pace:, average_speed:, average_power:, sport:, grade_adjusted_pace: nil)
     unless sport&.power_led? && average_power.present?
@@ -785,7 +785,7 @@ module WorkoutsHelper
   # prefers average power as its fourth tile when the file recorded it and
   # falls back to ascent otherwise; its speed tiles are dropped entirely, as
   # km/h is not a rowing metric. A power-led virtual sport (cycling virtual,
-  # PLAN_VIRTUAL.md §8) leads with average power in place of its speed when
+  # docs/dev/VIRTUAL-PLATFORMS.md) leads with average power in place of its speed when
   # the recording carries it: the platform's speed is a game output, the watts
   # are the athlete's effort. A positionless recording promotes the channels it
   # did record — power, heart rate, calories — because its elevation tiles
@@ -895,7 +895,7 @@ module WorkoutsHelper
 
   # The series the chart draws and lists in its data table, in reading order.
   # A power-led virtual ride opens on its watts — the effort it measures — and
-  # the selector keeps the speed (PLAN_VIRTUAL.md §8).
+  # the selector keeps the speed (docs/dev/VIRTUAL-PLATFORMS.md).
   def workout_chart_display_series(workout, available_series)
     available = available_series.map(&:to_sym)
     display = []

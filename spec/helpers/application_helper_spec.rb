@@ -250,7 +250,7 @@ RSpec.describe ApplicationHelper do
       build(:workout, sport:, start_point: point, bounds: [ latitude, longitude, latitude, longitude ])
     end
 
-    # The world images are not committed (PLAN_VIRTUAL.md §2.1), so the helper
+    # The world images are not committed (docs/dev/VIRTUAL-PLATFORMS.md), so the helper
     # examples stub the catalogue lookup and assert the arguments it receives;
     # the lookup itself is covered in platforms_spec.
     def stub_world_map(longitude:, latitude:)

@@ -85,7 +85,7 @@ class Sport < ApplicationRecord
 
   # A virtual sport measures the athlete's effort in watts while its speed is a
   # game output: the draft, the gradient, the bike, the rider's weight and the
-  # course all feed it (PLAN_VIRTUAL.md §8). A recording that carries power
+  # course all feed it (docs/dev/VIRTUAL-PLATFORMS.md). A recording that carries power
   # therefore leads with it. Cycling (virtual) is the only catalog sport today;
   # a virtual run keeps its pace and a virtual row its fixed 500 m basis.
   def power_led? = virtual? && pace_speed_display == "speed"

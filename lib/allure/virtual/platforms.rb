@@ -2,7 +2,7 @@
 
 module Allure
   module Virtual
-    # The virtual-platform catalog (PLAN_VIRTUAL.md). Everything virtual that
+    # The virtual-platform catalog (docs/dev/VIRTUAL-PLATFORMS.md). Everything virtual that
     # the pipeline knows lives here: adding a provider is one entry, and no
     # other file names it. The entry bundles its FIT fingerprint, its creator
     # aliases, the sport to use when the file carries none, and the worlds it
@@ -40,7 +40,7 @@ module Allure
           # Paris is the one exception: its July 2026 expansion map has no
           # published rectangle, so the rectangle is the previous one shifted by
           # a quarter of its size north and east, where the two maps register
-          # exactly (PLAN_VIRTUAL.md §2.1). The anchor is its centre, like every
+          # exactly (docs/dev/VIRTUAL-PLATFORMS.md). The anchor is its centre, like every
           # other world.
           #
           # Each `basemap` is the world's published map image, generated into

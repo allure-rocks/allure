@@ -6,7 +6,7 @@ require "vips"
 RSpec.describe Workouts::RenderRouteImageJob do
   let(:workout) { create(:workout) }
 
-  # The world image is not committed (PLAN_VIRTUAL.md §2.1), so the job's
+  # The world image is not committed (docs/dev/VIRTUAL-PLATFORMS.md), so the job's
   # lookup is stubbed; the lookup itself is covered in platforms_spec.
   def virtual_world_basemap
     Allure::Virtual::Basemap.new(

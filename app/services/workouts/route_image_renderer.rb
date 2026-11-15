@@ -76,7 +76,7 @@ module Workouts
     #
     # `background` replaces the theme's own surface: a virtual world's fallback
     # image is drawn in the world's colour instead of the application surface
-    # (PLAN_VIRTUAL.md). `attribution` replaces the OpenStreetMap credit for the
+    # (docs/dev/VIRTUAL-PLATFORMS.md). `attribution` replaces the OpenStreetMap credit for the
     # same reason: a world image carries Zwift's map, not OSM data.
     def initialize(segments:, line_colour:, basemap: nil, smoothing: nil, theme: "light", background: nil,
                    attribution: nil)

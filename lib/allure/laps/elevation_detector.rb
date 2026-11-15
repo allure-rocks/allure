@@ -9,7 +9,7 @@ module Allure
       # A recording segment boundary is a pause or a teleport. The ground is
       # continuous across a pause — the athlete stood still and resumed where
       # they stopped — but not across a teleport, where the platform moved them
-      # (PLAN_VIRTUAL.md §7.1). The threshold is the teleport's own minimum
+      # (docs/dev/VIRTUAL-PLATFORMS.md). The threshold is the teleport's own minimum
       # step: a boundary whose positions jump that far starts a new run of
       # ground, so a climb never spans it.
       SEGMENT_JUMP_METRES = 200.0
