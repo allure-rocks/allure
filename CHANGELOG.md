@@ -43,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Zwift's world map images are committed with their provenance and `© Zwift`
   attribution and ship in the production image; `bin/rails virtual:world_images`
-  regenerates them from their pinned sources (`[devdoc:virtual-platforms]`).
+  regenerates them from their pinned sources ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)).
 - The public demo image is built on the demo host from a release tag and is
   never published by CI, because it carries the third-party FIT corpus
   (`[devdoc:demo]`).
@@ -129,7 +129,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   tiles, on the activity card and as the chart's default secondary line: the
   platform's speed is a game output, the watts are your effort. The elevation
   gain keeps its tile, and the speed stays in the secondary metrics and the
-  chart selector (`[devdoc:virtual-platforms]`).
+  chart selector ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)).
 - A virtual ride's map and analysis tables follow its watts too. The colour-by
   selector offers power — first for a virtual ride — and a legend names the
   ramp's two ends; speed and power ramps span the bulk of their readings and
@@ -162,7 +162,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to its start (or any platform jump) splits the recording, but the smart-lap
   climb detector built one elevation profile across the split and counted the
   jump as ascent — a phantom climb of the whole jump, which held the
-  biggest-climb record (`[devdoc:virtual-platforms]`). The detector now breaks its
+  biggest-climb record ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)). The detector now breaks its
   profile at a boundary whose positions jump 200 m or more; a climb that spans a
   pause stays one climb. A one-off migration rebuilds the laps of the affected
   recordings and recomputes the records.
@@ -175,7 +175,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it complete, with its final name (`[devdoc:remote-imports]`).
 - A virtual world's map now comes from Zwift's own map CDN, each file pinned by
   its SHA-256 and named after it, so a future update reaches browsers
-  immediately (`[devdoc:virtual-platforms]`). Watopia shows the north-west
+  immediately ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)). Watopia shows the north-west
   archipelago its October 2026 update added, where Tour of Watopia races start,
   and Paris shows its July 2026 expansion — Montmartre, Parc Monceau, the
   Madeleine — on its new, larger frame. The owner route images of activities on
@@ -247,7 +247,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of each of the 250 newest activities as virtual cycling or running, with
   its world. `bin/rails zwift:probe` checks the sign-in against a real
   account.
-- A virtual world draws its own map (`[devdoc:virtual-platforms]`): a Zwift
+- A virtual world draws its own map ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)): a Zwift
   activity's published world image — Watopia, London, Paris and nine other
   worlds — replaces the basemap on the workout page, the route image, a new
   publication's image and a received note, on the world's own background
@@ -1548,7 +1548,7 @@ migration (`db:migrate`, applied on boot).
   race course at twice the distance rowed, so a 500 m race showed 1 000 m and
   an impossible pace; every other world drifted by a few percent. The positions
   of a virtual platform's file are now fitted along the drawn course to the
-  file's lap distance (`[devdoc:virtual-platforms]`), so distance, pace, splits, best
+  file's lap distance ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)), so distance, pace, splits, best
   efforts and the map agree with it. `Allure::Gpx::Analyzer::VERSION` is 10;
   the audited `/admin/jobs` analysis backfill reanalyzes existing workouts and
   re-renders the route image of those whose geometry moved. Existing
@@ -2071,7 +2071,7 @@ migration (`db:migrate`, applied on boot).
 - EXR's Long Beach world (EXR 1.56) joins the virtual venue catalogue, so
   sessions on the Alamitos Bay / Marine Stadium waterfront are named from
   their start point; `Workouts::ImportDetection::VERSION` is 2 and the rebuild
-  sweep re-locates the venue of stored sessions (`[devdoc:virtual-platforms]`).
+  sweep re-locates the venue of stored sessions ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)).
 - Every segment, route and loop now carries a frozen bounded elevation profile
   (`segments.elevation_profile`, up to 240 points) written once at creation:
   the segment page renders it as the course chart on the right of the sticky
@@ -2217,7 +2217,7 @@ migration (`db:migrate`, applied on boot).
   was previously unnamed — its worlds (Boston, Bled, Henley, EXR World) become
   the workout's place through the venue catalog, and a virtual sport is never
   reverse-geocoded; the unambiguous FIT `fitness_equipment` indoor sub-sports
-  now resolve to their virtual sports (`[devdoc:virtual-platforms]`).
+  now resolve to their virtual sports ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)).
 - Derived data has one rebuild model (`[devdoc:derivations]`): the new owner
   page `/settings/data` and the administration console launch owner-scoped or
   instance-wide rebuilds — one file parse reconciles the import facts (device,

@@ -43,6 +43,10 @@ efforts, splits, personal bests and leaderboards.
 signatures, discovery, inbox and outbox, delivery, remote identity and follows,
 remote notes and media, the safety gate and the restricted audience.
 
+`docs/dev/VIRTUAL-PLATFORMS.md` is the virtual-platforms contract: the platform
+catalogue, the world maps, virtual sports, venue naming, distance calibration
+and teleports.
+
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
 progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
@@ -155,7 +159,9 @@ behaviours updates its page in every language in the same patch.
   virtual world's map image is drawn instead of the basemap and its attribution
   ships with it. A positionless recording is measured from the device's own
   distance and speed, stored with empty geometry, and refused publication with
-  `no_geometry`. `[devdoc:virtual-platforms]` `[devdoc:no-gps]`
+  `no_geometry`.
+  [docs/dev/VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)
+  `[devdoc:no-gps]`
 - **Demo and seeds.** `db/seeds.rb` seeds the reference catalogs in every
   environment and the demo dataset in development only; `Allure::Demo` turns an
   instance into a throwaway demo; `DemoSeed::Runner` drives the manifests

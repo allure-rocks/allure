@@ -2465,7 +2465,7 @@ A **power-led virtual sport** (`Sport#power_led?`: `cycling_virtual`) leads
 with average power in place of its speed when the recording carries it, in the
 summary tiles, the activity card, the chart's default secondary line and the
 analysis tables' effort column: the platform's speed is a game output, the
-watts are the athlete's effort (`[devdoc:virtual-platforms]`). The fourth tile stays the
+watts are the athlete's effort ([VIRTUAL-PLATFORMS.md](VIRTUAL-PLATFORMS.md)). The fourth tile stays the
 elevation gain; speed keeps its place in the secondary metrics, the tables'
 quiet second line and the chart selector. A publication whose profile withholds
 power, and the credited metric set, fall back to speed.
@@ -2749,7 +2749,7 @@ Rules:
   trend is a drawing and the numbers stay data. The selector is absent
   from non-owner pages; detailed point signals remain owner-only until the
   publication privacy filter preserves source-point provenance. A power-led
-  virtual ride (`[devdoc:virtual-platforms]`) opens on its power; the selector keeps the
+  virtual ride ([VIRTUAL-PLATFORMS.md](VIRTUAL-PLATFORMS.md)) opens on its power; the selector keeps the
   speed, and its stored choice is kept apart from the other charts' so neither
   kind overrides the other's default.
 - A profile with no elevation may still show an available owner-only secondary
@@ -2944,7 +2944,7 @@ placement.
   token read inside it — the control skin, the markers, the arrow halo, the
   grid behind a tile-less map, a popup — follows the basemap. Charts keep the
   page theme.
-- **A virtual world draws its own map** (`[devdoc:virtual-platforms]`): the world's
+- **A virtual world draws its own map** ([VIRTUAL-PLATFORMS.md](VIRTUAL-PLATFORMS.md)): the world's
   published image replaces the basemap, on a background in the world's own
   colour, and the attribution names `© Zwift`. The dark variant dims the same
   image rather than swapping a second one, so the toggle still works and the
@@ -2961,7 +2961,7 @@ placement.
   whenever at least one metric varies, and the selection highlight is ink so it
   stays visible on the track and its shades.
 - **The metric shades a value, and the legend says which.** A power-led virtual
-  ride offers *Puissance* first (`[devdoc:virtual-platforms]`); every other map offers
+  ride offers *Puissance* first ([VIRTUAL-PLATFORMS.md](VIRTUAL-PLATFORMS.md)); every other map offers
   elevation, speed, then power. Speed and power are noisy readings, so the ramp
   spans their 2nd–98th percentile and each colour stop takes the mean of its own
   slice of the route — one stop or one sprint never flattens the rest of the
@@ -3090,7 +3090,7 @@ rendered **asynchronously** on the same worker from its immutable sanitized
 track with the same chain; when the profile's `basemap` setting is off it is
 drawn tile-less by choice, never as a failure fallback. A virtual world's
 route image uses the world's own map image instead of the tile style
-(`[devdoc:virtual-platforms]`), in both variants, and its Ruby fallbacks paint the
+([VIRTUAL-PLATFORMS.md](VIRTUAL-PLATFORMS.md)), in both variants, and its Ruby fallbacks paint the
 world's colour (dimmed on the dark variant) instead of the application
 surface. Its federation delivery
 waits for the images so the Note always carries them. In dark mode the image is
