@@ -2,7 +2,7 @@
 
 # Watopia's October 2026 map adds the north-west archipelago the Tour of
 # Watopia races start on, and Paris's July 2026 expansion moved and enlarged its
-# frame (PLAN_VIRTUAL.md §2.1). Both are shipped as new world images, so the
+# frame (docs/dev/VIRTUAL-PLATFORMS.md). Both are shipped as new world images, so the
 # owner route images drawn on them show the old artwork until they are rendered
 # again. Only those two worlds changed, so only their recordings are
 # invalidated; the global RouteImage::VERSION stays put and the rest of the

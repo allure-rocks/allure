@@ -882,7 +882,7 @@ RSpec.describe "Workouts" do
       point = RGeo::Geographic.spherical_factory(srid: 4326).point(166.95251, -11.63555)
       w = create(:workout, user:, sport: catalog_sport("cycling_virtual"), start_point: point,
                             bounds: [ -11.63555, 166.95251, -11.63555, 166.95251 ])
-      # The world images are not committed (PLAN_VIRTUAL.md §2.1); the lookup
+      # The world images are not committed (docs/dev/VIRTUAL-PLATFORMS.md); the lookup
       # itself is covered in platforms_spec.
       allow(Allure::Virtual::Platforms).to receive(:basemap_at).and_return(
         Allure::Virtual::Basemap.new(

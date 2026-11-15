@@ -27,10 +27,10 @@
 <%# The owner's placed photos (PLAN_PHOTOS.md §7); nil on every other map. %>
 <% photos = local_assigns[:photos] %>
 <%# A virtual world's own map image replaces the ordinary basemap
-    (PLAN_VIRTUAL.md); nil on every real-world activity. %>
+    (docs/dev/VIRTUAL-PLATFORMS.md); nil on every real-world activity. %>
 <% virtual_basemap = local_assigns[:virtual_basemap] %>
 <%# A power-led virtual ride offers its watts first and remembers its own
-    colour choice (PLAN_VIRTUAL.md §8). %>
+    colour choice (docs/dev/VIRTUAL-PLATFORMS.md). %>
 <% power_led = local_assigns.fetch(:power_led, false) %>
 <% colour_metrics = power_led ? %w[power elevation speed] : %w[elevation speed power] %>
 <% actions = [ "allure:theme-changed@window->map#themeChanged", "allure:smoothing-changed@window->map#smoothingChanged" ] %>

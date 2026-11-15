@@ -9,7 +9,7 @@ class WorkoutToponymiesController < ApplicationController
     response.headers["Cache-Control"] = "private, no-store"
 
     # A virtual workout is never geocoded; its place comes from the platform's
-    # venue catalog (PLAN_VIRTUAL.md §4).
+    # venue catalog (docs/dev/VIRTUAL-PLATFORMS.md).
     toponymy = workout.toponymy unless workout.sport.virtual?
     return render json: { status: "unavailable" } unless toponymy
 

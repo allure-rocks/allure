@@ -11,7 +11,7 @@ module Workouts
   #
   # A change is recorded on the import entry as its provenance: a manual change
   # marks the entry `manual` so the re-detection backfill leaves it alone, and
-  # the backfill reports its own changes as `detected` (PLAN_VIRTUAL.md §6).
+  # the backfill reports its own changes as `detected` (docs/dev/VIRTUAL-PLATFORMS.md).
   # Crossing the virtual boundary also settles the toponymy: a virtual sport
   # discards it and is named from the platform's venue catalog, and a return to
   # a real sport re-enqueues geocoding.

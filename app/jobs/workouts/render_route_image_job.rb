@@ -29,7 +29,7 @@ module Workouts
 
     private
 
-    # The world map image a virtual activity is drawn on (PLAN_VIRTUAL.md).
+    # The world map image a virtual activity is drawn on (docs/dev/VIRTUAL-PLATFORMS.md).
     # The sport decides whether a world may apply at all: Zwift's London sits
     # on London, so geometry alone would claim a real ride there.
     def virtual_basemap(workout)

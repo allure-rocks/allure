@@ -1,4 +1,4 @@
-// A virtual world's own map image (PLAN_VIRTUAL.md): one background layer in
+// A virtual world's own map image (docs/dev/VIRTUAL-PLATFORMS.md): one background layer in
 // the world's colour and one image layer stretched over the world's rectangle.
 // Shared by the interactive map and the static route renderer so the two can
 // never draw a different world.

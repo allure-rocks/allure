@@ -9,7 +9,7 @@ module Workouts
   # job, the sweeps and the recovery job call it.
   #
   # A virtual workout is never geocoded; a legacy row is discarded instead
-  # (PLAN_VIRTUAL.md §3).
+  # (docs/dev/VIRTUAL-PLATFORMS.md).
   class ToponymyRefresh
     def initialize(workout:)
       @workout = workout

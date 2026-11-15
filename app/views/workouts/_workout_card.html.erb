@@ -125,7 +125,7 @@
           <% facts << format_duration_human(display.duration) if display.metric_visible?(:duration) && display.duration %>
           <%# A power-led virtual ride names its watts where the others name
               their speed: the platform's speed is a game output
-              (PLAN_VIRTUAL.md §8). A publication that withholds power keeps
+              (docs/dev/VIRTUAL-PLATFORMS.md). A publication that withholds power keeps
               the speed. A duration-only session recorded no distance to
               divide: its card names no pace or speed (PLAN_NO_GPS.md §9). %>
           <% if display.sport&.power_led? && display.metric_visible?(:average_power) && display.average_power.present? %>

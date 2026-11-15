@@ -36,7 +36,7 @@ const ANOMALY_SOURCE = "allure-anomalies";
 const ANOMALY_LAYER = "allure-anomaly-dashes";
 const ANOMALY_POINT_LAYER = "allure-anomaly-points";
 
-// A virtual world's own map image (PLAN_VIRTUAL.md) replaces the ordinary
+// A virtual world's own map image (docs/dev/VIRTUAL-PLATFORMS.md) replaces the ordinary
 // basemap: one background layer in the world's colour and one image layer
 // stretched over the world's rectangle. No tiles are fetched.
 
@@ -105,7 +105,7 @@ export default class extends Controller {
     // The colour-by legend's metric names and units (DESIGN.md §15.2).
     legendLocale: Object,
     // A power-led virtual ride offers its watts first and keeps its own stored
-    // colour choice (PLAN_VIRTUAL.md §8).
+    // colour choice (docs/dev/VIRTUAL-PLATFORMS.md).
     powerLed: { type: Boolean, default: false },
     startLabel: String,
     finishLabel: String,

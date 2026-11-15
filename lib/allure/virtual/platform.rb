@@ -2,7 +2,7 @@
 
 module Allure
   module Virtual
-    # One detectable virtual-activity system (PLAN_VIRTUAL.md). A platform is
+    # One detectable virtual-activity system (docs/dev/VIRTUAL-PLATFORMS.md). A platform is
     # pure catalogue data: the rest of the application never names a provider,
     # it resolves one from the file and asks this object for what to do.
     #

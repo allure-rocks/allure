@@ -248,7 +248,7 @@ module ApplicationHelper
   end
 
   # The world map image drawn under a virtual activity's track instead of the
-  # ordinary basemap (PLAN_VIRTUAL.md). The sport decides whether a world may
+  # ordinary basemap (docs/dev/VIRTUAL-PLATFORMS.md). The sport decides whether a world may
   # apply at all: Zwift's London sits on London, so geometry alone would claim
   # a real ride there. A world whose image the operator has not generated keeps
   # the ordinary basemap, and the profile's own `basemap: false` wins over

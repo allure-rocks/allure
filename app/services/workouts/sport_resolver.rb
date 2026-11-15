@@ -2,7 +2,7 @@
 
 module Workouts
   # Resolves the sport a file describes, in one place so the importer and the
-  # re-detection backfill can never disagree (PLAN_VIRTUAL.md §6). Resolution
+  # re-detection backfill can never disagree (docs/dev/VIRTUAL-PLATFORMS.md). Resolution
   # order: the sport the caller declares (the activity type an athlete chose
   # on another service, PLAN_STRAVA_ARCHIVE.md §4), the file's own signal, the
   # owner's generic-sport default for a detected catch-all, the virtual

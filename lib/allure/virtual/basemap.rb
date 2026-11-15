@@ -2,7 +2,7 @@
 
 module Allure
   module Virtual
-    # The published map image of a virtual world (PLAN_VIRTUAL.md). A world's
+    # The published map image of a virtual world (docs/dev/VIRTUAL-PLATFORMS.md). A world's
     # recorded positions are fictional, so the ordinary basemap draws them over
     # open sea or over a real city that only roughly matches; this image is the
     # world as its own game renders it.
@@ -11,7 +11,7 @@ module Allure
     # `zwift-data` package (andipaetzold/zwift-data, `src/worlds.ts`), which is
     # the same source the venue anchors use; Paris's July 2026 map is the one
     # exception, registered against the previous rectangle because zwift-data
-    # does not publish it yet (PLAN_VIRTUAL.md §2.1). `background` fills the
+    # does not publish it yet (docs/dev/VIRTUAL-PLATFORMS.md). `background` fills the
     # viewport around the image (the world's own sea or sky colour), and
     # `attribution` is the credit the map control shows.
     Basemap = Data.define(:image, :bounds, :background, :attribution) do
