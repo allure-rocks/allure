@@ -1,7 +1,7 @@
 # Zwift world map images
 
 One image per Zwift world, drawn under a virtual activity's track instead of
-the ordinary basemap (`PLAN_VIRTUAL.md`).
+the ordinary basemap (`[devdoc:virtual-platforms]`).
 
 ## Provenance
 

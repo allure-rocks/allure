@@ -5,7 +5,17 @@ All notable changes to Allure are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+`[devdoc:<topic>]` marks developer documentation that is not published yet; see
+[`AGENTS.md`](AGENTS.md).
+
 ## [Unreleased]
+
+### Added
+
+- A repository guide (`AGENTS.md`, with `CLAUDE.md` as its alias) and the
+  design reference (`docs/dev/DESIGN.md`), so contributors and coding agents
+  share the same constraints. A contract whose documentation is not published
+  yet is marked `[devdoc:<topic>]` in those files.
 
 ## [0.10.0] - 2026-11-13
 
@@ -27,17 +37,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The federation inbox refusal log drops control characters from the claimed
   actor and the parser's message, so an unauthenticated body can no longer
-  forge a log line (`PLAN_M5.md` §12.2).
+  forge a log line (`[devdoc:federation]`).
 
 ### Changed
 
-- Zwift's world map images are no longer committed: the artwork is Zwift's and
-  not ours to redistribute. `bin/rails virtual:world_images` generates them for
-  an operator who wants them, and a checkout without them draws the ordinary
-  basemap (`PLAN_VIRTUAL.md` §2.1).
+- Zwift's world map images are committed with their provenance and `© Zwift`
+  attribution and ship in the production image; `bin/rails virtual:world_images`
+  regenerates them from their pinned sources (`[devdoc:virtual-platforms]`).
 - The public demo image is built on the demo host from a release tag and is
   never published by CI, because it carries the third-party FIT corpus
-  (`PLAN_DEMO.md`, `RUNBOOK_DEMO.md`).
+  (`[devdoc:demo]`).
 - The About dialog's source link and the operator documentation point at the
   public GitHub repository.
 - The CI runs on GitHub Actions: `.github/workflows/ci.yml` verifies every pull
@@ -60,8 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   « Enregistrer en itinéraire », which opens the route form prefilled from the
   departure and arrival places; « Ignorer » closes the suggestion for good, and
   later repeats join it silently. Nothing is created until you decide, and the
-  saved route finds every activity the banner counted (`PLAN_SEGMENTS.md`
-  §7.7).
+  saved route finds every activity the banner counted (`[devdoc:segments]`).
 - Photos have a manager page of their own at `/workouts/:id/photos`: the route
   as a sticky rail, one row per photo with its caption, capture time, placement
   and the reason an automatic placement found nothing, drag-and-drop ordering
@@ -104,7 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   per-workout cap — so they appear in the workout's gallery and can be placed
   on the map. They carry no EXIF, so they arrive unplaced; the import counts
   the ones it could not fetch or the pipeline refused, and never fails because
-  of a photo (`PLAN_REMOTE_IMPORTS.md` §7d.3).
+  of a photo (`[devdoc:remote-imports]`).
 
 ### Changed
 
@@ -115,13 +123,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   action. A link or an unlink no longer refreshes — and can no longer wipe —
   another service's form. The former `/settings/connections` address
   redirects, and the notification and batch links open the service's page
-  (`PLAN_REMOTE_IMPORTS.md` §8.1, `DESIGN.md` §8.6).
+  (`[devdoc:remote-imports]`, `DESIGN.md` §8.6).
 - A virtual ride now leads with its watts. When a Cycling (Virtual) recording
   carries power, average power takes the place of the speed in the summary
   tiles, on the activity card and as the chart's default secondary line: the
   platform's speed is a game output, the watts are your effort. The elevation
   gain keeps its tile, and the speed stays in the secondary metrics and the
-  chart selector (`PLAN_VIRTUAL.md` §8).
+  chart selector (`[devdoc:virtual-platforms]`).
 - A virtual ride's map and analysis tables follow its watts too. The colour-by
   selector offers power — first for a virtual ride — and a legend names the
   ramp's two ends; speed and power ramps span the bulk of their readings and
@@ -144,7 +152,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   when the selected profile shares photos, and says so otherwise. Uploads get a
   translated picker and drop zone, answer size, type and slot refusals before
   sending, and refresh without interrupting an open viewer or a caption being
-  typed (`DESIGN.md` §10.22, `PLAN_PHOTOS.md` §5.2).
+  typed (`DESIGN.md` §10.22, `[devdoc:photos]`).
 
 ## [0.9.8] - 2026-11-07
 
@@ -154,7 +162,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to its start (or any platform jump) splits the recording, but the smart-lap
   climb detector built one elevation profile across the split and counted the
   jump as ascent — a phantom climb of the whole jump, which held the
-  biggest-climb record (`PLAN_VIRTUAL.md` §7.1). The detector now breaks its
+  biggest-climb record (`[devdoc:virtual-platforms]`). The detector now breaks its
   profile at a boundary whose positions jump 200 m or more; a climb that spans a
   pause stays one climb. A one-off migration rebuilds the laps of the affected
   recordings and recomputes the records.
@@ -164,10 +172,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the import froze a truncated recording that no later sync replaced — the
   listing is deduplicated by external id. The adapter now lists an activity
   only once its declared end has settled (10 minutes), and the next sync takes
-  it complete, with its final name (`PLAN_REMOTE_IMPORTS.md` §7d).
+  it complete, with its final name (`[devdoc:remote-imports]`).
 - A virtual world's map now comes from Zwift's own map CDN, each file pinned by
   its SHA-256 and named after it, so a future update reaches browsers
-  immediately (`PLAN_VIRTUAL.md` §2.1). Watopia shows the north-west
+  immediately (`[devdoc:virtual-platforms]`). Watopia shows the north-west
   archipelago its October 2026 update added, where Tour of Watopia races start,
   and Paris shows its July 2026 expansion — Montmartre, Parc Monceau, the
   Madeleine — on its new, larger frame. The owner route images of activities on
@@ -178,7 +186,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Finding people is an opt-in, minimal name search (`PLAN_PEOPLE.md`):
+- Finding people is an opt-in, minimal name search (`[devdoc:people]`):
   `/people` becomes a tabbed relationship hub (following, followers,
   requests), a live prefix search covers discoverable members and the remote
   accounts you already have a relationship with, and up to five suggestions
@@ -193,7 +201,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refunds and disputes are recorded as idempotent `funding_reversals` rows
   (kind, outcome, amount, resolved to the original invoice) and shown as
   badges in `/admin/funding`; they never rewrite the original payment nor
-  revoke a badge automatically (`PLAN_FUNDING.md` §3). The Stripe adapter
+  revoke a badge automatically (`[devdoc:funding]`). The Stripe adapter
   normalizes `refund.*` and `charge.dispute.*` events and lists refunds and
   disputes during reconciliation.
 
@@ -220,7 +228,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Import from Withings (`PLAN_REMOTE_IMPORTS.md` §7c), off unless the
+- Import from Withings (`[devdoc:remote-imports]`), off unless the
   operator sets `WITHINGS_IMPORT_ENABLED`. Withings has no public API for
   routes: the integration is unofficial, sends the password once and keeps it
   only while the link task runs, stores only the day-long session, and
@@ -231,7 +239,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   session that ends leaves the queued batches in place, and « Reconnecter et
   reprendre » resumes them. `bin/rails withings:probe` checks the sign-in
   against a real account.
-- Import from Zwift (`PLAN_REMOTE_IMPORTS.md` §7d), off unless the operator
+- Import from Zwift (`[devdoc:remote-imports]`), off unless the operator
   sets `ZWIFT_IMPORT_ENABLED`. Zwift has no public API: the integration is
   unofficial, sends the password once and keeps it only while the link task
   runs, stores only the eight-day refresh token, and imports the original FIT
@@ -239,7 +247,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of each of the 250 newest activities as virtual cycling or running, with
   its world. `bin/rails zwift:probe` checks the sign-in against a real
   account.
-- A virtual world draws its own map (`PLAN_VIRTUAL.md` §2.1): a Zwift
+- A virtual world draws its own map (`[devdoc:virtual-platforms]`): a Zwift
   activity's published world image — Watopia, London, Paris and nine other
   worlds — replaces the basemap on the workout page, the route image, a new
   publication's image and a received note, on the world's own background
@@ -315,7 +323,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   all instance members. Sharing an aggregate does not expose the unpublished
   workouts behind it, their routes or health data, and these blocks never
   federate. Existing enabled preferences retain their member audience.
-- A public demo deployment (`PLAN_DEMO.md`, `RUNBOOK_DEMO.md`): a shared
+- A public demo deployment (`[devdoc:demo]`): a shared
   member account, sample workouts re-dated to end yesterday, a nightly
   recreation of the database and storage, and a site-wide reset strip with
   an automatic five-minute warning. Demo mode is off by default and must
@@ -398,7 +406,7 @@ Detected loops. See the [upgrade guide](docs/site/operations/upgrading.md).
 
 ### Added
 
-- Voluntary instance funding (`PLAN_FUNDING.md`), entirely behind the
+- Voluntary instance funding (`[devdoc:funding]`), entirely behind the
   `FUNDING_ENABLED` master switch (off by default; while unset nothing renders,
   badges included, and no data is deleted): a « Soutenir l'instance » page
   ("Support this instance") offers a voluntary yearly contribution to the
@@ -428,7 +436,7 @@ Detected loops. See the [upgrade guide](docs/site/operations/upgrading.md).
 
 - Repeated loops are detected after their approach and return legs: a workout
   that rides to a circuit, laps it, and returns home now reuses the detected
-  loop segment instead of creating a second one (`PLAN_SMART_LAPS.md`).
+  loop segment instead of creating a second one (`[devdoc:smart-laps]`).
 - The CSRF state now persists across a cold-start iOS import: the companion's
   first import no longer fails its authenticity check.
 - Following a peer again after unblocking its domain restores the
@@ -592,7 +600,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Import a Strava archive (`PLAN_STRAVA_ARCHIVE.md`): a new « Archive Strava »
+- Import a Strava archive (`[devdoc:strava-archive]`): a new « Archive Strava »
   tab on the import page takes the ZIP Strava sends (up to 2 GB) and imports
   each activity's original file with its Strava name, type, description,
   private note, commute flag and gear, in any Strava language. Missing gear is
@@ -661,7 +669,7 @@ migration (`db:migrate`, applied on boot).
 ### Changed
 
 - Heart-rate coverage is read against the time the device recorded, pauses
-  excluded (`PLAN_HEART_RATE.md` §3.3, histogram version 2): a paused timer no
+  excluded (`[devdoc:heart-rate]`, histogram version 2): a paused timer no
   longer reads as a lost strap. Values a losing strap held are left out of the
   zones and the load, and a recording whose points are minutes apart is named
   « trop espacé » instead of being sliced. Run the heart-rate sweep from
@@ -743,7 +751,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Heart-rate zones (`PLAN_HEART_RATE.md`). An account sets its maximum and
+- Heart-rate zones (`[devdoc:heart-rate]`). An account sets its maximum and
   optional resting heart rate, the zone basis (percent of the maximum, or of
   the reserve after Karvonen) and the lower bounds of zones 2 to 5 at
   `/settings/heart-rate`, which proposes the highest observed maximum the
@@ -765,7 +773,7 @@ migration (`db:migrate`, applied on boot).
   `heart_rate_profile` on `/me`; the account export carries the profile.
   Nothing derived from heart rate is ever published or federated.
 - Courses take their elevation from the terrain service by default when the
-  instance configures one (`PLAN_ELEVATION.md` §10): a public course with the
+  instance configures one (`[devdoc:elevation]`): a public course with the
   service alone, a private or followers-only one with its owner's consent. The
   course's ascent, descent, grade and profile are recomputed once from its own
   line, the chart carries the « Altitudes estimées (MNT) » badge, and
@@ -800,7 +808,7 @@ migration (`db:migrate`, applied on boot).
   the readers of that audience, so a follower's reaction never names them to a
   reader of the public version; when nobody can be named, the sentence counts
   people. Existing reactions are classified fail-closed by the migration
-  (`PLAN_REACTIONS.md` §2, §4.2). The REST API keeps `counts` and `mine`.
+  (`[devdoc:reactions]`). The REST API keeps `counts` and `mine`.
 
 ### Changed
 
@@ -836,7 +844,7 @@ migration (`db:migrate`, applied on boot).
 - The feed hides a deactivated account's publications: the following stream's
   raw union now applies the deletion-window rule
   (`WorkoutPublication.of_available_owners`) like every other local surface
-  (`PLAN_ACCOUNT.md` §4.2).
+  (`[devdoc:account]`).
 - A due scheduled publication waits out its owner's deletion window instead of
   activating behind it: the publication policy refuses a deactivated owner's
   deliveries, so it would have gone live without reaching anyone. The recovery
@@ -845,8 +853,8 @@ migration (`db:migrate`, applied on boot).
 - A confirmed cancellation stops a purge that had already read the schedule:
   the cut-off re-checks it under the row lock and raises
   `Users::DeleteAccount::Cancelled`, which the purge job swallows
-  (`PLAN_ACCOUNT.md` §4.3).
-- Push subscription secrets are filtered from the logs (`PLAN_PUSH.md` §5).
+  (`[devdoc:account]`).
+- Push subscription secrets are filtered from the logs (`[devdoc:push]`).
 - A push registration replaces only the current account's earlier row for
   the same endpoint, and only when the new subscription saves: an endpoint
   is never proof of ownership, so another account's row is left alone (422),
@@ -855,11 +863,11 @@ migration (`db:migrate`, applied on boot).
   `Create` and `Delete` already apply to their objects. An activity admitted
   under a URI a peer's future `Delete` or `Follow` would carry could suppress
   that withdrawal or block that follow; `Federation::Parsers::Activity` now
-  refuses such an activity before any row is written (`PLAN_M2.md` §6.4).
+  refuses such an activity before any row is written (`[devdoc:federation]`).
 - A suspended account, or one inside its deletion window, is no longer named
   under its comments: the card shows « Un compte indisponible » with a
   neutral avatar and no handle or link, and the REST comment's `author` is
-  null, until reinstatement (`PLAN_COMMENTS.md` §7.6).
+  null, until reinstatement (`[devdoc:comments]`).
 
 ## [0.8.3] - 2026-10-18
 
@@ -922,7 +930,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Historical weather along outdoor workouts (`PLAN_WEATHER.md`), from
+- Historical weather along outdoor workouts (`[devdoc:weather]`), from
   Open-Meteo.
   - **Opt-in:** offered while `WEATHER_ENABLED` is set (with optional
     `WEATHER_*` tuning, see `.env.example`), and fetched only for an account
@@ -961,12 +969,12 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Manual entries (`PLAN_MANUAL_ENTRY.md`): a « Saisie manuelle » tab on the
+- Manual entries (`[devdoc:manual-entry]`): a « Saisie manuelle » tab on the
   import page records a workout typed in by hand — no file, no position, only
   the typed figures (`origin: "manual"`). It counts in totals, statistics and
   equipment wear, never in records, and cannot be published. The REST API
   creates one with `POST /api/rest/v1/workouts` and edits it through `PATCH`.
-- Data export and account deletion (`PLAN_ACCOUNT.md`), on
+- Data export and account deletion (`[devdoc:account]`), on
   `/settings/account`.
   - **Export:** one ZIP built in the background with the original files (in
     nested archives the import page reads back), the workouts as JSON and
@@ -982,7 +990,7 @@ migration (`db:migrate`, applied on boot).
     another account's deletion from `/admin/accounts`, audited.
   - `/metrics` exports `allure_account_exports` and
     `allure_account_deletions_scheduled`.
-- Leaderboard categories (`PLAN_SEGMENTS.md` §8.7): an account may declare
+- Leaderboard categories (`[devdoc:segments]`): an account may declare
   a category (women, men, or unspecified by default) at `/settings/profile`.
   The full board gains a Tous / Femmes / Hommes view over the ranking the
   reader already sees, offered per sport from three athletes of that
@@ -1016,14 +1024,14 @@ migration (`db:migrate`, applied on boot).
   which read as the opposite popup in both themes. Its facts line and its
   controls are inked for that surface.
 - A deleted account's username could be claimed again at sign-up; only the
-  withdrawn actor reserves it now, as `PLAN_M2.md` requires.
+  withdrawn actor reserves it now, as `[devdoc:federation]` requires.
 
 ## [0.8.0] - 2026-10-17
 
 ### Added
 
 - A reference Grafana dashboard for the Prometheus exporter,
-  `docs/grafana/allure.json` (« Allure — Instance », `PLAN_METRICS.md` §7.1).
+  `docs/grafana/allure.json` (« Allure — Instance », `[devdoc:metrics]`).
   Import it through Grafana's *Dashboards → Import*; it is documentation, not
   provisioned by the application, and carries no alert. Its rows cover
   instance health, HTTP, background jobs, federation, usage, and imports and
@@ -1031,10 +1039,9 @@ migration (`db:migrate`, applied on boot).
 
 ### Changed
 
-- Every chart is drawn by Apache ECharts instead of ApexCharts
-  (`PLAN_CHARTS.md`). ApexCharts' licence no longer allows redistributing it,
-  which every self-hosted instance does. The profile, the course progression,
-  the intensity pulse, the sport mix and the statistics keep their behaviour:
+- Every chart is drawn by Apache ECharts instead of ApexCharts. The profile,
+  the course progression, the intensity pulse, the sport mix and the statistics
+  keep their behaviour:
   map ↔ profile hover, zoom by mouse drag or touch long-press, the course
   selection, the anomaly dashes, live light/dark theme.
   - **Lighter pages:** the chart library is loaded only by a page that draws
@@ -1067,7 +1074,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Shared activities across instances (`PLAN_TOGETHER.md` §7, lot 4): a
+- Shared activities across instances (`[devdoc:shared-activities]`): a
   workout owner can invite an account on another Allure instance
   (`@nom@instance`) to confirm they did the outing together.
   - **Who can be invited:** the account must follow the owner and have
@@ -1103,7 +1110,7 @@ migration (`db:migrate`, applied on boot).
   another instance; `workout_id` is no longer required in
   `ParticipationData`.
 - Push: the relay binds every endpoint to the instance's VAPID public key
-  (`PLAN_PUSH.md` §3.1), so a leaked endpoint cannot be used without the
+  (`[devdoc:push]`), so a leaked endpoint cannot be used without the
   instance's private key. The « Sur cet iPhone » card hands the key to the
   app when it registers. Instances that enabled push in 0.7.2 must upgrade
   before the iOS app with push ships: the relay refuses registrations without
@@ -1127,7 +1134,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Push notifications for the iOS companion (`PLAN_PUSH.md`, instance side):
+- Push notifications for the iOS companion (`[devdoc:push]`, instance side):
   an account turns on « Recevoir sur cet iPhone » in the new « Sur cet
   iPhone » card of `/settings/notifications`, optionally hiding the content,
   and every new notification it would see in the inbox is also pushed to that
@@ -1170,7 +1177,7 @@ migration (`db:migrate`, applied on boot).
 ### Added
 
 - An activity file that records no position at all is imported instead of
-  being rejected (`PLAN_NO_GPS.md`): a trainer ride, a treadmill run, an erg
+  being rejected (`[devdoc:no-gps]`): a trainer ride, a treadmill run, an erg
   session, a pool swim or a duration-only session takes its distance, duration
   and pace from the device's own records rather than from GPS, and its page
   drops the map for the « Sans position GPS » state. It has no route to share,
@@ -1233,7 +1240,7 @@ migration (`db:migrate`, applied on boot).
   d'Huez, 14 km — vanished from the « Montées » tab, the chart and the
   geocoded summits, and its descent came out in pieces. The cap is now 30 km,
   a climb never reaches back past a point higher than its summit, and two
-  overlapping climbs keep only the stronger (`PLAN_SMART_LAPS.md` §4.3).
+  overlapping climbs keep only the stronger (`[devdoc:smart-laps]`).
   `Laps::Rebuild::VERSION` moves to 5 and
   `Workouts::ToponymyEnricher::ALGORITHM_VERSION` to 8. After deploying, run
   the toponymy backfill from `/admin/jobs` (which re-geocodes, at the
@@ -1246,7 +1253,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- A confirmed credit counts for the participant (`PLAN_TOGETHER.md` lot 2):
+- A confirmed credit counts for the participant (`[devdoc:shared-activities]`):
   it gives them a **credit row**, an activity of their own holding only the
   credited metrics — distance, durations, ascent and descent, speeds, paces,
   title — and no track, file, heart rate, cadence, power, calories, device
@@ -1268,7 +1275,7 @@ migration (`db:migrate`, applied on boot).
   recordings starting within six hours of the source, a confirmed credit
   converts later (« Lier mon enregistrement »), and a link shows on both
   workouts.
-- Outings done together are detected (`PLAN_TOGETHER.md` lot 3): after each
+- Outings done together are detected (`[devdoc:shared-activities]`): after each
   import, `Allure::Together::Detector` compares the recording with those of
   local accounts following each other in both directions — same sport
   family, overlapping windows, both within 60 m at least 80 % of the shared
@@ -1392,7 +1399,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- `PLAN_MCP.md` specifies a Model Context Protocol endpoint for AI
+- `[devdoc:mcp]` specifies a Model Context Protocol endpoint for AI
   assistants; `DESIGN.md` gains the §19.27 copy and the location badge.
 - `POST /mcp` serves AI assistants statelessly behind the API token boundary
   (`read` scope) with three read-only tools: `list_workouts`,
@@ -1411,7 +1418,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- `PLAN_API.md` specifies the public REST API (`/api/rest/v1`, scoped API
+- `[devdoc:api]` specifies the public REST API (`/api/rest/v1`, scoped API
   tokens), signed webhooks and the OpenAPI 3.1 document rendered by an
   embedded Scalar reference at `/developers/api`; `DESIGN.md` gains the
   glossary terms, the `/settings/api` and `/developers/api` anatomies and the
@@ -1486,7 +1493,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Automatic publishing (`PLAN_AUTO_PUBLISHING.md`): a publishing profile can
+- Automatic publishing (`[devdoc:auto-publishing]`): a publishing profile can
   be marked automatic — off by default, one per audience, turned on only with
   an explicit acknowledgement, optionally excluding commutes. Each new import
   is then published through the ordinary publisher, with the profile's delay,
@@ -1501,7 +1508,7 @@ migration (`db:migrate`, applied on boot).
   their name on the connection cards, the import tabs and the remote panel
   (`DESIGN.md` §6.4).
 - Allure flags the readings that look wrong in an activity's original file
-  (`PLAN_M1.md` §8.10): rejected and jumping GPS positions, speeds the sport
+  (`[devdoc:workout-core]`): rejected and jumping GPS positions, speeds the sport
   cannot reach, shifted timestamps and interrupted recordings, missing,
   frozen or suddenly changing heart rate, elevation steps, and power or
   cadence spikes. Only what makes a figure wrong is put forward: a maximum
@@ -1520,7 +1527,7 @@ migration (`db:migrate`, applied on boot).
 ### Changed
 
 - The Progression chart of a segment, route or loop draws a robust trend
-  (`Allure::Stats::RobustTrend`, `PLAN_SEGMENTS.md` §10): a straight
+  (`Allure::Stats::RobustTrend`, `[devdoc:segments]`): a straight
   Theil–Sen line under eight outings, a robust LOWESS curve from eight, so a
   bad day no longer bends it and its ends are no longer flattened. It
   replaces the moving average over five outings.
@@ -1541,7 +1548,7 @@ migration (`db:migrate`, applied on boot).
   race course at twice the distance rowed, so a 500 m race showed 1 000 m and
   an impossible pace; every other world drifted by a few percent. The positions
   of a virtual platform's file are now fitted along the drawn course to the
-  file's lap distance (`PLAN_VIRTUAL.md` §7), so distance, pace, splits, best
+  file's lap distance (`[devdoc:virtual-platforms]`), so distance, pace, splits, best
   efforts and the map agree with it. `Allure::Gpx::Analyzer::VERSION` is 10;
   the audited `/admin/jobs` analysis backfill reanalyzes existing workouts and
   re-renders the route image of those whose geometry moved. Existing
@@ -1551,7 +1558,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Sessions expire (`PLAN_AUTH.md` slice 1): after 30 days without activity
+- Sessions expire (`[devdoc:auth]`): after 30 days without activity
   and at most 90 days after signing in, both configurable
   (`AUTH_SESSION_IDLE_DAYS`, `AUTH_SESSION_MAX_DAYS`). The session cookie is
   no longer permanent, the sessions table shows when each session signed in,
@@ -1559,7 +1566,7 @@ migration (`db:migrate`, applied on boot).
 - Closing a session or signing out everywhere asks for the password again
   when it was last proved more than 10 minutes ago (« Confirmez votre
   identité »).
-- Two-step verification (`PLAN_AUTH.md` slice 2). After the password, an
+- Two-step verification (`[devdoc:auth]`). After the password, an
   account confirms with an authenticator app, a passkey or security key, or
   a one-time recovery code; no session exists until it does. Every password
   account must set one up within 14 days (`AUTH_2FA_GRACE_DAYS`), reminded on
@@ -1571,7 +1578,7 @@ migration (`db:migrate`, applied on boot).
   complete,
   each change is confirmed by email, and the operator can reset an account's
   methods from the console or `bin/rails users:reset_second_factor`.
-- Sign in with Google, Apple or an OpenID Connect provider (`PLAN_AUTH.md`
+- Sign in with Google, Apple or an OpenID Connect provider (`[devdoc:auth]`
   slice 3), each enabled by the operator through its `AUTH_GOOGLE_*`,
   `AUTH_APPLE_*` or `AUTH_OIDC_*` settings. A first sign-in creates an account
   without a password after choosing a username (registration rules and
@@ -1585,12 +1592,12 @@ migration (`db:migrate`, applied on boot).
   OpenID Connect provider.
 - The iOS companion signs in, creates an account, links a provider and
   confirms an identity through Google, Apple or OpenID Connect
-  (`PLAN_AUTH.md` slice 4). The provider opens in the system sign-in sheet and
+  (`[devdoc:auth]`). The provider opens in the system sign-in sheet and
   hands the result back to the app through a single-use, one-minute link
   bound to a secret only the app holds. Google is offered in the app only
   where Sign in with Apple is too. Needs the companion's `auth-session`
   bridge; older versions show no provider button.
-- Import from Garmin Connect (`PLAN_REMOTE_IMPORTS.md`), off unless the
+- Import from Garmin Connect (`[devdoc:remote-imports]`), off unless the
   operator sets `GARMIN_CONNECT_IMPORT_ENABLED`. Garmin has no public API:
   the integration is unofficial, and Garmin may change it or refuse a server
   address. From « Services connectés », an account links Garmin Connect with
@@ -1603,7 +1610,7 @@ migration (`db:migrate`, applied on boot).
   Disconnecting offers to delete what was imported, checked by default. A
   notification asks to reconnect when Garmin refuses the session.
   `bin/rails garmin_connect:probe` checks the sign-in against a real account.
-- Import from EXR, the virtual rowing game (`PLAN_REMOTE_IMPORTS.md` §7b),
+- Import from EXR, the virtual rowing game (`[devdoc:remote-imports]`),
   off unless the operator sets `EXR_IMPORT_ENABLED`. EXR has no public API:
   from « Services connectés », an account signs in to its EXR account once —
   the password is sent once and kept only while the link task runs, only the
@@ -1612,7 +1619,7 @@ migration (`db:migrate`, applied on boot).
   session's original FIT file, recognised as virtual rowing in its world.
   Signing out of the EXR site may require reconnecting.
   `bin/rails exr:probe` checks the account site against a real account.
-- Administration of connected services (`PLAN_REMOTE_IMPORTS.md` §10): a
+- Administration of connected services (`[devdoc:remote-imports]`): a
   « Connexions » tab under `/admin/imports` lists every account's connection
   with its state, last sync, session end and last error — never a
   credential or the external account — and the operator can revoke one
@@ -1671,7 +1678,7 @@ migration (`db:migrate`, applied on boot).
 ### Added
 
 - A workout can be published to its followers and to the public at once: one
-  live publication per audience (`PLAN_AUDIENCES.md`). Each reader is served
+  live publication per audience (`[devdoc:audiences]`). Each reader is served
   the narrowest version they may read, on the page, the track and chart, the
   feed and the profile. The « Publications » card lists one row per
   publication with its own actions, and « Ajouter une publication » adds a
@@ -1733,7 +1740,7 @@ migration (`db:migrate`, applied on boot).
   GPX, FIT, TCX, KML and KMZ files: it stages the file and opens the batch
   import form, whose file panel receives the bytes through the new
   `shared-files` bridge component and names what it received
-  (`PLAN_IMPORT_SOURCES.md` §3.1). The fallback sport, the notes and the
+  (`[devdoc:import-sources]`). The fallback sport, the notes and the
   submit stay Rails'; an app without the component keeps the plain upload
   field, and no server endpoint is added. `npm run test:shared-files` pins
   the transfer contract in CI.
@@ -1799,7 +1806,7 @@ migration (`db:migrate`, applied on boot).
 ### Added
 
 - Comments on published workouts, local to the instance for now
-  (`PLAN_COMMENTS.md` Slice 1): every signed-in reader the publication serves,
+  (`[devdoc:comments]` Slice 1): every signed-in reader the publication serves,
   owner included, writes plain-text comments (2 000 characters at most) and
   one level of replies in a full-width « Commentaires » card after « Partage »,
   re-rendered inside its Turbo Frame and working without JavaScript. The
@@ -1816,7 +1823,7 @@ migration (`db:migrate`, applied on boot).
   mandatory §19.21 sentence (`DESIGN.md` §10.20). The thread belongs to the
   workout, so republishing keeps it; comments never enter a publication
   snapshot. Federation of the comments themselves follows in Slices 2 and 3.
-- Comments federate directly between Allure instances (`PLAN_COMMENTS.md`
+- Comments federate directly between Allure instances (`[devdoc:comments]`
   Slice 2). A received note carries the comments card: a reader's comment is
   stored on their instance and sent to the publication's origin, addressed to
   the owner alone, with the mandatory sentence saying the origin keeps a
@@ -1836,7 +1843,7 @@ migration (`db:migrate`, applied on boot).
   comments out of every thread here. `dip fed_test` and
   `dip fed_restricted_test` prove the round trips.
 - The origin of a public publication relays its comments to every instance
-  that received it (`PLAN_COMMENTS.md` Slice 3): a reader on another
+  that received it (`[devdoc:comments]` Slice 3): a reader on another
   instance, or a member of the origin's, now sees the whole thread on a
   received note, not only the owner's words. Each relayed comment is checked
   against its author's own copy before it is stored, and leaves wherever it
@@ -1848,7 +1855,7 @@ migration (`db:migrate`, applied on boot).
   comment on to the other instances that received the workout
   (`DESIGN.md` §19.21). `dip fed_test` proves the relay and its withdrawal.
 - The iGPSPORT import source accepts every computer of the protocol family
-  (`PLAN_IMPORT_SOURCES.md` §4), not only the BSC500: the BSC100, BSC200,
+  (`[devdoc:import-sources]`), not only the BSC500: the BSC100, BSC200,
   BSC300 and BSC500 lines with their S, T and Max variants, the iGS630 and
   iGS800, the BiNavi and the BiNavi Air. Chrome's chooser filters by those
   name prefixes and `models.js` matches the chosen name again, refusing
@@ -1924,9 +1931,9 @@ migration (`db:migrate`, applied on boot).
   as two `Image` attachments — the light one first, the dark one marked
   `allure:theme: dark` — so a peer that predates the property keeps the light
   image; remote receipt, purge, retention and replacement cover both blobs
-  (`DESIGN.md` §15.4, `PLAN_M1.md`, `PLAN_M5.md`).
+  (`DESIGN.md` §15.4, `[devdoc:workout-core]`, `[devdoc:federation]`).
 - The workout list's table view supports bulk updates from `lg` up
-  (`PLAN_BULK_ACTIONS.md`): a selection column and a bulk bar with the live
+  (`[devdoc:bulk-actions]`): a selection column and a bulk bar with the live
   count, a « Sélectionner les N activités filtrées » scope and synchronous quick
   actions (commute, equipment). A sport change or a deletion is frozen into a
   `WorkoutBulkOperation` draft, reviewed with its exact counts, exclusions and
@@ -1943,7 +1950,7 @@ migration (`db:migrate`, applied on boot).
   connect, list, chunked download and disconnect replies pinned by Node tests.
   A companion without the bridge reads an update request instead of the
   desktop-Chrome requirement, and no server endpoint is added
-  (`PLAN_IMPORT_SOURCES.md` §4.4).
+  (`[devdoc:import-sources]`).
 - The iOS companion draws its chrome natively (`DESIGN.md` §7.7): a companion
   advertising `topbar` receives the web topbar hidden, with a payload for the
   navigation, the account menu under the account name, the notification state
@@ -2014,13 +2021,13 @@ migration (`db:migrate`, applied on boot).
   the page's `⋯` menu, with a label that names the type. The copy preserves
   the kind (a reversed route stays a route, private), keeps the link to the
   source activity, and is matched against the owner's own workouts in the
-  reversed direction only (`PLAN_SEGMENTS.md` §8.6).
+  reversed direction only (`[devdoc:segments]`).
 - The `/@username` listing follows `Workouts::PublicationPolicy`: public
   publications serve every member, and followers-only publications serve the
   owner and accepted local followers while restricted federation is enabled.
   The tiles count the same visible set, each card carries its audience badge,
   unpublished and scheduled publications stay hidden, and a parity spec
-  guards the scope against policy drift (`PLAN_M4_5.md`, `PLAN_M5.md`).
+  guards the scope against policy drift (`[devdoc:publishing-hardening]`, `[devdoc:federation]`).
 - Every active week of the hub's intensity pulse is a link: clicking a capsule,
   or pressing Enter with the keyboard cursor on it, opens the workouts list
   filtered to that week (`/workouts?period=custom&from=…&to=…`), carrying the
@@ -2029,7 +2036,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Changed
 
-- Browser surfaces are members-only (`PLAN_MEMBERS_ONLY.md`): every readable
+- Browser surfaces are members-only (`[devdoc:members-only]`): every readable
   page — feed, publications, courses, profiles, avatars, browser media — now
   requires a session, and a visitor is redirected to sign-in and returned to
   the requested page once authenticated. Public keeps its ActivityPub
@@ -2065,7 +2072,7 @@ migration (`db:migrate`, applied on boot).
 - EXR's Long Beach world (EXR 1.56) joins the virtual venue catalogue, so
   sessions on the Alamitos Bay / Marine Stadium waterfront are named from
   their start point; `Workouts::ImportDetection::VERSION` is 2 and the rebuild
-  sweep re-locates the venue of stored sessions (`PLAN_VIRTUAL.md` §2).
+  sweep re-locates the venue of stored sessions (`[devdoc:virtual-platforms]`).
 - Every segment, route and loop now carries a frozen bounded elevation profile
   (`segments.elevation_profile`, up to 240 points) written once at creation:
   the segment page renders it as the course chart on the right of the sticky
@@ -2080,7 +2087,7 @@ migration (`db:migrate`, applied on boot).
   reversed. The reversed copy mirrors the geometry and stored elevation
   profile, swaps ascent and descent and recomputes its signature; the copy is
   matched against the copier's own workouts only, and a reversed one only
-  matches recordings made the other way (`PLAN_SEGMENTS.md` §8.6).
+  matches recordings made the other way (`[devdoc:segments]`).
 
 ### Changed
 
@@ -2133,7 +2140,7 @@ migration (`db:migrate`, applied on boot).
   "all sports" when the recordings disagree. `Segments::BackfillLoopReuseJob`
   converges already-duplicated loops onto the oldest one, audited at
   `/admin/jobs` and available per account at `/settings/data`
-  (`PLAN_SEGMENTS.md` §7.3, `PLAN_DERIVATIONS.md` §5).
+  (`[devdoc:segments]`, `[devdoc:derivations]`).
 
 ## [0.3.7] - 2026-10-01
 
@@ -2171,7 +2178,7 @@ migration (`db:migrate`, applied on boot).
   timeline's step dots become the same circles as the places and carry their
   step icon (`DESIGN.md` §15.1). The owner elevation-source switch moves from
   its own « Altitudes » card into the header `⋯` menu as a single toggle, with
-  its pending and failed states (`PLAN_ELEVATION.md` §6).
+  its pending and failed states (`[devdoc:elevation]`).
 
 ## [0.3.6] - 2026-09-29
 
@@ -2187,7 +2194,7 @@ migration (`db:migrate`, applied on boot).
   republishing withdraws the old publication immediately, and deleting the
   workout cancels it in the same transaction. The administration console gains
   the scheduled filter, operator cancellation and audit
-  (`PLAN_DELAYED_PUBLISHING.md`, `DESIGN.md` §19.19).
+  (`[devdoc:delayed-publishing]`, `DESIGN.md` §19.19).
 - Typed reactions on publications and received notes: one active reaction per
   account and target, with four types (beer, energy, coffee, the neutral
   like). Repeating a type withdraws it, another type replaces it; a reaction
@@ -2195,7 +2202,7 @@ migration (`db:migrate`, applied on boot).
   private property, one on a local workout never leaves the instance, and the
   owner gets a notification with its `/settings/notifications` switch. The bar
   renders in feed cards, on workout and received-note pages and in remote
-  profile lists, inside a Turbo Frame (`PLAN_REACTIONS.md`, `DESIGN.md`
+  profile lists, inside a Turbo Frame (`[devdoc:reactions]`, `DESIGN.md`
   §10.17).
 - Shared activities, first lot: the owner invites an account they already
   follow in either direction; the invited account confirms or declines, and a
@@ -2204,15 +2211,15 @@ migration (`db:migrate`, applied on boot).
   pair, either party withdraws, a refusal is terminal for that pair, and an
   invited participant reads a metrics-only presentation of an unpublished
   source while geometry stays governed by the owner's publication policy
-  (`PLAN_TOGETHER.md`, `DESIGN.md` §10.18).
+  (`[devdoc:shared-activities]`, `DESIGN.md` §10.18).
 - Virtual platforms are recognised by identity: `Allure::Virtual::Platforms`
   bundles each provider's FIT `file_id` fingerprint, creator aliases, fallback
   sport and rendered worlds. EXR is named from its fingerprint — the device
   was previously unnamed — its worlds (Boston, Bled, Henley, EXR World) become
   the workout's place through the venue catalog, and a virtual sport is never
   reverse-geocoded; the unambiguous FIT `fitness_equipment` indoor sub-sports
-  now resolve to their virtual sports (`PLAN_VIRTUAL.md`).
-- Derived data has one rebuild model (`PLAN_DERIVATIONS.md`): the new owner
+  now resolve to their virtual sports (`[devdoc:virtual-platforms]`).
+- Derived data has one rebuild model (`[devdoc:derivations]`): the new owner
   page `/settings/data` and the administration console launch owner-scoped or
   instance-wide rebuilds — one file parse reconciles the import facts (device,
   re-detectable sport, virtual venue) and the analysis, route images are
@@ -2263,7 +2270,7 @@ migration (`db:migrate`, applied on boot).
   and each account controls the two kinds at `/settings/notifications`. An
   entry is withdrawn when its relationship ends — decision, unfollow, block,
   or a deleted remote account — and never carries coordinates, workout
-  content, or remote HTML (`PLAN_NOTIFICATIONS.md`, `DESIGN.md` §10.16).
+  content, or remote HTML (`[devdoc:notifications]`, `DESIGN.md` §10.16).
 
 ### Changed
 
@@ -2286,7 +2293,7 @@ migration (`db:migrate`, applied on boot).
   the fallbacks. Generated avatars are deterministic pink geometric art with
   no initials, seeded per account at creation and backfilled for existing
   accounts, and rotatable in place while the generated art is visible
-  (`DESIGN.md` §9.2/§9.4, `PLAN_M4.md` §6.1).
+  (`DESIGN.md` §9.2/§9.4, `[devdoc:product-ui]`).
 
 ### Changed
 
@@ -2297,7 +2304,7 @@ migration (`db:migrate`, applied on boot).
   replaces the former opt-in. Eligibility is derived on read, so a publication,
   exclusion, visibility, or privacy-zone change needs no refresh; existing
   leaderboards are preserved by the snapshot alignment
-  (`PLAN_SEGMENTS.md` §6.3/§8.2, `PLAN_PUBLISHING.md`).
+  (`[devdoc:segments]`, `[devdoc:publishing]`).
 - The feed uses one card for local publications and received notes: a
   mandatory author header, the route image or its pending/unavailable state,
   compact primary metric tiles with the record stamp, and a three-line
@@ -2319,12 +2326,11 @@ migration (`db:migrate`, applied on boot).
   device with a running-power channel had its session power maximum stored as
   ascent (an Amazfit Balance 2 showed 443 m for a 298 m run and 397 m for a
   25 m one). The session total of that family is trusted again; complete laps
-  still win and the computed profile remains the fallback (`PLAN_FIT.md`
-  §3.5, `PLAN_ELEVATION.md` §3bis).
+  still win and the computed profile remains the fallback (`[devdoc:fit]`, `[devdoc:elevation]`).
 - Consecutive points sharing a timestamp — a GPX export rounds to the second —
   keep their path length in the workout distance instead of being dropped: a
   6.4 km run exported as GPX read 5.9 km while its own geometry measured
-  6.4 km (`PLAN_M1.md` §8.1).
+  6.4 km (`[devdoc:workout-core]`).
 - Local actors render through their account's avatar chain: the People list
   and notifications now show the uploaded avatar, the cached Gravatar, or the
   account's persisted seed instead of generated art seeded by the actor URI.
@@ -2342,7 +2348,7 @@ migration (`db:migrate`, applied on boot).
 - A signed federated `Delete` may tombstone an object only when the object URI
   shares the sender's authority, mirroring `Create`: another instance's object
   can no longer be permanently censored with an attacker-owned tombstone
-  (`PLAN_M5.md` §9.3).
+  (`[devdoc:federation]`).
 - The outbound SSRF guard validates the IPv4 embedded in NAT64
   (`64:ff9b::/96`, `64:ff9b:1::/48`) and 6to4 (`2002::/16`) addresses,
   closing a loopback, link-local, or private tunnel through a NAT64 or 6to4
@@ -2350,7 +2356,7 @@ migration (`db:migrate`, applied on boot).
 - WebFinger accepts a `self` link only when the actor's authority matches the
   queried handle's domain, so a domain can no longer point a handle at another
   instance's actor and make that handle display or follow the victim
-  (`PLAN_M5.md` §11.1).
+  (`[devdoc:federation]`).
 - Password-reset requests answer in constant time: the lookup and delivery
   moved into an always-enqueued job, removing a timing side channel that
   enumerated accounts.
@@ -2363,25 +2369,25 @@ migration (`db:migrate`, applied on boot).
   histogram splitting every best-efforts rebuild into its pure `compute` phase
   and its transactional `persist` phase, labelled `context` (`import`,
   `reanalysis`, `backfill`). It measures how much derived-data work actually
-  runs under the write locks (`PLAN_METRICS.md` §3).
+  runs under the write locks (`[devdoc:metrics]`).
 - Display smoothing for tracks: workout maps carry an on/off toggle in the map
   options icon — now a compact icon button aligned with the colour selector —
   that persists the account preference, and the intensity is chosen on
   `/settings/appearance` (*Léger* / *Moyen* / *Fort*, default off at medium).
   Course (segment) maps and publication images are always smoothed at the
   medium level. Smoothing preserves the point count, so payloads, snapshots,
-  metrics, hover and the colour ramp are unchanged (`PLAN_MAPLIBRE.md` §9).
+  metrics, hover and the colour ramp are unchanged (`[devdoc:maps]`).
 - Rowing and virtual rowing display their pace over 500 m (`2:00 /500m`) in
   every tile, card, analysis table, leaderboard, record, stat and chart axis,
   in either unit system, instead of speed. Their fourth summary tile is average
   power when the file recorded it, otherwise ascent, and both speed tiles are
   hidden. The catalog carries the nullable `sports.pace_basis_metres`
-  (`PLAN_M1.md` §5.1/§13, `DESIGN.md` §20.3).
+  (`[devdoc:workout-core]`, `DESIGN.md` §20.3).
 - Standard-distance best efforts now cover rowing and virtual rowing with the
   Concept2 set (500 m, 1 km, 2 km, 5 km, 6 km, 10 km, half marathon, marathon),
   and the running profile gains the marathon. `best_efforts:backfill SPORT=`
   rebuilds one sport when a profile gains a distance
-  (`PLAN_BEST_EFFORTS.md` §2/§6).
+  (`[devdoc:best-efforts]`).
 
 ### Changed
 
@@ -2398,7 +2404,7 @@ migration (`db:migrate`, applied on boot).
 - Best-efforts computation runs before the import and reanalysis transactions;
   only the row replacement stays inside them, so the `users` row lock taken by
   every workout insert no longer covers the CPU scan over the track
-  (`PLAN_BEST_EFFORTS.md` §4).
+  (`[devdoc:best-efforts]`).
 - The seven personal-record winner queries of `Records::RecomputeService` are
   index-backed on `(user_id, sport_id, <metric>)`, so a mass import no longer
   sorts the account's whole history once per imported workout.
@@ -2406,7 +2412,7 @@ migration (`db:migrate`, applied on boot).
   a wider track-coloured halo, one every 240 screen pixels — on the live map and
   every route PNG, replacing the filled notch shape. Each chevron is placed on
   the straightest candidate of its slot, so it never sits on a corner
-  (`DESIGN.md` §15.2/§15.4, `PLAN_MAPLIBRE.md` §8).
+  (`DESIGN.md` §15.2/§15.4, `[devdoc:maps]`).
 
 ## [0.3.2] - 2026-09-25
 
@@ -2427,7 +2433,7 @@ migration (`db:migrate`, applied on boot).
   lists read, `workout_toponymies.places` keeps the list beside its inputs,
   and the same pass indexes every recorded marker as a `workout_place_names`
   row for the owner's filter and autocomplete. The audited `/admin/jobs`
-  places backfill recomputes both purely and offline (`PLAN_M1.md` §11.1).
+  places backfill recomputes both purely and offline (`[devdoc:workout-core]`).
   Places never enter a publication snapshot or federation.
 - The workout list's card view reproduces the `/me` recent-workout
   presentation and scrolls endlessly: fully clickable cards with the route
@@ -2455,13 +2461,13 @@ migration (`db:migrate`, applied on boot).
   an interval session no longer fails the whole import on the per-workout
   uniqueness of `laps.number`: the index still numbers the lap when it is
   usable, and a colliding index falls back to the next free number
-  (`PLAN_FIT.md` §4.5).
+  (`[devdoc:fit]`).
 - Two effort-matchings for the same workout no longer race the unique
   `(segment, workout, occurrence)` key: `Segments::MatchWorkoutJob` locks the
   workout row for its transaction, so a run enqueued by an elevation
   reanalysis or a segment backfill while the import's own run is still working
   waits and re-reads the committed efforts instead
-  (`PLAN_SEGMENTS.md` §12.1).
+  (`[devdoc:segments]`).
 
 ## [0.3.1] - 2026-09-23
 
@@ -2473,7 +2479,7 @@ migration (`db:migrate`, applied on boot).
   feeds, publications, and received notes, including the raster and tile-less
   fallbacks. Direction comes from the geometry alone, so no track payload,
   snapshot, or federated representation changes (`DESIGN.md` §15.2/§15.4,
-  `PLAN_MAPLIBRE.md` §8).
+  `[devdoc:maps]`).
 
 ### Fixed
 
@@ -2484,14 +2490,14 @@ migration (`db:migrate`, applied on boot).
 - `/settings/sports` only offers plausible choices per generic sport: tennis
   and padel no longer appear for running, nor halfbike and inline skating for
   cycling. Each generic has a curated, alphabetical target list whose default
-  selection is the generic sport itself (`PLAN_M1.md` §3.4.2).
+  selection is the generic sport itself (`[devdoc:workout-core]`).
 - Every sport dropdown (workout form, batch import, segment form, list
   filters, leaderboards, `/settings/sports`) is sorted by the localized
   display name, accent- and case-insensitively, instead of catalog order.
 - Real-world FIT and GPX files import as recorded: an isolated record whose
   clock glitched backwards is dropped instead of rejecting the activity,
   Garmin-style chained companion files are accepted up to 64, and the point
-  cap rises to 250,000 so a long ultra imports whole (`PLAN_FIT.md`).
+  cap rises to 250,000 so a long ultra imports whole (`[devdoc:fit]`).
 - A FIT recording whose clock jumps backwards by more than an hour — a device
   clock correction — restarts from the corrected time and discards only the
   records from the earlier epoch, instead of failing the import.
@@ -2509,7 +2515,7 @@ migration (`db:migrate`, applied on boot).
   with the file's statement. A publishing profile's `commute` setting (off by
   default, like `device`) shares the flag in the sanitized representation and
   as a `commute` presence Note tag, parsed by remote Allure peers and rendered
-  as a badge. `PLAN_M1.md` §3.4 and `PLAN_M5.md` §8 are the contracts.
+  as a badge. `[devdoc:workout-core]` and `[devdoc:federation]` are the contracts.
 - Eight sports: `cycling_road`, `cycling_gravel`, `cycling_electric`,
   `running_virtual`, `rowing_virtual`, `pool_swimming`, `snowboarding`, and
   `skiing_touring` (36 active sports). FIT/GPX/TCX detection now routes
@@ -2520,7 +2526,7 @@ migration (`db:migrate`, applied on boot).
   generic sport (`cycling`, `running`, `walking`), the owner's preferred
   variant of the same icon family is used instead. The mapping applies to
   detection only — an explicit detection, the import fallback, and existing
-  workouts are never changed (`PLAN_M1.md` §3.4.2).
+  workouts are never changed (`[devdoc:workout-core]`).
 - A per-sport icon set: every one of the 36 sports ships its own inline SVG
   partial (`app/views/sports/icons/`), plus six family fallbacks for a remote
   sport the local catalog does not know. The cycling variants stay
@@ -2584,7 +2590,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Terrain elevation for workouts without altitude (`PLAN_ELEVATION.md`). When
+- Terrain elevation for workouts without altitude (`[devdoc:elevation]`). When
   the instance configures an OpenTopoData-compatible `ELEVATION_BASE_URL` and
   the account opts in from `/settings/elevation`, an elevation-less workout is
   enriched after import from the configured dataset: coordinates are sampled
@@ -2635,9 +2641,9 @@ migration (`db:migrate`, applied on boot).
   `workouts:backfill_analysis` rake task and an audited « Recalculer les
   analyses » action in `/admin/jobs`, which shows how many workouts are on an
   older analysis version. Both enqueue the same self-rescheduling job
-  (`PLAN_M1.md` §9, `PLAN_ADMIN.md` §4.2).
+  (`[devdoc:workout-core]`, `[devdoc:admin]`).
 - The import page picks its panel from the `Allure::ImportSources` registry, so
-  a source is a registry entry plus a partial (`PLAN_IMPORT_SOURCES.md`). The
+  a source is a registry entry plus a partial (`[devdoc:import-sources]`). The
   first non-file source downloads recorded FIT activities straight from an
   iGPSPORT BSC bike computer over Web Bluetooth in desktop Chrome/Edge, then
   hands them to the existing batch form with its exact progress, duplicate
@@ -2660,7 +2666,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Changed
 
-- The metrics engine is resilient to imprecise GPS (`PLAN_M1.md` §8.6 and
+- The metrics engine is resilient to imprecise GPS (`[devdoc:workout-core]` and
   §8.9, analysis version 5). Implausible positions are removed before any
   metric: an iterative interior detour test for out-and-back spikes and a
   data-driven speed envelope that trims cold-fix and stale-fix artifacts at
@@ -2674,7 +2680,7 @@ migration (`db:migrate`, applied on boot).
   rebuild versions bump so derived efforts and laps are recomputed. Run
   `Workouts::BackfillAnalysisJob.perform_later` after deploying.
 - Publishing endpoint masks now control privacy-zone filtering
-  (`PLAN_M2.md`): an unchecked `mask_start` or `mask_finish` exempts that
+  (`[devdoc:federation]`): an unchecked `mask_start` or `mask_finish` exempts that
   endpoint from zone filtering — its points stay visible from the endpoint up
   to the route's first exit from every zone (start), or from its last entry
   to the end (finish) — while interior points stay filtered and a route that
@@ -2697,7 +2703,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- A Prometheus exporter at `/metrics` for Grafana (`PLAN_METRICS.md`): bearer
+- A Prometheus exporter at `/metrics` for Grafana (`[devdoc:metrics]`): bearer
   `METRICS_TOKEN` access (404 while unset), `yabeda-rails` request metrics,
   Solid Queue queue/process gauges, federation status counts, activity-based
   active and connected user metrics, storage and database sizes, and Ruby
@@ -2815,7 +2821,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Standard-distance best efforts (`PLAN_BEST_EFFORTS.md`): the fastest elapsed
+- Standard-distance best efforts (`[devdoc:best-efforts]`): the fastest elapsed
   time over 400 m to 30 km for running/trail and 5 miles to 80 km for the ride
   sports, computed inside a single recording segment with interpolated
   boundaries, shown on `/records` and on the workout page's Analysis card.
@@ -2825,7 +2831,7 @@ migration (`db:migrate`, applied on boot).
 - `BestEfforts::BackfillJob` and `bin/rails best_efforts:backfill` rebuild the
   efforts for existing workouts from their stored track points; no re-analysis
   is needed.
-- Grade adjusted pace (`PLAN_M1.md` §8.8): a flat-equivalent pace derived from
+- Grade adjusted pace (`[devdoc:workout-core]`): a flat-equivalent pace derived from
   the smoothed elevation profile with the Minetti 2002 climb polynomial and a
   descent cost curve. It renders on the workout summary and, as a
   quiet `GAP` line under the pace, in the owner-only Analysis tables (detected
@@ -2846,7 +2852,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Derived smart laps (`PLAN_SMART_LAPS.md`): rebuildable `detected_laps` rows
+- Derived smart laps (`[devdoc:smart-laps]`): rebuildable `detected_laps` rows
   projected from loop and route efforts, one pause lap per recording segment,
   elevation climbs and descents from a single shared profile, stops, and
   speed/power intervals, all named from the stored toponymy without new
@@ -2897,7 +2903,7 @@ migration (`db:migrate`, applied on boot).
   following `leaderboard_audience`; sharing a course that crosses an active
   privacy zone requires a stored owner acknowledgment, and a corridor change
   asks for it again.
-- Federated course distribution (`PLAN_SEGMENTS_FEDERATION.md` F0–F4): immutable
+- Federated course distribution (`[devdoc:segments-federation]` F0–F4): immutable
   `SegmentPublication` snapshots with explicit publish, republish, and withdraw
   controls; a course `Note` on the dedicated `/api/v1/segment/` path with a
   `sport_slug` tag and a required GPX attachment; received courses cached as
@@ -2957,7 +2963,7 @@ migration (`db:migrate`, applied on boot).
   federation phase, and both the profile form and the publish selector explain
   the reserved followers audience.
 - The course-only federated-segments contract is frozen in
-  `PLAN_SEGMENTS_FEDERATION.md`; implementation remains post-M5.
+  `[devdoc:segments-federation]`; implementation remains post-M5.
 
 ### Fixed
 
@@ -2983,7 +2989,7 @@ migration (`db:migrate`, applied on boot).
   author deletion.
 - The expanded two-node ring (`dip fed_test`), the restricted ring
   (`dip fed_restricted_test`), and the manual
-  `RUNBOOK_FEDERATION_HTTPS.md` Tier-3 checklist.
+  `[devdoc:federation]` Tier-3 checklist.
 
 ### Changed
 
