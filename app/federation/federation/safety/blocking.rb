@@ -4,7 +4,7 @@ module Federation
   module Safety
     # Creates and removes blocks and applies their privacy consequence: when a
     # remote actor or authority is blocked, every entitlement it delivered is
-    # withdrawn with the `blocked` reason (PLAN_M5 §12.1). Public cached media
+    # withdrawn with the `blocked` reason (docs/dev/FEDERATION.md). Public cached media
     # is retained exactly as on unfollow; unblocking does not restore
     # entitlements, because the withdrawal is the record of the decision.
     class Blocking

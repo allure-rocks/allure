@@ -141,7 +141,7 @@ module Federation
       end
 
       # A followers-only event leaves the instance only while restricted
-      # federation is enabled, and then to a promoted peer only (PLAN_M5
+      # federation is enabled, and then to a promoted peer only (docs/dev/FEDERATION.md
       # §13.3): the followers audience itself is always publishable for local
       # followers, so this is the switch's one outbound gate. Which inbox
       # receives the POST is a separate decision made by `inbox_for`:

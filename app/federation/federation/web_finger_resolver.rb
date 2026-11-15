@@ -101,7 +101,7 @@ module Federation
     # A WebFinger server vouches only for actors on its own authority. Without
     # this binding a domain could alias another instance's actor under its own
     # handle, have it cached with a foreign acct, and misdirect follows
-    # (PLAN_M5 §11.1).
+    # (docs/dev/FEDERATION.md).
     def validate_actor_authority!(actor_uri, domain)
       expected = Allure::Federation::Authority.domain("#{scheme}://#{domain}")
       actual = Allure::Federation::Authority.domain(actor_uri)

@@ -109,7 +109,7 @@ class PublishingProfile < ApplicationRecord
   # custom profiles stay public-only through `custom_audience_is_public`. The
   # followers audience is always available: its local followers read it
   # whatever the switches say, and FEDERATION_RESTRICTED_ENABLED only decides
-  # whether it also reaches approved instances (PLAN_M5 §7.9).
+  # whether it also reaches approved instances (docs/dev/FEDERATION.md).
   def publishable?
     audience == "public" || built_in_key == "followers"
   end

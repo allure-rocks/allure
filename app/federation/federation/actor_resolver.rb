@@ -18,7 +18,7 @@ module Federation
 
     # An actor document is a few kilobytes on every known implementation. The
     # cap bounds both the transfer and the `raw` column a hostile document
-    # would otherwise fill up to the transport's 1 MB limit (PLAN_M5 §12.3).
+    # would otherwise fill up to the transport's 1 MB limit (docs/dev/FEDERATION.md).
     MAX_DOCUMENT_BYTES = 256.kilobytes
 
     # A signer is resolved inside the request thread of an unauthenticated
@@ -192,7 +192,7 @@ module Federation
     end
 
     # Actor summaries are display-only; the cap keeps a hostile document from
-    # storing an unbounded blob (PLAN_M5 §12.3).
+    # storing an unbounded blob (docs/dev/FEDERATION.md).
     def summary_for(document)
       value = document["summary"].to_s
       value[0, 2_000].presence

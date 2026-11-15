@@ -2,7 +2,7 @@
 
 module Federation
   module Safety
-    # The inbound admission rate limit (PLAN_M5 §12.2). Every admitted activity
+    # The inbound admission rate limit (docs/dev/FEDERATION.md). Every admitted activity
     # counts, whatever its later status: the row itself is the evidence that the
     # authority spent capacity. Rejected and failed items still had to pass the
     # signature check and actor resolution, so they count too.

@@ -199,7 +199,7 @@ RSpec.describe Federation::Delivery::Deliver do
     )
   end
 
-  # PLAN_M5 §12.6: an event naming its recipients one by one shows each
+  # docs/dev/FEDERATION.md: an event naming its recipients one by one shows each
   # destination only its own actors, never the account's other contacts.
   it "sends each destination only its own actors from an explicit recipient list" do
     listed = %w[https://remote.example/users/demo https://remote.example/users/other https://elsewhere.example/users/eve]

@@ -247,7 +247,7 @@ class User < ApplicationRecord
     Allure::Funding.enabled? && !deactivated? && !funding_badge_hidden? && funding_badge_tier.present?
   end
 
-  # The one operator account (PLAN_M5 §12.5). Unset means nobody is an
+  # The one operator account (docs/dev/FEDERATION.md). Unset means nobody is an
   # operator; the console remains the fallback for administration.
   def instance_operator?
     configured = self.class.operator_username

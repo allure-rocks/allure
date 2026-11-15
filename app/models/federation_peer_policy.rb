@@ -4,7 +4,7 @@ require "uri"
 
 # The local instance's declared capability for one remote authority. This is
 # the only source of a remote actor's capability profile: a peer document may
-# never promote itself (PLAN_M5 §11.2).
+# never promote itself (docs/dev/FEDERATION.md).
 class FederationPeerPolicy < ApplicationRecord
   include FederationDomainFormat
 

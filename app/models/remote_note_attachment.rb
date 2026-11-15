@@ -4,7 +4,7 @@ require "uri"
 
 # The persisted attachment descriptor for a received note. The row exists
 # before any remote fetch: receipt records what the Note declared, and the
-# fetch/verify/purge pipeline runs afterwards (PLAN_M5 §7.4).
+# fetch/verify/purge pipeline runs afterwards (docs/dev/FEDERATION.md).
 class RemoteNoteAttachment < ApplicationRecord
   include RemoteMediaAttachment
 

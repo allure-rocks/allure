@@ -4,7 +4,7 @@ module Federation
   # The signed-in personal stream: the viewer's own active publications (any
   # audience), local publications from accounts the actor follows, plus remote
   # notes this actor holds an active entitlement for, merged in one
-  # chronological order (PLAN_M5 §14.1, DESIGN.md §8.3). A followed local
+  # chronological order (docs/dev/FEDERATION.md, DESIGN.md §8.3). A followed local
   # author's followers-only publication always joins the stream, as
   # Workouts::PublicationPolicy serves it to an accepted local follower. With `include_public:`, the instance's remaining public publications
   # join the stream, deduplicated against followed authors and the viewer's own

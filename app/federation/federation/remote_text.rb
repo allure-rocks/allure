@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Federation
-  # The single remote-content sanitizer (PLAN_M5 §12.4): an explicit allowlist
+  # The single remote-content sanitizer (docs/dev/FEDERATION.md): an explicit allowlist
   # for what a received note may render. Applied at parse time and again at
   # render time; links may only use http(s).
   module RemoteText

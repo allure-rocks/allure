@@ -30,7 +30,7 @@ module Allure
         ActiveModel::Type::Boolean.new.cast(ENV.fetch("FEDERATION_ENABLED", default)) == true
       end
 
-      # The separately gated restricted audience (PLAN_M5 §13.1). It defaults
+      # The separately gated restricted audience (docs/dev/FEDERATION.md). It defaults
       # to false in every environment; enabling it makes the built-in followers
       # profile publishable without changing any public behavior.
       def self.restricted_enabled?

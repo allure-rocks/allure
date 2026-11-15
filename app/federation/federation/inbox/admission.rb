@@ -77,7 +77,7 @@ module Federation
 
       # Blocks and rate limits run on the claimed actor before any outbound
       # resolution, so a blocked or flooding authority cannot spend our fetch
-      # capacity, and nothing is persisted for it (PLAN_M5 §12.1–12.2). This
+      # capacity, and nothing is persisted for it (docs/dev/FEDERATION.md–12.2). This
       # limit counts admitted rows; the fetches of requests that never verify
       # are metered by `SignerResolution` itself.
       def enforce_safety!(actor_uri)
@@ -135,7 +135,7 @@ module Federation
       end
 
       # Only a row the sender is party to may route its Accept or Undo
-      # (PLAN_M5 §12.6). A lookup by URI alone answered 202 for any existing
+      # (docs/dev/FEDERATION.md). A lookup by URI alone answered 202 for any existing
       # relationship and 404 otherwise, so any signer could test who follows
       # whom — and Follow URIs used to be computable. A row the sender is not
       # party to now answers exactly like an unknown URI.

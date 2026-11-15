@@ -7,7 +7,7 @@ module Federation
     # Processes a Delete for a received note or course: durable tombstone,
     # entitlement withdrawal, and synchronous location redaction. A Delete for
     # an object never seen locally creates a tombstone so a later Create cannot
-    # resurrect it (PLAN_M5 §9.3, §8.6; PLAN_SEGMENTS_FEDERATION.md §10.4).
+    # resurrect it (docs/dev/FEDERATION.md, §8.6; PLAN_SEGMENTS_FEDERATION.md §10.4).
     class Delete
       def initialize(item:, activity:, now: Time.current, outbox_events: [])
         @item = item
@@ -48,7 +48,7 @@ module Federation
       private
 
       # An actor Delete carries an embedded Tombstone whose id is the sender's
-      # own actor URI (PLAN_M5 §8.7). It is handled apart from object
+      # own actor URI (docs/dev/FEDERATION.md). It is handled apart from object
       # tombstones: the author is tombstoned, every entitlement it delivered is
       # withdrawn, and its notes and courses lose their media and location data.
       def actor_deletion?

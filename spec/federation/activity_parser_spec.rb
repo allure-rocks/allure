@@ -40,7 +40,7 @@ RSpec.describe Federation::Parsers::Activity do
 
   # Allure's own activity URIs are deterministic, so an id on a foreign
   # authority is the handle a third party would use to squat the URI of a
-  # peer's future Delete or Follow (PLAN_M2.md §6.4).
+  # peer's future Delete or Follow (docs/dev/FEDERATION.md).
   it "rejects an activity id that lives on another authority than the actor" do
     [
       base_activity.merge("id" => "https://peer.example/api/v1/trail/abc/activities/1"),

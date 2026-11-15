@@ -107,7 +107,7 @@ RSpec.describe PublishingProfile do
     end
   end
 
-  # PLAN_M5 §13.1: local followers read the followers audience whatever the
+  # docs/dev/FEDERATION.md: local followers read the followers audience whatever the
   # switches say; FEDERATION_RESTRICTED_ENABLED only gates its federation.
   describe "publishability" do
     %w[false true].each do |restricted|

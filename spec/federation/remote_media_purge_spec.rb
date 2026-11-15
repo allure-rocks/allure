@@ -32,7 +32,7 @@ RSpec.describe Federation::RemoteMedia::Purge do
     end
   end
 
-  # PLAN_M5 §9.6: any signed-in account may still open a public copy, so one
+  # docs/dev/FEDERATION.md: any signed-in account may still open a public copy, so one
   # account's unfollow must not blank another's media.
   it "retains a public note's media when the last entitlement is withdrawn" do
     create(:remote_note_recipient, remote_note: note).withdraw!(reason: "unfollow")

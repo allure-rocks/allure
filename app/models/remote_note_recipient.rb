@@ -2,7 +2,7 @@
 
 # One local actor's entitlement to one received note. Entitlements are what
 # make recipient-aware reads possible: content delivered for one account never
-# appears for another (PLAN_M5 §7.3, §8.3).
+# appears for another (docs/dev/FEDERATION.md, §8.3).
 class RemoteNoteRecipient < ApplicationRecord
   STATUSES = %w[active withdrawn].freeze
   WITHDRAWAL_REASONS = %w[unfollow rejected blocked deleted unreachable].freeze

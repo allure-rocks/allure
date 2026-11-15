@@ -2,7 +2,7 @@
 
 module Federation
   module Safety
-    # The instance-level block check (PLAN_M5 §12.1). An actor block names one
+    # The instance-level block check (docs/dev/FEDERATION.md). An actor block names one
     # actor URI. A domain block without a port covers the host, every
     # subdomain and every port, so a blocked operator cannot come back as
     # `x.evil.example` or `evil.example:8443`; a domain block with a port

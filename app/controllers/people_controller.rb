@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The signed-in relationship hub (PLAN_M5 §11.6, PLAN_PEOPLE.md): following,
+# The signed-in relationship hub (docs/dev/FEDERATION.md, PLAN_PEOPLE.md): following,
 # followers, requests to decide, outgoing requests, and the two discovery
 # surfaces — name search and suggestions. Relationships between accounts of
 # this instance never depend on FEDERATION_ENABLED: while it is off, the hub

@@ -3,7 +3,7 @@
 module Federation
   module Safety
     # Bounds how many request threads may fetch a signer's actor at once
-    # (PLAN_M5 §12.2). An inbox POST or a signed GET whose cached key does not
+    # (docs/dev/FEDERATION.md). An inbox POST or a signed GET whose cached key does not
     # verify fetches the claimed actor inside the request thread; without a
     # bound, a few requests naming slow actor URIs would hold every web thread
     # and take the whole instance down. A request that finds the gate taken is
