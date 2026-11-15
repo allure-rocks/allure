@@ -1840,7 +1840,7 @@ full, paginated list is `/notifications`.
 
 ### 10.17 Reaction bar
 
-The appreciation control on a publication (`[devdoc:reactions]`): one row of
+The appreciation control on a publication ([REACTIONS.md](REACTIONS.md)): one row of
 compact pills at the foot of a feed card and in the social row under the
 figures of the workout or received-note page, never a second visual language.
 

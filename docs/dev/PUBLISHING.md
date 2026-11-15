@@ -200,7 +200,7 @@ badge when the reader sees several threads (`[devdoc:comments]`).
 
 One count per workout, names per audience. A reaction records the audience it
 was given through; every reader counts it, but only the readers of that
-audience are named it (`[devdoc:reactions]`).
+audience are named it ([REACTIONS.md](REACTIONS.md)).
 
 ### Browser access
 
