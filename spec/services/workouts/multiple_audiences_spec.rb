@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# One live publication per audience (PLAN_AUDIENCES.md): a workout published
+# One live publication per audience (docs/dev/PUBLISHING.md): a workout published
 # to its followers and to the public at once, each reader served the narrowest
 # version they are entitled to.
 RSpec.describe "Workout publications per audience" do

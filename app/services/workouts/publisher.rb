@@ -47,7 +47,7 @@ module Workouts
       workout_publication = nil
       WorkoutPublication.transaction do
         @workout.with_lock do
-          # One live publication per audience (PLAN_AUDIENCES.md §2): another
+          # One live publication per audience (docs/dev/PUBLISHING.md): another
           # audience may be published beside it.
           @workout.reset_publications
           if @workout.active_publication_for(@profile.audience)

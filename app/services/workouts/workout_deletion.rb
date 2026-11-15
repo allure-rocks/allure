@@ -11,7 +11,7 @@ module Workouts
 
     # Atomic lifecycle boundary (PLAN_M4_5 Slice 4): withdrawal persistence and
     # source destruction commit together, for every audience's publication
-    # (PLAN_AUDIENCES.md §4). A publication still inside its safety delay is
+    # (docs/dev/PUBLISHING.md). A publication still inside its safety delay is
     # cancelled in the same transaction — no Delete activity exists for one,
     # because nothing was ever shared. Delete expansion is enqueued only after
     # commit; a destroy failure rolls back the withdrawal.

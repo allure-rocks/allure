@@ -2,7 +2,7 @@
 
 module Workouts
   # The one publication of a workout a signed-in reader is served
-  # (PLAN_AUDIENCES.md §3): among the active publications, the narrowest
+  # (docs/dev/PUBLISHING.md): among the active publications, the narrowest
   # audience the reader is entitled to, so a follower reads the followers
   # version and everyone else the public one. `audience:` narrows the choice to
   # that audience — the owner's reader preview of one publication. Nil when

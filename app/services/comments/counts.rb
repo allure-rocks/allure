@@ -3,7 +3,7 @@
 module Comments
   # Active comment counts for one page of targets (PLAN_COMMENTS.md §5.5): one
   # grouped query per target class, so a feed page never counts per card. A
-  # workout counts only the threads the viewer may read (PLAN_AUDIENCES.md §6).
+  # workout counts only the threads the viewer may read (docs/dev/PUBLISHING.md).
   class Counts
     def initialize(targets:, viewer: nil)
       @targets = Array(targets).compact

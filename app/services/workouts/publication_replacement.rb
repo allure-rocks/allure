@@ -6,7 +6,7 @@ module Workouts
   # delay (PLAN_DELAYED_PUBLISHING.md): a replacement intended to remove
   # sensitive data takes effect at once, and the new representation is held for
   # review before anyone sees it. The other audiences' publications are left
-  # alone (PLAN_AUDIENCES.md §4); the replacement keeps the replaced audience or
+  # alone (docs/dev/PUBLISHING.md); the replacement keeps the replaced audience or
   # takes one no other live publication holds.
   class PublicationReplacement
     Result = Data.define(:old_publication, :new_publication, :delete_event)

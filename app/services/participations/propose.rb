@@ -101,7 +101,7 @@ module Participations
 
     # The narrowest active publication whose Create the remote account was
     # authorized for and is still being, or was, delivered: the one it holds
-    # (PLAN_AUDIENCES.md §5). An invitation rides on it.
+    # (docs/dev/PUBLISHING.md). An invitation rides on it.
     def held_publication(target_actor)
       @workout.active_publications.find do |publication|
         create_event = Workouts::PublicationWithdrawal.find_create_event(publication)

@@ -11,7 +11,7 @@ module Federation
   # actor.
   #
   # A workout appears once: among its publications the viewer may read, the
-  # narrowest audience is the one shown (PLAN_AUDIENCES.md §3).
+  # narrowest audience is the one shown (docs/dev/PUBLISHING.md).
   #
   # The union is a projection of identities only; the records themselves are
   # hydrated in two batched queries so the page never builds one query per row

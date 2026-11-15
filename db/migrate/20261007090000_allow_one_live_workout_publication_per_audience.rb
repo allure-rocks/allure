@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # A workout carries at most one live (active or scheduled) publication per
-# audience instead of one in total (PLAN_AUDIENCES.md §2). The audience is
+# audience instead of one in total (docs/dev/PUBLISHING.md). The audience is
 # derived from the frozen profile snapshot, so it can never disagree with it.
 class AllowOneLiveWorkoutPublicationPerAudience < ActiveRecord::Migration[8.1]
   def up

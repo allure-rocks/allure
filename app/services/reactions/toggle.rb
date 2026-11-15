@@ -70,7 +70,7 @@ module Reactions
     def workout_allowed?
       return false if @target.user_id == @user.id
 
-      # The publication serving the reader (PLAN_AUDIENCES.md §3); reactions
+      # The publication serving the reader (docs/dev/PUBLISHING.md); reactions
       # stay on the workout, whichever version was read.
       publication = Workouts::PublicationResolver.new(workout: @target, user: @user).call
       return false unless publication

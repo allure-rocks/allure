@@ -2,7 +2,7 @@
 
 module Workouts
   # The owner's withdrawal from the workout page: one named active publication,
-  # or every active one at once (PLAN_AUDIENCES.md §4). Each withdrawal keeps
+  # or every active one at once (docs/dev/PUBLISHING.md). Each withdrawal keeps
   # its own Delete intent, addressed to the instances its Create reached.
   class PublicationDeletion
     def initialize(user:, workout:, publication: nil)

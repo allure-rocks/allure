@@ -1,7 +1,7 @@
 <%# A comment or reply composer (DESIGN.md §10.20, §19.21): one plain text
     field, the mandatory privacy sentence, and the submit. The owner of a
     workout published to several audiences picks the thread of a new comment
-    (PLAN_AUDIENCES.md §6); a reply joins its comment's. A refused text comes
+    (docs/dev/PUBLISHING.md); a reply joins its comment's. A refused text comes
     back in the field with its explanation. Locals: `target`, `card`, `parent`
     (the comment answered, or nil), `body`, `error`. %>
 <% parent = local_assigns[:parent] %>

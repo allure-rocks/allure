@@ -12,7 +12,7 @@ class WorkoutPublication < ApplicationRecord
     "active" => %w[deleted].freeze,
     "deleted" => [].freeze
   }.freeze
-  # Audiences from the narrowest to the widest (PLAN_AUDIENCES.md §3): a
+  # Audiences from the narrowest to the widest (docs/dev/PUBLISHING.md): a
   # reader entitled to several live publications of one workout is served the
   # first of them. A future group audience goes before `followers`.
   AUDIENCE_PRECEDENCE = %w[followers public].freeze
@@ -90,7 +90,7 @@ class WorkoutPublication < ApplicationRecord
   }
 
   # `visible_to` kept to one publication per workout: the narrowest audience,
-  # the one the reader is served (PLAN_AUDIENCES.md §3).
+  # the one the reader is served (docs/dev/PUBLISHING.md).
   scope :served_to, ->(user) {
     where(id: visible_to(user).unscope(:order)
       .select(Arel.sql("DISTINCT ON (workout_publications.workout_id) workout_publications.id"))
@@ -287,7 +287,7 @@ class WorkoutPublication < ApplicationRecord
     }
   end
 
-  # One live publication per audience and workout (PLAN_AUDIENCES.md §2); the
+  # One live publication per audience and workout (docs/dev/PUBLISHING.md); the
   # partial unique index is the authority under concurrency.
   def live_audience_is_free
     return if workout_id.blank? || audience.blank?

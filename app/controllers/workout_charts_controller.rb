@@ -5,7 +5,7 @@ class WorkoutChartsController < ApplicationController
     workout = Workout.find_by_short_id!(params[:workout_id])
     # `?as=publication` serves the owner the publication chart, as for the
     # track, so the reader preview never shows unpublished data. A reader gets
-    # the chart of the publication serving them (PLAN_AUDIENCES.md §3).
+    # the chart of the publication serving them (docs/dev/PUBLISHING.md).
     if workout.user != current_user || params[:as] == "publication"
       audience = params[:audience] if params[:as] == "publication"
       publication = Workouts::PublicationResolver.new(workout:, user: current_user, audience:).call

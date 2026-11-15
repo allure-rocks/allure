@@ -45,7 +45,7 @@ Every user-facing surface of the local product:
 
 - **Backend contracts.** Units, identifiers, publication lifecycle, GPX
   algorithms, federation identity and geometry axis order are locked by
-  `[devdoc:workout-core]`, `[devdoc:publishing]`, `[devdoc:federation]` and
+  `[devdoc:workout-core]`, [PUBLISHING.md](PUBLISHING.md), `[devdoc:federation]` and
   `AGENTS.md`. Design never overrides them; where a design need conflicts with
   one, the matching developer document is amended first.
 - **M5 federation screens.** Remote profiles, follow, the merged `/feed`
@@ -3362,7 +3362,7 @@ answer is an **equivalent, not an excuse**:
 ## 19. Privacy-critical copy
 
 **These strings are mandatory, verbatim, and non-dismissible where stated.**
-They exist because `[devdoc:publishing]` and `[devdoc:segments]` identify specific
+They exist because [PUBLISHING.md](PUBLISHING.md) and `[devdoc:segments]` identify specific
 ways this application can harm someone, and copy is the only mitigation the user
 actually reads. They are written in the sober register (§3.2) and may not be
 softened, shortened, made playful, or moved behind a disclosure.
@@ -4644,7 +4644,7 @@ there is no original-data card and no danger zone.
               below lg the card lives on /workouts/:id/comments
 [Publications] full-width owner card: header « Retirer toutes les
               publications » (ghost danger) while one is live; one row per
-              publication, at most one per audience ([devdoc:audiences]) —
+              publication, at most one per audience ([PUBLISHING.md](PUBLISHING.md)) —
               the scheduled ones (§19.19 notice, reschedule, cancel, publish
               now) then the active ones, narrowest audience first (audience,
               profile, date, « Voir comme vos lecteurs », shared media,
@@ -5973,7 +5973,7 @@ of it forces a redesign.
 
 1. **Nothing in the UI names the protocol.** A remote account is "un compte sur
    une autre instance", not "an ActivityPub actor". Delivery state is "publiée",
-   not "202 Accepted". `[devdoc:publishing]` already requires a non-technical
+   not "202 Accepted". [PUBLISHING.md](PUBLISHING.md) already requires a non-technical
    delivery summary; this design makes it a vocabulary rule.
 2. **A remote person is badged, not styled differently.** The same avatar, name
    and card, plus an instance badge (`@user@instance`). Two visual languages for
@@ -6082,6 +6082,6 @@ before it is implemented. A change lands in the same patch as the code that
 depends on it, in both locales, with the styleguide updated.
 
 When a rule here conflicts with a data or protocol contract in
-`[devdoc:workout-core]`, `[devdoc:publishing]`, `[devdoc:federation]`,
+`[devdoc:workout-core]`, [PUBLISHING.md](PUBLISHING.md), `[devdoc:federation]`,
 `[devdoc:tracking-depth]` or `[devdoc:segments]`, the contract wins and this
 document is amended — never the other way round, and never silently.

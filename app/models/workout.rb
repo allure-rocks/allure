@@ -110,7 +110,7 @@ class Workout < ApplicationRecord
           class_name: "WorkoutHeartRate",
           dependent: :delete,
           inverse_of: :workout
-  # At most one live publication per audience (PLAN_AUDIENCES.md §2), listed
+  # At most one live publication per audience (docs/dev/PUBLISHING.md), listed
   # from the narrowest audience to the widest. A reader is served the first
   # one their entitlements allow (Workouts::PublicationResolver).
   has_many :active_publications,
@@ -264,7 +264,7 @@ class Workout < ApplicationRecord
   end
 
   # The audiences of the live publications, active or scheduled: a new
-  # publication can only take another one (PLAN_AUDIENCES.md §2).
+  # publication can only take another one (docs/dev/PUBLISHING.md).
   def live_audiences
     (active_publications.map(&:audience) + scheduled_publications.map(&:audience)).uniq
   end

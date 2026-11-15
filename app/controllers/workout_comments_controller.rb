@@ -2,7 +2,7 @@
 
 # Posting a comment or a reply on a workout's thread (PLAN_COMMENTS.md §5.1).
 # The thread is the workout's, one per publication audience, not one
-# publication's, so a republished workout keeps it (PLAN_AUDIENCES.md §6). Denial is 404, never 403; a closed thread or a refused text
+# publication's, so a republished workout keeps it (docs/dev/PUBLISHING.md). Denial is 404, never 403; a closed thread or a refused text
 # re-renders the card with its explanation and the text the reader typed.
 class WorkoutCommentsController < ApplicationController
   include CommentCardRendering

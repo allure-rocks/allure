@@ -6,7 +6,7 @@ module Comments
   # parent comment, else the publication active right now or the received
   # note — and stores the row with its outbound intent and its notifications
   # in one transaction. On a workout, each publication audience keeps its own
-  # thread (PLAN_AUDIENCES.md §6): a reply joins its comment's audience, a new
+  # thread (docs/dev/PUBLISHING.md): a reply joins its comment's audience, a new
   # comment the one of the publication serving the writer — the narrowest, or
   # the one the owner picks. A comment on a received note goes to its origin; the
   # owner's own comment goes to the publication's recipients; anyone else's
