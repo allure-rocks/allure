@@ -1051,6 +1051,6 @@ infer from a green RSpec run.
 
 FIT parsing (`FIT.md`), power efforts and records (`POWER.md`), the sanitized
 publication and its audiences (`PUBLISHING.md`), federation transport
-(`[devdoc:federation]`), reusable segments and best efforts
+([FEDERATION.md](FEDERATION.md)), reusable segments and best efforts
 ([SEGMENTS.md](SEGMENTS.md), [BEST-EFFORTS.md](BEST-EFFORTS.md)), and the interface
 (`DESIGN.md`).

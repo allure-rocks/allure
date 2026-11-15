@@ -45,7 +45,7 @@ Every user-facing surface of the local product:
 
 - **Backend contracts.** Units, identifiers, publication lifecycle, GPX
   algorithms, federation identity and geometry axis order are locked by
-  [WORKOUT.md](WORKOUT.md), [PUBLISHING.md](PUBLISHING.md), `[devdoc:federation]` and
+  [WORKOUT.md](WORKOUT.md), [PUBLISHING.md](PUBLISHING.md), [FEDERATION.md](FEDERATION.md) and
   `AGENTS.md`. Design never overrides them; where a design need conflicts with
   one, the matching developer document is amended first.
 - **M5 federation screens.** Remote profiles, follow, the merged `/feed`
@@ -3622,7 +3622,7 @@ selector, updating live:
 
 The followers profile is always available: accepted followers on this instance
 read its publications whatever the federation switches say
-(`[devdoc:federation]`). Non-dismissible info panel on the profile page, naming
+([FEDERATION.md](FEDERATION.md)). Non-dismissible info panel on the profile page, naming
 exactly who receives them under the instance's current switches
 (`PublishingProfilesHelper#followers_reach_notice`). The owner cannot choose
 which instances are approved; the operator does, and the copy must not imply
@@ -5953,7 +5953,7 @@ Print styles are out of scope.
 M5 adds remote profiles, follow, a following feed, notifications, comments,
 likes, moderation and Wanderer; the federation transport, remote profiles,
 feed, operator settings, and remote publication and course rendering have
-shipped. The surface is specified by `[devdoc:federation]` and
+shipped. The surface is specified by [FEDERATION.md](FEDERATION.md) and
 [SEGMENTS-FEDERATION.md](SEGMENTS-FEDERATION.md); this section records where it attaches so none
 of it forces a redesign.
 
@@ -6000,7 +6000,7 @@ questions. Each is a deviation from a rule above.
    unbuilt `trails_path`, `feed_federated_path`, and `settings_wanderer_path`
    surfaces are intentionally absent from `config/navigation.rb` rather than
    dangling; the following stream is part of `/feed`, and Wanderer
-   interoperability is post-M5 (`[devdoc:federation]`). No dangling leaf remains.
+   interoperability is post-M5 ([FEDERATION.md](FEDERATION.md)). No dangling leaf remains.
 2. The topbar account menu's "Profile" item links to `root_path`, not the
    account's profile — and now that `settings_profile_path` routes, the menu has
    two plausible destinations and points at neither.
@@ -6082,6 +6082,6 @@ before it is implemented. A change lands in the same patch as the code that
 depends on it, in both locales, with the styleguide updated.
 
 When a rule here conflicts with a data or protocol contract in
-[WORKOUT.md](WORKOUT.md), [PUBLISHING.md](PUBLISHING.md), `[devdoc:federation]`,
+[WORKOUT.md](WORKOUT.md), [PUBLISHING.md](PUBLISHING.md), [FEDERATION.md](FEDERATION.md),
 `[devdoc:tracking-depth]` or [SEGMENTS.md](SEGMENTS.md), the contract wins and this
 document is amended — never the other way round, and never silently.

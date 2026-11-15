@@ -39,6 +39,10 @@ efforts, splits, personal bests and leaderboards.
 `docs/dev/SMART-LAPS.md` the detected-laps contract, and
 `docs/dev/BEST-EFFORTS.md` the standard-distance best-efforts contract.
 
+`docs/dev/FEDERATION.md` is the federation contract: permanent identity,
+signatures, discovery, inbox and outbox, delivery, remote identity and follows,
+remote notes and media, the safety gate and the restricted audience.
+
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
 progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
@@ -99,7 +103,7 @@ behaviours updates its page in every language in the same patch.
   transport, signed inbox admission, durable follow and delivery state,
   tombstones (`410 Gone`), blocks and inbound rate limiting live under
   `app/federation/`; the two-node ring is `docker-compose.fed.yml`.
-  `[devdoc:federation]`
+  [docs/dev/FEDERATION.md](docs/dev/FEDERATION.md)
 - **Segments and best efforts.** `Segment` is a reusable course and is never
   owned by a workout; `SegmentEffort` links a workout to it. `TrackSegment` is a
   recording segment — the two are different things and the codebase keeps them

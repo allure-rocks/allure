@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The federation inbox refusal log drops control characters from the claimed
   actor and the parser's message, so an unauthenticated body can no longer
-  forge a log line (`[devdoc:federation]`).
+  forge a log line ([FEDERATION.md](docs/dev/FEDERATION.md)).
 
 ### Changed
 
@@ -863,7 +863,7 @@ migration (`db:migrate`, applied on boot).
   `Create` and `Delete` already apply to their objects. An activity admitted
   under a URI a peer's future `Delete` or `Follow` would carry could suppress
   that withdrawal or block that follow; `Federation::Parsers::Activity` now
-  refuses such an activity before any row is written (`[devdoc:federation]`).
+  refuses such an activity before any row is written ([FEDERATION.md](docs/dev/FEDERATION.md)).
 - A suspended account, or one inside its deletion window, is no longer named
   under its comments: the card shows « Un compte indisponible » with a
   neutral avatar and no handle or link, and the REST comment's `author` is
@@ -1024,7 +1024,7 @@ migration (`db:migrate`, applied on boot).
   which read as the opposite popup in both themes. Its facts line and its
   controls are inked for that surface.
 - A deleted account's username could be claimed again at sign-up; only the
-  withdrawn actor reserves it now, as `[devdoc:federation]` requires.
+  withdrawn actor reserves it now, as [FEDERATION.md](docs/dev/FEDERATION.md) requires.
 
 ## [0.8.0] - 2026-10-17
 
@@ -1930,7 +1930,7 @@ migration (`db:migrate`, applied on boot).
   as two `Image` attachments — the light one first, the dark one marked
   `allure:theme: dark` — so a peer that predates the property keeps the light
   image; remote receipt, purge, retention and replacement cover both blobs
-  (`DESIGN.md` §15.4, [WORKOUT.md](docs/dev/WORKOUT.md), `[devdoc:federation]`).
+  (`DESIGN.md` §15.4, [WORKOUT.md](docs/dev/WORKOUT.md), [FEDERATION.md](docs/dev/FEDERATION.md)).
 - The workout list's table view supports bulk updates from `lg` up
   (`[devdoc:bulk-actions]`): a selection column and a bulk bar with the live
   count, a « Sélectionner les N activités filtrées » scope and synchronous quick
@@ -2026,7 +2026,7 @@ migration (`db:migrate`, applied on boot).
   owner and accepted local followers while restricted federation is enabled.
   The tiles count the same visible set, each card carries its audience badge,
   unpublished and scheduled publications stay hidden, and a parity spec
-  guards the scope against policy drift ([PUBLISHING.md](docs/dev/PUBLISHING.md), `[devdoc:federation]`).
+  guards the scope against policy drift ([PUBLISHING.md](docs/dev/PUBLISHING.md), [FEDERATION.md](docs/dev/FEDERATION.md)).
 - Every active week of the hub's intensity pulse is a link: clicking a capsule,
   or pressing Enter with the keyboard cursor on it, opens the workouts list
   filtered to that week (`/workouts?period=custom&from=…&to=…`), carrying the
@@ -2347,7 +2347,7 @@ migration (`db:migrate`, applied on boot).
 - A signed federated `Delete` may tombstone an object only when the object URI
   shares the sender's authority, mirroring `Create`: another instance's object
   can no longer be permanently censored with an attacker-owned tombstone
-  (`[devdoc:federation]`).
+  ([FEDERATION.md](docs/dev/FEDERATION.md)).
 - The outbound SSRF guard validates the IPv4 embedded in NAT64
   (`64:ff9b::/96`, `64:ff9b:1::/48`) and 6to4 (`2002::/16`) addresses,
   closing a loopback, link-local, or private tunnel through a NAT64 or 6to4
@@ -2355,7 +2355,7 @@ migration (`db:migrate`, applied on boot).
 - WebFinger accepts a `self` link only when the actor's authority matches the
   queried handle's domain, so a domain can no longer point a handle at another
   instance's actor and make that handle display or follow the victim
-  (`[devdoc:federation]`).
+  ([FEDERATION.md](docs/dev/FEDERATION.md)).
 - Password-reset requests answer in constant time: the lookup and delivery
   moved into an always-enqueued job, removing a timing side channel that
   enumerated accounts.
@@ -2514,7 +2514,7 @@ migration (`db:migrate`, applied on boot).
   with the file's statement. A publishing profile's `commute` setting (off by
   default, like `device`) shares the flag in the sanitized representation and
   as a `commute` presence Note tag, parsed by remote Allure peers and rendered
-  as a badge. [WORKOUT.md](docs/dev/WORKOUT.md) and `[devdoc:federation]` are the contracts.
+  as a badge. [WORKOUT.md](docs/dev/WORKOUT.md) and [FEDERATION.md](docs/dev/FEDERATION.md) are the contracts.
 - Eight sports: `cycling_road`, `cycling_gravel`, `cycling_electric`,
   `running_virtual`, `rowing_virtual`, `pool_swimming`, `snowboarding`, and
   `skiing_touring` (36 active sports). FIT/GPX/TCX detection now routes
@@ -2679,7 +2679,7 @@ migration (`db:migrate`, applied on boot).
   rebuild versions bump so derived efforts and laps are recomputed. Run
   `Workouts::BackfillAnalysisJob.perform_later` after deploying.
 - Publishing endpoint masks now control privacy-zone filtering
-  (`[devdoc:federation]`): an unchecked `mask_start` or `mask_finish` exempts that
+  ([FEDERATION.md](docs/dev/FEDERATION.md)): an unchecked `mask_start` or `mask_finish` exempts that
   endpoint from zone filtering — its points stay visible from the endpoint up
   to the route's first exit from every zone (start), or from its last entry
   to the end (finish) — while interior points stay filtered and a route that
@@ -2988,7 +2988,7 @@ migration (`db:migrate`, applied on boot).
   author deletion.
 - The expanded two-node ring (`dip fed_test`), the restricted ring
   (`dip fed_restricted_test`), and the manual
-  `[devdoc:federation]` Tier-3 checklist.
+  [FEDERATION.md](docs/dev/FEDERATION.md) Tier-3 checklist.
 
 ### Changed
 

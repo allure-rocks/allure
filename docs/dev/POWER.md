@@ -360,7 +360,7 @@ only where it enumerates the shared figures (D14).
   `Federation::RemoteNoteView`, `Workouts::PublicationView`, the feed card and
   the remote note page render the labels.
 - `docs/openapi/v1.yaml` gains the field in the remote-note schema; the
-  federation contract (`[devdoc:federation]`) gains the tag row and its rules.
+  federation contract ([FEDERATION.md](FEDERATION.md)) gains the tag row and its rules.
 - `dip fed_test` fabricates a `min5` power effort and record on the ring
   workout (as it already fabricates the `mi5` best effort) and asserts the tag
   and its remote parse. The public profile shares `average_power` by default.
