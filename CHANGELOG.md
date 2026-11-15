@@ -808,7 +808,7 @@ migration (`db:migrate`, applied on boot).
   the readers of that audience, so a follower's reaction never names them to a
   reader of the public version; when nobody can be named, the sentence counts
   people. Existing reactions are classified fail-closed by the migration
-  (`[devdoc:reactions]`). The REST API keeps `counts` and `mine`.
+  ([REACTIONS.md](docs/dev/REACTIONS.md)). The REST API keeps `counts` and `mine`.
 
 ### Changed
 
@@ -2202,7 +2202,7 @@ migration (`db:migrate`, applied on boot).
   private property, one on a local workout never leaves the instance, and the
   owner gets a notification with its `/settings/notifications` switch. The bar
   renders in feed cards, on workout and received-note pages and in remote
-  profile lists, inside a Turbo Frame (`[devdoc:reactions]`, `DESIGN.md`
+  profile lists, inside a Turbo Frame ([REACTIONS.md](docs/dev/REACTIONS.md), `DESIGN.md`
   §10.17).
 - Shared activities, first lot: the owner invites an account they already
   follow in either direction; the invited account confirms or declines, and a

@@ -19,6 +19,11 @@ contract, the contract wins and `DESIGN.md` is amended.
 `docs/dev/ACCESS.md` is the access contract: every browser surface requires an
 account, while the ActivityPub wire contract is unchanged.
 
+`docs/dev/PUBLISHING.md` is the publishing contract: the source workout, the
+profile, the immutable publication, the audiences and the federation boundary.
+`docs/dev/REACTIONS.md` is the reactions contract: the four types, the toggle,
+the audience rule and the wire.
+
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
 progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
@@ -89,8 +94,8 @@ behaviours updates its page in every language in the same patch.
   reactions (one active per actor and target), shared activities (credit and
   link rows), `/people` discovery, and in-app notifications. Each has one write
   seam and its own notification switch. `[devdoc:comments]`
-  `[devdoc:reactions]` `[devdoc:shared-activities]` `[devdoc:people]`
-  `[devdoc:notifications]`
+  [docs/dev/REACTIONS.md](docs/dev/REACTIONS.md)
+  `[devdoc:shared-activities]` `[devdoc:people]` `[devdoc:notifications]`
 - **Remote imports.** `ImportConnection` keeps one encrypted credential set per
   account and provider; `Workouts::RemoteImportBatchJob` lists a range once and
   imports each entry through `Workouts::Importer`. Garmin Connect, EXR, Withings
