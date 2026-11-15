@@ -2065,7 +2065,7 @@ rule — every action delegates to the service the workout page already uses.
 
 ### 10.20 Comments card
 
-The conversation under a publication (`[devdoc:comments]`): one full-width card
+The conversation under a publication ([COMMENTS.md](COMMENTS.md)): one full-width card
 on the workout page from `lg` up, first of the full-width cards for the owner
 (before « Partage » and the participants card), after the participants card
 for a participant, last for every other reader (§20.3, §24). Below `lg` the
@@ -3899,7 +3899,7 @@ The link suggestion banner states, under « Vous avez enregistré cette sortie �
 Placement: under every comment and reply composer, as the field's
 description (§10.20); in place of the composer on a closed thread.
 Non-dismissible, sober register. The sentence names the widest audience the
-comment reaches once the thread federates (`[devdoc:comments]`).
+comment reaches once the thread federates ([COMMENTS.md](COMMENTS.md)).
 
 On a public publication:
 

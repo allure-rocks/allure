@@ -194,7 +194,7 @@ serving them and writes to the narrowest. A reply takes its comment's audience
 and needs the reader to be served a publication of that audience. The owner
 picks the thread among the open active publications; the composer shows the
 choice when more than one is open. A followers comment carries an « Abonnés »
-badge when the reader sees several threads (`[devdoc:comments]`).
+badge when the reader sees several threads ([COMMENTS.md](COMMENTS.md)).
 
 ### Reactions
 
