@@ -45,6 +45,9 @@
 # Local, untracked read-only design references and conformance corpora.
 /references_apps/
 
+# Local agent notes: a private overlay for this checkout, never published.
+/AGENTS.local.md
+
 # Vite Ruby
 /public/vite*
 node_modules
