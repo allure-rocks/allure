@@ -18,6 +18,13 @@ jobs:
           head="${{ github.event.pull_request.head.sha }}"
           missing=0
           for commit in $(git rev-list --no-merges "$base..$head"); do
+            author="$(git log -1 --format=%ae "$commit")"
+            case "$author" in
+              *dependabot\[bot\]*|*github-actions\[bot\]*)
+                echo "Skipping bot commit $commit ($author)."
+                continue
+                ;;
+            esac
             if ! git log -1 --format=%B "$commit" | grep -qiE '^Signed-off-by: .+ <.+>$'; then
               echo "::error::Commit $commit is missing a Signed-off-by line. Use git commit -s."
               missing=1
