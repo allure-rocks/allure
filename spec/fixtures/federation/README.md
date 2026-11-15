@@ -12,7 +12,7 @@ publication Delete, a follow Reject, and an actor Delete carrying a Tombstone.
 They are receiver inputs, not external-peer compatibility fixtures.
 
 `allure_segment_note.json` pins the course Create profile
-(`PLAN_SEGMENTS_FEDERATION.md` §6): a `Note` on the dedicated
+(`[devdoc:segments-federation]`): a `Note` on the dedicated
 `/api/v1/segment/{shortuuid}` path with the `segment_kind`, `sport_slug`,
 `match_tolerance`, and `average_grade` tags, a required GPX `Document`, and an
 optional route-image `Image`.

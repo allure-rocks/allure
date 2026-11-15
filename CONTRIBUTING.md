@@ -111,6 +111,7 @@ app/federation/       ActivityPub services and jobs
 app/frontend/         Vite root — entrypoints, Stimulus controllers, SCSS
 app/services/         Persistence transactions and storage orchestration
 config/navigation.rb  The single source of truth for the navigation
+docs/dev/             Design reference and developer contracts
 docs/site/            Operator documentation (docs.allure.rocks)
 lib/allure/           Framework-independent domain code, including federation privacy
 spec/                 RSpec; federation specs run offline against pinned fixtures
@@ -185,9 +186,10 @@ hardcode user-facing English.
   <https://docs.allure.rocks>. A change to an environment variable, to
   `docker-compose.production.yml` or `production.env.example`, to an operator
   rake task or to the deployment updates its pages in the same patch.
-- The design reference and the contracts behind a durable behaviour are
-  maintained with the source; a pull request explains the contract it
-  implements until the developer documentation is published.
+- `docs/dev/DESIGN.md` is the design reference and `AGENTS.md` is the
+  repository guide. A contract that is not published yet is marked
+  `[devdoc:<topic>]` in those files, and a pull request explains the contract
+  it implements until the document lands.
 
 ## Commits and pull requests
 
