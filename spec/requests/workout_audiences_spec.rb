@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The workout page with one publication per audience (PLAN_AUDIENCES.md):
+# The workout page with one publication per audience (docs/dev/PUBLISHING.md):
 # the owner's sharing card, the per-row actions, and what each reader is
 # served.
 RSpec.describe "Workout publications per audience" do

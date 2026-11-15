@@ -48,7 +48,7 @@ class WorkoutsController < ApplicationController
     @scheduled_publications = owner ? WorkoutPublication.by_precedence(@workout.scheduled_publications.to_a) : []
     @auto_publications = owner ? @workout.auto_publications.includes(:workout_publication).order(:id).to_a : []
     # A reader is served the narrowest publication they are entitled to
-    # (PLAN_AUDIENCES.md §3). `?as=publication` lets the owner read the page
+    # (docs/dev/PUBLISHING.md). `?as=publication` lets the owner read the page
     # exactly as a reader of one publication sees it — `audience` names which,
     # the narrowest by default (DESIGN.md §20.3); without one it is ignored.
     @publication = Workouts::PublicationResolver.new(workout: @workout, user: current_user).call unless owner
@@ -177,7 +177,7 @@ class WorkoutsController < ApplicationController
   end
 
   # Withdraws the publication the row names, or every active one from the
-  # card header (PLAN_AUDIENCES.md §4).
+  # card header (docs/dev/PUBLISHING.md).
   def destroy_publication
     publication = (named_publication(@workout.active_publications) if params[:publication_id].present?)
     Workouts::PublicationDeletion.new(user: current_user, workout: @workout, publication:).call!
@@ -298,7 +298,7 @@ class WorkoutsController < ApplicationController
   end
 
   # The profile the publish form opens on: the first publishable profile whose
-  # audience no live publication holds yet (PLAN_AUDIENCES.md §2), so the form
+  # audience no live publication holds yet (docs/dev/PUBLISHING.md), so the form
   # adds a publication beside the existing ones. Shared by the publication form
   # and its shared-field lists.
   def selected_publishing_profile

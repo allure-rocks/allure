@@ -22,7 +22,7 @@ class ProfilesController < ApplicationController
       Following.active.find_by(follower_actor: current_user.actor, followed_actor: @actor)
 
     # One publication per workout, the one this reader is served
-    # (PLAN_AUDIENCES.md §3), so a follower never counts a workout twice.
+    # (docs/dev/PUBLISHING.md), so a follower never counts a workout twice.
     publications = WorkoutPublication.served_to(current_user).where(workout_id: @user.workouts.select(:id))
     @profile_account = @user
     @shared_statistics = Profiles::SharedStatistics.new(user: @user, viewer: current_user).call

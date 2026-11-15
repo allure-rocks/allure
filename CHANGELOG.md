@@ -1678,7 +1678,7 @@ migration (`db:migrate`, applied on boot).
 ### Added
 
 - A workout can be published to its followers and to the public at once: one
-  live publication per audience (`[devdoc:audiences]`). Each reader is served
+  live publication per audience ([PUBLISHING.md](docs/dev/PUBLISHING.md)). Each reader is served
   the narrowest version they may read, on the page, the track and chart, the
   feed and the profile. The « Publications » card lists one row per
   publication with its own actions, and « Ajouter une publication » adds a
@@ -2304,7 +2304,7 @@ migration (`db:migrate`, applied on boot).
   replaces the former opt-in. Eligibility is derived on read, so a publication,
   exclusion, visibility, or privacy-zone change needs no refresh; existing
   leaderboards are preserved by the snapshot alignment
-  (`[devdoc:segments]`, `[devdoc:publishing]`).
+  (`[devdoc:segments]`, [PUBLISHING.md](docs/dev/PUBLISHING.md)).
 - The feed uses one card for local publications and received notes: a
   mandatory author header, the route image or its pending/unavailable state,
   compact primary metric tiles with the record stamp, and a three-line

@@ -107,7 +107,7 @@ module Workouts
     end
 
     # A workout counts as published while any audience's publication is active
-    # (PLAN_AUDIENCES.md §2).
+    # (docs/dev/PUBLISHING.md).
     def apply_publication(scope)
       published = WorkoutPublication.active.select(:workout_id)
       case publication

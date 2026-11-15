@@ -7,7 +7,7 @@ class WorkoutTracksController < ApplicationController
   # so the sharing snapshot can show exactly what non-owners see (PLAN_M4_5
   # Slice 7). It still requires publication policy for :track and 404s otherwise.
   # A reader gets the track of the publication serving them, and the owner's
-  # preview the one of `audience` (PLAN_AUDIENCES.md §3).
+  # preview the one of `audience` (docs/dev/PUBLISHING.md).
   def show
     workout = Workout.find_by_short_id!(params[:workout_id])
     if params[:as] == "publication"

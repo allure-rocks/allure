@@ -9,7 +9,7 @@ module CommentsHelper
   # Everything the card renders for one target and the current viewer.
   # `publication` is the one a new comment hangs on — the narrowest serving
   # the viewer — and `publications` every active one the owner may write
-  # under, or the one serving a reader (PLAN_AUDIENCES.md §6); `audiences`
+  # under, or the one serving a reader (docs/dev/PUBLISHING.md); `audiences`
   # the threads the viewer reads.
   CommentCard = Data.define(:target, :listing, :permission, :owner, :publication, :publications, :audiences) do
     def entries = listing.entries

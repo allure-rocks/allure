@@ -90,7 +90,7 @@ module Federation
         Result.new(allowed: true, inbox_url: inbox, reason: nil)
       end
 
-      # One Note per peer (PLAN_AUDIENCES.md §5): a recipient entitled to a
+      # One Note per peer (docs/dev/PUBLISHING.md): a recipient entitled to a
       # narrower active publication of the same workout — a promoted follower
       # when a followers publication sits beside the public one — receives that
       # one only. Decided at expansion: a Note already delivered stays.

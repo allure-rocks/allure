@@ -92,7 +92,7 @@ module Federation
 
         workout = parent.workout
         # A reply joins its comment's thread: the publication of that audience
-        # (PLAN_AUDIENCES.md §6).
+        # (docs/dev/PUBLISHING.md).
         hosted(workout, publication: workout.active_publication_for(parent.audience), host: workout.user&.actor, parent:, warnings:)
       end
 

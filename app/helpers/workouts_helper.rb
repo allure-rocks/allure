@@ -660,7 +660,7 @@ module WorkoutsHelper
   end
 
   # The owner's publication badges (DESIGN.md §10.4): one per active
-  # publication's audience, narrowest first (PLAN_AUDIENCES.md §7), else one
+  # publication's audience, narrowest first (docs/dev/PUBLISHING.md), else one
   # per scheduled publication in the tint of the audience it will reach, else
   # « not published » — left out where `unpublished: false` (cards and phone
   # rows mark only a shared or scheduled workout). Reads the two preloaded
@@ -681,7 +681,7 @@ module WorkoutsHelper
     safe_join(badges)
   end
 
-  # The profiles a publish form offers (PLAN_AUDIENCES.md §2): those whose
+  # The profiles a publish form offers (docs/dev/PUBLISHING.md): those whose
   # audience no live publication holds yet, plus — when replacing — the
   # replaced publication's own audience.
   def publish_form_profiles(workout, profiles, replaced: nil)
@@ -936,7 +936,7 @@ module WorkoutsHelper
   # public URL (PLAN_M4_5 §5.1).
   #
   # The publication shown is the narrowest serving the viewer
-  # (PLAN_AUDIENCES.md §3) unless the caller already chose it.
+  # (docs/dev/PUBLISHING.md) unless the caller already chose it.
   def workout_display(workout, snapshot_only: false, sport_catalog: nil, publication: nil)
     return workout if !snapshot_only && workout.user == current_user
 

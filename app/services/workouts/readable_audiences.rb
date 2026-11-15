@@ -2,7 +2,7 @@
 
 module Workouts
   # The publication audiences a reader may read on local workouts
-  # (PLAN_AUDIENCES.md §6): the audience of every active publication that
+  # (docs/dev/PUBLISHING.md): the audience of every active publication that
   # serves them — a follower the followers and the public ones, anyone else
   # the public one. The owner reads them all, even after the publications went
   # away. Each audience keeps its own comment thread, and a reactor is named

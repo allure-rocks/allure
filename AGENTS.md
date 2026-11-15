@@ -71,7 +71,7 @@ behaviours updates its page in every language in the same patch.
   made; `mask_start` and `mask_finish` govern the endpoints and fail closed. A
   workout carries at most one live publication per audience, and
   `Workouts::PublicationResolver` serves each reader the narrowest one they may
-  read. `[devdoc:publishing]` `[devdoc:audiences]`
+  read. [docs/dev/PUBLISHING.md](docs/dev/PUBLISHING.md)
 - **Federation.** `Allure::Federation::Config` is the only source of permanent
   instance identity: base URL, scheme, host, port, actor and collection URIs.
   Every federated id derives from it. WebFinger, HTTP Signatures, SSRF-safe
@@ -876,7 +876,8 @@ workout interaction:
 
 Do not silently change units, point JSON keys, ShortUUID alphabet, publication
 lifecycle, or GPX metric algorithms. These are protocol/persistence contracts;
-update the matching `[devdoc:workout-core]` or `[devdoc:publishing]` document and
+update the matching `[devdoc:workout-core]` or
+[docs/dev/PUBLISHING.md](docs/dev/PUBLISHING.md) document and
 the tests if a demonstrated need changes one.
 
 ### Terminology

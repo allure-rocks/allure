@@ -121,7 +121,7 @@ module Workouts
       raise ActiveRecord::RecordNotFound unless @workout
 
       # A workout may carry one active publication per audience
-      # (PLAN_AUDIENCES.md §2); withdrawing by workout alone only stays
+      # (docs/dev/PUBLISHING.md); withdrawing by workout alone only stays
       # unambiguous while one is active.
       @workout.reset_publications
       active = @workout.active_publications.to_a

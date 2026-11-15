@@ -16,7 +16,7 @@ module Segments
   # Every condition is an INNER JOIN, an EXISTS or a NOT EXISTS, so a missing
   # publication or an unreadable input excludes the effort instead of
   # defaulting to visible. A workout published to several audiences
-  # (PLAN_AUDIENCES.md §2) qualifies through any of them and still ranks once.
+  # (docs/dev/PUBLISHING.md) qualifies through any of them and still ranks once.
   # A private course matches nothing, which keeps routes and loops (always
   # private) off every board. Two viewers may read two different boards.
   module Listing

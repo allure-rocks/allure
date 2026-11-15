@@ -1252,7 +1252,7 @@ class FederationRingTest
     assert(wrong.status == 404, "non-follower signed object GET returned HTTP #{wrong.status}")
   end
 
-  # One Note per peer (PLAN_AUDIENCES.md §5): the same workout published to
+  # One Note per peer (docs/dev/PUBLISHING.md): the same workout published to
   # the public beside its followers publication is not sent to the promoted
   # follower, which already holds the narrower Note.
   def publish_public_beside_followers
