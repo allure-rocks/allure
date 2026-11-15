@@ -122,7 +122,7 @@ segment boundary is a pause (the athlete stood still, the ground continues) or
 a teleport (the platform moved them, the ground does not). `ElevationDetector`
 breaks the profile at a boundary whose positions jump 200 m or more, so a climb
 never spans a teleport and its jump is never counted as ascent
-(`[devdoc:virtual-platforms]`); a climb that spans a pause stays one climb.
+([VIRTUAL-PLATFORMS.md](VIRTUAL-PLATFORMS.md)); a climb that spans a pause stays one climb.
 
 `ClimbDetector` projects each climb onto point indexes and computes slice
 metrics, average and maximum grade, and a climb score (`km × average grade %`).
