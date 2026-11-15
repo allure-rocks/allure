@@ -23,6 +23,9 @@ documentation belongs; the sentence around the marker states the rule that must
 hold. `grep -rn '\[devdoc:' AGENTS.md docs/dev` lists every pending topic.
 Never replace a marker with an invented link; keep it until the document lands.
 
+`AGENTS.local.md`, when present in the checkout, adds local notes for this
+machine. It is ignored by Git and never published; read it after this file.
+
 `docs/site/` is the operator documentation published at
 <https://docs.allure.rocks> (VitePress, English only, its own `package.json`,
 excluded from the production image by `.dockerignore`; see
