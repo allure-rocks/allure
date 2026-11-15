@@ -867,7 +867,7 @@ migration (`db:migrate`, applied on boot).
 - A suspended account, or one inside its deletion window, is no longer named
   under its comments: the card shows « Un compte indisponible » with a
   neutral avatar and no handle or link, and the REST comment's `author` is
-  null, until reinstatement (`[devdoc:comments]`).
+  null, until reinstatement ([COMMENTS.md](docs/dev/COMMENTS.md)).
 
 ## [0.8.3] - 2026-10-18
 
@@ -1806,7 +1806,7 @@ migration (`db:migrate`, applied on boot).
 ### Added
 
 - Comments on published workouts, local to the instance for now
-  (`[devdoc:comments]` Slice 1): every signed-in reader the publication serves,
+  ([COMMENTS.md](docs/dev/COMMENTS.md)): every signed-in reader the publication serves,
   owner included, writes plain-text comments (2 000 characters at most) and
   one level of replies in a full-width « Commentaires » card after « Partage »,
   re-rendered inside its Turbo Frame and working without JavaScript. The
@@ -1822,9 +1822,8 @@ migration (`db:migrate`, applied on boot).
   account's comments leave their threads, and the composer carries the
   mandatory §19.21 sentence (`DESIGN.md` §10.20). The thread belongs to the
   workout, so republishing keeps it; comments never enter a publication
-  snapshot. Federation of the comments themselves follows in Slices 2 and 3.
-- Comments federate directly between Allure instances (`[devdoc:comments]`
-  Slice 2). A received note carries the comments card: a reader's comment is
+  snapshot. Federation of the comments themselves follows in later releases.
+- Comments federate directly between Allure instances ([COMMENTS.md](docs/dev/COMMENTS.md)). A received note carries the comments card: a reader's comment is
   stored on their instance and sent to the publication's origin, addressed to
   the owner alone, with the mandatory sentence saying the origin keeps a
   copy. The origin hosts the thread: it accepts the comment through its
@@ -1843,7 +1842,7 @@ migration (`db:migrate`, applied on boot).
   comments out of every thread here. `dip fed_test` and
   `dip fed_restricted_test` prove the round trips.
 - The origin of a public publication relays its comments to every instance
-  that received it (`[devdoc:comments]` Slice 3): a reader on another
+  that received it ([COMMENTS.md](docs/dev/COMMENTS.md)): a reader on another
   instance, or a member of the origin's, now sees the whole thread on a
   received note, not only the owner's words. Each relayed comment is checked
   against its author's own copy before it is stored, and leaves wherever it

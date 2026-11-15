@@ -22,7 +22,9 @@ account, while the ActivityPub wire contract is unchanged.
 `docs/dev/PUBLISHING.md` is the publishing contract: the source workout, the
 profile, the immutable publication, the audiences and the federation boundary.
 `docs/dev/REACTIONS.md` is the reactions contract: the four types, the toggle,
-the audience rule and the wire.
+the audience rule and the wire. `docs/dev/COMMENTS.md` is the comments
+contract: the thread per audience, the one level of replies, the moderation,
+the wire and the relay.
 
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
@@ -93,7 +95,8 @@ behaviours updates its page in every language in the same patch.
 - **Social.** Comments (one level of replies, the origin hosts the thread),
   reactions (one active per actor and target), shared activities (credit and
   link rows), `/people` discovery, and in-app notifications. Each has one write
-  seam and its own notification switch. `[devdoc:comments]`
+  seam and its own notification switch.
+  [docs/dev/COMMENTS.md](docs/dev/COMMENTS.md)
   [docs/dev/REACTIONS.md](docs/dev/REACTIONS.md)
   `[devdoc:shared-activities]` `[devdoc:people]` `[devdoc:notifications]`
 - **Remote imports.** `ImportConnection` keeps one encrypted credential set per
