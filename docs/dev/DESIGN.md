@@ -45,7 +45,7 @@ Every user-facing surface of the local product:
 
 - **Backend contracts.** Units, identifiers, publication lifecycle, GPX
   algorithms, federation identity and geometry axis order are locked by
-  `[devdoc:workout-core]`, [PUBLISHING.md](PUBLISHING.md), `[devdoc:federation]` and
+  [WORKOUT.md](WORKOUT.md), [PUBLISHING.md](PUBLISHING.md), `[devdoc:federation]` and
   `AGENTS.md`. Design never overrides them; where a design need conflicts with
   one, the matching developer document is amended first.
 - **M5 federation screens.** Remote profiles, follow, the merged `/feed`
@@ -1224,7 +1224,7 @@ configures a provider, API et webhooks, Sécurité).
 | `/settings/profile` | display name, bio, avatar (§9), leaderboard category (§19.6, `[devdoc:segments]`), separate opt-ins for whole-history sport statistics and personal records (§19.38, §20.14) |
 | `/settings/appearance` | theme, locale, route-image theme (auto/light/dark), workout track smoothing (level) |
 | `/settings/units` | unit system, time zone, week start |
-| `/settings/sports` | default variant per generic sport (cycling, running, walking) used at import (`[devdoc:workout-core]`) |
+| `/settings/sports` | default variant per generic sport (cycling, running, walking) used at import ([WORKOUT.md](WORKOUT.md)) |
 | `/settings/notifications` | « Notifications dans l'application »: one switch per kind, saved by the card's submit; then, only in a companion registering the `push` bridge component on an instance with push configured, the « Sur cet iPhone » card (§7.7, §19.28) |
 | `/settings/elevation` | terrain elevation opt-in, only when the instance configures a provider (`[devdoc:elevation]`) |
 | `/settings/publishing-profiles` | the profile collection (existing route) |
@@ -2459,7 +2459,7 @@ A sport with a fixed pace basis (`pace_basis_metres`, rowing's 500 m) renders
 its pace over that distance (`m:ss /500m`, in either unit system) and never
 shows speed, in every cell and tile; its summary tiles prefer average power
 when the file recorded it. Records and stats follow the same basis through the
-shared formatters. See `[devdoc:workout-core]`.
+shared formatters. See [WORKOUT.md](WORKOUT.md).
 
 A **power-led virtual sport** (`Sport#power_led?`: `cycling_virtual`) leads
 with average power in place of its speed when the recording carries it, in the
@@ -3134,12 +3134,12 @@ asynchronous for the cards and media that use it.
 ### 15.5 Data anomalies
 
 Readings the analyzer flags as looking wrong in the original file
-(`[devdoc:workout-core]`) are shown to the owner only, never to a reader, in a
+([WORKOUT.md](WORKOUT.md)) are shown to the owner only, never to a reader, in a
 reader preview, or in a publication. They are flagged, never corrected, and the
 copy says so.
 
 Nearly every recording holds a finding, so the page puts forward only those
-that make a figure wrong (`major`, `[devdoc:workout-core]`); there is no header
+that make a figure wrong (`major`, [WORKOUT.md](WORKOUT.md)); there is no header
 badge.
 
 - **Summary tile**: a contested figure keeps its recorded value and gains one
@@ -6082,6 +6082,6 @@ before it is implemented. A change lands in the same patch as the code that
 depends on it, in both locales, with the styleguide updated.
 
 When a rule here conflicts with a data or protocol contract in
-`[devdoc:workout-core]`, [PUBLISHING.md](PUBLISHING.md), `[devdoc:federation]`,
+[WORKOUT.md](WORKOUT.md), [PUBLISHING.md](PUBLISHING.md), `[devdoc:federation]`,
 `[devdoc:tracking-depth]` or `[devdoc:segments]`, the contract wins and this
 document is amended — never the other way round, and never silently.

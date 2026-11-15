@@ -26,6 +26,11 @@ the audience rule and the wire. `docs/dev/COMMENTS.md` is the comments
 contract: the thread per audience, the one level of replies, the moderation,
 the wire and the relay.
 
+`docs/dev/WORKOUT.md` is the workout contract: the source workout, the
+recording segments, the units, the GPX input, the metrics engine, the import
+transaction and the route image. `docs/dev/FIT.md` is the FIT import contract,
+and `docs/dev/POWER.md` is the power-duration contract.
+
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
 progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
@@ -69,7 +74,8 @@ behaviours updates its page in every language in the same patch.
   uploads the original, persists the workout and its ordered `TrackSegment`
   rows in one transaction, and compensates a failed storage upload. Persisted
   metrics use SI units, public workout ids are ShortUUID-encoded UUIDs, and
-  recording segments stay separate across pauses. `[devdoc:workout-core]`
+  recording segments stay separate across pauses.
+  [docs/dev/WORKOUT.md](docs/dev/WORKOUT.md)
 - **Publication and privacy.** An imported workout is private until its owner
   publishes it. `PublishingProfile` is the single sharing policy;
   `WorkoutPublication` is an immutable sanitized representation with the
@@ -884,7 +890,7 @@ workout interaction:
 
 Do not silently change units, point JSON keys, ShortUUID alphabet, publication
 lifecycle, or GPX metric algorithms. These are protocol/persistence contracts;
-update the matching `[devdoc:workout-core]` or
+update the matching [docs/dev/WORKOUT.md](docs/dev/WORKOUT.md) or
 [docs/dev/PUBLISHING.md](docs/dev/PUBLISHING.md) document and
 the tests if a demonstrated need changes one.
 
