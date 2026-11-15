@@ -31,6 +31,12 @@ recording segments, the units, the GPX input, the metrics engine, the import
 transaction and the route image. `docs/dev/FIT.md` is the FIT import contract,
 and `docs/dev/POWER.md` is the power-duration contract.
 
+`docs/dev/SEGMENTS.md` is the segments contract: courses, routes, loops,
+efforts, splits, personal bests and leaderboards.
+`docs/dev/SEGMENTS-FEDERATION.md` is the course-only federation contract,
+`docs/dev/SMART-LAPS.md` the detected-laps contract, and
+`docs/dev/BEST-EFFORTS.md` the standard-distance best-efforts contract.
+
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
 progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
@@ -97,7 +103,9 @@ behaviours updates its page in every language in the same patch.
   recording segment — the two are different things and the codebase keeps them
   apart by name. Boards are derived on read per viewer, personal bests are per
   `(segment, athlete, sport)`, and `best_efforts`/`effort_records` hold the
-  standard-distance efforts. `[devdoc:segments]` `[devdoc:best-efforts]`
+  standard-distance efforts.
+  [docs/dev/SEGMENTS.md](docs/dev/SEGMENTS.md)
+  [docs/dev/BEST-EFFORTS.md](docs/dev/BEST-EFFORTS.md)
 - **Social.** Comments (one level of replies, the origin hosts the thread),
   reactions (one active per actor and target), shared activities (credit and
   link rows), `/people` discovery, and in-app notifications. Each has one write

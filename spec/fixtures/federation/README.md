@@ -12,10 +12,10 @@ publication Delete, a follow Reject, and an actor Delete carrying a Tombstone.
 They are receiver inputs, not external-peer compatibility fixtures.
 
 `allure_segment_note.json` pins the course Create profile
-(`[devdoc:segments-federation]`): a `Note` on the dedicated
-`/api/v1/segment/{shortuuid}` path with the `segment_kind`, `sport_slug`,
-`match_tolerance`, and `average_grade` tags, a required GPX `Document`, and an
-optional route-image `Image`.
+([SEGMENTS-FEDERATION.md](../../../docs/dev/SEGMENTS-FEDERATION.md)): a `Note`
+on the dedicated `/api/v1/segment/{shortuuid}` path with the `segment_kind`,
+`sport_slug`, `match_tolerance`, and `average_grade` tags, a required GPX
+`Document`, and an optional route-image `Image`.
 
 `signature_headers.yml` pins the wire headers, body digests, and canonical
 request inputs. It intentionally contains no private key or authorization
