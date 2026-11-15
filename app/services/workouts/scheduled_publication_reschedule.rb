@@ -2,7 +2,7 @@
 
 module Workouts
   # Moves a scheduled publication's planned moment to another preset within the
-  # safety delay (PLAN_DELAYED_PUBLISHING.md §4). The frozen snapshot does not
+  # safety delay (docs/dev/DELAYED-PUBLISHING.md). The frozen snapshot does not
   # change; only the activation job is re-enqueued. An in-flight job that fires
   # before the new moment defers itself.
   class ScheduledPublicationReschedule

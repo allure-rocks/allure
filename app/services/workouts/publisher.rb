@@ -4,7 +4,7 @@ module Workouts
   # Freezes a workout into a publication. With the default `immediate` delay the
   # publication activates in the request path; with a safety-delay preset it is
   # created `scheduled` and nothing local or federated refers to it until
-  # ScheduledPublicationActivation runs (PLAN_DELAYED_PUBLISHING.md). No outbox
+  # ScheduledPublicationActivation runs (docs/dev/DELAYED-PUBLISHING.md). No outbox
   # event is created here, so cancelling inside a delay leaves no trace.
   class Publisher
     class PublicationError < StandardError

@@ -4,7 +4,7 @@ class WorkoutTracksController < ApplicationController
   # Owner requests read the point rows; non-owner requests use the immutable
   # publication representation and never fall back to the source track.
   # `?as=publication` forces the sanitized publication track even for the owner,
-  # so the sharing snapshot can show exactly what non-owners see (PLAN_M4_5
+  # so the sharing snapshot can show exactly what non-owners see (docs/dev/PUBLISHING.md
   # Slice 7). It still requires publication policy for :track and 404s otherwise.
   # A reader gets the track of the publication serving them, and the owner's
   # preview the one of `audience` (docs/dev/PUBLISHING.md).

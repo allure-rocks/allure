@@ -68,7 +68,7 @@ RSpec.describe "Federation publication protocol", type: :request do
     )
   end
 
-  it "returns 404 for followers-only Notes even to a verified accepted actor during M4.5" do
+  it "returns 404 for followers-only Notes even to a verified accepted actor while restricted federation is off" do
     publication = followers_publication
     create(:following, :accepted, follower_actor: remote_actor, followed_actor: owner.reload.actor)
     path = workout_publication_path(publication)
@@ -80,7 +80,7 @@ RSpec.describe "Federation publication protocol", type: :request do
     expect(response).to have_http_status(:not_found)
   end
 
-  it "returns 404 for followers-only media even to a verified accepted actor during M4.5" do
+  it "returns 404 for followers-only media even to a verified accepted actor while restricted federation is off" do
     profile = create(
       :publishing_profile,
       :followers,
@@ -115,7 +115,7 @@ RSpec.describe "Federation publication protocol", type: :request do
     expect(response).to have_http_status(:not_found)
   end
 
-  it "returns 404 for followers-only media even with a valid signature during M4.5" do
+  it "returns 404 for followers-only media even with a valid signature while restricted federation is off" do
     publication = followers_publication
     create(:following, :accepted, follower_actor: remote_actor, followed_actor: owner.reload.actor)
     path = workout_publication_route_image_path(publication)

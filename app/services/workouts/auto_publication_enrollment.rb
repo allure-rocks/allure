@@ -2,7 +2,7 @@
 
 module Workouts
   # Called by the importer once a new workout is persisted
-  # (PLAN_AUTO_PUBLISHING.md §3). For every automatic publishing profile of the
+  # (docs/dev/AUTO-PUBLISHING.md). For every automatic publishing profile of the
   # account it records one ledger row: `waiting` for the enrichments, or
   # `skipped` straight away when the import itself rules the publication out
   # (a bulk import, an activity older than the recent window, an excluded

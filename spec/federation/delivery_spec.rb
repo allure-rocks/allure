@@ -81,10 +81,10 @@ RSpec.describe Federation::Outbox::Expander do
     expect(event.reload.deliveries.first.recipients.first.actor_uri).to eq(remote_one.uri)
   end
 
-  # M4.5 public-only gate: followers-only Creates fail closed and never expand,
-  # even to restricted-capable accepted followers (PLAN_M4_5 §5.2). Restricted
-  # followers delivery is M5-only.
-  it "fails closed for followers-only Creates even to restricted peers during M4.5" do
+  # Followers-only Creates fail closed and never expand while restricted
+  # federation is off, even to restricted-capable accepted followers
+  # (docs/dev/PUBLISHING.md).
+  it "fails closed for followers-only Creates even to restricted peers while restricted federation is off" do
     owner = create(:user)
     publication_actor = create(:local_actor, user: owner)
     workout = create(:workout, user: owner)
@@ -270,7 +270,7 @@ RSpec.describe Federation::Delivery::Deliver do
   it "re-resolves one Gone delivery and retries on a new inbox" do
     # Not persisted: pre-POST reauthorization finds no Actor row and keeps the
     # stale inbox, so the 410 path is exercised and recovery moves to the
-    # refreshed inbox (PLAN_M4_5 Slice 5).
+    # refreshed inbox (docs/dev/PUBLISHING.md).
     replacement = build(:actor, uri: recipient.actor_uri, inbox_url: "https://remote.example/new-inbox")
     allow(actor_resolver).to receive(:resolve).with(recipient.actor_uri, refresh: true).and_return(replacement)
     allow(client).to receive(:validate_url)

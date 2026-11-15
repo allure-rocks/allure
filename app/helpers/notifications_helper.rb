@@ -197,7 +197,7 @@ module NotificationsHelper
   end
 
   # The automatic-publication notice says whether the workout is already live
-  # or held by the profile's delay, and until when (PLAN_AUTO_PUBLISHING.md §7).
+  # or held by the profile's delay, and until when (docs/dev/AUTO-PUBLISHING.md).
   def auto_published_notification_text(notification)
     title = publication_notification_title(notification).presence
     scheduled_for = Time.zone.parse(notification.payload.to_h["scheduled_for"].to_s) if notification.payload.to_h["scheduled_for"].present?

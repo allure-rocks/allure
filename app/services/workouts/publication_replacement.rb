@@ -3,7 +3,7 @@
 module Workouts
   # Replaces one active publication with a new frozen snapshot. The old
   # publication is withdrawn immediately and the replacement enters the safety
-  # delay (PLAN_DELAYED_PUBLISHING.md): a replacement intended to remove
+  # delay (docs/dev/DELAYED-PUBLISHING.md): a replacement intended to remove
   # sensitive data takes effect at once, and the new representation is held for
   # review before anyone sees it. The other audiences' publications are left
   # alone (docs/dev/PUBLISHING.md); the replacement keeps the replaced audience or

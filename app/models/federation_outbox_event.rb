@@ -23,7 +23,7 @@ class FederationOutboxEvent < ApplicationRecord
 
   scope :active, -> { where(status: %w[pending expanded]) }
   # Excludes publication Creates whose subject is no longer active, so deleted
-  # publications never appear in outbox collections (PLAN_M4_5 §5.3), and the
+  # publications never appear in outbox collections (docs/dev/PUBLISHING.md), and the
   # comment relays riding on them with them (PLAN_COMMENTS.md §9). All other
   # events (Deletes, Undos, Actor activities) pass through.
   scope :live_publication_creates, -> {

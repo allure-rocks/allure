@@ -5,7 +5,7 @@
 # and authenticate HTTP signatures; local viewers authorize through
 # Workouts::PublicationPolicy with a browser principal instead, so the owner
 # and another signed-in account never share the remote signed-actor
-# assumptions (PLAN_M4_5 Slice 2). Viewing requires an account
+# assumptions (docs/dev/PUBLISHING.md). Viewing requires an account
 # (docs/dev/ACCESS.md), so no anonymous principal reaches the policy here.
 #
 # The route image is served in the viewer's requested variant, falling back to

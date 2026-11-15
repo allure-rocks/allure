@@ -75,7 +75,7 @@ module Workouts
     end
 
     # Every logical recipient whose Create delivery made any network attempt must
-    # receive Delete (PLAN_M4_5 Slice 4). A delivery cancelled after claim still
+    # receive Delete (docs/dev/PUBLISHING.md). A delivery cancelled after claim still
     # may have reached the remote on an earlier attempt, so cancelled rows with
     # attempts > 0 are included; never-attempted pending->cancelled rows are not.
     def self.recipient_uris_for(create_event)

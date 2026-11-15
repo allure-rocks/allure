@@ -51,7 +51,7 @@ module Federation
         count
       end
 
-      # One enqueue failure must not abort the sweep (PLAN_M4_5 Slice 6): each
+      # One enqueue failure must not abort the sweep (docs/dev/PUBLISHING.md): each
       # record is isolated, reported, and retried on the next cadence. Database
       # intent remains authoritative; no logical row is duplicated.
       def enqueue_pending_events

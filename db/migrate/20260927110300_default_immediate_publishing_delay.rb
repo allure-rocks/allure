@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Publishing is immediate by default again: the safety delay is an opt-in
-# profile policy (PLAN_DELAYED_PUBLISHING.md). `0` means "publish now" and is
+# profile policy (docs/dev/DELAYED-PUBLISHING.md). `0` means "publish now" and is
 # the default for new profiles; existing profiles are moved to it because the
 # delayed feature has not shipped. The check constraint must admit 0 before the
 # default and the backfill are written.

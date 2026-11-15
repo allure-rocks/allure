@@ -148,7 +148,7 @@ module Workouts
         filename: member.name,
         source_digest: digest,
         near_duplicate_window: NEAR_DUPLICATE_WINDOW,
-        # An archive is a history, never a new outing (PLAN_AUTO_PUBLISHING.md §3).
+        # An archive is a history, never a new outing (docs/dev/AUTO-PUBLISHING.md).
         bulk: true
       ).call
 

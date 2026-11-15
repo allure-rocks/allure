@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Activates one scheduled publication (PLAN_DELAYED_PUBLISHING.md §4): the
+  # Activates one scheduled publication (docs/dev/DELAYED-PUBLISHING.md): the
   # frozen snapshot becomes visible, the Create intent is created atomically
   # with the transition, and delivery starts once the route image is ready.
   #
@@ -30,7 +30,7 @@ module Workouts
       Rails.error.report(error, handled: true, context: { component: name, workout_publication_id: publication.id })
     end
 
-    # Immediate publishing (PLAN_DELAYED_PUBLISHING.md): activates the frozen
+    # Immediate publishing (docs/dev/DELAYED-PUBLISHING.md): activates the frozen
     # publication in the request path. The job is enqueued first as a fallback —
     # it no-ops on an active publication and recovers an activation failure that
     # left the row scheduled, so nothing is ever stranded. The owner is acting

@@ -2,7 +2,7 @@
 
 module Workouts
   # Whether every enrichment an import starts has settled
-  # (PLAN_AUTO_PUBLISHING.md §4). Each check reads the derivation's own marker
+  # (docs/dev/AUTO-PUBLISHING.md). Each check reads the derivation's own marker
   # (PLAN_DERIVATIONS.md), so it costs no extra bookkeeping:
   #
   # - elevation: no terrain-elevation request pending (the importer records
