@@ -1508,7 +1508,7 @@ migration (`db:migrate`, applied on boot).
   their name on the connection cards, the import tabs and the remote panel
   (`DESIGN.md` §6.4).
 - Allure flags the readings that look wrong in an activity's original file
-  (`[devdoc:workout-core]`): rejected and jumping GPS positions, speeds the sport
+  ([WORKOUT.md](docs/dev/WORKOUT.md)): rejected and jumping GPS positions, speeds the sport
   cannot reach, shifted timestamps and interrupted recordings, missing,
   frozen or suddenly changing heart rate, elevation steps, and power or
   cadence spikes. Only what makes a figure wrong is put forward: a maximum
@@ -1930,7 +1930,7 @@ migration (`db:migrate`, applied on boot).
   as two `Image` attachments — the light one first, the dark one marked
   `allure:theme: dark` — so a peer that predates the property keeps the light
   image; remote receipt, purge, retention and replacement cover both blobs
-  (`DESIGN.md` §15.4, `[devdoc:workout-core]`, `[devdoc:federation]`).
+  (`DESIGN.md` §15.4, [WORKOUT.md](docs/dev/WORKOUT.md), `[devdoc:federation]`).
 - The workout list's table view supports bulk updates from `lg` up
   (`[devdoc:bulk-actions]`): a selection column and a bulk bar with the live
   count, a « Sélectionner les N activités filtrées » scope and synchronous quick
@@ -2325,11 +2325,11 @@ migration (`db:migrate`, applied on boot).
   device with a running-power channel had its session power maximum stored as
   ascent (an Amazfit Balance 2 showed 443 m for a 298 m run and 397 m for a
   25 m one). The session total of that family is trusted again; complete laps
-  still win and the computed profile remains the fallback (`[devdoc:fit]`, `[devdoc:elevation]`).
+  still win and the computed profile remains the fallback ([FIT.md](docs/dev/FIT.md), `[devdoc:elevation]`).
 - Consecutive points sharing a timestamp — a GPX export rounds to the second —
   keep their path length in the workout distance instead of being dropped: a
   6.4 km run exported as GPX read 5.9 km while its own geometry measured
-  6.4 km (`[devdoc:workout-core]`).
+  6.4 km ([WORKOUT.md](docs/dev/WORKOUT.md)).
 - Local actors render through their account's avatar chain: the People list
   and notifications now show the uploaded avatar, the cached Gravatar, or the
   account's persisted seed instead of generated art seeded by the actor URI.
@@ -2381,7 +2381,7 @@ migration (`db:migrate`, applied on boot).
   in either unit system, instead of speed. Their fourth summary tile is average
   power when the file recorded it, otherwise ascent, and both speed tiles are
   hidden. The catalog carries the nullable `sports.pace_basis_metres`
-  (`[devdoc:workout-core]`, `DESIGN.md` §20.3).
+  ([WORKOUT.md](docs/dev/WORKOUT.md), `DESIGN.md` §20.3).
 - Standard-distance best efforts now cover rowing and virtual rowing with the
   Concept2 set (500 m, 1 km, 2 km, 5 km, 6 km, 10 km, half marathon, marathon),
   and the running profile gains the marathon. `best_efforts:backfill SPORT=`
@@ -2432,7 +2432,7 @@ migration (`db:migrate`, applied on boot).
   lists read, `workout_toponymies.places` keeps the list beside its inputs,
   and the same pass indexes every recorded marker as a `workout_place_names`
   row for the owner's filter and autocomplete. The audited `/admin/jobs`
-  places backfill recomputes both purely and offline (`[devdoc:workout-core]`).
+  places backfill recomputes both purely and offline ([WORKOUT.md](docs/dev/WORKOUT.md)).
   Places never enter a publication snapshot or federation.
 - The workout list's card view reproduces the `/me` recent-workout
   presentation and scrolls endlessly: fully clickable cards with the route
@@ -2460,7 +2460,7 @@ migration (`db:migrate`, applied on boot).
   an interval session no longer fails the whole import on the per-workout
   uniqueness of `laps.number`: the index still numbers the lap when it is
   usable, and a colliding index falls back to the next free number
-  (`[devdoc:fit]`).
+  ([FIT.md](docs/dev/FIT.md)).
 - Two effort-matchings for the same workout no longer race the unique
   `(segment, workout, occurrence)` key: `Segments::MatchWorkoutJob` locks the
   workout row for its transaction, so a run enqueued by an elevation
@@ -2489,14 +2489,14 @@ migration (`db:migrate`, applied on boot).
 - `/settings/sports` only offers plausible choices per generic sport: tennis
   and padel no longer appear for running, nor halfbike and inline skating for
   cycling. Each generic has a curated, alphabetical target list whose default
-  selection is the generic sport itself (`[devdoc:workout-core]`).
+  selection is the generic sport itself ([WORKOUT.md](docs/dev/WORKOUT.md)).
 - Every sport dropdown (workout form, batch import, segment form, list
   filters, leaderboards, `/settings/sports`) is sorted by the localized
   display name, accent- and case-insensitively, instead of catalog order.
 - Real-world FIT and GPX files import as recorded: an isolated record whose
   clock glitched backwards is dropped instead of rejecting the activity,
   Garmin-style chained companion files are accepted up to 64, and the point
-  cap rises to 250,000 so a long ultra imports whole (`[devdoc:fit]`).
+  cap rises to 250,000 so a long ultra imports whole ([FIT.md](docs/dev/FIT.md)).
 - A FIT recording whose clock jumps backwards by more than an hour — a device
   clock correction — restarts from the corrected time and discards only the
   records from the earlier epoch, instead of failing the import.
@@ -2514,7 +2514,7 @@ migration (`db:migrate`, applied on boot).
   with the file's statement. A publishing profile's `commute` setting (off by
   default, like `device`) shares the flag in the sanitized representation and
   as a `commute` presence Note tag, parsed by remote Allure peers and rendered
-  as a badge. `[devdoc:workout-core]` and `[devdoc:federation]` are the contracts.
+  as a badge. [WORKOUT.md](docs/dev/WORKOUT.md) and `[devdoc:federation]` are the contracts.
 - Eight sports: `cycling_road`, `cycling_gravel`, `cycling_electric`,
   `running_virtual`, `rowing_virtual`, `pool_swimming`, `snowboarding`, and
   `skiing_touring` (36 active sports). FIT/GPX/TCX detection now routes
@@ -2525,7 +2525,7 @@ migration (`db:migrate`, applied on boot).
   generic sport (`cycling`, `running`, `walking`), the owner's preferred
   variant of the same icon family is used instead. The mapping applies to
   detection only — an explicit detection, the import fallback, and existing
-  workouts are never changed (`[devdoc:workout-core]`).
+  workouts are never changed ([WORKOUT.md](docs/dev/WORKOUT.md)).
 - A per-sport icon set: every one of the 36 sports ships its own inline SVG
   partial (`app/views/sports/icons/`), plus six family fallbacks for a remote
   sport the local catalog does not know. The cycling variants stay
@@ -2640,7 +2640,7 @@ migration (`db:migrate`, applied on boot).
   `workouts:backfill_analysis` rake task and an audited « Recalculer les
   analyses » action in `/admin/jobs`, which shows how many workouts are on an
   older analysis version. Both enqueue the same self-rescheduling job
-  (`[devdoc:workout-core]`, `[devdoc:admin]`).
+  ([WORKOUT.md](docs/dev/WORKOUT.md), `[devdoc:admin]`).
 - The import page picks its panel from the `Allure::ImportSources` registry, so
   a source is a registry entry plus a partial (`[devdoc:import-sources]`). The
   first non-file source downloads recorded FIT activities straight from an
@@ -2665,7 +2665,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Changed
 
-- The metrics engine is resilient to imprecise GPS (`[devdoc:workout-core]` and
+- The metrics engine is resilient to imprecise GPS ([WORKOUT.md](docs/dev/WORKOUT.md) and
   §8.9, analysis version 5). Implausible positions are removed before any
   metric: an iterative interior detour test for out-and-back spikes and a
   data-driven speed envelope that trims cold-fix and stale-fix artifacts at
@@ -2830,7 +2830,7 @@ migration (`db:migrate`, applied on boot).
 - `BestEfforts::BackfillJob` and `bin/rails best_efforts:backfill` rebuild the
   efforts for existing workouts from their stored track points; no re-analysis
   is needed.
-- Grade adjusted pace (`[devdoc:workout-core]`): a flat-equivalent pace derived from
+- Grade adjusted pace ([WORKOUT.md](docs/dev/WORKOUT.md)): a flat-equivalent pace derived from
   the smoothed elevation profile with the Minetti 2002 climb polynomial and a
   descent cost curve. It renders on the workout summary and, as a
   quiet `GAP` line under the pace, in the owner-only Analysis tables (detected
