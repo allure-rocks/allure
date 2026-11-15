@@ -16,6 +16,9 @@ all UI work. Read it before writing any view, Stimulus controller, navigation
 entry, or user-facing string. Where it conflicts with a data or protocol
 contract, the contract wins and `DESIGN.md` is amended.
 
+`docs/dev/ACCESS.md` is the access contract: every browser surface requires an
+account, while the ActivityPub wire contract is unchanged.
+
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
 progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
