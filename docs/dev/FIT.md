@@ -662,7 +662,7 @@ Vite HMR and basemap sprite noise documented in `AGENTS.md`.
   be a better source for the splits than the current distance-based
   `Allure::Gpx::Splits`, and multi-sport sessions would need a data model that
   does not exist. Both belong to the segments and routes work
-  (`[devdoc:segments]`).
+  ([SEGMENTS.md](SEGMENTS.md)).
 - **A positioned recording recomputes its metrics from coordinates.** Device
   distance and speed are read only for a positionless recording, so a FIT and a
   GPX of the same positioned effort report the same numbers.

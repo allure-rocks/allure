@@ -12,7 +12,7 @@ the power efforts and records, `PUBLISHING.md` the sanitized publication, and
   original file, the track and sensor values, the metrics and the private
   notes. It is never served to a non-owner.
 - **Recording segment** — one contiguous run between pauses, stored as a
-  `TrackSegment`. It is not a reusable course; see `[devdoc:segments]`.
+  `TrackSegment`. It is not a reusable course; see [SEGMENTS.md](SEGMENTS.md).
 - **Track** — the ordered recording segments of one workout. Multi-segment
   tracks stay separate so maps never draw a false line across a pause.
 - **Point** — one timed sample inside a recording segment, stored in the
@@ -1052,5 +1052,5 @@ infer from a green RSpec run.
 FIT parsing (`FIT.md`), power efforts and records (`POWER.md`), the sanitized
 publication and its audiences (`PUBLISHING.md`), federation transport
 (`[devdoc:federation]`), reusable segments and best efforts
-(`[devdoc:segments]`, `[devdoc:best-efforts]`), and the interface
+([SEGMENTS.md](SEGMENTS.md), [BEST-EFFORTS.md](BEST-EFFORTS.md)), and the interface
 (`DESIGN.md`).

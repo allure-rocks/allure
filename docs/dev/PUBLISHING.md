@@ -63,7 +63,7 @@ GPX settings are off by default.
 
 `segment` is a retired key: an old snapshot may still carry it, and it is
 ignored. Segment leaderboards follow the reader and the shared route instead
-(`[devdoc:segments]`).
+([SEGMENTS.md](SEGMENTS.md)).
 
 A profile also carries policies that are not part of the snapshot:
 
@@ -179,7 +179,7 @@ It drives the workout page, the track and chart endpoints,
   never counts a workout twice.
 - **Leaderboards** — an effort appears to a viewer through any active
   publication of the workout that viewer may read (`visible_to`) with its route
-  shared, and ranks once (`[devdoc:segments]`).
+  shared, and ranks once ([SEGMENTS.md](SEGMENTS.md)).
 - **Owner preview** — `?as=publication&audience=`; without it, the narrowest
   active publication.
 

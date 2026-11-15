@@ -69,7 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   « Enregistrer en itinéraire », which opens the route form prefilled from the
   departure and arrival places; « Ignorer » closes the suggestion for good, and
   later repeats join it silently. Nothing is created until you decide, and the
-  saved route finds every activity the banner counted (`[devdoc:segments]`).
+  saved route finds every activity the banner counted ([SEGMENTS.md](docs/dev/SEGMENTS.md)).
 - Photos have a manager page of their own at `/workouts/:id/photos`: the route
   as a sticky rail, one row per photo with its caption, capture time, placement
   and the reason an automatic placement found nothing, drag-and-drop ordering
@@ -436,7 +436,7 @@ Detected loops. See the [upgrade guide](docs/site/operations/upgrading.md).
 
 - Repeated loops are detected after their approach and return legs: a workout
   that rides to a circuit, laps it, and returns home now reuses the detected
-  loop segment instead of creating a second one (`[devdoc:smart-laps]`).
+  loop segment instead of creating a second one ([SMART-LAPS.md](docs/dev/SMART-LAPS.md)).
 - The CSRF state now persists across a cold-start iOS import: the companion's
   first import no longer fails its authenticity check.
 - Following a peer again after unblocking its domain restores the
@@ -990,7 +990,7 @@ migration (`db:migrate`, applied on boot).
     another account's deletion from `/admin/accounts`, audited.
   - `/metrics` exports `allure_account_exports` and
     `allure_account_deletions_scheduled`.
-- Leaderboard categories (`[devdoc:segments]`): an account may declare
+- Leaderboard categories ([SEGMENTS.md](docs/dev/SEGMENTS.md)): an account may declare
   a category (women, men, or unspecified by default) at `/settings/profile`.
   The full board gains a Tous / Femmes / Hommes view over the ranking the
   reader already sees, offered per sport from three athletes of that
@@ -1240,7 +1240,7 @@ migration (`db:migrate`, applied on boot).
   d'Huez, 14 km — vanished from the « Montées » tab, the chart and the
   geocoded summits, and its descent came out in pieces. The cap is now 30 km,
   a climb never reaches back past a point higher than its summit, and two
-  overlapping climbs keep only the stronger (`[devdoc:smart-laps]`).
+  overlapping climbs keep only the stronger ([SMART-LAPS.md](docs/dev/SMART-LAPS.md)).
   `Laps::Rebuild::VERSION` moves to 5 and
   `Workouts::ToponymyEnricher::ALGORITHM_VERSION` to 8. After deploying, run
   the toponymy backfill from `/admin/jobs` (which re-geocodes, at the
@@ -1527,7 +1527,7 @@ migration (`db:migrate`, applied on boot).
 ### Changed
 
 - The Progression chart of a segment, route or loop draws a robust trend
-  (`Allure::Stats::RobustTrend`, `[devdoc:segments]`): a straight
+  (`Allure::Stats::RobustTrend`, [SEGMENTS.md](docs/dev/SEGMENTS.md)): a straight
   Theil–Sen line under eight outings, a robust LOWESS curve from eight, so a
   bad day no longer bends it and its ends are no longer flattened. It
   replaces the moving average over five outings.
@@ -2020,7 +2020,7 @@ migration (`db:migrate`, applied on boot).
   the page's `⋯` menu, with a label that names the type. The copy preserves
   the kind (a reversed route stays a route, private), keeps the link to the
   source activity, and is matched against the owner's own workouts in the
-  reversed direction only (`[devdoc:segments]`).
+  reversed direction only ([SEGMENTS.md](docs/dev/SEGMENTS.md)).
 - The `/@username` listing follows `Workouts::PublicationPolicy`: public
   publications serve every member, and followers-only publications serve the
   owner and accepted local followers while restricted federation is enabled.
@@ -2086,7 +2086,7 @@ migration (`db:migrate`, applied on boot).
   reversed. The reversed copy mirrors the geometry and stored elevation
   profile, swaps ascent and descent and recomputes its signature; the copy is
   matched against the copier's own workouts only, and a reversed one only
-  matches recordings made the other way (`[devdoc:segments]`).
+  matches recordings made the other way ([SEGMENTS.md](docs/dev/SEGMENTS.md)).
 
 ### Changed
 
@@ -2139,7 +2139,7 @@ migration (`db:migrate`, applied on boot).
   "all sports" when the recordings disagree. `Segments::BackfillLoopReuseJob`
   converges already-duplicated loops onto the oldest one, audited at
   `/admin/jobs` and available per account at `/settings/data`
-  (`[devdoc:segments]`, `[devdoc:derivations]`).
+  ([SEGMENTS.md](docs/dev/SEGMENTS.md), `[devdoc:derivations]`).
 
 ## [0.3.7] - 2026-10-01
 
@@ -2303,7 +2303,7 @@ migration (`db:migrate`, applied on boot).
   replaces the former opt-in. Eligibility is derived on read, so a publication,
   exclusion, visibility, or privacy-zone change needs no refresh; existing
   leaderboards are preserved by the snapshot alignment
-  (`[devdoc:segments]`, [PUBLISHING.md](docs/dev/PUBLISHING.md)).
+  ([SEGMENTS.md](docs/dev/SEGMENTS.md), [PUBLISHING.md](docs/dev/PUBLISHING.md)).
 - The feed uses one card for local publications and received notes: a
   mandatory author header, the route image or its pending/unavailable state,
   compact primary metric tiles with the record stamp, and a three-line
@@ -2386,7 +2386,7 @@ migration (`db:migrate`, applied on boot).
   Concept2 set (500 m, 1 km, 2 km, 5 km, 6 km, 10 km, half marathon, marathon),
   and the running profile gains the marathon. `best_efforts:backfill SPORT=`
   rebuilds one sport when a profile gains a distance
-  (`[devdoc:best-efforts]`).
+  ([BEST-EFFORTS.md](docs/dev/BEST-EFFORTS.md)).
 
 ### Changed
 
@@ -2403,7 +2403,7 @@ migration (`db:migrate`, applied on boot).
 - Best-efforts computation runs before the import and reanalysis transactions;
   only the row replacement stays inside them, so the `users` row lock taken by
   every workout insert no longer covers the CPU scan over the track
-  (`[devdoc:best-efforts]`).
+  ([BEST-EFFORTS.md](docs/dev/BEST-EFFORTS.md)).
 - The seven personal-record winner queries of `Records::RecomputeService` are
   index-backed on `(user_id, sport_id, <metric>)`, so a mass import no longer
   sorts the account's whole history once per imported workout.
@@ -2466,7 +2466,7 @@ migration (`db:migrate`, applied on boot).
   workout row for its transaction, so a run enqueued by an elevation
   reanalysis or a segment backfill while the import's own run is still working
   waits and re-reads the committed efforts instead
-  (`[devdoc:segments]`).
+  ([SEGMENTS.md](docs/dev/SEGMENTS.md)).
 
 ## [0.3.1] - 2026-09-23
 
@@ -2820,7 +2820,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Standard-distance best efforts (`[devdoc:best-efforts]`): the fastest elapsed
+- Standard-distance best efforts ([BEST-EFFORTS.md](docs/dev/BEST-EFFORTS.md)): the fastest elapsed
   time over 400 m to 30 km for running/trail and 5 miles to 80 km for the ride
   sports, computed inside a single recording segment with interpolated
   boundaries, shown on `/records` and on the workout page's Analysis card.
@@ -2851,7 +2851,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Derived smart laps (`[devdoc:smart-laps]`): rebuildable `detected_laps` rows
+- Derived smart laps ([SMART-LAPS.md](docs/dev/SMART-LAPS.md)): rebuildable `detected_laps` rows
   projected from loop and route efforts, one pause lap per recording segment,
   elevation climbs and descents from a single shared profile, stops, and
   speed/power intervals, all named from the stored toponymy without new
@@ -2902,7 +2902,7 @@ migration (`db:migrate`, applied on boot).
   following `leaderboard_audience`; sharing a course that crosses an active
   privacy zone requires a stored owner acknowledgment, and a corridor change
   asks for it again.
-- Federated course distribution (`[devdoc:segments-federation]` F0–F4): immutable
+- Federated course distribution ([SEGMENTS-FEDERATION.md](docs/dev/SEGMENTS-FEDERATION.md) F0–F4): immutable
   `SegmentPublication` snapshots with explicit publish, republish, and withdraw
   controls; a course `Note` on the dedicated `/api/v1/segment/` path with a
   `sport_slug` tag and a required GPX attachment; received courses cached as
@@ -2962,7 +2962,7 @@ migration (`db:migrate`, applied on boot).
   federation phase, and both the profile form and the publish selector explain
   the reserved followers audience.
 - The course-only federated-segments contract is frozen in
-  `[devdoc:segments-federation]`; implementation remains post-M5.
+  [SEGMENTS-FEDERATION.md](docs/dev/SEGMENTS-FEDERATION.md); implementation remains post-M5.
 
 ### Fixed
 

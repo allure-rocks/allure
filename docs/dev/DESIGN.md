@@ -293,7 +293,7 @@ return and incomplete tours do not become laps. The existing settings Data and a
 « Recalculer mes boucles » / "Recalculate my loops" and « Recalculer les
 boucles » / "Recalculate loops". Their counts include positioned recordings
 without a loop whose detection is out of date; confirmations explain that
-publications do not change (`[devdoc:segments]`).
+publications do not change ([SEGMENTS.md](SEGMENTS.md)).
 
 Sport names are the 38 seeded slugs, translated under `sports.<slug>`. Never
 invent a display name in a view.
@@ -1221,7 +1221,7 @@ configures a provider, API et webhooks, Sécurité).
 
 | Sub-page | Contents |
 |---|---|
-| `/settings/profile` | display name, bio, avatar (§9), leaderboard category (§19.6, `[devdoc:segments]`), separate opt-ins for whole-history sport statistics and personal records (§19.38, §20.14) |
+| `/settings/profile` | display name, bio, avatar (§9), leaderboard category (§19.6, [SEGMENTS.md](SEGMENTS.md)), separate opt-ins for whole-history sport statistics and personal records (§19.38, §20.14) |
 | `/settings/appearance` | theme, locale, route-image theme (auto/light/dark), workout track smoothing (level) |
 | `/settings/units` | unit system, time zone, week start |
 | `/settings/sports` | default variant per generic sport (cycling, running, walking) used at import ([WORKOUT.md](WORKOUT.md)) |
@@ -2369,7 +2369,7 @@ A distinct, named state for "this worked, but not completely":
 - a batch import that finished with some failed entries;
 - equipment totals that have drifted and need a refresh;
 - a segment candidate that produced no effort because the interval spans a
-  recording gap — `[devdoc:segments]` makes explaining this a UI
+  recording gap — [SEGMENTS.md](SEGMENTS.md) makes explaining this a UI
   requirement, not a silent omission.
 
 Partial states use the warning colour, explain the cause in one sentence, and
@@ -3362,7 +3362,7 @@ answer is an **equivalent, not an excuse**:
 ## 19. Privacy-critical copy
 
 **These strings are mandatory, verbatim, and non-dismissible where stated.**
-They exist because [PUBLISHING.md](PUBLISHING.md) and `[devdoc:segments]` identify specific
+They exist because [PUBLISHING.md](PUBLISHING.md) and [SEGMENTS.md](SEGMENTS.md) identify specific
 ways this application can harm someone, and copy is the only mitigation the user
 actually reads. They are written in the sober register (§3.2) and may not be
 softened, shortened, made playful, or moved behind a disclosure.
@@ -3464,7 +3464,7 @@ form, with the exclusion it already knows:
 ### 19.5 Leaderboard aliases — on every leaderboard a non-owner reads
 
 Placement: persistent, non-dismissible info panel. Required by
-`[devdoc:segments]`, which makes the residual risk a UI obligation rather
+[SEGMENTS.md](SEGMENTS.md), which makes the residual risk a UI obligation rather
 than internal documentation.
 
 > **FR** — « Les alias ne sont pas des identités : ils masquent le nom, mais
@@ -3479,7 +3479,7 @@ than internal documentation.
 
 A shorter version of this already ships as `segments.leaderboard.residual_risk`,
 covering administrator identification and recognition by elimination. Two
-obligations in `[devdoc:segments]` are missing from it and must be added: that
+obligations in [SEGMENTS.md](SEGMENTS.md) are missing from it and must be added: that
 dates are deliberately coarsened to the month, and that a leaderboard remains
 personal data. It also renders as muted text at the foot of the card, which
 reads as a footnote; it belongs above the table, as a persistent info panel, so
@@ -4617,7 +4617,7 @@ there is no original-data card and no danger zone.
               steps are one horizontal line, each name whole, scrolling with
               faded edges so the card keeps its height across analysis tabs;
               toponymy places numbered on the curve, the active analysis
-              tab's layers and steps ([devdoc:smart-laps])
+              tab's layers and steps ([SMART-LAPS.md](SMART-LAPS.md))
 [Analyse]     one owner card, only non-empty tabs on one sideways-scrolling
               line with faded edges, first one active:
               Segments · Tours détectés · Montées · Descentes · Arrêts ·
@@ -4897,7 +4897,7 @@ silver, bronze, the same places as the efforts table (§10.4) — set beside it
 at the end of a short 45° leader in the place colour, up and to the right,
 mirrored near the right edge or the top of the plot so it stays in view. A thin (1.25 px) muted
 grey line is the trend, robust to a bad day: a straight Theil–Sen line under
-eight outings, a robust LOWESS curve from eight (`[devdoc:segments]`), each
+eight outings, a robust LOWESS curve from eight ([SEGMENTS.md](SEGMENTS.md)), each
 outing counted once as the mean of its laps, drawn from three outings and
 carrying no tooltip. It is drawn on a regular grid with straight segments,
 never a spline (one overshoots, even runs backwards, beside a long gap), and
@@ -4920,7 +4920,7 @@ and, on a shared course, **Mon rang** — `3 / 12`, with the laurel-wreath
 podium stamp in the place colour for a top-three place, `Non classé` for an
 unlisted effort, `—` without one. A private course replaces **Mon rang**
 with Participants and moves D− to the secondary line. Participants counts the
-athletes the viewer sees ranked on a shared course (`[devdoc:segments]`),
+athletes the viewer sees ranked on a shared course ([SEGMENTS.md](SEGMENTS.md)),
 never an unpublished effort; the secondary line keeps
 pente moyenne, tolérance (owner), and the course metrics the primary grid did
 not use. The
@@ -5109,7 +5109,7 @@ Les trois premières lignes du tableau affichent le rang §10.4 : le laurier de
 la place (or, argent, bronze) devant le numéro ; à partir de la quatrième place,
 le numéro reste seul, toujours annoncé « Rang N ».
 
-Le classement suit son lecteur (`[devdoc:segments]`) : chacun y voit les
+Le classement suit son lecteur ([SEGMENTS.md](SEGMENTS.md)) : chacun y voit les
 athlètes dont il peut lire la publication, parcours partagé, sauf ceux qui ont
 quitté ce classement. Les rangs se lisent donc « parmi les athlètes que vous
 pouvez voir », phrase écrite sous le sélecteur. Nul ne voit les efforts d'un
@@ -5124,7 +5124,7 @@ vide le dit.
 
 Sur la page du classement complet seulement, un second `nav-segmented` suit le
 premier : **Tous**, puis **Femmes** et **Hommes** pour chaque catégorie qu'au
-moins une section offre (`[devdoc:segments]`, `?category=`, combinable
+moins une section offre ([SEGMENTS.md](SEGMENTS.md), `?category=`, combinable
 avec `?board=`). Une catégorie n'est offerte qu'à partir de 3 athlètes
 distincts que le lecteur voit dans ce sport ; une section en dessous dit
 « Moins de 3 athlètes de cette catégorie parmi ceux que vous voyez dans ce
@@ -5145,7 +5145,7 @@ segment mono-sport garde une seule section, sans suffixe. L'ordre des sections
 suit le catalogue des sports.
 
 Anonymous rows: alias only — **no avatar**, no profile link, no exact date, no
-identifier of any kind (§9.5, `[devdoc:segments]`).
+identifier of any kind (§9.5, [SEGMENTS.md](SEGMENTS.md)).
 
 The viewer's own standing is read on the course page: the *Mon rang*
 tile carries the rank and the board size (`3 / 12`, with the laurel for a
@@ -5954,7 +5954,7 @@ M5 adds remote profiles, follow, a following feed, notifications, comments,
 likes, moderation and Wanderer; the federation transport, remote profiles,
 feed, operator settings, and remote publication and course rendering have
 shipped. The surface is specified by `[devdoc:federation]` and
-`[devdoc:segments-federation]`; this section records where it attaches so none
+[SEGMENTS-FEDERATION.md](SEGMENTS-FEDERATION.md); this section records where it attaches so none
 of it forces a redesign.
 
 **Where things attach**
@@ -6083,5 +6083,5 @@ depends on it, in both locales, with the styleguide updated.
 
 When a rule here conflicts with a data or protocol contract in
 [WORKOUT.md](WORKOUT.md), [PUBLISHING.md](PUBLISHING.md), `[devdoc:federation]`,
-`[devdoc:tracking-depth]` or `[devdoc:segments]`, the contract wins and this
+`[devdoc:tracking-depth]` or [SEGMENTS.md](SEGMENTS.md), the contract wins and this
 document is amended — never the other way round, and never silently.
