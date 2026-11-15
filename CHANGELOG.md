@@ -1493,7 +1493,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Automatic publishing (`[devdoc:auto-publishing]`): a publishing profile can
+- Automatic publishing ([AUTO-PUBLISHING.md](docs/dev/AUTO-PUBLISHING.md)): a publishing profile can
   be marked automatic — off by default, one per audience, turned on only with
   an explicit acknowledgement, optionally excluding commutes. Each new import
   is then published through the ordinary publisher, with the profile's delay,
@@ -2026,7 +2026,7 @@ migration (`db:migrate`, applied on boot).
   owner and accepted local followers while restricted federation is enabled.
   The tiles count the same visible set, each card carries its audience badge,
   unpublished and scheduled publications stay hidden, and a parity spec
-  guards the scope against policy drift (`[devdoc:publishing-hardening]`, `[devdoc:federation]`).
+  guards the scope against policy drift ([PUBLISHING.md](docs/dev/PUBLISHING.md), `[devdoc:federation]`).
 - Every active week of the hub's intensity pulse is a link: clicking a capsule,
   or pressing Enter with the keyboard cursor on it, opens the workouts list
   filtered to that week (`/workouts?period=custom&from=…&to=…`), carrying the
@@ -2193,7 +2193,7 @@ migration (`db:migrate`, applied on boot).
   republishing withdraws the old publication immediately, and deleting the
   workout cancels it in the same transaction. The administration console gains
   the scheduled filter, operator cancellation and audit
-  (`[devdoc:delayed-publishing]`, `DESIGN.md` §19.19).
+  ([DELAYED-PUBLISHING.md](docs/dev/DELAYED-PUBLISHING.md), `DESIGN.md` §19.19).
 - Typed reactions on publications and received notes: one active reaction per
   account and target, with four types (beer, energy, coffee, the neutral
   like). Repeating a type withdraws it, another type replaces it; a reaction

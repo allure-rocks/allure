@@ -68,11 +68,11 @@ ignored. Segment leaderboards follow the reader and the shared route instead
 A profile also carries policies that are not part of the snapshot:
 
 - `publish_delay_seconds` — an optional safety delay before a publication
-  becomes visible or federated (`[devdoc:delayed-publishing]`). `immediate` is
+  becomes visible or federated ([DELAYED-PUBLISHING.md](DELAYED-PUBLISHING.md)). `immediate` is
   the default; the owner may pick another preset for one publish.
 - `auto_publish` — an opt-in, acknowledged policy that publishes each recent,
   non-bulk import through the ordinary publisher once its enrichments settle
-  (`[devdoc:auto-publishing]`). One automatic profile per audience and account;
+  ([AUTO-PUBLISHING.md](AUTO-PUBLISHING.md)). One automatic profile per audience and account;
   commutes and chosen sports may be excluded.
 
 Changing a profile affects future publications only. An existing publication
@@ -207,6 +207,49 @@ audience are named it ([REACTIONS.md](REACTIONS.md)).
 Every browser surface is members-only (`ACCESS.md`). A visitor is redirected to
 sign-in and returned to the requested page. The ActivityPub wire contract is
 unchanged: remote peers have no Allure account.
+
+### Resource and audience contract
+
+Source-owner authorization and publication authorization remain separate.
+
+| Resource | Anonymous | Owner | Unrelated member | Local accepted follower |
+|---|---|---|---|---|
+| `/workouts` library | redirect | source workouts | 404 | 404 |
+| Public profile | redirect | active public snapshots, plus followers snapshots to entitled readers | active public snapshots | public and followers snapshots |
+| Owner workout detail | redirect | complete source | snapshot only for an active public publication | snapshot only for an active public publication |
+| Source track, chart, file, image | redirect | complete source | 404 | 404 |
+| Publication track, chart, GPX, image | redirect | owner source surface remains separate | active public snapshot if enabled | active public snapshot if enabled, plus the followers snapshot when entitled |
+| Followers-only publication | redirect | complete source through the owner surface | 404 | active followers snapshot |
+| Deleted publication | redirect | 404 through publication endpoints | 404 | 404 |
+
+The public profile is a publication surface even when viewed by the owner. It
+never switches to complete source values based on session ownership.
+
+On the protocol side, public objects and media remain publicly fetchable.
+Followers-only objects and media require a verified signed request:
+
+| Principal | Public publication | Followers publication |
+|---|---|---|
+| Unsigned request | allow | 404 |
+| Signed unrelated actor | allow | 404 |
+| Pending, rejected or undone follower | allow | 404 |
+| Accepted remote follower with `unknown` or `public` capability | allow | 404 |
+| Accepted remote follower with `restricted` capability | allow | allow while `FEDERATION_RESTRICTED_ENABLED` |
+| Tombstoned actor | public anonymous behavior only | 404 |
+
+An accepted relationship alone never exposes a followers-only object or media.
+
+The outbox collection contract:
+
+- `totalItems` and `orderedItems` use the same filtered relation;
+- deleted publication `Create` activities are excluded;
+- a `Delete` is visible according to its immutable recipient list, not the
+  current follower status;
+- `Follow`, `Accept`, `Undo` and `Like` events use their own exact activity
+  audience;
+- a public collection document never enumerates followers or following actor
+  IDs;
+- pagination is bounded and never materializes an unbounded collection.
 
 ## 7. Data model
 

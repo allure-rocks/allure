@@ -21,6 +21,8 @@ account, while the ActivityPub wire contract is unchanged.
 
 `docs/dev/PUBLISHING.md` is the publishing contract: the source workout, the
 profile, the immutable publication, the audiences and the federation boundary.
+`docs/dev/DELAYED-PUBLISHING.md` is the safety-delay contract, and
+`docs/dev/AUTO-PUBLISHING.md` is the automatic-publishing contract.
 `docs/dev/REACTIONS.md` is the reactions contract: the four types, the toggle,
 the audience rule and the wire. `docs/dev/COMMENTS.md` is the comments
 contract: the thread per audience, the one level of replies, the moderation,
