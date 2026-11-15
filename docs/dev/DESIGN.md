@@ -4073,7 +4073,7 @@ withdrawal of publications.
 ### 19.25 Automatic publishing — on the publishing profile form
 
 Placement: the « Publication automatique » card of the profile form, as a
-persistent `alert-warning` above the switch (`[devdoc:auto-publishing]`).
+persistent `alert-warning` above the switch ([AUTO-PUBLISHING.md](AUTO-PUBLISHING.md)).
 Non-dismissible. The switch is off by default; while the profile is not yet
 automatic, turning it on also requires the acknowledgement checkbox. The values
 interpolate `WorkoutAutoPublication`'s constants. Under the commute switch, a
@@ -5233,7 +5233,7 @@ sub-page repeats the collection in its shell; below `md` it links back here.
 ```
 
 The automatic switch is disabled, with the holder's name as its hint, while
-another profile of the same audience is automatic (`[devdoc:auto-publishing]`).
+another profile of the same audience is automatic ([AUTO-PUBLISHING.md](AUTO-PUBLISHING.md)).
 
 ### 20.13 `/settings/privacy-zones/new` — see §14.4
 
