@@ -25,7 +25,7 @@ module Workouts
 
     # A public publication serves every signed-in account and the public wire
     # protocol, but never an anonymous browser visitor: public means
-    # registered locally (PLAN_MEMBERS_ONLY.md). A followers publication serves
+    # registered locally (docs/dev/ACCESS.md). A followers publication serves
     # the owner and an accepted local follower whatever the switches say, and
     # an accepted remote follower whose locally assigned capability is
     # promoted only while restricted federation is enabled; the remote request

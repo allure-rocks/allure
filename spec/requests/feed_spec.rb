@@ -14,7 +14,7 @@ RSpec.describe "Feed" do
     expect(response).to redirect_to(me_path)
   end
 
-  # Viewing requires an account (PLAN_MEMBERS_ONLY.md): no feed surface is
+  # Viewing requires an account (docs/dev/ACCESS.md): no feed surface is
   # rendered to an anonymous visitor.
   it "redirects an anonymous visitor to sign-in" do
     get feed_path

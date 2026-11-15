@@ -110,7 +110,7 @@ class Segment < ApplicationRecord
 
   # Whether `viewer` (a signed-in User) may see the course itself: name,
   # description, metrics, map, and its board. Viewing requires an account
-  # (PLAN_MEMBERS_ONLY.md): a public course is not served to `nil`. Every
+  # (docs/dev/ACCESS.md): a public course is not served to `nil`. Every
   # denial surfaces as 404 via the controllers, never 403.
   def viewable_by?(viewer)
     return true if viewer == user
