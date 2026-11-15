@@ -185,7 +185,7 @@ publication markers.
 - A publication shares the held markers — gold only, never a second or third
   place — only when the profile's `records` setting is on (off by default): the
   snapshot carries `record_types` and `record_distances`, and federated Notes
-  deliver them as dedicated tags (`[devdoc:federation]`). The snapshot is
+  deliver them as dedicated tags ([FEDERATION.md](FEDERATION.md)). The snapshot is
   immutable, so a later record change stays invisible until the owner
   republishes.
 
