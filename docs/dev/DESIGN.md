@@ -900,7 +900,7 @@ and a client that does not advertise a bridge keeps the web counterpart.
 - The import page's iGPSPORT panel keeps its web controls, labels,
   selection, progress and journal in the companion; when the app registers
   the `igpsport` bridge component, the panel borrows the phone's Bluetooth
-  through it (`[devdoc:import-sources]`). The app contributes only the
+  through it ([IMPORT-SOURCES.md](IMPORT-SOURCES.md)). The app contributes only the
   device chooser sheet, the Bluetooth permission prompt and its radio errors,
   in the device language; everything else follows the account locale. A
   companion without the bridge reads an update request instead of the
@@ -909,7 +909,7 @@ and a client that does not advertise a bridge keeps the web counterpart.
   companion, which registers GPX, FIT, TCX, KML and KMZ as documents. The app
   stages the file and opens `/workout_imports/new`; when it registers the
   `shared-files` bridge component, the file panel's input receives the bytes
-  and names the files it received (`[devdoc:import-sources]`). The fallback
+  and names the files it received ([IMPORT-SOURCES.md](IMPORT-SOURCES.md)). The fallback
   sport, the notes and the submit stay Rails'; a server without the controller
   receives no file and the app explains that it must be updated.
 - Push (`[devdoc:push]`): when the app registers the `push` bridge component
@@ -4792,7 +4792,7 @@ never a raw identifier.
 ### 20.5 `/workout_imports/new` — Import
 
 One surface for every import, with a source picker when more than one import
-source is enabled (`[devdoc:import-sources]`). The picker is a pill tab list;
+source is enabled ([IMPORT-SOURCES.md](IMPORT-SOURCES.md)). The picker is a pill tab list;
 each source renders its own panel, and the shared options card sits below the
 panels: the fallback sport, the single-file title, the equipment, the commute
 flag and the notes. The former M1 single-file form (`/workouts/new`) redirects

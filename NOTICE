@@ -81,6 +81,14 @@ endorsement. The Garmin mark comes from Simple Icons (CC0), the EXR mark is
 the service's own favicon, and the iGPSPORT mark is a simplified trace of the
 manufacturer's icon.
 
+## Gadgetbridge
+
+The iGPSPORT protocol notes and model names under `app/frontend/lib/igpsport/`
+are informed by Gadgetbridge (<https://gadgetbridge.org>), Copyright 2015-2026
+the Gadgetbridge contributors, licensed under the GNU Affero General Public
+License, version 3 or later. The implementation is independent; the AGPL text
+is `LICENSE`.
+
 ## Zwift world data
 
 The world anchors and image rectangles in `lib/allure/virtual/platforms.rb` are
