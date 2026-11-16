@@ -1740,7 +1740,7 @@ migration (`db:migrate`, applied on boot).
   GPX, FIT, TCX, KML and KMZ files: it stages the file and opens the batch
   import form, whose file panel receives the bytes through the new
   `shared-files` bridge component and names what it received
-  (`[devdoc:import-sources]`). The fallback sport, the notes and the
+  ([IMPORT-SOURCES.md](docs/dev/IMPORT-SOURCES.md)). The fallback sport, the notes and the
   submit stay Rails'; an app without the component keeps the plain upload
   field, and no server endpoint is added. `npm run test:shared-files` pins
   the transfer contract in CI.
@@ -1854,7 +1854,7 @@ migration (`db:migrate`, applied on boot).
   comment on to the other instances that received the workout
   (`DESIGN.md` §19.21). `dip fed_test` proves the relay and its withdrawal.
 - The iGPSPORT import source accepts every computer of the protocol family
-  (`[devdoc:import-sources]`), not only the BSC500: the BSC100, BSC200,
+  ([IMPORT-SOURCES.md](docs/dev/IMPORT-SOURCES.md)), not only the BSC500: the BSC100, BSC200,
   BSC300 and BSC500 lines with their S, T and Max variants, the iGS630 and
   iGS800, the BiNavi and the BiNavi Air. Chrome's chooser filters by those
   name prefixes and `models.js` matches the chosen name again, refusing
@@ -1949,7 +1949,7 @@ migration (`db:migrate`, applied on boot).
   connect, list, chunked download and disconnect replies pinned by Node tests.
   A companion without the bridge reads an update request instead of the
   desktop-Chrome requirement, and no server endpoint is added
-  (`[devdoc:import-sources]`).
+  ([IMPORT-SOURCES.md](docs/dev/IMPORT-SOURCES.md)).
 - The iOS companion draws its chrome natively (`DESIGN.md` §7.7): a companion
   advertising `topbar` receives the web topbar hidden, with a payload for the
   navigation, the account menu under the account name, the notification state
@@ -2642,7 +2642,7 @@ migration (`db:migrate`, applied on boot).
   older analysis version. Both enqueue the same self-rescheduling job
   ([WORKOUT.md](docs/dev/WORKOUT.md), `[devdoc:admin]`).
 - The import page picks its panel from the `Allure::ImportSources` registry, so
-  a source is a registry entry plus a partial (`[devdoc:import-sources]`). The
+  a source is a registry entry plus a partial ([IMPORT-SOURCES.md](docs/dev/IMPORT-SOURCES.md)). The
   first non-file source downloads recorded FIT activities straight from an
   iGPSPORT BSC bike computer over Web Bluetooth in desktop Chrome/Edge, then
   hands them to the existing batch form with its exact progress, duplicate

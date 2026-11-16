@@ -52,6 +52,10 @@ registry, the connection model, the adapter contract, the batch job, the shared
 lifecycle and the provider capabilities. The detailed sign-in and operational
 notes stay in a local-only companion.
 
+`docs/dev/IMPORT-SOURCES.md` is the import-sources contract: the registry, the
+file source, the Strava archive, the iGPSPORT device source, the remote sources
+and the manual source.
+
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
 progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
