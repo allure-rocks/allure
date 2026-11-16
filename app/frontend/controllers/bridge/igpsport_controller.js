@@ -1,6 +1,6 @@
 import { BridgeComponent } from "@hotwired/hotwire-native-bridge";
 
-// iOS companion radio for the iGPSPORT device source (PLAN_IMPORT_SOURCES.md
+// iOS companion radio for the iGPSPORT device source (docs/dev/IMPORT-SOURCES.md
 // §4.4). Loaded only when the app registers the `igpsport` component; the
 // `igpsport-device` controller on the same element drives it through
 // `NativeLink`, which sends `connect`, `disconnect`, `list` and `download`

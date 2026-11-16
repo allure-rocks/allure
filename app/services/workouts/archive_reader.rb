@@ -14,7 +14,7 @@ module Workouts
     MAX_TOTAL_UNCOMPRESSED_LABEL = "2 GB"
     MAX_COMPRESSION_RATIO = 1_000
     # Every entry the central directory declares, folders included, checked
-    # before rubyzip builds one object per entry (PLAN_IMPORT_SOURCES.md §3.2).
+    # before rubyzip builds one object per entry (docs/dev/IMPORT-SOURCES.md).
     MAX_DIRECTORY_ENTRIES = 10_000
     CHUNK_SIZE = 64 * 1024
 

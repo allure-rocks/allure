@@ -72,7 +72,7 @@ RSpec.describe "REST API imports (PLAN_API.md §6.3, §8)", type: :request do
     expect(WorkoutImportBatch.count).to eq(0)
   end
 
-  it "answers 429 with a reason past the account's limits (PLAN_IMPORT_SOURCES.md §3.2)" do
+  it "answers 429 with a reason past the account's limits (docs/dev/IMPORT-SOURCES.md)" do
     3.times { create(:workout_import_batch, user:, sport: catalog_sport("cycling")) }
 
     post "/api/rest/v1/imports", params: { files: [ gpx_upload ], fallback_sport: "cycling" }, headers: headers

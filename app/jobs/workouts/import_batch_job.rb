@@ -7,7 +7,7 @@ module Workouts
     queue_as :default
 
     # One file import at a time per account: its others wait their turn
-    # instead of taking every worker thread (PLAN_IMPORT_SOURCES.md §3.2).
+    # instead of taking every worker thread (docs/dev/IMPORT-SOURCES.md).
     limits_concurrency key: ->(batch) { batch.user_id.to_s }, group: "WorkoutImportBatch", duration: 6.hours
 
     retry_on ActiveRecord::Deadlocked, wait: :polynomially_longer, attempts: 5
@@ -148,7 +148,7 @@ module Workouts
         sport: batch.sport,
         # The options card's title belongs to the single workout a single-file
         # import produces; a batch never titles every entry alike
-        # (PLAN_IMPORT_SOURCES.md §2).
+        # (docs/dev/IMPORT-SOURCES.md).
         title: single_entry_batch?(batch) ? batch.title : nil,
         notes: batch.notes,
         commute: batch.commute,

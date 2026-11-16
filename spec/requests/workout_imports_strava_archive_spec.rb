@@ -88,7 +88,7 @@ RSpec.describe "Strava archive imports" do
     expect(response.body).to include("3 photos jointes · 2 photos absentes de l’archive · 1 photo refusée")
   end
 
-  it "refuses a second archive while one is waiting (PLAN_IMPORT_SOURCES.md §3.2)" do
+  it "refuses a second archive while one is waiting (docs/dev/IMPORT-SOURCES.md)" do
     create(:workout_import_batch, user:, sport: nil, source: "strava_archive", status: "processing")
     sign_in_user
 

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Request body limits (PLAN_IMPORT_SOURCES.md §3.2)" do
+RSpec.describe "Request body limits (docs/dev/IMPORT-SOURCES.md)" do
   let(:user) { create(:user) }
 
   it "refuses an oversized import before the controller runs" do
