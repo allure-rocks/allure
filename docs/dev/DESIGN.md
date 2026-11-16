@@ -1281,7 +1281,7 @@ the external account and when it last synced. Each row opens
 the services, and the content is four cards, each with its own save —
 **Connexion** (the state badge, the link form or the linked account's facts,
 the sync actions and the privacy copy of §19.23–§19.23d), **Récupérer des
-activités** (`[devdoc:remote-imports]`), **Préférences**, and
+activités** ([REMOTE-IMPORTS.md](REMOTE-IMPORTS.md)), **Préférences**, and
 **Déconnecter** as the page's danger zone (§19.24). Only the service's own
 cards refresh, through the live-frame pattern, and only while it is linking or
 unlinking, so a form being filled in on another service is never replaced.
@@ -3965,7 +3965,7 @@ form and on the connected card. Persistent and non-dismissible.
 
 Placement: the EXR page of `/connections`, under the link form and on
 the connected card. Persistent and non-dismissible
-(`[devdoc:remote-imports]`). Without equipment, the unlink checkbox of
+([REMOTE-IMPORTS.md](REMOTE-IMPORTS.md)). Without equipment, the unlink checkbox of
 §19.24 names the workouts only.
 
 > **FR** — « EXR ne propose pas d'API publique : cette connexion utilise votre
@@ -3990,12 +3990,12 @@ the connected card. Persistent and non-dismissible
 Placement: the Withings page of `/connections`, under the sign-in
 form (e-mail and password only; the range is the connected card's retrieval
 form) and on the connected card. Persistent and non-dismissible
-(`[devdoc:remote-imports]`). Without equipment, the unlink checkbox of
+([REMOTE-IMPORTS.md](REMOTE-IMPORTS.md)). Without equipment, the unlink checkbox of
 §19.24 names the workouts only. The session is the only credential and
 Withings grants it for a day: the form asks for the password again at each
 reconnection, and the copy says so plainly instead of hiding it. The
 preferences form also carries the « N'importer que les séances avec un
-parcours GPS » switch (`[devdoc:remote-imports]`, on by
+parcours GPS » switch ([REMOTE-IMPORTS.md](REMOTE-IMPORTS.md), on by
 default): an Apple Health-fed account lists auto-detected sessions without a
 route beside real workouts, and only the route tells them apart.
 
@@ -4027,7 +4027,7 @@ route beside real workouts, and only the route tells them apart.
 Placement: the Zwift page of `/connections`, under the sign-in form
 (e-mail and password only; the range is the connected card's retrieval form)
 and on the connected card. Persistent and non-dismissible
-(`[devdoc:remote-imports]`). Without equipment, the unlink checkbox of
+([REMOTE-IMPORTS.md](REMOTE-IMPORTS.md)). Without equipment, the unlink checkbox of
 §19.24 names the workouts only. The refresh token is the only credential and
 lasts eight days without a sync: the copy says so, and the connected card's
 « Connexion valable jusqu'au » shows its end. Zwift exposes only the newest

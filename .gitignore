@@ -48,6 +48,9 @@
 # Local agent notes: a private overlay for this checkout, never published.
 /AGENTS.local.md
 
+# Local-only Markdown overlays: never published.
+*.local.md
+
 # Vite Ruby
 /public/vite*
 node_modules

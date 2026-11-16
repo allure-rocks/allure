@@ -112,7 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   per-workout cap — so they appear in the workout's gallery and can be placed
   on the map. They carry no EXIF, so they arrive unplaced; the import counts
   the ones it could not fetch or the pipeline refused, and never fails because
-  of a photo (`[devdoc:remote-imports]`).
+  of a photo ([REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md)).
 
 ### Changed
 
@@ -123,7 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   action. A link or an unlink no longer refreshes — and can no longer wipe —
   another service's form. The former `/settings/connections` address
   redirects, and the notification and batch links open the service's page
-  (`[devdoc:remote-imports]`, `DESIGN.md` §8.6).
+  ([REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md), `DESIGN.md` §8.6).
 - A virtual ride now leads with its watts. When a Cycling (Virtual) recording
   carries power, average power takes the place of the speed in the summary
   tiles, on the activity card and as the chart's default secondary line: the
@@ -172,7 +172,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the import froze a truncated recording that no later sync replaced — the
   listing is deduplicated by external id. The adapter now lists an activity
   only once its declared end has settled (10 minutes), and the next sync takes
-  it complete, with its final name (`[devdoc:remote-imports]`).
+  it complete, with its final name ([REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md)).
 - A virtual world's map now comes from Zwift's own map CDN, each file pinned by
   its SHA-256 and named after it, so a future update reaches browsers
   immediately ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)). Watopia shows the north-west
@@ -228,7 +228,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Import from Withings (`[devdoc:remote-imports]`), off unless the
+- Import from Withings ([REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md)), off unless the
   operator sets `WITHINGS_IMPORT_ENABLED`. Withings has no public API for
   routes: the integration is unofficial, sends the password once and keeps it
   only while the link task runs, stores only the day-long session, and
@@ -239,7 +239,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   session that ends leaves the queued batches in place, and « Reconnecter et
   reprendre » resumes them. `bin/rails withings:probe` checks the sign-in
   against a real account.
-- Import from Zwift (`[devdoc:remote-imports]`), off unless the operator
+- Import from Zwift ([REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md)), off unless the operator
   sets `ZWIFT_IMPORT_ENABLED`. Zwift has no public API: the integration is
   unofficial, sends the password once and keeps it only while the link task
   runs, stores only the eight-day refresh token, and imports the original FIT
@@ -1597,7 +1597,7 @@ migration (`db:migrate`, applied on boot).
   bound to a secret only the app holds. Google is offered in the app only
   where Sign in with Apple is too. Needs the companion's `auth-session`
   bridge; older versions show no provider button.
-- Import from Garmin Connect (`[devdoc:remote-imports]`), off unless the
+- Import from Garmin Connect ([REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md)), off unless the
   operator sets `GARMIN_CONNECT_IMPORT_ENABLED`. Garmin has no public API:
   the integration is unofficial, and Garmin may change it or refuse a server
   address. From « Services connectés », an account links Garmin Connect with
@@ -1610,7 +1610,7 @@ migration (`db:migrate`, applied on boot).
   Disconnecting offers to delete what was imported, checked by default. A
   notification asks to reconnect when Garmin refuses the session.
   `bin/rails garmin_connect:probe` checks the sign-in against a real account.
-- Import from EXR, the virtual rowing game (`[devdoc:remote-imports]`),
+- Import from EXR, the virtual rowing game ([REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md)),
   off unless the operator sets `EXR_IMPORT_ENABLED`. EXR has no public API:
   from « Services connectés », an account signs in to its EXR account once —
   the password is sent once and kept only while the link task runs, only the
@@ -1619,7 +1619,7 @@ migration (`db:migrate`, applied on boot).
   session's original FIT file, recognised as virtual rowing in its world.
   Signing out of the EXR site may require reconnecting.
   `bin/rails exr:probe` checks the account site against a real account.
-- Administration of connected services (`[devdoc:remote-imports]`): a
+- Administration of connected services ([REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md)): a
   « Connexions » tab under `/admin/imports` lists every account's connection
   with its state, last sync, session end and last error — never a
   credential or the external account — and the operator can revoke one

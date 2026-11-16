@@ -47,6 +47,11 @@ remote notes and media, the safety gate and the restricted audience.
 catalogue, the world maps, virtual sports, venue naming, distance calibration
 and teleports.
 
+`docs/dev/REMOTE-IMPORTS.md` is the remote-imports contract: the provider
+registry, the connection model, the adapter contract, the batch job, the shared
+lifecycle and the provider capabilities. The detailed sign-in and operational
+notes stay in a local-only companion.
+
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
 progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
@@ -128,7 +133,8 @@ behaviours updates its page in every language in the same patch.
   imports each entry through `Workouts::Importer`. Garmin Connect, EXR, Withings
   and Zwift are operator-enabled adapters under `ImportConnections::Providers`
   and each appears only when its variable is set; the Strava archive source is
-  always available. No health data is imported. `[devdoc:remote-imports]`
+  always available. No health data is imported.
+  [docs/dev/REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md)
   `[devdoc:strava-archive]`
 - **API, webhooks, MCP.** A versioned REST API under `/api/rest/v1` (not
   `/api/v1`, which names the ActivityPub objects), scoped `ApiToken`s, RFC 9457
