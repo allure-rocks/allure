@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_REMOTE_IMPORTS.md §4: workouts and equipment remember the connection
+# docs/dev/REMOTE-IMPORTS.md: workouts and equipment remember the connection
 # and the provider's id they came from; import batches and entries learn the
 # remote source, its trigger, the quota pause and the `skipped` outcome.
 class ExtendImportsForRemoteSources < ActiveRecord::Migration[8.1]

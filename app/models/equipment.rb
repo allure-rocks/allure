@@ -12,7 +12,7 @@ class Equipment < ApplicationRecord
 
   belongs_to :user
   belongs_to :equipment_type
-  # Gear synchronised from a remote provider (PLAN_REMOTE_IMPORTS.md §6.3).
+  # Gear synchronised from a remote provider (docs/dev/REMOTE-IMPORTS.md).
   belongs_to :import_connection, optional: true
   has_and_belongs_to_many :workouts, join_table: "workout_equipments"
 

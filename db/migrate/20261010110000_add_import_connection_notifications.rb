@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_REMOTE_IMPORTS.md §9: a connected service asking to be linked again.
+# docs/dev/REMOTE-IMPORTS.md: a connected service asking to be linked again.
 # `import_connection_revoked` is admitted now so a provider slice only adds its
 # producer. One switch governs both kinds.
 class AddImportConnectionNotifications < ActiveRecord::Migration[8.1]

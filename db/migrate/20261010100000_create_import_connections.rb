@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_REMOTE_IMPORTS.md §4: one connection per account and remote provider,
+# docs/dev/REMOTE-IMPORTS.md: one connection per account and remote provider,
 # stable across re-links so the external ids of what it imported keep
 # deduplicating. Strava's columns (OAuth state, webhook, rate budget) arrive
 # with its own slice.

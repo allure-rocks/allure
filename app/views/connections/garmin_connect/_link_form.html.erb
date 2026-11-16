@@ -1,4 +1,4 @@
-<%# The Garmin Connect sign-in (PLAN_REMOTE_IMPORTS.md §7.2). The password goes
+<%# The Garmin Connect sign-in (docs/dev/REMOTE-IMPORTS.md). The password goes
     to Garmin once, from a background job, and is never kept. Locals: connection. %>
 <%= form_with url: connection_link_path("garmin_connect"), method: :post do %>
   <div class="row g-2">

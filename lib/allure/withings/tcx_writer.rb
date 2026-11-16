@@ -6,7 +6,7 @@ require "time"
 module Allure
   module Withings
     # Builds the deterministic TCX original of one Withings session
-    # (PLAN_REMOTE_IMPORTS.md §7c.3, decisions 10 and 11). The same series
+    # (docs/dev/REMOTE-IMPORTS.md, decisions 10 and 11). The same series
     # always build the same bytes, so the `(user_id, source_digest)` index
     # deduplicates a re-import.
     #

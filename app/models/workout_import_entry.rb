@@ -8,7 +8,7 @@ class WorkoutImportEntry < ApplicationRecord
   # (PLAN_STRAVA_ARCHIVE.md §4), so the re-detection backfill never overwrites
   # a human decision (docs/dev/VIRTUAL-PLATFORMS.md).
   SPORT_SOURCES = %w[detected declared fallback unknown manual].freeze
-  # Why a remote activity was not imported (PLAN_REMOTE_IMPORTS.md §5.2).
+  # Why a remote activity was not imported (docs/dev/REMOTE-IMPORTS.md).
   SKIP_REASONS = %w[no_geometry unsupported_sport no_file].freeze
 
   belongs_to :batch,

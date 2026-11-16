@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Remote import sources (PLAN_REMOTE_IMPORTS.md): an in-memory provider that
+# Remote import sources (docs/dev/REMOTE-IMPORTS.md): an in-memory provider that
 # answers the adapter surface, the shared examples every real adapter must
 # pass, and a helper that enables a provider's operator flag for one example.
 #
@@ -76,7 +76,7 @@ module RemoteImportHelpers
   end
 end
 
-# The adapter surface the remote batch job depends on (PLAN_REMOTE_IMPORTS.md
+# The adapter surface the remote batch job depends on (docs/dev/REMOTE-IMPORTS.md
 # §5.1). Include with `provider` built for a linked connection and
 # `listed_activity` returning an activity the stubs serve.
 RSpec.shared_examples "an import provider" do

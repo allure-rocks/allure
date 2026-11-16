@@ -106,7 +106,7 @@ Rails.application.routes.draw do
     delete "/invitations/:id", to: "invitations#destroy", as: :invitation
     # Import failures (PLAN_ADMIN.md §4.7) and system diagnostics (§4.8).
     get "/imports", to: "imports#index", as: :imports
-    # Remote import connections (PLAN_REMOTE_IMPORTS.md §10), before `:id`.
+    # Remote import connections (docs/dev/REMOTE-IMPORTS.md), before `:id`.
     get "/imports/connections", to: "import_connections#index", as: :import_connections
     post "/imports/connections/:id/revoke", to: "import_connections#revoke", as: :import_connection_revoke
     get "/imports/:id", to: "imports#show", as: :import
@@ -353,7 +353,7 @@ Rails.application.routes.draw do
   # (DESIGN.md §8.5). From md up the sub-page shell repeats its navigation;
   # below md each sub-page links back to this hub.
   get "/settings", to: "settings/entry#show", as: :settings
-  # Connected services (PLAN_REMOTE_IMPORTS.md §8.1, DESIGN.md §8.6): their own
+  # Connected services (docs/dev/REMOTE-IMPORTS.md, DESIGN.md §8.6): their own
   # area beside /settings, reached from the account menu. The hub lists every
   # remote import source the account may see; each service keeps its own page,
   # so a link or an unlink never refreshes another service's form.

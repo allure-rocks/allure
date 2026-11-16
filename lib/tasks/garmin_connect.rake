@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :garmin_connect do
-  # Feasibility check for PLAN_REMOTE_IMPORTS.md §7 against a real account,
+  # Feasibility check for docs/dev/REMOTE-IMPORTS.md against a real account,
   # from the network this command runs on. Writes nothing to the database and
   # never prints the password, the tokens or the cookies.
   #
@@ -112,7 +112,7 @@ namespace :garmin_connect do
   end
 
   # Development only, until the card's sign-in form exists
-  # (PLAN_REMOTE_IMPORTS.md §7.2): links an account with the DI token a probe
+  # (docs/dev/REMOTE-IMPORTS.md): links an account with the DI token a probe
   # kept, without signing in to Garmin again. The token moves into the
   # connection's encrypted credentials and the file is deleted, because the
   # connection's first refresh spends the refresh token it holds.
@@ -150,7 +150,7 @@ namespace :garmin_connect do
 
   # Imports an account's Garmin Connect activities over a date range through
   # the remote batch pipeline, the task form of the card's « Récupérer des
-  # activités… » (PLAN_REMOTE_IMPORTS.md §8.2), processed by the
+  # activités… » (docs/dev/REMOTE-IMPORTS.md), processed by the
   # `remote_imports` worker.
   #
   #   USERNAME=marie FROM=2026-08-01 TO=2026-10-09 [SPORT=cycling] dip rails garmin_connect:retrieve

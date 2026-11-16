@@ -11,7 +11,7 @@ class WorkoutImportBatch < ApplicationRecord
 
   belongs_to :user
   # Required for an uploaded batch; a remote batch may rely on each file's own
-  # sport and the connection's fallback (PLAN_REMOTE_IMPORTS.md §4), a Strava
+  # sport and the connection's fallback (docs/dev/REMOTE-IMPORTS.md), a Strava
   # archive on each activity's declared type (PLAN_STRAVA_ARCHIVE.md §4).
   belongs_to :sport, optional: true
   belongs_to :import_connection, optional: true

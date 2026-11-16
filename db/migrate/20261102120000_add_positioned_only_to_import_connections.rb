@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_REMOTE_IMPORTS.md §7c.3: a Withings account fed by Apple Health lists
+# docs/dev/REMOTE-IMPORTS.md: a Withings account fed by Apple Health lists
 # auto-detected sessions (often without any recorded position) beside real
 # workouts; the connection may import positioned sessions only. The flag is
 # on for the existing Withings connections — the provider is not released

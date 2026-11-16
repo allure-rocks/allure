@@ -40,7 +40,7 @@ class Workout < ApplicationRecord
   belongs_to :user
   has_many :photos, -> { order(:position, :id) }, class_name: "WorkoutPhoto", dependent: :destroy, inverse_of: :workout
   belongs_to :sport
-  # Imported from a remote provider under `external_id` (PLAN_REMOTE_IMPORTS.md §4).
+  # Imported from a remote provider under `external_id` (docs/dev/REMOTE-IMPORTS.md).
   belongs_to :import_connection, optional: true
   # Recording segments: one per contiguous GPX <trkseg>, or per run of FIT
   # records between timer stop_all events. Deliberately not named `segments`:

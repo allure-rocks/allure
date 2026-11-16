@@ -3,7 +3,7 @@
 module Allure
   module Exr
     # Signs in to the EXR account site once and returns the remember cookie,
-    # the only credential Allure keeps (PLAN_REMOTE_IMPORTS.md §7b.2). The
+    # the only credential Allure keeps (docs/dev/REMOTE-IMPORTS.md). The
     # sign-in is the site's own HTML form: `GET /login` for the CSRF `_token`
     # and the session cookies, then `POST /login` with `mail` and `password`.
     class Session

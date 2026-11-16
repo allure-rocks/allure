@@ -4,7 +4,7 @@ require "digest"
 
 module Workouts
   # Imports the activities of a remote batch through its connection's
-  # provider (PLAN_REMOTE_IMPORTS.md §5.2). The same phases as the file
+  # provider (docs/dev/REMOTE-IMPORTS.md). The same phases as the file
   # pipeline: discovery (the provider's listing, for a date-range batch),
   # then one entry at a time through `Workouts::Importer`.
   #
@@ -180,7 +180,7 @@ module Workouts
       close(fetched.io)
     end
 
-    # The photos the provider offers with the activity (PLAN_REMOTE_IMPORTS.md
+    # The photos the provider offers with the activity (docs/dev/REMOTE-IMPORTS.md
     # §7d.3 for Zwift): attached through the same pipeline as the owner's own
     # uploads, so the stripped derivatives, the account quota and the
     # per-workout cap apply. A photo the pipeline refuses is counted, a photo
@@ -220,7 +220,7 @@ module Workouts
     end
 
     # Gear is attached at import only while the connection synchronises it and
-    # the item already exists locally (PLAN_REMOTE_IMPORTS.md §6.3).
+    # the item already exists locally (docs/dev/REMOTE-IMPORTS.md).
     def equipment_ids(connection, fetched)
       return nil unless connection.sync_equipment && fetched.equipment_external_id.present?
 

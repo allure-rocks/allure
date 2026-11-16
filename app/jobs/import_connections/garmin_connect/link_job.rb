@@ -3,7 +3,7 @@
 module ImportConnections
   module GarminConnect
     # Signs in to Garmin with the credentials a pending link holds
-    # (PLAN_REMOTE_IMPORTS.md §7.2): the password on the first run, the
+    # (docs/dev/REMOTE-IMPORTS.md): the password on the first run, the
     # verification code on the next. Every branch wipes what it used; a
     # failure returns the connection to its previous state with the reason.
     # Never retried: each attempt is a sign-in Garmin counts.

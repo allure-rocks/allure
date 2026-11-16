@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Connected services (PLAN_REMOTE_IMPORTS.md §8.1, DESIGN.md §8.6): the hub at
+# Connected services (docs/dev/REMOTE-IMPORTS.md, DESIGN.md §8.6): the hub at
 # /connections and one page per remote import source the operator enables,
 # plus the account's connections to a source the operator has since disabled,
 # which stay stored but inert. Every action is scoped to the current account's

@@ -2,7 +2,7 @@
 
 module Allure
   module RemoteImports
-    # The photos of one activity (PLAN_REMOTE_IMPORTS.md §5.1): how many the
+    # The photos of one activity (docs/dev/REMOTE-IMPORTS.md): how many the
     # provider announced (`listed`) and the ones it could download. A provider
     # without photos returns `PhotoSet.new`, and a photo whose download failed
     # is counted as missing rather than failing the activity.

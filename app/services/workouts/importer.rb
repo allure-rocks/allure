@@ -40,7 +40,7 @@ module Workouts
       @equipment_ids = equipment_ids
       @commute = commute
       # A remote import names its connection and the provider's id, written
-      # with the workout (PLAN_REMOTE_IMPORTS.md §5.2).
+      # with the workout (docs/dev/REMOTE-IMPORTS.md).
       @import_connection = import_connection
       @external_id = external_id
       # A bulk import (a large file batch, a date-range retrieval) is never

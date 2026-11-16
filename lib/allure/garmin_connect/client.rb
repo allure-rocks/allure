@@ -3,7 +3,7 @@
 module Allure
   module GarminConnect
     # Authenticated calls to connectapi with the DI bearer
-    # (PLAN_REMOTE_IMPORTS.md §7.3–7.4). Refreshes the token when it expires
+    # (docs/dev/REMOTE-IMPORTS.md–7.4). Refreshes the token when it expires
     # within 15 minutes and once after a 401; `token` is the current token.
     # Garmin rotates the refresh token on every refresh, so `on_refresh` is
     # called with the new token before any further request: the caller must

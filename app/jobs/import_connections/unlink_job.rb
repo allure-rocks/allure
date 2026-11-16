@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ImportConnections
-  # Disconnects a service (PLAN_REMOTE_IMPORTS.md §6.2): revokes what the
+  # Disconnects a service (docs/dev/REMOTE-IMPORTS.md): revokes what the
   # provider allows, deletes the imported workouts and equipment when the
   # owner chose to, and wipes every credential. The row stays `unlinked`, so
   # kept workouts keep their external id and a later link never imports them

@@ -3,7 +3,7 @@
 module ImportConnections
   module Withings
     # Signs in to Withings's private API with the password a pending link
-    # holds (PLAN_REMOTE_IMPORTS.md §7c.2) and keeps only the session, which
+    # holds (docs/dev/REMOTE-IMPORTS.md) and keeps only the session, which
     # Withings grants for the asked duration — a day. The password is wiped
     # before the request; a failed sign-in returns the connection to its
     # previous state with the reason. Once linked, the job resumes the

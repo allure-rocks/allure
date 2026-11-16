@@ -2,7 +2,7 @@
 
 module ImportConnections
   # Brings the provider's gear in as local equipment and attaches it to the
-  # connection's workouts that have none (PLAN_REMOTE_IMPORTS.md §6.3). An
+  # connection's workouts that have none (docs/dev/REMOTE-IMPORTS.md). An
   # item is created once, by external id, and never deleted or renamed by a
   # later sync; later imports attach known gear as they arrive.
   class EquipmentSyncJob < ApplicationJob

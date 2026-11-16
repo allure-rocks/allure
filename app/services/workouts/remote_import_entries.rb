@@ -2,7 +2,7 @@
 
 module Workouts
   # Turns a provider listing into the entries of a remote batch
-  # (PLAN_REMOTE_IMPORTS.md §5.2). Idempotent: an activity already listed in
+  # (docs/dev/REMOTE-IMPORTS.md). Idempotent: an activity already listed in
   # the batch is left alone, so a listing interrupted by the quota resumes.
   #
   # An activity without geometry is `skipped` at once, and one the connection

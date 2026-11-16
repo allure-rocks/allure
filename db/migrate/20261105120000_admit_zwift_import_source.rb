@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_REMOTE_IMPORTS.md §7d (slice 7): Zwift joins the remote providers. The
+# docs/dev/REMOTE-IMPORTS.md (slice 7): Zwift joins the remote providers. The
 # provider of a connection and the source of a batch are checked lists in the
 # database.
 class AdmitZwiftImportSource < ActiveRecord::Migration[8.1]
