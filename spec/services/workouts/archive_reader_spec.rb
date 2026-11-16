@@ -295,7 +295,7 @@ RSpec.describe Workouts::ArchiveReader do
     end
   end
 
-  describe "a central directory declaring too many entries (PLAN_IMPORT_SOURCES.md §3.2)" do
+  describe "a central directory declaring too many entries (docs/dev/IMPORT-SOURCES.md)" do
     it "refuses a ZIP or a KMZ before rubyzip reads its directory" do
       expect(Zip::File).not_to receive(:open_buffer)
 

@@ -307,7 +307,7 @@ RSpec.describe "Workout batch imports" do
     expect(response.body).to include('data-notice-level="success"')
   end
 
-  describe "admission (PLAN_IMPORT_SOURCES.md §3.2)" do
+  describe "admission (docs/dev/IMPORT-SOURCES.md)" do
     def post_gpx
       post workout_imports_path, params: {
         workout_import_batch: {

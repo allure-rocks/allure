@@ -5,7 +5,7 @@
 # A refused upload returns to that panel.
 class StravaArchiveImportsController < ApplicationController
   # The database-counted admission below bounds what is stored; this keeps one
-  # account from hammering the endpoint (PLAN_IMPORT_SOURCES.md §3.2).
+  # account from hammering the endpoint (docs/dev/IMPORT-SOURCES.md).
   rate_limit to: 20, within: 1.hour, only: :create, by: -> { current_user.id }, name: "web-strava-archives",
              with: -> { refuse_rate_limited }
 

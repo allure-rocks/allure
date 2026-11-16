@@ -336,7 +336,7 @@ RSpec.describe Workouts::ImportBatchJob do
     expect(batch.entries.first.status).to eq("cancelled")
   end
 
-  describe "the uploaded files (PLAN_IMPORT_SOURCES.md §3.2)" do
+  describe "the uploaded files (docs/dev/IMPORT-SOURCES.md)" do
     it "frees them once the batch completes, the workouts keeping their own originals" do
       batch = create(:workout_import_batch, user:, sport:)
       attach_source(batch, "archive.zip", zip_content("one.gpx" => gpx))

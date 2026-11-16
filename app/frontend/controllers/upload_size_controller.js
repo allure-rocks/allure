@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 // Refuses, before uploading, files the server would refuse for their size
-// (PLAN_IMPORT_SOURCES.md §3.2): past its limit the request is cut off with a
+// (docs/dev/IMPORT-SOURCES.md): past its limit the request is cut off with a
 // bare 413, after the whole upload. Only the visible panel's input is checked,
 // since every import panel sits in one form. The message is the server's own,
 // rendered into the page.

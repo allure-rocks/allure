@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Frees the uploads no import will read again (PLAN_IMPORT_SOURCES.md §3.2):
+  # Frees the uploads no import will read again (docs/dev/IMPORT-SOURCES.md):
   # those of every finished batch the batch jobs did not release themselves,
   # and those of an uploaded batch that made no progress for `STALLED_AFTER`,
   # which is failed first so it never resumes without its files.

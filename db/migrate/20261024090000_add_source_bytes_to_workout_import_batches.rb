@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_IMPORT_SOURCES.md §3.2: the bytes a batch's upload weighed, kept after
+# docs/dev/IMPORT-SOURCES.md: the bytes a batch's upload weighed, kept after
 # its files are purged so the account's daily upload budget still counts it.
 class AddSourceBytesToWorkoutImportBatches < ActiveRecord::Migration[8.1]
   def up

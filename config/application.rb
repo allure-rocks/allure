@@ -41,7 +41,7 @@ module Allure
     config.autoload_lib(ignore: %w[assets tasks middleware])
 
     # Before Rack::MethodOverride, which already reads form bodies
-    # (PLAN_IMPORT_SOURCES.md §3.2).
+    # (docs/dev/IMPORT-SOURCES.md).
     config.middleware.insert_before 0, Allure::RequestBodyLimit
 
     # Federation orchestration is kept outside the generic service namespace so

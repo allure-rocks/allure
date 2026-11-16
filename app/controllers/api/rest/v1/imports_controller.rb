@@ -94,7 +94,7 @@ module Api
           render json: detail(batch), status: :accepted
         end
 
-        # The web's admission (PLAN_IMPORT_SOURCES.md §3.2): too many imports
+        # The web's admission (docs/dev/IMPORT-SOURCES.md): too many imports
         # waiting, or the day's upload budget spent, answers 429 with a reason.
         def refuse_admission(batch)
           refusal = in_english do

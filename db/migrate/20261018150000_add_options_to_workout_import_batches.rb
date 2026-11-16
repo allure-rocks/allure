@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_IMPORT_SOURCES.md §2: the import page's shared options card. The title
+# docs/dev/IMPORT-SOURCES.md: the import page's shared options card. The title
 # applies to the single workout a single-file import produces; the commute
 # flag and the gear apply to every imported workout of the batch, whose totals
 # Workouts::Importer maintains.

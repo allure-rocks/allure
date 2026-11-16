@@ -1,6 +1,6 @@
 import { concat, decodeBase64 } from "./bytes.js";
 
-// The app's side of the `shared-files` bridge (PLAN_IMPORT_SOURCES.md §3.1).
+// The app's side of the `shared-files` bridge (docs/dev/IMPORT-SOURCES.md).
 // When the user shares a file into Allure from another app, the app holds it
 // and Rails' batch import page asks for it: one `connect` returns a manifest,
 // then each `download` streams the file in base64 chunks. This class turns

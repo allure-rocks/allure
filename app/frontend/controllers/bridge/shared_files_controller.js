@@ -3,7 +3,7 @@ import { BridgeComponent } from "@hotwired/hotwire-native-bridge";
 import { SharedFiles } from "../../lib/shared_files.js";
 
 // Files the user shared into Allure from another app (share sheet, AirDrop or
-// the Files app; PLAN_IMPORT_SOURCES.md §3.1). Loaded only when the app
+// the Files app; docs/dev/IMPORT-SOURCES.md). Loaded only when the app
 // registers `shared-files`: the page keeps the panel, the fallback sport and
 // the submit, and the app only streams the bytes into the existing input.
 export default class extends BridgeComponent {
