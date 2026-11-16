@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_REMOTE_IMPORTS.md §10: the operator revokes an account's connection to a
+# docs/dev/REMOTE-IMPORTS.md: the operator revokes an account's connection to a
 # remote import source, and the audit log records it. AdminEvent::ACTIONS is
 # mirrored by a checked constraint; historical actions stay allowed.
 class ExtendAdminEventActionsForImportConnections < ActiveRecord::Migration[8.1]

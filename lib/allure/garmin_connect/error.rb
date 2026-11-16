@@ -2,7 +2,7 @@
 
 module Allure
   module GarminConnect
-    # Failures of the unofficial Garmin Connect flow (PLAN_REMOTE_IMPORTS.md §7).
+    # Failures of the unofficial Garmin Connect flow (docs/dev/REMOTE-IMPORTS.md).
     # Messages never carry credentials, tokens or cookies.
     class Error < StandardError
       # Garmin answered INVALID_USERNAME_PASSWORD: stop, never try another strategy.

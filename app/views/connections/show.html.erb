@@ -1,4 +1,4 @@
-<%# One connected service (DESIGN.md §8.6, PLAN_REMOTE_IMPORTS.md §8.1): its own
+<%# One connected service (DESIGN.md §8.6, docs/dev/REMOTE-IMPORTS.md): its own
     page in the section shell, so a link or an unlink refreshes this service
     alone and never wipes another one's form. %>
 <% content_for :title, t("workouts.batch_import.sources.#{@card[:source].key}.label") %>

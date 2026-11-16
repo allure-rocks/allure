@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ImportConnections
-  # Builds the provider adapter of a connection (PLAN_REMOTE_IMPORTS.md §5.1).
+  # Builds the provider adapter of a connection (docs/dev/REMOTE-IMPORTS.md).
   # An adapter is built from one `ImportConnection`, persists the tokens it
   # refreshes on that row, and answers the duck-typed surface pinned by
   # `spec/support/shared_examples/import_provider.rb`:
@@ -26,7 +26,7 @@ module ImportConnections
     # fallback sport for files that name none (an EXR file always names its
     # platform, so it needs neither), and a session whose end the card shows
     # (EXR's five-year cookie, Withings's day, Zwift's eight-day refresh token,
-    # PLAN_REMOTE_IMPORTS.md §7c.4, §7d.2).
+    # docs/dev/REMOTE-IMPORTS.md, §7d.2).
     CAPABILITIES = {
       "garmin_connect" => %i[equipment fallback_sport],
       "exr" => %i[session_expiry],

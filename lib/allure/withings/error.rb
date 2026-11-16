@@ -3,7 +3,7 @@
 module Allure
   module Withings
     # Failures of reading Withings's private Health Mate API
-    # (PLAN_REMOTE_IMPORTS.md §7c). Messages never carry the password, the
+    # (docs/dev/REMOTE-IMPORTS.md). Messages never carry the password, the
     # session id or the userid.
     class Error < StandardError
       # The login refused the e-mail address or the password (status 100).

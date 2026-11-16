@@ -28,7 +28,7 @@ module WorkoutImportsHelper
   end
 
   # The reason an entry did not import: the translated skip reason of a remote
-  # activity (neutral), or the failure message (PLAN_REMOTE_IMPORTS.md §8.3).
+  # activity (neutral), or the failure message (docs/dev/REMOTE-IMPORTS.md).
   def import_entry_detail(entry)
     return if entry.error_message.blank? && !entry.skipped?
     return tag.span(t("workouts.batch_import.entries.skip_reasons.#{entry.skip_reason}"), class: "text-secondary") if entry.skipped?

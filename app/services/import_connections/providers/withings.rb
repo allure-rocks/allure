@@ -4,7 +4,7 @@ require "tempfile"
 
 module ImportConnections
   module Providers
-    # The Withings adapter (PLAN_REMOTE_IMPORTS.md §7c.3) over the pure
+    # The Withings adapter (docs/dev/REMOTE-IMPORTS.md) over the pure
     # `Allure::Withings::Client`. The only credentials are the private API's
     # session id and the userid; the synthesized TCX original carries the
     # positions, the elevation, the heart rate and the sport's TCX name, and

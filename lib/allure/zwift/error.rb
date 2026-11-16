@@ -2,7 +2,7 @@
 
 module Allure
   module Zwift
-    # Failures of reading Zwift's mobile API (PLAN_REMOTE_IMPORTS.md §7d).
+    # Failures of reading Zwift's mobile API (docs/dev/REMOTE-IMPORTS.md).
     # Messages never carry the password, the access token or the refresh
     # token.
     class Error < StandardError

@@ -5,7 +5,7 @@ require "time"
 module Allure
   module Zwift
     # Exchanges the account's password or refresh token for an access token
-    # (PLAN_REMOTE_IMPORTS.md §7d.1). Zwift's sign-in is a standard Keycloak
+    # (docs/dev/REMOTE-IMPORTS.md). Zwift's sign-in is a standard Keycloak
     # password grant; the application keeps only the refresh token, never the
     # password.
     #

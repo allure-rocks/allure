@@ -5,7 +5,7 @@ require "time"
 
 module ImportConnections
   module Providers
-    # The Garmin Connect adapter (PLAN_REMOTE_IMPORTS.md §7.4) over the pure
+    # The Garmin Connect adapter (docs/dev/REMOTE-IMPORTS.md) over the pure
     # `Allure::GarminConnect::Client`. The DI token lives in the connection's
     # credentials; a rotated token is written back the moment the client
     # refreshes it, because the previous refresh token is spent.

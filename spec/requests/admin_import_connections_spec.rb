@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The « Connexions » tab of the imports panel (PLAN_REMOTE_IMPORTS.md §10):
+# The « Connexions » tab of the imports panel (docs/dev/REMOTE-IMPORTS.md):
 # every connection's state without its secrets, and the audited revocation.
 RSpec.describe "Admin import connections" do
   let(:operator) { create(:user, :with_totp, username: "operator") }

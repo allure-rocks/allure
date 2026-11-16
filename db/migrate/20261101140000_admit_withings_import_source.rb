@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_REMOTE_IMPORTS.md §7c (slice 5): Withings joins the remote providers.
+# docs/dev/REMOTE-IMPORTS.md (slice 5): Withings joins the remote providers.
 # The provider of a connection and the source of a batch are checked lists in
 # the database.
 class AdmitWithingsImportSource < ActiveRecord::Migration[8.1]

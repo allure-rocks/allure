@@ -4,7 +4,7 @@ require "time"
 
 module Allure
   module Withings
-    # Reads a signed-in Withings account (PLAN_REMOTE_IMPORTS.md §7c.3): the
+    # Reads a signed-in Withings account (docs/dev/REMOTE-IMPORTS.md): the
     # workout list, window by window, and the two per-second series of one
     # session — locations and heart-rate samples. Only POSTs are sent; the
     # session id and userid travel in every form.

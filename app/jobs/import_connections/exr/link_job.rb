@@ -3,7 +3,7 @@
 module ImportConnections
   module Exr
     # Signs in to the EXR account site once with the password a pending link
-    # holds (PLAN_REMOTE_IMPORTS.md §7b.2) and keeps only the remember cookie.
+    # holds (docs/dev/REMOTE-IMPORTS.md) and keeps only the remember cookie.
     # The password is wiped before the request; a failure returns the
     # connection to its previous state with the reason. Never retried.
     class LinkJob < ApplicationJob

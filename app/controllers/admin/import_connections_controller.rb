@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # The « Connexions » tab of the imports panel (PLAN_REMOTE_IMPORTS.md §10):
+  # The « Connexions » tab of the imports panel (docs/dev/REMOTE-IMPORTS.md):
   # every account's connection to a remote import source, its state and sync
   # facts, and the audited operator revocation. Nothing stored encrypted is
   # ever rendered, nor the external account's name or address.

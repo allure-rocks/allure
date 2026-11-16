@@ -5,7 +5,7 @@ require "time"
 module Allure
   module Zwift
     # Reads a Zwift account with a refresh token and nothing else
-    # (PLAN_REMOTE_IMPORTS.md §7d.3): the profile, the activity list page by
+    # (docs/dev/REMOTE-IMPORTS.md): the profile, the activity list page by
     # page, and each activity's original FIT file. Only GETs are sent after
     # the token exchange. A refresh token the server rotates is handed to
     # `on_tokens` before the next request, so the provider can persist it
@@ -67,7 +67,7 @@ module Allure
         get_json("/api/activities/#{value}")
       end
 
-      # The photos Zwift attached to an activity (PLAN_REMOTE_IMPORTS.md
+      # The photos Zwift attached to an activity (docs/dev/REMOTE-IMPORTS.md
       # §7d.3): the detail's `snapshotList`, keeping only the S3 objects the
       # download can safely fetch.
       def activity_photo_urls(id)

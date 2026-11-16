@@ -8,7 +8,7 @@ require "uri"
 module Allure
   module Withings
     # A small HTTPS form client for `scalews.withings.net`, the private API of
-    # the Health Mate application (PLAN_REMOTE_IMPORTS.md §7c.1). The host is
+    # the Health Mate application (docs/dev/REMOTE-IMPORTS.md). The host is
     # pinned, only HTTPS is spoken, redirects are never followed — the API
     # answers JSON, so a redirect is a misrouted call — every body is bounded,
     # and requests are spaced by `min_interval`. Framework-independent.

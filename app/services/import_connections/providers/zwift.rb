@@ -4,7 +4,7 @@ require "tempfile"
 
 module ImportConnections
   module Providers
-    # The Zwift adapter (PLAN_REMOTE_IMPORTS.md §7d.3) over the pure
+    # The Zwift adapter (docs/dev/REMOTE-IMPORTS.md) over the pure
     # `Allure::Zwift::Client`. The only credential is the refresh token, which
     # rotates on every refresh and is written back at once; the FIT file names
     # its platform and its virtual sport, so neither equipment nor a fallback
@@ -65,7 +65,7 @@ module ImportConnections
 
       def equipment = []
 
-      # The photos Zwift attached to the activity (PLAN_REMOTE_IMPORTS.md
+      # The photos Zwift attached to the activity (docs/dev/REMOTE-IMPORTS.md
       # §7d.3): the activity detail lists them, and each is a public S3 object
       # like the FIT. A photo that cannot be downloaded is counted as missing,
       # never fatal — the import itself has already succeeded.
