@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The local reaction gesture on a workout publication (PLAN_REACTIONS.md §4.4).
+# The local reaction gesture on a workout publication (docs/dev/REACTIONS.md).
 # One PUT toggles the viewer's active reaction: an absent one is created, the
 # same one is withdrawn, another one replaces it. The target is the workout,
 # not the publication identity, so a later republish keeps the counts. Denial

@@ -13,7 +13,7 @@ class PublishingProfile < ApplicationRecord
   ].freeze
   # Settings a frozen publication snapshot may still carry after the setting
   # was retired. `segment` gated segment leaderboards until the board followed
-  # the reader and the shared route (PLAN_SEGMENTS.md §8.2); it is ignored.
+  # the reader and the shared route (docs/dev/SEGMENTS.md); it is ignored.
   LEGACY_SNAPSHOT_SETTING_KEYS = %w[segment].freeze
   METRIC_KEYS = %w[
     distance duration moving_time pause_time ascent descent min_elevation max_elevation

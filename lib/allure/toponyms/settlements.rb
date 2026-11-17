@@ -5,7 +5,7 @@ module Allure
     # The settlement vocabulary shared by the reverse client, the enricher and
     # the candidate builder: which address levels name a settlement, and how
     # far a point may sit from a settlement centre and still read as being
-    # "at" it (PLAN_M1.md §11.1).
+    # "at" it (docs/dev/WORKOUT.md).
     module Settlements
       KINDS = %w[
         isolated_dwelling locality neighbourhood suburb hamlet village town city municipality

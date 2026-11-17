@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The relay as a reader receives it (PLAN_COMMENTS.md §7.5): the thread host
+# The relay as a reader receives it (docs/dev/COMMENTS.md): the thread host
 # announces the comments it accepted on its public publication; a third
 # party's comment is checked against its author's own copy, this instance's
 # own comment is confirmed, and the host's Undo takes a relayed comment out.

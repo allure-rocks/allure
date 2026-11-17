@@ -2,7 +2,7 @@
 
 module Segments
   # Publishes a segment as an immutable course representation and emits its
-  # Create intent (PLAN_SEGMENTS_FEDERATION.md §9.1). There is no publishing
+  # Create intent (docs/dev/SEGMENTS-FEDERATION.md). There is no publishing
   # profile: the publication audience is snapshotted from `visibility`.
   class Publisher
     class PublicationError < StandardError; end

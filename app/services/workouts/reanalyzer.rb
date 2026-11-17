@@ -35,7 +35,7 @@ module Workouts
       metrics = analyze_track(track, source)
       device_totals = device_elevation_totals(track, metrics, source)
       # Computation before the row lock; persistence inside it still commits the
-      # efforts with the metrics they derive from (PLAN_BEST_EFFORTS.md §4).
+      # efforts with the metrics they derive from (docs/dev/BEST-EFFORTS.md).
       efforts = BestEfforts::Rebuild.compute(
         sport: @workout.sport,
         segments: metrics.segments,

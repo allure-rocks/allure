@@ -110,7 +110,7 @@ module Allure
       # preferred tier sits both closer to the endpoint than that feature's
       # own centre and within its kind's centre distance: Nominatim can return
       # a way-side dwelling while the recording stops in the village core
-      # (PLAN_M1.md §11.1).
+      # (docs/dev/WORKOUT.md).
       def endpoint_label(result, total_distance:, centers: {}, point: nil)
         return nil unless result.is_a?(Hash)
 

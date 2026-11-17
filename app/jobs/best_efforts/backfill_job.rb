@@ -5,7 +5,7 @@ module BestEfforts
   # stored track points are enough: no original file and no re-analysis are
   # needed. `sport_slug` narrows the sweep to one sport when a new distance
   # profile is added. Records are recomputed once per affected (user, sport) at
-  # the end of each batch. See PLAN_BEST_EFFORTS.md.
+  # the end of each batch. See docs/dev/BEST-EFFORTS.md.
   class BackfillJob < ApplicationJob
     BATCH_SIZE = 100
 

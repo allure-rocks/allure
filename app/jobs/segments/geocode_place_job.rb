@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Segments
-  # Geocodes one course's nearby place (PLAN_SEGMENTS.md §8.4). It shares the
+  # Geocodes one course's nearby place (docs/dev/SEGMENTS.md). It shares the
   # workout toponymy's concurrency key, so the geocoding jobs this instance
   # runs at once stay within GEOCODING_CONCURRENCY.
   class GeocodePlaceJob < ApplicationJob

@@ -2,7 +2,7 @@
 
 # `WorkoutSegment` means a *recording* segment: one contiguous GPX <trkseg>
 # between pauses. The sport-tracking domain also calls a reusable, leaderboarded
-# portion of a course a "segment" (see PLAN_SEGMENTS.md), and that concept needs
+# portion of a course a "segment" (see docs/dev/SEGMENTS.md), and that concept needs
 # the plain `Segment` constant.
 #
 # Renaming the M1 concept rather than the new one is the cheaper and safer

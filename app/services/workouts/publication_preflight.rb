@@ -219,7 +219,7 @@ module Workouts
     # An event that rides on a publication without being it. A comment's
     # Create or Delete names the comment, not its subject: the owner's rides
     # on its publication, a reader's is its author's own activity
-    # (PLAN_COMMENTS.md §6.1). The host's relay — an Announce and its Undo —
+    # (docs/dev/COMMENTS.md). The host's relay — an Announce and its Undo —
     # and an owner's participation Invite and its Undo (docs/dev/SHARED-ACTIVITIES.md)
     # name the publishing actor itself, whose identity mints them (§6.6). The
     # identity is checked structurally, because the comment or participation

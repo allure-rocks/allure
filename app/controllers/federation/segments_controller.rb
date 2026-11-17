@@ -2,7 +2,7 @@
 
 module Federation
   # The public protocol object for a course publication
-  # (PLAN_SEGMENTS_FEDERATION.md §6.5). Public courses are readable by any
+  # (docs/dev/SEGMENTS-FEDERATION.md). Public courses are readable by any
   # requester; followers-only courses require a verified signed request from an
   # actor the policy authorizes.
   class SegmentsController < ProtocolController

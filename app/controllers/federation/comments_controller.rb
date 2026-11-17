@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Federation
-  # A local author's comment as an ActivityPub object (PLAN_COMMENTS.md
+  # A local author's comment as an ActivityPub object (docs/dev/COMMENTS.md
   # §6.5). A public comment in its thread answers anyone, signed or not, so a
   # peer can resolve a reply by its id. A followers comment is never fetched
   # — its host already holds it and such threads are never relayed — and a

@@ -6,7 +6,7 @@ module Federation
     # plus one entitlement for the receiving local actor. The object path
     # selects the course or workout receipt. Idempotent by object identity; a
     # tombstoned object always wins (docs/dev/FEDERATION.md,
-    # PLAN_SEGMENTS_FEDERATION.md §10.3).
+    # docs/dev/SEGMENTS-FEDERATION.md).
     class Create
       def initialize(item:, activity:, now: Time.current)
         @item = item

@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Segments::Updater do
   # A loop the owner renamed is the identity they chose: the reconciliation
-  # elects it and the orphan sweep spares it (PLAN_SEGMENTS.md §7.3).
+  # elects it and the orphan sweep spares it (docs/dev/SEGMENTS.md).
   it "marks a renamed loop with the rename time" do
     loop_segment = create(:segment, :loop)
 

@@ -907,7 +907,7 @@ RSpec.describe Workouts::Importer do
     end
   end
 
-  describe "text a file hands on (PLAN_M1.md §7.3)" do
+  describe "text a file hands on (docs/dev/WORKOUT.md)" do
     def uploaded_text(content, filename)
       file = Tempfile.new([ "importer-", File.extname(filename) ])
       file.write(content)

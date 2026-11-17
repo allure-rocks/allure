@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The owner's live switch on a workout's thread (PLAN_COMMENTS.md §5.4).
+# The owner's live switch on a workout's thread (docs/dev/COMMENTS.md).
 # Anyone else gets 404.
 class WorkoutCommentThreadsController < ApplicationController
   include CommentCardRendering

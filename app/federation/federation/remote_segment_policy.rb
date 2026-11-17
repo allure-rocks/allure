@@ -4,7 +4,7 @@ module Federation
   # The presentation boundary for a received course: the remote page, its
   # track, and its cached media. A public course is visible to any signed-in
   # account; a followers-only course requires an active entitlement. Anonymous
-  # visitors never see a remote copy (PLAN_SEGMENTS_FEDERATION.md §12.2).
+  # visitors never see a remote copy (docs/dev/SEGMENTS-FEDERATION.md).
   class RemoteSegmentPolicy
     RESOURCES = %i[segment track media].freeze
 

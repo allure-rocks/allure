@@ -250,7 +250,7 @@ module Segments
     # A loop without a single effort carries no information: it was created and
     # never matched, or every workout that used it has released it. A loop the
     # owner renamed is not derived data any more — it is kept until the owner
-    # removes it (PLAN_SEGMENTS.md §7.3). Rows are locked and re-read before the
+    # removes it (docs/dev/SEGMENTS.md). Rows are locked and re-read before the
     # delete: a rename committed while this job waited is never destroyed. The
     # owner lock makes the sweep safe while another of the account's match jobs
     # runs.

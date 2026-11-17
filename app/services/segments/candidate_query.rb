@@ -50,7 +50,7 @@ module Segments
     # `minimum_tolerance:` widens the endpoint search for a caller that judges
     # the route at a larger tolerance than the one it was saved with — the
     # recurring-route detector, so a recording that resembles an existing route
-    # at the route default is never suggested as a new one (PLAN_SEGMENTS.md
+    # at the route default is never suggested as a new one (docs/dev/SEGMENTS.md
     # §7.7). The matcher still applies the route's own tolerance unless the
     # caller widens its copy too.
     def self.for_route_workout(workout, minimum_tolerance: nil)

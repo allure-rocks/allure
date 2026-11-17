@@ -5,7 +5,7 @@ module Allure
     # Finds the best effort over a set of standard distances inside one
     # workout. Pure Ruby, framework-independent, and deterministic.
     #
-    # Semantics (PLAN_BEST_EFFORTS.md):
+    # Semantics (docs/dev/BEST-EFFORTS.md):
     # - an effort lives inside a single recording segment; a recording pause is
     #   never bridged;
     # - the measured time is elapsed time, stops included;

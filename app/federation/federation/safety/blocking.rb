@@ -75,7 +75,7 @@ module Federation
       def withdraw_entitlements!(actors)
         Notifications::Withdraw.new(actor: actors).call!
         # Their comments leave every thread here, hosted or received, and a
-        # thread hosted here stops relaying them (PLAN_COMMENTS.md §7.6).
+        # thread hosted here stops relaying them (docs/dev/COMMENTS.md).
         removal = Comments::AuthorRemoval.new(actors:, reason: "blocked", now: @now)
         removal.call!
         @outbox_events.concat(removal.outbox_events)

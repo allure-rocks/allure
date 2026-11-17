@@ -17,7 +17,7 @@ module Allure
     # surviving neighbours becomes the recorded path, and the timestamps of
     # the survivors are unchanged.
     #
-    # See PLAN_M1.md section 8.9 for the locked contract.
+    # See docs/dev/WORKOUT.md for the locked contract.
     module Outliers
       INTERIOR_MARGIN_METRES = 10.0
       INTERIOR_RATIO = 2.5

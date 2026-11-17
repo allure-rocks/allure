@@ -2,7 +2,7 @@
 
 module Segments
   # Suggests saving a recurring route as a `kind: route` course
-  # (PLAN_SEGMENTS.md §7.7). The verdict is the route matcher itself
+  # (docs/dev/SEGMENTS.md). The verdict is the route matcher itself
   # (`Allure::Segments::Matcher`, kind "route"): a suggestion is created only
   # when this recording and at least MIN_OCCURRENCES - 1 earlier recordings
   # would be attached to the route saved from this recording. Nothing is

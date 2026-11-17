@@ -222,7 +222,7 @@ module Workouts
     end
 
     # The publication's own Create, never an owner's comment riding on it
-    # (PLAN_COMMENTS.md §9).
+    # (docs/dev/COMMENTS.md).
     def create_event_for(publication)
       Workouts::PublicationWithdrawal.find_create_event(publication)
     end

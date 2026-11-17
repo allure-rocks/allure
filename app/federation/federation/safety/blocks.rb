@@ -50,7 +50,7 @@ module Federation
 
       # The subset of the given actor URIs this instance blocks, by actor or by
       # domain, in two queries: a page that names many reactors never asks per
-      # actor (PLAN_REACTIONS.md §4.2).
+      # actor (docs/dev/REACTIONS.md).
       def blocked_uris(actor_uris)
         uris = Array(actor_uris).compact_blank
         return Set.new if uris.empty?

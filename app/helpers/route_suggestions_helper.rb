@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RouteSuggestionsHelper
-  # The pending suggestions naming this recording (PLAN_SEGMENTS.md §7.7),
+  # The pending suggestions naming this recording (docs/dev/SEGMENTS.md),
   # owner-only: the banner is rendered on the owner's page only. A suggestion
   # whose reference already carries a route effort is left out — the owner
   # saved the route from another recording, and the banner has nothing left to

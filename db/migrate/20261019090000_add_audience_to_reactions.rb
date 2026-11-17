@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_REACTIONS.md §2: a reaction remembers the audience it was given
+# docs/dev/REACTIONS.md: a reaction remembers the audience it was given
 # through, so a reader is named only the reactors whose audience they may
 # read. Counts stay global. Existing rows are classified fail-closed: a
 # workout reaction is public only when a public publication of its workout

@@ -113,7 +113,7 @@ module Federation
           document["object"] if document["object"].is_a?(String)
         when "Like"
           # The object of a Like is the liked publication, not a recipient: the
-          # local author is the addressed actor (PLAN_REACTIONS.md §4.3). The
+          # local author is the addressed actor (docs/dev/REACTIONS.md). The
           # old reading made every HTTP-delivered Like a 404.
           WorkoutPublication.find_by(object_uri: document["object"])&.actor&.uri
         when "Accept"

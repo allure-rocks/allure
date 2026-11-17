@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Presentation rules for the reaction bar (PLAN_REACTIONS.md §4.4, DESIGN.md
+# Presentation rules for the reaction bar (docs/dev/REACTIONS.md, DESIGN.md
 # §10.17). The same component serves a local publication and a received note,
 # and a page computes its summaries once for every card it renders.
 module ReactionsHelper

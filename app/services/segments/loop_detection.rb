@@ -40,7 +40,7 @@ module Segments
       # comprising two tours. Then prefer coverage and the earliest source cut.
       # A loop the owner renamed is the identity they chose: it wins the
       # equivalent-coverage comparison whatever its age, so a reconciliation
-      # never takes a renamed loop's efforts away (PLAN_SEGMENTS.md §7.3).
+      # never takes a renamed loop's efforts away (docs/dev/SEGMENTS.md).
       coverage = ->(result) { result.matches.sum(&:distance) }
       maximum = results.map(&coverage).max
       results.select { |result| coverage.call(result) >= maximum * 0.99 }

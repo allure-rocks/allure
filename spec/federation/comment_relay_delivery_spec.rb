@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The comments relay as the thread host sends it (PLAN_COMMENTS.md §6.6,
+# The comments relay as the thread host sends it (docs/dev/COMMENTS.md,
 # §8.4, §9): every comment the host takes on its public publication, but its
 # owner's own, is announced to the instances that publication went to, after
 # the publication itself. The Announce stops with its comment or its

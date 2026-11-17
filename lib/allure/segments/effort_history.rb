@@ -64,7 +64,7 @@ module Allure
         Series.new(sport_id:, entries:, best:, trend: trend(chronological))
       end
 
-      # The personal-place rule (PLAN_SEGMENTS.md §7.6): time, then the earlier
+      # The personal-place rule (docs/dev/SEGMENTS.md): time, then the earlier
       # start, then the earlier row, exactly like the efforts table.
       def ranked_places(efforts)
         efforts

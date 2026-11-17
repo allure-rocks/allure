@@ -6,7 +6,7 @@ module Workouts
   # serves them — a follower the followers and the public ones, anyone else
   # the public one. The owner reads them all, even after the publications went
   # away. Each audience keeps its own comment thread, and a reactor is named
-  # only to the readers of their reaction's audience (PLAN_REACTIONS.md §4.2).
+  # only to the readers of their reaction's audience (docs/dev/REACTIONS.md).
   # One query for a page of workouts, through the same rules as the profile
   # listing (WorkoutPublication.visible_to).
   class ReadableAudiences

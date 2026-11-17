@@ -3,7 +3,7 @@
 module Allure
   module Gpx
     # Elevation validity, noise filtering, and ascent/descent aggregation.
-    # See PLAN_M1.md section 8.6 for the locked algorithm.
+    # See docs/dev/WORKOUT.md for the locked algorithm.
     #
     # GPS elevation is the least accurate channel of a track: at 1 Hz it
     # jitters by roughly a metre, and summing raw positive deltas inflates

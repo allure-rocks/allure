@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Taking a comment out of its thread (PLAN_COMMENTS.md §5.2, §5.3): the author
+# Taking a comment out of its thread (docs/dev/COMMENTS.md): the author
 # deletes their own, the workout's owner removes anyone else's. Both are
 # idempotent; anyone else gets 404, never 403.
 class CommentsController < ApplicationController

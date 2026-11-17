@@ -3,7 +3,7 @@
 module Federation
   module Inbox
     # Receives one comment carried by a Create with `inReplyTo`
-    # (PLAN_COMMENTS.md §7.2). The `inReplyTo` names the thread: a local
+    # (docs/dev/COMMENTS.md). The `inReplyTo` names the thread: a local
     # publication or a comment on it makes this instance the host, which
     # authorizes the author through the publication's policy and answers a
     # refusal with a Reject; a received note or a comment on it means the
@@ -114,7 +114,7 @@ module Federation
       end
 
       # This instance hosts the thread: the publication's policy decides, and
-      # a refusal travels back to the author (PLAN_COMMENTS.md §4.3).
+      # a refusal travels back to the author (docs/dev/COMMENTS.md).
       def authorize!(discussion, author)
         return unless discussion.hosted_here?
 
@@ -172,7 +172,7 @@ module Federation
       end
 
       # The host relays what it accepted to every instance its public
-      # publication went to (PLAN_COMMENTS.md §6.6), the author's included,
+      # publication went to (docs/dev/COMMENTS.md), the author's included,
       # which learns the comment was taken.
       def relay!(discussion, comment)
         return unless discussion.hosted_here? && discussion.publication.audience == "public"

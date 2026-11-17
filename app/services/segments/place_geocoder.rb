@@ -2,7 +2,7 @@
 
 module Segments
   # Names the place a course runs through, for the segment index
-  # (PLAN_SEGMENTS.md §8.4): one Nominatim reverse lookup at the course
+  # (docs/dev/SEGMENTS.md): one Nominatim reverse lookup at the course
   # midpoint, half-way along its length, stored on the segment. The geometry
   # never changes, so a course is geocoded once. A virtual course has no real
   # place, and an instance without a provider leaves the course pending for a

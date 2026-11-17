@@ -2,7 +2,7 @@
 
 module Federation
   module Outbox
-    # The author's withdrawal of a comment that federated (PLAN_COMMENTS.md
+    # The author's withdrawal of a comment that federated (docs/dev/COMMENTS.md
     # §6.3, §8.1, §8.2). It goes exactly where the Create may have arrived —
     # the attempted set of that Create, the publication-withdrawal rule — and
     # shares the Create's subject. Deliveries the Create never attempted are

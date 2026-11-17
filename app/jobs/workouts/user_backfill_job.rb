@@ -27,7 +27,7 @@ module Workouts
   #   than the current version (docs/dev/HEART-RATE.md), rebuilt inline from
   #   the stored points;
   # - `route_suggestions`: recordings the recurring-route detector has not
-  #   examined yet (PLAN_SEGMENTS.md §7.7); the account sweep walks them newest
+  #   examined yet (docs/dev/SEGMENTS.md); the account sweep walks them newest
   #   first, so this kind enqueues it once instead of dispatching per record.
   #
   # A user sweep never bypasses a contract: it only rebuilds to the state the

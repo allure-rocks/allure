@@ -2,7 +2,7 @@
 
 module Federation
   module Serializers
-    # The course Note (PLAN_SEGMENTS_FEDERATION.md §6). It carries geometry,
+    # The course Note (docs/dev/SEGMENTS-FEDERATION.md). It carries geometry,
     # name, description, sport, and course metrics only: an effort, athlete,
     # alias, leaderboard row, or activity timestamp never appears here.
     class SegmentNote

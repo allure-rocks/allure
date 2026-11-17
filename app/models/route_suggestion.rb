@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# A recurring route the owner has not saved yet (PLAN_SEGMENTS.md §7.7).
+# A recurring route the owner has not saved yet (docs/dev/SEGMENTS.md).
 # Nothing here is a course: the suggestion names the recordings that follow the
 # same complete track, and the owner decides whether to save it as a route or
 # to dismiss it for good. A dismissed suggestion keeps absorbing later

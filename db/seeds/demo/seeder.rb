@@ -347,7 +347,7 @@ module DemoSeed
 
     # --- segments ------------------------------------------------------------
 
-    # A route's whole-track default is wider than a segment's (PLAN_SEGMENTS.md
+    # A route's whole-track default is wider than a segment's (docs/dev/SEGMENTS.md
     # §4.8); the demo's routes follow the same form default as a member's.
     def default_tolerance_for(kind)
       if kind == "route"

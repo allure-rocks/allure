@@ -23,7 +23,7 @@ class SegmentsController < ApplicationController
     end
 
     # One batched read per page feeds every row's record and the viewer's
-    # standing (PLAN_SEGMENTS.md §8.2); a private course simply has no board.
+    # standing (docs/dev/SEGMENTS.md); a private course simply has no board.
     @podiums = Segments::Podiums.new(rows: @segments, viewer: current_user).call
   end
 
@@ -35,7 +35,7 @@ class SegmentsController < ApplicationController
       @corridor_intersects = Segments::CorridorPreflight.intersects?(@segment)
     end
     # Every viewer only ever sees their own efforts here; the board is the
-    # only cross-athlete surface (PLAN_SEGMENTS.md §8.2).
+    # only cross-athlete surface (docs/dev/SEGMENTS.md).
     @efforts = if current_user
       @segment.segment_efforts
         .where(user: current_user)
@@ -48,19 +48,19 @@ class SegmentsController < ApplicationController
     @opted_out = current_user && @segment.segment_opt_outs.exists?(user: current_user)
     # The board preview lives on the detail page (top 10 per sport); the full
     # board stays at /segments/:id/leaderboard. Only a shared course has one,
-    # and each viewer reads their own (PLAN_SEGMENTS.md §8.2).
+    # and each viewer reads their own (docs/dev/SEGMENTS.md).
     @board_scope = board_scope
     @board_sections = @segment.shareable? ? @segment.leaderboard_sections(viewer: current_user, scope: @board_scope) : []
     @standing = viewer_standing
     # A shared course counts the athletes this viewer sees ranked; a private
-    # one is read by its owner alone (PLAN_SEGMENTS.md §8.2).
+    # one is read by its owner alone (docs/dev/SEGMENTS.md).
     @participants_count = if @segment.shareable?
       Segments::Listing.participants_count(@segment, viewer: current_user)
     else
       @segment.participants_count
     end
     @reach = Segments::Reach.new(segment: @segment, user: current_user).call
-    # The frozen course profile (PLAN_SEGMENTS.md §6.1): a stored bounded
+    # The frozen course profile (docs/dev/SEGMENTS.md): a stored bounded
     # snapshot, never recomputed here. The chart endpoint serves the same
     # points; this is the text equivalent (DESIGN.md §15.1).
     @segment_chart_table = Allure::Segments::ElevationProfile.table(@segment)
@@ -158,7 +158,7 @@ class SegmentsController < ApplicationController
   # board already loaded: no extra query, and a private course has none. An
   # unlisted effort is reported by the detail tiles through @efforts. A viewer
   # who declared a category also reads their place in it, once the category
-  # is offered on that ranking (PLAN_SEGMENTS.md §8.7).
+  # is offered on that ranking (docs/dev/SEGMENTS.md).
   def viewer_standing
     return nil unless current_user && @segment.shareable?
 
@@ -176,7 +176,7 @@ class SegmentsController < ApplicationController
     { category:, category_rank: ranking.index { |effort| effort.user_id == current_user.id } + 1, category_total: ranking.size }
   end
 
-  # The discover page (PLAN_SEGMENTS.md §8.4): the map alone, showing every
+  # The discover page (docs/dev/SEGMENTS.md): the map alone, showing every
   # course the viewer may see — the readable shared ones and their own, private
   # ones included — with no filter. Nothing here renders cards.
   def load_discover
@@ -199,7 +199,7 @@ class SegmentsController < ApplicationController
     [ start_point.x, start_point.y ]
   end
 
-  # Every course the viewer may see, one kind at a time (PLAN_SEGMENTS.md
+  # Every course the viewer may see, one kind at a time (docs/dev/SEGMENTS.md
   # §8.4): the readable shared ones and their own, private ones included.
   # Routes and loops are never shared, so those kinds only ever hold their
   # owner's courses. The viewer's own inactive courses stay listed so they
@@ -216,7 +216,7 @@ class SegmentsController < ApplicationController
 
   # The course itself is readable at its own `visibility` level; the board is
   # governed separately by `leaderboard_viewable_by?`. Denial is 404, never
-  # 403 (PLAN_SEGMENTS_FEDERATION.md §5.1).
+  # 403 (docs/dev/SEGMENTS-FEDERATION.md).
   def set_viewable_segment
     @segment = Segment.find_by_short_id!(params[:id])
     raise ActiveRecord::RecordNotFound unless @segment.viewable_by?(current_user)

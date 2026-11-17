@@ -42,7 +42,7 @@ class RemoteProfilesController < ApplicationController
   end
 
   # Entitled courses follow the same account scoping as notes
-  # (PLAN_SEGMENTS_FEDERATION.md §12.5).
+  # (docs/dev/SEGMENTS-FEDERATION.md).
   def segments_scope
     actor = current_user&.actor
     return RemoteSegment.none unless actor

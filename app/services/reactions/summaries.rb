@@ -2,7 +2,7 @@
 
 module Reactions
   # Batched reaction counts, the viewer's own state and the newest reactors of
-  # one page of targets (PLAN_REACTIONS.md §4.2). The feed renders many cards
+  # one page of targets (docs/dev/REACTIONS.md). The feed renders many cards
   # per page, so everything is computed with grouped queries over the page's
   # Workout and RemoteNote rows instead of one query per card. Reaction data is
   # live social state: it never enters a publication snapshot or a remote
@@ -109,7 +109,7 @@ module Reactions
     # The newest reactors of each type, one window-ranked query per target type
     # and capped at NAMES_LIMIT per (target, type). On a workout, only the
     # reactions of an audience the viewer may read are named, and the viewer's
-    # own (PLAN_REACTIONS.md §4.2): the others still count, unnamed. A deleted
+    # own (docs/dev/REACTIONS.md): the others still count, unnamed. A deleted
     # account is already gone here; a blocked or deactivated one is dropped
     # once the actors load. A received note is read by its entitled accounts
     # only, so its reactors are named to all of them.

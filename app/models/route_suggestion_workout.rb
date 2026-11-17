@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# One recording of a recurring-route suggestion (PLAN_SEGMENTS.md §7.7). A
+# One recording of a recurring-route suggestion (docs/dev/SEGMENTS.md). A
 # recording belongs to one suggestion only, and the row is derived: deleting
 # the workout removes it, and a suggestion left without a member disappears.
 class RouteSuggestionWorkout < ApplicationRecord

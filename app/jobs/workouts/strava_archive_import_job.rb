@@ -300,7 +300,7 @@ module Workouts
     end
 
     # The archive skipped the per-recording route-suggestion pass; the account
-    # sweep now walks its recordings newest first (PLAN_SEGMENTS.md §7.7).
+    # sweep now walks its recordings newest first (docs/dev/SEGMENTS.md).
     def enqueue_route_suggestion_sweep(batch)
       return unless batch.status == "completed"
       return if batch.user.deactivated?

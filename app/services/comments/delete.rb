@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Comments
-  # The author takes their own comment back (PLAN_COMMENTS.md §5.2). The row
+  # The author takes their own comment back (docs/dev/COMMENTS.md). The row
   # keeps its identity as a deleted comment, the notices it caused go, and a
   # comment that federated sends its Delete wherever its Create may have
   # arrived. A repeated request changes nothing.
@@ -29,7 +29,7 @@ module Comments
         Comments::Notifier.withdraw!(@comment)
         if was_active && @comment.deleted?
           events << Federation::Outbox::CommentDelete.new(comment: @comment, now: @now).call!
-          # A thread hosted here stops relaying it (PLAN_COMMENTS.md §8.4).
+          # A thread hosted here stops relaying it (docs/dev/COMMENTS.md).
           events << Federation::Outbox::CommentUnannounce.new(comment: @comment, now: @now).call! if @comment.workout
         end
       end

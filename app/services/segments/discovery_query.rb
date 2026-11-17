@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Segments
-  # The discover map's viewport read (PLAN_SEGMENTS.md §8.4): every course the
+  # The discover map's viewport read (docs/dev/SEGMENTS.md): every course the
   # viewer may see — the readable shared ones and their own, private ones
   # included — whose geometry intersects the requested bounding box. Bounded by
   # a feature cap so a world view can never stream the whole library, and

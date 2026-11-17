@@ -230,7 +230,7 @@ module Federation
       # The Allure reaction type travels in the private `_allure_reaction`
       # property; an external peer that sends a plain Like (or an unknown
       # value) means the neutral type, exactly like the missing property
-      # (PLAN_REACTIONS.md §4.3).
+      # (docs/dev/REACTIONS.md).
       def reaction_kind
         kind = @activity["_allure_reaction"].to_s
         Reaction::KINDS.include?(kind) ? kind : Reaction::DEFAULT_KIND
@@ -261,7 +261,7 @@ module Federation
       # validation failures reject the item without retrying. Pending media is
       # collected for the job to enqueue after commit, so no fetch can start
       # before the descriptor row is durable. A Create answering something
-      # through `inReplyTo` is a comment (PLAN_COMMENTS.md §7.2).
+      # through `inReplyTo` is a comment (docs/dev/COMMENTS.md).
       def process_object(kind)
         return process_comment if kind == :create && comment_create?
 
@@ -290,7 +290,7 @@ module Federation
       end
 
       # A thread host relays a comment on its public publication, or stops
-      # relaying it (PLAN_COMMENTS.md §7.5). A fetch the author's instance could
+      # relaying it (docs/dev/COMMENTS.md). A fetch the author's instance could
       # not answer yet raises and the item retries with the usual backoff.
       def process_comment_relay
         Inbox::CommentRelay.new(item: @item, activity: @activity, now: @now).call!
@@ -321,7 +321,7 @@ module Federation
       end
 
       # The thread host refused or took out a comment written here
-      # (PLAN_COMMENTS.md §7.4).
+      # (docs/dev/COMMENTS.md).
       def process_comment_refusal
         Inbox::CommentRefusal.new(item: @item, activity: @activity, now: @now).call!
       rescue Inbox::Rejected => error

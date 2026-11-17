@@ -6,7 +6,7 @@ require "uri"
 
 module Federation
   module Parsers
-    # The strict Allure comment profile (PLAN_COMMENTS.md §7.2): an embedded
+    # The strict Allure comment profile (docs/dev/COMMENTS.md): an embedded
     # Note written by the sending actor, on the sender's own authority,
     # answering a publication or a comment through `inReplyTo`. Its content is
     # sanitized like a received note's and its text projection is bounded like

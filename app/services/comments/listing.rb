@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Comments
-  # One target's thread as a viewer reads it (PLAN_COMMENTS.md §5.5): roots in
+  # One target's thread as a viewer reads it (docs/dev/COMMENTS.md): roots in
   # posting order, each with its replies in posting order, authors and their
   # avatars preloaded in the same pass. Active comments show to everyone; a
   # withdrawn root that still has visible replies stays as a stub so the

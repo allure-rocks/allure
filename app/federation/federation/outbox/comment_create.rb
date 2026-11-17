@@ -2,7 +2,7 @@
 
 module Federation
   module Outbox
-    # The Create carrying a local author's comment (PLAN_COMMENTS.md §6.3,
+    # The Create carrying a local author's comment (docs/dev/COMMENTS.md,
     # §8.1, §8.2). A reader's comment is the reader's own activity, addressed
     # to the thread host; the owner's comment rides on the publication it
     # answers, as a secondary event that only reaches the publication's

@@ -220,7 +220,7 @@ module Admin
     end
 
     # Geocodes the nearby place of every course still pending or failed
-    # (PLAN_SEGMENTS.md §8.4), through the paced geocoding job. Read-only when
+    # (docs/dev/SEGMENTS.md), through the paced geocoding job. Read-only when
     # nothing is pending or no provider is set.
     def backfill_segment_places
       count = segment_places_backfill_count
@@ -249,7 +249,7 @@ module Admin
 
     # Compares every recording the current detector has not seen with the
     # account's other recordings, newest first, to suggest the routes the owner
-    # repeats (PLAN_SEGMENTS.md §7.7). Nothing is created: a suggestion appears
+    # repeats (docs/dev/SEGMENTS.md). Nothing is created: a suggestion appears
     # on the concerned activity.
     def backfill_route_suggestions
       count = Segments::RouteSuggestionSweepJob.pending_scope.count

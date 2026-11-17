@@ -219,7 +219,7 @@ RSpec.describe Workouts::PublicationPolicy do
     end
   end
 
-  # PLAN_COMMENTS.md §4.1: the audience gates of :workout, the owner included,
+  # docs/dev/COMMENTS.md: the audience gates of :workout, the owner included,
   # while the snapshot's profile and the owner's live switch keep it open.
   describe "comments" do
     it "lets the owner, members, and protocol actors comment on an open public publication" do

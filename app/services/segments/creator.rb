@@ -7,7 +7,7 @@ module Segments
     # stop artefacts, and a consumer GPS drifts more at the ends than inside a
     # segment. Routes therefore default to the top of the allowed range, while
     # segments, detected loops and received courses keep the segment default
-    # (PLAN_SEGMENTS.md §4.8).
+    # (docs/dev/SEGMENTS.md).
     ROUTE_MATCH_TOLERANCE_METERS = 100
     # Omitting `sport:` inherits the source workout's sport; passing `nil`
     # creates a segment any sport can match.

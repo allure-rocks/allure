@@ -238,7 +238,7 @@ module Federation
       end
 
       # The origin's profile closed comments on this publication
-      # (PLAN_COMMENTS.md §6.4). Presence-only: `closed` is the one value, an
+      # (docs/dev/COMMENTS.md). Presence-only: `closed` is the one value, an
       # explicit `open` is the default and anything else is a warning that
       # keeps comments open.
       def parse_comments_closed

@@ -335,7 +335,7 @@ class FederationRingTest
     { statuses: [ note_status, gpx_status, dark_status ], dark_body: }
   end
 
-  # PLAN_REACTIONS.md: the receiving account reacts to the received note. A
+  # docs/dev/REACTIONS.md: the receiving account reacts to the received note. A
   # mints a Like carrying the Allure type, delivers it to the origin, and B
   # stores a local reaction and notifies the workout owner.
   def like_note_a
@@ -365,7 +365,7 @@ class FederationRingTest
     assert(Notification.where(kind: "reaction").exists?, "B did not notify the workout owner")
   end
 
-  # PLAN_COMMENTS.md Slice 2: A's account comments on the received note, B
+  # docs/dev/COMMENTS.md Slice 2: A's account comments on the received note, B
   # hosts the thread and its owner replies, A's author deletes the comment,
   # and a thread B closed refuses the next one with a Reject.
   def comment_note_a
@@ -396,7 +396,7 @@ class FederationRingTest
     assert(Notification.where(user:, kind: "comment", subject: comment).exists?, "B did not notify the workout owner")
   end
 
-  # PLAN_COMMENTS.md Slice 3: the host relays the comment it took to the
+  # docs/dev/COMMENTS.md Slice 3: the host relays the comment it took to the
   # instances its publication went to, the author's included, which learns
   # the comment was taken.
   def assert_comment_relay_b
@@ -558,7 +558,7 @@ class FederationRingTest
     assert(comment.audience == "followers", "the hosted comment audience is #{comment.audience.inspect}")
   end
 
-  # A followers thread is never relayed (PLAN_COMMENTS.md §6.6).
+  # A followers thread is never relayed (docs/dev/COMMENTS.md).
   def assert_no_relay_b
     assert(FederationOutboxEvent.where(activity_type: "Announce").none?, "B relayed a comment on a followers thread")
   end
@@ -829,7 +829,7 @@ class FederationRingTest
     assert(old_response.status == 404, "withdrawn object returned HTTP #{old_response.status}")
   end
 
-  # --- Federated courses (PLAN_SEGMENTS_FEDERATION.md §17.2) ------------------
+  # --- Federated courses (docs/dev/SEGMENTS-FEDERATION.md) ------------------
 
   def publish_segment
     workout = user.workouts.find_by!(title: "Federation ring route")
@@ -936,7 +936,7 @@ class FederationRingTest
   end
 
   # The copied course is private and owner-only, and the copier's own workout
-  # is matched locally against it (PLAN_SEGMENTS_FEDERATION.md §12.4).
+  # is matched locally against it (docs/dev/SEGMENTS-FEDERATION.md).
   def copy_segment_a
     remote = RemoteSegment.active.order(:id).last
     workout = user.workouts.find_by(title: "Copied course ride") || import_ring_workout

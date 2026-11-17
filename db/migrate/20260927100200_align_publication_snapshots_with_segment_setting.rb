@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_SEGMENTS.md §6.3/§8.2 alignment: every active publication is treated as
+# docs/dev/SEGMENTS.md alignment: every active publication is treated as
 # if its profile had carried `segment: true`, so the leaderboards that existed
 # before the switch keep their rows and the opt-out model applies to all
 # existing data at once. This is a controlled snapshot write, the same class of

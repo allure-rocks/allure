@@ -6,7 +6,7 @@ module Allure
     # Two devices on the same outing often disagree on the variant (a road
     # ride against a generic ride, a trail run against a run), so detection
     # compares curated families rather than slugs. The families are the
-    # per-account sport defaults of PLAN_M1.md §3.4.2 without their virtual
+    # per-account sport defaults of docs/dev/WORKOUT.md without their virtual
     # members: the icon families would pair tennis with running. Any other
     # sport is its own family, and a virtual sport never matches anything.
     module SportFamilies

@@ -3,7 +3,7 @@
 module SegmentsHelper
   # The leaderboard's pace/speed column follows the sport's preferred display:
   # speed sports read `Vitesse`, pace sports `Allure`, and a sport that shows
-  # both labels the column accordingly (PLAN_SEGMENTS.md §8.4).
+  # both labels the column accordingly (docs/dev/SEGMENTS.md).
   def leaderboard_pace_speed_header(sport)
     key = {
       "speed" => :speed,
@@ -12,7 +12,7 @@ module SegmentsHelper
     t("segments.leaderboard.#{key}")
   end
 
-  # Display rows for a leaderboard (PLAN_SEGMENTS.md §8.5). The viewer reads
+  # Display rows for a leaderboard (docs/dev/SEGMENTS.md). The viewer reads
   # their own name, the names of the accounts they follow, and every name on a
   # course they created (linked to profiles); everyone else reads a stable
   # per-segment alias with the date coarsened to the month. Anonymous rows
@@ -226,7 +226,7 @@ module SegmentsHelper
     { primary:, secondary: }
   end
 
-  # One sport's progression chart payload (PLAN_SEGMENTS.md §10): the viewer's
+  # One sport's progression chart payload (docs/dev/SEGMENTS.md): the viewer's
   # own efforts oldest first, each with its personal place (the trophy drawn
   # beside its point), and the trend. Labels are formatted here, so the tooltip
   # reads like the efforts table.
@@ -305,7 +305,7 @@ module SegmentsHelper
 
   # The athlete's own anonymity flag always wins; otherwise a name shows to
   # the course creator, to the athlete, and to their followers
-  # (PLAN_SEGMENTS.md §8.5).
+  # (docs/dev/SEGMENTS.md).
   def pseudonymous_effort?(effort, _segment, owner_view)
     return true if effort.anonymous?
     return false if owner_view || effort.user_id == current_user&.id
@@ -330,7 +330,7 @@ module SegmentsHelper
     end
   end
 
-  # The category view switch (PLAN_SEGMENTS.md §8.7): « Tous » plus each
+  # The category view switch (docs/dev/SEGMENTS.md): « Tous » plus each
   # category the board offers. Plain GET links; `path` builds the URL for a
   # `category` value (nil for every athlete).
   def segment_board_category_nav(current, offered, &path)

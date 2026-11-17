@@ -4,7 +4,7 @@ module Segments
   # Withdraws a course publication: cancels unattempted Create deliveries,
   # emits an explicit-recipient Delete, and marks the publication deleted.
   # Mirrors Workouts::PublicationWithdrawal
-  # (PLAN_SEGMENTS_FEDERATION.md §9.4).
+  # (docs/dev/SEGMENTS-FEDERATION.md).
   class PublicationWithdrawal
     ATTEMPTED_DELIVERY_STATUSES = %w[delivered failed delivering retrying reconciling].freeze
     RECIPIENT_STATUSES = %w[authorized withdrawn].freeze

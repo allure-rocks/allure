@@ -2,7 +2,7 @@
 
 module Segments
   # The counters and personal-best flags a segment derives from its current
-  # efforts (PLAN_SEGMENTS.md, docs/dev/SHARED-ACTIVITIES.md). Run after any change to
+  # efforts (docs/dev/SEGMENTS.md, docs/dev/SHARED-ACTIVITIES.md). Run after any change to
   # the effort set — a match, a released or dropped loop effort, a deleted
   # workout — so the stored figures never outlive the efforts they count.
   # Deterministic: a re-run is a no-op.

@@ -3,7 +3,7 @@
 module Allure
   module Gpx
     # Writes the compact per-point JSON contract documented in
-    # PLAN_M1.md section 5.4. This is the only place that shape is produced;
+    # docs/dev/WORKOUT.md This is the only place that shape is produced;
     # chart extraction (Slice 5) must read these same key constants.
     module PointSerializer
       KEY_TIME = "t"

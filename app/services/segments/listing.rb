@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Segments
-  # PLAN_SEGMENTS.md §8.2: the board follows the reader. Eligibility is derived
+  # docs/dev/SEGMENTS.md: the board follows the reader. Eligibility is derived
   # on read for one viewer, with no stored snapshot and nothing to refresh. An
   # effort appears on a board for a viewer when:
   #
@@ -57,7 +57,7 @@ module Segments
     end
 
     # The participant counter a viewer reads: the distinct athletes of their
-    # own board, across sports (PLAN_SEGMENTS.md §8.2). An unpublished effort
+    # own board, across sports (docs/dev/SEGMENTS.md). An unpublished effort
     # never shows through it, so it agrees with the board and « Mon rang ».
     def self.participants_count(segment, viewer:) = participants_counts(segment.id, viewer:).fetch(segment.id, 0)
 

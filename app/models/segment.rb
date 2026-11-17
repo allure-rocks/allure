@@ -16,7 +16,7 @@ class Segment < ApplicationRecord
   has_many :segment_efforts, dependent: :destroy, inverse_of: :segment
   has_many :segment_opt_outs, dependent: :destroy, inverse_of: :segment
   has_many :segment_publications, dependent: :nullify, inverse_of: :segment
-  # The recurring-route suggestions this route accepted (PLAN_SEGMENTS.md
+  # The recurring-route suggestions this route accepted (docs/dev/SEGMENTS.md
   # §7.7). A deleted route keeps the suggestion accepted: the owner's decision
   # stands and the suggestion never returns.
   has_many :route_suggestions, dependent: :nullify, inverse_of: :segment
@@ -26,7 +26,7 @@ class Segment < ApplicationRecord
           inverse_of: :segment
 
   # Courses a viewer may read beyond their own: public ones plus followers-only
-  # ones whose owner the viewer follows (PLAN_SEGMENTS.md §8.4). Private
+  # ones whose owner the viewer follows (docs/dev/SEGMENTS.md). Private
   # courses are never readable here; callers scope ownership when needed.
   scope :readable_by, ->(viewer) {
     followed_owner_ids = if viewer&.actor
@@ -50,7 +50,7 @@ class Segment < ApplicationRecord
 
   # Every course the viewer may see, their own private ones included: the
   # discover map is viewer-scoped, so nothing here is ever exposed to a
-  # non-owner (PLAN_SEGMENTS.md §8.4). `readable_by` already carries the
+  # non-owner (docs/dev/SEGMENTS.md). `readable_by` already carries the
   # viewer's own public and followers-only courses and the followed owners'.
   scope :visible_to, ->(viewer) {
     viewer ? readable_by(viewer).or(where(user_id: viewer.id)) : none
@@ -93,7 +93,7 @@ class Segment < ApplicationRecord
   # (docs/dev/DERIVATIONS.md).
   after_create_commit :enqueue_route_image
   # The nearby place is geocoded once from the course midpoint: the geometry
-  # never changes afterwards (PLAN_SEGMENTS.md §8.4).
+  # never changes afterwards (docs/dev/SEGMENTS.md).
   after_create_commit :enqueue_place_geocoding
   # The terrain service's profile replaces the device's when it is available
   # and allowed; a course that turns public becomes allowed
@@ -102,7 +102,7 @@ class Segment < ApplicationRecord
                                            if: -> { previously_new_record? || saved_change_to_visibility? }
 
   # Whether `viewer` (a signed-in User) may see this segment's
-  # leaderboard. After the PLAN_SEGMENTS.md §8.4 merge the board follows the
+  # leaderboard. After the docs/dev/SEGMENTS.md merge the board follows the
   # course visibility: the same predicate, so nobody ever reaches a board
   # whose course they cannot read. Every denial surfaces as 404 via the
   # controllers, never 403.
@@ -125,7 +125,7 @@ class Segment < ApplicationRecord
     end
   end
 
-  # Whether `user` opted out of this segment's board (PLAN_SEGMENTS.md §8.2).
+  # Whether `user` opted out of this segment's board (docs/dev/SEGMENTS.md).
   def opted_out?(user)
     return false if user.blank?
 
@@ -135,7 +135,7 @@ class Segment < ApplicationRecord
   # Every athlete with a recorded effort, published or not: the counter of a
   # private course, which only its owner reads. A shared course shows each
   # viewer their own board's count instead (`Segments::Listing.participants_count`,
-  # PLAN_SEGMENTS.md §8.2). A credited effort does not count: its athlete did
+  # docs/dev/SEGMENTS.md). A credited effort does not count: its athlete did
   # not record the course (docs/dev/SHARED-ACTIVITIES.md).
   def participants_count
     segment_efforts.joins(:workout).merge(Workout.recordings).distinct.count("segment_efforts.user_id")
@@ -147,7 +147,7 @@ class Segment < ApplicationRecord
 
   # Whether the owner renamed this course. A renamed loop is the identity the
   # owner chose: the reconciliation elects it and the orphan sweep spares it
-  # (PLAN_SEGMENTS.md §7.3).
+  # (docs/dev/SEGMENTS.md).
   def renamed? = renamed_at.present?
 
   # Detects an active publication that no longer matches the represented
@@ -174,7 +174,7 @@ class Segment < ApplicationRecord
     )
   end
 
-  # The board one viewer reads (PLAN_SEGMENTS.md §8.2): the athletes whose
+  # The board one viewer reads (docs/dev/SEGMENTS.md): the athletes whose
   # publication the viewer may read with the route shared, who did not opt
   # out and whose privacy zones stay clear of the corridor — best per athlete
   # and sport, ordered by time. `scope: "following"` keeps the accounts the
@@ -218,7 +218,7 @@ class Segment < ApplicationRecord
   # A course whose corridor intersects one of the owner's active privacy zones
   # may only be shared after the owner explicitly acknowledged it. Zones are
   # not subtracted from a segment, so this is a consent gate
-  # (PLAN_SEGMENTS_FEDERATION.md §5.2).
+  # (docs/dev/SEGMENTS-FEDERATION.md).
   def shared_corridor_acknowledged
     return if visibility == "private"
     return if privacy_zone_acknowledged_at.present?
@@ -229,7 +229,7 @@ class Segment < ApplicationRecord
 
   # A live publication must never outlive the visibility that justified it:
   # while one is active, the course cannot become more restrictive than its
-  # audience (PLAN_SEGMENTS_FEDERATION.md §9.3).
+  # audience (docs/dev/SEGMENTS-FEDERATION.md).
   def active_publication_allows_visibility
     publication = active_publication
     return if publication.blank?

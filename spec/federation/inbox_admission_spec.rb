@@ -99,7 +99,7 @@ RSpec.describe Federation::Inbox::Admission do
     expect { personal.call! }.to change { recipient.inbox_items.count }.by(1)
   end
 
-  # PLAN_REACTIONS.md §4.3: the object of a Like is the liked publication, not
+  # docs/dev/REACTIONS.md: the object of a Like is the liked publication, not
   # a recipient URI. The old reading answered 404 to every HTTP-delivered Like
   # even though the processor understood it.
   it "admits a Like addressed to the publication author" do

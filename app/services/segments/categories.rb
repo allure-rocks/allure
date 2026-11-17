@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Segments
-  # The category view of a board (PLAN_SEGMENTS.md §8.7): a filter over the
+  # The category view of a board (docs/dev/SEGMENTS.md): a filter over the
   # ranking the viewer already reads, never a second eligibility rule. It runs
   # on the loaded rows — best effort per athlete, `user` included — so the
   # board, its rank and the « Mon rang » tile share one rule and one query.

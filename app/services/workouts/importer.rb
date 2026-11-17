@@ -245,7 +245,7 @@ module Workouts
       totals = device_elevation_totals(track, metrics, sport)
       # The CPU computation runs before the transaction starts, so the
       # `users` row lock taken by every workout insert is not held during it.
-      # Persistence stays inside the transaction (PLAN_BEST_EFFORTS.md §4).
+      # Persistence stays inside the transaction (docs/dev/BEST-EFFORTS.md).
       efforts = BestEfforts::Rebuild.compute(
         sport:,
         segments: metrics.segments,
@@ -417,7 +417,7 @@ module Workouts
       Rails.error.report(error, handled: true, context: { component: self.class.name, workout_id: workout.id })
     end
 
-    # A recurring route is suggested, never created (PLAN_SEGMENTS.md §7.7).
+    # A recurring route is suggested, never created (docs/dev/SEGMENTS.md).
     # A bulk import skips the per-recording pass: the end of its batch runs the
     # account sweep instead, newest first, so the suggestion's reference is the
     # most recent occurrence.

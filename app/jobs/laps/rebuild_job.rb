@@ -2,7 +2,7 @@
 
 module Laps
   # Derives the smart laps of one workout from its stored points
-  # (PLAN_SMART_LAPS.md). The segment-matching job runs the same rebuild for a
+  # (docs/dev/SMART-LAPS.md). The segment-matching job runs the same rebuild for a
   # positioned workout; a positionless recording, whose points carry no
   # geometry to match against, reaches it through this job instead
   # (docs/dev/NO-GPS.md).

@@ -43,7 +43,7 @@ module Federation
       private
 
       # The owner's comment and the host's relay ride on their publication
-      # (PLAN_COMMENTS.md §9) and reach only that publication's recipients,
+      # (docs/dev/COMMENTS.md) and reach only that publication's recipients,
       # which exist once the publication's own Create expanded. Until then they
       # stay pending; that expansion enqueues them again.
       def awaiting_publication_expansion?

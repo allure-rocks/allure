@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # One contiguous GPX <trkseg>: a recording segment between two pauses.
-# Not to be confused with `Segment` (PLAN_SEGMENTS.md), which is a reusable,
+# Not to be confused with `Segment` (docs/dev/SEGMENTS.md), which is a reusable,
 # leaderboarded portion of a course.
 #
 # A segment of a positionless recording (docs/dev/NO-GPS.md) has no `geom` and no

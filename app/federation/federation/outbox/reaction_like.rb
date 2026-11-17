@@ -2,8 +2,7 @@
 
 module Federation
   module Outbox
-    # The ActivityPub Like for a reaction on a received note (PLAN_REACTIONS
-    # §4.3). The activity identity is the reaction's stored URI, and the
+    # The ActivityPub Like for a reaction on a received note (docs/dev/REACTIONS.md). The activity identity is the reaction's stored URI, and the
     # reaction type travels in `_allure_reaction`, a private extension an
     # external peer safely ignores — an absent property means the neutral
     # `like`, which is exactly what those peers send.

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Comments
-  # The single local write seam for comments (PLAN_COMMENTS.md §5.1). One post
+  # The single local write seam for comments (docs/dev/COMMENTS.md). One post
   # authorizes the thread, normalizes the text, resolves the wire parent — the
   # parent comment, else the publication active right now or the received
   # note — and stores the row with its outbound intent and its notifications
@@ -159,7 +159,7 @@ module Comments
     def owner? = !note? && @target.user_id == @user.id
 
     # A reader's comment is sent to the received note's origin; the owner's
-    # comment travels to the publication's recipients (PLAN_COMMENTS.md §8).
+    # comment travels to the publication's recipients (docs/dev/COMMENTS.md).
     def outbound_create(comment)
       return Federation::Outbox::CommentCreate.new(comment:).call! if note?
       return unless owner?
@@ -183,7 +183,7 @@ module Comments
     end
 
     # A reply answers an active top-level comment of the same thread; nothing
-    # answers a reply (one level, PLAN_COMMENTS.md §1).
+    # answers a reply (one level, docs/dev/COMMENTS.md).
     def resolve_parent
       return unless @parent_id
 

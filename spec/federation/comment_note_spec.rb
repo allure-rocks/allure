@@ -66,7 +66,7 @@ RSpec.describe Federation::Serializers::CommentNote do
     expect(note["to"]).to eq([ host.uri ])
   end
 
-  # PLAN_COMMENTS.md §7.2: a relayed comment can wait as a root for the
+  # docs/dev/COMMENTS.md: a relayed comment can wait as a root for the
   # comment it answers; a reply to it still names the received note.
   it "names the received note as the context of a reply to a waiting comment" do
     host = create(:actor, uri: "https://remote.example/users/demo")

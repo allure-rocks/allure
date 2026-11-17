@@ -2,7 +2,7 @@
 
 module Segments
   # A route created from one of a pending suggestion's recordings accepts that
-  # suggestion (PLAN_SEGMENTS.md §7.7): the banner closes, and the route keeps
+  # suggestion (docs/dev/SEGMENTS.md): the banner closes, and the route keeps
   # the identity the owner chose. A route saved from the reference or from any
   # later repeat counts. A route saved from another recording leaves the
   # suggestion pending; its banner disappears once the reference carries the
