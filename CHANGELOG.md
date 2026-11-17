@@ -1418,7 +1418,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- `[devdoc:api]` specifies the public REST API (`/api/rest/v1`, scoped API
+- [API.md](docs/dev/API.md) specifies the public REST API (`/api/rest/v1`, scoped API
   tokens), signed webhooks and the OpenAPI 3.1 document rendered by an
   embedded Scalar reference at `/developers/api`; `DESIGN.md` gains the
   glossary terms, the `/settings/api` and `/developers/api` anatomies and the

@@ -396,7 +396,7 @@ The classic and distance variants keep their existing key shape.
 record backfills — `BestEfforts::BackfillJob`, `PowerEfforts::BackfillJob` and
 `Laps::BackfillJob` — pass `announce: false`, so a sweep never announces years
 of old outings for any of the three families. A re-analysis of one workout
-keeps announcing, as today. The API contract (`[devdoc:api]`) is updated.
+keeps announcing, as today. The API contract ([API.md](API.md)) is updated.
 
 ## 11. Backfill, operations and metrics
 
