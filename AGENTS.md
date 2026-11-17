@@ -26,7 +26,10 @@ profile, the immutable publication, the audiences and the federation boundary.
 `docs/dev/REACTIONS.md` is the reactions contract: the four types, the toggle,
 the audience rule and the wire. `docs/dev/COMMENTS.md` is the comments
 contract: the thread per audience, the one level of replies, the moderation,
-the wire and the relay.
+the wire and the relay. `docs/dev/SHARED-ACTIVITIES.md` is the
+shared-activities contract: the participants, the credit and link kinds, the
+credited metric set, the reduced federated invitation and the co-presence
+detection.
 
 `docs/dev/WORKOUT.md` is the workout contract: the source workout, the
 recording segments, the units, the GPX input, the metrics engine, the import
@@ -131,7 +134,8 @@ behaviours updates its page in every language in the same patch.
   seam and its own notification switch.
   [docs/dev/COMMENTS.md](docs/dev/COMMENTS.md)
   [docs/dev/REACTIONS.md](docs/dev/REACTIONS.md)
-  `[devdoc:shared-activities]` `[devdoc:people]` `[devdoc:notifications]`
+  [docs/dev/SHARED-ACTIVITIES.md](docs/dev/SHARED-ACTIVITIES.md)
+  `[devdoc:people]` `[devdoc:notifications]`
 - **Remote imports.** `ImportConnection` keeps one encrypted credential set per
   account and provider; `Workouts::RemoteImportBatchJob` lists a range once and
   imports each entry through `Workouts::Importer`. Garmin Connect, EXR, Withings

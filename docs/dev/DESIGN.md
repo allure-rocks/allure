@@ -1903,7 +1903,7 @@ figures of the workout or received-note page, never a second visual language.
 
 ### 10.18 Participants card
 
-The shared-activity control (`[devdoc:shared-activities]`): an owner-only card that
+The shared-activity control ([`SHARED-ACTIVITIES.md`](SHARED-ACTIVITIES.md)): an owner-only card that
 records who else did the workout, and the participant's confirmation surface.
 
 - **Owner card.** A full-width card on the owner's workout page, below the
@@ -1914,7 +1914,7 @@ records who else did the workout, and the participant's confirmation surface.
   attente, confirmée, refusée), and the remove action — beside the name from
   `sm` up, under it on phones. The add field accepts a username, a local
   handle, or a remote handle (`@nom@instance`). A local account needs an
-  accepted follow in either direction. A remote account (`[devdoc:shared-activities]`) must follow the owner and hold the workout's publication, which must
+  accepted follow in either direction. A remote account ([`SHARED-ACTIVITIES.md`](SHARED-ACTIVITIES.md)) must follow the owner and hold the workout's publication, which must
   share the credited figures. A refused remote invitation answers with the
   §19.20 alert that names those conditions. A refusal by the invited account
   is terminal for that account on that workout, and the card states it
@@ -1943,7 +1943,7 @@ records who else did the workout, and the participant's confirmation surface.
   (`btn-primary`, `btn-outline-secondary`) while pending, then Retirer behind
   the shared confirmation dialog. It goes away once refused or withdrawn.
 - **Credit row.** A confirmed credit gives the participant an activity of
-  their own (`[devdoc:shared-activities]`). Its page carries the sport tile, the
+  their own ([`SHARED-ACTIVITIES.md`](SHARED-ACTIVITIES.md)). Its page carries the sport tile, the
   title, sport and date, the « Avec @X » badge (§10.4 Together, linking to
   the source; grey « Avec @X · activité source supprimée » once the source is
   gone), the credited metric set as summary tiles with the hint

@@ -1074,7 +1074,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Shared activities across instances (`[devdoc:shared-activities]`): a
+- Shared activities across instances ([SHARED-ACTIVITIES.md](docs/dev/SHARED-ACTIVITIES.md)): a
   workout owner can invite an account on another Allure instance
   (`@nom@instance`) to confirm they did the outing together.
   - **Who can be invited:** the account must follow the owner and have
@@ -1253,7 +1253,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- A confirmed credit counts for the participant (`[devdoc:shared-activities]`):
+- A confirmed credit counts for the participant ([SHARED-ACTIVITIES.md](docs/dev/SHARED-ACTIVITIES.md)):
   it gives them a **credit row**, an activity of their own holding only the
   credited metrics — distance, durations, ascent and descent, speeds, paces,
   title — and no track, file, heart rate, cadence, power, calories, device
@@ -1275,7 +1275,7 @@ migration (`db:migrate`, applied on boot).
   recordings starting within six hours of the source, a confirmed credit
   converts later (« Lier mon enregistrement »), and a link shows on both
   workouts.
-- Outings done together are detected (`[devdoc:shared-activities]`): after each
+- Outings done together are detected ([SHARED-ACTIVITIES.md](docs/dev/SHARED-ACTIVITIES.md)): after each
   import, `Allure::Together::Detector` compares the recording with those of
   local accounts following each other in both directions — same sport
   family, overlapping windows, both within 60 m at least 80 % of the shared
@@ -2210,7 +2210,7 @@ migration (`db:migrate`, applied on boot).
   pair, either party withdraws, a refusal is terminal for that pair, and an
   invited participant reads a metrics-only presentation of an unpublished
   source while geometry stays governed by the owner's publication policy
-  (`[devdoc:shared-activities]`, `DESIGN.md` §10.18).
+  ([SHARED-ACTIVITIES.md](docs/dev/SHARED-ACTIVITIES.md), `DESIGN.md` §10.18).
 - Virtual platforms are recognised by identity: `Allure::Virtual::Platforms`
   bundles each provider's FIT `file_id` fingerprint, creator aliases, fallback
   sport and rendered worlds. EXR is named from its fingerprint — the device
