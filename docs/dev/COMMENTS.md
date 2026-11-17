@@ -61,7 +61,7 @@ Mentions, comments on courses (`SegmentPublication` / `RemoteSegment`),
 reactions on comments, comment editing, rich text, attachments, thread
 backfill after republishing, operator moderation of individual comments in
 `/admin` (blocks and publication takedown remain the operator tools), comment
-metrics in `[devdoc:metrics]` (the catalog guard requires an `/admin`
+metrics in [METRICS.md](METRICS.md) (the catalog guard requires an `/admin`
 counterpart that does not exist), email or push, and interoperability of
 replies with non-Allure peers beyond what the strict contract happens to
 accept.

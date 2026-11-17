@@ -28,6 +28,9 @@ seven-day deletion window and the resumable purge.
 `docs/dev/API.md` is the API contract: the REST resources, the API tokens, the
 webhooks and the OpenAPI document.
 
+`docs/dev/METRICS.md` is the metrics contract: the endpoint, the metric
+catalog, the privacy negatives and the reference dashboard.
+
 `docs/dev/PUBLISHING.md` is the publishing contract: the source workout, the
 profile, the immutable publication, the audiences and the federation boundary.
 `docs/dev/DELAYED-PUBLISHING.md` is the safety-delay contract, and
@@ -187,7 +190,8 @@ behaviours updates its page in every language in the same patch.
   env-configured operator (`Admin::BaseController` answers 404 to everyone
   else); `AdminEvent` and `Admin::Audit` record every operator mutation
   append-only. `/metrics` is the Prometheus exporter behind `METRICS_TOKEN`.
-  `[devdoc:admin]` `[devdoc:metrics]`
+  `[devdoc:admin]`
+  [docs/dev/METRICS.md](docs/dev/METRICS.md)
 - **Accounts and authentication.** Session lifetimes, a second factor (TOTP,
   passkey, recovery code), identity providers, re-authentication, the iOS
   sign-in handoff, the self-service export, and the seven-day deletion window

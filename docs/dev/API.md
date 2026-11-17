@@ -743,7 +743,7 @@ exception.
   scopes, expiry, last use) with revoke, and webhook endpoints (host, events,
   state, failure count) with disable. Both audited.
 - `/admin/jobs` shows the `webhooks` queue with the others.
-- Metrics (`[devdoc:metrics]`, mapped in `Metrics::Catalog`, no label carries
+- Metrics ([METRICS.md](METRICS.md), mapped in `Metrics::Catalog`, no label carries
   a host, account or token):
   - `allure_api_tokens{status}` (`active`, `expired`, `revoked`);
   - `allure_api_requests_total{scope, status_class}` (Yabeda counter);
