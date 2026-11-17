@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # A local publication as a reader reads it (PLAN_API.md §6.5, §7.2): only
+      # A local publication as a reader reads it (docs/dev/API.md): only
       # while `Workouts::PublicationPolicy` serves it to the token's account,
       # and only the resources the policy allows. The owner reads their own
       # publications the same way, from the snapshot.

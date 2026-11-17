@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Webhooks
-  # Every few minutes (PLAN_API.md §11.4): re-enqueues due deliveries whose job
+  # Every few minutes (docs/dev/API.md): re-enqueues due deliveries whose job
   # was lost or that waited on a paused endpoint or a suspended account, and
   # prunes events and deliveries older than 30 days.
   class RecoveryJob < ApplicationJob

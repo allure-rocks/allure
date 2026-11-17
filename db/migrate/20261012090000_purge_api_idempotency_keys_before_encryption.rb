@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_API.md §5: `api_idempotency_keys.response_body` is encrypted at rest
+# docs/dev/API.md: `api_idempotency_keys.response_body` is encrypted at rest
 # from here on. The rows kept so far are in clear and would not decrypt, so
 # they go; the replay store lives 24 hours and a retry whose first response
 # is gone simply runs the request again.

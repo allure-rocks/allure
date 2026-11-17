@@ -17,7 +17,7 @@ module Workouts
 
     # The single seam the enrichment jobs call: a workout with nothing waiting
     # costs one indexed lookup and enqueues nothing. The same moment tells the
-    # owner's webhooks the analysis settled (PLAN_API.md §11.2).
+    # owner's webhooks the analysis settled (docs/dev/API.md).
     def self.nudge(workout)
       return unless workout.is_a?(Workout)
 

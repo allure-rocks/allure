@@ -39,7 +39,7 @@ module Federation
 
       def validate_url(url) = @guard.validate!(url)
 
-      # `max_redirects: 0` refuses any redirect (webhooks, PLAN_API.md §11.4).
+      # `max_redirects: 0` refuses any redirect (webhooks, docs/dev/API.md).
       #
       # `total_timeout` is one deadline for the whole exchange: every hop of a
       # redirect chain and every address resolution spend from it, so a slow

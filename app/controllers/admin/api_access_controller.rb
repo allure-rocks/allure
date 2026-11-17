@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # The operator's hand on an account's programmatic access (PLAN_API.md §14):
+  # The operator's hand on an account's programmatic access (docs/dev/API.md):
   # revoke an API token, disable a webhook. Both audited; the owner is told
   # (the security mail, the `webhook_disabled` notification). The operator
   # never sees a secret nor a webhook's full address.

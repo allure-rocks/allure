@@ -16,7 +16,7 @@ module Workouts
     TEXT = %w[title description notes].freeze
     FIELDS = (MEASURED + TEXT + %w[sport commute]).freeze
     # The names a change is announced under, as the REST representation spells
-    # them (PLAN_API.md §7.1).
+    # them (docs/dev/API.md).
     CHANGE_NAMES = { "duration" => "elapsed_time", "sport_id" => "sport" }.freeze
 
     Result = Data.define(:workout, :changed) do

@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The served OpenAPI document (PLAN_API.md §12): docs/openapi/v1.yaml with
+      # The served OpenAPI document (docs/dev/API.md): docs/openapi/v1.yaml with
       # the instance's server URL and the application version filled in at
       # request time, so the file never hardcodes a host.
       module Document

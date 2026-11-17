@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_API.md §14: the operator's view of an account's tokens and webhooks,
+# docs/dev/API.md: the operator's view of an account's tokens and webhooks,
 # the audited revocation and disabling, and the API metrics.
 RSpec.describe "Admin: API tokens and webhooks" do
   include ActiveJob::TestHelper
@@ -61,7 +61,7 @@ RSpec.describe "Admin: API tokens and webhooks" do
   end
 end
 
-RSpec.describe "API metrics (PLAN_API.md §14)", type: :request do
+RSpec.describe "API metrics (docs/dev/API.md)", type: :request do
   around do |example|
     previous = ENV["METRICS_TOKEN"]
     ENV["METRICS_TOKEN"] = "metrics-secret"

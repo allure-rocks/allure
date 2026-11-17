@@ -5,7 +5,7 @@ import * as path from "node:path";
 export default defineConfig({
   plugins: [RubyPlugin()],
 
-  // The Scalar API reference (PLAN_API.md §13.2) ships Vue's esm-bundler
+  // The Scalar API reference (docs/dev/API.md) ships Vue's esm-bundler
   // build, which expects these compile-time flags; without them it warns and
   // keeps the devtools hooks in the production bundle.
   define: {

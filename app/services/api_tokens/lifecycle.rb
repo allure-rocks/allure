@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ApiTokens
-  # Creating and revoking an API token (PLAN_API.md §4.4). Both are security
+  # Creating and revoking an API token (docs/dev/API.md). Both are security
   # changes, so both are mailed to the account.
   module Lifecycle
     module_function

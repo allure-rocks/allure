@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # The stored first response to a POST carrying an Idempotency-Key
-# (PLAN_API.md §5). Without a response status the request is still running.
+# (docs/dev/API.md). Without a response status the request is still running.
 # The body is encrypted at rest: a kept response may carry a secret shown
 # once (a webhook's, at creation or rotation), which the column it is
 # replayed from must not keep in clear.

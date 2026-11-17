@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API webhooks (PLAN_API.md §6.6)", type: :request do
+RSpec.describe "REST API webhooks (docs/dev/API.md)", type: :request do
   include ActiveJob::TestHelper
 
   let(:user) { create(:user) }

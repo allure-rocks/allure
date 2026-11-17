@@ -85,7 +85,7 @@ module Metrics
       FundingContribution.group(provider, :tier, status).count
     end
 
-    # PLAN_API.md §14: never a host, an account or a token.
+    # docs/dev/API.md: never a host, an account or a token.
     def api_token_counts(now = Time.current)
       {
         "revoked" => ApiToken.where.not(revoked_at: nil).count,

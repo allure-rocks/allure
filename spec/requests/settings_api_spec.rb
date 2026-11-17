@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Settings: API tokens (PLAN_API.md §4.4, DESIGN.md §20.18)", type: :request do
+RSpec.describe "Settings: API tokens (docs/dev/API.md, DESIGN.md §20.18)", type: :request do
   include ActiveJob::TestHelper
 
   let(:user) { create(:user) }
@@ -133,7 +133,7 @@ RSpec.describe "Settings: API tokens (PLAN_API.md §4.4, DESIGN.md §20.18)", ty
   end
 end
 
-RSpec.describe "The API reference page (PLAN_API.md §13)", type: :request do
+RSpec.describe "The API reference page (docs/dev/API.md)", type: :request do
   it "is members-only" do
     get developers_api_path
 

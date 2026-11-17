@@ -2,7 +2,7 @@
 
 module Webhooks
   # What the settings pages and the REST API both do to an endpoint
-  # (PLAN_API.md §6.6), so the two never diverge.
+  # (docs/dev/API.md), so the two never diverge.
   module Management
     class Inactive < StandardError; end
 

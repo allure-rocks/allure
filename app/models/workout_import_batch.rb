@@ -6,7 +6,7 @@ class WorkoutImportBatch < ApplicationRecord
   STATUSES = %w[queued processing completed failed cancelled].freeze
   TERMINAL_STATUSES = %w[completed failed cancelled].freeze
   SOURCES = ([ "file", Allure::ImportSources::STRAVA_ARCHIVE.key ] + Allure::RemoteImports::Config.providers).freeze
-  # `api`: uploaded through the REST API (PLAN_API.md §8).
+  # `api`: uploaded through the REST API (docs/dev/API.md).
   TRIGGERS = %w[manual scheduled webhook api].freeze
 
   belongs_to :user

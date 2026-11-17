@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The owner's workouts (PLAN_API.md §6.2). Every lookup goes through the
+      # The owner's workouts (docs/dev/API.md). Every lookup goes through the
       # token's account, so another account's workout is a 404, never a 403.
       class WorkoutsController < BaseController
         SORTS = {
@@ -89,7 +89,7 @@ module Api
           render json: serialize(reloaded(result.workout), detail: true), status: :created
         end
 
-        # The web edit form's fields (PLAN_API.md §6.3). Only the fields sent
+        # The web edit form's fields (docs/dev/API.md). Only the fields sent
         # change; a sport change re-analyses the workout from its original
         # file, exactly as the web does, and is all or nothing. A manual entry
         # also takes its figures.

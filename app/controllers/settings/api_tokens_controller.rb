@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Creating and revoking API tokens (PLAN_API.md §4.4). Creation follows a
+  # Creating and revoking API tokens (docs/dev/API.md). Creation follows a
   # recent proof of identity; the secret is shown once, on the page that
   # follows, and never again.
   class ApiTokensController < ApplicationController

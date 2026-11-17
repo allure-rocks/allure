@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API workouts (PLAN_API.md §6.2)", type: :request do
+RSpec.describe "REST API workouts (docs/dev/API.md)", type: :request do
   let(:user) { create(:user) }
   let(:headers) { api_headers_for(user) }
   let(:cycling) { catalog_sport("cycling") }

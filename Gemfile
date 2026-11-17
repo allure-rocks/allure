@@ -119,6 +119,6 @@ group :test do
   gem "webmock", "~> 3.26"
   gem "vcr", "~> 6.4"
   # The public REST API's contract tests validate every request and response
-  # against docs/openapi/v1.yaml (PLAN_API.md §12).
+  # against docs/openapi/v1.yaml (docs/dev/API.md).
   gem "openapi_first", "~> 4.2"
 end

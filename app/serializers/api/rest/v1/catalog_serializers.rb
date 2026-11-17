@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The small representations of PLAN_API.md §6.1–6.2: the account, the
+      # The small representations of docs/dev/API.md–6.2: the account, the
       # sport catalog, equipment and publishing profiles.
       module CatalogSerializers
         module_function
