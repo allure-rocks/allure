@@ -230,7 +230,7 @@ laps cover less than 90 % of the recording span, when the ratio falls outside
 0.25–4, or when the drawn distance already matches. A device outside the
 catalogue is never calibrated, and neither is a positionless recording: it has
 no drawn course, and its distance already comes from the device
-(`[devdoc:no-gps]`). The change is analyzer version 10
+([NO-GPS.md](NO-GPS.md)). The change is analyzer version 10
 ([ELEVATION.md](ELEVATION.md)), so the rebuild sweep reanalyzes existing workouts and
 `Workouts::Reanalyzer` re-renders the route image of those whose geometry moved.
 

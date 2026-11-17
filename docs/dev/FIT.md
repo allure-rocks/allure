@@ -268,7 +268,7 @@ absence cannot be used to bypass the file-type check.
 Records missing a timestamp are skipped silently. Records missing a position
 are kept: their sensor readings belong to the activity, and a file that never
 reached a fix is imported as a **positionless recording**
-(`[devdoc:no-gps]`). Within a file that did reach a fix, the position-less
+([NO-GPS.md](NO-GPS.md)). Within a file that did reach a fix, the position-less
 records stay skipped exactly as before — devices emit them before GPS lock and
 during indoor portions of an activity, and the positioned segments ignore them.
 
@@ -440,7 +440,7 @@ shared model already puts it:
 - recorded laps become `laps` rows, with their own numbering and metrics;
 - the device's air temperature becomes the `temp` point key;
 - a positionless recording keeps its device distance and speed in the point
-  stream (`[devdoc:no-gps]`);
+  stream ([NO-GPS.md](NO-GPS.md));
 - device serial numbers and session summaries are not persisted.
 
 ## 8. Import paths
@@ -560,7 +560,7 @@ Scenarios:
 | redefined local message type | definition replaced, not merged |
 | invalid-value sentinels | decode to `nil`, never to `0xFF…` |
 | records before GPS lock | skipped without error on a positioned file |
-| no GPS at all | imported as a positionless recording (`[devdoc:no-gps]`) |
+| no GPS at all | imported as a positionless recording ([NO-GPS.md](NO-GPS.md)) |
 | fewer than two timed records | `NoTrackError` |
 | non-activity `file_id.type` | `UnsupportedFitError` |
 | truncated stream, bad signature, CRC mismatch | `MalformedFitError` |
@@ -607,7 +607,7 @@ When present it asserts:
 3. **Indoor files import.** Representative treadmill, yoga, strength and
    breathing files are analysed as positionless recordings: non-negative
    distance, duration and their sensor channels, no bounds and no elevation
-   (`[devdoc:no-gps]`). A diving file whose records carry no timestamp at all
+   ([NO-GPS.md](NO-GPS.md)). A diving file whose records carry no timestamp at all
    still raises `NoTrackError`. Some indoor and diving activities contain GPS
    and are analysed normally.
 4. **Sport mapping is externally verified for curated samples.** Many corpus

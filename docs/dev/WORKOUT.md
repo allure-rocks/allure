@@ -330,7 +330,7 @@ Rules:
 |---|---|
 | `t` | whole seconds from segment start |
 | `d` | cumulative segment distance in metres |
-| `lat`, `lon` | WGS84 coordinate; **both absent** on a positionless recording (`[devdoc:no-gps]`) |
+| `lat`, `lon` | WGS84 coordinate; **both absent** on a positionless recording ([NO-GPS.md](NO-GPS.md)) |
 | `ele` | canonical filtered elevation in metres, omitted when absent or ignored for the sport |
 | `v` | point speed in metres/second over a centred five-second window, omitted when unavailable |
 | `hr` | heart rate, omitted when unavailable or non-positive (strap dropout) |
@@ -478,7 +478,7 @@ database.
 
 A **positioned** recording measures its distance from the geometry. A recording
 imported without any position instead reads the device's own cumulative
-distance and speed (`[devdoc:no-gps]`). For consecutive positioned points:
+distance and speed ([NO-GPS.md](NO-GPS.md)). For consecutive positioned points:
 
 1. Calculate horizontal distance.
 2. Normalize longitude to the shortest delta in `[-180, 180]`; use absolute
