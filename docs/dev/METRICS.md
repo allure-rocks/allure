@@ -162,7 +162,7 @@ never the body.
 | `allure_webhook_endpoints` | gauge | `status` | webhook endpoints: `active`, `inactive`, `disabled` |
 | `allure_webhook_deliveries` | gauge | `status` | webhook deliveries created in the last 24 hours |
 | `allure_webhook_delivery_oldest_pending_seconds` | gauge | — | age of the oldest pending delivery; 0 when none |
-| `allure_push_subscriptions` | gauge | — | push subscriptions of signed-in companion sessions (`[devdoc:push]`) |
+| `allure_push_subscriptions` | gauge | — | push subscriptions of signed-in companion sessions ([PUSH.md](PUSH.md)) |
 | `allure_account_exports` | gauge | `status` | account data exports: `pending`, `running`, `ready`, `failed`, `expired` (`ACCOUNT.md`) |
 | `allure_photos` | gauge | `status` | owner photos: `processing`, `ready`, `failed` (`PHOTOS.md`) |
 | `allure_photo_bytes` | gauge | — | owner photo originals and derivatives, including bytes reserved by processing uploads |

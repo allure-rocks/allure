@@ -58,6 +58,9 @@ search, the suggestions and the relationship hub.
 `docs/dev/NOTIFICATIONS.md` is the notifications contract: the inbox, its
 kinds, the producers, the withdrawal and the surfaces.
 
+`docs/dev/PUSH.md` is the push contract: the relay protocol, the payload, the
+instance subscriptions and the companion bridge.
+
 `docs/dev/WORKOUT.md` is the workout contract: the source workout, the
 recording segments, the units, the GPX input, the metrics engine, the import
 transaction and the route image. `docs/dev/FIT.md` is the FIT import contract,

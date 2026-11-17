@@ -912,7 +912,7 @@ and a client that does not advertise a bridge keeps the web counterpart.
   and names the files it received ([IMPORT-SOURCES.md](IMPORT-SOURCES.md)). The fallback
   sport, the notes and the submit stay Rails'; a server without the controller
   receives no file and the app explains that it must be updated.
-- Push (`[devdoc:push]`): when the app registers the `push` bridge component
+- Push ([PUSH.md](PUSH.md)): when the app registers the `push` bridge component
   and the instance configures push, `/settings/notifications` adds the
   « Sur cet iPhone » card under the per-kind switches. « Recevoir sur cet
   iPhone » asks the app, which shows the system permission prompt the first
@@ -4171,7 +4171,7 @@ for `filtered` and `raw`.
 ### 19.28 Push content — on the « Sur cet iPhone » card
 
 Placement: the last line of the card (§7.7), muted, with a lock glyph, always
-visible while the card is (`[devdoc:push]`). With « Masquer le contenu »
+visible while the card is ([PUSH.md](PUSH.md)). With « Masquer le contenu »
 on, the iPhone shows the generic sentence instead of the inbox's.
 
 > **FR** — « Le contenu est chiffré pour cet iPhone ; ni le relais d'Allure ni

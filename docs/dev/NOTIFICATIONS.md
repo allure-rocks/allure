@@ -4,7 +4,7 @@ A durable, per-account in-app inbox for directed events. It is deliberately
 **not** a feed and **not** a gamification mechanic: no points, levels, or
 leaderboard pressure (`DESIGN.md` §3). Email is out of scope, and the browser
 only ever talks to its own instance. Push to the iOS companion is one more
-delivery of the same rows (`[devdoc:push]`).
+delivery of the same rows ([PUSH.md](PUSH.md)).
 
 ## 1. Scope
 
@@ -110,7 +110,7 @@ badges/XP, and notification federation. Comments and replies joined with
 Each later kind must extend the `KINDS` check constraint and this contract in
 the same patch.
 
-Push to the iOS companion is a delivery of the same rows (`[devdoc:push]`): a
+Push to the iOS companion is a delivery of the same rows ([PUSH.md](PUSH.md)): a
 new row, or a reaction digest turned unread, goes to the recipient's opted-in
 devices through the relay, encrypted end to end. It adds no kind and no
 preference besides the device switch and its « Masquer le contenu »; a kind
