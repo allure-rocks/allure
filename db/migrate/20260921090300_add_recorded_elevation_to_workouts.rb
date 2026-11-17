@@ -2,7 +2,7 @@
 
 # Records whether the original file carried a valid elevation profile, so the
 # UI and the backfill can tell a recorded profile from a DEM-enriched one
-# (PLAN_ELEVATION.md §4).
+# (docs/dev/ELEVATION.md).
 class AddRecordedElevationToWorkouts < ActiveRecord::Migration[8.1]
   def up
     add_column :workouts, :recorded_elevation, :boolean, null: false, default: false

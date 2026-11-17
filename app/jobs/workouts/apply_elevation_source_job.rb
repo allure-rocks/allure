@@ -19,7 +19,7 @@ module Workouts
 
     # A request that can never be satisfied must not leave the page pending
     # forever: clearing it lets the workout summary show the failed or
-    # unavailable state and its retry action (PLAN_ELEVATION.md §5.5, §6).
+    # unavailable state and its retry action (docs/dev/ELEVATION.md).
     after_discard do |job, _error|
       clear_request(job.arguments.first)
     end

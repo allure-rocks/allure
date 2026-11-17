@@ -97,7 +97,7 @@ class Segment < ApplicationRecord
   after_create_commit :enqueue_place_geocoding
   # The terrain service's profile replaces the device's when it is available
   # and allowed; a course that turns public becomes allowed
-  # (PLAN_ELEVATION.md §10).
+  # (docs/dev/ELEVATION.md).
   after_commit :enqueue_terrain_elevation, on: %i[create update],
                                            if: -> { previously_new_record? || saved_change_to_visibility? }
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Terrain elevation preference (PLAN_ELEVATION.md): when the instance
+  # Terrain elevation preference (docs/dev/ELEVATION.md): when the instance
   # configures an OpenTopoData provider, an account may opt in to sending
   # sampled coordinates of its elevation-less workouts to it.
   class ElevationController < ApplicationController

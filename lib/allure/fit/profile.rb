@@ -33,7 +33,7 @@ module Allure
         # The session numbering is offset by one from the lap numbering for
         # the power and elevation totals: 21 is `max_power` here and
         # `total_ascent` in a lap. Reading 21/22 as the session totals turned
-        # a running-power maximum into an ascent (PLAN_ELEVATION.md §3bis).
+        # a running-power maximum into an ascent (docs/dev/ELEVATION.md).
         session: {
           5 => :sport,
           6 => :sub_sport,

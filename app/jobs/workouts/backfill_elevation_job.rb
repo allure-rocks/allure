@@ -3,7 +3,7 @@
 module Workouts
   # Enqueues the terrain-elevation apply job for every elevation-less workout of
   # an opted-in owner, in bounded id-cursor batches that resume themselves
-  # (PLAN_ELEVATION.md §7). Only runs when the instance configures a provider.
+  # (docs/dev/ELEVATION.md). Only runs when the instance configures a provider.
   class BackfillElevationJob < ApplicationJob
     BATCH_SIZE = 50
 

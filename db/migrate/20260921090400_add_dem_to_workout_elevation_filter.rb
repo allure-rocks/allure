@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # A terrain profile gets its own noise class and ascent threshold
-# (PLAN_ELEVATION.md §3): DEM interpolation is smoother than a barometer but
+# (docs/dev/ELEVATION.md): DEM interpolation is smoother than a barometer but
 # noisier than a clean barometric trace, and Strava's documented threshold for
 # DEM-derived elevation is 10 m. Allure keeps 8 m.
 class AddDemToWorkoutElevationFilter < ActiveRecord::Migration[8.1]

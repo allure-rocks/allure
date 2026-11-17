@@ -1183,7 +1183,7 @@ module WorkoutsHelper
 
   # The owner can switch between the recorded and the terrain profile only when
   # the instance configured a provider, the account opted in, and there is a
-  # recorded profile to fall back to (PLAN_ELEVATION.md §6).
+  # recorded profile to fall back to (docs/dev/ELEVATION.md).
   def elevation_source_control?(workout)
     return false unless current_user && current_user == workout.user
     return false unless Allure::Elevation::Config.configured?
@@ -1197,7 +1197,7 @@ module WorkoutsHelper
   end
 
   # Why an elevation-less owner workout shows no altitude, and the one action
-  # that fixes it where one exists (PLAN_ELEVATION.md §6). Nil means the
+  # that fixes it where one exists (docs/dev/ELEVATION.md). Nil means the
   # summary needs no notice.
   def workout_elevation_notice(workout)
     return nil unless current_user && current_user == workout.user

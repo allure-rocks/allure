@@ -165,7 +165,7 @@ Rails.application.routes.draw do
     resource :chart, only: :show, controller: "workout_charts"
     resource :toponymy, only: :show, controller: "workout_toponymies"
     resource :segment_selection, only: :show, controller: "workout_segment_selections"
-    # Owner-only elevation source switch (PLAN_ELEVATION.md).
+    # Owner-only elevation source switch (docs/dev/ELEVATION.md).
     resource :elevation_source, only: :update, controller: "workout_elevation_sources"
     # Owner-requested weather refresh (PLAN_WEATHER.md §7).
     resource :weather, only: :create, controller: "workout_weathers"
@@ -280,7 +280,7 @@ Rails.application.routes.draw do
     resource :appearance, only: %i[show update], controller: "appearance"
     # Units (M4): unit system, time zone, and week start.
     resource :units, only: %i[show update], controller: "units"
-    # Elevation (PLAN_ELEVATION.md): opt in to terrain elevation for workouts
+    # Elevation (docs/dev/ELEVATION.md): opt in to terrain elevation for workouts
     # without a recorded profile.
     resource :elevation, only: %i[show update], controller: "elevation"
     # Weather (PLAN_WEATHER.md §7): explicit consent to send coarsened
