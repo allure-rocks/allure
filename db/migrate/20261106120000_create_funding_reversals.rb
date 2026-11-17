@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_FUNDING.md §3 (PAY-105): verified reversal signals (refunds and
+# docs/dev/FUNDING.md: verified reversal signals (refunds and
 # disputes) are recorded in their own rows, separately from the immutable
 # original payments, so the operator can review them in /admin/funding.
 # The reversal's lifecycle (open → won/lost, succeeded → failed) updates

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Allure
-  # Voluntary contributions to the instance operator (PLAN_FUNDING.md). The
+  # Voluntary contributions to the instance operator (docs/dev/FUNDING.md). The
   # master switch is deliberately independent from the checkout links: an
   # operator can keep manual contributions and their badges without offering
   # an online payment page.
