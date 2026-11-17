@@ -49,6 +49,9 @@ shared-activities contract: the participants, the credit and link kinds, the
 credited metric set, the reduced federated invitation and the co-presence
 detection.
 
+`docs/dev/PEOPLE.md` is the people contract: the opt-in directory, the name
+search, the suggestions and the relationship hub.
+
 `docs/dev/WORKOUT.md` is the workout contract: the source workout, the
 recording segments, the units, the GPX input, the metrics engine, the import
 transaction and the route image. `docs/dev/FIT.md` is the FIT import contract,
@@ -181,7 +184,7 @@ behaviours updates its page in every language in the same patch.
   [docs/dev/COMMENTS.md](docs/dev/COMMENTS.md)
   [docs/dev/REACTIONS.md](docs/dev/REACTIONS.md)
   [docs/dev/SHARED-ACTIVITIES.md](docs/dev/SHARED-ACTIVITIES.md)
-  `[devdoc:people]` `[devdoc:notifications]`
+  [docs/dev/PEOPLE.md](docs/dev/PEOPLE.md) `[devdoc:notifications]`
 - **Remote imports.** `ImportConnection` keeps one encrypted credential set per
   account and provider; `Workouts::RemoteImportBatchJob` lists a range once and
   imports each entry through `Workouts::Importer`. Garmin Connect, EXR, Withings
