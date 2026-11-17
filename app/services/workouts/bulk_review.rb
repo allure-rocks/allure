@@ -23,7 +23,7 @@ module Workouts
         .includes(workout: [ :sport, { original_file_attachment: :blob } ])
         .filter_map(&:workout)
       # A manual entry has no file and needs none: its sport changes alone
-      # (PLAN_MANUAL_ENTRY.md §6).
+      # (docs/dev/MANUAL-ENTRY.md).
       without_original = workouts.count { |workout| !workout.manual? && !workout.original_file.attached? }
       published, scheduled = publication_counts(workouts)
 

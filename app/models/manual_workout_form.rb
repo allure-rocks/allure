@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The web form of a manual entry (PLAN_MANUAL_ENTRY.md §5): what the owner
+# The web form of a manual entry (docs/dev/MANUAL-ENTRY.md): what the owner
 # types, in their own units and time zone, kept as typed so a refused form
 # comes back unchanged. `to_attributes` turns it into the SI figures
 # Workouts::ManualEntry persists; the model's own refusals come back onto the

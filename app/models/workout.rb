@@ -20,11 +20,11 @@ class Workout < ApplicationRecord
   # A recording comes from an imported file; a credit row stands for a
   # confirmed credit participation and carries only the credited metric set,
   # no geometry (docs/dev/SHARED-ACTIVITIES.md); a manual entry carries the figures its
-  # owner typed in, no file and no geometry (PLAN_MANUAL_ENTRY.md). Mirrors
+  # owner typed in, no file and no geometry (docs/dev/MANUAL-ENTRY.md). Mirrors
   # workouts_origin.
   ORIGINS = %w[import credit manual].freeze
 
-  # The bounds a hand-typed figure must fall within (PLAN_MANUAL_ENTRY.md §4):
+  # The bounds a hand-typed figure must fall within (docs/dev/MANUAL-ENTRY.md):
   # SI, as persisted. A recording's figures are measured, never checked here.
   MANUAL_LIMITS = {
     duration: 1..(7 * 86_400),

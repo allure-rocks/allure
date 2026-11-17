@@ -10,7 +10,7 @@ module Allure
   # connection, docs/dev/REMOTE-IMPORTS.md), `:archive` (one uploaded export of
   # another service, read with its metadata and submitted from its own panel,
   # PLAN_STRAVA_ARCHIVE.md), or `:manual` (a workout typed in by hand, with no
-  # file and its own form, PLAN_MANUAL_ENTRY.md). A remote source exists for an
+  # file and its own form, docs/dev/MANUAL-ENTRY.md). A remote source exists for an
   # account only while the operator enables it.
   module ImportSources
     Source = Data.define(:key, :kind, :icon) do

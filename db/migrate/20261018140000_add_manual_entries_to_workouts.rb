@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_MANUAL_ENTRY.md §3: a workout the owner typed in by hand, with no file.
+# docs/dev/MANUAL-ENTRY.md: a workout the owner typed in by hand, with no file.
 # A manual entry has no position, no points, no original file and no remote
 # provenance; it carries only the declared figures. The origin check gains the
 # value, the recording shape gains its branch, the credit shape lets it through

@@ -2,7 +2,7 @@
 
 class WorkoutImportsController < ApplicationController
   before_action :set_batch, only: %i[show status cancel]
-  # The manual entry panel (PLAN_MANUAL_ENTRY.md §5) renders with the page.
+  # The manual entry panel (docs/dev/MANUAL-ENTRY.md) renders with the page.
   before_action :set_manual_entry, only: %i[new create]
   # The database-counted admission below bounds what is stored; this keeps one
   # account from hammering the endpoint (docs/dev/IMPORT-SOURCES.md).

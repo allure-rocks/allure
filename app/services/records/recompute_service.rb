@@ -56,7 +56,7 @@ module Records
     # A workout whose figure an anomaly contests never holds that record
     # (PLAN_M1.md §8.10): the second best takes its place. A manual entry
     # holds none: a typed figure counts in the totals, never as a record
-    # (PLAN_MANUAL_ENTRY.md §6).
+    # (docs/dev/MANUAL-ENTRY.md).
     def find_winner(config)
       column = config[:column]
       direction = config[:direction] == :min ? :asc : :desc

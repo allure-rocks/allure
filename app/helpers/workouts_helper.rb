@@ -636,7 +636,7 @@ module WorkoutsHelper
     Sport.alphabetical.map { |sport| [ sport_display_name(sport), sport.id ] }
   end
 
-  # A manual entry field's own refusals, under the field (PLAN_MANUAL_ENTRY.md §5).
+  # A manual entry field's own refusals, under the field (docs/dev/MANUAL-ENTRY.md).
   def manual_entry_error(form, field)
     messages = form.errors.full_messages_for(field)
     return if messages.empty?
@@ -738,7 +738,7 @@ module WorkoutsHelper
     workout_positionless?(workout) || workout_manual_hidden?(workout, :ascent) ? "—" : format_elevation(workout.ascent)
   end
 
-  # A manual entry's figure left empty reads as a dash (PLAN_MANUAL_ENTRY.md §7).
+  # A manual entry's figure left empty reads as a dash (docs/dev/MANUAL-ENTRY.md).
   def workout_manual_hidden?(workout, key) = workout.is_a?(Workout) && workout.manual? && !workout.metric_visible?(key)
 
   def workout_metric_items(workout)
@@ -803,7 +803,7 @@ module WorkoutsHelper
     else
       :average_pace
     end
-    # A manual entry leads with what its owner typed in (PLAN_MANUAL_ENTRY.md §7).
+    # A manual entry leads with what its owner typed in (docs/dev/MANUAL-ENTRY.md).
     if workout.is_a?(Workout) && workout.manual?
       base = workout.distance_recorded? ? [ :distance, :moving_time, preferred_average ] : [ :moving_time ]
       extras = %i[ascent average_power average_heart_rate calories]

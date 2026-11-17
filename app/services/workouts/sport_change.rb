@@ -63,7 +63,7 @@ module Workouts
 
     # A manual entry has no file and nothing derived from one: its figures
     # stay as typed, and the model's callback recomputes both record scopes
-    # (PLAN_MANUAL_ENTRY.md §6). A figure the new sport does not measure (an
+    # (docs/dev/MANUAL-ENTRY.md). A figure the new sport does not measure (an
     # ascent, a power) is refused rather than silently dropped.
     def change_manual_entry
       return @workout if @workout.update(sport: @sport)

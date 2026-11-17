@@ -40,7 +40,7 @@ class WorkoutsController < ApplicationController
     # set and its deletion, nothing drawn from a track (docs/dev/SHARED-ACTIVITIES.md).
     return show_credit if @workout.credit? && @workout.user == current_user
     # A manual entry is its owner's alone and has its own page: the typed
-    # figures, nothing drawn from a track (PLAN_MANUAL_ENTRY.md §7).
+    # figures, nothing drawn from a track (docs/dev/MANUAL-ENTRY.md).
     return render(:manual) if @workout.manual? && @workout.user == current_user
 
     owner = @workout.user == current_user
@@ -421,7 +421,7 @@ class WorkoutsController < ApplicationController
       .first
   end
 
-  # Every figure of a manual entry is editable (PLAN_MANUAL_ENTRY.md §5).
+  # Every figure of a manual entry is editable (docs/dev/MANUAL-ENTRY.md).
   def update_manual
     @manual_form = ManualWorkoutForm.from_params(params.fetch(:manual_workout, {}).permit(*ManualWorkoutsController::PERMITTED),
                                                  user: current_user)

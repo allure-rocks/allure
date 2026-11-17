@@ -16,7 +16,7 @@
 
 <%= render "publishing_profiles/auto_publish_notice", profiles: current_user.publishing_profiles.automatic.order(:position, :id).to_a, context: :import %>
 
-<%# A manual entry has its own form (PLAN_MANUAL_ENTRY.md §5): its panel sits
+<%# A manual entry has its own form (docs/dev/MANUAL-ENTRY.md): its panel sits
     after the upload form, which hides while it is selected. %>
 <div data-controller="import-source" data-import-source-initial-value="<%= initial_source %>">
   <% if sources.many? %>
