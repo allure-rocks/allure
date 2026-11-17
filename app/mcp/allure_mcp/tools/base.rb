@@ -2,7 +2,7 @@
 
 module AllureMcp
   module Tools
-    # What every Allure tool shares (PLAN_MCP.md §5): the token's account as
+    # What every Allure tool shares (docs/dev/MCP.md): the token's account as
     # the only scope, owner lookups that answer "not found" for anything else,
     # compact JSON text answers, and the outcome reported to the metrics.
     class Base < MCP::Tool

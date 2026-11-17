@@ -2,7 +2,7 @@
 
 module AllureMcp
   # A workout's recorded measurements over distance and time, as a compact
-  # table (PLAN_MCP.md §5.3): never a coordinate. The points come from
+  # table (docs/dev/MCP.md): never a coordinate. The points come from
   # Allure::Gpx::ChartSeries, which keeps every extremum and every gap
   # boundary when it thins a range down to `max_points`.
   class WorkoutSeries

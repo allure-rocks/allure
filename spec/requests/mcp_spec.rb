@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "MCP endpoint (PLAN_MCP.md)", type: :request do
+RSpec.describe "MCP endpoint (docs/dev/MCP.md)", type: :request do
   let(:user) { create(:user, time_zone: "Europe/Paris") }
   let(:cycling) { catalog_sport("cycling") }
   let(:running) { catalog_sport("running") }

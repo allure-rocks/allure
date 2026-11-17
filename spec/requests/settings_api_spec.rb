@@ -52,7 +52,7 @@ RSpec.describe "Settings: API tokens (docs/dev/API.md, DESIGN.md §20.18)", type
     expect(response).to redirect_to(settings_api_path)
   end
 
-  it "creates a token without location for AI assistants unless one is chosen (PLAN_MCP.md §4)" do
+  it "creates a token without location for AI assistants unless one is chosen (docs/dev/MCP.md)" do
     post settings_api_tokens_path, params: { api_token: { name: "Script", scopes: %w[read], expires_in_days: "90" } }
 
     expect(user.api_tokens.sole.mcp_geometry).to eq("none")

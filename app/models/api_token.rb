@@ -17,7 +17,7 @@ class ApiToken < ApplicationRecord
   RETENTION = 90.days
   REVOKERS = %w[owner operator system].freeze
   # How much location the token may hand an AI assistant through /mcp
-  # (PLAN_MCP.md §4), from least to most.
+  # (docs/dev/MCP.md), from least to most.
   MCP_GEOMETRY_LEVELS = %w[none filtered raw].freeze
 
   belongs_to :user

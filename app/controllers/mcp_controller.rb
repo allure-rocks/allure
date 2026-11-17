@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The Model Context Protocol endpoint (PLAN_MCP.md §3): a third door onto the
+# The Model Context Protocol endpoint (docs/dev/MCP.md): a third door onto the
 # account's own rooms, behind the REST API's token boundary — Bearer only,
 # the same refusals and rate limits. Served stateless: every POST is a whole
 # JSON-RPC exchange, so no session is kept and no stream is held open.

@@ -63,7 +63,7 @@ x-app: &app
     VAPID_SUBJECT: ${VAPID_SUBJECT:-}
     PUSH_RELAY_ORIGINS: ${PUSH_RELAY_ORIGINS:-}
     # Ceiling on the location an API token may hand an AI assistant through
-    # /mcp: none, filtered or raw. Unset means no ceiling (PLAN_MCP.md §4).
+    # /mcp: none, filtered or raw. Unset means no ceiling (docs/dev/MCP.md).
     MCP_GEOMETRY_MAX: ${MCP_GEOMETRY_MAX:-}
     # Public presentation metadata (footer, NodeInfo, PWA description). All
     # unset by default; nothing is invented for the operator.

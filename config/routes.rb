@@ -442,7 +442,7 @@ Rails.application.routes.draw do
       end
     end
   end
-  # The Model Context Protocol endpoint for AI assistants (PLAN_MCP.md §3).
+  # The Model Context Protocol endpoint for AI assistants (docs/dev/MCP.md).
   post "/mcp", to: "mcp#create", as: :mcp
   match "/mcp", to: "mcp#method_not_allowed", via: %i[get delete put patch]
   # The API reference (docs/dev/API.md), members-only.
