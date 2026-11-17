@@ -381,4 +381,4 @@ the ordinary 15-second Snapshot cache. Labels are closed: provider is `manual`,
 period whose `starts_at` is in the future is `upcoming`, not an active badge.
 Revocation takes precedence over expiry and a future start. No amount, account
 identifier, external payment ID or provider payload enters the exposition. See
-`[devdoc:funding]`.
+[FUNDING.md](FUNDING.md).

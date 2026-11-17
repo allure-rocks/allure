@@ -120,6 +120,9 @@ reading bounds, the sport mapping, the job and the archive's photos.
 `docs/dev/DEMO.md` is the demo contract: the mode switch, the re-dated data,
 the shared accounts, the nightly reset and the reset strip.
 
+`docs/dev/FUNDING.md` is the funding contract: the tiers, the paid periods,
+the supporter badge and the provider seam.
+
 `docs/dev/BULK-ACTIONS.md` is the bulk-actions contract: the selection, the
 quick actions and the reviewable background operations.
 

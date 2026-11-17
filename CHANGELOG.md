@@ -201,7 +201,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refunds and disputes are recorded as idempotent `funding_reversals` rows
   (kind, outcome, amount, resolved to the original invoice) and shown as
   badges in `/admin/funding`; they never rewrite the original payment nor
-  revoke a badge automatically (`[devdoc:funding]`). The Stripe adapter
+  revoke a badge automatically ([FUNDING.md](docs/dev/FUNDING.md)). The Stripe adapter
   normalizes `refund.*` and `charge.dispute.*` events and lists refunds and
   disputes during reconciliation.
 
@@ -406,7 +406,7 @@ Detected loops. See the [upgrade guide](docs/site/operations/upgrading.md).
 
 ### Added
 
-- Voluntary instance funding (`[devdoc:funding]`), entirely behind the
+- Voluntary instance funding ([FUNDING.md](docs/dev/FUNDING.md)), entirely behind the
   `FUNDING_ENABLED` master switch (off by default; while unset nothing renders,
   badges included, and no data is deleted): a « Soutenir l'instance » page
   ("Support this instance") offers a voluntary yearly contribution to the
