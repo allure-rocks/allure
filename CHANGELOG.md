@@ -854,7 +854,7 @@ migration (`db:migrate`, applied on boot).
   the cut-off re-checks it under the row lock and raises
   `Users::DeleteAccount::Cancelled`, which the purge job swallows
   ([ACCOUNT.md](docs/dev/ACCOUNT.md)).
-- Push subscription secrets are filtered from the logs (`[devdoc:push]`).
+- Push subscription secrets are filtered from the logs ([PUSH.md](docs/dev/PUSH.md)).
 - A push registration replaces only the current account's earlier row for
   the same endpoint, and only when the new subscription saves: an endpoint
   is never proof of ownership, so another account's row is left alone (422),
@@ -1110,7 +1110,7 @@ migration (`db:migrate`, applied on boot).
   another instance; `workout_id` is no longer required in
   `ParticipationData`.
 - Push: the relay binds every endpoint to the instance's VAPID public key
-  (`[devdoc:push]`), so a leaked endpoint cannot be used without the
+  ([PUSH.md](docs/dev/PUSH.md)), so a leaked endpoint cannot be used without the
   instance's private key. The « Sur cet iPhone » card hands the key to the
   app when it registers. Instances that enabled push in 0.7.2 must upgrade
   before the iOS app with push ships: the relay refuses registrations without
@@ -1134,7 +1134,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Push notifications for the iOS companion (`[devdoc:push]`, instance side):
+- Push notifications for the iOS companion ([PUSH.md](docs/dev/PUSH.md), instance side):
   an account turns on « Recevoir sur cet iPhone » in the new « Sur cet
   iPhone » card of `/settings/notifications`, optionally hiding the content,
   and every new notification it would see in the inbox is also pushed to that
