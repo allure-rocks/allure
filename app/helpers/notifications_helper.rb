@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Presentation rules for the in-app inbox (PLAN_NOTIFICATIONS.md). Every string
+# Presentation rules for the in-app inbox (docs/dev/NOTIFICATIONS.md). Every string
 # is localized and every remote account is rendered through the shared actor
 # helpers, so no copy names the protocol (DESIGN.md §24).
 module NotificationsHelper
@@ -111,7 +111,7 @@ module NotificationsHelper
 
   private
 
-  # One digest per workout (PLAN_NOTIFICATIONS.md §8). A single reaction names
+  # One digest per workout (docs/dev/NOTIFICATIONS.md). A single reaction names
   # its gesture (PLAN_REACTIONS.md §5); several name the newest account and
   # count the others.
   def reaction_notification_text(notification)

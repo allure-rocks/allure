@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Per-account in-app notification preferences (PLAN_NOTIFICATIONS.md). A
+# Per-account in-app notification preferences (docs/dev/NOTIFICATIONS.md). A
 # disabled kind is never created, so re-enabling it does not resurrect old
 # events.
 class AddNotificationPreferencesToUsers < ActiveRecord::Migration[8.1]

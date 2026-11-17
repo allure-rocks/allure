@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The per-account in-app inbox (PLAN_NOTIFICATIONS.md). One row per recipient
+# The per-account in-app inbox (docs/dev/NOTIFICATIONS.md). One row per recipient
 # and event: `actor` is who caused it, `subject` is the relationship it
 # describes, and `read_at` is the cross-device read marker. The row is
 # recipient-scoped and never carries coordinates, workout content, or remote

@@ -1,4 +1,4 @@
-<%# The bell dropdown body (PLAN_NOTIFICATIONS.md). Served as a Turbo Frame and
+<%# The bell dropdown body (docs/dev/NOTIFICATIONS.md). Served as a Turbo Frame and
     fetched whenever the dropdown opens, so the list is never stale. %>
 <turbo-frame id="notification-menu" data-notification-menu-url="<%= menu_notifications_path %>">
   <% if notifications.any? %>

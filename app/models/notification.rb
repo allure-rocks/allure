@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# One in-app notification for one account (PLAN_NOTIFICATIONS.md). The row is a
+# One in-app notification for one account (docs/dev/NOTIFICATIONS.md). The row is a
 # small recipient-scoped record: `actor` is who caused it, `subject` is the
 # relationship it describes, and `payload` stays an object reserved for kinds
 # that need display data. A notification never carries coordinates, workout
