@@ -19,6 +19,9 @@ contract, the contract wins and `DESIGN.md` is amended.
 `docs/dev/ACCESS.md` is the access contract: every browser surface requires an
 account, while the ActivityPub wire contract is unchanged.
 
+`docs/dev/AUTH.md` is the authentication contract: the two sign-in paths, the
+second factor, the identity providers, the sessions and the iOS handoff.
+
 `docs/dev/PUBLISHING.md` is the publishing contract: the source workout, the
 profile, the immutable publication, the audiences and the federation boundary.
 `docs/dev/DELAYED-PUBLISHING.md` is the safety-delay contract, and
@@ -175,7 +178,7 @@ behaviours updates its page in every language in the same patch.
 - **Accounts and authentication.** Session lifetimes, a second factor (TOTP,
   passkey, recovery code), identity providers, re-authentication, the iOS
   sign-in handoff, the self-service export, and the seven-day deletion window
-  with a resumable purge. `[devdoc:auth]` `[devdoc:account]`
+  with a resumable purge. [docs/dev/AUTH.md](docs/dev/AUTH.md) `[devdoc:account]`
 - **Enrichment.** Terrain elevation (an OpenTopoData-compatible server),
   historical weather (Open-Meteo), heart-rate zones and training load, photos
   with stripped derivatives and placement, and geocoded places. Each is opt-in,

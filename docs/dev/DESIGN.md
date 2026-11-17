@@ -276,7 +276,7 @@ of good visual design repairs.
 | Distance/time/elevation values | metrics | mesures | |
 | The uploaded file | original file | fichier d'origine | Never "source". |
 | Bringing files in | import | importer | Never "upload" as a noun. |
-| A second proof after the password | two-step verification | double authentification | `[devdoc:auth]`. Never "2FA" or "MFA" in UI copy. |
+| A second proof after the password | two-step verification | double authentification | [AUTH.md](AUTH.md). Never "2FA" or "MFA" in UI copy. |
 | Rotating six-digit codes | authenticator app | application d'authentification | The factor is the app, never "TOTP" in UI copy. |
 | Device-held credential | passkey | clé d'accès | Also covers a hardware security key. Never "WebAuthn" in UI copy. |
 | Single-use fallback code | recovery code | code de récupération | Ten per generation, shown once. |
@@ -5416,7 +5416,7 @@ render a dead link; an operator can still admit one account with a single-use
 prefilled read-only. An expired, already used, or unknown invitation link
 returns to sign-in with a plain statement.
 
-Re-authentication (`/session/reauthenticate/new`, `[devdoc:auth]`) is the
+Re-authentication (`/session/reauthenticate/new`, [AUTH.md](AUTH.md)) is the
 same shell: « Confirmez votre identité », one sentence naming the window
 (« Cette confirmation reste valable 10 minutes. »), the account address as
 read-only plain text, the password field with its reveal toggle, a full-width
@@ -5427,7 +5427,7 @@ action. » and repeats it. Once a second factor is enrolled the same card adds
 the second-factor fields below the password, and the copy says so; the
 operator console's 15-minute step-up uses this page.
 
-Two-step verification (`/session/challenge/new`, `[devdoc:auth]`) is the
+Two-step verification (`/session/challenge/new`, [AUTH.md](AUTH.md)) is the
 same shell after a correct password, laid out like Tabler's
 `2-step-verification-code` page: the card title « Vérification en deux
 étapes », one centred sentence, then Tabler's one-time-code input — six
@@ -5474,12 +5474,12 @@ application page carries a warning reminder under the flash — the deadline,
 the days left, « Activer » and « Plus tard », which hides it until the end of
 the day.
 
-Identity providers (`[devdoc:auth]`) add to the same shell, only for the
+Identity providers ([AUTH.md](AUTH.md)) add to the same shell, only for the
 providers the operator enabled. Under the sign-in and sign-up forms an « ou »
 divider precedes one full-width secondary button per provider — the brand
 glyph and « Continuer avec Google / Apple / <label> » — each a POST form
 outside Turbo. Inside the iOS companion the same buttons, identical on the
-page, open the provider in the system sign-in sheet (`[devdoc:auth]`); the
+page, open the provider in the system sign-in sheet ([AUTH.md](AUTH.md)); the
 page then continues in the app exactly as in a browser, a cancelled sheet
 leaves it untouched, and Google is omitted there while Sign in with Apple is
 not offered. An older companion without that bridge shows no provider button.

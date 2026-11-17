@@ -1558,7 +1558,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Sessions expire (`[devdoc:auth]`): after 30 days without activity
+- Sessions expire ([AUTH.md](docs/dev/AUTH.md)): after 30 days without activity
   and at most 90 days after signing in, both configurable
   (`AUTH_SESSION_IDLE_DAYS`, `AUTH_SESSION_MAX_DAYS`). The session cookie is
   no longer permanent, the sessions table shows when each session signed in,
@@ -1566,7 +1566,7 @@ migration (`db:migrate`, applied on boot).
 - Closing a session or signing out everywhere asks for the password again
   when it was last proved more than 10 minutes ago (« Confirmez votre
   identité »).
-- Two-step verification (`[devdoc:auth]`). After the password, an
+- Two-step verification ([AUTH.md](docs/dev/AUTH.md)). After the password, an
   account confirms with an authenticator app, a passkey or security key, or
   a one-time recovery code; no session exists until it does. Every password
   account must set one up within 14 days (`AUTH_2FA_GRACE_DAYS`), reminded on
@@ -1578,8 +1578,8 @@ migration (`db:migrate`, applied on boot).
   complete,
   each change is confirmed by email, and the operator can reset an account's
   methods from the console or `bin/rails users:reset_second_factor`.
-- Sign in with Google, Apple or an OpenID Connect provider (`[devdoc:auth]`
-  slice 3), each enabled by the operator through its `AUTH_GOOGLE_*`,
+- Sign in with Google, Apple or an OpenID Connect provider
+  ([AUTH.md](docs/dev/AUTH.md)), each enabled by the operator through its `AUTH_GOOGLE_*`,
   `AUTH_APPLE_*` or `AUTH_OIDC_*` settings. A first sign-in creates an account
   without a password after choosing a username (registration rules and
   invitations apply); an address already used by an account is refused rather
@@ -1592,7 +1592,7 @@ migration (`db:migrate`, applied on boot).
   OpenID Connect provider.
 - The iOS companion signs in, creates an account, links a provider and
   confirms an identity through Google, Apple or OpenID Connect
-  (`[devdoc:auth]`). The provider opens in the system sign-in sheet and
+  ([AUTH.md](docs/dev/AUTH.md)). The provider opens in the system sign-in sheet and
   hands the result back to the app through a single-use, one-minute link
   bound to a secret only the app holds. Google is offered in the app only
   where Sign in with Apple is too. Needs the companion's `auth-session`
