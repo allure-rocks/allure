@@ -46,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   regenerates them from their pinned sources ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)).
 - The public demo image is built on the demo host from a release tag and is
   never published by CI, because it carries the third-party FIT corpus
-  (`[devdoc:demo]`).
+  ([DEMO.md](docs/dev/DEMO.md)).
 - The About dialog's source link and the operator documentation point at the
   public GitHub repository.
 - The CI runs on GitHub Actions: `.github/workflows/ci.yml` verifies every pull
@@ -323,7 +323,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   all instance members. Sharing an aggregate does not expose the unpublished
   workouts behind it, their routes or health data, and these blocks never
   federate. Existing enabled preferences retain their member audience.
-- A public demo deployment (`[devdoc:demo]`): a shared
+- A public demo deployment ([DEMO.md](docs/dev/DEMO.md)): a shared
   member account, sample workouts re-dated to end yesterday, a nightly
   recreation of the database and storage, and a site-wide reset strip with
   an automatic five-minute warning. Demo mode is off by default and must

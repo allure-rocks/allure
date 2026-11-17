@@ -5678,7 +5678,7 @@ documentation is the separate public site (`docs/site/`), not these pages.
 │ « Mot de passe partagé : » <mot de passe publié>              │
 ```
 
-Rendered only when `DEMO_INSTANCE` is set (`Allure::Demo`, `[devdoc:demo]`);
+Rendered only when `DEMO_INSTANCE` is set (`Allure::Demo`, [DEMO.md](DEMO.md));
 an ordinary instance shows nothing of either surface.
 
 - **The strip** is one quiet secondary line on a sunken surface, above the
