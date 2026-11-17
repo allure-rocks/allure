@@ -54,6 +54,9 @@ and teleports.
 two-level opt-in, the sampling and profile, the device totals, the per-workout
 source and the course terrain.
 
+`docs/dev/DERIVATIONS.md` is the derived-data contract: the derivation map, the
+generation markers, the sweeps and the owner-scoped rebuilds.
+
 `docs/dev/REMOTE-IMPORTS.md` is the remote-imports contract: the provider
 registry, the connection model, the adapter contract, the batch job, the shared
 lifecycle and the provider capabilities. The detailed sign-in and operational

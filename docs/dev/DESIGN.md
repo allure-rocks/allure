@@ -1230,7 +1230,7 @@ configures a provider, API et webhooks, Sécurité).
 | `/settings/publishing-profiles` | the profile collection (existing route) |
 | `/settings/privacy-zones` | the zone collection (existing route) |
 | `/settings/security` | three groups (§20.15): two-step verification first (obligation, authenticator app, passkeys, recovery codes); the ways in side by side, password and identity providers; then the active sessions (paginated, sortable table with device, sign-in time and method, last activity and the lifetime rule) with « Fermer toutes les sessions » in its header; closing a session re-authenticates first |
-| `/settings/data` | derived-data maintenance for the account's own workouts: rebuild, route images, places, elevation (`[devdoc:derivations]`) |
+| `/settings/data` | derived-data maintenance for the account's own workouts: rebuild, route images, places, elevation ([DERIVATIONS.md](DERIVATIONS.md)) |
 | `/settings/api` | « API et webhooks »: API tokens and webhooks (§20.18, `[devdoc:api]`); never rendered in the iOS companion's settings navigation |
 | `/settings/account` | « Compte »: « Exporter mes données » (a live card: prepare, preparing, ready with size and expiry, failed, expired, cooldown) and « Supprimer mon compte » (§19.29), last in the « Système » group; a deactivated account lands on `/settings/account/deletion` in the auth layout (`[devdoc:account]`) |
 
