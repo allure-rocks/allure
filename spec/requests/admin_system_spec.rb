@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# System diagnostics (PLAN_ADMIN.md §4.8): versions, database sizes, storage
+# System diagnostics (docs/dev/ADMIN.md): versions, database sizes, storage
 # and environment flags, never a secret value.
 RSpec.describe "Admin system" do
   let(:operator) { create(:user, :with_totp, username: "operator") }

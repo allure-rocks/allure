@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The live background-job panel and its recovery controls (PLAN_ADMIN.md §4.2).
+# The live background-job panel and its recovery controls (docs/dev/ADMIN.md).
 RSpec.describe "Admin jobs" do
   let(:operator) { create(:user, :with_totp, username: "operator") }
   let(:member) { create(:user) }

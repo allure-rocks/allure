@@ -5,7 +5,7 @@ module Admin
     # Read-only instance diagnostics for the administration console: versions,
     # database sizes, storage totals, environment flags, and instance identity.
     # Never a secret value — flags are booleans, and no key, credential, or
-    # connection string is rendered (PLAN_ADMIN.md §4.8).
+    # connection string is rendered (docs/dev/ADMIN.md).
     class Diagnostics
       Result = Data.define(:versions, :database_sizes, :storage, :environment, :instance)
 

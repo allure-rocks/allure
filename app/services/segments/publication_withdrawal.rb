@@ -128,7 +128,7 @@ module Segments
 
     # The owner path is the default. `operator: true` is only honored for an
     # actual instance operator, so administration takedown can never become a
-    # general authorization bypass (PLAN_ADMIN.md §4.4).
+    # general authorization bypass (docs/dev/ADMIN.md).
     def authorize!(publication)
       return if operator?
 

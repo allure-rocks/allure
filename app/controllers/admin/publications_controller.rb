@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # Publication oversight (PLAN_ADMIN.md §4.4): browse workout and course
+  # Publication oversight (docs/dev/ADMIN.md): browse workout and course
   # publications with their audience, state and delivery tallies, and withdraw
   # an active publication through the immutable lifecycle. Takedown is
   # moderation over user content, so it is confirmed and audited.

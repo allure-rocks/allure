@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # Account administration (PLAN_ADMIN.md §4.5): browse and search accounts,
+  # Account administration (docs/dev/ADMIN.md): browse and search accounts,
   # inspect one, and suspend or reinstate it. Suspension revokes access (the
   # sessions are destroyed and sign-in is refused) but never touches content.
   class AccountsController < BaseController

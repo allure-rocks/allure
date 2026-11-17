@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Account administration (PLAN_ADMIN.md §4.5, §7): search, suspension with
+# Account administration (docs/dev/ADMIN.md): search, suspension with
 # session revocation, and reinstatement.
 RSpec.describe "Admin accounts" do
   let(:operator) { create(:user, :with_totp, username: "operator") }

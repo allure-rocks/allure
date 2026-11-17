@@ -3,7 +3,7 @@
 module Admin
   # Background-job health with recovery controls. The panel polls a Turbo Frame
   # fragment; every mutation is audited and every destructive one is confirmed
-  # in the shared dialog (PLAN_ADMIN.md §4.2).
+  # in the shared dialog (docs/dev/ADMIN.md).
   class JobsController < BaseController
     before_action :set_no_store
 

@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   get "/funding/thanks", to: "funding#thanks", as: :funding_thanks
   post "/funding/portal/:subscription_id", to: "funding#portal", as: :funding_portal
   post "/funding/webhooks/:provider", to: "funding/webhooks#create", as: :funding_webhook
-  # Operator administration console (PLAN_ADMIN.md). Every route inherits the
+  # Operator administration console (docs/dev/ADMIN.md). Every route inherits the
   # 404-for-non-operators gate from Admin::BaseController, and the product
   # chrome never links here except for the configured operator.
   namespace :admin do
@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     post "/accounts/:account_id/funding", to: "funding#create", as: :account_funding
     delete "/funding/:id", to: "funding#destroy", as: :funding_contribution
     post "/funding/subscriptions/:id/attachment", to: "funding#attach", as: :funding_subscription_attachment
-    # Background jobs (PLAN_ADMIN.md §4.2): the live panel and its recovery
+    # Background jobs (docs/dev/ADMIN.md): the live panel and its recovery
     # controls. Every action is operator-gated by Admin::BaseController and
     # audited.
     get "/jobs", to: "jobs#show", as: :jobs
@@ -69,7 +69,7 @@ Rails.application.routes.draw do
     post "/jobs/together_detection", to: "jobs#backfill_together_detection", as: :jobs_backfill_together_detection
     post "/jobs/heart_rate", to: "jobs#backfill_heart_rate", as: :jobs_backfill_heart_rate
     post "/jobs/route_suggestions", to: "jobs#backfill_route_suggestions", as: :jobs_backfill_route_suggestions
-    # Federation (PLAN_ADMIN.md §4.3): the former /settings/federation surface,
+    # Federation (docs/dev/ADMIN.md): the former /settings/federation surface,
     # moved into the console and expanded. Every mutation is operator-gated by
     # Admin::BaseController and audited.
     get "/federation", to: "federation#show", as: :federation
@@ -80,14 +80,14 @@ Rails.application.routes.draw do
     post "/federation/peer_policies", to: "federation#create_peer_policy", as: :federation_peer_policies
     delete "/federation/peer_policies/:id", to: "federation#destroy_peer_policy", as: :federation_peer_policy
     post "/federation/media_retry", to: "federation#retry_media", as: :federation_media_retry
-    # Publications (PLAN_ADMIN.md §4.4): oversight lists and takedown through
+    # Publications (docs/dev/ADMIN.md): oversight lists and takedown through
     # the immutable withdrawal lifecycle.
     get "/publications", to: "publications#index", as: :publications
     post "/publications/workouts/:id/withdraw", to: "publications#withdraw_workout",
          as: :workout_publication_withdraw
     post "/publications/courses/:id/withdraw", to: "publications#withdraw_course",
          as: :course_publication_withdraw
-    # Accounts (PLAN_ADMIN.md §4.5) and invitations (§4.6).
+    # Accounts and invitations (docs/dev/ADMIN.md).
     get "/accounts", to: "accounts#index", as: :accounts
     get "/accounts/:id", to: "accounts#show", as: :account
     patch "/accounts/:id/photo_quota", to: "accounts#photo_quota", as: :account_photo_quota
@@ -104,14 +104,14 @@ Rails.application.routes.draw do
     get "/invitations/new", to: "invitations#new", as: :new_invitation
     post "/invitations", to: "invitations#create"
     delete "/invitations/:id", to: "invitations#destroy", as: :invitation
-    # Import failures (PLAN_ADMIN.md §4.7) and system diagnostics (§4.8).
+    # Import failures and system diagnostics (docs/dev/ADMIN.md).
     get "/imports", to: "imports#index", as: :imports
     # Remote import connections (docs/dev/REMOTE-IMPORTS.md), before `:id`.
     get "/imports/connections", to: "import_connections#index", as: :import_connections
     post "/imports/connections/:id/revoke", to: "import_connections#revoke", as: :import_connection_revoke
     get "/imports/:id", to: "imports#show", as: :import
     get "/system", to: "system#show", as: :system
-    # The audit log (PLAN_ADMIN.md §4.9).
+    # The audit log (docs/dev/ADMIN.md).
     get "/events", to: "events#index", as: :events
   end
   # Owner-only place-name suggestions for the workout list's autocomplete

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # Registration invitations (PLAN_ADMIN.md §4.6). Only the token digest is
+  # Registration invitations (docs/dev/ADMIN.md). Only the token digest is
   # stored, so the single-use URL is rendered exactly once on the creation
   # response and can never be recovered; revocation deletes the row.
   class InvitationsController < BaseController

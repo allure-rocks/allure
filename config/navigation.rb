@@ -38,7 +38,7 @@ Allure::Navigation.define do
     item :equipment, icon: "bike", path: :equipments_path, policy: :signed_in?
   end
 
-  # Operator console (PLAN_ADMIN.md). Rendered exclusively by the admin layout
+  # Operator console (docs/dev/ADMIN.md). Rendered exclusively by the admin layout
   # through `nav_sections(position: :admin)`; the product chrome (top, bottom,
   # account dropdown) never emits it. Leaves whose route does not exist yet are
   # skipped, so this tree may describe the finished console while its slices
