@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The Strava archive source (PLAN_STRAVA_ARCHIVE.md §8): one ZIP submitted from
+# The Strava archive source (docs/dev/STRAVA-ARCHIVE.md): one ZIP submitted from
 # its panel of the import page, imported by Workouts::StravaArchiveImportJob.
 # A refused upload returns to that panel.
 class StravaArchiveImportsController < ApplicationController

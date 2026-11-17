@@ -6,7 +6,7 @@ module Workouts
   # workout as a duplicate of the very entry that created it. The entry claims
   # it back when it was already `processing` before this run, the workout was
   # created after the entry started, and no other entry holds it; it is then
-  # imported, not a duplicate of itself (PLAN_STRAVA_ARCHIVE.md §6).
+  # imported, not a duplicate of itself (docs/dev/STRAVA-ARCHIVE.md).
   module ImportResumption
     module_function
 

@@ -84,7 +84,7 @@ RSpec.describe "REST API imports (docs/dev/API.md)", type: :request do
     expect(user.workout_import_batches.count).to eq(3)
   end
 
-  describe "a Strava archive (PLAN_STRAVA_ARCHIVE.md §8)" do
+  describe "a Strava archive (docs/dev/STRAVA-ARCHIVE.md)" do
     def archive_upload(filename: "export_42.zip")
       content = strava_archive_zip(
         "activities.csv" => strava_activities_csv([

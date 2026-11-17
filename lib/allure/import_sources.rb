@@ -9,7 +9,7 @@ module Allure
   # no server credentials), `:remote` (server-side provider with a stored
   # connection, docs/dev/REMOTE-IMPORTS.md), `:archive` (one uploaded export of
   # another service, read with its metadata and submitted from its own panel,
-  # PLAN_STRAVA_ARCHIVE.md), or `:manual` (a workout typed in by hand, with no
+  # docs/dev/STRAVA-ARCHIVE.md), or `:manual` (a workout typed in by hand, with no
   # file and its own form, docs/dev/MANUAL-ENTRY.md). A remote source exists for an
   # account only while the operator enables it.
   module ImportSources

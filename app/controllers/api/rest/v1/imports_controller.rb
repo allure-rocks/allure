@@ -5,7 +5,7 @@ module Api
     module V1
       # File imports through the API (docs/dev/API.md): the web's batch
       # upload with the `api` trigger, or with `source=strava_archive` one
-      # Strava archive (PLAN_STRAVA_ARCHIVE.md §8). The response returns once
+      # Strava archive (docs/dev/STRAVA-ARCHIVE.md). The response returns once
       # the batch and its files are stored, before any parsing; the ordinary
       # pipeline does the rest, deduplication and automatic publishing
       # included.

@@ -24,7 +24,7 @@ export default class extends Controller {
     if (!source) return;
     this.#activeSource = source;
     // A remote source and an archive carry their own fields and submit
-    // (docs/dev/REMOTE-IMPORTS.md, PLAN_STRAVA_ARCHIVE.md §8): the upload's
+    // (docs/dev/REMOTE-IMPORTS.md, docs/dev/STRAVA-ARCHIVE.md): the upload's
     // options do not apply to them. A manual entry has a form of its own
     // outside the upload form (docs/dev/MANUAL-ENTRY.md), which hides entirely.
     const ownFields = tab.dataset.kind === "remote" || tab.dataset.kind === "archive";

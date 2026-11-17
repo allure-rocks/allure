@@ -4,14 +4,14 @@ require "tempfile"
 require "zip"
 
 module Workouts
-  # Opens a Strava archive (PLAN_STRAVA_ARCHIVE.md §3). It reuses the generic
+  # Opens a Strava archive (docs/dev/STRAVA-ARCHIVE.md). It reuses the generic
   # reader's guards — unsafe paths, the per-member size and compression ratio,
   # gzip members sniffed by content — but reads only what the archive names:
   # the three CSV files and one `activities/…` member at a time. The 1 000
   # member cap does not apply, since an archive holds every photo too; its
   # own bounds are the directory's declared entries, checked before opening,
   # one track file per activity at most, and the bytes extracted over the
-  # whole run (PLAN_STRAVA_ARCHIVE.md §3).
+  # whole run (docs/dev/STRAVA-ARCHIVE.md).
   #
   # The CSV files may sit at the root or under one top-level folder, when the
   # athlete unpacked the archive and zipped it again.

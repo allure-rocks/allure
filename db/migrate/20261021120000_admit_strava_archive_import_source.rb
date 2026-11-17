@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_STRAVA_ARCHIVE.md §6: a Strava archive is a batch source of its own, and
+# docs/dev/STRAVA-ARCHIVE.md: a Strava archive is a batch source of its own, and
 # the sport its activity type names is recorded as `declared`, which the
 # re-detection backfill never overwrites.
 class AdmitStravaArchiveImportSource < ActiveRecord::Migration[8.1]

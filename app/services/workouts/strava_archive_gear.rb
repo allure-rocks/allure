@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The equipment an archive's activity names (PLAN_STRAVA_ARCHIVE.md §5). The
+  # The equipment an archive's activity names (docs/dev/STRAVA-ARCHIVE.md). The
   # gear is matched against the account's equipment by label, ignoring case;
   # what is missing is created once, typed from `bikes.csv` and `shoes.csv`,
   # else from the sport, with the brand and model as its description. Nothing
