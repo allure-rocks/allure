@@ -145,7 +145,7 @@ attachment as a fallback.
 - **Photos** are immutable copies of the owner's stripped display files. A
   photo whose placement or EXIF position lies in an active privacy zone is left
   out by default; sharing it without position requires an explicit
-  acknowledgement (`[devdoc:photos]`).
+  acknowledgement ([PHOTOS.md](PHOTOS.md)).
 - **The representation** is frozen. Source, profile and zone changes never
   rewrite it.
 

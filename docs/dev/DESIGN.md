@@ -2197,7 +2197,7 @@ analysis card only.
 
 ### 10.22 Workout photos
 
-The owner-only Photos card (`[devdoc:photos]`) follows the analysis
+The owner-only Photos card ([PHOTOS.md](PHOTOS.md)) follows the analysis
 and weather, before comments, full width. It also appears on manual entries,
 never credit rows or a reader preview. It is a glance, not a workspace: the
 header carries the count (« Photos · 3 »), « Ajouter des photos » (the picker)
@@ -4353,7 +4353,7 @@ Placement: the panel of the Strava archive source (`[devdoc:strava-archive]`), i
 > until you publish them. Gear the archive names that your account lacks is
 > created."
 
-While photos are on (`[devdoc:photos]`), the first sentence names the
+While photos are on ([PHOTOS.md](PHOTOS.md)), the first sentence names the
 `media` folder instead of ignoring the photos, says the photos stay private
 with the activities, and that they count towards the account's storage
 (« … les activités importées et leurs photos restent privées jusqu'à ce que
@@ -5803,7 +5803,7 @@ l'opérateur » sentence alone.
 
 ### 20.24 `/workouts/:id/photos` — Photos
 
-The owner's photo manager (`[devdoc:photos]`), reached from the workout's
+The owner's photo manager ([PHOTOS.md](PHOTOS.md)), reached from the workout's
 Photos card (« Gérer ») and from its lightbox (« Modifier »). The page header
 is the way back to the workout, then « Photos ».
 
@@ -5833,7 +5833,7 @@ is the way back to the workout, then « Photos ».
 - **Rows.** One row per photo, in gallery order: a drag handle (pointer
   devices), the thumbnail opening the lightbox, the caption, the capture time,
   the placement line and, for a photo the automatic placement left off the
-  route, the reason (`[devdoc:photos]`: « Hors du parcours : prise 58 min
+  route, the reason ([PHOTOS.md](PHOTOS.md)): « Hors du parcours : prise 58 min
   avant le départ », « … à 1,2 km du tracé », « … ni heure ni position GPS »).
   « Placer sur le parcours » arms the map; the `⋯` menu holds « Retirer la
   position », « Placer automatiquement », « Monter », « Descendre »,
@@ -5843,7 +5843,7 @@ is the way back to the workout, then « Photos ».
   assistive tech, a refusal keeps the text, marks the field invalid and names
   the reason. Without JavaScript the row keeps its submit button.
 - **Order.** The gallery follows the capture time until the owner reorders it
-  (`[devdoc:photos]`). Dragging shows where the row lands; the menu's
+  ([PHOTOS.md](PHOTOS.md)). Dragging shows where the row lands; the menu's
   « Monter » / « Descendre » are the keyboard and touch path. A manual order
   shows « Trier par heure de prise de vue » and says that new photos go to the
   end.
