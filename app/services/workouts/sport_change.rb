@@ -101,7 +101,7 @@ module Workouts
 
     # A virtual sport discards the weather; any other sport re-derives it
     # (its stopped speed shapes the wind analysis), offline when the plan
-    # did not change (PLAN_WEATHER.md §5).
+    # did not change (docs/dev/WEATHER.md).
     def settle_weather
       WeatherRefresh.new(workout: @workout).call
     rescue StandardError => error

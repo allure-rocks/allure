@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Historical weather along a workout (PLAN_WEATHER.md §4): one row per
+# Historical weather along a workout (docs/dev/WEATHER.md): one row per
 # workout, the provider's raw hourly arrays kept so a new analysis generation
 # converges offline, and the account's explicit consent, off for everyone.
 class CreateWorkoutWeathers < ActiveRecord::Migration[8.1]

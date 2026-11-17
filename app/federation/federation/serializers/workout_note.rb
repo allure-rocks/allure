@@ -162,7 +162,7 @@ module Federation
       end
 
       # The weather summary, only when the profile shared it
-      # (PLAN_WEATHER.md §6): short SI lists, never an hourly value.
+      # (docs/dev/WEATHER.md): short SI lists, never an hourly value.
       def weather_tags
         Allure::Weather::NoteTags.encode(@representation["weather"]).map do |name, content|
           { "type" => "Note", "name" => name, "content" => content }

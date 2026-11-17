@@ -3,7 +3,7 @@
 module Allure
   module Weather
     # WMO weather interpretation codes → Allure's condition tokens
-    # (PLAN_WEATHER.md §3). The token is the wire and storage value; the icon
+    # (docs/dev/WEATHER.md). The token is the wire and storage value; the icon
     # is presentation only.
     module Conditions
       TOKENS = %w[

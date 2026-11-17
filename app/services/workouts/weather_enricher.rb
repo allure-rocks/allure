@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Fetches and analyses the weather along one workout (PLAN_WEATHER.md §3,
+  # Fetches and analyses the weather along one workout (docs/dev/WEATHER.md,
   # §5). Sampling, interpolation and the wind analysis are pure
   # (`Allure::Weather`); this service owns the provider conversation, the
   # daily budget, the pacing and the persisted row.

@@ -15,7 +15,7 @@ module Allure
 
       # `extra_values` is an optional array of hashes aligned with the global
       # point order, merged into each point before bounding (the weather
-      # channels, PLAN_WEATHER.md §7).
+      # channels, docs/dev/WEATHER.md).
       def initialize(workout_started_at: nil, segments: nil, points: nil, max_points: MAX_POINTS, include_index: false,
                      series: [ :elevation ], extra_values: nil)
         @workout_started_at = workout_started_at

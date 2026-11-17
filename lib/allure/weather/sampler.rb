@@ -2,7 +2,7 @@
 
 module Allure
   module Weather
-    # Where and when to ask for the weather (PLAN_WEATHER.md §3): the
+    # Where and when to ask for the weather (docs/dev/WEATHER.md): the
     # athlete's position at the start, at every whole UTC hour inside the
     # activity and at the finish, rounded to a 0.1° grid cell before anything
     # leaves the instance. Cells are deduplicated; each keeps the mean recorded

@@ -79,7 +79,7 @@ x-rails: &rails
     DEMO_DATASET: full
     TZ: ${TZ:-UTC}
     # Historical weather for the accounts that opted in through the seed
-    # (PLAN_WEATHER.md §2): Open-Meteo's archive covers the re-dated past.
+    # (docs/dev/WEATHER.md): Open-Meteo's archive covers the re-dated past.
     WEATHER_ENABLED: ${WEATHER_ENABLED:-false}
     WEATHER_REQUESTS_PER_SECOND: ${WEATHER_REQUESTS_PER_SECOND:-}
     WEATHER_MAX_REQUESTS_PER_DAY: ${WEATHER_MAX_REQUESTS_PER_DAY:-}

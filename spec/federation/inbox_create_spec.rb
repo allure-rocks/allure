@@ -68,7 +68,7 @@ RSpec.describe Federation::Inbox::Create do
     expect(note.representation.fetch("commute")).to be(true)
   end
 
-  it "stores a shared weather summary and drops an implausible one (PLAN_WEATHER.md §6)" do
+  it "stores a shared weather summary and drops an implausible one (docs/dev/WEATHER.md)" do
     activity["object"]["tag"].push(
       { "type" => "Note", "name" => "weather_condition", "content" => "rain" },
       { "type" => "Note", "name" => "weather_temperature", "content" => "9.5,13.2,7.0" },

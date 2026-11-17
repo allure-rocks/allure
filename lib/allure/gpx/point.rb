@@ -27,7 +27,7 @@ module Allure
     #
     # `temperature` is the device's own air-temperature reading in °C (FIT
     # `record.temperature`, Garmin GPX `atemp`), nil when the file recorded
-    # none (PLAN_WEATHER.md §11).
+    # none (docs/dev/WEATHER.md).
     Point = Data.define(:time, :latitude, :longitude, :elevation, :heart_rate, :cadence, :power, :speed, :distance,
                         :temperature) do
       def initialize(time:, latitude: nil, longitude: nil, elevation: nil, heart_rate: nil, cadence: nil, power: nil,

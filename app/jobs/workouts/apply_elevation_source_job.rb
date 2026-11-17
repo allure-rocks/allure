@@ -63,7 +63,7 @@ module Workouts
       ToponymyRefresh.new(workout:).call
     end
 
-    # The same deferral for the weather (PLAN_WEATHER.md §5).
+    # The same deferral for the weather (docs/dev/WEATHER.md).
     def schedule_deferred_weather(workout)
       weather = workout.weather
       return unless weather.nil? || weather.pending?

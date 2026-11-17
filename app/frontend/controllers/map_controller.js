@@ -378,7 +378,7 @@ export default class extends Controller {
 
   // The stops tab publishes its stop markers so the map shows a small stop
   // panel for every stop while that tab is active; the weather tab likewise
-  // publishes its weather markers (PLAN_WEATHER.md §7).
+  // publishes its weather markers (docs/dev/WEATHER.md).
   analysisTabChanged(event) {
     const markers = Array.isArray(event.detail?.markers) ? event.detail.markers : [];
     this.stopMarkerData = markers.filter((marker) => (
@@ -1119,7 +1119,7 @@ export default class extends Controller {
       element.setAttribute("aria-label", description);
       element.title = description;
       // The white Meteocons icon on the rose pill, animated unless the reader
-      // asked for less motion (PLAN_WEATHER.md §7).
+      // asked for less motion (docs/dev/WEATHER.md).
       const icon = document.createElement("img");
       icon.className = "allure-map-weather-icon";
       icon.src = weatherIconUrl(entry.svg, { color: "#ffffff" }) ?? "";

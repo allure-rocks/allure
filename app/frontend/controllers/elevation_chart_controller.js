@@ -17,7 +17,7 @@ const TOPONYMY_MAX_POLLS = 120;
 const TOPONYMY_MAX_POLL_DELAY = 15_000;
 // Chart pictograms: climbs and descents both mark summits, so only the summit
 // and the pause glyph are drawn for them; the weather tab marks each change of
-// weather with its condition icon (PLAN_WEATHER.md §7).
+// weather with its condition icon (docs/dev/WEATHER.md).
 const TABLER_GLYPHS = {
   mountain: "\u{ef97}",
   stop: "\u{ed45}",
@@ -143,7 +143,7 @@ export default class extends Controller {
     heartRateUnit: String,
     cadenceUnit: String,
     powerUnit: String,
-    // Weather channels (PLAN_WEATHER.md §7), stored in °C and m/s.
+    // Weather channels (docs/dev/WEATHER.md), stored in °C and m/s.
     temperatureLabel: String,
     deviceTemperatureLabel: String,
     headwindLabel: String,
@@ -457,7 +457,7 @@ export default class extends Controller {
   // symbolOffset carries the crowding offset while the anchor stays on the
   // curve. A weather marker draws the white Meteocons icon, animated unless
   // the reader asked for less motion, on the same brand-primary pill as the
-  // other tabs' glyphs (PLAN_WEATHER.md §7).
+  // other tabs' glyphs (docs/dev/WEATHER.md).
   #analysisPoints() {
     return (this.analysisMarkers ?? []).flatMap((marker) => {
       const distance = Number(marker.distance);

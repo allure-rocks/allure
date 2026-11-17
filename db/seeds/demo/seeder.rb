@@ -95,7 +95,7 @@ module DemoSeed
         route_image_theme: attributes.fetch(:route_image_theme, "auto"),
         smooth_tracks: attributes.fetch(:smooth_tracks, true),
         track_smoothing_level: attributes.fetch(:track_smoothing_level, "medium"),
-        # Historical weather is opt-in per account (PLAN_WEATHER.md §2); the
+        # Historical weather is opt-in per account (docs/dev/WEATHER.md); the
         # demo turns it on for the accounts a visitor browses.
         weather_enrichment_enabled: attributes.fetch(:weather_enrichment_enabled, false),
         # Optional profile sharing of totals and records (DESIGN.md §19.38):

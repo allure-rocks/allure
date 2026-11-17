@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Weather presentation (PLAN_WEATHER.md §7, DESIGN.md §20.3). Stored values
+# Weather presentation (docs/dev/WEATHER.md, DESIGN.md §20.3). Stored values
 # are SI; every figure is converted for the viewer's unit system here.
 module WeatherHelper
   COMPASS = %w[n ne e se s sw w nw].freeze
@@ -48,8 +48,8 @@ module WeatherHelper
     Allure::Weather::Markers.distances(workout_weather_points(workout), rows)
   end
 
-  # The « Météo » tab's markers on the profile and the map (PLAN_WEATHER.md
-  # §7): owner-only, placed where the weather changes.
+  # The « Météo » tab's markers on the profile and the map
+  # (docs/dev/WEATHER.md): owner-only, placed where the weather changes.
   def weather_analysis_markers(workout, rows, distances)
     Allure::Weather::Markers.new(rows:, distances:, total_distance: workout.distance).call.map do |marker|
       row = marker.row
@@ -79,7 +79,7 @@ module WeatherHelper
     }
   end
 
-  # The wind faced on each split (PLAN_WEATHER.md §3), from the stored series
+  # The wind faced on each split (docs/dev/WEATHER.md), from the stored series
   # and the recorded points; empty when the workout has no weather.
   def workout_split_winds(workout, splits)
     rows = workout_weather_rows(workout)
@@ -93,7 +93,7 @@ module WeatherHelper
     per_range
   end
 
-  # The device's own air-temperature readings (PLAN_WEATHER.md §11), derived
+  # The device's own air-temperature readings (docs/dev/WEATHER.md), derived
   # on read from the stored points: `{ mean:, min:, max: }` or nil.
   def workout_device_temperature(workout)
     return nil unless workout.recording?
@@ -155,7 +155,7 @@ module WeatherHelper
     Allure::Weather::Conditions.valid?(token) ? t("weather.conditions.#{token}") : nil
   end
 
-  # One Meteocons icon, inlined in `currentColor` (PLAN_WEATHER.md §7). An
+  # One Meteocons icon, inlined in `currentColor` (docs/dev/WEATHER.md). An
   # animated icon carries its static twin, and CSS shows the one the reader's
   # motion preference allows (DESIGN.md §16); `animated: false` (the hourly
   # table) carries the static one alone. Every id is suffixed so several

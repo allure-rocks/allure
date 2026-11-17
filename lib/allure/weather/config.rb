@@ -4,8 +4,8 @@ require "date"
 
 module Allure
   module Weather
-    # Environment-driven configuration for historical weather (PLAN_WEATHER.md
-    # §2). Values are read at call time. The feature exists only while
+    # Environment-driven configuration for historical weather
+    # (docs/dev/WEATHER.md). Values are read at call time. The feature exists only while
     # `WEATHER_ENABLED` is true; each account must still opt in.
     module Config
       DEFAULT_FORECAST_URL = "https://historical-forecast-api.open-meteo.com"

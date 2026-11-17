@@ -100,7 +100,7 @@ class Workout < ApplicationRecord
           dependent: :destroy,
           inverse_of: :workout
   # Historical weather along the route, for an account that consented
-  # (PLAN_WEATHER.md). Owner-only except the summary a profile may share.
+  # (docs/dev/WEATHER.md). Owner-only except the summary a profile may share.
   has_one :weather,
           class_name: "WorkoutWeather",
           dependent: :destroy,

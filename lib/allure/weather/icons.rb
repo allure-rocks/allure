@@ -2,7 +2,7 @@
 
 module Allure
   module Weather
-    # Condition token → Meteocons icon (PLAN_WEATHER.md §7). The files live in
+    # Condition token → Meteocons icon (docs/dev/WEATHER.md). The files live in
     # `app/views/weather/icons`, and the server hands the map and chart
     # controllers the markup they draw; this module only names them, and
     # reads one when a caller passes the directory.

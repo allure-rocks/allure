@@ -167,7 +167,7 @@ Rails.application.routes.draw do
     resource :segment_selection, only: :show, controller: "workout_segment_selections"
     # Owner-only elevation source switch (docs/dev/ELEVATION.md).
     resource :elevation_source, only: :update, controller: "workout_elevation_sources"
-    # Owner-requested weather refresh (PLAN_WEATHER.md §7).
+    # Owner-requested weather refresh (docs/dev/WEATHER.md).
     resource :weather, only: :create, controller: "workout_weathers"
     resources :segments, only: %i[new create]
     resources :routes, only: %i[new create]
@@ -283,7 +283,7 @@ Rails.application.routes.draw do
     # Elevation (docs/dev/ELEVATION.md): opt in to terrain elevation for workouts
     # without a recorded profile.
     resource :elevation, only: %i[show update], controller: "elevation"
-    # Weather (PLAN_WEATHER.md §7): explicit consent to send coarsened
+    # Weather (docs/dev/WEATHER.md): explicit consent to send coarsened
     # positions and times to Open-Meteo, and the deletion of stored weather.
     resource :weather, only: %i[show update destroy], controller: "weather"
     # Sports (PLAN_M1.md §3.4): which variant replaces a detected generic

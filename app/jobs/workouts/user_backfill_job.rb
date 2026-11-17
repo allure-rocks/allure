@@ -19,7 +19,7 @@ module Workouts
   # - `elevation`: elevation-less workouts of an opted-in account on an
   #   instance with a terrain provider (Workouts::ApplyElevationSourceJob);
   # - `weather`: positioned workouts of a consenting account without weather
-  #   or with an older weather generation (PLAN_WEATHER.md §5; the weather job
+  #   or with an older weather generation (docs/dev/WEATHER.md; the weather job
   #   is paced, so this only schedules work);
   # - `loops`: positioned recordings with an older detection/reuse generation,
   #   even without a loop yet (Segments::MatchWorkoutJob);

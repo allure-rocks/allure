@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_WEATHER.md §9: the operator schedules the weather of every consenting
+# docs/dev/WEATHER.md: the operator schedules the weather of every consenting
 # account's workouts from /admin/jobs, and the audit log records it.
 class ExtendAdminEventActionsForWeatherBackfill < ActiveRecord::Migration[8.1]
   PREVIOUS_ACTIONS = %w[

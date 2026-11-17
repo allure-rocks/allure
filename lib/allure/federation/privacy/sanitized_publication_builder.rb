@@ -52,7 +52,7 @@ module Allure
           # Commute is emitted only when the profile shares it and the workout
           # actually is one: absence is the false value on the wire.
           result[:commute] = true if enabled?("commute") && @commute
-          # The weather summary only (PLAN_WEATHER.md §6): never the hourly
+          # The weather summary only (docs/dev/WEATHER.md): never the hourly
           # series, a cell or an instant.
           result[:weather] = sanitized_weather if enabled?("weather")
           # Comments are open unless the profile explicitly closes them: a

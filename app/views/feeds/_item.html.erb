@@ -99,7 +99,7 @@
     <div class="text-secondary small allure-table-nums">
       <%= smart_started_at(view.started_at) %>
       <%# The shared weather summary, when the author's profile shared it
-          (PLAN_WEATHER.md §7). %>
+          (docs/dev/WEATHER.md). %>
       <% if (weather = view.weather) %>
         <%= render "weather/badge", summary: weather, class_name: "ms-1 feed-item__lift" %>
       <% end %>

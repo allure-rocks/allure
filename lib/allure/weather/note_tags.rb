@@ -2,7 +2,7 @@
 
 module Allure
   module Weather
-    # The weather summary on the wire (PLAN_WEATHER.md §6): a handful of Note
+    # The weather summary on the wire (docs/dev/WEATHER.md): a handful of Note
     # tags, each a short comma-separated list of SI numbers. The serializer
     # and the strict parser share this codec, so both ends agree on one shape.
     #

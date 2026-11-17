@@ -298,7 +298,7 @@ module Federation
         nil
       end
 
-      # The weather summary (PLAN_WEATHER.md §6): the first occurrence of each
+      # The weather summary (docs/dev/WEATHER.md): the first occurrence of each
       # tag counts; malformed values, or a summary that is not plausible as a
       # whole, are dropped with a warning.
       def parse_weather

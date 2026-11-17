@@ -1,4 +1,4 @@
-<%# Weather card (PLAN_WEATHER.md §7, DESIGN.md §20.3). One partial for the
+<%# Weather card (docs/dev/WEATHER.md, DESIGN.md §20.3). One partial for the
     owner's workout, a publication that shares its weather and a received
     note: only the summary renders, never a place or an hourly instant. The
     owner alone sees the pending, failed and missing states and their
@@ -6,7 +6,7 @@
 <% summary = local_assigns.fetch(:summary, {}) || {} %>
 <% state = local_assigns.fetch(:state, :ready) %>
 <% workout = local_assigns[:workout] %>
-<%# The device's own readings, owner-only (PLAN_WEATHER.md §11). %>
+<%# The device's own readings, owner-only (docs/dev/WEATHER.md). %>
 <% device_temperature = local_assigns[:device_temperature] %>
 <div class="card mb-3 allure-weather-card">
   <div class="card-header">

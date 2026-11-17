@@ -1,4 +1,4 @@
-// The weather icons of the profile and map markers (PLAN_WEATHER.md §7): Bas
+// The weather icons of the profile and map markers (docs/dev/WEATHER.md): Bas
 // Milius' Meteocons (MIT — see app/views/weather/icons/LICENSE), monochrome
 // in `currentColor`. The server owns the files and hands each marker both
 // variants as `svg: { animated, static }`; nothing here reads a file, so the
@@ -24,7 +24,7 @@ export function weatherIconUrl(svg, { color = "#ffffff" } = {}) {
   return markup === undefined ? undefined : `data:image/svg+xml;charset=utf-8,${encodeURIComponent(inked(markup, color))}`;
 }
 
-// The weather pill of the profile chart (PLAN_WEATHER.md §7): the icon, in
+// The weather pill of the profile chart (docs/dev/WEATHER.md): the icon, in
 // the given ink, inside a round surface ringed like the other markers,
 // composed here because ECharts draws a symbol as one image. The theme's
 // colours arrive as arguments, so a theme change recomposes.
