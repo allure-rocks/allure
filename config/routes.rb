@@ -216,7 +216,7 @@ Rails.application.routes.draw do
   # windows the waveform scrolls back to (DESIGN.md §15.1).
   get "/me", to: "me#show", as: :me
   get "/me/pulse", to: "me#pulse", as: :pulse_me
-  # In-app notifications (PLAN_NOTIFICATIONS.md): the topbar bell's badge and
+  # In-app notifications (docs/dev/NOTIFICATIONS.md): the topbar bell's badge and
   # dropdown, the paginated inbox, and read state. Owner-scoped throughout.
   resources :notifications, only: %i[index show] do
     collection do
@@ -289,7 +289,7 @@ Rails.application.routes.draw do
     # Sports (PLAN_M1.md §3.4): which variant replaces a detected generic
     # sport (cycling, running, walking) at import time.
     resource :sports, only: %i[show update], controller: "sports"
-    # Notifications (PLAN_NOTIFICATIONS.md): which follow events reach the
+    # Notifications (docs/dev/NOTIFICATIONS.md): which follow events reach the
     # account's in-app inbox.
     resource :notifications, only: %i[show update], controller: "notifications"
     # Push on the iOS companion (PLAN_PUSH.md §5): the current session's own

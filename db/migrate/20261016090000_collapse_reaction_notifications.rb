@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_NOTIFICATIONS.md §8: reactions on one workout share one notification,
+# docs/dev/NOTIFICATIONS.md: reactions on one workout share one notification,
 # whose subject becomes the workout. The existing per-reaction rows collapse
 # into one row per (recipient, workout): unread when any of them was, dated
 # by the newest, and recounted from the active reactions of accounts that

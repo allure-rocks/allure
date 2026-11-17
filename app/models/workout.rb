@@ -250,7 +250,7 @@ class Workout < ApplicationRecord
   after_commit :notify_detached_credits, on: :destroy
   after_commit :enqueue_remote_withdrawal, on: :destroy
   # The reactions cascade with the workout; their digest has nothing left to
-  # tell (PLAN_NOTIFICATIONS.md §8).
+  # tell (docs/dev/NOTIFICATIONS.md).
   after_destroy :withdraw_reaction_digest
   after_commit :diff_equipment_totals, on: :update,
     if: -> { saved_change_to_distance? || saved_change_to_moving_time? }

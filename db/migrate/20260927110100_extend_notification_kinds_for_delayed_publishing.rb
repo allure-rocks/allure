@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # docs/dev/DELAYED-PUBLISHING.md: the activation notice. The kind list is a
-# checked constraint in the database (PLAN_NOTIFICATIONS.md §2), so the new
+# checked constraint in the database (docs/dev/NOTIFICATIONS.md), so the new
 # kind must be admitted here, not only in Notification::KINDS.
 class ExtendNotificationKindsForDelayedPublishing < ActiveRecord::Migration[8.1]
   def up

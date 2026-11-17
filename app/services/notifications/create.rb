@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Notifications
-  # The single write seam for in-app notifications (PLAN_NOTIFICATIONS.md).
+  # The single write seam for in-app notifications (docs/dev/NOTIFICATIONS.md).
   # Producers pass the recipient, the kind, the actor, and the relationship it
   # describes; this service enforces the recipient's preferences, idempotency
   # through the unique index, and the per-account cap. It never fails its

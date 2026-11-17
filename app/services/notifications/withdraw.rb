@@ -6,7 +6,7 @@ module Notifications
   # privacy consequence, so it is unconditional and never announced.
   #
   # A reaction digest speaks for every account that reacted to a workout
-  # (PLAN_NOTIFICATIONS.md §8), so it is recounted instead of deleted: a
+  # (docs/dev/NOTIFICATIONS.md), so it is recounted instead of deleted: a
   # withdrawn reaction or an actor-wide withdrawal leaves the other accounts'
   # reactions in it.
   class Withdraw
