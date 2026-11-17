@@ -3,7 +3,7 @@
 module Segments
   # Re-runs loop detection for every positioned recording with an older
   # detection/reuse generation, including recordings with no loop yet
-  # (PLAN_DERIVATIONS.md §5). Because
+  # (docs/dev/DERIVATIONS.md). Because
   # `LoopReuse` always elects the oldest similar loop, re-running the matches
   # converges duplicate loops of one account onto a single segment instead of
   # creating new ones. Bounded id-cursor batches that resume themselves; a

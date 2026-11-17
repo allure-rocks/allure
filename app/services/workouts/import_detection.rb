@@ -2,7 +2,7 @@
 
 module Workouts
   # The generation of the file-derived facts reconciliation
-  # (PLAN_DERIVATIONS.md): how a stored original resolves its recording device,
+  # (docs/dev/DERIVATIONS.md): how a stored original resolves its recording device,
   # its still-detected sport, and its virtual venue. Bump it when the platform
   # catalogue, the alias tables, or the facts rules change; the rebuild sweep
   # then re-reads only the workouts whose stored version is older, without

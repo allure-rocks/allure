@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The single file-derived reconciliation of a workout (PLAN_DERIVATIONS.md).
+  # The single file-derived reconciliation of a workout (docs/dev/DERIVATIONS.md).
   # One parse serves every phase, in dependency order:
   #
   # 1. facts, when the stored import-detection generation is older: fill the

@@ -2,7 +2,7 @@
 
 module Workouts
   # Owner-scoped derived-data maintenance behind the settings Data page
-  # (PLAN_DERIVATIONS.md §7). One cursor sweep per kind, limited to the
+  # (docs/dev/DERIVATIONS.md). One cursor sweep per kind, limited to the
   # account's own workouts and courses, batched so a single account cannot
   # flood the queues, and throttled to one running sweep per (account, kind).
   #
@@ -66,7 +66,7 @@ module Workouts
       private
 
       # Only workouts that still keep their original file can be reconciled
-      # (PLAN_DERIVATIONS.md §5); a fileless workout is never counted.
+      # (docs/dev/DERIVATIONS.md); a fileless workout is never counted.
       def rebuild_scope(user)
         user.workouts
           .joins(:original_file_attachment)

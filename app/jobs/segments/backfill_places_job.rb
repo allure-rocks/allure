@@ -2,7 +2,7 @@
 
 module Segments
   # Geocodes the nearby place of every course still pending or failed
-  # (PLAN_SEGMENTS.md §8.4, PLAN_DERIVATIONS.md §5). Bounded id-cursor batches
+  # (PLAN_SEGMENTS.md §8.4, docs/dev/DERIVATIONS.md). Bounded id-cursor batches
   # that resume themselves; each course goes through the paced geocoding job.
   class BackfillPlacesJob < ApplicationJob
     BATCH_SIZE = 100

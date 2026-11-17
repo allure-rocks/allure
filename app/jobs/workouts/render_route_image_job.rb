@@ -122,7 +122,7 @@ module Workouts
         blobs.each { |name, blob| workout.public_send(name).attach(blob) }
         # Both variants are now of the current renderer generation; the rebuild
         # sweep uses this marker to re-render only what is missing or stale
-        # (PLAN_DERIVATIONS.md §4).
+        # (docs/dev/DERIVATIONS.md).
         workout.update_columns(route_image_version: Workouts::RouteImage::VERSION)
       end
     rescue StandardError => error

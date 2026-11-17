@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_DERIVATIONS.md: the operator's derived-data maintenance gains a
+# docs/dev/DERIVATIONS.md: the operator's derived-data maintenance gains a
 # segment elevation-profile sweep. AdminEvent::ACTIONS is mirrored by a checked
 # constraint, so the allowlist must be extended in the database too. Historical
 # actions stay allowed: the audit log is append-only.

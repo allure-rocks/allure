@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_DERIVATIONS.md: the loop-reuse reconciliation marker. Zero means the
+# docs/dev/DERIVATIONS.md: the loop-reuse reconciliation marker. Zero means the
 # workout's detected loop has not been reconciled under the current reuse
 # predicate (Segments::LoopReuse::VERSION), so BackfillLoopReuseJob re-runs its
 # matching; MatchWorkoutJob stamps the current version when it completes.

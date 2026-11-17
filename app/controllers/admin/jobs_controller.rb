@@ -94,7 +94,7 @@ module Admin
 
     # Re-renders every owner route image that is missing or stale. Read-only
     # when every image is current; publication images are snapshot media and
-    # are deliberately out of scope (PLAN_DERIVATIONS.md §4).
+    # are deliberately out of scope (docs/dev/DERIVATIONS.md).
     def backfill_route_images
       count = Workouts::BackfillRouteImagesJob.pending_scope.count
       if count.positive?
@@ -108,7 +108,7 @@ module Admin
 
     # Re-renders every owner segment image that is missing or stale. Read-only
     # when every image is current; publication images are snapshot media and
-    # are deliberately out of scope (PLAN_DERIVATIONS.md §4).
+    # are deliberately out of scope (docs/dev/DERIVATIONS.md).
     def backfill_segment_route_images
       count = Segments::BackfillRouteImagesJob.pending_scope.count
       if count.positive?
@@ -163,7 +163,7 @@ module Admin
 
     # Re-geocodes every workout whose toponymy is missing or was built by an
     # older algorithm, and discards a legacy toponymy left on a virtual
-    # workout (PLAN_DERIVATIONS.md §5). It only schedules the globally paced
+    # workout (docs/dev/DERIVATIONS.md). It only schedules the globally paced
     # geocoding job; read-only when nothing is pending or no provider is set.
     def backfill_toponymy
       count = toponymy_backfill_count
@@ -178,7 +178,7 @@ module Admin
 
     # Re-runs loop detection for workouts whose loop was not reconciled under
     # the current reuse predicate, so duplicate loop segments converge onto the
-    # oldest similar one (PLAN_DERIVATIONS.md §5). Read-only when nothing is
+    # oldest similar one (docs/dev/DERIVATIONS.md). Read-only when nothing is
     # pending.
     def backfill_loop_reuse
       count = Segments::BackfillLoopReuseJob.pending_scope.count
@@ -192,7 +192,7 @@ module Admin
     end
 
     # Builds the stored elevation profile of every source-backed segment that
-    # does not have one yet (PLAN_DERIVATIONS.md §5). Pure and offline;
+    # does not have one yet (docs/dev/DERIVATIONS.md). Pure and offline;
     # read-only when nothing is pending.
     def backfill_elevation_profiles
       count = Segments::BackfillElevationProfilesJob.pending_scope.count

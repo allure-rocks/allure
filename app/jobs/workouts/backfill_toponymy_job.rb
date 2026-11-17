@@ -4,7 +4,7 @@ module Workouts
   # Re-geocodes, in bounded id-cursor batches that resume themselves, every
   # workout whose toponymy is missing or was built by an older
   # `ToponymyEnricher::ALGORITHM_VERSION`, and discards a legacy toponymy left
-  # on a virtual workout (PLAN_DERIVATIONS.md §5). It only schedules: the
+  # on a virtual workout (docs/dev/DERIVATIONS.md). It only schedules: the
   # geocoding job is globally paced. A version change the enricher can
   # re-derive from the stored samples is re-selected offline, so the sweep only
   # pays the reverse requests it must. A workout still waiting for its terrain

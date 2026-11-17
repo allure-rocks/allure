@@ -2,7 +2,7 @@
 
 module Workouts
   # The single server-side way to (re)schedule a workout's geocoding
-  # (PLAN_DERIVATIONS.md §4). It marks the toponymy pending, so the enricher
+  # (docs/dev/DERIVATIONS.md). It marks the toponymy pending, so the enricher
   # does not short-circuit on a row that is still `ready` for the previous
   # geometry, and enqueues the globally paced job. Nothing reads the owner's
   # page to decide this any more: imports, re-analyses, the elevation apply

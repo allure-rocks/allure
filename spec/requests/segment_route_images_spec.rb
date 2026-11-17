@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The owner route image of a course (PLAN_DERIVATIONS.md): served through the
+# The owner route image of a course (docs/dev/DERIVATIONS.md): served through the
 # application at the course's own visibility, never as a raw storage URL.
 RSpec.describe "Segment route images" do
   let(:owner) { create(:user) }

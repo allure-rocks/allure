@@ -16,7 +16,7 @@ module Workouts
 
     # `track:` injects an already-parsed original, so the rebuild sweep parses
     # a file once for both its facts and its analysis
-    # (PLAN_DERIVATIONS.md §3).
+    # (docs/dev/DERIVATIONS.md).
     def initialize(workout:, force: false, elevation_source: nil, track: nil)
       @workout = workout
       @force = force
@@ -190,7 +190,7 @@ module Workouts
 
     # The stored places name positions and carry their elevations, so a new
     # track or a new elevation profile re-geocodes them; a same-geometry,
-    # same-profile run (a sport change) keeps them (PLAN_DERIVATIONS.md §4).
+    # same-profile run (a sport change) keeps them (docs/dev/DERIVATIONS.md).
     def refresh_toponymy
       ToponymyRefresh.new(workout: @workout).call
     rescue StandardError => error

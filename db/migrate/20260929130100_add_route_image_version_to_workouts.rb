@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_DERIVATIONS.md: the owner route image records the renderer generation
+# docs/dev/DERIVATIONS.md: the owner route image records the renderer generation
 # that produced it. Zero means missing or stale (the geometry was replaced by a
 # re-analysis), so a rebuild sweep can re-render incrementally instead of
 # redoing the whole library.
