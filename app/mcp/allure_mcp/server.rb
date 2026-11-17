@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AllureMcp
-  # Builds the MCP server for one request (PLAN_MCP.md §3). A fresh server per
+  # Builds the MCP server for one request (docs/dev/MCP.md). A fresh server per
   # request carries the request's principal and needs no shared state.
   module Server
     TOOLS = [

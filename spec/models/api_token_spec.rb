@@ -97,7 +97,7 @@ RSpec.describe ApiToken do
     expect { token.update_columns(scopes: %w[admin]) }.to raise_error(ActiveRecord::StatementInvalid)
   end
 
-  describe "MCP location level (PLAN_MCP.md §4)" do
+  describe "MCP location level (docs/dev/MCP.md)" do
     def with_ceiling(value)
       allow(ENV).to receive(:fetch).and_call_original
       allow(ENV).to receive(:fetch).with("MCP_GEOMETRY_MAX", "").and_return(value)

@@ -21,7 +21,7 @@ class SecurityMailer < ApplicationMailer
     @remaining = remaining
     @provider = provider
     @token_name = token_name
-    # A token that may hand locations to an AI assistant says so (PLAN_MCP.md §4).
+    # A token that may hand locations to an AI assistant says so (docs/dev/MCP.md).
     @mcp_geometry = mcp_geometry if ApiToken::MCP_GEOMETRY_LEVELS.excluding("none").include?(mcp_geometry)
     I18n.with_locale(user.locale) do
       mail subject: I18n.t("security_mailer.notice.subjects.#{event}", provider:, token: token_name), to: user.email_address

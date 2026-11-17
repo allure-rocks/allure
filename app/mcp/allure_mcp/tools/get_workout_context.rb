@@ -3,7 +3,7 @@
 module AllureMcp
   module Tools
     # Everything Allure knows about one of the account's workouts, in one
-    # answer (PLAN_MCP.md §5.1): the owner's figures and data-quality findings,
+    # answer (docs/dev/MCP.md): the owner's figures and data-quality findings,
     # laps and detected sections, splits, best and segment efforts, records,
     # equipment and the preceding weeks of training. Sections are switched
     # off by `include_*`; the track itself only at the token's location level.
