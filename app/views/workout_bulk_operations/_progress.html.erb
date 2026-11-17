@@ -1,4 +1,4 @@
-<%# The progress fragment (DESIGN.md §20.4, PLAN_BULK_ACTIONS.md §7): polled
+<%# The progress fragment (DESIGN.md §20.4, docs/dev/BULK-ACTIONS.md): polled
     through `status` while the operation is active. Counters are computed from
     the item rows, never denormalized. %>
 <% processed = total - counts.fetch("queued", 0) %>

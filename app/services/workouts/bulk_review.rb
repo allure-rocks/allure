@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The review-page summary of a draft operation (PLAN_BULK_ACTIONS.md §4): the
+  # The review-page summary of a draft operation (docs/dev/BULK-ACTIONS.md): the
   # exact selection, its date range, sports and publication states, plus the
   # exclusions the operation already knows about, so the owner confirms what
   # will actually happen.

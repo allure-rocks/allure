@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The durable executor of confirmed bulk operations (PLAN_BULK_ACTIONS.md §5):
+# The durable executor of confirmed bulk operations (docs/dev/BULK-ACTIONS.md):
 # per-item outcomes, resumability, cancellation, and a report that survives a
 # deletion.
 RSpec.describe Workouts::BulkOperationJob do

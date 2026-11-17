@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# One workout inside a durable bulk operation (PLAN_BULK_ACTIONS.md §4). The
+# One workout inside a durable bulk operation (docs/dev/BULK-ACTIONS.md). The
 # workout reference is nullified when a deletion operation removes it, so the
 # report survives its own effect; `failure_code` is a stable key translated at
 # render time, never a raw exception message.

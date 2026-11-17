@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Resolves the owner's bulk selection (PLAN_BULK_ACTIONS.md §2): either the
+  # Resolves the owner's bulk selection (docs/dev/BULK-ACTIONS.md): either the
   # filter scope of the list the owner is looking at, replayed through the
   # shared ListQuery, or explicit workout short ids. Foreign and malformed
   # identifiers are dropped without a hint, the cap is enforced before any

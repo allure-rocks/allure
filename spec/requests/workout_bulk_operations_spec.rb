@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Bulk activity operations (PLAN_BULK_ACTIONS.md, DESIGN.md §10.19): the
+# Bulk activity operations (docs/dev/BULK-ACTIONS.md, DESIGN.md §10.19): the
 # desktop table's selection, the synchronous quick actions, and the draft
 # review that feeds the durable job. The selection UI is web-desktop only and
 # never rendered in the iOS companion.

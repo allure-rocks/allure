@@ -625,7 +625,7 @@ class WorkoutsController < ApplicationController
   end
 
   # Workout list filters (§13), delegated to the shared query object so the
-  # bulk selection replays exactly this list (PLAN_BULK_ACTIONS.md §2). Every
+  # bulk selection replays exactly this list (docs/dev/BULK-ACTIONS.md). Every
   # filter is a URL parameter: back/forward work and a filtered view is
   # shareable. Filtering never resets the sort; pagination preserves the params.
   def list_query = @list_query ||= Workouts::ListQuery.new(user: current_user, params: params)
@@ -643,7 +643,7 @@ class WorkoutsController < ApplicationController
   def filter_direction = list_query.direction
 
   # The equipment the bulk bar can attach or detach. Loaded only for the table
-  # view, where the bulk selection lives (PLAN_BULK_ACTIONS.md §7).
+  # view, where the bulk selection lives (docs/dev/BULK-ACTIONS.md).
   def bulk_equipments
     return [] unless @view == "table"
 
