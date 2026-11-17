@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Notifications
-  # Pushes one notification to the recipient's devices (PLAN_PUSH.md §5).
+  # Pushes one notification to the recipient's devices (docs/dev/PUSH.md).
   # Enqueued once per alert, it fans out into one job per subscription, so a
   # retry only ever resends to the device that failed. Nothing happens while
   # push is unconfigured, nor for a notification already read or gone.

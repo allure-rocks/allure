@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_PUSH.md §5: which inbox writes reach the devices.
+# docs/dev/PUSH.md: which inbox writes reach the devices.
 RSpec.describe "Push enqueueing from the notification producers" do
   include ActiveJob::TestHelper
 

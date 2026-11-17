@@ -5,7 +5,7 @@
 # reached its absolute lifetime, whichever comes first.
 class Session < ApplicationRecord
   belongs_to :user
-  # Removed with the session by the foreign-key cascade (PLAN_PUSH.md §1.5),
+  # Removed with the session by the foreign-key cascade (docs/dev/PUSH.md),
   # including the sweeps that delete expired rows in bulk.
   has_one :push_subscription, dependent: :delete
 

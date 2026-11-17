@@ -11,7 +11,7 @@ Rails.application.config.filter_parameters += [
   # iOS handoff's PKCE verifier. An unspent recovery code stays valid
   # indefinitely, so none of them may reach a log.
   :code, :verifier, :assertion, :credential,
-  # The push subscription's proof (PLAN_PUSH.md §5): the session-less
+  # The push subscription's proof (docs/dev/PUSH.md): the session-less
   # `POST /push/unsubscribe` is authorized by the endpoint and its `auth`
   # secret alone, and knowing an endpoint is enough to replace the
   # registration it names. Neither may reach a log.

@@ -63,7 +63,7 @@ module Notifications
       }
       attributes.merge!(read_at: nil, created_at: now) if alert
       notification.update!(attributes)
-      # Only an alert reaches the devices (PLAN_PUSH.md §5): a silent recount
+      # Only an alert reaches the devices (docs/dev/PUSH.md): a silent recount
       # or a withdrawal pushes nothing.
       PushJob.enqueue_after_commit(notification) if alert
       notification

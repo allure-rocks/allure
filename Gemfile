@@ -79,7 +79,7 @@ gem "multipart-post"
 # The Model Context Protocol endpoint for AI assistants (docs/dev/MCP.md), served
 # stateless from a controller; the official SDK tracks protocol revisions.
 gem "mcp", "~> 1.7"
-# Push notifications for the iOS companion (PLAN_PUSH.md §5): RFC 8291
+# Push notifications for the iOS companion (docs/dev/PUSH.md): RFC 8291
 # payload encryption and the VAPID header; the request itself goes through the
 # federation client and its SSRF guard.
 gem "web-push", "~> 3.1"

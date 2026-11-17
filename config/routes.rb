@@ -226,7 +226,7 @@ Rails.application.routes.draw do
     end
   end
   # The companion drops its push subscription when it leaves this server
-  # (PLAN_PUSH.md §5): no session, the device's `auth` secret is the proof.
+  # (docs/dev/PUSH.md): no session, the device's `auth` secret is the proof.
   post "/push/unsubscribe", to: "push_unsubscriptions#create", as: :push_unsubscribe
   # Stats hub (M4): landing page for the by_time / by_sport datasets.
   get "/me/stats", to: "stats#show", as: :stats
@@ -292,7 +292,7 @@ Rails.application.routes.draw do
     # Notifications (docs/dev/NOTIFICATIONS.md): which follow events reach the
     # account's in-app inbox.
     resource :notifications, only: %i[show update], controller: "notifications"
-    # Push on the iOS companion (PLAN_PUSH.md §5): the current session's own
+    # Push on the iOS companion (docs/dev/PUSH.md): the current session's own
     # subscription, JSON only.
     resource :push_subscription, only: %i[create update destroy], controller: "push_subscriptions"
     # Data (docs/dev/DERIVATIONS.md): owner-scoped rebuilds of derived data.

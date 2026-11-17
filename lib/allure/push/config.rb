@@ -6,7 +6,7 @@ require "uri"
 
 module Allure
   module Push
-    # Push notification settings (PLAN_PUSH.md §5), read from the environment
+    # Push notification settings (docs/dev/PUSH.md), read from the environment
     # at call time like `Allure::Metrics::Config`. Push is off — no settings
     # card, no job — until the three VAPID values are set and the key pair is
     # a well-formed P-256 pair. The relay list is the only set of origins the
@@ -21,7 +21,7 @@ module Allure
       def public_key = ENV.fetch("VAPID_PUBLIC_KEY", "").strip
 
       # The public key as the relay and the app expect it: unpadded base64url.
-      # Every endpoint is bound to it at registration (PLAN_PUSH.md §3.1).
+      # Every endpoint is bound to it at registration (docs/dev/PUSH.md).
       def public_key_param
         bytes = decode(public_key)
         bytes ? encode(bytes) : public_key.delete("=")

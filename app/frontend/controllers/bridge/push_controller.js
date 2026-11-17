@@ -1,6 +1,6 @@
 import { BridgeComponent } from "@hotwired/hotwire-native-bridge";
 
-// « Sur cet iPhone » on /settings/notifications (PLAN_PUSH.md §6). The app
+// « Sur cet iPhone » on /settings/notifications (docs/dev/PUSH.md). The app
 // owns the permission, the relay registration and the device keys; the page
 // owns the server-side subscription of this session. The switch reads "on"
 // only when both agree: the app is registered and its endpoint is the one

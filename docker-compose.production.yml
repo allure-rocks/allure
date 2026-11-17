@@ -66,7 +66,7 @@ x-rails: &rails
     AUTH_OIDC_REQUIRED_AMR: ${AUTH_OIDC_REQUIRED_AMR:-}
     # Prometheus /metrics bearer token (optional). Unset disables the endpoint.
     METRICS_TOKEN: ${METRICS_TOKEN:-}
-    # Push notifications for the iOS companion (optional, PLAN_PUSH.md §5).
+    # Push notifications for the iOS companion (optional, docs/dev/PUSH.md).
     VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
     VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
     VAPID_SUBJECT: ${VAPID_SUBJECT:-}
