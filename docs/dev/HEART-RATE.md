@@ -217,7 +217,7 @@ or a received note.
   `users.time_zone`, `SUM(load)`.
 - A hub card « Charge d'entraînement »: Condition, Fatigue, Forme, a short ⓘ
   (method, own unit), a 90-day ECharts chart through `lib/charts/`
-  (`[devdoc:charts]`), the count of sessions without heart rate and of
+  ([CHARTS.md](CHARTS.md)), the count of sessions without heart rate and of
   sessions with partial heart rate (D11), « Comment lire ces chiffres » (load
   and floor, the three figures and the sign of the form, the unit compared
   with nothing else, nothing imputed, the warm-up), and the equivalent table.

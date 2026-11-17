@@ -2690,7 +2690,7 @@ Rules:
 
 ### 15.1 Charts
 
-Apache ECharts only (SVG renderer, `[devdoc:charts]`). No second charting library.
+Apache ECharts only (SVG renderer, [CHARTS.md](CHARTS.md)). No second charting library.
 
 | Dataset | Chart |
 |---|---|
