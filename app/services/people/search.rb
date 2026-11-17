@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module People
-  # PLAN_PEOPLE.md §3: the only name search the instance offers.
+  # docs/dev/PEOPLE.md: the only name search the instance offers.
   #
   # It returns a handful of accounts whose username or display name starts with
   # the typed text — discoverable members of this instance, plus the remote

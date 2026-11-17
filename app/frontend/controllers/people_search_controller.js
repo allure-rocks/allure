@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// People search (PLAN_PEOPLE.md §3, DESIGN.md §20.22): a combobox over the
+// People search (docs/dev/PEOPLE.md, DESIGN.md §20.22): a combobox over the
 // name-search endpoint. The field stays a plain text input inside the resolve
 // form, so without JavaScript it still submits an exact handle. The endpoint
 // answers an HTML fragment because each result carries a follow form; the

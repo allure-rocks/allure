@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module People
-  # PLAN_PEOPLE.md §4: accounts worth following, each with the reason it is
+  # docs/dev/PEOPLE.md: accounts worth following, each with the reason it is
   # offered. Every signal comes from something the viewer can already see, so
   # a suggestion never reveals a relationship or a place:
   #

@@ -102,7 +102,7 @@ module DemoSeed
         # the demo publishes them for the accounts a visitor reads.
         profile_statistics_audience: attributes.fetch(:profile_statistics_audience, "none"),
         profile_records_audience: attributes.fetch(:profile_records_audience, "none"),
-        # Name search and suggestions are opt-in (PLAN_PEOPLE.md §2); the demo
+        # Name search and suggestions are opt-in (docs/dev/PEOPLE.md); the demo
         # opts its personas in so the directory is not empty.
         discoverable: attributes.fetch(:discoverable, "none")
       )
