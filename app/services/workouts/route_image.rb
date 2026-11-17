@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The generation of the owner route image render (PLAN_DERIVATIONS.md). Bump
+  # The generation of the owner route image render (docs/dev/DERIVATIONS.md). Bump
   # it when the rendered contract changes (style, chevrons, framing, renderer
   # swap); RenderRouteImageJob stamps the version it produced, and the rebuild
   # sweep re-renders only the images whose stored version is older or that were

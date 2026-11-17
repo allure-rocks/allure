@@ -3,7 +3,7 @@
 module Allure
   module Weather
     # The weather the athlete met, one row per sample of the plan
-    # (PLAN_WEATHER.md §3): the values of the cell they were in, interpolated
+    # (docs/dev/WEATHER.md): the values of the cell they were in, interpolated
     # between the provider's two bounding hours. Wind speed is interpolated
     # linearly and its direction through the u/v components, never by
     # averaging angles; precipitation is the provider's sum over the hour that

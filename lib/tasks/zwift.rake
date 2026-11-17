@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 namespace :zwift do
-  # Feasibility check for PLAN_REMOTE_IMPORTS.md §7d against a real Zwift
+  # Feasibility check for docs/dev/REMOTE-IMPORTS.md against a real Zwift
   # account. Writes nothing to the database and never prints the password,
-  # the access token or the refresh token (Z1 in RUNBOOK_REMOTE_IMPORTS.md
+  # the access token or the refresh token (Z1 in docs/dev/REMOTE-IMPORTS.md
   # part 5).
   #
   #   dip sh

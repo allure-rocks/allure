@@ -30,9 +30,9 @@ FactoryBot.define do
       source { "Allure Test Device" }
     end
 
-    # An indoor recording imported without a GPS position (PLAN_NO_GPS.md):
-    # metrics and sensor readings, no location, no elevation (PLAN_NO_GPS.md
-    # §5). Its track segments are the `:unpositioned` ones.
+    # An indoor recording imported without a GPS position (docs/dev/NO-GPS.md):
+    # metrics and sensor readings, no location, no elevation. Its track
+    # segments are the `:unpositioned` ones.
     trait :unpositioned do
       start_point { nil }
       bounds { nil }
@@ -44,7 +44,7 @@ FactoryBot.define do
       import_format { "fit" }
     end
 
-    # A participant's credit row (PLAN_TOGETHER.md §3.2): the credited metric
+    # A participant's credit row (docs/dev/SHARED-ACTIVITIES.md): the credited metric
     # set only, no location, no file, no device.
     trait :credit do
       origin { "credit" }
@@ -59,7 +59,7 @@ FactoryBot.define do
       max_elevation { nil }
     end
 
-    # A workout typed in by hand (PLAN_MANUAL_ENTRY.md §3): the declared
+    # A workout typed in by hand (docs/dev/MANUAL-ENTRY.md): the declared
     # figures only, no location, no file, nothing an analysis derives.
     trait :manual do
       origin { "manual" }

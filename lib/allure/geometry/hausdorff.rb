@@ -8,7 +8,7 @@ module Allure
     # different points measure near zero. Each sampled point is measured against
     # the other polyline's segments, so a coarse sample never inflates the
     # result at a corner. Used to recognise an already detected loop
-    # (PLAN_SEGMENTS.md §7.3).
+    # (docs/dev/SEGMENTS.md).
     module Hausdorff
       DEFAULT_SAMPLES = 64
 

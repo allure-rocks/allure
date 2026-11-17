@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Notifications
-  # One `reaction` notification per workout and owner (PLAN_NOTIFICATIONS.md
-  # §8). The row is always recomputed from the active reactions, never
+  # One `reaction` notification per workout and owner
+  # (docs/dev/NOTIFICATIONS.md). The row is always recomputed from the active reactions, never
   # incremented, so a withdrawal, a block, or a deleted account converges on
   # the same state: the newest counted reactor is the actor, and the payload
   # carries the total and the count per type. The row is locked before it is
@@ -63,7 +63,7 @@ module Notifications
       }
       attributes.merge!(read_at: nil, created_at: now) if alert
       notification.update!(attributes)
-      # Only an alert reaches the devices (PLAN_PUSH.md §5): a silent recount
+      # Only an alert reaches the devices (docs/dev/PUSH.md): a silent recount
       # or a withdrawal pushes nothing.
       PushJob.enqueue_after_commit(notification) if alert
       notification

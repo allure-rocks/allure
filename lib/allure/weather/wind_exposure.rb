@@ -2,7 +2,7 @@
 
 module Allure
   module Weather
-    # The wind the athlete actually faced (PLAN_WEATHER.md §3). The moving
+    # The wind the athlete actually faced (docs/dev/WEATHER.md). The moving
     # track is cut into ~100 m stretches inside each recording segment; each
     # stretch's bearing is compared with the 10 m wind at its mid-time, and its
     # distance is counted head (origin within ±45° of ahead), tail (within ±45°

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Participations
-  # Ends remote participations (PLAN_TOGETHER.md §7.6).
+  # Ends remote participations (docs/dev/SHARED-ACTIVITIES.md).
   #
   # On the invited account's instance: its own withdrawal of a confirmation,
   # the owner's `Undo` of the Invite, and the relationship ending — an

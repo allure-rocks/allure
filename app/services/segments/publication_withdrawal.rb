@@ -4,7 +4,7 @@ module Segments
   # Withdraws a course publication: cancels unattempted Create deliveries,
   # emits an explicit-recipient Delete, and marks the publication deleted.
   # Mirrors Workouts::PublicationWithdrawal
-  # (PLAN_SEGMENTS_FEDERATION.md §9.4).
+  # (docs/dev/SEGMENTS-FEDERATION.md).
   class PublicationWithdrawal
     ATTEMPTED_DELIVERY_STATUSES = %w[delivered failed delivering retrying reconciling].freeze
     RECIPIENT_STATUSES = %w[authorized withdrawn].freeze
@@ -128,7 +128,7 @@ module Segments
 
     # The owner path is the default. `operator: true` is only honored for an
     # actual instance operator, so administration takedown can never become a
-    # general authorization bypass (PLAN_ADMIN.md §4.4).
+    # general authorization bypass (docs/dev/ADMIN.md).
     def authorize!(publication)
       return if operator?
 

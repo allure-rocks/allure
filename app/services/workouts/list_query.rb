@@ -5,7 +5,7 @@ module Workouts
   # publication, commute, place and free-text filters, plus the canonical sort
   # key, parsed once from request params. Shared by WorkoutsController and the
   # bulk selection, so a bulk operation can replay exactly the list the owner
-  # is looking at (PLAN_BULK_ACTIONS.md §2).
+  # is looking at (docs/dev/BULK-ACTIONS.md).
   class ListQuery
     PERIODS = [ "all", *Allure::Stats::Periods::KEYS, "custom" ].freeze
     PUBLICATIONS = %w[all published not_published].freeze
@@ -107,7 +107,7 @@ module Workouts
     end
 
     # A workout counts as published while any audience's publication is active
-    # (PLAN_AUDIENCES.md §2).
+    # (docs/dev/PUBLISHING.md).
     def apply_publication(scope)
       published = WorkoutPublication.active.select(:workout_id)
       case publication

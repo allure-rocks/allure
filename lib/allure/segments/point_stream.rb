@@ -27,7 +27,7 @@ module Allure
               elapsed_time: time - @workout_started_at,
               distance: distance_offset + point.fetch(KEYS::KEY_DISTANCE),
               # A positionless recording's points carry no coordinates at all
-              # (PLAN_NO_GPS.md §5): every distance-driven consumer keeps
+              # (docs/dev/NO-GPS.md): every distance-driven consumer keeps
               # working, and the coordinate-driven ones see nil.
               longitude: point[KEYS::KEY_LONGITUDE],
               latitude: point[KEYS::KEY_LATITUDE],

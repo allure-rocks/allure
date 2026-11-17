@@ -7,10 +7,10 @@ module Allure
   #
   # `kind` is `:file` (uploaded archives), `:device` (browser-side download,
   # no server credentials), `:remote` (server-side provider with a stored
-  # connection, PLAN_REMOTE_IMPORTS.md), `:archive` (one uploaded export of
+  # connection, docs/dev/REMOTE-IMPORTS.md), `:archive` (one uploaded export of
   # another service, read with its metadata and submitted from its own panel,
-  # PLAN_STRAVA_ARCHIVE.md), or `:manual` (a workout typed in by hand, with no
-  # file and its own form, PLAN_MANUAL_ENTRY.md). A remote source exists for an
+  # docs/dev/STRAVA-ARCHIVE.md), or `:manual` (a workout typed in by hand, with no
+  # file and its own form, docs/dev/MANUAL-ENTRY.md). A remote source exists for an
   # account only while the operator enables it.
   module ImportSources
     Source = Data.define(:key, :kind, :icon) do

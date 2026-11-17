@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # Account administration (PLAN_ADMIN.md §4.5): browse and search accounts,
+  # Account administration (docs/dev/ADMIN.md): browse and search accounts,
   # inspect one, and suspend or reinstate it. Suspension revokes access (the
   # sessions are destroyed and sign-in is refused) but never touches content.
   class AccountsController < BaseController
@@ -57,7 +57,7 @@ module Admin
       redirect_to admin_account_path(account), notice: t("photos.admin.saved")
     end
 
-    # PLAN_AUTH.md §5.7: removes every factor and session; the account enrols
+    # docs/dev/AUTH.md: removes every factor and session; the account enrols
     # again at its next password sign-in, with no grace period.
     def reset_second_factor
       account = User.find(params[:id])
@@ -95,7 +95,7 @@ module Admin
       redirect_to admin_account_path(account), notice: t("admin.accounts.flash.reinstated", username: account.username)
     end
 
-    # PLAN_ACCOUNT.md §4.4: the same seven-day window as a member's own
+    # docs/dev/ACCOUNT.md: the same seven-day window as a member's own
     # request; only the operator may cancel it. The operator account is never
     # deleted from the web.
     def schedule_deletion

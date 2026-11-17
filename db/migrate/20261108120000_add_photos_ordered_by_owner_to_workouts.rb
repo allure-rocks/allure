@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_PHOTOS.md §2.1: the gallery follows the capture time until the owner
+# docs/dev/PHOTOS.md: the gallery follows the capture time until the owner
 # reorders it by hand. A workout whose current order already differs from the
 # upload order keeps that order: the owner chose it.
 class AddPhotosOrderedByOwnerToWorkouts < ActiveRecord::Migration[8.1]

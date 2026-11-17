@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Inbound comments (PLAN_COMMENTS.md §7): the host side stores a reader's
+# Inbound comments (docs/dev/COMMENTS.md): the host side stores a reader's
 # comment on its workout or refuses it with a Reject; the reader side stores
 # the host's own comment on the received note; Delete, Reject, blocks and
 # author deletions take comments out.

@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// The owner drops a photo on the track (PLAN_PHOTOS.md §4): « Placer sur le
+// The owner drops a photo on the track (docs/dev/PHOTOS.md): « Placer sur le
 // parcours » arms the map, which carries the instruction and its error itself
 // (DESIGN.md §10.22). Its next click comes back as `allure:photo-placed`, sent
 // to the server to be snapped onto the line; a refused click re-arms the map

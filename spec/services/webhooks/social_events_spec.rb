@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Records, segments, social and connection webhook events (PLAN_API.md §11.2)" do
+RSpec.describe "Records, segments, social and connection webhook events (docs/dev/API.md)" do
   let(:user) { create(:user) }
   let!(:endpoint) { user.webhook_endpoints.create!(url: "https://hooks.example.com/", events: [ "*" ]) }
   let(:actor) { Federation::ActorProvisioner.new(user:).call! }

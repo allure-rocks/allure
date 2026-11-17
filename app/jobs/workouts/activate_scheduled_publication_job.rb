@@ -2,7 +2,7 @@
 
 module Workouts
   # Runs at `scheduled_for` and activates the publication
-  # (PLAN_DELAYED_PUBLISHING.md). A job that fires before the planned moment —
+  # (docs/dev/DELAYED-PUBLISHING.md). A job that fires before the planned moment —
   # because the owner rescheduled — defers itself; a lost job is recovered by
   # the recurring sweep in Federation::RecoveryJob.
   class ActivateScheduledPublicationJob < ApplicationJob

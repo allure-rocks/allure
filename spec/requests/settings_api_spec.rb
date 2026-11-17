@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Settings: API tokens (PLAN_API.md §4.4, DESIGN.md §20.18)", type: :request do
+RSpec.describe "Settings: API tokens (docs/dev/API.md, DESIGN.md §20.18)", type: :request do
   include ActiveJob::TestHelper
 
   let(:user) { create(:user) }
@@ -52,7 +52,7 @@ RSpec.describe "Settings: API tokens (PLAN_API.md §4.4, DESIGN.md §20.18)", ty
     expect(response).to redirect_to(settings_api_path)
   end
 
-  it "creates a token without location for AI assistants unless one is chosen (PLAN_MCP.md §4)" do
+  it "creates a token without location for AI assistants unless one is chosen (docs/dev/MCP.md)" do
     post settings_api_tokens_path, params: { api_token: { name: "Script", scopes: %w[read], expires_in_days: "90" } }
 
     expect(user.api_tokens.sole.mcp_geometry).to eq("none")
@@ -133,7 +133,7 @@ RSpec.describe "Settings: API tokens (PLAN_API.md §4.4, DESIGN.md §20.18)", ty
   end
 end
 
-RSpec.describe "The API reference page (PLAN_API.md §13)", type: :request do
+RSpec.describe "The API reference page (docs/dev/API.md)", type: :request do
   it "is members-only" do
     get developers_api_path
 

@@ -3,7 +3,7 @@
 module Federation
   module Outbox
     # The invited account's answer to a remote owner's Invite
-    # (PLAN_TOGETHER.md §7): an `Accept` or a `Reject` of that Invite, then,
+    # (docs/dev/SHARED-ACTIVITIES.md): an `Accept` or a `Reject` of that Invite, then,
     # for a confirmation it takes back, an `Undo` of its `Accept`. Each is the
     # account's own activity, addressed to the owner alone; identities are
     # deterministic, so the Undo names the Accept without remembering it.

@@ -5,7 +5,7 @@ module Federation
   # of Workouts::PublicationView so the established metric, map, and chart
   # partials can render it unchanged. The remote sport label is matched to the
   # shared seeded catalog; an unknown label keeps the label and gets a neutral
-  # route glyph (PLAN_M5 §14.2).
+  # route glyph (docs/dev/FEDERATION.md).
   class RemoteNoteView
     METRIC_KEYS = PublishingProfile::METRIC_KEYS
     MEDIA_STATUSES = %w[pending fetching].freeze

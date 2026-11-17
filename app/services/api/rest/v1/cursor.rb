@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # Opaque pagination cursors (PLAN_API.md §5). Encrypted rather than only
+      # Opaque pagination cursors (docs/dev/API.md). Encrypted rather than only
       # signed, so the internal row id they carry never reaches a client, and
       # bound to the ordering they were issued for.
       module Cursor

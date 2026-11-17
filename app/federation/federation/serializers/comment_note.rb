@@ -2,7 +2,7 @@
 
 module Federation
   module Serializers
-    # A local comment as an ActivityPub Note (PLAN_COMMENTS.md §6.2): plain
+    # A local comment as an ActivityPub Note (docs/dev/COMMENTS.md): plain
     # text escaped into the content, the publication or the parent comment as
     # `inReplyTo`, the publication as `context` so a reader that never saw the
     # parent still knows the thread, and no name, tag, attachment, or url. The

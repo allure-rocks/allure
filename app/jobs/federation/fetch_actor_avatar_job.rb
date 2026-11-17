@@ -3,7 +3,7 @@
 require "stringio"
 
 module Federation
-  # Caches a remote actor's avatar locally (PLAN_M5 §11.5). The browser only
+  # Caches a remote actor's avatar locally (docs/dev/FEDERATION.md). The browser only
   # ever talks to this instance; a failed fetch stays silent and the avatar
   # component falls back to the generated art.
   class FetchActorAvatarJob < ApplicationJob

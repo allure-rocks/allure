@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Allure REST API
-  # Replaced at request time by the application version (PLAN_API.md §3).
+  # Replaced at request time by the application version (docs/dev/API.md).
   version: "0"
   summary: Read and manage your Allure workouts from your own programs.
   description: |

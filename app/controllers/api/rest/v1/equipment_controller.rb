@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The account's equipment (PLAN_API.md §6.2).
+      # The account's equipment (docs/dev/API.md).
       class EquipmentController < BaseController
         require_scope "read"
 

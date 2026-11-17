@@ -3,7 +3,7 @@
 require "csv"
 
 module Users
-  # Writes the account's data archive (PLAN_ACCOUNT.md §3.3) into `path`: the
+  # Writes the account's data archive (docs/dev/ACCOUNT.md) into `path`: the
   # original files as imported, in nested ZIP archives the import page takes
   # back as they are, and everything else as JSON and CSV in SI units. Rows
   # are read in batches and written as they go, and each original is copied

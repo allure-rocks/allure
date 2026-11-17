@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API publication (PLAN_API.md §6.4, §9)", type: :request do
+RSpec.describe "REST API publication (docs/dev/API.md)", type: :request do
   let(:user) { create(:user) }
   let(:workout) { create(:workout, user:, title: "Shareable ride", notes: "Private note") }
   let(:profile) { create(:publishing_profile, :without_endpoint_masks, user:) }

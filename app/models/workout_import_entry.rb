@@ -5,10 +5,10 @@ class WorkoutImportEntry < ApplicationRecord
   TERMINAL_STATUSES = %w[imported failed duplicate cancelled skipped].freeze
   # `manual` is written when the owner changes the sport by hand, and
   # `declared` when the activity type the athlete chose elsewhere decided it
-  # (PLAN_STRAVA_ARCHIVE.md §4), so the re-detection backfill never overwrites
-  # a human decision (PLAN_VIRTUAL.md §6).
+  # (docs/dev/STRAVA-ARCHIVE.md), so the re-detection backfill never overwrites
+  # a human decision (docs/dev/VIRTUAL-PLATFORMS.md).
   SPORT_SOURCES = %w[detected declared fallback unknown manual].freeze
-  # Why a remote activity was not imported (PLAN_REMOTE_IMPORTS.md §5.2).
+  # Why a remote activity was not imported (docs/dev/REMOTE-IMPORTS.md).
   SKIP_REASONS = %w[no_geometry unsupported_sport no_file].freeze
 
   belongs_to :batch,

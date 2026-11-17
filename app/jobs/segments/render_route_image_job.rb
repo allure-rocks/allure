@@ -3,8 +3,8 @@
 module Segments
   # Renders the owner image for a segment, route or loop on the dedicated
   # route_images worker, with the same MapLibre -> raster -> tile-less fallback
-  # chain as workout images (PLAN_DERIVATIONS.md §4). Course images are always
-  # smoothed at the medium level (PLAN_MAPLIBRE.md §9): a course is a reusable
+  # chain as workout images (docs/dev/DERIVATIONS.md). Course images are always
+  # smoothed at the medium level (docs/dev/MAPS.md): a course is a reusable
   # corridor, not a recording, and the live segment map reads the same display
   # geometry. The image is derived from the segment's own geometry, never from
   # the source workout's track, and is served only through its application
@@ -112,7 +112,7 @@ module Segments
         blobs.each { |name, blob| segment.public_send(name).attach(blob) }
         # Both variants are now of the current renderer generation; the rebuild
         # sweeps use this marker to re-render only what is stale
-        # (PLAN_DERIVATIONS.md §4).
+        # (docs/dev/DERIVATIONS.md).
         segment.update_columns(route_image_version: Segments::RouteImage::VERSION)
       end
     rescue StandardError => error

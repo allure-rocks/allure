@@ -4,7 +4,7 @@ require "rails_helper"
 
 # Expected values below are independently derived from the equirectangular /
 # haversine / outlier / elevation-filter / threshold formulas documented in
-# PLAN_M1.md sections 8.1-8.9, not by running this analyzer and recording its
+# docs/dev/WORKOUT.md, not by running this analyzer and recording its
 # output.
 RSpec.describe Allure::Gpx::Analyzer do
   describe "galibier: normal timed 3D route" do
@@ -159,7 +159,7 @@ RSpec.describe Allure::Gpx::Analyzer do
     let(:start) { Time.zone.parse("2026-06-01 08:00:00 UTC") }
 
     # A trainer session: cumulative device distance and speed, one 30 s
-    # standstill in the middle, no coordinates anywhere (PLAN_NO_GPS.md §4).
+    # standstill in the middle, no coordinates anywhere (docs/dev/NO-GPS.md).
     # Speeds are consistent with the distance steps so the fixture carries no
     # anomaly of its own.
     subject(:metrics) do

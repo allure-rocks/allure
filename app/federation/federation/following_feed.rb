@@ -4,14 +4,14 @@ module Federation
   # The signed-in personal stream: the viewer's own active publications (any
   # audience), local publications from accounts the actor follows, plus remote
   # notes this actor holds an active entitlement for, merged in one
-  # chronological order (PLAN_M5 §14.1, DESIGN.md §8.3). A followed local
+  # chronological order (docs/dev/FEDERATION.md, DESIGN.md §8.3). A followed local
   # author's followers-only publication always joins the stream, as
   # Workouts::PublicationPolicy serves it to an accepted local follower. With `include_public:`, the instance's remaining public publications
   # join the stream, deduplicated against followed authors and the viewer's own
   # actor.
   #
   # A workout appears once: among its publications the viewer may read, the
-  # narrowest audience is the one shown (PLAN_AUDIENCES.md §3).
+  # narrowest audience is the one shown (docs/dev/PUBLISHING.md).
   #
   # The union is a projection of identities only; the records themselves are
   # hydrated in two batched queries so the page never builds one query per row
@@ -24,7 +24,7 @@ module Federation
     end
 
     # An account in its deletion window is deactivated: its publications are
-    # hidden locally until the purge withdraws them (PLAN_ACCOUNT.md §4.2),
+    # hidden locally until the purge withdraws them (docs/dev/ACCOUNT.md),
     # exactly as WorkoutPublication.of_available_owners reads it. The union is
     # raw SQL, so the rule is spelled here for every local fragment.
     OWNER_AVAILABLE = <<~SQL.squish

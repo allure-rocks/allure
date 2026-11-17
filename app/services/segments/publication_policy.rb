@@ -3,7 +3,7 @@
 module Segments
   # The single authorization boundary for a course publication: the public
   # protocol GETs, their media, and the signed followers-only branch
-  # (PLAN_SEGMENTS_FEDERATION.md §9.2). The local HTML course page stays
+  # (docs/dev/SEGMENTS-FEDERATION.md). The local HTML course page stays
   # governed by `Segment#viewable_by?`; this policy answers protocol
   # principals.
   class PublicationPolicy
@@ -31,7 +31,7 @@ module Segments
 
     # Public courses are readable by every signed-in account and by the public
     # wire protocol, but never by an anonymous browser visitor: public means
-    # registered locally (PLAN_MEMBERS_ONLY.md). Followers-only courses serve
+    # registered locally (docs/dev/ACCESS.md). Followers-only courses serve
     # the owner and an accepted local follower whatever the switches say, and
     # an accepted remote follower whose locally assigned capability is
     # promoted only while restricted federation is enabled; the request itself

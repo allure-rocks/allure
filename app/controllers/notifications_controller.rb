@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The signed-in in-app inbox (PLAN_NOTIFICATIONS.md): the topbar bell's badge
+# The signed-in in-app inbox (docs/dev/NOTIFICATIONS.md): the topbar bell's badge
 # and dropdown, the paginated list, and read state. Every lookup is scoped to
 # the current account, so another account's notification is a 404.
 class NotificationsController < ApplicationController

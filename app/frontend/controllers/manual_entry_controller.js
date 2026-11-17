@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// The manual entry form (PLAN_MANUAL_ENTRY.md §5): the ascent hides for a
+// The manual entry form (docs/dev/MANUAL-ENTRY.md): the ascent hides for a
 // sport that measures no elevation, and its input is disabled so it is never
 // submitted. Without a sport, every field stays available.
 export default class extends Controller {

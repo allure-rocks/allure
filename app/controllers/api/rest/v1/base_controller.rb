@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The REST API's request boundary (PLAN_API.md §4.5, §5). It reads only
+      # The REST API's request boundary (docs/dev/API.md). It reads only
       # `Authorization: Bearer`, never the session cookie, so no API mutation
       # is reachable by a cross-site request; it answers RFC 9457 problems in
       # English; and every query is scoped through the token's account.
@@ -48,7 +48,7 @@ module Api
         before_action :private_caching
 
         # One bucket per token across every controller behind this boundary
-        # (PLAN_API.md §4.6): without `scope:` Rails keys the count by
+        # (docs/dev/API.md): without `scope:` Rails keys the count by
         # controller path, and a token would get the limit once per resource.
         RATE_LIMIT_SCOPE = "api"
 
@@ -58,7 +58,7 @@ module Api
                    scope: RATE_LIMIT_SCOPE, if: -> { mutation_request? },
                    with: -> { render_rate_limited(1.minute) }
 
-        # Declares the scope an action needs (PLAN_API.md §4.3). Several
+        # Declares the scope an action needs (docs/dev/API.md). Several
         # scopes mean any one of them suffices.
         def self.require_scope(*scopes, **options)
           before_action(**options) { ensure_scope!(scopes) }
@@ -94,7 +94,7 @@ module Api
         end
 
         def ensure_scope!(scopes)
-          # The `scope` label of allure_api_requests_total (PLAN_API.md §14).
+          # The `scope` label of allure_api_requests_total (docs/dev/API.md).
           request.env["allure.api_scope"] = scopes.first.to_s
           return if scopes.any? { Current.api_token.scope?(it) }
 
@@ -129,7 +129,7 @@ module Api
         end
 
         # 422 with one `{ field, code, detail }` per refused field
-        # (PLAN_API.md §5).
+        # (docs/dev/API.md).
         def render_validation(errors)
           render_problem(:unprocessable_content, "validation_failed", errors:)
         end
@@ -160,7 +160,7 @@ module Api
         end
 
         # Keyset pagination over `column` then the primary key, both in
-        # `direction` (PLAN_API.md §5). The cursor is encrypted and bound to
+        # `direction` (docs/dev/API.md). The cursor is encrypted and bound to
         # `context`, so a cursor from another ordering is refused.
         def paginate(scope, column:, direction:, context:, &serialize)
           limit = page_limit

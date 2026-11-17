@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_API.md §6.3, §8: the REST API names an import batch by a ShortUUID, and
+# docs/dev/API.md: the REST API names an import batch by a ShortUUID, and
 # a batch it creates carries the `api` trigger.
 class PrepareImportBatchesForTheApi < ActiveRecord::Migration[8.1]
   def up

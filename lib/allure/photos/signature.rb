@@ -3,7 +3,7 @@
 module Allure
   module Photos
     # The real type of an uploaded photo, read from its first bytes
-    # (PLAN_PHOTOS.md §3.1). The declared content type and the extension are
+    # (docs/dev/PHOTOS.md). The declared content type and the extension are
     # never trusted. Answers nil for anything else, a GIF included.
     module Signature
       PNG = "\x89PNG\r\n\x1a\n".b

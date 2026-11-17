@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# One verified reversal signal against a recorded contribution (PLAN_FUNDING.md
-# §3, PAY-105): a refund or a dispute, resolved through authenticated provider
+# One verified reversal signal against a recorded contribution
+# (docs/dev/FUNDING.md): a refund or a dispute, resolved through authenticated provider
 # read-back to the original paid invoice. Reversals never rewrite the
 # contribution — the badge-after-refund policy is unchanged and only the
 # operator's manual revocation removes a badge — they give the operator the

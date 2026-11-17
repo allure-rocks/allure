@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Authentication proofs never reach the log (PLAN_AUTH.md §5.8): a parameter
+# Authentication proofs never reach the log (docs/dev/AUTH.md): a parameter
 # rename must not silently reopen the gap.
 RSpec.describe "Log filtering" do
   let(:filter) { ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters) }

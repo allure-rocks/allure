@@ -2,8 +2,8 @@
 
 module Workouts
   # Whether every enrichment an import starts has settled
-  # (PLAN_AUTO_PUBLISHING.md §4). Each check reads the derivation's own marker
-  # (PLAN_DERIVATIONS.md), so it costs no extra bookkeeping:
+  # (docs/dev/AUTO-PUBLISHING.md). Each check reads the derivation's own marker
+  # (docs/dev/DERIVATIONS.md), so it costs no extra bookkeeping:
   #
   # - elevation: no terrain-elevation request pending (the importer records
   #   one when it enqueues the enrichment; applying or giving up clears it);
@@ -12,11 +12,11 @@ module Workouts
   # - places: the toponymy reached a terminal state (virtual sports have none);
   # - route_image: the owner image is of the current renderer generation;
   # - weather: the weather reached a terminal state, waited for only when a
-  #   waiting automatic publication's profile shares it (PLAN_WEATHER.md §5).
+  #   waiting automatic publication's profile shares it (docs/dev/WEATHER.md).
   #
   # - photos: no photo of the workout is still being processed, so an
   #   automatic publication takes every photo uploaded in time
-  #   (PLAN_PHOTOS.md §5.3).
+  #   (docs/dev/PHOTOS.md).
   #
   # A failed enrichment counts as settled: it will not improve by waiting.
   class AutoPublicationReadiness

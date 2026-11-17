@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Import failure inspection (PLAN_ADMIN.md §4.7): the batch list and the stored
+# Import failure inspection (docs/dev/ADMIN.md): the batch list and the stored
 # per-entry parser detail.
 RSpec.describe "Admin imports" do
   let(:operator) { create(:user, :with_totp, username: "operator") }

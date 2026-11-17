@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_TOGETHER.md §8, lot 3: each account may opt out of co-presence
+# docs/dev/SHARED-ACTIVITIES.md: each account may opt out of co-presence
 # detection, and the candidate query reads recordings of every account by
 # start time, which only the per-account index covered.
 class AddTogetherDetection < ActiveRecord::Migration[8.1]

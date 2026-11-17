@@ -4,7 +4,7 @@ require "tempfile"
 
 module ImportConnections
   module Providers
-    # The EXR adapter (PLAN_REMOTE_IMPORTS.md §7b.3) over the pure
+    # The EXR adapter (docs/dev/REMOTE-IMPORTS.md) over the pure
     # `Allure::Exr::Client`. The only credential is the account site's
     # remember cookie; a cookie the site replaces is written back at once.
     # The FIT file names its platform, so neither a sport hint nor equipment

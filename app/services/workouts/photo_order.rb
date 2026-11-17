@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The gallery's order (PLAN_PHOTOS.md §2.1): capture time first, then the
+  # The gallery's order (docs/dev/PHOTOS.md): capture time first, then the
   # route position of a photo that recorded no time, then the upload order.
   # The owner takes over by reordering by hand; « Trier par heure de prise de
   # vue » resumes the automatic order.

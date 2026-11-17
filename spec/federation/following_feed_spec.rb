@@ -99,7 +99,7 @@ RSpec.describe Federation::FollowingFeed do
     expect(feed.follows_anyone?).to be(false)
   end
 
-  describe "with a deactivated owner (PLAN_ACCOUNT.md §4.2)" do
+  describe "with a deactivated owner (docs/dev/ACCOUNT.md)" do
     # The window hides an account's publications from every reader until the
     # purge withdraws them, the feed included: its union is raw SQL, not
     # `WorkoutPublication.visible_to`.

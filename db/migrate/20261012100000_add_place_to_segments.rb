@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_SEGMENTS.md §8.4: the nearby place the segment index shows beside each
+# docs/dev/SEGMENTS.md: the nearby place the segment index shows beside each
 # course, reverse-geocoded once from the course midpoint. Existing rows start
 # `pending` so the audited backfill finds them; the place never federates.
 class AddPlaceToSegments < ActiveRecord::Migration[8.1]

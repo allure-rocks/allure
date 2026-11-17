@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Presentation rules for the comments card (PLAN_COMMENTS.md §11, DESIGN.md
+# Presentation rules for the comments card (docs/dev/COMMENTS.md, DESIGN.md
 # §10.20). One card serves the thread this instance hosts on a workout and the
 # thread another instance hosts for a received note; it reads who the viewer
 # is, what the policy lets them do, and why a thread is closed, and it never
@@ -9,7 +9,7 @@ module CommentsHelper
   # Everything the card renders for one target and the current viewer.
   # `publication` is the one a new comment hangs on — the narrowest serving
   # the viewer — and `publications` every active one the owner may write
-  # under, or the one serving a reader (PLAN_AUDIENCES.md §6); `audiences`
+  # under, or the one serving a reader (docs/dev/PUBLISHING.md); `audiences`
   # the threads the viewer reads.
   CommentCard = Data.define(:target, :listing, :permission, :owner, :publication, :publications, :audiences) do
     def entries = listing.entries
@@ -102,7 +102,7 @@ module CommentsHelper
   # the cached actor with its instance handle (DESIGN.md §24); a deleted
   # account by the generic words. A deactivated local account (suspended, or
   # inside its deletion window) is not named either: its comment stays, its
-  # identity does not show (PLAN_COMMENTS.md §7.6).
+  # identity does not show (docs/dev/COMMENTS.md).
   def comment_author_name(actor)
     return t("comments.author.deleted") if actor.nil? || actor.tombstoned?
     return t("comments.author.unavailable") if comment_author_deactivated?(actor)
@@ -168,7 +168,7 @@ module CommentsHelper
   def comment_privacy_text(card, audience: nil)
     if card.received?
       # The origin relays a comment on its public publication to the other
-      # instances that received it (PLAN_COMMENTS.md §6.6), never a followers one.
+      # instances that received it (docs/dev/COMMENTS.md), never a followers one.
       key = card.target.public? ? "comments.privacy.received_public" : "comments.privacy.received"
       t(key, handle: actor_handle(card.target.actor))
     elsif card.audience_choice? && audience.nil?

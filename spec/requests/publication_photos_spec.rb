@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_PHOTOS.md §5.4: readers see only what a publication froze, through the
+# docs/dev/PHOTOS.md: readers see only what a publication froze, through the
 # publication's own media endpoint.
 RSpec.describe "Publication photos" do
   let(:owner) { create(:user) }

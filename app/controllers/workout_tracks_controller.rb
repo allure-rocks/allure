@@ -4,10 +4,10 @@ class WorkoutTracksController < ApplicationController
   # Owner requests read the point rows; non-owner requests use the immutable
   # publication representation and never fall back to the source track.
   # `?as=publication` forces the sanitized publication track even for the owner,
-  # so the sharing snapshot can show exactly what non-owners see (PLAN_M4_5
+  # so the sharing snapshot can show exactly what non-owners see (docs/dev/PUBLISHING.md
   # Slice 7). It still requires publication policy for :track and 404s otherwise.
   # A reader gets the track of the publication serving them, and the owner's
-  # preview the one of `audience` (PLAN_AUDIENCES.md §3).
+  # preview the one of `audience` (docs/dev/PUBLISHING.md).
   def show
     workout = Workout.find_by_short_id!(params[:workout_id])
     if params[:as] == "publication"
@@ -20,7 +20,7 @@ class WorkoutTracksController < ApplicationController
 
       track = publication.track
     elsif workout.user == current_user
-      # A positionless recording has no track at all (PLAN_NO_GPS.md §6).
+      # A positionless recording has no track at all (docs/dev/NO-GPS.md).
       raise ActiveRecord::RecordNotFound unless workout.positioned?
 
       track = Allure::Gpx::TrackSeries.new(segments: workout.track_segments).call

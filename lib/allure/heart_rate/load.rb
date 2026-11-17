@@ -2,7 +2,7 @@
 
 module Allure
   module HeartRate
-    # Edwards' training impulse (PLAN_HEART_RATE.md D8): minutes in each zone
+    # Edwards' training impulse (docs/dev/HEART-RATE.md): minutes in each zone
     # weighted by the zone's number, with nothing under the zones' load floor
     # (Edwards counts from 50 % of the maximum). The unit is Allure's own:
     # it is not comparable with a power-based or another application's score.

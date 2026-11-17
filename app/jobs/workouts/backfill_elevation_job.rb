@@ -3,7 +3,7 @@
 module Workouts
   # Enqueues the terrain-elevation apply job for every elevation-less workout of
   # an opted-in owner, in bounded id-cursor batches that resume themselves
-  # (PLAN_ELEVATION.md §7). Only runs when the instance configures a provider.
+  # (docs/dev/ELEVATION.md). Only runs when the instance configures a provider.
   class BackfillElevationJob < ApplicationJob
     BATCH_SIZE = 50
 
@@ -14,7 +14,7 @@ module Workouts
 
     class << self
       # A credit row and a positionless recording have no track to sample
-      # (PLAN_TOGETHER.md §6.6, PLAN_NO_GPS.md §6).
+      # (docs/dev/SHARED-ACTIVITIES.md, docs/dev/NO-GPS.md).
       def pending_scope
         Workout.positioned
           .where(recorded_elevation: false)

@@ -38,7 +38,7 @@ module Federation
         following.undo!
         withdraw_entitlements!(local_actor, target_actor)
         # Invitations from this owner end with the relationship; a
-        # confirmation taken back is told (PLAN_TOGETHER.md §7).
+        # confirmation taken back is told (docs/dev/SHARED-ACTIVITIES.md).
         participation_events = Participations::RemoteWithdrawal.for_pair!(
           recipient_actor: local_actor, origin_actor: target_actor, notify_origin: true
         )
@@ -85,7 +85,7 @@ module Federation
 
     # Delivered copies of this author disappear from the feed and profile lists
     # immediately. Public media is retained; a followers-only object is purged
-    # once its last entitlement is withdrawn (PLAN_M5 §9.6).
+    # once its last entitlement is withdrawn (docs/dev/FEDERATION.md).
     def withdraw_entitlements!(local_actor, remote_actor)
       [ RemoteNote, RemoteSegment ].each do |model|
         model.where(actor: remote_actor).find_each do |record|

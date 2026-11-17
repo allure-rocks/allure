@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Account lifecycle jobs (PLAN_ACCOUNT.md)" do
+RSpec.describe "Account lifecycle jobs (docs/dev/ACCOUNT.md)" do
   include ActiveJob::TestHelper
   include ActiveSupport::Testing::TimeHelpers
 

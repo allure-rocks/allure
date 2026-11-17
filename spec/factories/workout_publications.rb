@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :workout_publication do
     transient do
-      # A snapshot whose profile closed comments (PLAN_COMMENTS.md §6.4).
+      # A snapshot whose profile closed comments (docs/dev/COMMENTS.md).
       comments_closed { false }
     end
 

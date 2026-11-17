@@ -2,7 +2,7 @@
 
 module Allure
   module RemoteImports
-    # The failures every provider adapter raises (PLAN_REMOTE_IMPORTS.md §5.1),
+    # The failures every provider adapter raises (docs/dev/REMOTE-IMPORTS.md),
     # whatever its own client calls them.
     class Error < StandardError
       # The link must be redone: the connection turns `expired`.

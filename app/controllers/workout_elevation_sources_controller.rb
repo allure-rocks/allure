@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Owner-only elevation source switch (PLAN_ELEVATION.md §6). The request is
+# Owner-only elevation source switch (docs/dev/ELEVATION.md). The request is
 # recorded as a pending preference and the actual reanalysis runs in a job, so
 # the page never blocks on the provider.
 class WorkoutElevationSourcesController < ApplicationController

@@ -2,7 +2,7 @@
 
 # One best effort over a standard distance inside a single workout, rebuilt
 # from the stored track points by `BestEfforts::Rebuild`. Display-only: never
-# URL-addressable and never federated. See PLAN_BEST_EFFORTS.md.
+# URL-addressable and never federated. See docs/dev/BEST-EFFORTS.md.
 class BestEffort < ApplicationRecord
   belongs_to :user, inverse_of: :best_efforts
   belongs_to :sport, inverse_of: :best_efforts

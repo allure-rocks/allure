@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The Découvrir page (PLAN_SEGMENTS.md §8.4): the map alone, showing every
+# The Découvrir page (docs/dev/SEGMENTS.md): the map alone, showing every
 # course the viewer may see — the readable shared ones and their own, private
 # ones included — with no filter and no cards.
 RSpec.describe "Discover page" do

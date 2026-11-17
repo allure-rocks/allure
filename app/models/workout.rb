@@ -14,17 +14,17 @@ class Workout < ApplicationRecord
   IMPORT_FORMATS = %w[gpx fit tcx kml].freeze
 
   # The analysis source of the elevation profile: the recording device or the
-  # configured DEM service (PLAN_ELEVATION.md).
+  # configured DEM service (docs/dev/ELEVATION.md).
   ELEVATION_SOURCES = %w[device dem].freeze
 
   # A recording comes from an imported file; a credit row stands for a
   # confirmed credit participation and carries only the credited metric set,
-  # no geometry (PLAN_TOGETHER.md §3.2); a manual entry carries the figures its
-  # owner typed in, no file and no geometry (PLAN_MANUAL_ENTRY.md). Mirrors
+  # no geometry (docs/dev/SHARED-ACTIVITIES.md); a manual entry carries the figures its
+  # owner typed in, no file and no geometry (docs/dev/MANUAL-ENTRY.md). Mirrors
   # workouts_origin.
   ORIGINS = %w[import credit manual].freeze
 
-  # The bounds a hand-typed figure must fall within (PLAN_MANUAL_ENTRY.md §4):
+  # The bounds a hand-typed figure must fall within (docs/dev/MANUAL-ENTRY.md):
   # SI, as persisted. A recording's figures are measured, never checked here.
   MANUAL_LIMITS = {
     duration: 1..(7 * 86_400),
@@ -40,12 +40,12 @@ class Workout < ApplicationRecord
   belongs_to :user
   has_many :photos, -> { order(:position, :id) }, class_name: "WorkoutPhoto", dependent: :destroy, inverse_of: :workout
   belongs_to :sport
-  # Imported from a remote provider under `external_id` (PLAN_REMOTE_IMPORTS.md §4).
+  # Imported from a remote provider under `external_id` (docs/dev/REMOTE-IMPORTS.md).
   belongs_to :import_connection, optional: true
   # Recording segments: one per contiguous GPX <trkseg>, or per run of FIT
   # records between timer stop_all events. Deliberately not named `segments`:
   # that word belongs to the reusable course portions specified in
-  # PLAN_SEGMENTS.md.
+  # docs/dev/SEGMENTS.md.
   has_many :track_segments,
            -> { order(:position) },
            dependent: :destroy,
@@ -70,10 +70,10 @@ class Workout < ApplicationRecord
   has_and_belongs_to_many :equipments, join_table: "workout_equipments"
   has_many :reactions, inverse_of: :workout, dependent: :destroy
   # The thread this instance hosts for the workout's publications
-  # (PLAN_COMMENTS.md): it belongs to the workout, not to one publication
+  # (docs/dev/COMMENTS.md): it belongs to the workout, not to one publication
   # identity, so republishing keeps it.
   has_many :comments, inverse_of: :workout, dependent: :delete_all
-  # Confirmed shared activities (PLAN_TOGETHER.md). This workout is the source
+  # Confirmed shared activities (docs/dev/SHARED-ACTIVITIES.md). This workout is the source
   # of each row; `participant_links` are the rows where another account's
   # recording names this workout as its source. Never federated in v1.
   has_many :workout_participations, dependent: :destroy, inverse_of: :workout
@@ -94,37 +94,37 @@ class Workout < ApplicationRecord
            dependent: :delete_all,
            inverse_of: :workout
   # Terrain elevation fetched for a workout without a recorded profile, or
-  # chosen by the owner instead of it (PLAN_ELEVATION.md).
+  # chosen by the owner instead of it (docs/dev/ELEVATION.md).
   has_one :elevation,
           class_name: "WorkoutElevation",
           dependent: :destroy,
           inverse_of: :workout
   # Historical weather along the route, for an account that consented
-  # (PLAN_WEATHER.md). Owner-only except the summary a profile may share.
+  # (docs/dev/WEATHER.md). Owner-only except the summary a profile may share.
   has_one :weather,
           class_name: "WorkoutWeather",
           dependent: :destroy,
           inverse_of: :workout
-  # The recording's heart-rate histogram (PLAN_HEART_RATE.md). Owner-only.
+  # The recording's heart-rate histogram (docs/dev/HEART-RATE.md). Owner-only.
   has_one :heart_rate,
           class_name: "WorkoutHeartRate",
           dependent: :delete,
           inverse_of: :workout
-  # At most one live publication per audience (PLAN_AUDIENCES.md §2), listed
+  # At most one live publication per audience (docs/dev/PUBLISHING.md), listed
   # from the narrowest audience to the widest. A reader is served the first
   # one their entitlements allow (Workouts::PublicationResolver).
   has_many :active_publications,
            -> { active.narrowest_first },
            class_name: "WorkoutPublication",
            inverse_of: :workout
-  # Frozen snapshots inside their publishing delay (PLAN_DELAYED_PUBLISHING.md).
+  # Frozen snapshots inside their publishing delay (docs/dev/DELAYED-PUBLISHING.md).
   # Invisible to every reader until they activate; the owner can cancel,
   # reschedule, or publish them now.
   has_many :scheduled_publications,
            -> { scheduled.narrowest_first },
            class_name: "WorkoutPublication",
            inverse_of: :workout
-  # The automatic publications an import scheduled (PLAN_AUTO_PUBLISHING.md):
+  # The automatic publications an import scheduled (docs/dev/AUTO-PUBLISHING.md):
   # one per audience, owner-only bookkeeping, never published or federated.
   has_many :auto_publications,
            class_name: "WorkoutAutoPublication",
@@ -134,21 +134,21 @@ class Workout < ApplicationRecord
            class_name: "Segment",
            foreign_key: :source_workout_id,
            inverse_of: :source_workout
-  # Recurring-route suggestions naming this recording (PLAN_SEGMENTS.md §7.7).
+  # Recurring-route suggestions naming this recording (docs/dev/SEGMENTS.md).
   # Owner-only derived bookkeeping: deleting the workout drops its membership,
   # and a suggestion left without a member disappears.
   has_many :route_suggestion_workouts, dependent: :destroy, inverse_of: :workout
   has_one_attached :original_file, dependent: :purge_later
   # A credit row's source while attached (the foreign key nullifies it when the
   # source is deleted) and the source's owner, kept after detachment for the
-  # « Avec @X » badge (PLAN_TOGETHER.md §3.2, §6.5).
+  # « Avec @X » badge (docs/dev/SHARED-ACTIVITIES.md).
   belongs_to :credited_from, class_name: "Workout", foreign_key: :credited_from_workout_id,
                              optional: true, inverse_of: :credit_rows
   belongs_to :credited_by, class_name: "Actor", foreign_key: :credited_by_actor_id, optional: true
   has_many :credit_rows, class_name: "Workout", foreign_key: :credited_from_workout_id,
                          inverse_of: :credited_from
   # A credit confirmed for an invitation from another instance: its figures
-  # come from the received note, it has no local source (PLAN_TOGETHER.md §7).
+  # come from the received note, it has no local source (docs/dev/SHARED-ACTIVITIES.md).
   belongs_to :remote_participation, optional: true, inverse_of: :credit_row
 
   validates :uuid, uniqueness: true, allow_nil: true
@@ -194,7 +194,7 @@ class Workout < ApplicationRecord
   # credit row is someone else's recording and is never edited in bulk.
   scope :authored, -> { where(origin: %w[import manual]) }
   # Recordings the geometry-driven derivations may touch: the ones with a
-  # track (PLAN_NO_GPS.md §6). A positionless recording has no map, no route
+  # track (docs/dev/NO-GPS.md). A positionless recording has no map, no route
   # image, no toponymy and no segment matching.
   scope :positioned, -> { recordings.where.not(start_point: nil) }
   scope :unpositioned, -> { recordings.where(start_point: nil) }
@@ -206,12 +206,12 @@ class Workout < ApplicationRecord
     where(id: WorkoutPublication.visible_to(user).select(:workout_id))
   }
   # Recordings whose recorded duration reaches the given moment, whatever
-  # their start (the co-presence window's overlap test, PLAN_TOGETHER.md).
+  # their start (the co-presence window's overlap test, docs/dev/SHARED-ACTIVITIES.md).
   scope :ending_at_or_after, ->(time) {
     where("workouts.started_at + make_interval(secs => workouts.duration) >= ?", time)
   }
   # Closest start first, the oldest row on a tie: the order the recording
-  # picker offers same-outing recordings in (PLAN_TOGETHER.md §10).
+  # picker offers same-outing recordings in (docs/dev/SHARED-ACTIVITIES.md).
   scope :ordered_by_start_proximity_to, ->(time) {
     order(
       Arel.sql(sanitize_sql_array([ "ABS(EXTRACT(EPOCH FROM (workouts.started_at - ?::timestamp)))", time ])),
@@ -235,11 +235,11 @@ class Workout < ApplicationRecord
   before_destroy :decrement_equipment_totals
   # The efforts cascade with the workout, so the segments they sat on are
   # captured first (prepended ahead of the `dependent: :destroy` callbacks) and
-  # refreshed after commit (PLAN_TOGETHER.md §6.4).
+  # refreshed after commit (docs/dev/SHARED-ACTIVITIES.md).
   before_destroy :capture_effort_segment_ids, prepend: true
   after_commit :refresh_effort_segments, on: :destroy
 
-  # Credit rows (PLAN_TOGETHER.md §6.2, §6.5). A source's change reaches its
+  # Credit rows (docs/dev/SHARED-ACTIVITIES.md). A source's change reaches its
   # attached credit rows; deleting a source detaches and keeps them; deleting
   # a credit row withdraws its participation so it is never recreated. Both
   # run ahead of the `dependent: :destroy` callbacks, while the
@@ -250,13 +250,13 @@ class Workout < ApplicationRecord
   after_commit :notify_detached_credits, on: :destroy
   after_commit :enqueue_remote_withdrawal, on: :destroy
   # The reactions cascade with the workout; their digest has nothing left to
-  # tell (PLAN_NOTIFICATIONS.md §8).
+  # tell (docs/dev/NOTIFICATIONS.md).
   after_destroy :withdraw_reaction_digest
   after_commit :diff_equipment_totals, on: :update,
     if: -> { saved_change_to_distance? || saved_change_to_moving_time? }
 
   # Workouts a viewer may see: their own plus active public publications.
-  # Viewing requires an account (PLAN_MEMBERS_ONLY.md), so `nil` sees nothing.
+  # Viewing requires an account (docs/dev/ACCESS.md), so `nil` sees nothing.
   def self.visible_to(user)
     return none unless user
 
@@ -264,7 +264,7 @@ class Workout < ApplicationRecord
   end
 
   # The audiences of the live publications, active or scheduled: a new
-  # publication can only take another one (PLAN_AUDIENCES.md §2).
+  # publication can only take another one (docs/dev/PUBLISHING.md).
   def live_audiences
     (active_publications.map(&:audience) + scheduled_publications.map(&:audience)).uniq
   end
@@ -309,10 +309,10 @@ class Workout < ApplicationRecord
     credit? && (credit_detached_at.present? || (credited_from_workout_id.nil? && remote_participation_id.nil?))
   end
 
-  # A credit from another instance's publication (PLAN_TOGETHER.md §7).
+  # A credit from another instance's publication (docs/dev/SHARED-ACTIVITIES.md).
   def credit_remote? = credit? && remote_participation_id.present?
 
-  # A positioned recording has geometry; a positionless one (PLAN_NO_GPS.md)
+  # A positioned recording has geometry; a positionless one (docs/dev/NO-GPS.md)
   # was recorded without a fix and carries none. A credit row is never
   # positioned. The pair `start_point`/`bounds` exists or does not together.
   def positioned? = recording? && start_point.present?
@@ -320,13 +320,13 @@ class Workout < ApplicationRecord
   # The workout whose stored points derive this one's best efforts and
   # segment efforts: itself for a recording, the source for an attached credit
   # row, nil for a detached one, whose derived rows are frozen
-  # (PLAN_TOGETHER.md §6.3).
+  # (docs/dev/SHARED-ACTIVITIES.md).
   def track_workout = recording? ? self : credited_from
 
   # The figures this workout may show at all. A positionless recording carries
   # no elevation, and one whose file recorded no distance has no distance,
   # pace or speed to divide: those tiles would print zeros nobody measured
-  # (PLAN_NO_GPS.md §9).
+  # (docs/dev/NO-GPS.md).
   ELEVATION_METRIC_KEYS = %i[ascent descent min_elevation max_elevation].freeze
   DISTANCE_METRIC_KEYS = %i[
     distance average_speed max_speed average_pace best_pace grade_adjusted_pace
@@ -349,7 +349,7 @@ class Workout < ApplicationRecord
     !(positionless? && !distance_recorded? && DISTANCE_METRIC_KEYS.include?(key))
   end
 
-  # A recording imported without any position (PLAN_NO_GPS.md).
+  # A recording imported without any position (docs/dev/NO-GPS.md).
   def positionless? = recording? && !positioned?
 
   # Whether the file's distance is worth showing: a duration-only session
@@ -358,7 +358,7 @@ class Workout < ApplicationRecord
 
   def metrics_present? = true
 
-  # Readings flagged by the analyzer (PLAN_M1.md §8.10). Owner-only derived
+  # Readings flagged by the analyzer (docs/dev/WORKOUT.md). Owner-only derived
   # data: never part of a publication snapshot or federation.
   def anomaly_findings = Array(data_anomalies&.fetch("findings", nil))
 

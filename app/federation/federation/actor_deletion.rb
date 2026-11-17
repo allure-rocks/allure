@@ -26,7 +26,7 @@ module Federation
         @actor.with_lock do
           event = create_delete_event!
           # The account's comments on other workouts leave their threads with
-          # it, and threads hosted here stop relaying them (PLAN_COMMENTS.md
+          # it, and threads hosted here stop relaying them (docs/dev/COMMENTS.md
           # §7.6); its own workouts take theirs along.
           removal.call!
           @actor.tombstone!(at: @now)
@@ -59,7 +59,7 @@ module Federation
       followers_uri = "#{@actor.uri}/followers"
       # The payload is what receivers actually parse; the explicit recipients
       # list and the followers collection must be on the wire, not only on the
-      # outbox row (PLAN_M5 §8.7). Each destination receives only its own
+      # outbox row (docs/dev/FEDERATION.md). Each destination receives only its own
       # actors from that list (`Outbox::WireAudience`).
       payload = {
         "type" => "Delete",

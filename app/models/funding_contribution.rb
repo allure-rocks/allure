@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# One voluntary contribution to the instance operator (PLAN_FUNDING.md). The
+# One voluntary contribution to the instance operator (docs/dev/FUNDING.md). The
 # provider owns the payment; this row only records its verified result. An
 # unmatched row has no user until the operator attaches it.
 class FundingContribution < ApplicationRecord

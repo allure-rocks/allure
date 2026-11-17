@@ -2,7 +2,7 @@
 
 module Workouts
   # Re-places a workout's automatically placed photos after its recording or
-  # its camera-clock correction changed (PLAN_PHOTOS.md §4).
+  # its camera-clock correction changed (docs/dev/PHOTOS.md).
   class PhotoPlacementJob < ApplicationJob
     queue_as :photos
     discard_on ActiveJob::DeserializationError

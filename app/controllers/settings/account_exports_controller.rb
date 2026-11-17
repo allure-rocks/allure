@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # The data export (PLAN_ACCOUNT.md §3): a request needs a recent proof of
+  # The data export (docs/dev/ACCOUNT.md): a request needs a recent proof of
   # identity and is built in the background; the archive is streamed from the
   # application, owner-scoped, never through a raw storage URL. An account in
   # its deletion window may still download its last export.

@@ -55,7 +55,7 @@ RSpec.describe Workouts::PublicationPolicy do
       expect(allowed?(public_publication, Workouts::PublicationPrincipal.browser(other_user))).to be(true)
     end
 
-    # PLAN_M5 §13.1: the local followers audience does not depend on the
+    # docs/dev/FEDERATION.md: the local followers audience does not depend on the
     # restricted-federation switch.
     it "serves followers publications to the owner and accepted local followers only, restricted federation off" do
       allow(Allure::Federation::Config).to receive(:restricted_enabled?).and_return(false)
@@ -219,7 +219,7 @@ RSpec.describe Workouts::PublicationPolicy do
     end
   end
 
-  # PLAN_COMMENTS.md §4.1: the audience gates of :workout, the owner included,
+  # docs/dev/COMMENTS.md: the audience gates of :workout, the owner included,
   # while the snapshot's profile and the owner's live switch keep it open.
   describe "comments" do
     it "lets the owner, members, and protocol actors comment on an open public publication" do

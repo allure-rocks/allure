@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The demo instance's seed task (PLAN_DEMO.md §5). The boot chain runs it on
+# The demo instance's seed task (docs/dev/DEMO.md). The boot chain runs it on
 # every fresh database; an operator may re-run it by hand at any time — it is
 # idempotent and never wipes anything.
 namespace :demo do

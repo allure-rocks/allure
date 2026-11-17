@@ -3,7 +3,7 @@
 module Segments
   # The PostGIS corridor test shared by shared-leaderboard eligibility (a third
   # party's location history must not be listed) and the owner-facing preflight
-  # before a course is shared (PLAN_SEGMENTS_FEDERATION.md §5.2). A segment
+  # before a course is shared (docs/dev/SEGMENTS-FEDERATION.md). A segment
   # corridor is geometry widened by its match tolerance; privacy zones are
   # never subtracted from it, so the preflight is a consent gate, not filtering.
   class CorridorPreflight

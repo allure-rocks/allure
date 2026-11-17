@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Registration invitations (PLAN_ADMIN.md §4.6, §8): issue a single-use link,
+# Registration invitations (docs/dev/ADMIN.md): issue a single-use link,
 # show it exactly once, and revoke it.
 RSpec.describe "Admin invitations" do
   let(:operator) { create(:user, :with_totp, username: "operator") }

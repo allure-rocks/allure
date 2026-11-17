@@ -7,7 +7,7 @@ module Allure
     # every other message is skipped by its declared length, so an unknown
     # message can never desynchronise the stream.
     #
-    # See PLAN_FIT.md section 3.5. Adding a field here is the whole cost of
+    # See docs/dev/FIT.md Adding a field here is the whole cost of
     # consuming it: the decoder needs no other change.
     module Profile
       # Global message number => message name.
@@ -33,7 +33,7 @@ module Allure
         # The session numbering is offset by one from the lap numbering for
         # the power and elevation totals: 21 is `max_power` here and
         # `total_ascent` in a lap. Reading 21/22 as the session totals turned
-        # a running-power maximum into an ascent (PLAN_ELEVATION.md §3bis).
+        # a running-power maximum into an ascent (docs/dev/ELEVATION.md).
         session: {
           5 => :sport,
           6 => :sub_sport,
@@ -262,7 +262,7 @@ module Allure
       }.freeze
 
       # `lap.lap_trigger`: how the device opened the lap. Stored on the lap as a
-      # display string (PLAN_M3.md section 6.1).
+      # display string (docs/dev/WORKOUT.md).
       LAP_TRIGGERS = {
         0 => :manual,
         1 => :distance,

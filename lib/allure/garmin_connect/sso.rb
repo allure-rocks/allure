@@ -3,7 +3,7 @@
 module Allure
   module GarminConnect
     # Signs in to Garmin SSO as the Garmin Connect mobile application and
-    # returns a CAS service ticket (PLAN_REMOTE_IMPORTS.md §7.1).
+    # returns a CAS service ticket (docs/dev/REMOTE-IMPORTS.md).
     #
     # Port of python-garminconnect 0.3.11 strategies 2 (mobile, plain HTTP) and
     # 5 (portal, plain HTTP), in that order. No TLS impersonation: Garmin's bot

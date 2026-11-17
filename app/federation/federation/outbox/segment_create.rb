@@ -5,7 +5,7 @@ module Federation
     # Builds the ActivityPub Create intent for a segment publication, and can
     # rebuild its payload once the asynchronous route image has been attached.
     # Mirrors PublicationCreate for the course contract
-    # (PLAN_SEGMENTS_FEDERATION.md §9.1).
+    # (docs/dev/SEGMENTS-FEDERATION.md).
     class SegmentCreate
       def initialize(publication:)
         @publication = publication

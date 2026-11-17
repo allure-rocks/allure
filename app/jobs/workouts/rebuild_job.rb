@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The single file-derived reconciliation of a workout (PLAN_DERIVATIONS.md).
+  # The single file-derived reconciliation of a workout (docs/dev/DERIVATIONS.md).
   # One parse serves every phase, in dependency order:
   #
   # 1. facts, when the stored import-detection generation is older: fill the
@@ -30,7 +30,7 @@ module Workouts
       reanalyze(workout, track) if analysis_stale?(workout)
       # A positionless recording has no toponymy to name and no route image to
       # render; its smart laps are rebuilt by the laps job instead of the
-      # segment matcher (PLAN_NO_GPS.md §6).
+      # segment matcher (docs/dev/NO-GPS.md).
       if workout.reload.positioned?
         PlaceNamer.new(workout:).call
         enqueue_route_image(workout)

@@ -7,7 +7,7 @@ module Federation
     # Processes a Delete for a received note or course: durable tombstone,
     # entitlement withdrawal, and synchronous location redaction. A Delete for
     # an object never seen locally creates a tombstone so a later Create cannot
-    # resurrect it (PLAN_M5 §9.3, §8.6; PLAN_SEGMENTS_FEDERATION.md §10.4).
+    # resurrect it (docs/dev/FEDERATION.md; docs/dev/SEGMENTS-FEDERATION.md).
     class Delete
       def initialize(item:, activity:, now: Time.current, outbox_events: [])
         @item = item
@@ -24,7 +24,7 @@ module Federation
         comment = ::Comment.find_by(uri: object_uri)
         return delete_comment!(comment) if comment
         # A comment tombstone needs a thread, which a bare Delete never names:
-        # an unknown comment is refused instead (PLAN_COMMENTS.md §7.3).
+        # an unknown comment is refused instead (docs/dev/COMMENTS.md).
         raise Rejected, "comment is unknown" if comment_path?(object_uri)
 
         model = object_model(object_uri)
@@ -48,7 +48,7 @@ module Federation
       private
 
       # An actor Delete carries an embedded Tombstone whose id is the sender's
-      # own actor URI (PLAN_M5 §8.7). It is handled apart from object
+      # own actor URI (docs/dev/FEDERATION.md). It is handled apart from object
       # tombstones: the author is tombstoned, every entitlement it delivered is
       # withdrawn, and its notes and courses lose their media and location data.
       def actor_deletion?
@@ -77,7 +77,7 @@ module Federation
           end
           Participations::RemoteWithdrawal.close_pending!(RemoteNote.where(actor:), at: @now)
           # The deleted account took part in this instance's workouts: those
-          # participations end with it (PLAN_TOGETHER.md §7).
+          # participations end with it (docs/dev/SHARED-ACTIVITIES.md).
           WorkoutParticipation.active.where(participant_actor: actor).find_each do |participation|
             participation.update!(withdrawn_at: @now)
             Notifications::Withdraw.new(subject: participation).call!

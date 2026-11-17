@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_AUTH.md slice 2: the second step of a password sign-in, the grace
+# docs/dev/AUTH.md: the second step of a password sign-in, the grace
 # period and the enrolment-only session, enrolment of each factor, recovery
 # codes, re-authentication with a factor, and the operator's step-up.
 RSpec.describe "Second factor" do

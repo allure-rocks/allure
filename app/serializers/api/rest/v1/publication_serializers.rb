@@ -4,7 +4,7 @@ module Api
   module Rest
     module V1
       # The owner's view of a publication and of a publish preview
-      # (PLAN_API.md §6.4, §7.4). A publication is identified by its own
+      # (docs/dev/API.md). A publication is identified by its own
       # ShortUUID, the same one its ActivityPub object carries.
       module PublicationSerializers
         # The optional fields a profile shares or leaves out, as the web lists
@@ -56,7 +56,7 @@ module Api
         end
 
         # The §19.1 and §19.2 sentences in English, for the client to show
-        # before it publishes (PLAN_API.md §6.4, §13.3).
+        # before it publishes (docs/dev/API.md).
         def copy(shared = nil)
           I18n.with_locale(:en) do
             labels = Array(shared).map { I18n.t("publishing_profiles.settings.#{it == 'metrics' ? 'metrics_title' : it}") }

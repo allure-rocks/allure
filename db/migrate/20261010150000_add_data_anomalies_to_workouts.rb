@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_M1.md §8.10: the analyzer flags readings that look wrong in the
+# docs/dev/WORKOUT.md: the analyzer flags readings that look wrong in the
 # original file (GPS, timestamps, heart rate, elevation, power, cadence). The
 # findings are owner-only derived data, rebuilt with every analysis and never
 # part of a publication snapshot.

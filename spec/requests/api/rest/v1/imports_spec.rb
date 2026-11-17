@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API imports (PLAN_API.md §6.3, §8)", type: :request do
+RSpec.describe "REST API imports (docs/dev/API.md)", type: :request do
   include ActiveJob::TestHelper
 
   let(:user) { create(:user) }
@@ -72,7 +72,7 @@ RSpec.describe "REST API imports (PLAN_API.md §6.3, §8)", type: :request do
     expect(WorkoutImportBatch.count).to eq(0)
   end
 
-  it "answers 429 with a reason past the account's limits (PLAN_IMPORT_SOURCES.md §3.2)" do
+  it "answers 429 with a reason past the account's limits (docs/dev/IMPORT-SOURCES.md)" do
     3.times { create(:workout_import_batch, user:, sport: catalog_sport("cycling")) }
 
     post "/api/rest/v1/imports", params: { files: [ gpx_upload ], fallback_sport: "cycling" }, headers: headers
@@ -84,7 +84,7 @@ RSpec.describe "REST API imports (PLAN_API.md §6.3, §8)", type: :request do
     expect(user.workout_import_batches.count).to eq(3)
   end
 
-  describe "a Strava archive (PLAN_STRAVA_ARCHIVE.md §8)" do
+  describe "a Strava archive (docs/dev/STRAVA-ARCHIVE.md)" do
     def archive_upload(filename: "export_42.zip")
       content = strava_archive_zip(
         "activities.csv" => strava_activities_csv([

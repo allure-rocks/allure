@@ -4,8 +4,8 @@ require "vips"
 
 module Allure
   module Photos
-    # Environment-driven configuration for workout photos (PLAN_PHOTOS.md §2.2,
-    # §3). Values are read at call time. Photos are on unless `PHOTOS_ENABLED`
+    # Environment-driven configuration for workout photos
+    # (docs/dev/PHOTOS.md). Values are read at call time. Photos are on unless `PHOTOS_ENABLED`
     # turns them off; `PHOTOS_QUOTA_MB` is the default storage quota of every
     # account, which the operator may override per account.
     module Config

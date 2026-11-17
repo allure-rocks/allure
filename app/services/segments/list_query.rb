@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Segments
-  # The segment index's list query (PLAN_SEGMENTS.md §8.4, DESIGN.md §20.6):
+  # The segment index's list query (docs/dev/SEGMENTS.md, DESIGN.md §20.6):
   # the sport filter and the canonical sort key, parsed once from request
   # params, applied to the viewer's visible courses of one kind.
   #

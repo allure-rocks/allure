@@ -5,7 +5,7 @@ module PublishingProfilesHelper
     t("publishing_profiles.settings.metrics.#{metric}")
   end
 
-  # The publishing-delay presets (PLAN_DELAYED_PUBLISHING.md), shared by the
+  # The publishing-delay presets (docs/dev/DELAYED-PUBLISHING.md), shared by the
   # profile form, the publish form, and the scheduled card. `immediate` is
   # omitted where the action already means "publish now" — the scheduled card's
   # reschedule select has its own Publish now button.
@@ -18,7 +18,7 @@ module PublishingProfilesHelper
   end
 
   # "without delay" / "after a 1 day delay", for the automatic-publishing
-  # notices (PLAN_AUTO_PUBLISHING.md §7).
+  # notices (docs/dev/AUTO-PUBLISHING.md).
   def auto_publish_delay_phrase(profile)
     return t("publishing_profiles.auto_notice.immediate") if profile.publish_delay_seconds.zero?
 

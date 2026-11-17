@@ -111,7 +111,7 @@ module Federation
         following.pending? ? following.reject!(at: @now) : following.undo!(at: @now)
         withdraw_entitlements!(following)
         # The owner refused this account's follow: its invitations from that
-        # owner end, and a confirmation taken back is told (PLAN_TOGETHER.md §7).
+        # owner end, and a confirmation taken back is told (docs/dev/SHARED-ACTIVITIES.md).
         if following.follower_actor.local?
           @outbox_events.concat(Participations::RemoteWithdrawal.for_pair!(
             recipient_actor: following.follower_actor, origin_actor: following.followed_actor,
@@ -121,7 +121,7 @@ module Federation
       end
 
       # A rejection after earlier delivery withdraws the local follower's
-      # copies immediately; a followers-only object is purged (PLAN_M5 §9.6).
+      # copies immediately; a followers-only object is purged (docs/dev/FEDERATION.md).
       def withdraw_entitlements!(following)
         local_actor = following.follower_actor
         remote_actor = following.followed_actor
@@ -230,7 +230,7 @@ module Federation
       # The Allure reaction type travels in the private `_allure_reaction`
       # property; an external peer that sends a plain Like (or an unknown
       # value) means the neutral type, exactly like the missing property
-      # (PLAN_REACTIONS.md §4.3).
+      # (docs/dev/REACTIONS.md).
       def reaction_kind
         kind = @activity["_allure_reaction"].to_s
         Reaction::KINDS.include?(kind) ? kind : Reaction::DEFAULT_KIND
@@ -261,7 +261,7 @@ module Federation
       # validation failures reject the item without retrying. Pending media is
       # collected for the job to enqueue after commit, so no fetch can start
       # before the descriptor row is durable. A Create answering something
-      # through `inReplyTo` is a comment (PLAN_COMMENTS.md §7.2).
+      # through `inReplyTo` is a comment (docs/dev/COMMENTS.md).
       def process_object(kind)
         return process_comment if kind == :create && comment_create?
 
@@ -290,7 +290,7 @@ module Federation
       end
 
       # A thread host relays a comment on its public publication, or stops
-      # relaying it (PLAN_COMMENTS.md §7.5). A fetch the author's instance could
+      # relaying it (docs/dev/COMMENTS.md). A fetch the author's instance could
       # not answer yet raises and the item retries with the usual backoff.
       def process_comment_relay
         Inbox::CommentRelay.new(item: @item, activity: @activity, now: @now).call!
@@ -299,7 +299,7 @@ module Federation
       end
 
       # A remote owner invites a local account to confirm it took part in a
-      # publication it holds (PLAN_TOGETHER.md §7).
+      # publication it holds (docs/dev/SHARED-ACTIVITIES.md).
       def process_participation_invite
         Inbox::ParticipationInvite.new(item: @item, activity: @activity, now: @now).call!
       rescue Inbox::Rejected => error
@@ -307,7 +307,7 @@ module Federation
       end
 
       # An answer to, or a withdrawal of, a remote participation
-      # (PLAN_TOGETHER.md §7); false when the activity names none.
+      # (docs/dev/SHARED-ACTIVITIES.md); false when the activity names none.
       def participation_answered?(step)
         Inbox::ParticipationAnswer.new(item: @item, activity: @activity, now: @now).public_send(step)
       rescue Inbox::Rejected => error
@@ -321,7 +321,7 @@ module Federation
       end
 
       # The thread host refused or took out a comment written here
-      # (PLAN_COMMENTS.md §7.4).
+      # (docs/dev/COMMENTS.md).
       def process_comment_refusal
         Inbox::CommentRefusal.new(item: @item, activity: @activity, now: @now).call!
       rescue Inbox::Rejected => error

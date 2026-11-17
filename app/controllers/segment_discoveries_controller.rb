@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The discover map (PLAN_SEGMENTS.md §8.4): every course the viewer may see —
+# The discover map (docs/dev/SEGMENTS.md): every course the viewer may see —
 # the readable shared ones and their own, private ones included — inside the
 # requested viewport, as a sanitized GeoJSON FeatureCollection. Facts only —
 # name, sport, distance, participant count and the course URL, all formatted

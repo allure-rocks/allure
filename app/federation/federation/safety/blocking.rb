@@ -4,7 +4,7 @@ module Federation
   module Safety
     # Creates and removes blocks and applies their privacy consequence: when a
     # remote actor or authority is blocked, every entitlement it delivered is
-    # withdrawn with the `blocked` reason (PLAN_M5 §12.1). Public cached media
+    # withdrawn with the `blocked` reason (docs/dev/FEDERATION.md). Public cached media
     # is retained exactly as on unfollow; unblocking does not restore
     # entitlements, because the withdrawal is the record of the decision.
     class Blocking
@@ -75,7 +75,7 @@ module Federation
       def withdraw_entitlements!(actors)
         Notifications::Withdraw.new(actor: actors).call!
         # Their comments leave every thread here, hosted or received, and a
-        # thread hosted here stops relaying them (PLAN_COMMENTS.md §7.6).
+        # thread hosted here stops relaying them (docs/dev/COMMENTS.md).
         removal = Comments::AuthorRemoval.new(actors:, reason: "blocked", now: @now)
         removal.call!
         @outbox_events.concat(removal.outbox_events)
@@ -102,7 +102,7 @@ module Federation
       end
 
       # A block ends every shared activity with the blocked actors, in both
-      # directions, and tells nobody (PLAN_TOGETHER.md §4, §7): invitations
+      # directions, and tells nobody (docs/dev/SHARED-ACTIVITIES.md): invitations
       # received from them, and this instance's participations naming them.
       def withdraw_participations!(actors)
         RemoteParticipation.active.joins(:remote_note).where(remote_notes: { actor_id: actors.select(:id) })

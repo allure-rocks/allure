@@ -2,7 +2,7 @@
 
 module AllureMcp
   module Tools
-    # What every Allure tool shares (PLAN_MCP.md §5): the token's account as
+    # What every Allure tool shares (docs/dev/MCP.md): the token's account as
     # the only scope, owner lookups that answer "not found" for anything else,
     # compact JSON text answers, and the outcome reported to the metrics.
     class Base < MCP::Tool
@@ -111,8 +111,8 @@ module AllureMcp
             average_power: workout.average_power,
             places: Array(workout.places).filter_map { it["name"] if it.is_a?(Hash) },
             # `credit`: another account recorded it; metrics only, no track
-            # (PLAN_TOGETHER.md §3.2). `manual`: typed in by hand, no track
-            # and no sensor series (PLAN_MANUAL_ENTRY.md §8).
+            # (docs/dev/SHARED-ACTIVITIES.md). `manual`: typed in by hand, no track
+            # and no sensor series (docs/dev/MANUAL-ENTRY.md).
             origin: workout.origin
           }
         end

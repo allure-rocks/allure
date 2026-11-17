@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Ready-to-paste MCP client configurations for /settings/api (PLAN_MCP.md §7).
+# Ready-to-paste MCP client configurations for /settings/api (docs/dev/MCP.md).
 # Client configuration formats are the clients' own, so they are not
 # translated; only the surrounding labels are.
 module McpHelper

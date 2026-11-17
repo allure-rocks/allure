@@ -5,7 +5,7 @@ require "uri"
 # The persisted attachment descriptor for a received course. The row exists
 # before any remote fetch: receipt only records what the Note declared, and the
 # fetch/verify/purge pipeline runs afterwards
-# (PLAN_SEGMENTS_FEDERATION.md §7.4).
+# (docs/dev/SEGMENTS-FEDERATION.md).
 class RemoteSegmentAttachment < ApplicationRecord
   include RemoteMediaAttachment
 

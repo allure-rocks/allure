@@ -11,7 +11,7 @@ require_relative "dating"
 # already did; a failing entry is reported and never stops the run.
 module DemoSeed
   PASSWORD = "allure-dev-password"
-  # A fixed, public development secret (PLAN_AUTH.md §10): every demo account
+  # A fixed, public development secret (docs/dev/AUTH.md): every demo account
   # signs in with a second factor, as the operator must. Any authenticator app
   # or `ROTP::TOTP.new(TOTP_SECRET).now` gives the current code.
   TOTP_SECRET = "ALLUREDEVTOTPSECRETDEMOACCOUNTS2"
@@ -35,7 +35,7 @@ module DemoSeed
       @fixtures_root = Pathname(fixtures_root)
       @out = out
       @limit = limit
-      # The seed dates its recordings near the present (PLAN_DEMO.md §2,
+      # The seed dates its recordings near the present (docs/dev/DEMO.md,
       # DemoSeed::Dating): the two offsets in seconds are applied to file
       # imports (and their batches) and to typed manual entries respectively —
       # the manifest declares a separate anchor per family.
@@ -45,7 +45,7 @@ module DemoSeed
       # passes false so no account holds a second factor at all.
       @enrol_second_factor = enrol_second_factor
       # A callable receiving the username and answering that account's
-      # password (PLAN_DEMO.md §3): the demo publishes one shared password and
+      # password (docs/dev/DEMO.md): the demo publishes one shared password and
       # hands every other account a fresh random one, so nobody can sign in as
       # a background persona from the repository's public development
       # constant. When nil, every account keeps DemoSeed::PASSWORD and an
@@ -95,14 +95,14 @@ module DemoSeed
         route_image_theme: attributes.fetch(:route_image_theme, "auto"),
         smooth_tracks: attributes.fetch(:smooth_tracks, true),
         track_smoothing_level: attributes.fetch(:track_smoothing_level, "medium"),
-        # Historical weather is opt-in per account (PLAN_WEATHER.md §2); the
+        # Historical weather is opt-in per account (docs/dev/WEATHER.md); the
         # demo turns it on for the accounts a visitor browses.
         weather_enrichment_enabled: attributes.fetch(:weather_enrichment_enabled, false),
         # Optional profile sharing of totals and records (DESIGN.md §19.38):
         # the demo publishes them for the accounts a visitor reads.
         profile_statistics_audience: attributes.fetch(:profile_statistics_audience, "none"),
         profile_records_audience: attributes.fetch(:profile_records_audience, "none"),
-        # Name search and suggestions are opt-in (PLAN_PEOPLE.md §2); the demo
+        # Name search and suggestions are opt-in (docs/dev/PEOPLE.md); the demo
         # opts its personas in so the directory is not empty.
         discoverable: attributes.fetch(:discoverable, "none")
       )
@@ -241,7 +241,7 @@ module DemoSeed
       end
     end
 
-    # The figures a manual entry declares (PLAN_MANUAL_ENTRY.md §3), in SI as
+    # The figures a manual entry declares (docs/dev/MANUAL-ENTRY.md), in SI as
     # Workouts::ManualEntry takes them.
     MANUAL_FIGURES = %i[duration moving_time distance ascent average_heart_rate max_heart_rate calories average_power].freeze
 
@@ -347,7 +347,7 @@ module DemoSeed
 
     # --- segments ------------------------------------------------------------
 
-    # A route's whole-track default is wider than a segment's (PLAN_SEGMENTS.md
+    # A route's whole-track default is wider than a segment's (docs/dev/SEGMENTS.md
     # §4.8); the demo's routes follow the same form default as a member's.
     def default_tolerance_for(kind)
       if kind == "route"

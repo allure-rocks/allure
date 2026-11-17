@@ -9,7 +9,7 @@ module Allure
     #
     # All persisted speed/pace values are SI (metres/second, seconds/km); the
     # sport's `stopped_speed_threshold` is km/h and is converted here only for
-    # the moving/stopped threshold comparison, per PLAN_M1.md section 5.1.
+    # the moving/stopped threshold comparison, per docs/dev/WORKOUT.md
     #
     # The analyzer owns the canonical point stream: implausible GPS positions
     # are removed, the elevation profile is filtered once (section 8.6), and
@@ -60,7 +60,7 @@ module Allure
 
         # An unpositioned recording has no geometry to clean or elevate: every
         # timed record is a data point, and distance and speed come from the
-        # device itself (PLAN_NO_GPS.md §4).
+        # device itself (docs/dev/NO-GPS.md).
         cleaned_segments = track.segments.map do |segment|
           segment.positioned? ? Outliers.filter(segment.points) : segment.points
         end
@@ -169,7 +169,7 @@ module Allure
         )
       end
 
-      # An indoor activity (PLAN_NO_GPS.md §4): no coordinates, so no
+      # An indoor activity (docs/dev/NO-GPS.md): no coordinates, so no
       # outlier removal, no elevation, no GAP, no geodesic distance. Distance
       # and speed come from the device's own records — its cumulative
       # `distance`, its speed, one filling the other's gaps; a recording with
@@ -226,7 +226,7 @@ module Allure
       # trainer, pod or erg actually measured, and it is preferred to this
       # pair of boundary readings' speed. A cumulative distance that does not
       # advance is a standstill, never distance integrated from a stale speed
-      # (PLAN_NO_GPS.md §4.1). When the cumulative distance is missing from
+      # (docs/dev/NO-GPS.md). When the cumulative distance is missing from
       # the file, the interval is the device speed over its own duration;
       # when neither is recorded, it is a duration-only interval.
       #
@@ -303,7 +303,7 @@ module Allure
           # The distance is the recorded path length, independent of timestamp
           # resolution: second-precision exports repeat timestamps across real
           # movement, and that movement still belongs to the workout. Only
-          # moving time and speed require positive time (PLAN_M1.md §8.1/§8.3).
+          # moving time and speed require positive time (docs/dev/WORKOUT.md).
           distance = delta.negative? ? 0.0 : point_distance(previous_point, current_point)
           duration = [ delta, 0.0 ].max
           speed = duration.positive? ? distance / duration : 0.0
@@ -312,7 +312,7 @@ module Allure
       end
 
       # Sports that do not record elevation always use 2D distance, even if
-      # the file happens to supply elevation values (PLAN_M1.md section 8.6).
+      # the file happens to supply elevation values (docs/dev/WORKOUT.md).
       def point_distance(previous_point, current_point)
         return Geo.distance(previous_point, current_point) if @records_elevation
 
@@ -327,7 +327,7 @@ module Allure
 
       # A positionless interval follows the same stopped-speed threshold as a
       # positioned one as soon as the file recorded any movement data — a
-      # cumulative distance or a device speed (PLAN_NO_GPS.md §4.2). A file
+      # cumulative distance or a device speed (docs/dev/NO-GPS.md). A file
       # with neither is a duration-only session: its timer ran, so all of its
       # time is moving time and the only pause is a timer stop.
       def positionless_moving?(interval, points)
@@ -381,7 +381,7 @@ module Allure
       # speed is the device's own reading; where the device recorded none, the
       # interval's computed speed stands in. A speed that rounds to nothing is
       # left out so `v` never claims motion that did not happen
-      # (PLAN_NO_GPS.md §5).
+      # (docs/dev/NO-GPS.md).
       def serialize_positionless_points(points, intervals)
         cumulative_distance = 0.0
         segment_start = points.first.time
@@ -478,7 +478,7 @@ module Allure
         end
         # A positionless recording (or an all-unpositioned mixed one) has no
         # bounds and no start point: the workout is stored without either
-        # (PLAN_NO_GPS.md §5).
+        # (docs/dev/NO-GPS.md).
         latitudes = segment_metrics.flat_map { |segment| segment.coordinates.map { |_lon, lat| lat } }
         longitudes = segment_metrics.flat_map { |segment| segment.coordinates.map { |lon, _lat| lon } }
         positioned = latitudes.any? && longitudes.any?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_VIRTUAL.md §6: the operator can enqueue the import re-detection sweep
+# docs/dev/VIRTUAL-PLATFORMS.md: the operator can enqueue the import re-detection sweep
 # from /admin/jobs. AdminEvent::ACTIONS is mirrored by a checked constraint, so
 # the allowlist must be extended in the database too.
 class ExtendAdminEventActionsForImportRedetection < ActiveRecord::Migration[8.1]

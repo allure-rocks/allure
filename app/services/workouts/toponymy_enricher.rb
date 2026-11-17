@@ -32,7 +32,7 @@ module Workouts
     def call(force: false)
       # A virtual sport rendered a fictional world at a real anchor; reverse
       # geocoding it would name a place the athlete never visited
-      # (PLAN_VIRTUAL.md §3). The venue catalog names its place instead.
+      # (docs/dev/VIRTUAL-PLATFORMS.md). The venue catalog names its place instead.
       return discard_virtual_toponymy if @workout.sport.virtual?
 
       toponymy = prepare_toponymy
@@ -129,7 +129,7 @@ module Workouts
     # Version 9 changed the endpoint selection only: a version-8 toponymy whose
     # stored samples still line up with the stored track is re-selected
     # offline, with just the endpoint settlements' centres resolved
-    # (PLAN_M1.md §11.1). Every other case falls through to a full
+    # (docs/dev/WORKOUT.md). Every other case falls through to a full
     # re-geocoding, so the backfill never re-issues a reverse request per
     # sample.
     def reselect_stored(toponymy)

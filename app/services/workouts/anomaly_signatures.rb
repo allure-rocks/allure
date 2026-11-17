@@ -2,7 +2,7 @@
 
 module Workouts
   # The anomaly kinds that are this device's ordinary behaviour for one
-  # account (PLAN_M1.md §8.10): a kind found in most of the owner's analysed
+  # account (docs/dev/WORKOUT.md): a kind found in most of the owner's analysed
   # workouts from the same recording device. Such findings are explained once
   # instead of flagged; a finding that changes a figure is never one of them.
   class AnomalySignatures

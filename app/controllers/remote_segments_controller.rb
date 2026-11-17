@@ -3,7 +3,7 @@
 # The remote course page. A public course is readable by any signed-in
 # account; a followers-only course requires an active entitlement; a deleted
 # course renders a tombstone for former recipients only
-# (PLAN_SEGMENTS_FEDERATION.md §12.2).
+# (docs/dev/SEGMENTS-FEDERATION.md).
 class RemoteSegmentsController < ApplicationController
   def show
     raise ActiveRecord::RecordNotFound unless Allure::Federation::Config.enabled?

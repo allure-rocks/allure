@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The web form of a manual entry (PLAN_MANUAL_ENTRY.md §5): typed in the
+# The web form of a manual entry (docs/dev/MANUAL-ENTRY.md): typed in the
 # account's units and time zone, read into SI.
 RSpec.describe ManualWorkoutForm do
   let(:user) { create(:user, time_zone: "Europe/Paris", unit_system: "metric") }

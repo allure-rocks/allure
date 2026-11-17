@@ -2,7 +2,7 @@
 
 module AllureMcp
   # A workout's track for an AI assistant, at the token's location level
-  # (PLAN_MCP.md §4): nothing at `none`; at `filtered`, every point inside an
+  # (docs/dev/MCP.md): nothing at `none`; at `filtered`, every point inside an
   # active privacy zone removed, start and finish included (no endpoint
   # exemption, unlike a publication profile); at `raw`, the recorded points.
   # Either way thinned evenly to `max_points`, recording segments kept apart.

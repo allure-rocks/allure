@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API workouts (PLAN_API.md §6.2)", type: :request do
+RSpec.describe "REST API workouts (docs/dev/API.md)", type: :request do
   let(:user) { create(:user) }
   let(:headers) { api_headers_for(user) }
   let(:cycling) { catalog_sport("cycling") }
@@ -96,7 +96,7 @@ RSpec.describe "REST API workouts (PLAN_API.md §6.2)", type: :request do
     end
   end
 
-  describe "GET /workouts/:id weather (PLAN_WEATHER.md §8)" do
+  describe "GET /workouts/:id weather (docs/dev/WEATHER.md)" do
     it "carries the status, the SI summary and the hourly series" do
       workout = workout_at("2026-08-10 07:00")
       create(:workout_weather, workout:)

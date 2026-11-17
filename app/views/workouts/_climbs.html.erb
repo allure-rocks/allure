@@ -18,7 +18,7 @@
           <th scope="col" class="text-end"><%= t("workouts.show.laps.vam") %></th>
           <% if show_heart_rate %><th scope="col" class="text-end allure-col-extra"><%= t("workouts.show.laps.heart_rate") %></th><% end %>
           <%# A power-led virtual ride leads with its watts, so the climb's own
-              power stays on phones too (PLAN_VIRTUAL.md §8). %>
+              power stays on phones too (docs/dev/VIRTUAL-PLATFORMS.md). %>
           <% if show_power %><th scope="col" class="text-end<%= " allure-col-extra" unless sport.power_led? %>"><%= t("workouts.show.laps.power") %></th><% end %>
         </tr>
       </thead>

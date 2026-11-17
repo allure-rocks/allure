@@ -5,7 +5,7 @@ require "nokogiri"
 module Allure
   module Exr
     # One page of the EXR account's session list (`/sessions/` or
-    # `/sessions/<n>`), newest first (PLAN_REMOTE_IMPORTS.md §7b.1). The page
+    # `/sessions/<n>`), newest first (docs/dev/REMOTE-IMPORTS.md). The page
     # is translated, so the parser reads attributes and numbers, never labels.
     #
     # `listed_at` keeps the site's `datetime` as written, which carries no

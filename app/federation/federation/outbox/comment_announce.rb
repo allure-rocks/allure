@@ -3,7 +3,7 @@
 module Federation
   module Outbox
     # The thread host relays a comment it accepted to every instance its public
-    # publication went to (PLAN_COMMENTS.md §6.6, §8.4): an Announce of the
+    # publication went to (docs/dev/COMMENTS.md): an Announce of the
     # comment as its author wrote it — a remote author's object exactly as
     # received, so receivers can compare it with the author's own copy. It is
     # a secondary publication event (§9) and never covers a followers thread.

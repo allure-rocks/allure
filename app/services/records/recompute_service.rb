@@ -54,9 +54,9 @@ module Records
     end
 
     # A workout whose figure an anomaly contests never holds that record
-    # (PLAN_M1.md §8.10): the second best takes its place. A manual entry
+    # (docs/dev/WORKOUT.md): the second best takes its place. A manual entry
     # holds none: a typed figure counts in the totals, never as a record
-    # (PLAN_MANUAL_ENTRY.md §6).
+    # (docs/dev/MANUAL-ENTRY.md).
     def find_winner(config)
       column = config[:column]
       direction = config[:direction] == :min ? :asc : :desc
@@ -81,7 +81,7 @@ module Records
     # laps are rebuilt asynchronously, so `Segments::MatchWorkoutJob` and
     # `Laps::BackfillJob` recompute records once the climbs are fresh. A credit
     # row competes with the single number it carries, `credited_max_climb`
-    # (PLAN_TOGETHER.md §6.3); ties go to the earlier workout.
+    # (docs/dev/SHARED-ACTIVITIES.md); ties go to the earlier workout.
     def recompute_max_climb
       if @sport.records_elevation
         candidates = [ recorded_max_climb, credited_max_climb ].compact

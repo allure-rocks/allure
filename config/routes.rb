@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   resource :session
-  # The second step of a password sign-in (PLAN_AUTH.md §5.1).
+  # The second step of a password sign-in (docs/dev/AUTH.md).
   resource :session_challenge, only: %i[new create], path: "session/challenge" do
     post :options
     post :cancel
   end
-  # Identity providers (PLAN_AUTH.md §6). OmniAuth answers POST /auth/:provider
+  # Identity providers (docs/dev/AUTH.md). OmniAuth answers POST /auth/:provider
   # itself; these routes receive its verified callbacks.
   match "/auth/:provider/callback", to: "provider_callbacks#create", via: %i[get post],
                                     constraints: { provider: /google|oidc/ }, as: :provider_callback
@@ -13,12 +13,12 @@ Rails.application.routes.draw do
   # OmniAuth's test mode returns with a GET; the real return is the re-post.
   match "/auth/apple/return", to: "provider_callbacks#create", via: %i[get post], as: :apple_return
   get "/auth/failure", to: "provider_callbacks#failure", as: :provider_failure
-  # The iOS companion's provider sign-in (PLAN_AUTH.md §9): started in the
+  # The iOS companion's provider sign-in (docs/dev/AUTH.md): started in the
   # system browser, collected by the app's web view.
   get "/auth/ios/:provider", to: "companion_provider_starts#show", as: :companion_provider_start
   resource :session_handoff, only: :create, path: "session/handoff"
   resource :onboarding, only: %i[new create destroy], path: "auth/onboarding"
-  # Re-authentication before a sensitive action (PLAN_AUTH.md §5.5).
+  # Re-authentication before a sensitive action (docs/dev/AUTH.md).
   resource :reauthentication, only: %i[new create], path: "session/reauthenticate" do
     post :options
   end
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   get "/funding/thanks", to: "funding#thanks", as: :funding_thanks
   post "/funding/portal/:subscription_id", to: "funding#portal", as: :funding_portal
   post "/funding/webhooks/:provider", to: "funding/webhooks#create", as: :funding_webhook
-  # Operator administration console (PLAN_ADMIN.md). Every route inherits the
+  # Operator administration console (docs/dev/ADMIN.md). Every route inherits the
   # 404-for-non-operators gate from Admin::BaseController, and the product
   # chrome never links here except for the configured operator.
   namespace :admin do
@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     post "/accounts/:account_id/funding", to: "funding#create", as: :account_funding
     delete "/funding/:id", to: "funding#destroy", as: :funding_contribution
     post "/funding/subscriptions/:id/attachment", to: "funding#attach", as: :funding_subscription_attachment
-    # Background jobs (PLAN_ADMIN.md §4.2): the live panel and its recovery
+    # Background jobs (docs/dev/ADMIN.md): the live panel and its recovery
     # controls. Every action is operator-gated by Admin::BaseController and
     # audited.
     get "/jobs", to: "jobs#show", as: :jobs
@@ -69,7 +69,7 @@ Rails.application.routes.draw do
     post "/jobs/together_detection", to: "jobs#backfill_together_detection", as: :jobs_backfill_together_detection
     post "/jobs/heart_rate", to: "jobs#backfill_heart_rate", as: :jobs_backfill_heart_rate
     post "/jobs/route_suggestions", to: "jobs#backfill_route_suggestions", as: :jobs_backfill_route_suggestions
-    # Federation (PLAN_ADMIN.md §4.3): the former /settings/federation surface,
+    # Federation (docs/dev/ADMIN.md): the former /settings/federation surface,
     # moved into the console and expanded. Every mutation is operator-gated by
     # Admin::BaseController and audited.
     get "/federation", to: "federation#show", as: :federation
@@ -80,44 +80,44 @@ Rails.application.routes.draw do
     post "/federation/peer_policies", to: "federation#create_peer_policy", as: :federation_peer_policies
     delete "/federation/peer_policies/:id", to: "federation#destroy_peer_policy", as: :federation_peer_policy
     post "/federation/media_retry", to: "federation#retry_media", as: :federation_media_retry
-    # Publications (PLAN_ADMIN.md §4.4): oversight lists and takedown through
+    # Publications (docs/dev/ADMIN.md): oversight lists and takedown through
     # the immutable withdrawal lifecycle.
     get "/publications", to: "publications#index", as: :publications
     post "/publications/workouts/:id/withdraw", to: "publications#withdraw_workout",
          as: :workout_publication_withdraw
     post "/publications/courses/:id/withdraw", to: "publications#withdraw_course",
          as: :course_publication_withdraw
-    # Accounts (PLAN_ADMIN.md §4.5) and invitations (§4.6).
+    # Accounts and invitations (docs/dev/ADMIN.md).
     get "/accounts", to: "accounts#index", as: :accounts
     get "/accounts/:id", to: "accounts#show", as: :account
     patch "/accounts/:id/photo_quota", to: "accounts#photo_quota", as: :account_photo_quota
     post "/accounts/:id/suspend", to: "accounts#suspend", as: :account_suspend
     post "/accounts/:id/reinstate", to: "accounts#reinstate", as: :account_reinstate
     post "/accounts/:id/reset_second_factor", to: "accounts#reset_second_factor", as: :account_reset_second_factor
-    # PLAN_ACCOUNT.md §4.4: the operator schedules or cancels a deletion.
+    # docs/dev/ACCOUNT.md: the operator schedules or cancels a deletion.
     post "/accounts/:id/deletion", to: "accounts#schedule_deletion", as: :account_deletion
     delete "/accounts/:id/deletion", to: "accounts#cancel_deletion", as: nil
-    # PLAN_API.md §14: audited token revocation and webhook disabling.
+    # docs/dev/API.md: audited token revocation and webhook disabling.
     post "/accounts/:account_id/api_tokens/:id/revocation", to: "api_access#revoke_token", as: :account_api_token_revocation
     post "/accounts/:account_id/webhooks/:id/disabling", to: "api_access#disable_webhook", as: :account_webhook_disabling
     get "/invitations", to: "invitations#index", as: :invitations
     get "/invitations/new", to: "invitations#new", as: :new_invitation
     post "/invitations", to: "invitations#create"
     delete "/invitations/:id", to: "invitations#destroy", as: :invitation
-    # Import failures (PLAN_ADMIN.md §4.7) and system diagnostics (§4.8).
+    # Import failures and system diagnostics (docs/dev/ADMIN.md).
     get "/imports", to: "imports#index", as: :imports
-    # Remote import connections (PLAN_REMOTE_IMPORTS.md §10), before `:id`.
+    # Remote import connections (docs/dev/REMOTE-IMPORTS.md), before `:id`.
     get "/imports/connections", to: "import_connections#index", as: :import_connections
     post "/imports/connections/:id/revoke", to: "import_connections#revoke", as: :import_connection_revoke
     get "/imports/:id", to: "imports#show", as: :import
     get "/system", to: "system#show", as: :system
-    # The audit log (PLAN_ADMIN.md §4.9).
+    # The audit log (docs/dev/ADMIN.md).
     get "/events", to: "events#index", as: :events
   end
   # Owner-only place-name suggestions for the workout list's autocomplete
   # (DESIGN.md §13). Declared before the resource so it never matches `:id`.
   get "/workouts/place_suggestions", to: "workout_place_suggestions#index", as: :workout_place_suggestions
-  # Bulk activity operations (PLAN_BULK_ACTIONS.md, DESIGN.md §10.19). The
+  # Bulk activity operations (docs/dev/BULK-ACTIONS.md, DESIGN.md §10.19). The
   # static collection paths come before the member `:id` so `/workouts/bulk/
   # apply` and `/review` never resolve as an operation id; everything is
   # owner-scoped in the controller.
@@ -127,7 +127,7 @@ Rails.application.routes.draw do
   patch "/workouts/bulk/:id", to: "workout_bulk_operations#update"
   get "/workouts/bulk/:id/status", to: "workout_bulk_operations#status", as: :status_workout_bulk_operation
   post "/workouts/bulk/:id/cancel", to: "workout_bulk_operations#cancel", as: :cancel_workout_bulk_operation
-  # A workout typed in by hand from the import page (PLAN_MANUAL_ENTRY.md §5);
+  # A workout typed in by hand from the import page (docs/dev/MANUAL-ENTRY.md);
   # it is edited through the workout's own edit page.
   post "/workouts/manual", to: "manual_workouts#create", as: :manual_workouts
   # The M1 single-file import page merged into the one import surface
@@ -150,12 +150,12 @@ Rails.application.routes.draw do
       post :publish
       post :republish
       post :delivery_refresh
-      # Delayed publishing (PLAN_DELAYED_PUBLISHING.md): leave the safety
+      # Delayed publishing (docs/dev/DELAYED-PUBLISHING.md): leave the safety
       # delay early, move its planned moment, or cancel it with no trace.
       post :activate_publication
       patch :reschedule_publication
       delete :scheduled_publication, action: :destroy_scheduled_publication
-      # Automatic publishing (PLAN_AUTO_PUBLISHING.md): the owner declines a
+      # Automatic publishing (docs/dev/AUTO-PUBLISHING.md): the owner declines a
       # waiting automatic publication before it happens.
       delete :auto_publication, action: :destroy_auto_publication
       get :publication_preview
@@ -165,29 +165,29 @@ Rails.application.routes.draw do
     resource :chart, only: :show, controller: "workout_charts"
     resource :toponymy, only: :show, controller: "workout_toponymies"
     resource :segment_selection, only: :show, controller: "workout_segment_selections"
-    # Owner-only elevation source switch (PLAN_ELEVATION.md).
+    # Owner-only elevation source switch (docs/dev/ELEVATION.md).
     resource :elevation_source, only: :update, controller: "workout_elevation_sources"
-    # Owner-requested weather refresh (PLAN_WEATHER.md §7).
+    # Owner-requested weather refresh (docs/dev/WEATHER.md).
     resource :weather, only: :create, controller: "workout_weathers"
     resources :segments, only: %i[new create]
     resources :routes, only: %i[new create]
     resource :original_file, only: :show, controller: "workout_files"
     resource :route_image, only: :show, controller: "workout_route_images"
-    # Owner-requested re-render of the owner image (PLAN_DERIVATIONS.md §4);
+    # Owner-requested re-render of the owner image (docs/dev/DERIVATIONS.md);
     # the bulk maintenance lives in /settings/data and /admin/jobs. The path
     # deliberately avoids the `/route_image` prefix so the detail page's
     # "no stored image URL" guard stays an unambiguous substring check.
     post "regenerate_route_image", to: "workout_route_images#regenerate", as: :regenerate_route_image
-    # The local reaction gesture (PLAN_REACTIONS.md §4.4): one PUT toggles the
+    # The local reaction gesture (docs/dev/REACTIONS.md): one PUT toggles the
     # viewer's reaction on the active publication.
     resource :reaction, only: :update, controller: "workout_reactions"
-    # Shared activities (PLAN_TOGETHER.md): the owner invites, the participant
+    # Shared activities (docs/dev/SHARED-ACTIVITIES.md): the owner invites, the participant
     # answers or later links their own recording, either party withdraws.
     resources :participations, only: %i[create update destroy], controller: "workout_participations" do
       patch :convert, on: :member
       patch :dismiss_link_suggestion, on: :member
     end
-    # The workout's thread (PLAN_COMMENTS.md §11.5): a reader posts a comment
+    # The workout's thread (docs/dev/COMMENTS.md): a reader posts a comment
     # or a reply, the owner closes or reopens it. The index is the thread's own
     # page, the one the phone layout opens (DESIGN.md §10.20).
     resources :comments, only: %i[index create], controller: "workout_comments"
@@ -196,7 +196,7 @@ Rails.application.routes.draw do
   # The author deletes a comment, the thread host removes one: one route, the
   # controller tells them apart.
   resources :comments, only: :destroy
-  # Recurring-route suggestions (PLAN_SEGMENTS.md §7.7): the owner dismisses
+  # Recurring-route suggestions (docs/dev/SEGMENTS.md): the owner dismisses
   # one from its banner; saving the route is the acceptance.
   resources :route_suggestions, only: [] do
     patch :dismiss, on: :member
@@ -216,7 +216,7 @@ Rails.application.routes.draw do
   # windows the waveform scrolls back to (DESIGN.md §15.1).
   get "/me", to: "me#show", as: :me
   get "/me/pulse", to: "me#pulse", as: :pulse_me
-  # In-app notifications (PLAN_NOTIFICATIONS.md): the topbar bell's badge and
+  # In-app notifications (docs/dev/NOTIFICATIONS.md): the topbar bell's badge and
   # dropdown, the paginated inbox, and read state. Owner-scoped throughout.
   resources :notifications, only: %i[index show] do
     collection do
@@ -226,7 +226,7 @@ Rails.application.routes.draw do
     end
   end
   # The companion drops its push subscription when it leaves this server
-  # (PLAN_PUSH.md §5): no session, the device's `auth` secret is the proof.
+  # (docs/dev/PUSH.md): no session, the device's `auth` secret is the proof.
   post "/push/unsubscribe", to: "push_unsubscriptions#create", as: :push_unsubscribe
   # Stats hub (M4): landing page for the by_time / by_sport datasets.
   get "/me/stats", to: "stats#show", as: :stats
@@ -234,7 +234,7 @@ Rails.application.routes.draw do
     collection do
       get :by_time
       get :by_sport
-      # Time in each heart-rate zone per week or month (PLAN_HEART_RATE.md §4).
+      # Time in each heart-rate zone per week or month (docs/dev/HEART-RATE.md).
       get :heart_rate
     end
   end
@@ -280,22 +280,22 @@ Rails.application.routes.draw do
     resource :appearance, only: %i[show update], controller: "appearance"
     # Units (M4): unit system, time zone, and week start.
     resource :units, only: %i[show update], controller: "units"
-    # Elevation (PLAN_ELEVATION.md): opt in to terrain elevation for workouts
+    # Elevation (docs/dev/ELEVATION.md): opt in to terrain elevation for workouts
     # without a recorded profile.
     resource :elevation, only: %i[show update], controller: "elevation"
-    # Weather (PLAN_WEATHER.md §7): explicit consent to send coarsened
+    # Weather (docs/dev/WEATHER.md): explicit consent to send coarsened
     # positions and times to Open-Meteo, and the deletion of stored weather.
     resource :weather, only: %i[show update destroy], controller: "weather"
-    # Sports (PLAN_M1.md §3.4): which variant replaces a detected generic
+    # Sports (docs/dev/WORKOUT.md): which variant replaces a detected generic
     # sport (cycling, running, walking) at import time.
     resource :sports, only: %i[show update], controller: "sports"
-    # Notifications (PLAN_NOTIFICATIONS.md): which follow events reach the
+    # Notifications (docs/dev/NOTIFICATIONS.md): which follow events reach the
     # account's in-app inbox.
     resource :notifications, only: %i[show update], controller: "notifications"
-    # Push on the iOS companion (PLAN_PUSH.md §5): the current session's own
+    # Push on the iOS companion (docs/dev/PUSH.md): the current session's own
     # subscription, JSON only.
     resource :push_subscription, only: %i[create update destroy], controller: "push_subscriptions"
-    # Data (PLAN_DERIVATIONS.md §7): owner-scoped rebuilds of derived data.
+    # Data (docs/dev/DERIVATIONS.md): owner-scoped rebuilds of derived data.
     # Every action is scoped to the current account's workouts.
     resource :data, only: :show, controller: "data"
     post "data/rebuild", to: "data#rebuild", as: :data_rebuild
@@ -307,10 +307,10 @@ Rails.application.routes.draw do
     post "data/loops", to: "data#loops", as: :data_loops
     post "data/heart_rate", to: "data#heart_rate", as: :data_heart_rate
     post "data/route_suggestions", to: "data#route_suggestions", as: :data_route_suggestions
-    # Heart rate (PLAN_HEART_RATE.md §3.1): the account's maximum, resting
+    # Heart rate (docs/dev/HEART-RATE.md): the account's maximum, resting
     # value and zones. Owner-only; nothing here is ever published.
     resource :heart_rate, only: %i[show update destroy], path: "heart-rate", controller: "heart_rate"
-    # Account (PLAN_ACCOUNT.md): the data export and the self-service
+    # Account (docs/dev/ACCOUNT.md): the data export and the self-service
     # deletion, with the page a deactivated account lands on.
     resource :account, only: :show, controller: "account"
     resources :account_exports, only: :create, path: "account/exports" do
@@ -322,7 +322,7 @@ Rails.application.routes.draw do
     patch "security/password", to: "security#update_password", as: :security_password
     delete "security/sessions/:id", to: "security#destroy_session", as: :security_session
     delete "security/sessions", to: "security#destroy_all_sessions", as: :destroy_all_security_sessions
-    # Second factors (PLAN_AUTH.md §5.2–§5.3).
+    # Second factors (docs/dev/AUTH.md).
     post "security/reminder/dismiss", to: "security#dismiss_reminder", as: :dismiss_second_factor_reminder
     resource :totp, only: %i[new create destroy], path: "security/totp"
     resources :passkeys, only: %i[create destroy], path: "security/passkeys" do
@@ -330,7 +330,7 @@ Rails.application.routes.draw do
     end
     resource :recovery_codes, only: %i[show create], path: "security/recovery-codes"
     resources :identities, only: :destroy, path: "security/identities"
-    # API tokens (PLAN_API.md §4.4, DESIGN.md §20.18).
+    # API tokens (docs/dev/API.md, DESIGN.md §20.18).
     resource :api, only: :show, controller: "api"
     resources :api_tokens, only: %i[new create destroy], path: "api/tokens" do
       get :created, on: :collection
@@ -353,7 +353,7 @@ Rails.application.routes.draw do
   # (DESIGN.md §8.5). From md up the sub-page shell repeats its navigation;
   # below md each sub-page links back to this hub.
   get "/settings", to: "settings/entry#show", as: :settings
-  # Connected services (PLAN_REMOTE_IMPORTS.md §8.1, DESIGN.md §8.6): their own
+  # Connected services (docs/dev/REMOTE-IMPORTS.md, DESIGN.md §8.6): their own
   # area beside /settings, reached from the account menu. The hub lists every
   # remote import source the account may see; each service keeps its own page,
   # so a link or an unlink never refreshes another service's form.
@@ -378,15 +378,15 @@ Rails.application.routes.draw do
   get "/api/v1/trail/:id/media/route-image", to: "federation/media#route_image", as: :workout_publication_route_image
   get "/api/v1/trail/:id/media/route-image-dark", to: "federation/media#route_image_dark", as: :workout_publication_route_image_dark
   get "/api/v1/trail/:id", to: "federation/workouts#show", as: :workout_publication
-  # Course publications (PLAN_SEGMENTS_FEDERATION.md §6.5). The dedicated path
+  # Course publications (docs/dev/SEGMENTS-FEDERATION.md). The dedicated path
   # is what distinguishes a course Note from a workout Note on the wire.
   get "/api/v1/segment/:id/media/gpx", to: "federation/segment_media#gpx", as: :segment_publication_gpx
   get "/api/v1/segment/:id/media/route-image", to: "federation/segment_media#route_image", as: :segment_publication_route_image
   get "/api/v1/segment/:id/media/route-image-dark", to: "federation/segment_media#route_image_dark", as: :segment_publication_route_image_dark
   get "/api/v1/segment/:id", to: "federation/segments#show", as: :segment_publication
-  # A local author's comment as an object (PLAN_COMMENTS.md §6.5).
+  # A local author's comment as an object (docs/dev/COMMENTS.md).
   get "/api/v1/comment/:id", to: "federation/comments#show", as: :comment_object
-  # The public REST API (PLAN_API.md §3). Under /api/rest/v1, never /api/v1,
+  # The public REST API (docs/dev/API.md). Under /api/rest/v1, never /api/v1,
   # which names the ActivityPub objects above. docs/openapi/v1.yaml documents
   # exactly these paths, and a guard spec keeps the two in step.
   namespace :api do
@@ -412,7 +412,7 @@ Rails.application.routes.draw do
         patch "publications/:id", to: "publications#update", as: nil
         delete "publications/:id", to: "publications#destroy", as: nil
         post "publications/:id/activation", to: "publications#activate", as: nil
-        # Social reads (PLAN_API.md §6.5): what the account may read on the web.
+        # Social reads (docs/dev/API.md): what the account may read on the web.
         get "feed", to: "social#feed"
         get "followers", to: "social#followers"
         get "following", to: "social#following"
@@ -427,7 +427,7 @@ Rails.application.routes.draw do
         get "remote_notes/:id/route_image", to: "remote_notes#route_image", as: nil
         get "remote_notes/:id/comments", to: "remote_notes#comments", as: nil
         resources :records, only: :index
-        # Webhooks (PLAN_API.md §6.6).
+        # Webhooks (docs/dev/API.md).
         resources :webhooks, only: %i[index show create destroy]
         patch "webhooks/:id", to: "webhooks#update", as: nil
         post "webhooks/:id/ping", to: "webhooks#ping", as: nil
@@ -442,22 +442,22 @@ Rails.application.routes.draw do
       end
     end
   end
-  # The Model Context Protocol endpoint for AI assistants (PLAN_MCP.md §3).
+  # The Model Context Protocol endpoint for AI assistants (docs/dev/MCP.md).
   post "/mcp", to: "mcp#create", as: :mcp
   match "/mcp", to: "mcp#method_not_allowed", via: %i[get delete put patch]
-  # The API reference (PLAN_API.md §13), members-only.
+  # The API reference (docs/dev/API.md), members-only.
   get "/developers/api", to: "developers#api", as: :developers_api
   get "/developers/api/reference", to: "developers#reference", as: :developers_api_reference
   get "/developers", to: redirect("/developers/api")
   # Members' help on the product's concepts (DESIGN.md §20.20).
   get "/help", to: "help#index", as: :help
   get "/help/:topic", to: "help#show", as: :help_topic
-  # Passkeys in the iOS companion (PLAN_AUTH.md §9).
+  # Passkeys in the iOS companion (docs/dev/AUTH.md).
   get "/.well-known/apple-app-site-association", to: "apple_app_site_associations#show",
                                                  as: :apple_app_site_association
   get "/.well-known/webfinger", to: "federation/webfinger#show", as: :webfinger
   # Prometheus text exposition for external Grafana/Prometheus scraping
-  # (PLAN_METRICS.md). The Rack endpoint answers 404 unless METRICS_TOKEN is
+  # (docs/dev/METRICS.md). The Rack endpoint answers 404 unless METRICS_TOKEN is
   # set, so an instance without metrics configured exposes nothing.
   mount Allure::Metrics::Endpoint.new => "/metrics"
   get "/.well-known/nodeinfo", to: "federation/node_info#discovery", as: :nodeinfo_discovery
@@ -485,16 +485,16 @@ Rails.application.routes.draw do
   get "/remote_notes/:id/chart", to: "remote_note_charts#show", as: :remote_note_chart
   get "/remote_notes/:id", to: "remote_notes#show", as: :remote_note
   # The invited account's answer to another instance's invitation
-  # (PLAN_TOGETHER.md §7).
+  # (docs/dev/SHARED-ACTIVITIES.md).
   resources :remote_participations, only: :update
-  # The local reaction gesture on a received note (PLAN_REACTIONS.md §4.4).
+  # The local reaction gesture on a received note (docs/dev/REACTIONS.md).
   put "/remote_notes/:id/reaction", to: "remote_note_reactions#update", as: :remote_note_reaction
-  # A comment on a received note, sent to its origin (PLAN_COMMENTS.md §11.5).
+  # A comment on a received note, sent to its origin (docs/dev/COMMENTS.md).
   # Its thread's own page comes first and names the helper both share.
   get "/remote_notes/:id/comments", to: "remote_note_comments#index", as: :remote_note_comments
   post "/remote_notes/:id/comments", to: "remote_note_comments#create"
   # Received courses: the same application-mediated boundary as remote notes,
-  # with a copy-as-local action and no chart (PLAN_SEGMENTS_FEDERATION.md §12).
+  # with a copy-as-local action and no chart (docs/dev/SEGMENTS-FEDERATION.md).
   get "/remote_segments/:id/media/gpx", to: "remote_segment_media#gpx", as: :remote_segment_gpx
   get "/remote_segments/:id/media/route-image", to: "remote_segment_media#route_image", as: :remote_segment_route_image
   get "/remote_segments/:id/track", to: "remote_segment_tracks#show", as: :remote_segment_track
@@ -503,7 +503,7 @@ Rails.application.routes.draw do
   get "/@:username", to: "profiles#show", as: :profile
   get "/@:username/avatar", to: "avatars#show", as: :profile_avatar
   resource :feedback, only: :create, controller: "feedback"
-  # Discover map (PLAN_SEGMENTS.md §8.2/§8.4): the viewport read behind the
+  # Discover map (docs/dev/SEGMENTS.md): the viewport read behind the
   # Découvrir map. Declared before the resource so `discover_map` never matches
   # `:id`.
   get "/segments/discover_map", to: "segment_discoveries#show", as: :segments_discover_map
@@ -526,7 +526,7 @@ Rails.application.routes.draw do
     # The stored course elevation profile, same visibility gate as the track.
     resource :chart, only: :show, controller: "segment_charts"
     # The owner route image, served through the application at the course's own
-    # visibility like the track; never a raw storage URL (PLAN_SEGMENTS.md §8.1).
+    # visibility like the track; never a raw storage URL (docs/dev/SEGMENTS.md).
     resource :route_image, only: :show, controller: "segment_route_images"
   end
   # Public publications feed. Canonical address for the feed and the anchor for

@@ -2,7 +2,7 @@
 
 module Settings
   # The federation diagnostics and controls moved into the administration
-  # console (`/admin/federation`, PLAN_ADMIN.md §4.3). This legacy address only
+  # console (`/admin/federation`, docs/dev/ADMIN.md). This legacy address only
   # redirects the operator, and still answers 404 to everyone else so it never
   # confirms the console's existence.
   class FederationController < ApplicationController

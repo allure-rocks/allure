@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_AUTH.md §5.7: the operator can reset an account's second factors.
+# docs/dev/AUTH.md: the operator can reset an account's second factors.
 # AdminEvent::ACTIONS is mirrored by a checked constraint, so the allowlist
 # must be extended in the database too. Historical actions stay allowed: the
 # audit log is append-only.

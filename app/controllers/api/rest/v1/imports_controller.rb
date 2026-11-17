@@ -3,9 +3,9 @@
 module Api
   module Rest
     module V1
-      # File imports through the API (PLAN_API.md §6.3, §8): the web's batch
+      # File imports through the API (docs/dev/API.md): the web's batch
       # upload with the `api` trigger, or with `source=strava_archive` one
-      # Strava archive (PLAN_STRAVA_ARCHIVE.md §8). The response returns once
+      # Strava archive (docs/dev/STRAVA-ARCHIVE.md). The response returns once
       # the batch and its files are stored, before any parsing; the ordinary
       # pipeline does the rest, deduplication and automatic publishing
       # included.
@@ -94,7 +94,7 @@ module Api
           render json: detail(batch), status: :accepted
         end
 
-        # The web's admission (PLAN_IMPORT_SOURCES.md §3.2): too many imports
+        # The web's admission (docs/dev/IMPORT-SOURCES.md): too many imports
         # waiting, or the day's upload budget spent, answers 429 with a reason.
         def refuse_admission(batch)
           refusal = in_english do

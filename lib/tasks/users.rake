@@ -51,7 +51,7 @@ namespace :users do
     abort "Invitation could not be created: #{error.record.errors.full_messages.to_sentence}"
   end
 
-  desc "Remove every second factor of an account (PLAN_AUTH.md §5.7); it enrols again at its next sign-in"
+  desc "Remove every second factor of an account (docs/dev/AUTH.md); it enrols again at its next sign-in"
   task reset_second_factor: :environment do
     username = ENV["USERNAME"].to_s.strip.downcase
     abort "USERNAME is required." if username.blank?
@@ -65,7 +65,7 @@ namespace :users do
     puts "Second factors removed for #{user.username}; every session is closed."
   end
 
-  desc "Email a password-less account a one-time link to set a password (PLAN_AUTH.md §6.5)"
+  desc "Email a password-less account a one-time link to set a password (docs/dev/AUTH.md)"
   task send_password_setup: :environment do
     username = ENV["USERNAME"].to_s.strip.downcase
     abort "USERNAME is required." if username.blank?

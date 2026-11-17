@@ -8,13 +8,13 @@ module BestEfforts
   # The pure `compute` step can run before the caller's transaction, while
   # `persist` stays inside it (import, reanalysis, or backfill): a workout's
   # efforts are committed with the workout, and its `after_commit` records
-  # recompute still reads current efforts. See PLAN_BEST_EFFORTS.md.
+  # recompute still reads current efforts. See docs/dev/BEST-EFFORTS.md.
   class Rebuild
     class << self
       # Pure Ruby over the analyzer's in-memory segment metrics or the stored
       # track segments. Never touches the database. An effort the workout's
       # anomalies contest is left out: its time was never run
-      # (PLAN_M1.md §8.10).
+      # (docs/dev/WORKOUT.md).
       def compute(sport:, segments:, workout_started_at:, context: "backfill", anomalies: nil)
         measure(:compute, context) do
           distances = Allure::Gpx::BestEfforts.distances_for(sport.slug)
@@ -55,7 +55,7 @@ module BestEfforts
 
     # A credit row is rebuilt from its source's points and anomalies, with the
     # participant as athlete; a detached one has no points left and keeps its
-    # frozen efforts (PLAN_TOGETHER.md §6.3).
+    # frozen efforts (docs/dev/SHARED-ACTIVITIES.md).
     def call
       track = @workout.track_workout
       return [] unless track

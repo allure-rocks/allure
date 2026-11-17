@@ -2,7 +2,7 @@
 
 module Allure
   module RemoteImports
-    # Operator flags for the remote import sources (PLAN_REMOTE_IMPORTS.md §3),
+    # Operator flags for the remote import sources (docs/dev/REMOTE-IMPORTS.md),
     # read at call time like `Allure::Elevation::Config`. A provider whose flag
     # is unset is invisible: no card, no import panel, no job does anything.
     module Config

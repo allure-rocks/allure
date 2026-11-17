@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_HEART_RATE.md §6: nothing the heart-rate analysis derives ever leaves
+# docs/dev/HEART-RATE.md: nothing the heart-rate analysis derives ever leaves
 # the owner, whatever the profile shares.
 RSpec.describe "Heart-rate privacy" do
   let(:owner) { create(:user, max_heart_rate: 190, resting_heart_rate: 48) }

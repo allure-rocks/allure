@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Participations
-  # Copies the column contract of PLAN_TOGETHER.md §3.2 from an attached
+  # Copies the column contract of docs/dev/SHARED-ACTIVITIES.md from an attached
   # credit row's source, and nothing else: the credited metric set, the title,
   # the matcher's noise class, the analysis version, the contested metrics
   # records must skip, and the credited biggest climb. A detached row is
@@ -19,7 +19,7 @@ module Participations
     end
 
     # One number from the owner's detected climbs, never the climb itself:
-    # its name and shape stay the owner's (PLAN_TOGETHER.md §4.1, §6.3).
+    # its name and shape stay the owner's (docs/dev/SHARED-ACTIVITIES.md).
     def self.max_climb(source)
       return unless source.sport.records_elevation
 
@@ -40,7 +40,7 @@ module Participations
     end
 
     # The participant's derived rows follow the source's points
-    # (PLAN_TOGETHER.md §6.3): best efforts now, then the records they and the
+    # (docs/dev/SHARED-ACTIVITIES.md): best efforts now, then the records they and the
     # credited climb feed, then the segment matching on its own queue. Run
     # outside any open transaction, so the queued match reads committed rows.
     def derive

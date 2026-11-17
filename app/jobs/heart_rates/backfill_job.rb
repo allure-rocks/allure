@@ -2,8 +2,8 @@
 
 module HeartRates
   # Bounded, resumable histogram rebuild for every recording whose marker is
-  # older than the current version (PLAN_HEART_RATE.md §3.4,
-  # PLAN_DERIVATIONS.md §5). The stored points are enough: no original file
+  # older than the current version (docs/dev/HEART-RATE.md,
+  # docs/dev/DERIVATIONS.md). The stored points are enough: no original file
   # and no re-analysis.
   class BackfillJob < ApplicationJob
     BATCH_SIZE = 100

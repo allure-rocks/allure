@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_AUTO_PUBLISHING.md §2: an automatic profile may leave sports out, as it
+# docs/dev/AUTO-PUBLISHING.md: an automatic profile may leave sports out, as it
 # leaves out commutes. Catalog slugs; the empty default excludes nothing, so
 # every existing automatic profile keeps publishing every sport.
 class AddAutoPublishExcludedSportsToPublishingProfiles < ActiveRecord::Migration[8.1]

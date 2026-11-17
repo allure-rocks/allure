@@ -5,7 +5,7 @@ require "digest"
 module Federation
   module Safety
     # Meters the signer fetches an unauthenticated request can cause
-    # (PLAN_M5 §12.2). The admission limit counts admitted rows only, and a
+    # (docs/dev/FEDERATION.md). The admission limit counts admitted rows only, and a
     # request whose signature does not verify leaves none, so every attempt
     # that reaches a fetch is counted here instead, per authority and per
     # site (`Allure::Federation::Authority.site`, which wildcard subdomains

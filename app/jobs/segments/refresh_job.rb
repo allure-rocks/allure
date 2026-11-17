@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Segments
-  # Refreshes the segments a deleted workout had efforts on (PLAN_TOGETHER.md
-  # §6.4). Deleting a workout cascades its efforts away; without this, the
+  # Refreshes the segments a deleted workout had efforts on
+  # (docs/dev/SHARED-ACTIVITIES.md). Deleting a workout cascades its efforts away; without this, the
   # segments' counters and personal-best flags kept counting them. A segment
   # deleted in the meantime is simply skipped.
   class RefreshJob < ApplicationJob

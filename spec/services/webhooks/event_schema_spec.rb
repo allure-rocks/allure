@@ -3,7 +3,7 @@
 require "rails_helper"
 
 # The document's `webhooks` section is the contract of every event Allure
-# sends (PLAN_API.md §11.2, §12): one entry per type, and each real envelope
+# sends (docs/dev/API.md): one entry per type, and each real envelope
 # validates against it.
 RSpec.describe "Webhook event schemas" do
   let(:document) { YAML.safe_load_file(Rails.root.join("docs/openapi/v1.yaml"), aliases: true) }

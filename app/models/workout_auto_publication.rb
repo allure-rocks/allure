@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # One automatic publication of one imported workout for one audience
-# (PLAN_AUTO_PUBLISHING.md). The row is created at import when the account has
+# (docs/dev/AUTO-PUBLISHING.md). The row is created at import when the account has
 # an automatic publishing profile for that audience: `waiting` until every
 # enrichment of the workout has settled, then `published` (immediately or
 # inside the profile's safety delay), `skipped` with the reason nothing was

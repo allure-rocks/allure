@@ -2,7 +2,7 @@
 
 module Workouts
   # The single server-side way to (re)schedule a workout's weather
-  # (PLAN_WEATHER.md §5), like `ToponymyRefresh`. It marks the row pending and
+  # (docs/dev/WEATHER.md), like `ToponymyRefresh`. It marks the row pending and
   # enqueues the paced job. A workout that can no longer have weather (a sport
   # turned virtual) loses any stored row; one whose owner withdrew consent
   # keeps it untouched and asks nothing.

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Fetches one workout's weather (PLAN_WEATHER.md §5). One job at a time on
+  # Fetches one workout's weather (docs/dev/WEATHER.md). One job at a time on
   # the instance, so the provider is paced globally; a provider outage or a
   # 429 retries with back-off and ends `failed`, an exhausted
   # daily budget waits and leaves the row pending for the recovery sweep.

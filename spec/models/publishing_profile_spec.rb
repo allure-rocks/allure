@@ -22,7 +22,7 @@ RSpec.describe PublishingProfile do
       expect(profile.settings).to include("route" => true, "route_image" => true, "basemap" => true, "gpx" => false)
     end
 
-    it "shares no heart rate in a new profile, while accepting it when ticked (PLAN_HEART_RATE.md D7)" do
+    it "shares no heart rate in a new profile, while accepting it when ticked (docs/dev/HEART-RATE.md)" do
       default = build(:publishing_profile, settings: {})
       default.validate
 
@@ -107,7 +107,7 @@ RSpec.describe PublishingProfile do
     end
   end
 
-  # PLAN_M5 §13.1: local followers read the followers audience whatever the
+  # docs/dev/FEDERATION.md: local followers read the followers audience whatever the
   # switches say; FEDERATION_RESTRICTED_ENABLED only gates its federation.
   describe "publishability" do
     %w[false true].each do |restricted|

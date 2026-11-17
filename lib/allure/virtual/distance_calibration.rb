@@ -3,7 +3,7 @@
 module Allure
   module Virtual
     # Fits a virtual platform's rendered positions to the distance the
-    # ergometer itself recorded (PLAN_VIRTUAL.md §7). A virtual world's
+    # ergometer itself recorded (docs/dev/VIRTUAL-PLATFORMS.md). A virtual world's
     # coordinates are drawn, not measured: EXR's Bled race course places the
     # boat at twice its real distance, and every world drifts by a few
     # percent. The file's lap distances are the athlete's real effort, so they
@@ -34,7 +34,7 @@ module Allure
 
       def call(segments:, laps:)
         # A positionless recording has no drawn course to fit; its distance
-        # already comes from the device (PLAN_NO_GPS.md).
+        # already comes from the device (docs/dev/NO-GPS.md).
         return segments unless segments.all?(&:positioned?)
 
         cleaned = segments.map { |segment| Allure::Gpx::Outliers.filter(segment.points) }

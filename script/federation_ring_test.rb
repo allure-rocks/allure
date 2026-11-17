@@ -132,7 +132,7 @@ class FederationRingTest
 
   # The ring never reaches Open-Meteo: the gate stores a ready weather summary
   # so the shared weather path runs end to end — snapshot, Note tags, strict
-  # remote parsing (PLAN_WEATHER.md §6).
+  # remote parsing (docs/dev/WEATHER.md).
   def ensure_weather(workout)
     WorkoutWeather.find_or_initialize_by(workout:).update!(
       status: "ready", fetch_version: Workouts::WeatherEnricher::FETCH_VERSION,
@@ -223,7 +223,7 @@ class FederationRingTest
   end
 
   # The received copy belongs to the follower; a second local account on the
-  # same instance must never see it (PLAN_M5 Slice 5 / §7).
+  # same instance must never see it (docs/dev/FEDERATION.md).
   def assert_isolation_a
     note = RemoteNote.order(:id).last
     other_actor = Federation::ActorProvisioner.new(user: User.find_by!(username: "paul")).call!
@@ -236,7 +236,7 @@ class FederationRingTest
   end
 
   # Sanitized representation: title, sport, metrics and a start location that
-  # is not one of the masked endpoints (PLAN_M5 §17.2).
+  # is not one of the masked endpoints (docs/dev/FEDERATION.md).
   def assert_representation_a
     note = RemoteNote.order(:id).last
     assert(note.present?, "no received note")
@@ -280,7 +280,7 @@ class FederationRingTest
   end
 
   # Re-POST the same Create. Admission must recognize the duplicate and persist
-  # nothing new (PLAN_M5 §17.2 item 8).
+  # nothing new (docs/dev/FEDERATION.md item 8).
   def redeliver_create_b
     event = event_for("Create")
     delivery = event&.deliveries&.first
@@ -299,7 +299,7 @@ class FederationRingTest
   end
 
   # A public note renders for any signed-in account, and its media is served
-  # through this instance's own endpoints (PLAN_M5 §17.2 items 7/9). The
+  # through this instance's own endpoints (docs/dev/FEDERATION.md items 7/9). The
   # entitlement-gated HTTP isolation check lives in the restricted scenario.
   def assert_received_page_a
     note = RemoteNote.order(:id).last
@@ -335,7 +335,7 @@ class FederationRingTest
     { statuses: [ note_status, gpx_status, dark_status ], dark_body: }
   end
 
-  # PLAN_REACTIONS.md: the receiving account reacts to the received note. A
+  # docs/dev/REACTIONS.md: the receiving account reacts to the received note. A
   # mints a Like carrying the Allure type, delivers it to the origin, and B
   # stores a local reaction and notifies the workout owner.
   def like_note_a
@@ -365,7 +365,7 @@ class FederationRingTest
     assert(Notification.where(kind: "reaction").exists?, "B did not notify the workout owner")
   end
 
-  # PLAN_COMMENTS.md Slice 2: A's account comments on the received note, B
+  # docs/dev/COMMENTS.md Slice 2: A's account comments on the received note, B
   # hosts the thread and its owner replies, A's author deletes the comment,
   # and a thread B closed refuses the next one with a Reject.
   def comment_note_a
@@ -396,7 +396,7 @@ class FederationRingTest
     assert(Notification.where(user:, kind: "comment", subject: comment).exists?, "B did not notify the workout owner")
   end
 
-  # PLAN_COMMENTS.md Slice 3: the host relays the comment it took to the
+  # docs/dev/COMMENTS.md Slice 3: the host relays the comment it took to the
   # instances its publication went to, the author's included, which learns
   # the comment was taken.
   def assert_comment_relay_b
@@ -558,7 +558,7 @@ class FederationRingTest
     assert(comment.audience == "followers", "the hosted comment audience is #{comment.audience.inspect}")
   end
 
-  # A followers thread is never relayed (PLAN_COMMENTS.md §6.6).
+  # A followers thread is never relayed (docs/dev/COMMENTS.md).
   def assert_no_relay_b
     assert(FederationOutboxEvent.where(activity_type: "Announce").none?, "B relayed a comment on a followers thread")
   end
@@ -634,7 +634,7 @@ class FederationRingTest
     session
   end
 
-  # The seeded demo accounts carry an authenticator app (PLAN_AUTH.md §10).
+  # The seeded demo accounts carry an authenticator app (docs/dev/AUTH.md).
   def answer_second_factor(session, session_user)
     session.get("/session/challenge/new")
     token = session.response.body[/name="authenticity_token" value="([^"]+)"/, 1]
@@ -651,7 +651,7 @@ class FederationRingTest
     wait_for("B delivered Create") { delivered?(event_for("Create")) }
   end
 
-  # PLAN_TOGETHER.md §7: B's owner invites A's account, which holds the
+  # docs/dev/SHARED-ACTIVITIES.md: B's owner invites A's account, which holds the
   # publication and follows her, to confirm the outing. A stores the
   # invitation, shows its card on the received note, and confirms: an Accept
   # goes back and A's account gets a credit row from the note's figures.
@@ -792,7 +792,7 @@ class FederationRingTest
     Federation::Safety::Blocking.new.unblock_domain!(domain: PEER_DOMAIN)
   end
 
-  # The block ended A's follow of the peer, locally (PLAN_M5 §12.1), and
+  # The block ended A's follow of the peer, locally (docs/dev/FEDERATION.md), and
   # unblocking restores nothing: A follows again. B still holds the accepted
   # relationship, so it accepts the renewed Follow at once.
   def refollow_b
@@ -807,7 +807,7 @@ class FederationRingTest
   end
 
   # The first workout's publication was withdrawn in the delete cycle; a fresh
-  # publish must produce a new object identity (PLAN_M5 §17.2 item 10).
+  # publish must produce a new object identity (docs/dev/FEDERATION.md item 10).
   def republish_publication
     workout = user.workouts.find_by!(title: "Federation ring route")
     assert(workout.active_publications.none?, "republish expects the first publication to be withdrawn")
@@ -829,7 +829,7 @@ class FederationRingTest
     assert(old_response.status == 404, "withdrawn object returned HTTP #{old_response.status}")
   end
 
-  # --- Federated courses (PLAN_SEGMENTS_FEDERATION.md §17.2) ------------------
+  # --- Federated courses (docs/dev/SEGMENTS-FEDERATION.md) ------------------
 
   def publish_segment
     workout = user.workouts.find_by!(title: "Federation ring route")
@@ -936,7 +936,7 @@ class FederationRingTest
   end
 
   # The copied course is private and owner-only, and the copier's own workout
-  # is matched locally against it (PLAN_SEGMENTS_FEDERATION.md §12.4).
+  # is matched locally against it (docs/dev/SEGMENTS-FEDERATION.md).
   def copy_segment_a
     remote = RemoteSegment.active.order(:id).last
     workout = user.workouts.find_by(title: "Copied course ride") || import_ring_workout
@@ -1038,7 +1038,7 @@ class FederationRingTest
   end
 
   # Unfollow withdraws the entitlement immediately. The public note keeps its
-  # cached media (PLAN_M5 §9.6); the feed drops the author.
+  # cached media (docs/dev/FEDERATION.md); the feed drops the author.
   def assert_withdrawal_a
     local_actor = Federation::ActorProvisioner.new(user:).call!
     note = wait_for("A withdrew the entitlement") do
@@ -1076,7 +1076,7 @@ class FederationRingTest
   end
 
   # An explicit sweep replaces a development recurring entry: the key retires
-  # only after every event and delivery is terminal (PLAN_M5 §15 Slice 8).
+  # only after every event and delivery is terminal (docs/dev/FEDERATION.md).
   def retire_actor_key_b
     Federation::RecoveryJob.perform_now
   end
@@ -1213,7 +1213,7 @@ class FederationRingTest
   end
 
   # Entitlement-gated HTTP isolation: only the follower's account renders the
-  # followers note and its media; a second local account gets 404 (PLAN_M5
+  # followers note and its media; a second local account gets 404 (docs/dev/FEDERATION.md
   # §17.2 item 9).
   def assert_restricted_page_a
     note = RemoteNote.active.order(:id).last
@@ -1252,7 +1252,7 @@ class FederationRingTest
     assert(wrong.status == 404, "non-follower signed object GET returned HTTP #{wrong.status}")
   end
 
-  # One Note per peer (PLAN_AUDIENCES.md §5): the same workout published to
+  # One Note per peer (docs/dev/PUBLISHING.md): the same workout published to
   # the public beside its followers publication is not sent to the promoted
   # follower, which already holds the narrower Note.
   def publish_public_beside_followers
@@ -1280,7 +1280,7 @@ class FederationRingTest
   def followers_workout = user.workouts.find_by!(title: "Federation ring followers route")
 
   # Public scenario, restricted federation off on both nodes: the followers
-  # audience is publishable for local followers (PLAN_M5 §13.1), and even a
+  # audience is publishable for local followers (docs/dev/FEDERATION.md), and even a
   # promoted peer is not sent it. The promotion is removed afterwards so the
   # rest of the public scenario runs against an unknown peer.
   def publish_unfederated_followers

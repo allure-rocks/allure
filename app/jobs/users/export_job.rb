@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-  # Builds one requested data export (PLAN_ACCOUNT.md §3.2): the archive is
+  # Builds one requested data export (docs/dev/ACCOUNT.md): the archive is
   # written to a temporary file, attached, and the account is told in-app and
   # by mail. A failure marks the row failed and tells nobody; the account may
   # ask again after the cooldown.

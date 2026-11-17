@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# An activity imported without any GPS position (PLAN_NO_GPS.md): a trainer
+# An activity imported without any GPS position (docs/dev/NO-GPS.md): a trainer
 # ride, a treadmill run, a pool swim, a duration-only session. It is measured
 # from the device's own records, displayed without any geometry, and cannot be
 # published yet.

@@ -73,7 +73,7 @@ RSpec.describe Auth::SecondFactorPolicy do
     expect(described_class.counts(now:)).to eq("satisfied" => 1, "grace" => 1, "required" => 2)
   end
 
-  it "owes nothing on a demo instance, the operator included (PLAN_DEMO.md §3)" do
+  it "owes nothing on a demo instance, the operator included (docs/dev/DEMO.md)" do
     ENV["DEMO_INSTANCE"] = "true"
     overdue = create(:user, second_factor_required_since: now - 30.days)
     operator = create(:user, username: "operator", second_factor_required_since: now - 1.minute)

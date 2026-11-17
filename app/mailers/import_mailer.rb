@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The end of a Strava archive import (PLAN_STRAVA_ARCHIVE.md §8): a whole
+# The end of a Strava archive import (docs/dev/STRAVA-ARCHIVE.md): a whole
 # history takes minutes to import and hours to enrich, so the account is told
 # by mail when its archive is done, or why it failed. No other import mails.
 # Localized to the account, since the mail is queued.

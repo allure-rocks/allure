@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_FUNDING.md §3: voluntary, yearly contributions to the instance
+# docs/dev/FUNDING.md: voluntary, yearly contributions to the instance
 # operator. Money stays at the payment provider; these rows only record the
 # verified contribution and the honorific badge preferences.
 class CreateFundingContributions < ActiveRecord::Migration[8.1]

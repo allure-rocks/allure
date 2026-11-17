@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_DERIVATIONS.md: every segment, route and loop carries an owner route
+# docs/dev/DERIVATIONS.md: every segment, route and loop carries an owner route
 # image rendered on the dedicated route_images worker, and records the renderer
 # generation that produced it. Zero means missing or stale, so the rebuild
 # sweeps re-render incrementally instead of redoing the whole library. The

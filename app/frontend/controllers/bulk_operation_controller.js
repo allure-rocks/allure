@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 // The bulk operation's progress page (DESIGN.md §20.4,
-// PLAN_BULK_ACTIONS.md §7).
+// docs/dev/BULK-ACTIONS.md).
 //
 // The batch-import variant (`batch_import_controller.js`) for the durable bulk
 // ledger: poll the status fragment while the operation is active, announce

@@ -3,7 +3,7 @@
 module Allure
   module Photos
     # Reads the capture time and position of a photo from the EXIF fields
-    # libvips exposes (PLAN_PHOTOS.md §3.2). Each value is a string such as
+    # libvips exposes (docs/dev/PHOTOS.md). Each value is a string such as
     # "45/1 10/1 3045/100 (45, 10, 30.45, Rational, 3 components, 24 bytes)":
     # only the part before the parenthesis is parsed. A malformed or missing
     # value yields nil for that fact, never an error.

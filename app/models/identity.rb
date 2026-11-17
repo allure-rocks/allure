@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# An identity at a provider linked to an account (PLAN_AUTH.md §4.4). The
+# An identity at a provider linked to an account (docs/dev/AUTH.md). The
 # issuer and subject are the only key: an identity is never matched or linked
 # by email.
 class Identity < ApplicationRecord

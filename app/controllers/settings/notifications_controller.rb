@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # In-app notification preferences (PLAN_NOTIFICATIONS.md). A disabled kind is
+  # In-app notification preferences (docs/dev/NOTIFICATIONS.md). A disabled kind is
   # never created, so re-enabling it does not resurrect old events.
   class NotificationsController < ApplicationController
     def show

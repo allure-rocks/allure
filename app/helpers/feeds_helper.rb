@@ -38,7 +38,7 @@ module FeedsHelper
   # The owner reads their own snapshot, never the live workout: the feed shows
   # exactly what was published (DESIGN.md §8.3). Everyone else goes through
   # the publication policy with their browser principal; the feed itself is
-  # members-only (PLAN_MEMBERS_ONLY.md).
+  # members-only (docs/dev/ACCESS.md).
   def feed_item_for(item)
     if item.kind == "local"
       workout = item.record

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_HEART_RATE.md §3.4: the operator computes the heart-rate histogram of
+# docs/dev/HEART-RATE.md: the operator computes the heart-rate histogram of
 # every existing recording from /admin/jobs, and the audit log records it.
 class ExtendAdminEventActionsForHeartRateBackfill < ActiveRecord::Migration[8.1]
   PREVIOUS_ACTIONS = %w[

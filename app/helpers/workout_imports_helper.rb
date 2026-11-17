@@ -28,7 +28,7 @@ module WorkoutImportsHelper
   end
 
   # The reason an entry did not import: the translated skip reason of a remote
-  # activity (neutral), or the failure message (PLAN_REMOTE_IMPORTS.md §8.3).
+  # activity (neutral), or the failure message (docs/dev/REMOTE-IMPORTS.md).
   def import_entry_detail(entry)
     return if entry.error_message.blank? && !entry.skipped?
     return tag.span(t("workouts.batch_import.entries.skip_reasons.#{entry.skip_reason}"), class: "text-secondary") if entry.skipped?
@@ -51,13 +51,13 @@ module WorkoutImportsHelper
     end
   end
 
-  # The equipment a Strava archive created (PLAN_STRAVA_ARCHIVE.md §5).
+  # The equipment a Strava archive created (docs/dev/STRAVA-ARCHIVE.md).
   def import_batch_created_equipment(entries)
     entries.filter_map { |entry| entry.metadata["created_equipment"] }.uniq
   end
 
   # The photos a Strava archive attached, could not find and refused
-  # (PLAN_STRAVA_ARCHIVE.md §6ter), or nil when it listed none.
+  # (docs/dev/STRAVA-ARCHIVE.md), or nil when it listed none.
   def import_batch_photo_line(entries)
     counts = %w[photos photos_missing photos_refused].index_with do |key|
       entries.sum { |entry| entry.metadata[key].to_i }

@@ -2,7 +2,7 @@
 
 module Federation
   module Inbox
-    # The thread host stops relaying a comment (PLAN_COMMENTS.md §7.5): the
+    # The thread host stops relaying a comment (docs/dev/COMMENTS.md): the
     # comment left its thread there — deleted, removed, or with its author.
     # A third party's relayed copy leaves the thread here with its words; this
     # instance's own comment becomes removed by the owner, which its author

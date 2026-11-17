@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Auth
-  # Resolves a verified provider answer (PLAN_AUTH.md §6.2) into what happens
+  # Resolves a verified provider answer (docs/dev/AUTH.md) into what happens
   # next. The identity is looked up by its issuer and subject only; an email
   # never links or signs into an existing account.
   #
@@ -28,7 +28,7 @@ module Auth
 
     # The parts of a verified OmniAuth answer this class reads, as plain JSON:
     # the iOS companion's handoff carries them from the system browser to the
-    # app's web view (PLAN_AUTH.md §9). Rebuilt with OmniAuth::AuthHash.new.
+    # app's web view (docs/dev/AUTH.md). Rebuilt with OmniAuth::AuthHash.new.
     # The ID token itself never travels: only the verified claims.
     def self.portable(auth)
       reader = new(auth:, provider: nil)
@@ -155,7 +155,7 @@ module Auth
     end
 
     # A generic provider may be required to state the authentication context
-    # it used (PLAN_AUTH.md §6.4). The claim comes from the strategy's
+    # it used (docs/dev/AUTH.md). The claim comes from the strategy's
     # raw_info, into which omniauth_openid_connect merges the ID token's
     # claims after verifying its signature, issuer, audience, nonce and
     # expiry; this class never decodes a token itself.

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Presentation rules for the in-app inbox (PLAN_NOTIFICATIONS.md). Every string
+# Presentation rules for the in-app inbox (docs/dev/NOTIFICATIONS.md). Every string
 # is localized and every remote account is rendered through the shared actor
 # helpers, so no copy names the protocol (DESIGN.md §24).
 module NotificationsHelper
@@ -111,8 +111,8 @@ module NotificationsHelper
 
   private
 
-  # One digest per workout (PLAN_NOTIFICATIONS.md §8). A single reaction names
-  # its gesture (PLAN_REACTIONS.md §5); several name the newest account and
+  # One digest per workout (docs/dev/NOTIFICATIONS.md). A single reaction names
+  # its gesture (docs/dev/REACTIONS.md); several name the newest account and
   # count the others.
   def reaction_notification_text(notification)
     workout = notification.subject
@@ -140,7 +140,7 @@ module NotificationsHelper
 
   # A comment notice names the account and, for the workout's owner, the
   # workout; a reply to the recipient's own comment says so instead, and never
-  # names a title the recipient may not be allowed to read (PLAN_COMMENTS.md
+  # names a title the recipient may not be allowed to read (docs/dev/COMMENTS.md
   # §10).
   def comment_notification_text(notification)
     comment = notification.subject
@@ -169,7 +169,7 @@ module NotificationsHelper
     actor = notification.actor
     return t("notifications.kinds.#{notification.kind}_deleted") if actor_deleted?(actor)
     # An invitation received from another instance names its received note
-    # (PLAN_TOGETHER.md §7).
+    # (docs/dev/SHARED-ACTIVITIES.md).
     if participation.is_a?(RemoteParticipation) && participation.remote_note
       return t("notifications.kinds.#{notification.kind}", name: actor_name(actor), title: participation.remote_note.title)
     end
@@ -197,7 +197,7 @@ module NotificationsHelper
   end
 
   # The automatic-publication notice says whether the workout is already live
-  # or held by the profile's delay, and until when (PLAN_AUTO_PUBLISHING.md §7).
+  # or held by the profile's delay, and until when (docs/dev/AUTO-PUBLISHING.md).
   def auto_published_notification_text(notification)
     title = publication_notification_title(notification).presence
     scheduled_for = Time.zone.parse(notification.payload.to_h["scheduled_for"].to_s) if notification.payload.to_h["scheduled_for"].present?

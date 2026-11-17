@@ -5,7 +5,7 @@ class WorkoutsController < ApplicationController
 
   before_action :set_workout_for_show, only: :show
   before_action :set_owned_workout, only: %i[edit update destroy publish destroy_publication republish publication_preview delivery_refresh activate_publication reschedule_publication destroy_scheduled_publication destroy_auto_publication]
-  # A credit row is read-only except for its deletion (PLAN_TOGETHER.md §6.6).
+  # A credit row is read-only except for its deletion (docs/dev/SHARED-ACTIVITIES.md).
   before_action :refuse_credit_row, only: %i[edit update publish destroy_publication republish publication_preview delivery_refresh activate_publication reschedule_publication destroy_scheduled_publication destroy_auto_publication]
   before_action :ensure_publishing_profiles, only: %i[show publish republish publication_preview]
   before_action :set_equipments, only: %i[edit update]
@@ -37,10 +37,10 @@ class WorkoutsController < ApplicationController
 
   def show
     # The participant's own credit row has its own page: the credited metric
-    # set and its deletion, nothing drawn from a track (PLAN_TOGETHER.md §10).
+    # set and its deletion, nothing drawn from a track (docs/dev/SHARED-ACTIVITIES.md).
     return show_credit if @workout.credit? && @workout.user == current_user
     # A manual entry is its owner's alone and has its own page: the typed
-    # figures, nothing drawn from a track (PLAN_MANUAL_ENTRY.md §7).
+    # figures, nothing drawn from a track (docs/dev/MANUAL-ENTRY.md).
     return render(:manual) if @workout.manual? && @workout.user == current_user
 
     owner = @workout.user == current_user
@@ -48,7 +48,7 @@ class WorkoutsController < ApplicationController
     @scheduled_publications = owner ? WorkoutPublication.by_precedence(@workout.scheduled_publications.to_a) : []
     @auto_publications = owner ? @workout.auto_publications.includes(:workout_publication).order(:id).to_a : []
     # A reader is served the narrowest publication they are entitled to
-    # (PLAN_AUDIENCES.md §3). `?as=publication` lets the owner read the page
+    # (docs/dev/PUBLISHING.md). `?as=publication` lets the owner read the page
     # exactly as a reader of one publication sees it — `audience` names which,
     # the narrowest by default (DESIGN.md §20.3); without one it is ignored.
     @publication = Workouts::PublicationResolver.new(workout: @workout, user: current_user).call unless owner
@@ -56,7 +56,7 @@ class WorkoutsController < ApplicationController
       @publication = Workouts::PublicationResolver.new(workout: @workout, user: current_user, audience: params[:audience]).call
       @reader_preview = @publication.present?
     end
-    # The reaction bar's batched summary (PLAN_REACTIONS.md §4.4).
+    # The reaction bar's batched summary (docs/dev/REACTIONS.md).
     @reaction_targets = [ @workout ]
     @display_workout = if @publication
       Workouts::PublicationView.new(@publication, principal: Workouts::PublicationPrincipal.browser(current_user))
@@ -177,7 +177,7 @@ class WorkoutsController < ApplicationController
   end
 
   # Withdraws the publication the row names, or every active one from the
-  # card header (PLAN_AUDIENCES.md §4).
+  # card header (docs/dev/PUBLISHING.md).
   def destroy_publication
     publication = (named_publication(@workout.active_publications) if params[:publication_id].present?)
     Workouts::PublicationDeletion.new(user: current_user, workout: @workout, publication:).call!
@@ -231,7 +231,7 @@ class WorkoutsController < ApplicationController
   end
 
   # The owner declines an automatic publication still waiting for the
-  # enrichments (PLAN_AUTO_PUBLISHING.md §7): it is settled as skipped and
+  # enrichments (docs/dev/AUTO-PUBLISHING.md): it is settled as skipped and
   # nothing is published. A publication it already made is withdrawn like any
   # other.
   def destroy_auto_publication
@@ -298,7 +298,7 @@ class WorkoutsController < ApplicationController
   end
 
   # The profile the publish form opens on: the first publishable profile whose
-  # audience no live publication holds yet (PLAN_AUDIENCES.md §2), so the form
+  # audience no live publication holds yet (docs/dev/PUBLISHING.md), so the form
   # adds a publication beside the existing ones. Shared by the publication form
   # and its shared-field lists.
   def selected_publishing_profile
@@ -395,7 +395,7 @@ class WorkoutsController < ApplicationController
   end
 
   # A confirmed (or pending) participant reaches a source workout the
-  # publication policy would hide from them (PLAN_TOGETHER.md §4): they read
+  # publication policy would hide from them (docs/dev/SHARED-ACTIVITIES.md): they read
   # the credited metrics-only presentation while it is unpublished, and the
   # standard publication presentation once it is published. Everyone else
   # follows the publication policy and gets a 404.
@@ -411,7 +411,7 @@ class WorkoutsController < ApplicationController
   # An invitation admits its invitee at once: the owner chose to share. A
   # detection admits nobody until both accounts confirmed, since a suggestion
   # discloses a title and a date, never the counterpart's metrics
-  # (PLAN_TOGETHER.md §8).
+  # (docs/dev/SHARED-ACTIVITIES.md).
   def participant_participation
     actor = current_user&.actor
     return unless actor
@@ -421,7 +421,7 @@ class WorkoutsController < ApplicationController
       .first
   end
 
-  # Every figure of a manual entry is editable (PLAN_MANUAL_ENTRY.md §5).
+  # Every figure of a manual entry is editable (docs/dev/MANUAL-ENTRY.md).
   def update_manual
     @manual_form = ManualWorkoutForm.from_params(params.fetch(:manual_workout, {}).permit(*ManualWorkoutsController::PERMITTED),
                                                  user: current_user)
@@ -475,7 +475,7 @@ class WorkoutsController < ApplicationController
     PublishingProfile.ensure_built_ins_for!(current_user)
   end
 
-  # The publish form's photo list (PLAN_PHOTOS.md §5.2): `photo_selection`
+  # The publish form's photo list (docs/dev/PHOTOS.md): `photo_selection`
   # marks that a list was shown, so an empty choice shares no photo; without
   # it the default selection applies.
   def photo_choice
@@ -499,7 +499,7 @@ class WorkoutsController < ApplicationController
         "shared" => helpers.publication_preview_fields(profile),
         "withheld" => helpers.publication_withheld_fields(profile),
         # The publish form shows its photo choice only for a profile that
-        # shares photos (PLAN_PHOTOS.md §5.2, DESIGN.md §19.35).
+        # shares photos (docs/dev/PHOTOS.md, DESIGN.md §19.35).
         "photos" => profile.settings["photos"] == true,
         "delay" => profile.publish_delay_seconds
       }
@@ -534,7 +534,7 @@ class WorkoutsController < ApplicationController
     sample_chart_rows(Array(publication&.representation&.dig("chart")))
   end
 
-  # The participant's credit row (PLAN_TOGETHER.md §10): its own analysis
+  # The participant's credit row (docs/dev/SHARED-ACTIVITIES.md): its own analysis
   # rows, the convert action while attached, and the source's map and profile
   # only through the publication the participant may read, never the source's
   # raw track.
@@ -565,7 +565,7 @@ class WorkoutsController < ApplicationController
   end
 
   # A remote credit's map is its received note's, while the note is active
-  # and the account may still read it (PLAN_TOGETHER.md §7).
+  # and the account may still read it (docs/dev/SHARED-ACTIVITIES.md).
   def credit_remote_view
     note = @workout.remote_participation&.remote_note
     return unless note&.active?
@@ -625,7 +625,7 @@ class WorkoutsController < ApplicationController
   end
 
   # Workout list filters (§13), delegated to the shared query object so the
-  # bulk selection replays exactly this list (PLAN_BULK_ACTIONS.md §2). Every
+  # bulk selection replays exactly this list (docs/dev/BULK-ACTIONS.md). Every
   # filter is a URL parameter: back/forward work and a filtered view is
   # shareable. Filtering never resets the sort; pagination preserves the params.
   def list_query = @list_query ||= Workouts::ListQuery.new(user: current_user, params: params)
@@ -643,7 +643,7 @@ class WorkoutsController < ApplicationController
   def filter_direction = list_query.direction
 
   # The equipment the bulk bar can attach or detach. Loaded only for the table
-  # view, where the bulk selection lives (PLAN_BULK_ACTIONS.md §7).
+  # view, where the bulk selection lives (docs/dev/BULK-ACTIONS.md).
   def bulk_equipments
     return [] unless @view == "table"
 

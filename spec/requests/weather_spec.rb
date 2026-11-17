@@ -3,7 +3,7 @@
 require "rails_helper"
 
 # Weather consent, the owner's card and refresh, and the data page sweep
-# (PLAN_WEATHER.md §5, §7).
+# (docs/dev/WEATHER.md).
 RSpec.describe "Weather", :weather do
   include ActiveJob::TestHelper
 

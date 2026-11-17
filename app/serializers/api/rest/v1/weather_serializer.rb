@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # Weather in the API (PLAN_WEATHER.md §8): SI units as stored. The owner
+      # Weather in the API (docs/dev/WEATHER.md): SI units as stored. The owner
       # reads the status, the summary and the hourly series of their workout;
       # a publication carries the summary only, when its profile shared it.
       module WeatherSerializer

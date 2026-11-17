@@ -1,4 +1,4 @@
-<%# The EXR sign-in (PLAN_REMOTE_IMPORTS.md §7b.2). The password goes to the EXR
+<%# The EXR sign-in (docs/dev/REMOTE-IMPORTS.md). The password goes to the EXR
     account site once, from a background job, and is never kept; only the
     site's remember cookie is. Locals: connection. %>
 <%= form_with url: connection_link_path("exr"), method: :post do %>

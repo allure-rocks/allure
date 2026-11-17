@@ -8,7 +8,7 @@ module Workouts
   #
   # `elevation_source:` overrides the workout's effective source for this run
   # (`"device"` or `"dem"`). A `dem` run applies the cached terrain profile
-  # before analysis and forces the DEM ascent class (PLAN_ELEVATION.md); without
+  # before analysis and forces the DEM ascent class (docs/dev/ELEVATION.md); without
   # it the stored effective source is reused.
   class Reanalyzer
     MissingOriginalFileError = OriginalTrack::MissingOriginalFileError
@@ -16,7 +16,7 @@ module Workouts
 
     # `track:` injects an already-parsed original, so the rebuild sweep parses
     # a file once for both its facts and its analysis
-    # (PLAN_DERIVATIONS.md §3).
+    # (docs/dev/DERIVATIONS.md).
     def initialize(workout:, force: false, elevation_source: nil, track: nil)
       @workout = workout
       @force = force
@@ -35,7 +35,7 @@ module Workouts
       metrics = analyze_track(track, source)
       device_totals = device_elevation_totals(track, metrics, source)
       # Computation before the row lock; persistence inside it still commits the
-      # efforts with the metrics they derive from (PLAN_BEST_EFFORTS.md §4).
+      # efforts with the metrics they derive from (docs/dev/BEST-EFFORTS.md).
       efforts = BestEfforts::Rebuild.compute(
         sport: @workout.sport,
         segments: metrics.segments,
@@ -170,7 +170,7 @@ module Workouts
         elevation_source_requested: nil,
         # New track segments invalidate every point-indexed effort until the
         # matching job that follows each reanalysis stamps it again; automatic
-        # publishing waits for that (PLAN_AUTO_PUBLISHING.md §4).
+        # publishing waits for that (docs/dev/AUTO-PUBLISHING.md).
         loop_reuse_version: 0,
         route_image_version: route_image_version(metrics)
       }
@@ -190,7 +190,7 @@ module Workouts
 
     # The stored places name positions and carry their elevations, so a new
     # track or a new elevation profile re-geocodes them; a same-geometry,
-    # same-profile run (a sport change) keeps them (PLAN_DERIVATIONS.md §4).
+    # same-profile run (a sport change) keeps them (docs/dev/DERIVATIONS.md).
     def refresh_toponymy
       ToponymyRefresh.new(workout: @workout).call
     rescue StandardError => error
@@ -208,7 +208,7 @@ module Workouts
     # A nil geometry never compares equal to coordinates: a positionless
     # recording keeps its empty shape, and a versioned run that would move a
     # workout between shapes (only a changed parser rule can) is treated as a
-    # change and re-renders nothing (PLAN_NO_GPS.md §6).
+    # change and re-renders nothing (docs/dev/NO-GPS.md).
     def geometry_changed?(segments)
       stored = @workout.track_segments.map { |segment| segment.geom&.points&.map { |point| [ point.x, point.y ] } }
       stored != segments.map(&:coordinates)
@@ -271,7 +271,7 @@ module Workouts
 
     # RGeo helpers. A positionless recording has no coordinates: both builders
     # answer nil and the columns stay empty, exactly as the importer stores
-    # them (PLAN_NO_GPS.md §5).
+    # them (docs/dev/NO-GPS.md).
     def factory = RGeo::Geographic.spherical_factory(srid: 4326)
 
     def build_point(lon_lat)

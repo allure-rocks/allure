@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_PHOTOS.md §2.2: the operator sets an account's photo quota from
+# docs/dev/PHOTOS.md: the operator sets an account's photo quota from
 # /admin/accounts/:id, and the audit log records it.
 class ExtendAdminEventActionsForPhotoQuota < ActiveRecord::Migration[8.1]
   PREVIOUS_ACTIONS = %w[

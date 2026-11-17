@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The analysis rows of a workout (PLAN_API.md §6.2, §7.5): laps, splits,
+      # The analysis rows of a workout (docs/dev/API.md): laps, splits,
       # best efforts and segment efforts, owner-only, SI units, the columns of
       # the workout page's « Analyse » card.
       module LapSerializers

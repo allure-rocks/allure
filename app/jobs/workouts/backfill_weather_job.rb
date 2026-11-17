@@ -4,7 +4,7 @@ module Workouts
   # Schedules, in bounded id-cursor batches that resume themselves, the
   # weather of every eligible workout of a consenting account that has none,
   # or whose row was built by an older fetch or analysis generation
-  # (PLAN_WEATHER.md §5). It only schedules: the weather job is paced, and a
+  # (docs/dev/WEATHER.md). It only schedules: the weather job is paced, and a
   # new analysis generation converges offline from the kept responses.
   class BackfillWeatherJob < ApplicationJob
     BATCH_SIZE = 100

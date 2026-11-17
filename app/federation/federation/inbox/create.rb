@@ -5,8 +5,8 @@ module Federation
     # Processes one embedded public object into a RemoteNote or a RemoteSegment
     # plus one entitlement for the receiving local actor. The object path
     # selects the course or workout receipt. Idempotent by object identity; a
-    # tombstoned object always wins (PLAN_M5 §9.2,
-    # PLAN_SEGMENTS_FEDERATION.md §10.3).
+    # tombstoned object always wins (docs/dev/FEDERATION.md,
+    # docs/dev/SEGMENTS-FEDERATION.md).
     class Create
       def initialize(item:, activity:, now: Time.current)
         @item = item
@@ -42,7 +42,7 @@ module Federation
       end
 
       # A publication reaches the accounts that follow its author, never one
-      # it merely names (PLAN_M5 §8.3): otherwise any remote actor could put
+      # it merely names (docs/dev/FEDERATION.md): otherwise any remote actor could put
       # a note, its media fetches and the invitations it enables in a stranger's
       # feed. Allure itself never addresses a publication directly.
       def require_follow!(author)

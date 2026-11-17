@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The photos a publication froze (PLAN_PHOTOS.md §5.3): independent,
+# The photos a publication froze (docs/dev/PHOTOS.md): independent,
 # metadata-free copies made at publish time, immutable, purged with the
 # publication's other media when it is withdrawn. The shared distance is
 # measured along the published route, never a coordinate.

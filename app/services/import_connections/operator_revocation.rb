@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ImportConnections
-  # The operator's « Révoquer » (PLAN_REMOTE_IMPORTS.md §10): the connection
+  # The operator's « Révoquer » (docs/dev/REMOTE-IMPORTS.md): the connection
   # turns `revoked`, its credentials are wiped and its running batches are
   # cancelled; the imported workouts and equipment stay untouched. The owner
   # is told and may link again. The caller records the audit event.

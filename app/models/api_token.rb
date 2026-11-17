@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# A personal API token (PLAN_API.md §4). The secret is shown once at creation
+# A personal API token (docs/dev/API.md). The secret is shown once at creation
 # and only its SHA-256 digest is kept: a 256-bit random secret needs no slow
 # hash, so authentication is one indexed equality.
 class ApiToken < ApplicationRecord
@@ -17,7 +17,7 @@ class ApiToken < ApplicationRecord
   RETENTION = 90.days
   REVOKERS = %w[owner operator system].freeze
   # How much location the token may hand an AI assistant through /mcp
-  # (PLAN_MCP.md §4), from least to most.
+  # (docs/dev/MCP.md), from least to most.
   MCP_GEOMETRY_LEVELS = %w[none filtered raw].freeze
 
   belongs_to :user

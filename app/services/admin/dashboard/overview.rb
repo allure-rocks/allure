@@ -5,7 +5,7 @@ module Admin
     # Aggregates the instance's headline numbers for the administration
     # dashboard: account, activity, publication, federation, storage, queue,
     # and import counts plus the most recent rows. It is counts and identifiers
-    # only — never coordinates, payloads, keys, or remote HTML (PLAN_ADMIN.md).
+    # only — never coordinates, payloads, keys, or remote HTML (docs/dev/ADMIN.md).
     #
     # Everything is a bounded count or a top-5 list: the page must stay cheap on
     # an instance with years of activities.
@@ -48,7 +48,7 @@ module Admin
       end
 
       # Recordings only: a credit row repeats an outing already counted
-      # (PLAN_TOGETHER.md §6.6).
+      # (docs/dev/SHARED-ACTIVITIES.md).
       def workouts
         recordings = Workout.recordings
         {

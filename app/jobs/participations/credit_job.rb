@@ -2,7 +2,7 @@
 
 module Participations
   # Creates or re-attaches the credit row of a confirmed credit
-  # (PLAN_TOGETHER.md §5). A link, or a participation withdrawn before the job
+  # (docs/dev/SHARED-ACTIVITIES.md). A link, or a participation withdrawn before the job
   # ran, is a no-op.
   class CreditJob < ApplicationJob
     queue_as :default
@@ -12,7 +12,7 @@ module Participations
     discard_on ActiveJob::DeserializationError
 
     # A participant who already holds their own recording of the outing is
-    # offered the link at once (PLAN_TOGETHER.md §8).
+    # offered the link at once (docs/dev/SHARED-ACTIVITIES.md).
     def perform(participation)
       CreditRows.attach(participation)
       Together::CreditLinkSuggestion.for_participation(participation.reload)

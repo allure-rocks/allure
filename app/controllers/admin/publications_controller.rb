@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # Publication oversight (PLAN_ADMIN.md §4.4): browse workout and course
+  # Publication oversight (docs/dev/ADMIN.md): browse workout and course
   # publications with their audience, state and delivery tallies, and withdraw
   # an active publication through the immutable lifecycle. Takedown is
   # moderation over user content, so it is confirmed and audited.
@@ -26,7 +26,7 @@ module Admin
     def withdraw_workout
       publication = WorkoutPublication.find_by_short_id!(params[:id])
       # A scheduled publication was never shared, so operator takedown is a
-      # local cancellation with no Delete activity (PLAN_DELAYED_PUBLISHING.md).
+      # local cancellation with no Delete activity (docs/dev/DELAYED-PUBLISHING.md).
       if publication.scheduled?
         result = Workouts::ScheduledPublicationCancellation.new(user: current_user, publication:, operator: true).call!
         audit(result.publication, kind: "workout", action: :publication_schedule_cancelled)

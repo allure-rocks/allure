@@ -49,7 +49,7 @@ module Federation
       # A tombstoned actor must still be able to sign its own withdrawal: the
       # account Delete is created while the actor is current and delivered
       # after tombstoning, before the key retirement sweep destroys the key
-      # (PLAN_M5 §8.7 / PLAN_M2 §4.5).
+      # (docs/dev/FEDERATION.md).
       def validate_actor!
         return if @actor.is_a?(Actor) && @actor.local? && signable?
 

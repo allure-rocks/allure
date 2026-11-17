@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # The invited account's answer to an invitation from another instance
-# (PLAN_TOGETHER.md §7): confirm, decline, or withdraw a confirmation. Only
+# (docs/dev/SHARED-ACTIVITIES.md): confirm, decline, or withdraw a confirmation. Only
 # that account finds the row; anyone else gets a 404.
 class RemoteParticipationsController < ApplicationController
   NOTICES = {

@@ -3,7 +3,7 @@ module Authentication
 
   # The browser-session state of an unfinished authentication step. It
   # belongs to whoever was using the browser, so it goes whenever an account
-  # signs in or a session ends (PLAN_AUTH.md §8): a secret, recovery codes or
+  # signs in or a session ends (docs/dev/AUTH.md): a secret, recovery codes or
   # a provider identity must never pass to the next person.
   # `return_to_after_authenticating` is not here: it is the next person's own.
   AUTHENTICATION_FLOW_KEYS = %i[
@@ -26,13 +26,13 @@ module Authentication
       skip_before_action :enforce_deletion_window, **options
     end
 
-    # The pages an enrolment-only session may reach (PLAN_AUTH.md §5.3).
+    # The pages an enrolment-only session may reach (docs/dev/AUTH.md).
     def allow_enrolment_only_access(**options)
       skip_before_action :enforce_second_factor_enrolment, **options
     end
 
     # The pages an account in its deletion window may reach
-    # (PLAN_ACCOUNT.md §4.2).
+    # (docs/dev/ACCOUNT.md).
     def allow_deletion_window_access(**options)
       skip_before_action :enforce_deletion_window, **options
     end
@@ -65,7 +65,7 @@ module Authentication
 
       # An enrolment-only session whose account gained a factor elsewhere only
       # ever proved the password: it ends, and the next sign-in asks for the
-      # factor instead of leaving it on the enrolment page (PLAN_AUTH.md §5.3).
+      # factor instead of leaving it on the enrolment page (docs/dev/AUTH.md).
       if session.enrolment_only? && session.user.second_factor_enrolled?
         session.destroy
         drop_session_cookie
@@ -80,7 +80,7 @@ module Authentication
     def enrolment_only_session? = Current.session&.enrolment_only? || false
 
     # A password account whose grace period has ended may only enrol a second
-    # factor (PLAN_AUTH.md §5.3). A full session whose deadline passes while it
+    # factor (docs/dev/AUTH.md). A full session whose deadline passes while it
     # is open becomes enrolment-only on its next request.
     def enforce_second_factor_enrolment
       current = Current.session
@@ -101,7 +101,7 @@ module Authentication
     end
 
     # An account whose deletion is scheduled is deactivated: every page leads
-    # to the one that offers to cancel it (PLAN_ACCOUNT.md §4.2).
+    # to the one that offers to cancel it (docs/dev/ACCOUNT.md).
     def enforce_deletion_window
       return unless Current.session&.user&.deletion_scheduled?
 
@@ -112,7 +112,7 @@ module Authentication
       end
     end
 
-    # Sensitive actions need a recent proof of identity (PLAN_AUTH.md §5.5).
+    # Sensitive actions need a recent proof of identity (docs/dev/AUTH.md).
     # A GET returns to itself afterwards; any other request returns to the page
     # it was sent from, where the person repeats the action.
     def require_recent_authentication
@@ -121,8 +121,8 @@ module Authentication
       redirect_to_reauthentication
     end
 
-    # The operator console re-confirms a second factor (PLAN_AUTH.md §5.4). A
-    # demo operator holds no factor at all (PLAN_DEMO.md §3): the console still
+    # The operator console re-confirms a second factor (docs/dev/AUTH.md). A
+    # demo operator holds no factor at all (docs/dev/DEMO.md): the console still
     # needs a recent proof of identity, and the password is the only one left.
     def require_recent_second_factor
       return if Current.session.recent_second_factor?
@@ -146,7 +146,7 @@ module Authentication
       session.delete(:return_to_after_authenticating) || me_url
     end
 
-    # The password or the provider was right (PLAN_AUTH.md §5.1, §6.2). A
+    # The password or the provider was right (docs/dev/AUTH.md). A
     # provider's own sign-in is trusted, except for the operator. An account
     # that owes a factor and has one answers it before any session exists;
     # one that owes it without having it signs in restricted to enrolment once
@@ -197,7 +197,7 @@ module Authentication
     end
 
     # Allure's own second factor is owed on the password path, and by the
-    # operator whatever the path (PLAN_AUTH.md §1).
+    # operator whatever the path (docs/dev/AUTH.md).
     def allure_factor_applies?(user, auth_method)
       auth_method == "password" || user.instance_operator?
     end
@@ -209,7 +209,7 @@ module Authentication
 
     # The proof of identity the session starts with is the moment the person
     # authenticated: now for a password or a factor just answered, the
-    # provider's own `auth_time` when it reports one (PLAN_AUTH.md §6.2).
+    # provider's own `auth_time` when it reports one (docs/dev/AUTH.md).
     # The CSRF token is rotated too, so a token read before the sign-in is
     # worth nothing after it (§8).
     def start_new_session_for(user, second_factor: nil, enrolment_only: false, auth_method: "password",
@@ -219,7 +219,7 @@ module Authentication
       now = Time.current
       user.sessions.create!(
         # A demo's shared accounts show their session list to strangers: no
-        # IP is ever persisted there (PLAN_DEMO.md §3).
+        # IP is ever persisted there (docs/dev/DEMO.md).
         user_agent: request.user_agent, ip_address: (Allure::Demo.enabled? ? nil : request.remote_ip),
         last_seen_at: now,
         reauthenticated_at: authenticated_at || now,

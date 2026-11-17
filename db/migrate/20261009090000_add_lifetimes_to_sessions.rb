@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Session hardening (PLAN_AUTH.md §4.5, §8): a session expires after an idle
+# Session hardening (docs/dev/AUTH.md): a session expires after an idle
 # period and an absolute lifetime, and sensitive actions read the last time its
 # owner proved their identity. Existing rows take their last update as their
 # last activity; none counts as recently re-authenticated.

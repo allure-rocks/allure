@@ -4,11 +4,11 @@ module Workouts
   # Freezes a workout into a publication. With the default `immediate` delay the
   # publication activates in the request path; with a safety-delay preset it is
   # created `scheduled` and nothing local or federated refers to it until
-  # ScheduledPublicationActivation runs (PLAN_DELAYED_PUBLISHING.md). No outbox
+  # ScheduledPublicationActivation runs (docs/dev/DELAYED-PUBLISHING.md). No outbox
   # event is created here, so cancelling inside a delay leaves no trace.
   class Publisher
     class PublicationError < StandardError
-      # A stable code for programs (PLAN_API.md §6.4); the message stays the
+      # A stable code for programs (docs/dev/API.md); the message stays the
       # translated sentence the web shows.
       attr_reader :code
 
@@ -27,7 +27,7 @@ module Workouts
     end
 
     # `photo_ids`/`photos_acknowledged`: the owner's choice of photos
-    # (PLAN_PHOTOS.md §5.2); nil takes every ready, non-sensitive photo.
+    # (docs/dev/PHOTOS.md); nil takes every ready, non-sensitive photo.
     def initialize(user:, workout:, profile:, delay: nil, photo_ids: nil, photos_acknowledged: false)
       @user = user
       @workout = workout
@@ -47,7 +47,7 @@ module Workouts
       workout_publication = nil
       WorkoutPublication.transaction do
         @workout.with_lock do
-          # One live publication per audience (PLAN_AUDIENCES.md §2): another
+          # One live publication per audience (docs/dev/PUBLISHING.md): another
           # audience may be published beside it.
           @workout.reset_publications
           if @workout.active_publication_for(@profile.audience)

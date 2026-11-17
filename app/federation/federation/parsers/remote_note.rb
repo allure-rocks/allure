@@ -6,7 +6,7 @@ require "uri"
 module Federation
   module Parsers
     # Turns an embedded Allure Note into an immutable normalized value
-    # (PLAN_M5 §8.2). Whole-document violations raise InvalidObject; malformed
+    # (docs/dev/FEDERATION.md). Whole-document violations raise InvalidObject; malformed
     # individual values are skipped and recorded as warnings. The preserved
     # raw object keeps unknown tags and non-Note entries.
     class RemoteNote
@@ -238,7 +238,7 @@ module Federation
       end
 
       # The origin's profile closed comments on this publication
-      # (PLAN_COMMENTS.md §6.4). Presence-only: `closed` is the one value, an
+      # (docs/dev/COMMENTS.md). Presence-only: `closed` is the one value, an
       # explicit `open` is the default and anything else is a warning that
       # keeps comments open.
       def parse_comments_closed
@@ -298,7 +298,7 @@ module Federation
         nil
       end
 
-      # The weather summary (PLAN_WEATHER.md §6): the first occurrence of each
+      # The weather summary (docs/dev/WEATHER.md): the first occurrence of each
       # tag counts; malformed values, or a summary that is not plausible as a
       # whole, are dropped with a warning.
       def parse_weather
@@ -339,7 +339,7 @@ module Federation
           end
           # The fetch is signed with a local actor's key, so an attachment on
           # another authority would turn this instance into a confused deputy
-          # against a third party's followers-only media (PLAN_M5 §8.2).
+          # against a third party's followers-only media (docs/dev/FEDERATION.md).
           unless same_authority?(url)
             warn("attachment authority does not match the author")
             next

@@ -5,9 +5,9 @@ require "time"
 module Allure
   module RemoteImports
     # One activity as a provider's listing describes it, before any fetch
-    # (PLAN_REMOTE_IMPORTS.md §5.1). `geometry` describes what the listing
+    # (docs/dev/REMOTE-IMPORTS.md). `geometry` describes what the listing
     # declares: an indoor activity without a GPS track is imported as a
-    # positionless recording (PLAN_NO_GPS.md §8), never skipped for that
+    # positionless recording (docs/dev/NO-GPS.md), never skipped for that
     # reason; `manual` marks an activity whose provider holds no file at all,
     # which is skipped without a request; `ended_at` carries the listed end,
     # either the window a fetch needs (Withings's series) or the end a listing

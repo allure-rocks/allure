@@ -60,7 +60,7 @@ RSpec.describe "Workout charts" do
     expect(response.body).not_to include("lat", "lon", "index", "segment_index")
   end
 
-  it "adds the weather and device temperature channels to the owner's v2 response (PLAN_WEATHER.md §7)" do
+  it "adds the weather and device temperature channels to the owner's v2 response (docs/dev/WEATHER.md)" do
     create(:track_segment, workout:, points: [
       { "t" => 0, "d" => 0.0, "lat" => 45.08, "lon" => 6.42, "ele" => 100.0, "temp" => 19 },
       { "t" => 60, "d" => 250.0, "lat" => 45.09, "lon" => 6.43, "ele" => 112.0, "temp" => 21 }

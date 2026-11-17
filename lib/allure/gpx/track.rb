@@ -21,7 +21,7 @@ module Allure
     # A track whose file recorded no position at all (an indoor FIT/TCX
     # activity) keeps its time and sensor readings: `#positioned?` is false and
     # the analyzer measures it from the device's distance and speed instead of
-    # the geometry (PLAN_NO_GPS.md).
+    # the geometry (docs/dev/NO-GPS.md).
     Track = Data.define(:creator, :name, :description, :calories, :source_max_speed,
                         :source_ascent, :source_descent, :activity_signals, :segments, :laps,
                         :commute_hint) do
@@ -47,12 +47,12 @@ module Allure
 
       # A track is positioned when its segments are: a positionless recording
       # is an indoor activity the device tracked without a fix
-      # (PLAN_NO_GPS.md).
+      # (docs/dev/NO-GPS.md).
       def positioned? = segments.any? { |segment| segment.positioned? }
 
       # Moves every point time and every recorded lap start by one offset in
       # seconds, leaving positions, durations and sensor readings untouched
-      # (PLAN_DEMO.md §4: a demo instance dates its seeded recordings near the
+      # (docs/dev/DEMO.md: a demo instance dates its seeded recordings near the
       # present instead of the day the file was recorded). The source track is
       # never mutated; a zero or nil offset returns it unchanged. The stored
       # original file always keeps its own dates.

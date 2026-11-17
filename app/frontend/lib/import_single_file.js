@@ -1,5 +1,5 @@
 // The options card's title applies to the single workout a single-file import
-// produces (PLAN_IMPORT_SOURCES.md §2). Every source is single-entry except a
+// produces (docs/dev/IMPORT-SOURCES.md). Every source is single-entry except a
 // ZIP, which the archive reader enumerates (Workouts::ArchiveReader): a bare
 // track file, a gzip-compressed one and a KMZ all yield exactly one entry.
 const MULTI_ENTRY_EXTENSION = ".zip";

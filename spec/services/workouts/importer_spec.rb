@@ -39,7 +39,7 @@ RSpec.describe Workouts::Importer do
     expect(result.workout.source_digest).to match(/\A\h{64}\z/)
   end
 
-  describe "with a time shift (PLAN_DEMO.md §4)" do
+  describe "with a time shift (docs/dev/DEMO.md)" do
     let(:shift) { 86_400 * 195 }
     let(:other_user) { create(:user) }
 
@@ -74,7 +74,7 @@ RSpec.describe Workouts::Importer do
     end
   end
 
-  it "stores the heart-rate histogram with the workout (PLAN_HEART_RATE.md §3.4)" do
+  it "stores the heart-rate histogram with the workout (docs/dev/HEART-RATE.md)" do
     user.update!(max_heart_rate: 190)
 
     workout = importer("with_extensions").call.workout
@@ -907,7 +907,7 @@ RSpec.describe Workouts::Importer do
     end
   end
 
-  describe "text a file hands on (PLAN_M1.md §7.3)" do
+  describe "text a file hands on (docs/dev/WORKOUT.md)" do
     def uploaded_text(content, filename)
       file = Tempfile.new([ "importer-", File.extname(filename) ])
       file.write(content)

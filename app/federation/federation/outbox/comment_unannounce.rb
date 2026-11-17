@@ -4,7 +4,7 @@ module Federation
   module Outbox
     # The thread host stops relaying a comment that left its thread — deleted
     # by its author, removed by the owner, or taken out with a blocked or
-    # deleted account (PLAN_COMMENTS.md §6.3, §8.4). The Undo goes exactly
+    # deleted account (docs/dev/COMMENTS.md). The Undo goes exactly
     # where the Announce was attempted; deliveries never attempted are
     # cancelled and the Announce's payload is redacted, so the words travel no
     # further and stay nowhere in the outbox.

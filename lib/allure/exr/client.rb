@@ -3,7 +3,7 @@
 module Allure
   module Exr
     # Reads a signed-in EXR account with nothing but its remember cookie
-    # (PLAN_REMOTE_IMPORTS.md §7b.3): the session list, page by page, and each
+    # (docs/dev/REMOTE-IMPORTS.md): the session list, page by page, and each
     # session's FIT file. Only GET requests are sent. A landing on the sign-in
     # page raises `Error::SignedOut`; a remember cookie the site replaces is
     # handed to `on_rotate` before the next request.

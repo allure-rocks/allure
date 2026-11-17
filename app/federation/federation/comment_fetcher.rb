@@ -3,7 +3,7 @@
 require "json"
 
 module Federation
-  # Fetches a relayed comment from its author's own instance (PLAN_COMMENTS.md
+  # Fetches a relayed comment from its author's own instance (docs/dev/COMMENTS.md
   # §7.5): the thread host could otherwise put any words in any actor's name.
   # The GET is signed by the local recipient and bounded like any object
   # fetch. A refusal — the author's instance does not serve the comment — is

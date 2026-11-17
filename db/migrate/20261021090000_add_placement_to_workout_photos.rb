@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Where a photo sits along its workout (PLAN_PHOTOS.md §4): the position in
+# Where a photo sits along its workout (docs/dev/PHOTOS.md): the position in
 # use, how it was found, and its distance and elapsed time along the
 # recording. Owner-only. `cleared` is the owner's explicit removal, which an
 # automatic placement never overrides, like `manual`. The workout carries the

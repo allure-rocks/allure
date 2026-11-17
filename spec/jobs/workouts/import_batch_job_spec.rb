@@ -44,7 +44,7 @@ RSpec.describe Workouts::ImportBatchJob do
     expect(batch.entries.order(:position).map { |entry| entry.workout.original_file.filename.to_s }).to eq([ "one.gpx", "two.gpx" ])
   end
 
-  it "passes the demo time shift through to every imported workout (PLAN_DEMO.md §4)" do
+  it "passes the demo time shift through to every imported workout (docs/dev/DEMO.md)" do
     other = create(:user)
     plain = create(:workout_import_batch, user: other, sport:)
     attach_source(plain, "archive.zip", zip_content("one.gpx" => gpx))
@@ -336,7 +336,7 @@ RSpec.describe Workouts::ImportBatchJob do
     expect(batch.entries.first.status).to eq("cancelled")
   end
 
-  describe "the uploaded files (PLAN_IMPORT_SOURCES.md §3.2)" do
+  describe "the uploaded files (docs/dev/IMPORT-SOURCES.md)" do
     it "frees them once the batch completes, the workouts keeping their own originals" do
       batch = create(:workout_import_batch, user:, sport:)
       attach_source(batch, "archive.zip", zip_content("one.gpx" => gpx))

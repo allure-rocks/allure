@@ -2,7 +2,7 @@
 
 # One index per personal-record winner, so Records::RecomputeService's
 # `ORDER BY <metric> LIMIT 1` per (user, sport) is index-backed instead of a
-# sort over the account's whole workout history (PLAN_BEST_EFFORTS.md §4).
+# sort over the account's whole workout history (docs/dev/BEST-EFFORTS.md).
 # Concurrent builds keep a deployment from blocking writes on `workouts`.
 class AddRecordWinnerIndexesToWorkouts < ActiveRecord::Migration[8.1]
   disable_ddl_transaction!

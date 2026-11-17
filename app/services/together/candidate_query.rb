@@ -2,7 +2,7 @@
 
 module Together
   # The recordings co-presence detection may compare a workout with
-  # (PLAN_TOGETHER.md §8): local accounts with an accepted follow in both
+  # (docs/dev/SHARED-ACTIVITIES.md): local accounts with an accepted follow in both
   # directions, both opted in and not suspended; recordings, not commutes,
   # whose recording windows overlap this one's; and whose tracks come near
   # this one's somewhere. The detector makes the decision; this only bounds

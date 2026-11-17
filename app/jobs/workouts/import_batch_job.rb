@@ -7,13 +7,13 @@ module Workouts
     queue_as :default
 
     # One file import at a time per account: its others wait their turn
-    # instead of taking every worker thread (PLAN_IMPORT_SOURCES.md §3.2).
+    # instead of taking every worker thread (docs/dev/IMPORT-SOURCES.md).
     limits_concurrency key: ->(batch) { batch.user_id.to_s }, group: "WorkoutImportBatch", duration: 6.hours
 
     retry_on ActiveRecord::Deadlocked, wait: :polynomially_longer, attempts: 5
 
     # `time_shift:` is the optional offset in seconds the demo seed passes
-    # through to each import (PLAN_DEMO.md §4); ordinary batches never set it.
+    # through to each import (docs/dev/DEMO.md); ordinary batches never set it.
     def perform(batch, time_shift: nil)
       return if batch.terminal?
 
@@ -148,7 +148,7 @@ module Workouts
         sport: batch.sport,
         # The options card's title belongs to the single workout a single-file
         # import produces; a batch never titles every entry alike
-        # (PLAN_IMPORT_SOURCES.md §2).
+        # (docs/dev/IMPORT-SOURCES.md).
         title: single_entry_batch?(batch) ? batch.title : nil,
         notes: batch.notes,
         commute: batch.commute,
@@ -188,7 +188,7 @@ module Workouts
     end
 
     # Every source is enumerated before the first import, so the frozen total
-    # already tells an archive from a few new outings (PLAN_AUTO_PUBLISHING.md
+    # already tells an archive from a few new outings (docs/dev/AUTO-PUBLISHING.md
     # §3).
     def bulk?(batch)
       batch.total_entries > WorkoutAutoPublication::BULK_FILE_ENTRIES
@@ -297,7 +297,7 @@ module Workouts
     end
 
     # A bulk import skipped the per-recording route-suggestion pass; the
-    # account sweep now walks its recordings newest first (PLAN_SEGMENTS.md
+    # account sweep now walks its recordings newest first (docs/dev/SEGMENTS.md
     # §7.7). A failed or cancelled batch suggests nothing.
     def enqueue_route_suggestion_sweep(batch)
       return unless batch.status == "completed"

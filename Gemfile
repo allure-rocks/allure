@@ -24,13 +24,13 @@ gem "jbuilder"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 
-# Second factors (PLAN_AUTH.md §2): authenticator codes, their enrolment QR
+# Second factors (docs/dev/AUTH.md): authenticator codes, their enrolment QR
 # code, and passkeys / security keys.
 gem "rotp", "~> 6.3"
 gem "rqrcode", "~> 3.1"
 gem "webauthn", "~> 3.4"
 
-# Identity providers (PLAN_AUTH.md §6): the OmniAuth handshake with Rails CSRF
+# Identity providers (docs/dev/AUTH.md): the OmniAuth handshake with Rails CSRF
 # protection on its request phase, OpenID Connect for Google and a generic
 # provider, and Sign in with Apple's form-post flow.
 gem "omniauth", "~> 2.1"
@@ -49,7 +49,7 @@ gem "solid_cable"
 # Metrics for Prometheus/Grafana. Yabeda is the collector framework, the
 # Prometheus adapter renders the text exposition, and yabeda-rails supplies the
 # request count/duration metrics. There is no Solid Queue adapter: queue and
-# federation gauges are scrape-time collect blocks (PLAN_METRICS.md).
+# federation gauges are scrape-time collect blocks (docs/dev/METRICS.md).
 gem "yabeda"
 gem "yabeda-prometheus"
 gem "yabeda-rails"
@@ -76,10 +76,10 @@ gem "pagy"
 # the browser.
 gem "httparty"
 gem "multipart-post"
-# The Model Context Protocol endpoint for AI assistants (PLAN_MCP.md), served
+# The Model Context Protocol endpoint for AI assistants (docs/dev/MCP.md), served
 # stateless from a controller; the official SDK tracks protocol revisions.
 gem "mcp", "~> 1.7"
-# Push notifications for the iOS companion (PLAN_PUSH.md §5): RFC 8291
+# Push notifications for the iOS companion (docs/dev/PUSH.md): RFC 8291
 # payload encryption and the VAPID header; the request itself goes through the
 # federation client and its SSRF guard.
 gem "web-push", "~> 3.1"
@@ -119,6 +119,6 @@ group :test do
   gem "webmock", "~> 3.26"
   gem "vcr", "~> 6.4"
   # The public REST API's contract tests validate every request and response
-  # against docs/openapi/v1.yaml (PLAN_API.md §12).
+  # against docs/openapi/v1.yaml (docs/dev/API.md).
   gem "openapi_first", "~> 4.2"
 end

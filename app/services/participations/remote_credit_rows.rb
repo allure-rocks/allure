@@ -2,7 +2,7 @@
 
 module Participations
   # Gives a confirmed invitation from another instance its credit row
-  # (PLAN_TOGETHER.md §7): a metrics-only workout of the local account,
+  # (docs/dev/SHARED-ACTIVITIES.md): a metrics-only workout of the local account,
   # counting in its statistics and column records like a local credit, built
   # from the received note's figures — which the owner's instance required
   # the publication to share — and the sport slug and start the Invite

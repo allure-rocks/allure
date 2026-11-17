@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The synchronous bulk actions (PLAN_BULK_ACTIONS.md §3): the commute flag
+  # The synchronous bulk actions (docs/dev/BULK-ACTIONS.md): the commute flag
   # and equipment links. Each call touches only the owner's rows, counts only
   # actual changes, and refreshes equipment totals once per equipment — never
   # per workout.
@@ -42,7 +42,7 @@ module Workouts
       count
     end
 
-    # One `workout.updated` per workout changed (PLAN_API.md §11.2).
+    # One `workout.updated` per workout changed (docs/dev/API.md).
     def announce(ids, field)
       @user.workouts.where(id: ids).find_each { Webhooks::Events.workout_updated(it, [ field ]) }
     end

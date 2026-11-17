@@ -2,7 +2,7 @@
 
 module Segments
   # Fills the stored elevation profile of every source-backed segment that does
-  # not have one yet (PLAN_DERIVATIONS.md §5). Bounded id-cursor batches that
+  # not have one yet (docs/dev/DERIVATIONS.md). Bounded id-cursor batches that
   # resume themselves; a segment whose source workout was deleted, or whose
   # provenance no longer matches, is stamped [] by the build job and never
   # revisited.

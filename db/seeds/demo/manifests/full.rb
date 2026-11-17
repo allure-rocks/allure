@@ -13,7 +13,7 @@
 module DemoSeed
   module Manifests
     # The demo instance and the development seed re-date the whole dataset so
-    # its most recent activity lands near the present (PLAN_DEMO.md §2). The
+    # its most recent activity lands near the present (docs/dev/DEMO.md). The
     # few delayed publications sit on recent activities, so some are still
     # waiting once the dataset is re-dated. Each anchor is the newest date
     # of its family in this manifest: the files anchor matches the newest
@@ -78,7 +78,7 @@ module DemoSeed
               title: "Argentière – Lac Blanc", description: "Montée directe au lac, descente par les Chéserys.",
               equipment: [ "Hoka Speedgoat" ], publish: :public }
           ],
-          # Typed in by hand (PLAN_MANUAL_ENTRY.md): a gym session and a run
+          # Typed in by hand (docs/dev/MANUAL-ENTRY.md): a gym session and a run
           # the watch missed. They count in the totals and the shoes' wear,
           # never in the records.
           manual_workouts: [

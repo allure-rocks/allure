@@ -317,7 +317,7 @@ RSpec.describe WorkoutPublication do
 
   # `visible_to` is the SQL projection behind the profile listing; it must
   # never drift from the browser branch of Workouts::PublicationPolicy
-  # (PLAN_M5 §13.2). Each case compares the scope's rows with the policy's
+  # (docs/dev/FEDERATION.md). Each case compares the scope's rows with the policy's
   # verdict for the same viewer.
   describe "visible_to" do
     def visible_ids(scope)
@@ -386,7 +386,7 @@ RSpec.describe WorkoutPublication do
     end
   end
 
-  # The board's route rule (PLAN_SEGMENTS.md §8.2): the frozen profile shares
+  # The board's route rule (docs/dev/SEGMENTS.md): the frozen profile shares
   # the route and the route was not redacted.
   describe "route_shared" do
     it "keeps publications whose frozen profile shares the route" do

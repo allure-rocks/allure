@@ -5,7 +5,7 @@
 # segment efforts), `pause` (one lap per recording segment), and `climb`
 # (detected from the elevation profile). Rows are rebuildable in one
 # transaction by Laps::Rebuild and are display-only: never URL-addressable, no
-# ShortUUID, and never part of a publication. See PLAN_SMART_LAPS.md.
+# ShortUUID, and never part of a publication. See docs/dev/SMART-LAPS.md.
 class DetectedLap < ApplicationRecord
   SOURCES = %w[loop route pause climb descent stop speed_interval power_interval].freeze
   LAP_SOURCES = %w[loop route pause].freeze

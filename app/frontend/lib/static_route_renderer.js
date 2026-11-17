@@ -218,7 +218,7 @@ function normalizeRoute(input) {
 }
 
 // A virtual world's map image, handed over by the Ruby renderer as a data URL
-// so the renderer needs no network and no origin exception (PLAN_VIRTUAL.md).
+// so the renderer needs no network and no origin exception (docs/dev/VIRTUAL-PLATFORMS.md).
 function normalizeVirtualBasemap(value) {
   if (value === undefined || value === null) return null;
   if (typeof value !== "object" || Array.isArray(value)) {

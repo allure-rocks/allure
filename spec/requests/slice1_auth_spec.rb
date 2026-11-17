@@ -229,7 +229,7 @@ RSpec.describe "Slice 1 authentication" do
     end
 
     context "when a deleted account's username is offered again" do
-      it "refuses it (PLAN_ACCOUNT.md §2.1)" do
+      it "refuses it (docs/dev/ACCOUNT.md)" do
         deleted = create(:user, username: "gone_rider")
         Federation::ActorProvisioner.new(user: deleted).call!
         deleted.destroy!

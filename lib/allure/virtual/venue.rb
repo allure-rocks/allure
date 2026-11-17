@@ -2,7 +2,7 @@
 
 module Allure
   module Virtual
-    # A virtual world's real-world anchor (PLAN_VIRTUAL.md). The platform
+    # A virtual world's real-world anchor (docs/dev/VIRTUAL-PLATFORMS.md). The platform
     # renders a fictional course at a real location, so the workout's geometry
     # sits at the anchor and the world can be recognised from the start point.
     # `radius_m` is the generous bound that contains every published route of

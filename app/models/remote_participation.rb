@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # An invitation a local account received from a remote Allure owner to confirm
-# it took part in a publication it holds (PLAN_TOGETHER.md §3.3, §7). It names
+# it took part in a publication it holds (docs/dev/SHARED-ACTIVITIES.md). It names
 # the received note and the `Invite` that carried it; its answer is a
 # confirmation or a refusal, and either side may withdraw it later. A refusal
 # stays live, so the same publication is never offered again; a withdrawal
@@ -11,7 +11,7 @@ class RemoteParticipation < ApplicationRecord
 
   belongs_to :remote_note
   belongs_to :recipient_actor, class_name: "Actor"
-  # The account's credit row once it confirmed (PLAN_TOGETHER.md §7).
+  # The account's credit row once it confirmed (docs/dev/SHARED-ACTIVITIES.md).
   has_one :credit_row, class_name: "Workout", inverse_of: :remote_participation
 
   validates :object_uri, :invite_activity_uri, presence: true

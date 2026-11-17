@@ -4,7 +4,7 @@ require "csv"
 
 module Allure
   module StravaArchive
-    # Reads `activities.csv` from a Strava archive (PLAN_STRAVA_ARCHIVE.md §2).
+    # Reads `activities.csv` from a Strava archive (docs/dev/STRAVA-ARCHIVE.md).
     #
     # Strava writes the headers, the activity types and the dates in the
     # athlete's display language, so no header text is trusted: the leading

@@ -3,7 +3,7 @@
 module Workouts
   # Sweeps every workout whose stored analysis or import-detection generation
   # is older than the current one through Workouts::RebuildJob, in bounded
-  # id-cursor batches that resume themselves (PLAN_DERIVATIONS.md §5).
+  # id-cursor batches that resume themselves (docs/dev/DERIVATIONS.md).
   # Idempotent and safe to re-run: each workout is reconciled against its own
   # immutable file, so a new analyzer or a new virtual platform is a constant
   # bump plus one run of this sweep.

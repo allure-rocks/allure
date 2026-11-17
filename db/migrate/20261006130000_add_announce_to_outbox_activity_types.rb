@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_COMMENTS.md §6.6, §8.4: the thread host relays every accepted public
+# docs/dev/COMMENTS.md: the thread host relays every accepted public
 # comment as an Announce, the one activity type the comments relay adds.
 class AddAnnounceToOutboxActivityTypes < ActiveRecord::Migration[8.1]
   ACTIVITY_TYPES = %w[Create Delete Undo Follow Accept Like Reject Announce].freeze

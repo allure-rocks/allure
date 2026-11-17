@@ -40,21 +40,21 @@ module Workouts
       @equipment_ids = equipment_ids
       @commute = commute
       # A remote import names its connection and the provider's id, written
-      # with the workout (PLAN_REMOTE_IMPORTS.md §5.2).
+      # with the workout (docs/dev/REMOTE-IMPORTS.md).
       @import_connection = import_connection
       @external_id = external_id
       # A bulk import (a large file batch, a date-range retrieval) is never
-      # published automatically (PLAN_AUTO_PUBLISHING.md §3).
+      # published automatically (docs/dev/AUTO-PUBLISHING.md).
       @bulk = bulk
       # The sport another service's metadata names, which outranks the file's
-      # detection (PLAN_STRAVA_ARCHIVE.md §4).
+      # detection (docs/dev/STRAVA-ARCHIVE.md).
       @declared_sport = declared_sport
       # When set, a recording already starting within this window is the same
       # outing imported another way, and this one is a duplicate
-      # (PLAN_STRAVA_ARCHIVE.md §7).
+      # (docs/dev/STRAVA-ARCHIVE.md).
       @near_duplicate_window = near_duplicate_window
       # An offset in seconds applied to the parsed track before anything is
-      # derived from it (PLAN_DEMO.md §4): the demo seed dates its recordings
+      # derived from it (docs/dev/DEMO.md): the demo seed dates its recordings
       # near the present. Persisted on the workout so every re-analysis of the
       # original re-applies it. Every ordinary import leaves it unset.
       @time_shift = time_shift
@@ -68,7 +68,7 @@ module Workouts
       track = parse_track
       # The shift precedes every derivation, so metrics, laps, efforts and the
       # near-duplicate window all read the same shifted times
-      # (PLAN_DEMO.md §4).
+      # (docs/dev/DEMO.md).
       track = track.shifted(@time_shift) if @time_shift.to_i.nonzero?
       resolution = resolve_sport(track)
       metrics = analyze_track(track, resolution.sport)
@@ -198,7 +198,7 @@ module Workouts
     end
 
     # A credit row is not a recording, so a credited outing does not stop the
-    # participant's own recording of it (PLAN_TOGETHER.md §6.6).
+    # participant's own recording of it (docs/dev/SHARED-ACTIVITIES.md).
     def near_duplicate(started_at)
       return nil unless @near_duplicate_window && started_at
 
@@ -245,7 +245,7 @@ module Workouts
       totals = device_elevation_totals(track, metrics, sport)
       # The CPU computation runs before the transaction starts, so the
       # `users` row lock taken by every workout insert is not held during it.
-      # Persistence stays inside the transaction (PLAN_BEST_EFFORTS.md §4).
+      # Persistence stays inside the transaction (docs/dev/BEST-EFFORTS.md).
       efforts = BestEfforts::Rebuild.compute(
         sport:,
         segments: metrics.segments,
@@ -367,7 +367,7 @@ module Workouts
     end
 
     # Everything geography-driven is skipped for a positionless recording
-    # (PLAN_NO_GPS.md §6): no venue, no route image, no segment matching, no
+    # (docs/dev/NO-GPS.md): no venue, no route image, no segment matching, no
     # co-presence detection, no terrain elevation, no toponymy. Smart laps,
     # best efforts and records are derived from the points inside the
     # persistence transaction or by their own job.
@@ -401,7 +401,7 @@ module Workouts
     end
 
     # A positionless recording has no geometry to match, so it derives its
-    # smart laps and records directly (PLAN_NO_GPS.md §6). The loop generation
+    # smart laps and records directly (docs/dev/NO-GPS.md). The loop generation
     # is stamped at import: no loop or route effort will ever arrive for it.
     def enqueue_laps(workout)
       workout.update_columns(loop_reuse_version: Segments::LoopReuse::VERSION)
@@ -410,14 +410,14 @@ module Workouts
       Rails.error.report(error, handled: true, context: { component: self.class.name, workout_id: workout.id })
     end
 
-    # Co-presence detection (PLAN_TOGETHER.md §8) reads only the stored points.
+    # Co-presence detection (docs/dev/SHARED-ACTIVITIES.md) reads only the stored points.
     def enqueue_together_detection(workout)
       Together::DetectWorkoutJob.perform_later(workout)
     rescue StandardError => error
       Rails.error.report(error, handled: true, context: { component: self.class.name, workout_id: workout.id })
     end
 
-    # A recurring route is suggested, never created (PLAN_SEGMENTS.md §7.7).
+    # A recurring route is suggested, never created (docs/dev/SEGMENTS.md).
     # A bulk import skips the per-recording pass: the end of its batch runs the
     # account sweep instead, newest first, so the suggestion's reference is the
     # most recent occurrence.
@@ -451,7 +451,7 @@ module Workouts
       Rails.error.report(error, handled: true, context: { component: self.class.name, workout_id: workout.id })
     end
 
-    # Weather is fetched for an account that consented (PLAN_WEATHER.md §5);
+    # Weather is fetched for an account that consented (docs/dev/WEATHER.md);
     # the refresh itself checks every condition. Like the geocoding, it waits
     # for a requested terrain profile, whose re-analysis (or the apply job
     # giving up) schedules it on the final elevations.
@@ -465,7 +465,7 @@ module Workouts
 
     # Terrain elevation is fetched and applied only for a workout whose
     # recorded profile is empty, on a sport that records elevation, for an
-    # account that opted in (PLAN_ELEVATION.md §5).
+    # account that opted in (docs/dev/ELEVATION.md).
     def enqueue_elevation(workout)
       return unless Allure::Elevation::Config.configured?
       return unless workout.sport.records_elevation?
@@ -490,7 +490,7 @@ module Workouts
     end
 
     # The device's own totals win over the computed profile when the file
-    # carries them (PLAN_ELEVATION.md §3). Sports that ignore elevation keep
+    # carries them (docs/dev/ELEVATION.md). Sports that ignore elevation keep
     # the computed zero.
     def device_elevation_totals(track, metrics, sport)
       return nil unless sport.records_elevation?
@@ -535,7 +535,7 @@ module Workouts
     end
 
     # RGeo helpers. A positionless recording has no coordinates at all, so
-    # both builders answer nil and the columns stay empty (PLAN_NO_GPS.md §5).
+    # both builders answer nil and the columns stay empty (docs/dev/NO-GPS.md).
     def factory = RGeo::Geographic.spherical_factory(srid: 4326)
 
     def build_point(lon_lat)

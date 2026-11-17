@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_TOGETHER.md §3.2, §6.2, §6.5: the credit row lifecycle.
+# docs/dev/SHARED-ACTIVITIES.md: the credit row lifecycle.
 RSpec.describe Participations::CreditRows do
   include ActiveJob::TestHelper
 

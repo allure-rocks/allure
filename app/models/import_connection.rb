@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# An account's link to one remote provider (PLAN_REMOTE_IMPORTS.md §4). The
+# An account's link to one remote provider (docs/dev/REMOTE-IMPORTS.md). The
 # row is stable across re-links: unlinking wipes the credentials but keeps the
 # row, so the external ids of what it imported keep deduplicating.
 #
@@ -70,7 +70,7 @@ class ImportConnection < ApplicationRecord
   def credential(key) = credentials.to_h[key.to_s]
 
   # Batches a provider session left queued when it ended (Withings's day,
-  # PLAN_REMOTE_IMPORTS.md §7c.2): the next link resumes them.
+  # docs/dev/REMOTE-IMPORTS.md): the next link resumes them.
   def interrupted_batches = import_batches.where(status: "queued")
 
   def interrupted_entries_count

@@ -46,7 +46,7 @@ export default class extends BridgeComponent {
       id: notifications.id,
       label: badge?.dataset.label ?? notifications.title,
       unread: Boolean(badge),
-      // The companion's app icon badge follows it (PLAN_PUSH.md §6).
+      // The companion's app icon badge follows it (docs/dev/PUSH.md).
       count: badge ? Number(badge.dataset.count) || 0 : 0,
     };
   }

@@ -65,7 +65,7 @@
         <small class="form-text"><%= t("settings.notifications.participation_confirmed_hint") %></small>
 
         <%# Not a notice switch: it decides whether detection compares this
-            account's recordings at all (PLAN_TOGETHER.md §8). %>
+            account's recordings at all (docs/dev/SHARED-ACTIVITIES.md). %>
         <label class="form-check form-switch mt-2">
           <%= form.check_box :together_detection_enabled, class: "form-check-input", role: "switch" %>
           <span class="form-check-label"><%= t("settings.notifications.together_detection_label") %></span>
@@ -95,7 +95,7 @@
     </div>
   <% end %>
 
-  <%# Push on the iOS companion (PLAN_PUSH.md §6): only for an app that
+  <%# Push on the iOS companion (docs/dev/PUSH.md): only for an app that
       registers the `push` bridge component, and only once the instance is
       configured. Both switches act at once through the bridge, outside the
       preferences form. %>

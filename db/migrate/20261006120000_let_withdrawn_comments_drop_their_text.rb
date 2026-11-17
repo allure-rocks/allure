@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_COMMENTS.md §3.3: deleting a comment takes its words with it. The row
+# docs/dev/COMMENTS.md: deleting a comment takes its words with it. The row
 # keeps its identity so a late Create stays refused, but a comment its author
 # deleted, or whose author's account was deleted, keeps no text: only an
 # active comment needs a non-empty body.

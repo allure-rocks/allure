@@ -3,7 +3,7 @@
 require "rails_helper"
 
 # The signed wire endpoints under /api/v1: unsigned public fetches stay
-# allowed — remote peers have no Allure account (PLAN_MEMBERS_ONLY.md). The
+# allowed — remote peers have no Allure account (docs/dev/ACCESS.md). The
 # browser-facing counterpart has its own coverage in publication_media_spec.rb.
 RSpec.describe "Workout publication media" do
   let(:owner) { create(:user) }

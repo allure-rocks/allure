@@ -3,7 +3,7 @@
 module Allure
   module RemoteImports
     # The original file of one remote activity and what the provider says
-    # about it (PLAN_REMOTE_IMPORTS.md §5.1). `io` is readable and rewindable;
+    # about it (docs/dev/REMOTE-IMPORTS.md). `io` is readable and rewindable;
     # `filename` carries the extension the importer recognises. `declared_sport`
     # is a catalog slug the provider's listing named (Withings's `subcategory`,
     # §7c.3): it outranks the file's own detection exactly as the Strava

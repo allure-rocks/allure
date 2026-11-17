@@ -55,14 +55,14 @@ module Segments
       Records::RecomputeService.new(user: workout.user, sport: workout.sport).call
       Webhooks::Events.segment_efforts_created(workout, @created_efforts || [])
       Workouts::AutoPublishJob.nudge(workout)
-      # The credited biggest climb follows the rebuilt climbs (PLAN_TOGETHER.md §6.2).
+      # The credited biggest climb follows the rebuilt climbs (docs/dev/SHARED-ACTIVITIES.md).
       Participations::CreditSyncJob.nudge(workout)
     end
 
     private
 
     # A credit row is matched for its participant on its source's points
-    # (PLAN_TOGETHER.md §6.3): plain segments only — routes, loops and laps
+    # (docs/dev/SHARED-ACTIVITIES.md): plain segments only — routes, loops and laps
     # are the owner's analysis — and kinematics only. A detached row has no
     # points left and keeps its frozen efforts.
     def perform_credit(credit)
@@ -132,7 +132,7 @@ module Segments
           average_speed: match.average_speed,
           average_pace: match.average_pace,
           # A credit row's effort is kinematics only: the channels are the
-          # source owner's (PLAN_TOGETHER.md §3.2).
+          # source owner's (docs/dev/SHARED-ACTIVITIES.md).
           average_heart_rate: (match.average_heart_rate if workout.recording?),
           max_heart_rate: (match.max_heart_rate if workout.recording?),
           average_cadence: (match.average_cadence if workout.recording?),
@@ -250,7 +250,7 @@ module Segments
     # A loop without a single effort carries no information: it was created and
     # never matched, or every workout that used it has released it. A loop the
     # owner renamed is not derived data any more — it is kept until the owner
-    # removes it (PLAN_SEGMENTS.md §7.3). Rows are locked and re-read before the
+    # removes it (docs/dev/SEGMENTS.md). Rows are locked and re-read before the
     # delete: a rename committed while this job waited is never destroyed. The
     # owner lock makes the sweep safe while another of the account's match jobs
     # runs.

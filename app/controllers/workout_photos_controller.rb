@@ -53,7 +53,7 @@ class WorkoutPhotosController < ApplicationController
     end
   end
 
-  # The whole order in one request (PLAN_PHOTOS.md §3.3); the owner's order
+  # The whole order in one request (docs/dev/PHOTOS.md); the owner's order
   # stops the automatic capture-time pass until « Trier ».
   def order
     current_user.with_lock do
@@ -75,7 +75,7 @@ class WorkoutPhotosController < ApplicationController
     render_photos
   end
 
-  # The owner's placement (PLAN_PHOTOS.md §4): drop the photo on the track
+  # The owner's placement (docs/dev/PHOTOS.md): drop the photo on the track
   # from the map, take its position away, or hand it back to the automatic
   # placement. Only a ready photo of a recording with a track is placed.
   def placement
@@ -155,7 +155,7 @@ class WorkoutPhotosController < ApplicationController
     @diagnoses = photo_diagnoses
   end
 
-  # One track read for every unplaced photo on the page (PLAN_PHOTOS.md §4.2).
+  # One track read for every unplaced photo on the page (docs/dev/PHOTOS.md).
   def photo_diagnoses
     return {} unless @placeable
 

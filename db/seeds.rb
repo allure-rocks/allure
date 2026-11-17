@@ -47,7 +47,7 @@ sport_rows = [
   [ "tennis_outdoor", "Tennis (Outdoor)", "run", 0.1, "speed", nil, false, false ],
   [ "padel_outdoor", "Padel (Outdoor)", "run", 0.1, "speed", nil, false, false ],
   [ "paragliding", "Paragliding", "other", 0.1, "speed", nil, true, false ],
-  # Indoor sessions without a distance at all (PLAN_NO_GPS.md §3.3): a
+  # Indoor sessions without a distance at all (docs/dev/NO-GPS.md): a
   # strength workout and the generic fitness catch-all.
   [ "strength_training", "Strength Training", "other", 0.1, "speed", nil, false, false ],
   [ "fitness", "Fitness", "other", 0.1, "speed", nil, false, false ]
@@ -65,7 +65,7 @@ needs_shift = Sport.where.not(slug: target_slugs).where(position: target_range).
   Sport.where(slug: target_slugs).any? { |sport| sport.position != target_positions.fetch(sport.slug) }
 Sport.update_all("position = position + 10000") if needs_shift
 
-# A virtual sport records an activity in a rendered world (PLAN_VIRTUAL.md):
+# A virtual sport records an activity in a rendered world (docs/dev/VIRTUAL-PLATFORMS.md):
 # geocoding is meaningless for it, and its place is named from the platform's
 # venue catalog instead.
 virtual_slugs = %w[cycling_virtual running_virtual rowing_virtual].to_set

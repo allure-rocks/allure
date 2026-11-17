@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-  # Runs a due account deletion (PLAN_ACCOUNT.md §2.2, §4.3) in bounded steps:
+  # Runs a due account deletion (docs/dev/ACCOUNT.md) in bounded steps:
   # each run deletes at most BATCH workouts and re-enqueues itself while work
   # remains, so a large account never holds one long job or transaction. The
   # final mail goes to the address captured before the row disappears.

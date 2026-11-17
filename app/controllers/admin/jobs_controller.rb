@@ -3,7 +3,7 @@
 module Admin
   # Background-job health with recovery controls. The panel polls a Turbo Frame
   # fragment; every mutation is audited and every destructive one is confirmed
-  # in the shared dialog (PLAN_ADMIN.md §4.2).
+  # in the shared dialog (docs/dev/ADMIN.md).
   class JobsController < BaseController
     before_action :set_no_store
 
@@ -94,7 +94,7 @@ module Admin
 
     # Re-renders every owner route image that is missing or stale. Read-only
     # when every image is current; publication images are snapshot media and
-    # are deliberately out of scope (PLAN_DERIVATIONS.md §4).
+    # are deliberately out of scope (docs/dev/DERIVATIONS.md).
     def backfill_route_images
       count = Workouts::BackfillRouteImagesJob.pending_scope.count
       if count.positive?
@@ -108,7 +108,7 @@ module Admin
 
     # Re-renders every owner segment image that is missing or stale. Read-only
     # when every image is current; publication images are snapshot media and
-    # are deliberately out of scope (PLAN_DERIVATIONS.md §4).
+    # are deliberately out of scope (docs/dev/DERIVATIONS.md).
     def backfill_segment_route_images
       count = Segments::BackfillRouteImagesJob.pending_scope.count
       if count.positive?
@@ -134,7 +134,7 @@ module Admin
     end
 
     # Schedules the weather of every consenting account's eligible workouts
-    # that have none or an older generation (PLAN_WEATHER.md §9). The weather
+    # that have none or an older generation (docs/dev/WEATHER.md). The weather
     # job is paced; read-only while the feature is off or nothing is pending.
     def backfill_weather
       count = Workouts::BackfillWeatherJob.pending_scope.count
@@ -163,7 +163,7 @@ module Admin
 
     # Re-geocodes every workout whose toponymy is missing or was built by an
     # older algorithm, and discards a legacy toponymy left on a virtual
-    # workout (PLAN_DERIVATIONS.md §5). It only schedules the globally paced
+    # workout (docs/dev/DERIVATIONS.md). It only schedules the globally paced
     # geocoding job; read-only when nothing is pending or no provider is set.
     def backfill_toponymy
       count = toponymy_backfill_count
@@ -178,7 +178,7 @@ module Admin
 
     # Re-runs loop detection for workouts whose loop was not reconciled under
     # the current reuse predicate, so duplicate loop segments converge onto the
-    # oldest similar one (PLAN_DERIVATIONS.md §5). Read-only when nothing is
+    # oldest similar one (docs/dev/DERIVATIONS.md). Read-only when nothing is
     # pending.
     def backfill_loop_reuse
       count = Segments::BackfillLoopReuseJob.pending_scope.count
@@ -192,7 +192,7 @@ module Admin
     end
 
     # Builds the stored elevation profile of every source-backed segment that
-    # does not have one yet (PLAN_DERIVATIONS.md §5). Pure and offline;
+    # does not have one yet (docs/dev/DERIVATIONS.md). Pure and offline;
     # read-only when nothing is pending.
     def backfill_elevation_profiles
       count = Segments::BackfillElevationProfilesJob.pending_scope.count
@@ -206,7 +206,7 @@ module Admin
     end
 
     # Gives every eligible course the terrain service's elevation figures
-    # (PLAN_ELEVATION.md §10), through the paced per-course job. Read-only when
+    # (docs/dev/ELEVATION.md), through the paced per-course job. Read-only when
     # nothing is pending or no provider is set.
     def backfill_segment_terrain_elevation
       count = segment_terrain_elevation_backfill_count
@@ -220,7 +220,7 @@ module Admin
     end
 
     # Geocodes the nearby place of every course still pending or failed
-    # (PLAN_SEGMENTS.md §8.4), through the paced geocoding job. Read-only when
+    # (docs/dev/SEGMENTS.md), through the paced geocoding job. Read-only when
     # nothing is pending or no provider is set.
     def backfill_segment_places
       count = segment_places_backfill_count
@@ -234,7 +234,7 @@ module Admin
     end
 
     # Compares every recording the current detector has not seen with its
-    # owner's partners on the same outing (PLAN_TOGETHER.md §8). Suggestions
+    # owner's partners on the same outing (docs/dev/SHARED-ACTIVITIES.md). Suggestions
     # for old outings reach both accounts once.
     def backfill_together_detection
       count = Together::BackfillDetectionJob.pending_scope.count
@@ -249,7 +249,7 @@ module Admin
 
     # Compares every recording the current detector has not seen with the
     # account's other recordings, newest first, to suggest the routes the owner
-    # repeats (PLAN_SEGMENTS.md §7.7). Nothing is created: a suggestion appears
+    # repeats (docs/dev/SEGMENTS.md). Nothing is created: a suggestion appears
     # on the concerned activity.
     def backfill_route_suggestions
       count = Segments::RouteSuggestionSweepJob.pending_scope.count
@@ -263,7 +263,7 @@ module Admin
     end
 
     # Computes the heart-rate histogram of every recording the current version
-    # has not seen, from the stored points (PLAN_HEART_RATE.md §3.4).
+    # has not seen, from the stored points (docs/dev/HEART-RATE.md).
     def backfill_heart_rate
       count = HeartRates::BackfillJob.pending_scope.count
       if count.positive?

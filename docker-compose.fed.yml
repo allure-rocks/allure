@@ -52,7 +52,7 @@ x-fed-app: &fed-app
     # past the gate's polling bound (db/seeds/development.rb).
     DEMO_DATASET: minimal
     # With the files' own dates, so the gate seeds the same dataset whatever
-    # the day it runs (PLAN_DEMO.md §2).
+    # the day it runs (docs/dev/DEMO.md).
     DEMO_SEED_SHIFT: "0"
     # The ring addresses itself by network alias over plain HTTP. Both of these
     # are required together: the SSRF guard only permits an http:// target when

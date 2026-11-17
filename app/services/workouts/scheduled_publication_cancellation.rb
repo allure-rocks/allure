@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Cancels the publication inside its safety delay (PLAN_DELAYED_PUBLISHING.md
+  # Cancels the publication inside its safety delay (docs/dev/DELAYED-PUBLISHING.md
   # §4). Nothing was ever shared, so the row goes straight to the terminal
   # `deleted` state and no Delete activity is created; the media is purged by
   # Workouts::PublicationCleanup like any deleted publication.

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_TOGETHER.md §6.3-§6.5: a credit row's best efforts and segment efforts
+# docs/dev/SHARED-ACTIVITIES.md: a credit row's best efforts and segment efforts
 # are derived from its source's points for the participant, kinematics only,
 # off shared boards and counters, and frozen once the source is deleted.
 RSpec.describe "Credit row derivations" do

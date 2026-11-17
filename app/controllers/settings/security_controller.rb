@@ -4,7 +4,7 @@ module Settings
   # Account security (M4 Slice 1): password change, the paginated active-session
   # table with per-session revoke, and sign out everywhere. Destructive wording
   # follows DESIGN.md §19.12 verbatim. Closing sessions requires a recent proof
-  # of identity (PLAN_AUTH.md §5.5), so a stolen cookie cannot sign its owner
+  # of identity (docs/dev/AUTH.md), so a stolen cookie cannot sign its owner
   # out of their other devices.
   class SecurityController < ApplicationController
     include Pagy::Method
@@ -12,7 +12,7 @@ module Settings
     allow_enrolment_only_access only: :show
     before_action :require_recent_authentication, only: %i[destroy_session destroy_all_sessions]
     # A visitor on a demo's shared account must not lock the next one out
-    # (PLAN_DEMO.md §3).
+    # (docs/dev/DEMO.md).
     before_action :refuse_demo_account_lockout, only: :update_password
 
     SESSIONS_PER_PAGE = 10
@@ -31,7 +31,7 @@ module Settings
       load_sessions
     end
 
-    # The second-factor reminder (PLAN_AUTH.md §5.3) stays hidden for the rest
+    # The second-factor reminder (docs/dev/AUTH.md) stays hidden for the rest
     # of the day.
     def dismiss_reminder
       cookies[:second_factor_reminder_dismissed] = { value: Date.current.iso8601, expires: Time.current.end_of_day,
@@ -40,7 +40,7 @@ module Settings
     end
 
     # A password-less account adds its first password after re-authenticating
-    # (PLAN_AUTH.md §5.6); the second-factor grace period starts with it.
+    # (docs/dev/AUTH.md); the second-factor grace period starts with it.
     def update_password
       @user = current_user
       adding = !@user.password?

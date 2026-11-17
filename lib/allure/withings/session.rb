@@ -5,7 +5,7 @@ require "digest"
 module Allure
   module Withings
     # Signs in to Withings's private API once and resolves the account's
-    # users (PLAN_REMOTE_IMPORTS.md §7c.1–7c.2). The sign-in is the Health
+    # users (docs/dev/REMOTE-IMPORTS.md–7c.2). The sign-in is the Health
     # Mate application's own: the MD5 digest of the password travels in the
     # `hash` field, exactly as the application sends it, and the answer's
     # session id is the only credential Allure ever keeps — for the few hours
@@ -16,7 +16,7 @@ module Allure
       # Withings grants the duration the login asks for (observed
       # 2026-11-01: `duration=86400` answered `duration: 86400`, while the
       # 2019 reference merely asked 900). The provider signs in for a day
-      # — PLAN_REMOTE_IMPORTS.md §7c.2 decision 9.
+      # — docs/dev/REMOTE-IMPORTS.md decision 9.
       DAILY_DURATION = 86_400
       LOGIN_PATH = "/cgi-bin/auth"
       USERS_PATH = "/cgi-bin/account"

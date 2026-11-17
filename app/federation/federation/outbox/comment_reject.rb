@@ -3,7 +3,7 @@
 module Federation
   module Outbox
     # The thread host's answer to a remote comment it did not accept, or no
-    # longer accepts (PLAN_COMMENTS.md §6.3, §8.3): a Reject of the comment's
+    # longer accepts (docs/dev/COMMENTS.md): a Reject of the comment's
     # Create, addressed to its author alone, with the reason in the private
     # `_allure_reason` property. Each reason is its own activity, so a refusal
     # at receipt and a later removal never collide.

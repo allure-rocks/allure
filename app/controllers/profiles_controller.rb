@@ -4,7 +4,7 @@ class ProfilesController < ApplicationController
   include Pagy::Method
 
   # The account's portrait and publication journal, shown to members only
-  # (PLAN_MEMBERS_ONLY.md). The listing follows Workouts::PublicationPolicy:
+  # (docs/dev/ACCESS.md). The listing follows Workouts::PublicationPolicy:
   # public publications serve every account, followers publications serve the
   # owner and accepted local followers while restricted federation is enabled.
   # Drafts and scheduled publications live on /workouts and /me, never on this
@@ -12,7 +12,7 @@ class ProfilesController < ApplicationController
   def show
     @user = User.find_by(username: params[:username].to_s.downcase)
     raise ActiveRecord::RecordNotFound unless @user
-    # Hidden for the deletion window (PLAN_ACCOUNT.md §4.2).
+    # Hidden for the deletion window (docs/dev/ACCOUNT.md).
     raise ActiveRecord::RecordNotFound if @user.deletion_scheduled?
 
     # While federation is off no actor is provisioned for a visit: an account
@@ -22,7 +22,7 @@ class ProfilesController < ApplicationController
       Following.active.find_by(follower_actor: current_user.actor, followed_actor: @actor)
 
     # One publication per workout, the one this reader is served
-    # (PLAN_AUDIENCES.md §3), so a follower never counts a workout twice.
+    # (docs/dev/PUBLISHING.md), so a follower never counts a workout twice.
     publications = WorkoutPublication.served_to(current_user).where(workout_id: @user.workouts.select(:id))
     @profile_account = @user
     @shared_statistics = Profiles::SharedStatistics.new(user: @user, viewer: current_user).call

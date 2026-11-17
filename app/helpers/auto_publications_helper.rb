@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The owner-facing wording of an automatic publication (PLAN_AUTO_PUBLISHING.md
+# The owner-facing wording of an automatic publication (docs/dev/AUTO-PUBLISHING.md
 # §7), shared by the import entries and the workout's sharing card.
 module AutoPublicationsHelper
   def auto_publication_text(row)

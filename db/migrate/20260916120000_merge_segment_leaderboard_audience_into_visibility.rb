@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_SEGMENTS.md §8.4 merge: one visibility axis now governs both the course
+# docs/dev/SEGMENTS.md merge: one visibility axis now governs both the course
 # page and its leaderboard. The translation is fail-closed — the new level is
 # the most restrictive of the course visibility and the former board audience:
 # owner → private, followers/members → followers_only, public → public.

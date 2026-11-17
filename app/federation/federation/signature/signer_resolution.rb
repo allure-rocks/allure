@@ -10,7 +10,7 @@ module Federation
     # instance) is picked up at once instead of after the cache expires.
     #
     # That fetch runs in the request thread of an unauthenticated request, so
-    # it is bounded (PLAN_M5 §12.2): an actor fetched less than
+    # it is bounded (docs/dev/FEDERATION.md): an actor fetched less than
     # `REFRESH_FLOOR` ago is not fetched again, every fetch is metered by
     # `Safety::ResolutionAttempts`, and at most `Safety::ResolutionGate::SLOTS`
     # run at once.

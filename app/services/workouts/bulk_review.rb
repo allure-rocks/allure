@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The review-page summary of a draft operation (PLAN_BULK_ACTIONS.md §4): the
+  # The review-page summary of a draft operation (docs/dev/BULK-ACTIONS.md): the
   # exact selection, its date range, sports and publication states, plus the
   # exclusions the operation already knows about, so the owner confirms what
   # will actually happen.
@@ -23,7 +23,7 @@ module Workouts
         .includes(workout: [ :sport, { original_file_attachment: :blob } ])
         .filter_map(&:workout)
       # A manual entry has no file and needs none: its sport changes alone
-      # (PLAN_MANUAL_ENTRY.md §6).
+      # (docs/dev/MANUAL-ENTRY.md).
       without_original = workouts.count { |workout| !workout.manual? && !workout.original_file.attached? }
       published, scheduled = publication_counts(workouts)
 

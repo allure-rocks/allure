@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The owner's workouts (PLAN_API.md §6.2). Every lookup goes through the
+      # The owner's workouts (docs/dev/API.md). Every lookup goes through the
       # token's account, so another account's workout is a 404, never a 403.
       class WorkoutsController < BaseController
         SORTS = {
@@ -19,7 +19,7 @@ module Api
         BOOLEANS = { "true" => true, "false" => false }.freeze
         EDITABLE = %w[title description notes sport commute equipment_ids].freeze
         TEXT_FIELDS = %w[title description notes].freeze
-        # The figures of a manual entry (PLAN_MANUAL_ENTRY.md §8), named as the
+        # The figures of a manual entry (docs/dev/MANUAL-ENTRY.md), named as the
         # representation names them, with the column each one writes. A
         # recording's figures are measured from its file and never written.
         MANUAL_FIELDS = {
@@ -72,7 +72,7 @@ module Api
                     disposition: "attachment"
         end
 
-        # A manual entry (PLAN_MANUAL_ENTRY.md §8): the web's « Saisie
+        # A manual entry (docs/dev/MANUAL-ENTRY.md): the web's « Saisie
         # manuelle » form, in SI units. Files go through /imports.
         def create
           body = request.request_parameters
@@ -89,13 +89,13 @@ module Api
           render json: serialize(reloaded(result.workout), detail: true), status: :created
         end
 
-        # The web edit form's fields (PLAN_API.md §6.3). Only the fields sent
+        # The web edit form's fields (docs/dev/API.md). Only the fields sent
         # change; a sport change re-analyses the workout from its original
         # file, exactly as the web does, and is all or nothing. A manual entry
         # also takes its figures.
         def update
           workout = owned_workout(includes: [ :sport, :equipments ])
-          # A credit row is read-only except for its deletion (PLAN_TOGETHER.md §6.6).
+          # A credit row is read-only except for its deletion (docs/dev/SHARED-ACTIVITIES.md).
           return render_problem(:unprocessable_content, "credited_workout") if workout.credit?
           return update_manual(workout) if workout.manual?
 

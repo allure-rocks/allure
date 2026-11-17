@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The administration shell and dashboard (PLAN_ADMIN.md §2–§4): operator-only,
+# The administration shell and dashboard (docs/dev/ADMIN.md): operator-only,
 # 404 for everyone else, and never linked from a member's HTML.
 RSpec.describe "Admin dashboard" do
   let(:operator) { create(:user, :with_totp, username: "operator") }

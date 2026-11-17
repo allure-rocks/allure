@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The signed-in relationship hub (PLAN_M5 §11.6, PLAN_PEOPLE.md): following,
+# The signed-in relationship hub (docs/dev/FEDERATION.md, docs/dev/PEOPLE.md): following,
 # followers, requests to decide, outgoing requests, and the two discovery
 # surfaces — name search and suggestions. Relationships between accounts of
 # this instance never depend on FEDERATION_ENABLED: while it is off, the hub
@@ -44,7 +44,7 @@ class PeopleController < ApplicationController
     end
   end
 
-  # PLAN_PEOPLE.md §3: the live suggestions fragment. HTML, because each row
+  # docs/dev/PEOPLE.md: the live suggestions fragment. HTML, because each row
   # carries a follow form; the Stimulus controller swaps it into the dropdown.
   def search
     set_no_store

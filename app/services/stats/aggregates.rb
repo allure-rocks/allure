@@ -7,7 +7,7 @@ module Stats
   # `users.week_start`. Results are sparse (periods without workouts are
   # absent, never zero-filled) and bounded to the most-recent workouts to cap
   # cost, unless the caller passes `limit: nil` for the unbounded all-time
-  # window. No table; pure query. See PLAN_M3.md section 7.6.
+  # window. No table; pure query. See docs/dev/WORKOUT.md.
   #
   # The period expression is built from Arel nodes (never string
   # interpolation), so even the dynamic time zone cannot become an injection

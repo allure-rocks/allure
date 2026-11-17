@@ -11,7 +11,7 @@ module Workouts
   #
   # A change is recorded on the import entry as its provenance: a manual change
   # marks the entry `manual` so the re-detection backfill leaves it alone, and
-  # the backfill reports its own changes as `detected` (PLAN_VIRTUAL.md §6).
+  # the backfill reports its own changes as `detected` (docs/dev/VIRTUAL-PLATFORMS.md).
   # Crossing the virtual boundary also settles the toponymy: a virtual sport
   # discards it and is named from the platform's venue catalog, and a return to
   # a real sport re-enqueues geocoding.
@@ -63,7 +63,7 @@ module Workouts
 
     # A manual entry has no file and nothing derived from one: its figures
     # stay as typed, and the model's callback recomputes both record scopes
-    # (PLAN_MANUAL_ENTRY.md §6). A figure the new sport does not measure (an
+    # (docs/dev/MANUAL-ENTRY.md). A figure the new sport does not measure (an
     # ascent, a power) is refused rather than silently dropped.
     def change_manual_entry
       return @workout if @workout.update(sport: @sport)
@@ -101,7 +101,7 @@ module Workouts
 
     # A virtual sport discards the weather; any other sport re-derives it
     # (its stopped speed shapes the wind analysis), offline when the plan
-    # did not change (PLAN_WEATHER.md §5).
+    # did not change (docs/dev/WEATHER.md).
     def settle_weather
       WeatherRefresh.new(workout: @workout).call
     rescue StandardError => error

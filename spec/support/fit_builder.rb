@@ -200,7 +200,7 @@ module FitFixtureHelpers
 
   # points: [{ time:, lat:, lon:, altitude: nil, hr: nil, cadence: nil, power: nil, speed: nil,
   #            distance: nil }] — `distance` is the device's cumulative distance in metres
-  #          (a positionless recording's own source, PLAN_NO_GPS.md §3.2).
+  #          (a positionless recording's own source, docs/dev/NO-GPS.md).
   # stops:  [Time] — each becomes a timer/stop_all event
   # laps:   [{ time:, elapsed:, moving: nil, distance: nil, avg_speed: nil,
   #            max_speed: nil, avg_heart_rate: nil, max_heart_rate: nil,

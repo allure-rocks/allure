@@ -2,7 +2,7 @@
 
 module Workouts
   # Settles a workout's waiting automatic publications
-  # (PLAN_AUTO_PUBLISHING.md §5). Enqueued by the importer and nudged by every
+  # (docs/dev/AUTO-PUBLISHING.md). Enqueued by the importer and nudged by every
   # enrichment job when it finishes; the recurring sweep recovers a lost nudge
   # and applies the deadline. Running it early is harmless: it does nothing
   # until the workout is ready.
@@ -17,7 +17,7 @@ module Workouts
 
     # The single seam the enrichment jobs call: a workout with nothing waiting
     # costs one indexed lookup and enqueues nothing. The same moment tells the
-    # owner's webhooks the analysis settled (PLAN_API.md §11.2).
+    # owner's webhooks the analysis settled (docs/dev/API.md).
     def self.nudge(workout)
       return unless workout.is_a?(Workout)
 

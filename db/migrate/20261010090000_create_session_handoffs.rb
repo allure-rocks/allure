@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_AUTH.md §4.6 and §9: the iOS companion signs in through a provider in
+# docs/dev/AUTH.md: the iOS companion signs in through a provider in
 # the system browser, which hands the verified answer back to the app's web
 # view through a single-use, short-lived token bound to a PKCE challenge.
 class CreateSessionHandoffs < ActiveRecord::Migration[8.1]

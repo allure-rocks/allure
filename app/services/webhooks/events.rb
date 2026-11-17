@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Webhooks
-  # The event catalogue's emitters (PLAN_API.md §11.2), one per fact, each
+  # The event catalogue's emitters (docs/dev/API.md), one per fact, each
   # called where the fact happens. Payloads never carry geometry: a workout is
   # its list representation without free text, a publication its summary.
   module Events
@@ -147,7 +147,7 @@ module Webhooks
 
     # A participation on a local workout names that workout; an invitation
     # received from another instance names the received note it is about
-    # (PLAN_TOGETHER.md §7), and is always a credit.
+    # (docs/dev/SHARED-ACTIVITIES.md), and is always a credit.
     def participation_data(subject, author)
       id = Allure::ShortId.encode(subject.uuid)
       if subject.is_a?(RemoteParticipation)

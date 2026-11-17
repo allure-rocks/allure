@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API workout writes (PLAN_API.md §6.3)", type: :request do
+RSpec.describe "REST API workout writes (docs/dev/API.md)", type: :request do
   let(:user) { create(:user) }
   let(:headers) { api_headers_for(user, scopes: %w[write], "Content-Type" => "application/json") }
   let(:cycling) { catalog_sport("cycling") }
@@ -92,7 +92,7 @@ RSpec.describe "REST API workout writes (PLAN_API.md §6.3)", type: :request do
     end
   end
 
-  describe "POST /workouts (PLAN_MANUAL_ENTRY.md §8)" do
+  describe "POST /workouts (docs/dev/MANUAL-ENTRY.md)" do
     let(:body) do
       { sport: "running", started_at: "2026-10-17T07:30:00+02:00", elapsed_time: 2730, distance: 8500,
         ascent: 120, average_heart_rate: 145, max_heart_rate: 170, title: "Footing sans montre" }

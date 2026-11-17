@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Owner-requested weather refresh (PLAN_WEATHER.md §7): a missing or failed
+# Owner-requested weather refresh (docs/dev/WEATHER.md): a missing or failed
 # weather is asked again. The job is paced and idempotent; an unchanged plan
 # converges offline from the kept responses.
 class WorkoutWeathersController < ApplicationController

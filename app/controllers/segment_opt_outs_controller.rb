@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Opt-out leaderboard participation (PLAN_SEGMENTS.md §8.2): every matched
+# Opt-out leaderboard participation (docs/dev/SEGMENTS.md): every matched
 # athlete is ranked by default; a row excludes the athlete and destroying it
 # removes the exclusion. There is no effort requirement — excluding a course
 # before running it is allowed — and the owner is not a special case. Denial is

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Historical weather in specs (PLAN_WEATHER.md §10). `weather: true` turns the
+# Historical weather in specs (docs/dev/WEATHER.md). `weather: true` turns the
 # feature on against test hosts; `stub_open_meteo` answers every location
 # with the same synthetic hourly values over the requested dates.
 module WeatherHelpers

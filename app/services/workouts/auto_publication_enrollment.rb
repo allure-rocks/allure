@@ -2,7 +2,7 @@
 
 module Workouts
   # Called by the importer once a new workout is persisted
-  # (PLAN_AUTO_PUBLISHING.md §3). For every automatic publishing profile of the
+  # (docs/dev/AUTO-PUBLISHING.md). For every automatic publishing profile of the
   # account it records one ledger row: `waiting` for the enrichments, or
   # `skipped` straight away when the import itself rules the publication out
   # (a bulk import, an activity older than the recent window, an excluded
@@ -45,7 +45,7 @@ module Workouts
       return "sport" if profile.auto_publish_excludes_sport?(@workout.sport)
       return "profile_unavailable" unless profile.publishable?
       # A positionless recording cannot be published at all, so it never
-      # waits on enrichments that will not run (PLAN_NO_GPS.md §7).
+      # waits on enrichments that will not run (docs/dev/NO-GPS.md).
       return "no_geometry" unless @workout.positioned?
 
       nil

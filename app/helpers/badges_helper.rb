@@ -17,7 +17,7 @@ module BadgesHelper
     state_badge(css: "bg-primary-lt", icon: "ti-user-circle", label:, fit:, data: { badge: "mine" })
   end
 
-  # An activity done with someone (PLAN_TOGETHER.md, DESIGN.md §10.18): it
+  # An activity done with someone (docs/dev/SHARED-ACTIVITIES.md, DESIGN.md §10.18): it
   # links to the source while the viewer may open it, and turns grey once the
   # source is deleted. `tooltip` carries the full list of names when the label
   # shortens it.

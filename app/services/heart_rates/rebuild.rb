@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module HeartRates
-  # Rebuilds one recording's heart-rate histogram (PLAN_HEART_RATE.md §3.4).
+  # Rebuilds one recording's heart-rate histogram (docs/dev/HEART-RATE.md).
   # The pure `compute` runs before the caller's transaction (import,
   # re-analysis) or here (backfill); `persist` runs inside it, replaces the
   # row — or deletes it when no beat was recorded — slices the owner's zones,

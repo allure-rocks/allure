@@ -3,7 +3,7 @@
 require "rails_helper"
 require "rake"
 
-# The seed half of the demo instance's nightly reset (PLAN_DEMO.md §5): dates
+# The seed half of the demo instance's nightly reset (docs/dev/DEMO.md): dates
 # re-anchored on the present, one published password and random ones for
 # every background persona, a quiet notification bell, and a session id
 # sequence that never lets yesterday's signed cookie resume tomorrow's
@@ -149,7 +149,7 @@ RSpec.describe Demo::Reset do
     expect(tom.totp_enrolled?).to be(false)
     expect(marie.totp_enrolled?).to be(false)
     # The published account keeps the shared password; the background persona
-    # gets an unknowable random one (PLAN_DEMO.md §3).
+    # gets an unknowable random one (docs/dev/DEMO.md).
     expect(tom.authenticate("AllureRocks2026")).to be_truthy
     expect(tom.authenticate(DemoSeed::PASSWORD)).to be_falsey
     expect(marie.authenticate(DemoSeed::PASSWORD)).to be_falsey

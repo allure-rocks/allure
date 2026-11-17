@@ -38,7 +38,7 @@ module Segments
     # A loop's manual edit runs under the owner row lock — the same one the
     # account's match jobs hold — so a rename can never interleave with a
     # reconciliation that would release its efforts or delete it
-    # (PLAN_SEGMENTS.md §7.3).
+    # (docs/dev/SEGMENTS.md).
     def save_segment(matching_changed)
       if @segment.kind == "loop"
         @segment.user.with_lock { persist(matching_changed) }
@@ -55,14 +55,14 @@ module Segments
         @segment.assign_attributes(@attributes)
         # A loop's rename makes it the owner's own; the mark is never taken
         # back. Other kinds are named by the owner at creation already.
-        # (PLAN_SEGMENTS.md §7.3)
+        # (docs/dev/SEGMENTS.md)
         @segment.renamed_at = Time.current if @segment.kind == "loop" && @segment.will_save_change_to_name?
         if matching_changed
           @segment.segment_efforts.where.not(id: frozen_efforts.select(:id)).delete_all
           Segments::Refresh.call(@segment)
           # The corridor is the geometry widened by the match tolerance, so a
           # tolerance change invalidates an older acknowledgment and asks the
-          # owner again (PLAN_SEGMENTS_FEDERATION.md §5.2).
+          # owner again (docs/dev/SEGMENTS-FEDERATION.md).
           @segment.privacy_zone_acknowledged_at = nil
         end
         @segment.privacy_zone_acknowledged_at = Time.current if @zone_acknowledged
@@ -74,7 +74,7 @@ module Segments
 
     # A detached credit row has no points left to match again, so its efforts
     # survive a matching change while the segment stays active and its sport
-    # still admits them (PLAN_TOGETHER.md §6.4). Read after the new attributes
+    # still admits them (docs/dev/SHARED-ACTIVITIES.md). Read after the new attributes
     # are assigned.
     def frozen_efforts
       return SegmentEffort.none unless @segment.active

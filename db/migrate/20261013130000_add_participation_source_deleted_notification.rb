@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_TOGETHER.md §6.5, §9: the participant learns that the source of a
+# docs/dev/SHARED-ACTIVITIES.md: the participant learns that the source of a
 # credit they keep was deleted. The confirmations switch governs it, so no
 # preference column is added.
 class AddParticipationSourceDeletedNotification < ActiveRecord::Migration[8.1]

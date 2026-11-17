@@ -13,7 +13,7 @@ class PublishingProfile < ApplicationRecord
   ].freeze
   # Settings a frozen publication snapshot may still carry after the setting
   # was retired. `segment` gated segment leaderboards until the board followed
-  # the reader and the shared route (PLAN_SEGMENTS.md §8.2); it is ignored.
+  # the reader and the shared route (docs/dev/SEGMENTS.md); it is ignored.
   LEGACY_SNAPSHOT_SETTING_KEYS = %w[segment].freeze
   METRIC_KEYS = %w[
     distance duration moving_time pause_time ascent descent min_elevation max_elevation
@@ -21,7 +21,7 @@ class PublishingProfile < ApplicationRecord
     average_heart_rate max_heart_rate
     average_cadence max_cadence average_power max_power calories
   ].freeze
-  # Heart rate is health data (PLAN_HEART_RATE.md D7): a new profile shares
+  # Heart rate is health data (docs/dev/HEART-RATE.md): a new profile shares
   # none until its owner ticks it. Existing profiles keep their stored list.
   HEALTH_METRIC_KEYS = %w[average_heart_rate max_heart_rate].freeze
   # The form's three groups, in METRIC_KEYS order.
@@ -31,7 +31,7 @@ class PublishingProfile < ApplicationRecord
     "sensors" => %w[average_heart_rate max_heart_rate average_cadence max_cadence average_power max_power calories]
   }.freeze
   # The safety delay before a publication becomes visible or federated
-  # (PLAN_DELAYED_PUBLISHING.md). A profile policy, not a snapshot setting: the
+  # (docs/dev/DELAYED-PUBLISHING.md). A profile policy, not a snapshot setting: the
   # published representation is unchanged. `immediate` (0) is the default:
   # publishing is direct unless the owner opts into a hold. The owner may pick
   # another preset for one publish; the profile value is the default.
@@ -59,7 +59,7 @@ class PublishingProfile < ApplicationRecord
     "basemap" => true,
     "mask_start" => true,
     "mask_finish" => true,
-    # Photos are shared only by an explicit choice (PLAN_PHOTOS.md §5.1).
+    # Photos are shared only by an explicit choice (docs/dev/PHOTOS.md).
     "photos" => false,
     "photo_captions" => false,
     "photo_positions" => false
@@ -72,7 +72,7 @@ class PublishingProfile < ApplicationRecord
   has_many :workout_publications, inverse_of: :publishing_profile, dependent: :nullify
   has_many :workout_auto_publications, inverse_of: :publishing_profile, dependent: :nullify
 
-  # Automatic publishing (PLAN_AUTO_PUBLISHING.md) is a profile policy like the
+  # Automatic publishing (docs/dev/AUTO-PUBLISHING.md) is a profile policy like the
   # delay, never a snapshot setting. Off by default; turning it on requires the
   # owner to acknowledge what it does, once, in the same submission.
   attribute :auto_publish_acknowledged, :boolean, default: false
@@ -109,7 +109,7 @@ class PublishingProfile < ApplicationRecord
   # custom profiles stay public-only through `custom_audience_is_public`. The
   # followers audience is always available: its local followers read it
   # whatever the switches say, and FEDERATION_RESTRICTED_ENABLED only decides
-  # whether it also reaches approved instances (PLAN_M5 §7.9).
+  # whether it also reaches approved instances (docs/dev/FEDERATION.md).
   def publishable?
     audience == "public" || built_in_key == "followers"
   end
@@ -131,7 +131,7 @@ class PublishingProfile < ApplicationRecord
     super(value.is_a?(Hash) ? value.stringify_keys : value)
   end
 
-  # Automatic publishing's sport exclusion (PLAN_AUTO_PUBLISHING.md §2), a
+  # Automatic publishing's sport exclusion (docs/dev/AUTO-PUBLISHING.md), a
   # profile policy like the commute exclusion: the workouts of these sports are
   # never published by themselves. Sorted and unique, so saving the same choice
   # is not a change.

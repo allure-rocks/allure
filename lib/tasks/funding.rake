@@ -2,7 +2,7 @@
 
 namespace :funding do
   # The safety net for lost or reordered provider webhooks
-  # (PLAN_FUNDING.md §6.7). Without `SINCE`, every paid provider invoice is
+  # (docs/dev/FUNDING.md). Without `SINCE`, every paid provider invoice is
   # replayed; idempotency makes that harmless.
   desc "Replay paid funding invoices through each enabled provider's recovery seam"
   task reconcile: :environment do

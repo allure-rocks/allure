@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ImportConnections
-  # The provider refused the connection's tokens (PLAN_REMOTE_IMPORTS.md §7.3):
+  # The provider refused the connection's tokens (docs/dev/REMOTE-IMPORTS.md):
   # the tokens are wiped, the row turns `expired`, and the owner is told to
   # relink from the settings card. Imported data and preferences stay. A
   # session whose end is expected (Withings's day-long session, §7c.2) passes

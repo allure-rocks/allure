@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# PLAN_TOGETHER.md §8, slice 3d: each recording remembers the detector version
+# docs/dev/SHARED-ACTIVITIES.md: each recording remembers the detector version
 # it was compared with, so the audited history backfill counts what is left
-# and a rerun is a no-op (PLAN_DERIVATIONS.md: one generation marker per
+# and a rerun is a no-op (docs/dev/DERIVATIONS.md: one generation marker per
 # derivation). Existing recordings start at 0, pending.
 class AddTogetherDetectionVersionToWorkouts < ActiveRecord::Migration[8.1]
   PREVIOUS_ACTIONS = %w[

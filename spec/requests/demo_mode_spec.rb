@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The demo mode's shared playground accounts (PLAN_DEMO.md §3): no visitor may
+# The demo mode's shared playground accounts (docs/dev/DEMO.md): no visitor may
 # lock the next one out, no session IP is ever persisted, and the operator
 # reaches the console with a password proof alone.
 RSpec.describe "Demo mode", type: :request do

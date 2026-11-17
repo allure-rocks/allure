@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Whether an account may store another upload (PLAN_IMPORT_SOURCES.md §3.2):
+  # Whether an account may store another upload (docs/dev/IMPORT-SOURCES.md):
   # a few file imports and one Strava archive waiting at a time, and a bounded
   # number of bytes per day. Counted in the database, so every web process and
   # the API agree; the web and API forms both ask before attaching anything.
@@ -12,7 +12,7 @@ module Workouts
     DAILY_UPLOAD_LABEL = "6 GB"
     WINDOW = 24.hours
 
-    # `reason` is the API's code (PLAN_API.md §5); `message` the form's text;
+    # `reason` is the API's code (docs/dev/API.md); `message` the form's text;
     # `retry_after` the seconds until the refusal may lift.
     Refusal = Data.define(:reason, :message, :retry_after)
 

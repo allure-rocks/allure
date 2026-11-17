@@ -2,10 +2,10 @@
 
 class WorkoutImportsController < ApplicationController
   before_action :set_batch, only: %i[show status cancel]
-  # The manual entry panel (PLAN_MANUAL_ENTRY.md §5) renders with the page.
+  # The manual entry panel (docs/dev/MANUAL-ENTRY.md) renders with the page.
   before_action :set_manual_entry, only: %i[new create]
   # The database-counted admission below bounds what is stored; this keeps one
-  # account from hammering the endpoint (PLAN_IMPORT_SOURCES.md §3.2).
+  # account from hammering the endpoint (docs/dev/IMPORT-SOURCES.md).
   rate_limit to: 20, within: 1.hour, only: :create, by: -> { current_user.id }, name: "web-imports",
              with: -> { refuse_rate_limited }
 
@@ -97,7 +97,7 @@ class WorkoutImportsController < ApplicationController
   end
 
   # Only the account's own equipment, like the workout form: an unknown id is
-  # ignored instead of raising (PLAN_IMPORT_SOURCES.md §2).
+  # ignored instead of raising (docs/dev/IMPORT-SOURCES.md).
   def owned_equipment_ids
     ids = Array(batch_params[:equipment_ids]).reject(&:blank?)
     current_user.equipments.where(id: ids).ids

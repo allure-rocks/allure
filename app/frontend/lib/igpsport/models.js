@@ -1,4 +1,4 @@
-// The iGPSPORT computers the device source offers (PLAN_IMPORT_SOURCES.md
+// The iGPSPORT computers the device source offers (docs/dev/IMPORT-SOURCES.md
 // §4). Chrome's chooser filters by name prefix only, so the chosen name is
 // matched again against the family's names. Only the BSC500 and the BSC100S
 // are verified on hardware; every other model gets the 20-byte writes that fit

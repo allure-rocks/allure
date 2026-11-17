@@ -99,7 +99,7 @@ RSpec.describe Federation::Inbox::Admission do
     expect { personal.call! }.to change { recipient.inbox_items.count }.by(1)
   end
 
-  # PLAN_REACTIONS.md §4.3: the object of a Like is the liked publication, not
+  # docs/dev/REACTIONS.md: the object of a Like is the liked publication, not
   # a recipient URI. The old reading answered 404 to every HTTP-delivered Like
   # even though the processor understood it.
   it "admits a Like addressed to the publication author" do
@@ -184,7 +184,7 @@ RSpec.describe Federation::Inbox::Admission do
       expect(remote_actor.reload.public_key_pem).to eq(new_key.public_key.to_pem)
     end
 
-    describe "bounding the fetch an unverified request causes (PLAN_M5 §12.2)" do
+    describe "bounding the fetch an unverified request causes (docs/dev/FEDERATION.md)" do
       let(:forger_key) { OpenSSL::PKey::RSA.generate(2048) }
 
       def forged_admission
@@ -318,7 +318,7 @@ RSpec.describe Federation::Inbox::Admission do
   # admitted under the URI a peer's future Delete will carry would turn that
   # Delete into the "conflicting body" refusal above — a permanent 401 and a
   # withdrawal that never lands. The id must live on the signer's own
-  # authority (PLAN_M2.md §6.4).
+  # authority (docs/dev/FEDERATION.md).
   context "when an activity id lives on another authority than its actor" do
     let(:peer_uri) { "https://peer.example/users/bob" }
     let(:peer_key) { OpenSSL::PKey::RSA.generate(2048) }
@@ -465,7 +465,7 @@ RSpec.describe Federation::Inbox::Admission do
     expect { accept_admission.call! }.to change { recipient.inbox_items.count }.by(1)
   end
 
-  # PLAN_M5 §12.6: an Accept or Undo naming a row the sender is not party to
+  # docs/dev/FEDERATION.md: an Accept or Undo naming a row the sender is not party to
   # answers exactly like one naming an unknown URI, so no signer can test who
   # follows or reacted to whom.
   describe "keeping the social graph hidden" do

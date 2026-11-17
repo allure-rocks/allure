@@ -4,7 +4,7 @@ module Api
   module Rest
     module V1
       # What another account published, as this account may read it
-      # (PLAN_API.md §7.2, §7.3, §10). Built from the publication snapshot or
+      # (docs/dev/API.md). Built from the publication snapshot or
       # the received note only, never from a live workout; a field the profile
       # did not share is absent, so "hidden" never reads as "not recorded".
       # Received text is plain: no remote HTML ever leaves here.

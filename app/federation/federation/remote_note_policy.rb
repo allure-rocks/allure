@@ -4,7 +4,7 @@ module Federation
   # The single visibility boundary for received notes and their media,
   # mirroring Workouts::PublicationPolicy. Anonymous visitors never see remote
   # copies; a followers note additionally requires an active entitlement
-  # (PLAN_M5 §8.3, §14).
+  # (docs/dev/FEDERATION.md).
   class RemoteNotePolicy
     RESOURCES = %i[note track chart media react comment].freeze
 
@@ -34,7 +34,7 @@ module Federation
         true
       when :comment
         # The origin's profile closed the thread on the wire; a thread closed
-        # live is only learnt from its refusal (PLAN_COMMENTS.md §4.2).
+        # live is only learnt from its refusal (docs/dev/COMMENTS.md).
         @note.representation["comments_closed"] != true
       when :track
         @note.representation["track"].is_a?(Hash) && Array(@note.representation.dig("track", "features")).any?

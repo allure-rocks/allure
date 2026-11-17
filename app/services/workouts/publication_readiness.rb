@@ -14,7 +14,7 @@ module Workouts
 
     def call
       return Result.new(ready: false, warnings: [ :followers_unavailable ]) unless @profile.publishable?
-      # A positionless recording has no route to share (PLAN_NO_GPS.md §7).
+      # A positionless recording has no route to share (docs/dev/NO-GPS.md).
       return Result.new(ready: false, warnings: [ :no_geometry ]) unless @workout.positioned?
 
       route = PublicationRoute.new(user: @user, workout: @workout, profile: @profile)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_AUTO_PUBLISHING.md: a publishing profile may publish every new import
+# docs/dev/AUTO-PUBLISHING.md: a publishing profile may publish every new import
 # by itself, once the workout's enrichments have settled. The profile carries
 # the opt-in (off by default, one per audience and account); each import that
 # meets an automatic profile leaves one ledger row per audience, which records

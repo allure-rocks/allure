@@ -2,7 +2,7 @@
 
 module Allure
   module Auth
-    # Hardening of the openid_connect OmniAuth strategy (PLAN_AUTH.md §6.7),
+    # Hardening of the openid_connect OmniAuth strategy (docs/dev/AUTH.md),
     # prepended to it at boot by the OmniAuth initializer.
     #
     # The strategy keeps the nonce and the PKCE verifier of a round trip in

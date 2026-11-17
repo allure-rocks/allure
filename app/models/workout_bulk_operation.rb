@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# A reviewable bulk operation over the owner's workouts (PLAN_BULK_ACTIONS.md
-# §4). A draft freezes the reviewed selection; confirming stores the validated
+# A reviewable bulk operation over the owner's workouts
+# (docs/dev/BULK-ACTIONS.md). A draft freezes the reviewed selection; confirming stores the validated
 # parameters and hands the row to Workouts::BulkOperationJob, which walks the
 # items in order. Quick actions never create a row.
 class WorkoutBulkOperation < ApplicationRecord

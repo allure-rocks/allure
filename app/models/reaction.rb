@@ -3,7 +3,7 @@
 require "uri"
 
 # One durable appreciation gesture, on a local workout or a received remote
-# note (PLAN_REACTIONS.md). A reaction is the local counterpart of the
+# note (docs/dev/REACTIONS.md). A reaction is the local counterpart of the
 # ActivityPub Like state: `undone_at` keeps the withdrawal history and the
 # partial unique indexes allow one active reaction per actor and target.
 # Changing the kind withdraws the current Like and creates a new row, so every
@@ -11,7 +11,7 @@ require "uri"
 class Reaction < ApplicationRecord
   KINDS = %w[beer energy coffee like].freeze
   DEFAULT_KIND = "like"
-  # The audience the reaction was given through (PLAN_REACTIONS.md §2): a
+  # The audience the reaction was given through (docs/dev/REACTIONS.md): a
   # reader is named only the reactors whose audience they may read.
   AUDIENCES = %w[public followers].freeze
 

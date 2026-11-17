@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_HEART_RATE.md §3.3–§3.4: one seconds-per-bpm histogram per recording,
+# docs/dev/HEART-RATE.md: one seconds-per-bpm histogram per recording,
 # with the zone seconds and load it gives under the account's current zones.
 class CreateWorkoutHeartRates < ActiveRecord::Migration[8.1]
   def change

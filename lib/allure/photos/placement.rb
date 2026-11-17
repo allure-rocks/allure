@@ -2,7 +2,7 @@
 
 module Allure
   module Photos
-    # Places a photo along a recording (PLAN_PHOTOS.md §4), pure and offline.
+    # Places a photo along a recording (docs/dev/PHOTOS.md), pure and offline.
     #
     # `segments` are the recording segments in order, each `{ started_at:,
     # points: }` with the stored point hashes (`t` seconds from the segment
@@ -11,7 +11,7 @@ module Allure
     class Placement
       Result = Data.define(:longitude, :latitude, :source, :distance, :elapsed)
       Sample = Data.define(:time, :distance, :longitude, :latitude, :segment)
-      # Why an automatic placement found nothing (PLAN_PHOTOS.md §4): the EXIF
+      # Why an automatic placement found nothing (docs/dev/PHOTOS.md): the EXIF
       # position is further from the route than a photo can mean, and/or the
       # capture time falls outside the recording's window. Nil when neither
       # applies, or when there is no clue at all.
@@ -53,8 +53,8 @@ module Allure
         at_time(taken_at) if taken_at
       end
 
-      # Why `automatic` answered nothing, in the owner's terms (PLAN_PHOTOS.md
-      # §4): a GPS position beyond the 200 m threshold, and/or a capture time
+      # Why `automatic` answered nothing, in the owner's terms
+      # (docs/dev/PHOTOS.md): a GPS position beyond the 200 m threshold, and/or a capture time
       # beyond the five-minute window at either end. Nil when no clue explains
       # it, so the page can say the photo has neither.
       def diagnose(exif_longitude: nil, exif_latitude: nil, taken_at: nil)

@@ -8,7 +8,7 @@ module Admin
     layout "admin"
 
     before_action :require_operator
-    # Second-factor step-up (PLAN_AUTH.md §5.4), after the 404 so the console
+    # Second-factor step-up (docs/dev/AUTH.md), after the 404 so the console
     # is never revealed to anyone else.
     before_action :require_recent_second_factor
 

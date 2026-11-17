@@ -296,7 +296,7 @@ RSpec.describe Allure::Gpx::Parser do
       expect(track.segments.first.points.first.heart_rate).to be_nil
     end
 
-    it "reads the Garmin air temperature and drops an implausible one (PLAN_WEATHER.md §11)" do
+    it "reads the Garmin air temperature and drops an implausible one (docs/dev/WEATHER.md)" do
       xml = <<~GPX
         <?xml version="1.0"?>
         <gpx version="1.1" xmlns="http://www.topografix.com/GPX/1/1"

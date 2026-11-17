@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Participations
-  # The owner's invitation seam (PLAN_TOGETHER.md §5, §7). A local account
+  # The owner's invitation seam (docs/dev/SHARED-ACTIVITIES.md). A local account
   # needs an accepted follow in either direction; it gets the pending credit
   # with the owner's confirmation and a notice. A remote Allure account
-  # (lot 4) must already hold the workout's active publication — its delivery
+  # must already hold the workout's active publication — its delivery
   # of the publication's Create is live and it follows the owner — and that
   # publication must share the figures a credit row is built from; it gets an
   # `Invite` addressed to it alone, riding on that publication. Repeating an
@@ -64,7 +64,7 @@ module Participations
 
       # An invitation riding on a publication that is gone cannot be answered
       # any more; a new one rides on the current publication, and the invited
-      # instance re-attaches a credit it kept (PLAN_TOGETHER.md §7.6).
+      # instance re-attaches a credit it kept (docs/dev/SHARED-ACTIVITIES.md).
       if existing
         existing.update!(withdrawn_at: Time.current)
         Notifications::Withdraw.new(subject: existing).call!
@@ -101,7 +101,7 @@ module Participations
 
     # The narrowest active publication whose Create the remote account was
     # authorized for and is still being, or was, delivered: the one it holds
-    # (PLAN_AUDIENCES.md §5). An invitation rides on it.
+    # (docs/dev/PUBLISHING.md). An invitation rides on it.
     def held_publication(target_actor)
       @workout.active_publications.find do |publication|
         create_event = Workouts::PublicationWithdrawal.find_create_event(publication)

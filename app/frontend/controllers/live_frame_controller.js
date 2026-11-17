@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Live administration frame (PLAN_ADMIN.md §4.2).
+// Live administration frame (docs/dev/ADMIN.md).
 //
 // Polls a server-rendered fragment and replaces the frame's content on each
 // tick — the established mechanism for live data in this application (Action

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Owner-only photo presentation (PLAN_PHOTOS.md §4, §7).
+# Owner-only photo presentation (docs/dev/PHOTOS.md).
 module WorkoutPhotosHelper
   # The two Turbo Frames a photo mutation may answer (DESIGN.md §20.24): the
   # card's gallery on the workout page, and the manager's list on its own page.
@@ -73,8 +73,8 @@ module WorkoutPhotosHelper
     t("photos.distance_from_start", distance: format_distance(photo.distance, precision: 1))
   end
 
-  # Why an automatic placement left a ready photo off the route (PLAN_PHOTOS.md
-  # §4.2), in the owner's terms. Nil for a photo that is placed, processing or
+  # Why an automatic placement left a ready photo off the route
+  # (docs/dev/PHOTOS.md), in the owner's terms. Nil for a photo that is placed, processing or
   # failed; a photo with no clue at all says so.
   def workout_photo_unplaced_reason(photo, diagnosis)
     return unless photo.ready? && !photo.placed?
@@ -92,7 +92,7 @@ module WorkoutPhotosHelper
     parts.any? ? t("photos.unplaced.summary", reasons: parts.to_sentence) : t("photos.unplaced.no_clue")
   end
 
-  # The photos the publish form lists (PLAN_PHOTOS.md §5.2): every ready
+  # The photos the publish form lists (docs/dev/PHOTOS.md): every ready
   # photo, the ones taken inside a privacy zone unchecked and flagged.
   def publication_photo_choices(workout)
     return [] unless Allure::Photos::Config.enabled?
@@ -114,7 +114,7 @@ module WorkoutPhotosHelper
     publication_photo_path(publication, photo.id, variant: variant == :thumbnail ? "thumbnail" : nil)
   end
 
-  # A reader's map markers (PLAN_PHOTOS.md §5.4): a shared distance names a
+  # A reader's map markers (docs/dev/PHOTOS.md): a shared distance names a
   # point of the published route itself, never a new coordinate.
   def publication_photo_markers(view)
     photos = view.photos.select(&:distance)

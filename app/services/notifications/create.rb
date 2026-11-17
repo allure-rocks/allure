@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Notifications
-  # The single write seam for in-app notifications (PLAN_NOTIFICATIONS.md).
+  # The single write seam for in-app notifications (docs/dev/NOTIFICATIONS.md).
   # Producers pass the recipient, the kind, the actor, and the relationship it
   # describes; this service enforces the recipient's preferences, idempotency
   # through the unique index, and the per-account cap. It never fails its
@@ -25,7 +25,7 @@ module Notifications
       "auto_publication_failed" => :notify_auto_publication_failed,
       "webhook_disabled" => :notify_webhooks,
       # The account asked for its export: telling it is part of the answer,
-      # so no switch turns it off (PLAN_ACCOUNT.md §3.2).
+      # so no switch turns it off (docs/dev/ACCOUNT.md).
       "account_export_ready" => nil,
       "funding_recorded" => nil
     }.freeze
@@ -68,7 +68,7 @@ module Notifications
     private
 
     # The webhook event of the same fact goes whatever the in-app switch
-    # says: subscribing an endpoint is the preference (PLAN_API.md §11.2). It
+    # says: subscribing an endpoint is the preference (docs/dev/API.md). It
     # is a side effect of the side effect: a failure there is reported and
     # never costs the in-app notification.
     def emit_webhook

@@ -9,10 +9,10 @@ class SegmentLeaderboardsController < ApplicationController
     @owner_view = @segment.user == current_user
     # The board this viewer reads: every athlete whose publication they may
     # read with the route shared, or only the accounts they follow
-    # (PLAN_SEGMENTS.md §8.2). The rendering decides names versus aliases.
+    # (docs/dev/SEGMENTS.md). The rendering decides names versus aliases.
     @board_scope = Segments::Listing::SCOPES.include?(params[:board]) ? params[:board] : "everyone"
     @sections = @segment.leaderboard_sections(viewer: current_user, scope: @board_scope)
-    # The category view (PLAN_SEGMENTS.md §8.7) filters each sport's ranking;
+    # The category view (docs/dev/SEGMENTS.md) filters each sport's ranking;
     # a section below the threshold renders nil and says so.
     @category = Segments::Categories.filter?(params[:category]) ? params[:category] : nil
     @offered_categories = Segments::Categories::FILTERS.select do |category|

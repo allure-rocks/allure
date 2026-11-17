@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The owner's Workout representation (PLAN_API.md §7.1). SI units as
+      # The owner's Workout representation (docs/dev/API.md). SI units as
       # persisted; nullable measurements stay null when not recorded. The list
       # form omits the free text and the owner-only analysis detail.
       class WorkoutSerializer
@@ -47,7 +47,7 @@ module Api
             origin: workout.origin,
             # Whether the workout carries a track of its own: false for a
             # positionless recording (which cannot be published yet,
-            # PLAN_NO_GPS.md §9) and false for a credited workout, whose
+            # docs/dev/NO-GPS.md) and false for a credited workout, whose
             # geometry belongs to its source.
             positioned: workout.positioned?,
             credit: credit_facts,
@@ -74,7 +74,7 @@ module Api
 
         # A credit row names who recorded the outing and whether that
         # recording still exists, never the source's identifier
-        # (PLAN_TOGETHER.md §10).
+        # (docs/dev/SHARED-ACTIVITIES.md).
         def credit_facts
           return nil unless @workout.credit?
 
@@ -110,7 +110,7 @@ module Api
         end
 
         # The value a contested figure would have without the anomaly, as the
-        # owner's page shows it under the figure (PLAN_M1.md §8.10).
+        # owner's page shows it under the figure (docs/dev/WORKOUT.md).
         def plausible_values
           impact = @workout.data_anomalies.is_a?(Hash) ? @workout.data_anomalies.fetch("impact", {}) : {}
           %w[max_speed distance max_heart_rate].each_with_object({}) do |metric, values|

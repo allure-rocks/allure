@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # « API et webhooks » (DESIGN.md §20.18, PLAN_API.md §4.4): the account's
+  # « API et webhooks » (DESIGN.md §20.18, docs/dev/API.md): the account's
   # API tokens. Webhooks join this page with their slice.
   class ApiController < ApplicationController
     def show

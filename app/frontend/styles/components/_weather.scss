@@ -1,8 +1,8 @@
-// Weather card (PLAN_WEATHER.md §7, DESIGN.md §20.3): the condition icon
+// Weather card (docs/dev/WEATHER.md, DESIGN.md §20.3): the condition icon
 // leads the temperature range, the wind arrow is an SVG rotated by attribute,
 // and the head / cross / tail exposure is one SVG bar with its legend.
 // The condition icon is a monochrome Meteocons SVG drawn in `currentColor`,
-// the brand primary, on the primary-tint tile (PLAN_WEATHER.md §7).
+// the brand primary, on the primary-tint tile (docs/dev/WEATHER.md).
 .allure-weather-card__icon {
   display: inline-flex;
   align-items: center;

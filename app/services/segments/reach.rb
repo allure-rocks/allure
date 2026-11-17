@@ -2,7 +2,7 @@
 
 module Segments
   # Who sees the viewer on a course's board, or why nobody does
-  # (PLAN_SEGMENTS.md §8.2, DESIGN.md §20.6). The board follows each reader, so
+  # (docs/dev/SEGMENTS.md, DESIGN.md §20.6). The board follows each reader, so
   # the athlete's own line states the widest reach of their efforts:
   #
   # - `public` — a public publication sharing the route: every member who sees
@@ -14,7 +14,7 @@ module Segments
   # - `route_hidden` — published, but no publication shares the route;
   # - `unpublished` — no live publication at all;
   # - `credited` — only efforts credited from another account's recording,
-  #   which shared boards never rank (PLAN_TOGETHER.md §4);
+  #   which shared boards never rank (docs/dev/SHARED-ACTIVITIES.md);
   # - nil — no effort on the course, or a course without a board.
   class Reach
     def initialize(segment:, user:)

@@ -6,7 +6,7 @@ require "uri"
 module Federation
   module Parsers
     # Turns an embedded Allure course Note into an immutable normalized value
-    # (PLAN_SEGMENTS_FEDERATION.md §10.2). Whole-document violations raise
+    # (docs/dev/SEGMENTS-FEDERATION.md). Whole-document violations raise
     # InvalidObject; malformed individual values are skipped and recorded as
     # warnings. The preserved raw object keeps unknown tags and non-Note
     # entries.

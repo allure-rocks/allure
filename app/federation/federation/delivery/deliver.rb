@@ -111,7 +111,7 @@ module Federation
         publication.active?
       end
 
-      # Reauthorizes immediately before POST (PLAN_M4_5 Slice 5) and recalculates
+      # Reauthorizes immediately before POST (docs/dev/PUBLISHING.md) and recalculates
       # the safe destination. A stale inbox_url is never used: single-recipient
       # or unanimous moves update in place, divergent inboxes split so each
       # delivery keeps one destination.
@@ -216,7 +216,7 @@ module Federation
       # owner's comment or a relayed one riding on a publication — waits for
       # the publication's Create to reach the same recipient, or the comment
       # would arrive before the note it answers and be refused for good; a
-      # secondary Undo waits for the activity it undoes (PLAN_COMMENTS.md §9).
+      # secondary Undo waits for the activity it undoes (docs/dev/COMMENTS.md).
       def predecessor_for(event)
         case event.activity_type
         when "Delete"

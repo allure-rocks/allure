@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The account's personal records (PLAN_API.md §6.2), as `/me/records`
+      # The account's personal records (docs/dev/API.md), as `/me/records`
       # lists them: the classic records per sport and type, and the
       # best-effort records per sport and standard distance.
       class RecordsController < BaseController

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # The self-service deletion (PLAN_ACCOUNT.md §4). The request needs a recent
+  # The self-service deletion (docs/dev/ACCOUNT.md). The request needs a recent
   # proof of identity, the username typed again and an acknowledgment; it
   # deactivates the account for DeletionSchedule::GRACE. During the window
   # every page leads here, where the account may cancel, download its last
@@ -12,7 +12,7 @@ module Settings
     allow_deletion_window_access only: %i[show destroy]
     before_action :require_recent_authentication, only: :create
     # A visitor on a demo's shared account must not take the whole instance
-    # down with it (PLAN_DEMO.md §3).
+    # down with it (docs/dev/DEMO.md).
     before_action :refuse_demo_account_lockout, only: :create
     before_action :set_no_store
 
@@ -40,7 +40,7 @@ module Settings
     end
 
     # A deletion the operator scheduled is the operator's to cancel
-    # (PLAN_ACCOUNT.md §4.4).
+    # (docs/dev/ACCOUNT.md).
     def destroy
       return redirect_to settings_account_deletion_path, status: :see_other if current_user.deletion_requested_by == "operator"
 

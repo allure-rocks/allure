@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Segments
-  # The index rows' board summary (PLAN_SEGMENTS.md §8.2/§8.4): for each row
+  # The index rows' board summary (docs/dev/SEGMENTS.md): for each row
   # — one course and one sport — the top three of that sport's board as the
   # viewer reads it, plus the viewer's own best in that sport and their
   # standing. A row without a sport (an all-sports course nobody ran) has no

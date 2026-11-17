@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_REMOTE_IMPORTS.md §7b: EXR joins the remote providers. The provider of a
+# docs/dev/REMOTE-IMPORTS.md: EXR joins the remote providers. The provider of a
 # connection and the source of a batch are checked lists in the database.
 class AdmitExrImportSource < ActiveRecord::Migration[8.1]
   def up

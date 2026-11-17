@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Per-account track-display smoothing (PLAN_MAPLIBRE.md §9). `smooth_tracks`
+# Per-account track-display smoothing (docs/dev/MAPS.md). `smooth_tracks`
 # is the workout map's on/off toggle; `track_smoothing_level` is the intensity
 # chosen in appearance settings. Course (segment) displays are always smoothed
 # at the medium level and ignore these columns.

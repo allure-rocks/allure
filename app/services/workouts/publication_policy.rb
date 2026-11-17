@@ -25,7 +25,7 @@ module Workouts
 
     # A public publication serves every signed-in account and the public wire
     # protocol, but never an anonymous browser visitor: public means
-    # registered locally (PLAN_MEMBERS_ONLY.md). A followers publication serves
+    # registered locally (docs/dev/ACCESS.md). A followers publication serves
     # the owner and an accepted local follower whatever the switches say, and
     # an accepted remote follower whose locally assigned capability is
     # promoted only while restricted federation is enabled; the remote request
@@ -58,7 +58,7 @@ module Workouts
     def followers_publication? = @publication.audience == "followers"
 
     # A deactivated owner's publications are refused to everyone until the
-    # purge withdraws them (PLAN_ACCOUNT.md §4.2).
+    # purge withdraws them (docs/dev/ACCOUNT.md).
     def owner_deletion_scheduled? = @publication.actor&.user&.deletion_scheduled? || false
 
     def follower_actor
@@ -101,11 +101,11 @@ module Workouts
         true
       when :react
         # The owner reads the counts but never reacts to their own workout
-        # (PLAN_REACTIONS.md §4.4); `:like` stays the inbound ActivityPub gate.
+        # (docs/dev/REACTIONS.md); `:like` stays the inbound ActivityPub gate.
         !owner?
       when :comment
         # Unlike a reaction, the owner takes part in the thread; everyone the
-        # audience serves may write while comments are open (PLAN_COMMENTS.md
+        # audience serves may write while comments are open (docs/dev/COMMENTS.md
         # §4.1).
         @publication.comments_open?
       when :analysis
@@ -120,7 +120,7 @@ module Workouts
       when :gpx, :route_image
         attachment_allowed?(resource)
       when :photos
-        # The frozen photo copies (PLAN_PHOTOS.md §5.4): only what the
+        # The frozen photo copies (docs/dev/PHOTOS.md): only what the
         # snapshot shared, whatever the profile says today.
         @publication.profile_settings["photos"] == true && @publication.representation["photos"].is_a?(Array)
       else

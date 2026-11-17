@@ -2,7 +2,7 @@
 
 module Federation
   module RemoteMedia
-    # Operator-triggered retry (PLAN_M5 §12.5). It resets terminal failures and
+    # Operator-triggered retry (docs/dev/FEDERATION.md). It resets terminal failures and
     # re-enqueues them; cached and purged descriptors are final, and an owner
     # that is no longer active has nothing left to fetch.
     class Retry

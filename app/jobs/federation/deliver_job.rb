@@ -4,7 +4,7 @@ module Federation
   class DeliverJob < ApplicationJob
     queue_as :federation
 
-    # At most 5 concurrent deliveries per target authority (PLAN_M5 §12.2).
+    # At most 5 concurrent deliveries per target authority (docs/dev/FEDERATION.md).
     # The key is computed at enqueue, where the delivery is still a record.
     limits_concurrency to: 5, duration: 5.minutes,
       key: ->(delivery) { Allure::Federation::Authority.domain(delivery.inbox_url) }

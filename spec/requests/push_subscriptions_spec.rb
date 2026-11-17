@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_PUSH.md §5–§6: the current session's subscription, the native
+# docs/dev/PUSH.md: the current session's subscription, the native
 # unsubscribe, and the « Sur cet iPhone » card.
 RSpec.describe "Push subscriptions" do
   let(:user) { create(:user) }

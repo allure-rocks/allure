@@ -2,7 +2,7 @@
 
 module Metrics
   # Builds every database-derived metric value in one pass for the Prometheus
-  # exporter (PLAN_METRICS.md §4). Each family is rescued independently: a
+  # exporter (docs/dev/METRICS.md). Each family is rescued independently: a
   # failing family is omitted from the exposition, never propagated into
   # Yabeda's collect block.
   #
@@ -42,7 +42,7 @@ module Metrics
         users_new_7d: User.where(created_at: 7.days.ago..).count,
         users_new_30d: User.where(created_at: 30.days.ago..).count,
         # Recordings only: a credit row repeats an outing already counted
-        # (PLAN_TOGETHER.md §6.6).
+        # (docs/dev/SHARED-ACTIVITIES.md).
         workouts: Workout.recordings.count,
         workouts_new_7d: Workout.recordings.where(created_at: 7.days.ago..).count,
         workouts_new_30d: Workout.recordings.where(created_at: 30.days.ago..).count,
@@ -85,7 +85,7 @@ module Metrics
       FundingContribution.group(provider, :tier, status).count
     end
 
-    # PLAN_API.md §14: never a host, an account or a token.
+    # docs/dev/API.md: never a host, an account or a token.
     def api_token_counts(now = Time.current)
       {
         "revoked" => ApiToken.where.not(revoked_at: nil).count,
@@ -117,7 +117,7 @@ module Metrics
     end
 
     # Active users are activity-based: a sign-in alone does not count
-    # (PLAN_METRICS.md §3). The definition is shared with the administration
+    # (docs/dev/METRICS.md). The definition is shared with the administration
     # dashboard through Users::Engagement.
     def activity_family
       engagement = Users::Engagement.new

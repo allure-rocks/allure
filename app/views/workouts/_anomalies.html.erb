@@ -1,4 +1,4 @@
-<%# Readings that look wrong in the original file (PLAN_M1.md §8.10,
+<%# Readings that look wrong in the original file (docs/dev/WORKOUT.md,
     DESIGN.md §15.5): first the figures they make wrong, then one group per
     kind (the figure-changing kinds first), then, folded, what this device
     does on most recordings. Rows preview their range on the chart and the map
@@ -100,7 +100,7 @@
 <% end %>
 
 <%# A gap between two passages is what the recorded profile gets wrong; the
-    terrain profile is the one correction available (PLAN_M1.md §8.10). %>
+    terrain profile is the one correction available (docs/dev/WORKOUT.md). %>
 <% if groups.any? { |group| group[:kind] == "elevation_mismatch" } && elevation_source_control?(workout) &&
       workout.elevation_source != "dem" %>
   <div class="card-body pt-2">

@@ -3,7 +3,7 @@
 # One user's gear item with denormalized lifetime totals. Totals are
 # maintained by `Equipments::Totals` on associate/dissociate/metric-change
 # and repaired by the refresh endpoint; they are never edited directly.
-# See PLAN_M3.md sections 6.3 and 7.5.
+# See docs/dev/WORKOUT.md and docs/dev/BEST-EFFORTS.md.
 class Equipment < ApplicationRecord
   include HasShortId
 
@@ -12,7 +12,7 @@ class Equipment < ApplicationRecord
 
   belongs_to :user
   belongs_to :equipment_type
-  # Gear synchronised from a remote provider (PLAN_REMOTE_IMPORTS.md §6.3).
+  # Gear synchronised from a remote provider (docs/dev/REMOTE-IMPORTS.md).
   belongs_to :import_connection, optional: true
   has_and_belongs_to_many :workouts, join_table: "workout_equipments"
 

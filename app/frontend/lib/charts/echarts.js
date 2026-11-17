@@ -1,4 +1,4 @@
-// The single entry to Apache ECharts (PLAN_CHARTS.md). The library is loaded
+// The single entry to Apache ECharts (docs/dev/CHARTS.md). The library is loaded
 // on demand, the first time a chart connects, so pages without a chart never
 // pay for it; every controller shares the one promise. Only the modules the
 // charts use are registered (echarts_modules.js), and only the SVG renderer:

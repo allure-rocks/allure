@@ -1,18 +1,18 @@
 <%# Sharing (DESIGN.md §19, §20.3): one card listing the workout's
-    publications — one per audience at most (PLAN_AUDIENCES.md §2), the
+    publications — one per audience at most (docs/dev/PUBLISHING.md), the
     scheduled ones inside their safety delay, then the active ones, narrowest
     first — each with its own actions, then « Ajouter une publication », which
     unfolds the publish form for an audience no publication holds yet. The
     header withdraws every active publication. Without any publication the
     publish form opens the card directly; a row's « Remplacer » unfolds the
     same form under the list. What a profile shares is listed, never
-    projected. Automatic publications (PLAN_AUTO_PUBLISHING.md §7) lead the
+    projected. Automatic publications (docs/dev/AUTO-PUBLISHING.md) lead the
     card while they wait, with « Ne pas publier »; a publication they made is
     marked, and one they did not make says why. Locals: `workout`,
     `active_publications`, `scheduled_publications`, `profiles`, `readiness`,
     `delivery_summaries`, `auto_publications`. %>
 <%# A positionless recording has no route to share, so the card states why
-    instead of offering the form (PLAN_NO_GPS.md §7, §9). %>
+    instead of offering the form (docs/dev/NO-GPS.md). %>
 <% positionless = workout.recording? && !workout.positioned? %>
 <% add_profile = @selected_profile %>
 <% add_form_id = "workout-publish-form-add" %>

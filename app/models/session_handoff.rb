@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # A provider sign-in made in the iOS companion's system browser, waiting for
-# the app's web view to collect it (PLAN_AUTH.md §9). The browser only knows
+# the app's web view to collect it (docs/dev/AUTH.md). The browser only knows
 # the token; the app alone holds the PKCE verifier, so a token read from the
 # redirect is useless on its own. A handoff is redeemed at most once, by its
 # deletion, and any attempt — right or wrong — spends it.

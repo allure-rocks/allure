@@ -50,7 +50,7 @@ RSpec.describe Workouts::SportResolver do
       .to raise_error(described_class::MissingSport)
   end
 
-  describe "a declared sport (PLAN_STRAVA_ARCHIVE.md §4)" do
+  describe "a declared sport (docs/dev/STRAVA-ARCHIVE.md)" do
     it "outranks what the file detects" do
       trail = catalog_sport("trail")
       catalog_sport("cycling_road")
@@ -94,7 +94,7 @@ RSpec.describe Workouts::SportResolver do
   end
 
   # The file above carries no sport at all. `sport: 4` is not that file: a bare
-  # `fitness_equipment` has an Allure equivalent since PLAN_NO_GPS.md §3.3
+  # `fitness_equipment` has an Allure equivalent since docs/dev/NO-GPS.md
   # (`SportCatalog::SPORT_ALIASES`), and resolves like any other signal.
   it "resolves a bare fitness_equipment file to the indoor catch-all" do
     fitness = catalog_sport("fitness")

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ImportConnections
-  # « Récupérer des activités » (PLAN_REMOTE_IMPORTS.md §8.2): one manual
+  # « Récupérer des activités » (docs/dev/REMOTE-IMPORTS.md): one manual
   # batch over a date range, listed and imported by the remote batch job.
   class Retrieval
     Result = Data.define(:batch, :error) do

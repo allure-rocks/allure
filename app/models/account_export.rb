@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# One requested copy of an account's data (PLAN_ACCOUNT.md §3): built by
+# One requested copy of an account's data (docs/dev/ACCOUNT.md): built by
 # Users::ExportJob into a single ZIP, downloadable by its owner only for
 # LIFETIME, then purged. One export runs at a time per account, and a new one
 # may be requested once every COOLDOWN.

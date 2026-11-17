@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Settings
-  # Recovery codes (PLAN_AUTH.md §4.3): shown once, right after they are
+  # Recovery codes (docs/dev/AUTH.md): shown once, right after they are
   # generated, and never again. Regenerating replaces the whole set.
   class RecoveryCodesController < ApplicationController
     before_action :require_recent_authentication, only: :create
     # A visitor on a demo's shared account must not rotate a factor's way in
-    # (PLAN_DEMO.md §3).
+    # (docs/dev/DEMO.md).
     before_action :refuse_demo_account_lockout, only: :create
 
     def show

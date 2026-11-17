@@ -6,7 +6,7 @@ require "time"
 module Allure
   module Withings
     # Builds the deterministic TCX original of one Withings session
-    # (PLAN_REMOTE_IMPORTS.md §7c.3, decisions 10 and 11). The same series
+    # (docs/dev/REMOTE-IMPORTS.md, decisions 10 and 11). The same series
     # always build the same bytes, so the `(user_id, source_digest)` index
     # deduplicates a re-import.
     #
@@ -16,7 +16,7 @@ module Allure
     # rescan per point. An indoor session writes one trackpoint per
     # heart-rate sample without a `Position`: Allure's TCX parser opens a
     # positionless recording from those exactly as from a device's indoor
-    # export (PLAN_NO_GPS.md §3). A session whose location answer carries
+    # export (docs/dev/NO-GPS.md). A session whose location answer carries
     # fewer than two samples falls back to the heart-rate timeline: one
     # fix is not a route, and no position a sample does not carry is ever
     # invented. No distance is interpolated either: the summary lap keeps

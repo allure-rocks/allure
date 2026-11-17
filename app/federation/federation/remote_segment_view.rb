@@ -5,7 +5,7 @@ module Federation
   # of Workouts::PublicationView so the established metric and map partials
   # render it unchanged. The remote sport slug is matched to the shared seeded
   # catalog; an all-sports or unknown course keeps a neutral fallback
-  # (PLAN_SEGMENTS_FEDERATION.md §12.3).
+  # (docs/dev/SEGMENTS-FEDERATION.md).
   class RemoteSegmentView
     METRIC_KEYS = PublishingProfile::METRIC_KEYS
     MEDIA_STATUSES = %w[pending fetching].freeze

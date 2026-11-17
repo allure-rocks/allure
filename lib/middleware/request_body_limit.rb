@@ -2,7 +2,7 @@
 
 module Allure
   # Refuses a request body larger than its endpoint accepts before Rails
-  # parses it (PLAN_IMPORT_SOURCES.md §3.2). Puma has already buffered the
+  # parses it (docs/dev/IMPORT-SOURCES.md). Puma has already buffered the
   # body by then, within its own server-wide `http_content_length_limit`; this
   # keeps a small form from carrying gigabytes into the multipart parser, a
   # second copy on disk, and the application. Only the reverse proxy refuses

@@ -2,7 +2,7 @@
 
 module Together
   # Looks for the account's partners on the same outing after an import
-  # (PLAN_TOGETHER.md §8).
+  # (docs/dev/SHARED-ACTIVITIES.md).
   class DetectWorkoutJob < ApplicationJob
     queue_as :default
 

@@ -5,8 +5,8 @@ require "rails_helper"
 # The browser-facing publication media surface. The signed wire endpoints have
 # their own coverage in workout_publication_media_spec.rb; this one proves the
 # local principal path: a signed-in member for a public publication, the owner
-# and an accepted local follower for a followers-only one (PLAN_M5 §13.2).
-# Anonymous visitors are redirected to sign-in (PLAN_MEMBERS_ONLY.md).
+# and an accepted local follower for a followers-only one (docs/dev/FEDERATION.md).
+# Anonymous visitors are redirected to sign-in (docs/dev/ACCESS.md).
 RSpec.describe "Publication media" do
   let(:owner) { create(:user) }
   let(:workout) { create(:workout, user: owner) }

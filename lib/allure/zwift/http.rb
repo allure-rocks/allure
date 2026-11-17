@@ -9,7 +9,7 @@ require "uri"
 module Allure
   module Zwift
     # A small HTTPS client for the two hosts of Zwift's mobile API
-    # (PLAN_REMOTE_IMPORTS.md §7d): `secure.zwift.com` for the Keycloak token
+    # (docs/dev/REMOTE-IMPORTS.md): `secure.zwift.com` for the Keycloak token
     # endpoint and `us-or-rly101.zwift.com` for the read API. The FIT files
     # come from Zwift's own S3 bucket, whose name the API supplies; only a
     # safe bucket name and key are accepted, so a hostile answer can never

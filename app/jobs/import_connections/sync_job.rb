@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ImportConnections
-  # The sync of one connection (PLAN_REMOTE_IMPORTS.md §6.1): lists the window
+  # The sync of one connection (docs/dev/REMOTE-IMPORTS.md): lists the window
   # since the last sync, minus a day for late uploads, and creates a batch only
   # when something new remains. The hourly sweep only enqueues connections with
   # automatic sync; « Synchroniser maintenant » asks for the same pass with

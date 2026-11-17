@@ -108,7 +108,7 @@ RSpec.describe "Federation inboxes", type: :request do
     expect(response.headers["Retry-After"]).to eq("300")
   end
 
-  # PLAN_M5 §12.2: a request whose signature never verifies is not admitted,
+  # docs/dev/FEDERATION.md: a request whose signature never verifies is not admitted,
   # so the admission limit never sees it; the signer fetch it causes is
   # bounded on its own.
   context "with forged signatures naming the same actor" do

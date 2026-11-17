@@ -23,8 +23,8 @@ class FederationOutboxEvent < ApplicationRecord
 
   scope :active, -> { where(status: %w[pending expanded]) }
   # Excludes publication Creates whose subject is no longer active, so deleted
-  # publications never appear in outbox collections (PLAN_M4_5 §5.3), and the
-  # comment relays riding on them with them (PLAN_COMMENTS.md §9). All other
+  # publications never appear in outbox collections (docs/dev/PUBLISHING.md), and the
+  # comment relays riding on them with them (docs/dev/COMMENTS.md). All other
   # events (Deletes, Undos, Actor activities) pass through.
   scope :live_publication_creates, -> {
     where(
@@ -47,7 +47,7 @@ class FederationOutboxEvent < ApplicationRecord
   }
 
   # A comment's Create, and the host's Announce relaying it, leave the outbox
-  # with the comment (PLAN_COMMENTS.md §3.3): a comment deleted, removed, or
+  # with the comment (docs/dev/COMMENTS.md): a comment deleted, removed, or
   # refused is never served again. An Announce names its comment only inside
   # its payload, which its withdrawal redacts, so it is served only while that
   # comment is still in its thread.
@@ -82,7 +82,7 @@ class FederationOutboxEvent < ApplicationRecord
   validates :attempts, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   # Actor currency is an intent invariant, enforced when the event is created.
   # A deletion event must stay updatable after its own actor is tombstoned so
-  # its delivery can reach terminal state and the key can retire (PLAN_M5 §8.7).
+  # its delivery can reach terminal state and the key can retire (docs/dev/FEDERATION.md).
   validate :actor_is_current_local_actor, on: :create
   validate :uris_are_absolute
   validate :payload_and_audience_are_objects

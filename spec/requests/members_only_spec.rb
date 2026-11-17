@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_MEMBERS_ONLY.md: every browser surface requires a registered account, a
+# docs/dev/ACCESS.md: every browser surface requires a registered account, a
 # shared link survives the sign-in gate, and the public wire contract stays
 # anonymous for remote peers.
 RSpec.describe "Members-only access" do

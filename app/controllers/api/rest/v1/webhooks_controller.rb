@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # Webhook management (PLAN_API.md §6.6), the same operations as the
+      # Webhook management (docs/dev/API.md), the same operations as the
       # settings page, through `Webhooks::Management`.
       class WebhooksController < BaseController
         EDITABLE = %w[url description events active].freeze

@@ -97,7 +97,7 @@ RSpec.describe "Publishing profiles" do
     expect(profile.reload.settings["device"]).to be(true)
   end
 
-  # PLAN_COMMENTS.md §6.4: open by default, an older profile without the key
+  # docs/dev/COMMENTS.md: open by default, an older profile without the key
   # stays open, and an unchecked box is an explicit close.
   it "exposes the comments setting, open for an older profile, and stores an unchecked box as closed" do
     profile = create(:publishing_profile, :custom, user:)

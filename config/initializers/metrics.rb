@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Metrics bootstrap (PLAN_METRICS.md).
+# Metrics bootstrap (docs/dev/METRICS.md).
 #
 # yabeda-rails installs its request metrics only when it detects a known
 # application server, which leaves consoles, tests, and `bin/jobs` without the
@@ -21,7 +21,7 @@ Rails.application.config.after_initialize do
   Metrics::Schema.define!
   Yabeda.configure { collect { Metrics::Collector.refresh! } }
 
-  # PLAN_API.md §14: REST API requests by the scope the operation needs and
+  # docs/dev/API.md: REST API requests by the scope the operation needs and
   # the status class. `process_action` wraps rescue_from, so a refusal or a
   # 404 is counted with its final status.
   ActiveSupport::Notifications.subscribe("process_action.action_controller") do |*, payload|

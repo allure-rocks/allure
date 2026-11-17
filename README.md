@@ -141,9 +141,10 @@ release is 0.10.0; [CHANGELOG.md](CHANGELOG.md) lists what changed in each one.
 
 Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the
 development environment, the demo dataset, the checks and the DCO sign-off, and
-[SECURITY.md](SECURITY.md) to report a vulnerability privately. The design and
-the contracts behind a durable behaviour are explained in the pull request
-until the developer documentation is published.
+[SECURITY.md](SECURITY.md) to report a vulnerability privately. The design
+reference is [docs/dev/DESIGN.md](docs/dev/DESIGN.md), and
+[AGENTS.md](AGENTS.md) is the repository guide for contributors and coding
+agents. The developer contracts are published under `docs/dev/`.
 
 ## Credits
 

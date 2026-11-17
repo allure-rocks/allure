@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_ELEVATION.md §10: a course carries the source of its frozen elevation
+# docs/dev/ELEVATION.md: a course carries the source of its frozen elevation
 # figures (the recording device's or the terrain service's) and the state of
 # its terrain request; the operator backfills it from /admin/jobs.
 class AddTerrainElevationToSegments < ActiveRecord::Migration[8.1]

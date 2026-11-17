@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_DERIVATIONS.md §5: the operator re-geocodes missing or outdated
+# docs/dev/DERIVATIONS.md: the operator re-geocodes missing or outdated
 # toponymies from /admin/jobs, and the audit log records it. AdminEvent::ACTIONS
 # is mirrored by a checked constraint; historical actions stay allowed.
 class ExtendAdminEventActionsForToponymyBackfill < ActiveRecord::Migration[8.1]

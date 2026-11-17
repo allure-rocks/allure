@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The comment object endpoint (PLAN_COMMENTS.md §6.5): a public local comment
+# The comment object endpoint (docs/dev/COMMENTS.md): a public local comment
 # in its thread answers anyone; everything else is 404.
 RSpec.describe "Comment objects" do
   let(:owner) { create(:user) }

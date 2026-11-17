@@ -6,7 +6,7 @@ require "uri"
 # attachments. The remote-media services (fetch, verification, processing,
 # purge, recovery, retry) talk to these attributes and methods instead of a
 # concrete owner class, while the models stay separate
-# (PLAN_SEGMENTS_FEDERATION.md §7.4).
+# (docs/dev/SEGMENTS-FEDERATION.md).
 module RemoteMediaAttachment
   extend ActiveSupport::Concern
 

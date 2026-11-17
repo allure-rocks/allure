@@ -5,7 +5,7 @@
 
 <%# The iOS companion has no Web Bluetooth; when it registers the `igpsport`
     bridge component the panel borrows the phone's radio instead
-    (PLAN_IMPORT_SOURCES.md §4.4). An older app is asked to update. %>
+    (docs/dev/IMPORT-SOURCES.md). An older app is asked to update. %>
 <% native = hotwire_native_bridge?(:igpsport) %>
 <div class="card mb-3">
   <%= tag.div class: "card-body",

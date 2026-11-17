@@ -2,7 +2,7 @@
 
 module Workouts
   # Owner-scoped derived-data maintenance behind the settings Data page
-  # (PLAN_DERIVATIONS.md §7). One cursor sweep per kind, limited to the
+  # (docs/dev/DERIVATIONS.md). One cursor sweep per kind, limited to the
   # account's own workouts and courses, batched so a single account cannot
   # flood the queues, and throttled to one running sweep per (account, kind).
   #
@@ -19,15 +19,15 @@ module Workouts
   # - `elevation`: elevation-less workouts of an opted-in account on an
   #   instance with a terrain provider (Workouts::ApplyElevationSourceJob);
   # - `weather`: positioned workouts of a consenting account without weather
-  #   or with an older weather generation (PLAN_WEATHER.md §5; the weather job
+  #   or with an older weather generation (docs/dev/WEATHER.md; the weather job
   #   is paced, so this only schedules work);
   # - `loops`: positioned recordings with an older detection/reuse generation,
   #   even without a loop yet (Segments::MatchWorkoutJob);
   # - `heart_rate`: recordings whose heart-rate histogram is missing or older
-  #   than the current version (PLAN_HEART_RATE.md §3.4), rebuilt inline from
+  #   than the current version (docs/dev/HEART-RATE.md), rebuilt inline from
   #   the stored points;
   # - `route_suggestions`: recordings the recurring-route detector has not
-  #   examined yet (PLAN_SEGMENTS.md §7.7); the account sweep walks them newest
+  #   examined yet (docs/dev/SEGMENTS.md); the account sweep walks them newest
   #   first, so this kind enqueues it once instead of dispatching per record.
   #
   # A user sweep never bypasses a contract: it only rebuilds to the state the
@@ -66,7 +66,7 @@ module Workouts
       private
 
       # Only workouts that still keep their original file can be reconciled
-      # (PLAN_DERIVATIONS.md §5); a fileless workout is never counted.
+      # (docs/dev/DERIVATIONS.md); a fileless workout is never counted.
       def rebuild_scope(user)
         user.workouts
           .joins(:original_file_attachment)
@@ -77,7 +77,7 @@ module Workouts
           )
       end
 
-      # Credit rows have no track: no image, no geocoding (PLAN_TOGETHER.md §6.6).
+      # Credit rows have no track: no image, no geocoding (docs/dev/SHARED-ACTIVITIES.md).
       def route_image_scope(user)
         user.workouts.recordings.where(route_image_version: ...RouteImage::VERSION)
       end

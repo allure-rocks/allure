@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_TOGETHER.md §6.6, §10: a credit row is the participant's own activity,
+# docs/dev/SHARED-ACTIVITIES.md: a credit row is the participant's own activity,
 # read-only except for its deletion, and nothing in it is drawn from a track.
 RSpec.describe "Workout credit rows" do
   let(:owner) { create(:user, username: "marie") }

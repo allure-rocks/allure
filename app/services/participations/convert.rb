@@ -2,7 +2,7 @@
 
 module Participations
   # The participant turns a confirmed credit into a link by naming their own
-  # recording of the same outing (PLAN_TOGETHER.md §5): the two workouts then
+  # recording of the same outing (docs/dev/SHARED-ACTIVITIES.md): the two workouts then
   # point at each other and the credit row is destroyed, so nothing is counted
   # twice. The participation stays confirmed, so the owner reads the new kind
   # on the card; no notice is sent.

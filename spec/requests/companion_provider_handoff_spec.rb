@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_AUTH.md slice 4: the iOS companion signs in through a provider in its
+# docs/dev/AUTH.md: the iOS companion signs in through a provider in its
 # system browser, which hands the verified answer back to the app's web view
 # through a single-use token bound to the app's PKCE challenge. In these specs
 # one integration session plays both the system browser and the web view.

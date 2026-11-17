@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AllureMcp
-  # `allure_mcp_requests_total` (PLAN_METRICS.md): one count per JSON-RPC
+  # `allure_mcp_requests_total` (docs/dev/METRICS.md): one count per JSON-RPC
   # request. Labels stay bounded — a tool name a client invents is `unknown`.
   module Metrics
     METHODS = %w[initialize ping tools/list tools/call].freeze

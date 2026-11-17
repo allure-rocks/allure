@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API account and catalog (PLAN_API.md §6.1–6.2)", type: :request do
+RSpec.describe "REST API account and catalog (docs/dev/API.md–6.2)", type: :request do
   let(:user) { create(:user, username: "marion", display_name: "Marion") }
 
   it "describes the account and the token" do

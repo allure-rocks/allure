@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :exr do
-  # Feasibility check for PLAN_REMOTE_IMPORTS.md §7b against a real EXR
+  # Feasibility check for docs/dev/REMOTE-IMPORTS.md against a real EXR
   # account. Writes nothing to the database and never prints the password or
   # a cookie value.
   #

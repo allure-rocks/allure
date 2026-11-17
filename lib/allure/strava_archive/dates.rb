@@ -4,8 +4,8 @@ require "date"
 
 module Allure
   module StravaArchive
-    # Reads the `Activity Date` of `activities.csv` (PLAN_STRAVA_ARCHIVE.md
-    # §11, slice 2). Strava writes it in UTC but in the athlete's display
+    # Reads the `Activity Date` of `activities.csv`
+    # (docs/dev/STRAVA-ARCHIVE.md). Strava writes it in UTC but in the athlete's display
     # language: `Aug 31, 2014, 10:54:43 AM`, `09.12.2022, 15:24:49`,
     # `9 déc. 2022, 15:24:49`, `2022年12月9日 下午3:24:49`. The reader looks
     # for its parts rather than one pattern per language: an ISO date, a

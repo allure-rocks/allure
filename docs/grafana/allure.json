@@ -1,7 +1,7 @@
 {
   "title": "Allure — Instance",
   "uid": "allure-instance",
-  "description": "Health and usage of an Allure instance, from the /metrics exporter (PLAN_METRICS.md).",
+  "description": "Health and usage of an Allure instance, from the /metrics exporter (docs/dev/METRICS.md).",
   "tags": [
     "allure"
   ],

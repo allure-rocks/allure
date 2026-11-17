@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_SEGMENTS.md §6.2/§6.3: eligibility is computed on read from the segment,
+# docs/dev/SEGMENTS.md: eligibility is computed on read from the segment,
 # the active publication, the exclusions, and the effort owner's zones, so the
 # stored `segment_efforts.listed` snapshot and its refresh machinery are gone.
 # Participation becomes opt-out: a `segment_opt_outs` row is the exclusion.

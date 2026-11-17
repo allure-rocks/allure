@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # An import batch and, in the detail form, its entries (PLAN_API.md §6.3,
+      # An import batch and, in the detail form, its entries (docs/dev/API.md,
       # §7.5): the counters and states the web's import progress shows.
       class ImportSerializer
         def initialize(batch, entries: nil)

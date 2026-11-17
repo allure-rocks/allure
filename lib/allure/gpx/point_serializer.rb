@@ -3,7 +3,7 @@
 module Allure
   module Gpx
     # Writes the compact per-point JSON contract documented in
-    # PLAN_M1.md section 5.4. This is the only place that shape is produced;
+    # docs/dev/WORKOUT.md This is the only place that shape is produced;
     # chart extraction (Slice 5) must read these same key constants.
     module PointSerializer
       KEY_TIME = "t"
@@ -38,7 +38,7 @@ module Allure
         # A point of a positionless recording carries no coordinates at all:
         # the keys are absent, never null, so every coordinate consumer fails
         # loudly instead of reading a meaningless 0° position
-        # (PLAN_NO_GPS.md).
+        # (docs/dev/NO-GPS.md).
         if !latitude.nil? && !longitude.nil?
           hash[KEY_LATITUDE] = latitude
           hash[KEY_LONGITUDE] = longitude

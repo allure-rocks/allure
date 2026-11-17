@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 namespace :withings do
-  # Feasibility check for PLAN_REMOTE_IMPORTS.md §7c against a real Withings
+  # Feasibility check for docs/dev/REMOTE-IMPORTS.md against a real Withings
   # account. Writes nothing to the database and never prints the password,
-  # the session id or the userid (W1 in RUNBOOK_REMOTE_IMPORTS.md part 4).
+  # the session id or the userid (W1 in docs/dev/REMOTE-IMPORTS.md part 4).
   #
   #   dip rails withings:probe
   #   WITHINGS_EMAIL=… DAYS=30 DOWNLOAD=1 TCX_PATH=tmp/withings-probe.tcx \

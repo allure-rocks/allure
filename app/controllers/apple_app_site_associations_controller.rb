@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Lets the iOS companion use this instance's passkeys (PLAN_AUTH.md §9):
+# Lets the iOS companion use this instance's passkeys (docs/dev/AUTH.md):
 # Associated Domains reads the `webcredentials` apps from here. Absent until
 # the operator names the app identifiers.
 class AppleAppSiteAssociationsController < ApplicationController

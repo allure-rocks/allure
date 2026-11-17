@@ -102,7 +102,7 @@
   </div>
 </div>
 
-<%# Automatic publishing (PLAN_AUTO_PUBLISHING.md, DESIGN.md §19.25): off by
+<%# Automatic publishing (docs/dev/AUTO-PUBLISHING.md, DESIGN.md §19.25): off by
     default; turning it on asks for an explicit acknowledgement in the same
     submission. %>
 <% profile = form.object %>
@@ -139,7 +139,7 @@
     <small class="form-text d-block mb-3" id="publishing-profile-auto-commute-hint"><%= t("publishing_profiles.form.auto_exclude_commute_hint") %></small>
 
     <%# The sports an automatic profile leaves out, as the commute exclusion
-        above (PLAN_AUTO_PUBLISHING.md §2, §7): the filter bar's sport pills,
+        above (docs/dev/AUTO-PUBLISHING.md): the filter bar's sport pills,
         every active sport offered. The hidden empty value keeps the key
         submitted, so unticking every sport clears the list. %>
     <fieldset class="allure-sport-filter allure-sport-filter--form mb-1"

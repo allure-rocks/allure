@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The reference Grafana dashboard (PLAN_METRICS.md §7) may only query families
+# The reference Grafana dashboard (docs/dev/METRICS.md) may only query families
 # the exporter declares, so a renamed or removed metric fails here instead of
 # leaving an empty panel in an operator's Grafana.
 RSpec.describe "docs/grafana/allure.json" do

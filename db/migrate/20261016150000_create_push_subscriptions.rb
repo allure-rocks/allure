@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_PUSH.md §5: one push subscription per signed-in session. It goes with
+# docs/dev/PUSH.md: one push subscription per signed-in session. It goes with
 # its session (sign-out, expiry, revocation) through the cascade, so no push
 # reaches a device for an account it no longer holds. The endpoint and the
 # device's `auth` secret are encrypted; the digest finds a row by endpoint.

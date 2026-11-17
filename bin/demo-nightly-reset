@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Host-side nightly reset (PLAN_DEMO.md §5), run from cron every minute:
+# Host-side nightly reset (docs/dev/DEMO.md), run from cron every minute:
 #
 #     * * * * * /srv/allure/bin/demo-nightly-reset /srv/allure/demo.env
 #

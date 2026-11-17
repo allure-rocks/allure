@@ -127,7 +127,7 @@ RSpec.describe Workouts::ScheduledPublicationActivation do
     expect(future.reload).to be_scheduled
   end
 
-  describe "the owner's deletion window (PLAN_ACCOUNT.md §4.2)" do
+  describe "the owner's deletion window (docs/dev/ACCOUNT.md)" do
     def schedule_deletion
       user.update!(deletion_requested_at: Time.current, deletion_scheduled_at: 1.day.from_now,
                    deletion_requested_by: "self")

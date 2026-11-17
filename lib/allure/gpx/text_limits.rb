@@ -2,7 +2,7 @@
 
 module Allure
   module Gpx
-    # The longest text a parsed file may hand on (PLAN_M1.md §7.3). Every
+    # The longest text a parsed file may hand on (docs/dev/WORKOUT.md). Every
     # format builds the shared `Track` and `Lap` values, which clip here, so a
     # file's text is bounded once whatever reads it: the title and the
     # description at the workout's own validation limits, the device name and

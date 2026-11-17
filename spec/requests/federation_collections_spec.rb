@@ -39,7 +39,7 @@ RSpec.describe "Slice 5 federation collections", type: :request do
     expect(page.fetch("orderedItems")).to eq([])
   end
 
-  # PLAN_COMMENTS.md §3.3: a comment's Create leaves the outbox with its
+  # docs/dev/COMMENTS.md: a comment's Create leaves the outbox with its
   # comment.
   it "lists the owner's public comment and drops it once deleted" do
     workout = create(:workout, user:)
@@ -57,7 +57,7 @@ RSpec.describe "Slice 5 federation collections", type: :request do
     expect(response.body).not_to include("Merci à tous")
   end
 
-  # PLAN_COMMENTS.md §6.6: the host's relay leaves the outbox with the comment.
+  # docs/dev/COMMENTS.md: the host's relay leaves the outbox with the comment.
   it "lists the relay of a member's comment and drops it once the comment leaves" do
     workout = create(:workout, user:)
     create(:workout_publication, workout:, publishing_profile: public_publishing_profile_for(user))
@@ -120,7 +120,7 @@ RSpec.describe "Slice 5 federation collections", type: :request do
 
     expect(recipient_page.fetch("orderedItems").map { |item| item["type"] }).to include("Delete")
     expect(stranger_page.fetch("orderedItems").map { |item| item["type"] }).not_to include("Delete")
-    # PLAN_M5 §12.6: the Delete names its recipients, and each reader sees
+    # docs/dev/FEDERATION.md: the Delete names its recipients, and each reader sees
     # only those of its own authority.
     delete_for_recipient = recipient_page.fetch("orderedItems").find { |item| item["type"] == "Delete" }
     expect(delete_for_recipient.fetch("to")).to eq([ recipient.uri ])
@@ -156,7 +156,7 @@ RSpec.describe "Slice 5 federation collections", type: :request do
     expect(second.fetch("orderedItems").length).to eq(5)
   end
 
-  # PLAN_M5 §12.2: a signed GET never fetches nor stores an actor this
+  # docs/dev/FEDERATION.md: a signed GET never fetches nor stores an actor this
   # instance does not know. Only a known actor can be addressed by an outbox
   # item or hold a follow, so an unknown signer reads what anonymous readers
   # read.

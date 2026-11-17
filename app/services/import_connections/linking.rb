@@ -2,8 +2,7 @@
 
 module ImportConnections
   # The request side of linking a provider with the account's own password
-  # (PLAN_REMOTE_IMPORTS.md §7.2 for Garmin Connect, §7b.2 for EXR, §7c.2 for
-  # Withings). Sign-in
+  # (docs/dev/REMOTE-IMPORTS.md): Garmin Connect, EXR and Withings. Sign-in
   # is slow and Garmin's may stop for a verification code, so it runs in the
   # provider's link job; the password and, later, the code wait for it in the
   # connection's encrypted credentials for at most

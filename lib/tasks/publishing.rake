@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :publishing do
-  desc "Verify publication data before M4.5 migrations"
+  desc "Verify publication data before a publishing migration"
   task preflight: :environment do
     result = Workouts::PublicationPreflight.new.call
 

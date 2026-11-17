@@ -45,7 +45,7 @@ module Allure
         %i[hiking trail] => "hiking",
         %i[walking casual_walking] => "walking",
         %i[walking speed_walking] => "walking",
-        # An indoor session with no distance at all (PLAN_NO_GPS.md §3.3):
+        # An indoor session with no distance at all (docs/dev/NO-GPS.md):
         # the gym machines whose sub-sport names the activity.
         %i[training strength_training] => "strength training",
         %i[training cardio_training] => "fitness",

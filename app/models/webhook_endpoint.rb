@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# An address an account asked Allure to notify (PLAN_API.md §11.1). Its URL
+# An address an account asked Allure to notify (docs/dev/API.md). Its URL
 # passes the federation SSRF guard at creation and on every change, and again
 # at every attempt. The secret signs each delivery (Standard Webhooks) and is
 # shown once; a rotation keeps the previous one signing for 24 hours.
@@ -82,7 +82,7 @@ class WebhookEndpoint < ApplicationRecord
     fresh
   end
 
-  # Tells the owner (the `webhook_disabled` notification, PLAN_API.md §11.4).
+  # Tells the owner (the `webhook_disabled` notification, docs/dev/API.md).
   def disable!(reason, at: Time.current)
     update!(disabled_at: at, disabled_reason: reason)
     Notifications::Create.new(user:, kind: "webhook_disabled", subject: self,

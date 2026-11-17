@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The owner's recorded track as GeoJSON (PLAN_API.md §6.2): one LineString
+      # The owner's recorded track as GeoJSON (docs/dev/API.md): one LineString
       # Feature per recording segment, never joined across a pause, with the
       # per-point measurements as parallel arrays. A measurement absent from
       # every point of a segment is omitted for that segment.

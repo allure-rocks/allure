@@ -4,7 +4,7 @@ require "digest"
 
 module Workouts
   # Imports the activities of a remote batch through its connection's
-  # provider (PLAN_REMOTE_IMPORTS.md §5.2). The same phases as the file
+  # provider (docs/dev/REMOTE-IMPORTS.md). The same phases as the file
   # pipeline: discovery (the provider's listing, for a date-range batch),
   # then one entry at a time through `Workouts::Importer`.
   #
@@ -110,7 +110,7 @@ module Workouts
       end
 
       # A manual activity has no file to fetch; an indoor one without a GPS
-      # track does, and is imported positionlessly (PLAN_NO_GPS.md §8).
+      # track does, and is imported positionlessly (docs/dev/NO-GPS.md).
       return skip_entry(entry, "no_file") if activity.manual
       # Positioned-only import (Withings fed by Apple Health, §7c.3): a
       # session without a route is skipped before any fetch.
@@ -158,7 +158,7 @@ module Workouts
         import_connection: connection,
         external_id: entry.external_id,
         # A retrieval over a date range is history; the scheduled sync and the
-        # webhooks bring new outings (PLAN_AUTO_PUBLISHING.md §3).
+        # webhooks bring new outings (docs/dev/AUTO-PUBLISHING.md).
         bulk: batch.trigger == "manual"
       ).call
 
@@ -180,7 +180,7 @@ module Workouts
       close(fetched.io)
     end
 
-    # The photos the provider offers with the activity (PLAN_REMOTE_IMPORTS.md
+    # The photos the provider offers with the activity (docs/dev/REMOTE-IMPORTS.md
     # §7d.3 for Zwift): attached through the same pipeline as the owner's own
     # uploads, so the stripped derivatives, the account quota and the
     # per-workout cap apply. A photo the pipeline refuses is counted, a photo
@@ -210,7 +210,7 @@ module Workouts
     # An activity recorded at the same moment already exists, imported some
     # other way (a file, another provider): it is not imported twice. A credit
     # row is not a recording, so the participant's own recording of a credited
-    # outing is still imported (PLAN_TOGETHER.md §6.6).
+    # outing is still imported (docs/dev/SHARED-ACTIVITIES.md).
     def near_duplicate(user, started_at)
       return nil unless started_at
 
@@ -220,7 +220,7 @@ module Workouts
     end
 
     # Gear is attached at import only while the connection synchronises it and
-    # the item already exists locally (PLAN_REMOTE_IMPORTS.md §6.3).
+    # the item already exists locally (docs/dev/REMOTE-IMPORTS.md).
     def equipment_ids(connection, fetched)
       return nil unless connection.sync_equipment && fetched.equipment_external_id.present?
 
@@ -272,7 +272,7 @@ module Workouts
     end
 
     # A manual retrieval skipped the per-recording route-suggestion pass; the
-    # account sweep now walks its recordings newest first (PLAN_SEGMENTS.md
+    # account sweep now walks its recordings newest first (docs/dev/SEGMENTS.md
     # §7.7). A scheduled sync does not, since its imports are not bulk.
     def enqueue_route_suggestion_sweep(batch)
       return unless batch.status == "completed"

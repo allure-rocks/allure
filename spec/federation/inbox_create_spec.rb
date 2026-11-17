@@ -68,7 +68,7 @@ RSpec.describe Federation::Inbox::Create do
     expect(note.representation.fetch("commute")).to be(true)
   end
 
-  it "stores a shared weather summary and drops an implausible one (PLAN_WEATHER.md §6)" do
+  it "stores a shared weather summary and drops an implausible one (docs/dev/WEATHER.md)" do
     activity["object"]["tag"].push(
       { "type" => "Note", "name" => "weather_condition", "content" => "rain" },
       { "type" => "Note", "name" => "weather_temperature", "content" => "9.5,13.2,7.0" },
@@ -138,7 +138,7 @@ RSpec.describe Federation::Inbox::Create do
     expect(note.entitled_to?(recipient)).to be(false)
   end
 
-  # PLAN_M5 §8.3: naming a local account is not enough to reach it.
+  # docs/dev/FEDERATION.md: naming a local account is not enough to reach it.
   it "rejects a note addressed directly to an account that does not follow its author" do
     follow.destroy!
     direct = [ Federation::Parsers::RemoteNote::PUBLIC_AUDIENCE, recipient.uri ]

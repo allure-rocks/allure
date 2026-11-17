@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The account lifecycle mails (PLAN_ACCOUNT.md): a ready export, a scheduled
+# The account lifecycle mails (docs/dev/ACCOUNT.md): a ready export, a scheduled
 # or cancelled deletion, and the deletion done. Localized to the account,
 # since the mails are queued. The last one is sent after the row is gone, so
 # it takes the address and locale captured before the purge, never the row.

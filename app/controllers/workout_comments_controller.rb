@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-# Posting a comment or a reply on a workout's thread (PLAN_COMMENTS.md §5.1).
+# Posting a comment or a reply on a workout's thread (docs/dev/COMMENTS.md).
 # The thread is the workout's, one per publication audience, not one
-# publication's, so a republished workout keeps it (PLAN_AUDIENCES.md §6). Denial is 404, never 403; a closed thread or a refused text
+# publication's, so a republished workout keeps it (docs/dev/PUBLISHING.md). Denial is 404, never 403; a closed thread or a refused text
 # re-renders the card with its explanation and the text the reader typed.
 class WorkoutCommentsController < ApplicationController
   include CommentCardRendering
 
   before_action :set_workout
   # A person converses; a script floods. The bound is per account and far above
-  # any conversation (PLAN_COMMENTS.md §4.4).
+  # any conversation (docs/dev/COMMENTS.md).
   rate_limit to: 20, within: 1.minute, only: :create, by: -> { current_user.id },
              with: -> { render_comment_card(@workout, status: :too_many_requests, composer: refused(:rate_limited)) }
 

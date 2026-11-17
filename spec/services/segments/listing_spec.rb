@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_SEGMENTS.md §8.2: the board follows the reader. An effort appears for a
+# docs/dev/SEGMENTS.md: the board follows the reader. An effort appears for a
 # viewer who may see the course and read a publication of the workout that
 # shares its route, unless the athlete opted out or a privacy zone touches the
 # corridor.

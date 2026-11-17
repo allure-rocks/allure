@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_AUTH.md §6.5: the operator emails a password-less account a one-time
+# docs/dev/AUTH.md: the operator emails a password-less account a one-time
 # password-setting link, and the audit log records it. AdminEvent::ACTIONS is
 # mirrored by a checked constraint; historical actions stay allowed.
 class ExtendAdminEventActionsForPasswordSetup < ActiveRecord::Migration[8.1]

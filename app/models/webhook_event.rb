@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # One event emitted to an account's webhooks, its payload frozen at emission
-# (PLAN_API.md §11.1). The `evt_` id is the envelope's `id` and the
+# (docs/dev/API.md). The `evt_` id is the envelope's `id` and the
 # `webhook-id` header, the same for every attempt and every redelivery.
 class WebhookEvent < ApplicationRecord
   include HasShortId

@@ -11,24 +11,24 @@ class User < ApplicationRecord
   ROUTE_IMAGE_THEMES = %w[auto light dark].freeze
   UNIT_SYSTEMS = %w[metric imperial].freeze
   WEEK_STARTS = %w[monday sunday].freeze
-  # Track-display smoothing intensities (PLAN_MAPLIBRE.md §9). The window is a
+  # Track-display smoothing intensities (docs/dev/MAPS.md). The window is a
   # display transform only: it never changes a payload, snapshot, or metric.
   TRACK_SMOOTHING_LEVELS = %w[light medium strong].freeze
-  # The self-declared leaderboard category (PLAN_SEGMENTS.md §8.7). It only
+  # The self-declared leaderboard category (docs/dev/SEGMENTS.md). It only
   # offers a filtered view of a board; `unspecified` keeps the general board.
   LEADERBOARD_CATEGORIES = %w[unspecified women men].freeze
   # Local profile sections only, never publication or federation audiences.
   PROFILE_SHARING_AUDIENCES = %w[none followers members].freeze
   # Whether the account may be found by name search and suggestions
-  # (PLAN_PEOPLE.md §2). `none` is the default for everyone: the directory is
+  # (docs/dev/PEOPLE.md). `none` is the default for everyone: the directory is
   # opt-in, and an exact handle still reaches a hidden account.
   DISCOVERABILITY = %w[none members].freeze
   TIME_ZONE_IDENTIFIERS = TZInfo::Timezone.all_identifiers.freeze
-  # Who asked for a scheduled deletion (PLAN_ACCOUNT.md §4.1).
+  # Who asked for a scheduled deletion (docs/dev/ACCOUNT.md).
   DELETION_REQUESTERS = %w[self operator].freeze
 
   # Generic sports an import detects when the file carries no usable sub-type
-  # (PLAN_M1.md §3.4). An account may replace each of them with a variant of
+  # (docs/dev/WORKOUT.md). An account may replace each of them with a variant of
   # the same icon family; the columns stay nil to keep the detected generic.
   SPORT_DEFAULT_KEYS = Sport::GENERIC_SLUGS.index_with { |slug| :"default_#{slug}_sport" }.freeze
 
@@ -72,7 +72,7 @@ class User < ApplicationRecord
   AVATAR_PALETTE = Allure::Avatar::Palette::COLOURS
 
   # An account created through an identity provider has no password
-  # (PLAN_AUTH.md §6.3), so Rails' built-in presence rule is replaced by the
+  # (docs/dev/AUTH.md), so Rails' built-in presence rule is replaced by the
   # explicit validations below.
   has_secure_password validations: false
   # Set by the provider sign-up, the only path that creates an account
@@ -85,9 +85,9 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_one_attached :gravatar_cache
   has_many :sessions, dependent: :destroy
-  # Each goes with its session (PLAN_PUSH.md §5), through the cascade.
+  # Each goes with its session (docs/dev/PUSH.md), through the cascade.
   has_many :push_subscriptions, dependent: :delete_all
-  # Second factors (PLAN_AUTH.md §4.1–§4.3).
+  # Second factors (docs/dev/AUTH.md).
   encrypts :otp_secret
   has_many :webauthn_credentials, dependent: :delete_all
   has_many :recovery_codes, dependent: :delete_all
@@ -112,7 +112,7 @@ class User < ApplicationRecord
   has_many :privacy_zones, dependent: :destroy, inverse_of: :user
   has_many :notifications, dependent: :destroy
   has_many :people_suggestion_dismissals, dependent: :delete_all
-  # Recurring-route suggestions (PLAN_SEGMENTS.md §7.7): owner-only bookkeeping,
+  # Recurring-route suggestions (docs/dev/SEGMENTS.md): owner-only bookkeeping,
   # never a course and never published.
   has_many :route_suggestions, dependent: :destroy
   has_many :account_exports, dependent: :destroy
@@ -132,7 +132,7 @@ class User < ApplicationRecord
   before_create :assign_avatar_seed
   # A password account owes a second factor from the moment it holds a
   # password — at creation or when a password-less account adds one; the
-  # grace period counts from here (PLAN_AUTH.md §5.3).
+  # grace period counts from here (docs/dev/AUTH.md).
   before_save :start_second_factor_requirement
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
@@ -193,7 +193,7 @@ class User < ApplicationRecord
   validate :username_not_operator, on: :self_registration
   validate :username_not_instance_name, on: :self_registration
   validate :default_sports_are_allowed
-  # The heart-rate profile (PLAN_HEART_RATE.md §3.1).
+  # The heart-rate profile (docs/dev/HEART-RATE.md).
   validates :max_heart_rate, numericality: { only_integer: true, in: 100..220 }, allow_nil: true
   validates :resting_heart_rate, numericality: { only_integer: true, in: 25..120 }, allow_nil: true
   validates :heart_rate_zone_basis, inclusion: { in: Allure::HeartRate::Zones::BASES }
@@ -202,9 +202,9 @@ class User < ApplicationRecord
   after_commit :refresh_gravatar_cache, on: :update, if: :saved_change_to_gravatar_opt_in?
 
   # Accounts whose deletion window has ended, including a purge that stopped
-  # half-way and must resume (PLAN_ACCOUNT.md §4.3).
+  # half-way and must resume (docs/dev/ACCOUNT.md).
   scope :deletion_due, ->(now = Time.current) { where(deletion_scheduled_at: ..now) }
-  # The accounts name search and suggestions may return (PLAN_PEOPLE.md §2).
+  # The accounts name search and suggestions may return (docs/dev/PEOPLE.md).
   # A deactivated account is never discoverable, whatever its setting says.
   scope :discoverable, -> { where(discoverable: "members", suspended_at: nil, deletion_scheduled_at: nil) }
 
@@ -218,10 +218,10 @@ class User < ApplicationRecord
 
   def second_factor_count = (totp_enrolled? ? 1 : 0) + webauthn_credentials.count
 
-  # Operator suspension (PLAN_ADMIN.md §7): access is revoked, content is not.
+  # Operator suspension (docs/dev/ADMIN.md): access is revoked, content is not.
   def suspended? = suspended_at.present?
 
-  # A scheduled deletion (PLAN_ACCOUNT.md §4.2) deactivates the account for
+  # A scheduled deletion (docs/dev/ACCOUNT.md) deactivates the account for
   # its window: its content is hidden and nothing runs on its behalf.
   def deletion_scheduled? = deletion_scheduled_at.present?
 
@@ -232,7 +232,7 @@ class User < ApplicationRecord
   # webhook, synchronisation or automatic publication.
   def deactivated? = suspended? || deletion_scheduled?
 
-  # Found by name search and suggestions (PLAN_PEOPLE.md §2). The setting alone
+  # Found by name search and suggestions (docs/dev/PEOPLE.md). The setting alone
   # is not enough: a deactivated account never appears.
   def discoverable? = discoverable == "members" && !deactivated?
 
@@ -247,7 +247,7 @@ class User < ApplicationRecord
     Allure::Funding.enabled? && !deactivated? && !funding_badge_hidden? && funding_badge_tier.present?
   end
 
-  # The one operator account (PLAN_M5 §12.5). Unset means nobody is an
+  # The one operator account (docs/dev/FEDERATION.md). Unset means nobody is an
   # operator; the console remains the fallback for administration.
   def instance_operator?
     configured = self.class.operator_username
@@ -328,7 +328,7 @@ class User < ApplicationRecord
 
   # A deleted account's actor keeps its URI forever, and the URI derives from
   # the username: handing the name out again would leave the new account
-  # unable to federate (PLAN_ACCOUNT.md §2.1). Only the tombstoned actor of a
+  # unable to federate (docs/dev/ACCOUNT.md). Only the tombstoned actor of a
   # deleted account reserves the name — a live owner is the uniqueness rule's.
   def username_not_retired
     return if username.blank? || !username.match?(USERNAME_FORMAT)
@@ -370,7 +370,7 @@ class User < ApplicationRecord
   private
 
   # A default must be an active sport from the generic's curated target list
-  # (PLAN_M1.md §3.4.2), which includes the generic itself; nil means the same
+  # (docs/dev/WORKOUT.md), which includes the generic itself; nil means the same
   # as choosing it.
   def default_sports_are_allowed
     SPORT_DEFAULT_KEYS.each do |generic_slug, attribute|

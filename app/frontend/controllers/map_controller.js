@@ -36,7 +36,7 @@ const ANOMALY_SOURCE = "allure-anomalies";
 const ANOMALY_LAYER = "allure-anomaly-dashes";
 const ANOMALY_POINT_LAYER = "allure-anomaly-points";
 
-// A virtual world's own map image (PLAN_VIRTUAL.md) replaces the ordinary
+// A virtual world's own map image (docs/dev/VIRTUAL-PLATFORMS.md) replaces the ordinary
 // basemap: one background layer in the world's colour and one image layer
 // stretched over the world's rectangle. No tiles are fetched.
 
@@ -105,7 +105,7 @@ export default class extends Controller {
     // The colour-by legend's metric names and units (DESIGN.md §15.2).
     legendLocale: Object,
     // A power-led virtual ride offers its watts first and keeps its own stored
-    // colour choice (PLAN_VIRTUAL.md §8).
+    // colour choice (docs/dev/VIRTUAL-PLATFORMS.md).
     powerLed: { type: Boolean, default: false },
     startLabel: String,
     finishLabel: String,
@@ -119,7 +119,7 @@ export default class extends Controller {
     // Owner-only position and timing findings (DESIGN.md §15.5): distance
     // ranges along the track, plus the coordinates of rejected positions.
     anomalies: { type: Array, default: [] },
-    // The owner's placed photos (PLAN_PHOTOS.md §7): id, lon, lat, thumbnail
+    // The owner's placed photos (docs/dev/PHOTOS.md): id, lon, lat, thumbnail
     // endpoint and label. Thumbnails sharing a spot at the current zoom are
     // grouped under one marker with a count.
     photos: { type: Array, default: [] },
@@ -378,7 +378,7 @@ export default class extends Controller {
 
   // The stops tab publishes its stop markers so the map shows a small stop
   // panel for every stop while that tab is active; the weather tab likewise
-  // publishes its weather markers (PLAN_WEATHER.md §7).
+  // publishes its weather markers (docs/dev/WEATHER.md).
   analysisTabChanged(event) {
     const markers = Array.isArray(event.detail?.markers) ? event.detail.markers : [];
     this.stopMarkerData = markers.filter((marker) => (
@@ -1119,7 +1119,7 @@ export default class extends Controller {
       element.setAttribute("aria-label", description);
       element.title = description;
       // The white Meteocons icon on the rose pill, animated unless the reader
-      // asked for less motion (PLAN_WEATHER.md §7).
+      // asked for less motion (docs/dev/WEATHER.md).
       const icon = document.createElement("img");
       icon.className = "allure-map-weather-icon";
       icon.src = weatherIconUrl(entry.svg, { color: "#ffffff" }) ?? "";

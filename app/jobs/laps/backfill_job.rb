@@ -15,7 +15,7 @@ module Laps
              ActiveRecord::SerializationFailure, wait: :polynomially_longer, attempts: 5
 
     def perform(after_id: 0)
-      # A credit row has no track and no laps (PLAN_TOGETHER.md §6.6).
+      # A credit row has no track and no laps (docs/dev/SHARED-ACTIVITIES.md).
       workouts = Workout.recordings.where("id > ?", after_id).order(:id).limit(BATCH_SIZE).to_a
       workouts.each do |workout|
         Laps::Rebuild.new(workout:).call

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The Découvrir map endpoint (PLAN_SEGMENTS.md §8.4): every course the viewer
+# The Découvrir map endpoint (docs/dev/SEGMENTS.md): every course the viewer
 # may see — the readable shared ones and their own, private ones included —
 # inside the requested viewport, as sanitized GeoJSON. Facts only — no effort,
 # no athlete, no source workout — and a malformed viewport is a client error,

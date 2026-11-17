@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// The demo strip's reset warning (PLAN_DEMO.md §6). The server renders the
+// The demo strip's reset warning (docs/dev/DEMO.md). The server renders the
 // next reset as an absolute instant; the controller turns the warning line on
 // by itself when it comes within the window, without any reload — the page
 // may have been open for hours by then, and Turbo keeps it alive.

@@ -13,7 +13,7 @@ module PublicationBadgeHelper
   # One state, one mark, one tint, one wording. A scheduled publication takes
   # the tint of the audience it will reach and pulses: nothing is shared while
   # the delay runs, and its owner can still act on it
-  # (PLAN_DELAYED_PUBLISHING.md).
+  # (docs/dev/DELAYED-PUBLISHING.md).
   STATES = {
     "public" => { css: "bg-success-lt", icon: "ti-broadcast",
                   label: "workouts.publication.audience.public" },

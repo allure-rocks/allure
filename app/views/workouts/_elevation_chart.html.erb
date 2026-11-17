@@ -4,7 +4,7 @@
 <% available_series = local_assigns.fetch(:available_series, [ :elevation ]) %>
 <% toponymy = local_assigns.fetch(:toponymy, false) %>
 <% anomalies = local_assigns.fetch(:anomalies, []) %>
-<%# The owner's placed photos (PLAN_PHOTOS.md §7); nil on every other chart. %>
+<%# The owner's placed photos (docs/dev/PHOTOS.md); nil on every other chart. %>
 <% photos = local_assigns[:photos] %>
 <% secondary_options = local_assigns.fetch(:configurable, false) ? workout_chart_secondary_options(display, available_series) : [] %>
 <% table_series = workout_chart_display_series(display, available_series) %>
@@ -26,7 +26,7 @@
      <%= "data-elevation-chart-selection-value=true data-elevation-chart-selection-url-value=#{workout_segment_selection_path(workout)}" if selection %>
      <% if anomalies.present? %>data-elevation-chart-anomalies-value="<%= anomalies.to_json %>"<% end %>
      data-elevation-chart-unit-system-value="<%= current_user&.unit_system || 'metric' %>"
-     <%# A power-led virtual ride opens on its watts (PLAN_VIRTUAL.md §8). %>
+     <%# A power-led virtual ride opens on its watts (docs/dev/VIRTUAL-PLATFORMS.md). %>
      <% if display.sport&.power_led? && available_series.map(&:to_sym).include?(:power) %>data-elevation-chart-power-led-value="true"<% end %>
      <%# The axis mode belongs to the workout the chart plots; a course chart
          passes no workout and stays on its distance axis. %>

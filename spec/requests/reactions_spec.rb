@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The reaction gesture (PLAN_REACTIONS.md §4.4, DESIGN.md §10.17): one PUT
+# The reaction gesture (docs/dev/REACTIONS.md, DESIGN.md §10.17): one PUT
 # toggles the viewer's reaction inside a Turbo Frame, the bar renders in the
 # feed and on the detail pages, and the owner or a visitor only ever reads
 # counts.
@@ -232,7 +232,7 @@ RSpec.describe "Reactions" do
       expect(response.body).to include(%(data-bs-title="Éric a trinqué à cette activité"))
     end
 
-    # PLAN_REACTIONS.md §4.2: a reaction given through the followers version
+    # docs/dev/REACTIONS.md: a reaction given through the followers version
     # counts for every reader but is named only to that audience.
     it "counts a followers reaction for a public reader without naming it" do
       allow(Allure::Federation::Config).to receive(:restricted_enabled?).and_return(true)

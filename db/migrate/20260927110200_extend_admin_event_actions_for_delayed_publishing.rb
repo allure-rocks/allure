@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_DELAYED_PUBLISHING.md §7: operator cancellation of a scheduled
+# docs/dev/DELAYED-PUBLISHING.md: operator cancellation of a scheduled
 # publication is its own audited action. AdminEvent::ACTIONS is mirrored by a
 # checked constraint, so the allowlist must be extended in the database too.
 class ExtendAdminEventActionsForDelayedPublishing < ActiveRecord::Migration[8.1]

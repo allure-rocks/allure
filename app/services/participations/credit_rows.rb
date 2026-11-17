@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Participations
-  # Gives a confirmed credit its credit row (PLAN_TOGETHER.md §3.2, §6.2): the
+  # Gives a confirmed credit its credit row (docs/dev/SHARED-ACTIVITIES.md): the
   # attached row when it exists, else a detached row of the same owner the
   # participant kept from a deleted source of the same outing (the owner
   # re-imported it), else a new one. Idempotent per source and participant;
@@ -37,7 +37,7 @@ module Participations
         credit
       end
       # A new credit row reaches the participant's integrations like an import;
-      # a re-attached one is the same workout (PLAN_TOGETHER.md §6.2).
+      # a re-attached one is the same workout (docs/dev/SHARED-ACTIVITIES.md).
       Webhooks::Events.workout_created(row) if created
       CreditSync.new(row).derive
     end

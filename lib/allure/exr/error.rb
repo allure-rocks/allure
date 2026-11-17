@@ -2,7 +2,7 @@
 
 module Allure
   module Exr
-    # Failures of reading the EXR account site (PLAN_REMOTE_IMPORTS.md §7b).
+    # Failures of reading the EXR account site (docs/dev/REMOTE-IMPORTS.md).
     # Messages never carry the password or a cookie value.
     class Error < StandardError
       # The site refused the e-mail address or the password.

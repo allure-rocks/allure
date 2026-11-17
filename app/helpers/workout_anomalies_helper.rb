@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Presentation of the analyzer's flagged readings (PLAN_M1.md §8.10,
+# Presentation of the analyzer's flagged readings (docs/dev/WORKOUT.md,
 # DESIGN.md §15.5). Owner-only: every caller renders them for the workout's
 # owner and never from a publication.
 module WorkoutAnomaliesHelper
@@ -114,7 +114,7 @@ module WorkoutAnomaliesHelper
   end
 
   # The figures an anomaly makes wrong, keyed by the summary metric they
-  # annotate: the plausible value, why, and where (PLAN_M1.md §8.10).
+  # annotate: the plausible value, why, and where (docs/dev/WORKOUT.md).
   def workout_anomaly_notes(workout)
     impact = workout.data_anomalies.fetch("impact", {})
     contested = Array(workout.contested_metrics)
@@ -210,7 +210,7 @@ module WorkoutAnomaliesHelper
   end
 
   # An elevation gap has no plausible value to name: the recorded profile is
-  # the only one there is (PLAN_M1.md §8.10).
+  # the only one there is (docs/dev/WORKOUT.md).
   def elevation_mismatch_note(impact, excluded)
     text = t("workouts.anomalies.notes.elevation_mismatch", gap: format_elevation(impact["gap"].to_f))
     text = [ text, t("workouts.anomalies.notes.excluded_metric") ].join(" · ") if excluded

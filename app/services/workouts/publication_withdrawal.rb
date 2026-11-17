@@ -7,8 +7,8 @@ module Workouts
 
     Result = Data.define(:publication, :delete_event, :created)
 
-    # `reason` names the withdrawal to the owner's webhooks (PLAN_API.md
-    # §11.2): `deleted` by default, `operator` for the operator's.
+    # `reason` names the withdrawal to the owner's webhooks
+    # (docs/dev/API.md): `deleted` by default, `operator` for the operator's.
     def initialize(user:, workout: nil, publication: nil, operator: false, reason: nil)
       @user = user
       @workout = workout
@@ -75,7 +75,7 @@ module Workouts
     end
 
     # Every logical recipient whose Create delivery made any network attempt must
-    # receive Delete (PLAN_M4_5 Slice 4). A delivery cancelled after claim still
+    # receive Delete (docs/dev/PUBLISHING.md). A delivery cancelled after claim still
     # may have reached the remote on an earlier attempt, so cancelled rows with
     # attempts > 0 are included; never-attempted pending->cancelled rows are not.
     def self.recipient_uris_for(create_event)
@@ -121,7 +121,7 @@ module Workouts
       raise ActiveRecord::RecordNotFound unless @workout
 
       # A workout may carry one active publication per audience
-      # (PLAN_AUDIENCES.md §2); withdrawing by workout alone only stays
+      # (docs/dev/PUBLISHING.md); withdrawing by workout alone only stays
       # unambiguous while one is active.
       @workout.reset_publications
       active = @workout.active_publications.to_a
@@ -134,7 +134,7 @@ module Workouts
 
     # The owner path is the default. `operator: true` is only honored for an
     # actual instance operator, so administration takedown can never become a
-    # general authorization bypass (PLAN_ADMIN.md §4.4).
+    # general authorization bypass (docs/dev/ADMIN.md).
     def authorize!(publication)
       return if operator?
 

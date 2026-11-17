@@ -3,7 +3,7 @@
 module Allure
   module Weather
     # Whether the sun was above the horizon at one instant and position
-    # (PLAN_WEATHER.md §3). The provider is asked nothing extra: its ten
+    # (docs/dev/WEATHER.md). The provider is asked nothing extra: its ten
     # hourly variables fill one billed call, and an eleventh would double it.
     #
     # The solar elevation follows the standard low-precision ephemeris (mean

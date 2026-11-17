@@ -193,7 +193,7 @@ RSpec.describe "Demo seed manifests" do
     end
   end
 
-  # The demo instance re-dates the dataset from these anchors (PLAN_DEMO.md §4):
+  # The demo instance re-dates the dataset from these anchors (docs/dev/DEMO.md):
   # each anchor must stay the newest date of its family, so the demo's most
   # recent activity lands near the present. The corpus filenames embed the
   # recording date, which keeps the check pure string work.

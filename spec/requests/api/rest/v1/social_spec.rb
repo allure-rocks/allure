@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API social reads (PLAN_API.md §6.5, §10)", type: :request do
+RSpec.describe "REST API social reads (docs/dev/API.md)", type: :request do
   let(:reader) { create(:user) }
   let(:author) { create(:user, email_address: "secret-author@example.com") }
   let(:headers) { api_headers_for(reader, scopes: %w[social:read]) }

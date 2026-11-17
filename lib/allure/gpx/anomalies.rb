@@ -15,7 +15,7 @@ module Allure
     # `TrackSeries`/`ChartSeries`, so the map and the chart place a finding
     # exactly where the stored points are.
     #
-    # See PLAN_M1.md section 8.10 for the locked contract.
+    # See docs/dev/WORKOUT.md for the locked contract.
     class Anomalies
       KINDS = {
         "gps_rejected" => "gps",
@@ -466,7 +466,7 @@ module Allure
           # A positionless segment has no positions to judge: the GPS family
           # (rejected fixes, jumps, skew, implausible speed) never runs, and
           # the time, heart-rate, power and cadence families do
-          # (PLAN_NO_GPS.md §4.3). Nothing is marked major, because no derived
+          # (docs/dev/NO-GPS.md). Nothing is marked major, because no derived
           # figure depends on a coordinate here.
           if positioned?
             rejected_positions

@@ -19,7 +19,7 @@ class WorkoutRouteImagesController < ApplicationController
 
   # Owner-requested re-render. The job is idempotent and replaces the image
   # under the workout lock, so a double click only queues a second render. A
-  # credit row has no track to draw (PLAN_TOGETHER.md §6.6).
+  # credit row has no track to draw (docs/dev/SHARED-ACTIVITIES.md).
   def regenerate
     workout = current_user.workouts.positioned.find_by_short_id!(params[:workout_id])
     Workouts::RenderRouteImageJob.perform_later(workout)

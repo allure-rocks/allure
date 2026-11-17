@@ -5,7 +5,7 @@ require "time"
 
 module ImportConnections
   module Providers
-    # The Garmin Connect adapter (PLAN_REMOTE_IMPORTS.md §7.4) over the pure
+    # The Garmin Connect adapter (docs/dev/REMOTE-IMPORTS.md) over the pure
     # `Allure::GarminConnect::Client`. The DI token lives in the connection's
     # credentials; a rotated token is written back the moment the client
     # refreshes it, because the previous refresh token is spent.
@@ -48,7 +48,7 @@ module ImportConnections
         archive&.close!
       end
 
-      # Garmin Connect photos are not imported yet (PLAN_PHOTOS.md §6).
+      # Garmin Connect photos are not imported yet (docs/dev/PHOTOS.md).
       def photos(_activity) = Allure::RemoteImports::PhotoSet.new
 
       def equipment
@@ -94,7 +94,7 @@ module ImportConnections
           started_at: parse_gmt(item["startTimeGMT"]),
           sport_hint: item.dig("activityType", "typeKey").presence,
           # A manual activity carries no file to fetch; an indoor one is
-          # fetched and imported positionlessly (PLAN_NO_GPS.md §8).
+          # fetched and imported positionlessly (docs/dev/NO-GPS.md).
           geometry: item["hasPolyline"] == true,
           manual: item["manualActivity"] == true
         )

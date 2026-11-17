@@ -11,7 +11,7 @@ module Allure
     # −18 %, no further benefit beyond) so that steep descents are not
     # over-credited, unlike the raw laboratory model.
     #
-    # See PLAN_M1.md section 8.8 for the locked contract.
+    # See docs/dev/WORKOUT.md for the locked contract.
     module GradeAdjustedPace
       MINETTI_COEFFICIENTS = [ 155.4, -30.4, -43.3, 46.3, 19.5, 3.6 ].freeze
       FLAT_COST = 3.6
@@ -36,7 +36,7 @@ module Allure
       # Computes the grade-adjusted distance (metres) and moving time (seconds)
       # from a flat list of points. Points must respond to `time`, `longitude`,
       # `latitude`, and `elevation`, and their elevations must already be the
-      # canonical filtered profile (PLAN_M1.md section 8.6): this method never
+      # canonical filtered profile (docs/dev/WORKOUT.md): this method never
       # smooths again. The distance basis mirrors `Geo.distance` (3D when both
       # endpoints carry an elevation, horizontal otherwise), and only moving
       # intervals whose endpoints share a valid elevation contribute. Returns
@@ -55,7 +55,7 @@ module Allure
           duration = current.time - previous.time
           next unless duration.positive?
 
-          # A positionless recording (PLAN_NO_GPS.md §4) has no gradient at
+          # A positionless recording (docs/dev/NO-GPS.md) has no gradient at
           # all: its unpositioned points are skipped here, so a positionless
           # track answers +nil+ — the documented "no eligible interval"
           # contract — instead of crashing on nil coordinates.

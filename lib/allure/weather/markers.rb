@@ -3,7 +3,7 @@
 module Allure
   module Weather
     # Where the « Météo » analysis tab marks the weather on the profile and
-    # the map (PLAN_WEATHER.md §7): at the start, then only where the weather
+    # the map (docs/dev/WEATHER.md): at the start, then only where the weather
     # changes — another condition, a wind turning to another of the eight
     # compass sectors, or a temperature moved by 2 °C — at least 8 % of the
     # distance apart and six at most. A workout whose weather never changes

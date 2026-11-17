@@ -3,7 +3,7 @@
 module Segments
   # Atomic deletion boundary: withdrawal persistence and segment destruction
   # commit together; Delete expansion is enqueued only after commit. Mirrors
-  # Workouts::WorkoutDeletion (PLAN_SEGMENTS_FEDERATION.md §9.4).
+  # Workouts::WorkoutDeletion (docs/dev/SEGMENTS-FEDERATION.md).
   class SegmentDeletion
     Result = Data.define(:segment_id, :publication, :delete_event)
 

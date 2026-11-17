@@ -4,7 +4,7 @@ require "uri"
 
 # A safe received representation of a remote Allure course. It is never a
 # local segment: no effort, athlete, alias, or leaderboard data, and no
-# editing surface (PLAN_SEGMENTS_FEDERATION.md §7.2). Content is immutable
+# editing surface (docs/dev/SEGMENTS-FEDERATION.md). Content is immutable
 # except for the controlled deletion and location-redaction paths.
 class RemoteSegment < ApplicationRecord
   STATUSES = %w[active deleted].freeze

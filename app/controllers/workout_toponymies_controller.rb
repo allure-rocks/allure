@@ -2,14 +2,14 @@
 
 # Reads the owner's stored toponymy. The page never schedules geocoding: the
 # import, the re-analysis, the sweeps and the recovery job do
-# (PLAN_DERIVATIONS.md §4), so this endpoint has no side effect.
+# (docs/dev/DERIVATIONS.md), so this endpoint has no side effect.
 class WorkoutToponymiesController < ApplicationController
   def show
     workout = current_user.workouts.positioned.find_by_short_id!(params[:workout_id])
     response.headers["Cache-Control"] = "private, no-store"
 
     # A virtual workout is never geocoded; its place comes from the platform's
-    # venue catalog (PLAN_VIRTUAL.md §4).
+    # venue catalog (docs/dev/VIRTUAL-PLATFORMS.md).
     toponymy = workout.toponymy unless workout.sport.virtual?
     return render json: { status: "unavailable" } unless toponymy
 

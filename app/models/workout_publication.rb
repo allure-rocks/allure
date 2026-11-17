@@ -12,7 +12,7 @@ class WorkoutPublication < ApplicationRecord
     "active" => %w[deleted].freeze,
     "deleted" => [].freeze
   }.freeze
-  # Audiences from the narrowest to the widest (PLAN_AUDIENCES.md §3): a
+  # Audiences from the narrowest to the widest (docs/dev/PUBLISHING.md): a
   # reader entitled to several live publications of one workout is served the
   # first of them. A future group audience goes before `followers`.
   AUDIENCE_PRECEDENCE = %w[followers public].freeze
@@ -22,7 +22,7 @@ class WorkoutPublication < ApplicationRecord
   SERVED_ORDER_SQL = "workout_publications.workout_id, #{AUDIENCE_RANK_SQL}, workout_publications.id"
   # The frozen profile shares the route and the route was not redacted: a
   # board or reach computation never reveals a passage whose publication
-  # hides where it went (PLAN_SEGMENTS.md §8.2).
+  # hides where it went (docs/dev/SEGMENTS.md).
   ROUTE_SHARED_SQL = <<~SQL.squish
     workout_publications.profile_snapshot -> 'settings' ->> 'route' = 'true'
     AND COALESCE(workout_publications.route_metadata ->> 'redacted', 'false') <> 'true'
@@ -42,7 +42,7 @@ class WorkoutPublication < ApplicationRecord
            inverse_of: :workout_publication,
            dependent: :restrict_with_exception
 
-  # The photos frozen at publish time (PLAN_PHOTOS.md §5.3).
+  # The photos frozen at publish time (docs/dev/PHOTOS.md).
   has_many :photos, -> { order(:position) }, class_name: "WorkoutPublicationPhoto",
                                               inverse_of: :workout_publication, dependent: :destroy
   has_one_attached :gpx, dependent: :purge_later
@@ -71,7 +71,7 @@ class WorkoutPublication < ApplicationRecord
   # public set used by federation and operator aggregates.
   # An account whose deletion is scheduled is deactivated for its window: its
   # publications are hidden locally and refused on the wire until the purge
-  # withdraws them (PLAN_ACCOUNT.md §4.2).
+  # withdraws them (docs/dev/ACCOUNT.md).
   scope :of_available_owners, -> {
     where.not(actor_id: Actor.joins(:user).where.not(users: { deletion_scheduled_at: nil }).select(:id))
   }
@@ -90,7 +90,7 @@ class WorkoutPublication < ApplicationRecord
   }
 
   # `visible_to` kept to one publication per workout: the narrowest audience,
-  # the one the reader is served (PLAN_AUDIENCES.md §3).
+  # the one the reader is served (docs/dev/PUBLISHING.md).
   scope :served_to, ->(user) {
     where(id: visible_to(user).unscope(:order)
       .select(Arel.sql("DISTINCT ON (workout_publications.workout_id) workout_publications.id"))
@@ -147,7 +147,7 @@ class WorkoutPublication < ApplicationRecord
   def publication_description = representation["description"]
 
   # Comments are open while the snapshot's profile allowed them and the owner
-  # has not closed the thread live (PLAN_COMMENTS.md §1, §4.1).
+  # has not closed the thread live (docs/dev/COMMENTS.md).
   def comments_closed_by_profile? = representation["comments_closed"] == true
   def comments_open? = !comments_closed_by_profile? && workout.present? && workout.comments_closed_at.nil?
   def publication_started_at = representation["started_at"]
@@ -287,7 +287,7 @@ class WorkoutPublication < ApplicationRecord
     }
   end
 
-  # One live publication per audience and workout (PLAN_AUDIENCES.md §2); the
+  # One live publication per audience and workout (docs/dev/PUBLISHING.md); the
   # partial unique index is the authority under concurrency.
   def live_audience_is_free
     return if workout_id.blank? || audience.blank?
@@ -380,7 +380,7 @@ class WorkoutPublication < ApplicationRecord
 
   PHOTO_KEYS = %w[id width height caption distance].freeze
 
-  # The frozen photos (PLAN_PHOTOS.md §5.3): an identifier, dimensions, an
+  # The frozen photos (docs/dev/PHOTOS.md): an identifier, dimensions, an
   # optional caption and an optional distance along the published route —
   # never a coordinate, a capture time or any EXIF field.
   def validate_photos(photos)
@@ -424,7 +424,7 @@ class WorkoutPublication < ApplicationRecord
   end
 
   # A profile that disabled comments freezes `comments_closed: true` into the
-  # snapshot; absence means open (PLAN_COMMENTS.md §6.4).
+  # snapshot; absence means open (docs/dev/COMMENTS.md).
   def validate_comments_closed(value)
     return if value.nil?
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# A climb or a descent never spans a discontinuity (PLAN_VIRTUAL.md §7.1): the
+# A climb or a descent never spans a discontinuity (docs/dev/VIRTUAL-PLATFORMS.md): the
 # smart-lap detector now breaks its elevation profile where the ground does not
 # continue — a teleport, or a recording resumed elsewhere — so the jump is no
 # longer counted as ascent. The phantom climb it produced held the

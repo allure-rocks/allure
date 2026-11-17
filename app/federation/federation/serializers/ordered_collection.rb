@@ -20,7 +20,7 @@ module Federation
         @page = page.to_i.clamp(1, MAX_PAGE)
       end
 
-      # Bounded pagination (PLAN_M4_5 §5.3): totalItems and orderedItems share one
+      # Bounded pagination (docs/dev/PUBLISHING.md): totalItems and orderedItems share one
       # DB-filtered relation. Only the current page's payloads are loaded;
       # the collection never materializes every event or payload.
       def collection
@@ -86,8 +86,8 @@ module Federation
         end
       end
 
-      # M4.5 public-only gate: an accepted follow alone never grants visibility
-      # (PLAN_M4_5 §5.2). Visible means public, or directly addressed to the
+      # An accepted follow alone never grants visibility
+      # (docs/dev/PUBLISHING.md). Visible means public, or directly addressed to the
       # verified viewer (immutable Delete recipients, Follow/Accept targets).
       def apply_audience_filter(relation)
         public_value = WorkoutNote::PUBLIC_AUDIENCE

@@ -2,7 +2,7 @@
 
 module Participations
   # The recordings a participant may name to turn a participation into a link
-  # (PLAN_TOGETHER.md §5, §10): their own, not the source itself, and not
+  # (docs/dev/SHARED-ACTIVITIES.md): their own, not the source itself, and not
   # already linked to another live participation (the live-recording partial
   # unique index would otherwise raise). Shared by `Decide` and `Convert`.
   module RecordingRules

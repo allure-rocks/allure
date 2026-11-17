@@ -2,7 +2,7 @@
 
 module Segments
   # Walks one account's positioned recordings from the newest to the oldest and
-  # runs recurring-route detection on each (PLAN_SEGMENTS.md §7.7). The order
+  # runs recurring-route detection on each (docs/dev/SEGMENTS.md). The order
   # matters: the first occurrence of a circuit the walk reaches is the newest
   # one, so the suggestion's reference workout — the geometry the route form
   # uses — is the most recent recording. Resumable through the (started_at, id)

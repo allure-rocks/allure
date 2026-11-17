@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Whether a workout may be sent to the weather provider (PLAN_WEATHER.md
-  # §5): the instance offers the feature, the owner consented and is active,
+  # Whether a workout may be sent to the weather provider
+  # (docs/dev/WEATHER.md): the instance offers the feature, the owner consented and is active,
   # and the workout is a positioned recording of a real-world sport. A manual
   # entry, a credit row, a positionless recording and a virtual sport never
   # have weather.

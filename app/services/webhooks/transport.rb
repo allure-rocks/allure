@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Webhooks
-  # Sends one signed delivery (PLAN_API.md §11.3, §11.4) through the
+  # Sends one signed delivery (docs/dev/API.md) through the
   # federation client and its SSRF guard: HTTPS only (plain HTTP only on the
   # local ring), private addresses refused and re-resolved at every attempt,
   # no redirect followed, a small response read and thrown away.

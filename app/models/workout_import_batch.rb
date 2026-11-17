@@ -6,16 +6,16 @@ class WorkoutImportBatch < ApplicationRecord
   STATUSES = %w[queued processing completed failed cancelled].freeze
   TERMINAL_STATUSES = %w[completed failed cancelled].freeze
   SOURCES = ([ "file", Allure::ImportSources::STRAVA_ARCHIVE.key ] + Allure::RemoteImports::Config.providers).freeze
-  # `api`: uploaded through the REST API (PLAN_API.md §8).
+  # `api`: uploaded through the REST API (docs/dev/API.md).
   TRIGGERS = %w[manual scheduled webhook api].freeze
 
   belongs_to :user
   # Required for an uploaded batch; a remote batch may rely on each file's own
-  # sport and the connection's fallback (PLAN_REMOTE_IMPORTS.md §4), a Strava
-  # archive on each activity's declared type (PLAN_STRAVA_ARCHIVE.md §4).
+  # sport and the connection's fallback (docs/dev/REMOTE-IMPORTS.md), a Strava
+  # archive on each activity's declared type (docs/dev/STRAVA-ARCHIVE.md).
   belongs_to :sport, optional: true
   belongs_to :import_connection, optional: true
-  # The options card's gear (PLAN_IMPORT_SOURCES.md §2): the importer attaches
+  # The options card's gear (docs/dev/IMPORT-SOURCES.md): the importer attaches
   # it to every workout of the batch and keeps Equipment totals in step.
   has_and_belongs_to_many :equipments, join_table: "workout_import_batch_equipments"
   has_many :entries,
@@ -80,7 +80,7 @@ class WorkoutImportBatch < ApplicationRecord
   end
 
   # Each imported workout keeps its own copy of its original, so a finished
-  # batch never reads its upload again (PLAN_IMPORT_SOURCES.md §3.2).
+  # batch never reads its upload again (docs/dev/IMPORT-SOURCES.md).
   def release_sources!
     source_files.purge_later if source_files.attached?
   end

@@ -3,7 +3,7 @@
 module ImportConnections
   module Zwift
     # Signs in to Zwift's mobile API once with the password a pending link
-    # holds (PLAN_REMOTE_IMPORTS.md §7d.2) and keeps only the refresh token and
+    # holds (docs/dev/REMOTE-IMPORTS.md) and keeps only the refresh token and
     # the athlete id. The password is wiped before the request; a failure
     # returns the connection to its previous state with the reason. Once
     # linked, the job verifies the token with one profile call and resumes the

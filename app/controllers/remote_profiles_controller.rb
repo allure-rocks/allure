@@ -30,7 +30,7 @@ class RemoteProfilesController < ApplicationController
   private
 
   # Only notes this local account was admitted for; remote profiles never
-  # expose another account's delivered copies (PLAN_M5 §11.6).
+  # expose another account's delivered copies (docs/dev/FEDERATION.md).
   def notes_scope
     actor = current_user&.actor
     return RemoteNote.none unless actor
@@ -42,7 +42,7 @@ class RemoteProfilesController < ApplicationController
   end
 
   # Entitled courses follow the same account scoping as notes
-  # (PLAN_SEGMENTS_FEDERATION.md §12.5).
+  # (docs/dev/SEGMENTS-FEDERATION.md).
   def segments_scope
     actor = current_user&.actor
     return RemoteSegment.none unless actor

@@ -118,7 +118,7 @@ RSpec.describe Allure::Gpx::GradeAdjustedPace do
       expect(described_class.from_points(points, stopped_speed_threshold_km_h: 0.5)).to be_nil
     end
 
-    it "returns nil for a positionless recording instead of crashing (PLAN_NO_GPS.md §4)" do
+    it "returns nil for a positionless recording instead of crashing (docs/dev/NO-GPS.md)" do
       points = [
         point(time: 0, lat: nil, lon: nil, elevation: 100.0),
         point(time: 200, lat: nil, lon: nil, elevation: 100.0)

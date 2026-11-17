@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The ways a comment leaves its thread (PLAN_COMMENTS.md §5.2–§5.4, §7.6):
+# The ways a comment leaves its thread (docs/dev/COMMENTS.md):
 # its author deletes it, the workout's owner removes it, an account deletion
 # removes every comment it wrote, and the owner closes the thread.
 RSpec.describe "Comment withdrawals" do
@@ -113,7 +113,7 @@ RSpec.describe "Comment withdrawals" do
     end
   end
 
-  # PLAN_COMMENTS.md §6.3, §8: the withdrawals that travel.
+  # docs/dev/COMMENTS.md: the withdrawals that travel.
   describe "federated withdrawals" do
     let(:host) { create(:actor, uri: "https://remote.example/users/demo") }
     let(:note) { create(:remote_note, actor: host) }

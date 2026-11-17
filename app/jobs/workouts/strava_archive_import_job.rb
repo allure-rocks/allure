@@ -3,7 +3,7 @@
 require "digest"
 
 module Workouts
-  # Imports a Strava archive (PLAN_STRAVA_ARCHIVE.md §6). Discovery reads
+  # Imports a Strava archive (docs/dev/STRAVA-ARCHIVE.md). Discovery reads
   # `activities.csv` once and freezes one entry per activity — its name, type,
   # texts, commute flag and gear in the entry's metadata — then one per track
   # file the CSV does not name. Each entry then imports its original file
@@ -148,7 +148,7 @@ module Workouts
         filename: member.name,
         source_digest: digest,
         near_duplicate_window: NEAR_DUPLICATE_WINDOW,
-        # An archive is a history, never a new outing (PLAN_AUTO_PUBLISHING.md §3).
+        # An archive is a history, never a new outing (docs/dev/AUTO-PUBLISHING.md).
         bulk: true
       ).call
 
@@ -300,7 +300,7 @@ module Workouts
     end
 
     # The archive skipped the per-recording route-suggestion pass; the account
-    # sweep now walks its recordings newest first (PLAN_SEGMENTS.md §7.7).
+    # sweep now walks its recordings newest first (docs/dev/SEGMENTS.md).
     def enqueue_route_suggestion_sweep(batch)
       return unless batch.status == "completed"
       return if batch.user.deactivated?

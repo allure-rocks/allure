@@ -2,7 +2,7 @@
 
 module Segments
   # Replaces a course's frozen elevation figures with the terrain service's
-  # (PLAN_ELEVATION.md §10). Every course then reads one reference profile,
+  # (docs/dev/ELEVATION.md). Every course then reads one reference profile,
   # whatever device recorded it. A public course is already visible to every
   # member, so the instance's service alone suffices; a private or
   # followers-only one also needs its owner's terrain consent. A provider that

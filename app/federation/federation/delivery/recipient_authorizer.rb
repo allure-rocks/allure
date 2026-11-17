@@ -12,7 +12,7 @@ module Federation
       LIVE_PUBLICATION_DELIVERY_STATUSES = %w[pending delivering reconciling retrying delivered].freeze
 
       # The event a secondary Undo takes back, named by the nested object's
-      # `id` among the same actor's events (PLAN_COMMENTS.md §9). Delivery
+      # `id` among the same actor's events (docs/dev/COMMENTS.md). Delivery
       # orders the Undo after it.
       def self.undone_event_for(event)
         object = event.payload.is_a?(Hash) ? event.payload["object"] : nil
@@ -64,7 +64,7 @@ module Federation
 
       # An owner's comment, the host's relay of a comment, and an owner's
       # participation Invite ride on their publication without being it
-      # (PLAN_COMMENTS.md §9, PLAN_TOGETHER.md §7): a Create, an Announce or an
+      # (docs/dev/COMMENTS.md, docs/dev/SHARED-ACTIVITIES.md): a Create, an Announce or an
       # Invite reaches only an instance that holds, or is being sent, the
       # publication, and still passes the publication's rules; a Delete
       # follows its own Create and an Undo the activity it undoes, like any
@@ -90,7 +90,7 @@ module Federation
         Result.new(allowed: true, inbox_url: inbox, reason: nil)
       end
 
-      # One Note per peer (PLAN_AUDIENCES.md §5): a recipient entitled to a
+      # One Note per peer (docs/dev/PUBLISHING.md): a recipient entitled to a
       # narrower active publication of the same workout — a promoted follower
       # when a followers publication sits beside the public one — receives that
       # one only. Decided at expansion: a Note already delivered stays.
@@ -141,7 +141,7 @@ module Federation
       end
 
       # A followers-only event leaves the instance only while restricted
-      # federation is enabled, and then to a promoted peer only (PLAN_M5
+      # federation is enabled, and then to a promoted peer only (docs/dev/FEDERATION.md
       # §13.3): the followers audience itself is always publishable for local
       # followers, so this is the switch's one outbound gate. Which inbox
       # receives the POST is a separate decision made by `inbox_for`:

@@ -2,7 +2,7 @@
 
 # The dark variant of the sanitized route-image snapshot. Publications keep
 # both variants and reference each blob once, like the light image; federation
-# advertises them together (DESIGN.md §15.4, PLAN_M5.md §8).
+# advertises them together (DESIGN.md §15.4, docs/dev/FEDERATION.md).
 class AddDarkRouteImageToPublications < ActiveRecord::Migration[8.1]
   def change
     %i[workout_publications segment_publications].each do |table|

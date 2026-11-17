@@ -36,7 +36,7 @@ RSpec.describe Workouts::Reanalyzer do
     workout.reload
   end
 
-  it "re-applies the stored time shift on re-analysis, never falling back to the file's own dates (PLAN_DEMO.md §4)" do
+  it "re-applies the stored time shift on re-analysis, never falling back to the file's own dates (docs/dev/DEMO.md)" do
     workout = imported_workout(time_shift: 86_400 * 195)
     shifted_start = workout.started_at
     shifted_segment_starts = workout.track_segments.pluck(:started_at)

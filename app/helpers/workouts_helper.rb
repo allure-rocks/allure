@@ -246,7 +246,7 @@ module WorkoutsHelper
 
   # The effort column of the analysis tables. A power-led virtual ride reads
   # its watts first, with the speed as a quiet second line, exactly like its
-  # summary tiles (PLAN_VIRTUAL.md §8); every other sport keeps the pace/speed
+  # summary tiles (docs/dev/VIRTUAL-PLATFORMS.md); every other sport keeps the pace/speed
   # cell.
   def effort_cell(average_pace:, average_speed:, average_power:, sport:, grade_adjusted_pace: nil)
     unless sport&.power_led? && average_power.present?
@@ -636,7 +636,7 @@ module WorkoutsHelper
     Sport.alphabetical.map { |sport| [ sport_display_name(sport), sport.id ] }
   end
 
-  # A manual entry field's own refusals, under the field (PLAN_MANUAL_ENTRY.md §5).
+  # A manual entry field's own refusals, under the field (docs/dev/MANUAL-ENTRY.md).
   def manual_entry_error(form, field)
     messages = form.errors.full_messages_for(field)
     return if messages.empty?
@@ -645,7 +645,7 @@ module WorkoutsHelper
   end
 
   # Targets for a generic-sport default: the curated variant list for that
-  # generic (PLAN_M1.md §3.4.2), in alphabetical order.
+  # generic (docs/dev/WORKOUT.md), in alphabetical order.
   def sport_default_options_for(generic_slug)
     slugs = Sport::DEFAULT_TARGET_SLUGS.fetch(generic_slug.to_s, [])
     Sport.alphabetical(Sport.where(slug: slugs)).map { |sport| [ sport_display_name(sport), sport.id ] }
@@ -660,7 +660,7 @@ module WorkoutsHelper
   end
 
   # The owner's publication badges (DESIGN.md §10.4): one per active
-  # publication's audience, narrowest first (PLAN_AUDIENCES.md §7), else one
+  # publication's audience, narrowest first (docs/dev/PUBLISHING.md), else one
   # per scheduled publication in the tint of the audience it will reach, else
   # « not published » — left out where `unpublished: false` (cards and phone
   # rows mark only a shared or scheduled workout). Reads the two preloaded
@@ -681,7 +681,7 @@ module WorkoutsHelper
     safe_join(badges)
   end
 
-  # The profiles a publish form offers (PLAN_AUDIENCES.md §2): those whose
+  # The profiles a publish form offers (docs/dev/PUBLISHING.md): those whose
   # audience no live publication holds yet, plus — when replacing — the
   # replaced publication's own audience.
   def publish_form_profiles(workout, profiles, replaced: nil)
@@ -714,7 +714,7 @@ module WorkoutsHelper
     names.join(" · ")
   end
 
-  # A recording imported without a GPS position (PLAN_NO_GPS.md §9) carries no
+  # A recording imported without a GPS position (docs/dev/NO-GPS.md) carries no
   # elevation at all, and one whose file recorded no distance either is a
   # duration-only session: both would render zeros the device never measured.
   # A publication view is always a positioned snapshot.
@@ -725,7 +725,7 @@ module WorkoutsHelper
   end
 
   # A positionless recording with no distance plots elapsed time: there is no
-  # kilometre to place a point at (PLAN_NO_GPS.md §9).
+  # kilometre to place a point at (docs/dev/NO-GPS.md).
   def workout_time_axis?(workout) = workout_positionless?(workout) && !workout_distance_recorded?(workout)
 
   # The list row's distance and ascent cells: a figure the file did not
@@ -738,7 +738,7 @@ module WorkoutsHelper
     workout_positionless?(workout) || workout_manual_hidden?(workout, :ascent) ? "—" : format_elevation(workout.ascent)
   end
 
-  # A manual entry's figure left empty reads as a dash (PLAN_MANUAL_ENTRY.md §7).
+  # A manual entry's figure left empty reads as a dash (docs/dev/MANUAL-ENTRY.md).
   def workout_manual_hidden?(workout, key) = workout.is_a?(Workout) && workout.manual? && !workout.metric_visible?(key)
 
   def workout_metric_items(workout)
@@ -785,7 +785,7 @@ module WorkoutsHelper
   # prefers average power as its fourth tile when the file recorded it and
   # falls back to ascent otherwise; its speed tiles are dropped entirely, as
   # km/h is not a rowing metric. A power-led virtual sport (cycling virtual,
-  # PLAN_VIRTUAL.md §8) leads with average power in place of its speed when
+  # docs/dev/VIRTUAL-PLATFORMS.md) leads with average power in place of its speed when
   # the recording carries it: the platform's speed is a game output, the watts
   # are the athlete's effort. A positionless recording promotes the channels it
   # did record — power, heart rate, calories — because its elevation tiles
@@ -803,7 +803,7 @@ module WorkoutsHelper
     else
       :average_pace
     end
-    # A manual entry leads with what its owner typed in (PLAN_MANUAL_ENTRY.md §7).
+    # A manual entry leads with what its owner typed in (docs/dev/MANUAL-ENTRY.md).
     if workout.is_a?(Workout) && workout.manual?
       base = workout.distance_recorded? ? [ :distance, :moving_time, preferred_average ] : [ :moving_time ]
       extras = %i[ascent average_power average_heart_rate calories]
@@ -835,7 +835,7 @@ module WorkoutsHelper
     workout.average_power.present?
   end
 
-  # The credited metric set (PLAN_TOGETHER.md §4.1): the only metrics a
+  # The credited metric set (docs/dev/SHARED-ACTIVITIES.md): the only metrics a
   # participant ever reads from a source workout. Physiological channels,
   # calories, the device, the description, and the places never appear.
   PARTICIPANT_METRIC_KEYS = %i[
@@ -895,7 +895,7 @@ module WorkoutsHelper
 
   # The series the chart draws and lists in its data table, in reading order.
   # A power-led virtual ride opens on its watts — the effort it measures — and
-  # the selector keeps the speed (PLAN_VIRTUAL.md §8).
+  # the selector keeps the speed (docs/dev/VIRTUAL-PLATFORMS.md).
   def workout_chart_display_series(workout, available_series)
     available = available_series.map(&:to_sym)
     display = []
@@ -933,10 +933,10 @@ module WorkoutsHelper
 
   # The profile page renders the published representation even for the owner
   # (`snapshot_only`), so the owner never reads complete source values from the
-  # public URL (PLAN_M4_5 §5.1).
+  # public URL (docs/dev/PUBLISHING.md).
   #
   # The publication shown is the narrowest serving the viewer
-  # (PLAN_AUDIENCES.md §3) unless the caller already chose it.
+  # (docs/dev/PUBLISHING.md) unless the caller already chose it.
   def workout_display(workout, snapshot_only: false, sport_catalog: nil, publication: nil)
     return workout if !snapshot_only && workout.user == current_user
 
@@ -1183,7 +1183,7 @@ module WorkoutsHelper
 
   # The owner can switch between the recorded and the terrain profile only when
   # the instance configured a provider, the account opted in, and there is a
-  # recorded profile to fall back to (PLAN_ELEVATION.md §6).
+  # recorded profile to fall back to (docs/dev/ELEVATION.md).
   def elevation_source_control?(workout)
     return false unless current_user && current_user == workout.user
     return false unless Allure::Elevation::Config.configured?
@@ -1197,7 +1197,7 @@ module WorkoutsHelper
   end
 
   # Why an elevation-less owner workout shows no altitude, and the one action
-  # that fixes it where one exists (PLAN_ELEVATION.md §6). Nil means the
+  # that fixes it where one exists (docs/dev/ELEVATION.md). Nil means the
   # summary needs no notice.
   def workout_elevation_notice(workout)
     return nil unless current_user && current_user == workout.user

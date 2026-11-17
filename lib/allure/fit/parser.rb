@@ -6,7 +6,7 @@ module Allure
     # values, the same contract `Allure::Gpx::Parser` produces. Everything
     # downstream — the analyzer, point serializer, chart and track series,
     # splits, route image, segment matching and publishing — therefore works
-    # on a FIT import with no change. See PLAN_FIT.md section 2.2 for why the
+    # on a FIT import with no change. See docs/dev/FIT.md for why the
     # shared value objects keep their `Gpx` name.
     #
     # Never saves anything and knows nothing about Active Record.
@@ -34,7 +34,7 @@ module Allure
       # handful of stray fixes in an indoor recording (a brief lock by a
       # window, one decoded sentinel) would otherwise turn it into a
       # meaningless two-point track and discard every other reading
-      # (PLAN_NO_GPS.md §3.1).
+      # (docs/dev/NO-GPS.md).
       POSITIONED_RECORDS_RATIO = 0.5
       # Some devices (Suunto, COROS) write a record every second but a fix
       # only every few seconds, so a fully tracked outdoor file can fall under
@@ -143,7 +143,7 @@ module Allure
           # The coordinates are optional: a record before GPS lock or during
           # an indoor portion keeps its sensor readings without them, and the
           # file is positionless when too few records ever carry a fix
-          # (PLAN_NO_GPS.md §3). A half-written fix is no fix.
+          # (docs/dev/NO-GPS.md). A half-written fix is no fix.
           latitude = decode_coordinate(fields[:position_lat], -90.0, 90.0, "latitude")
           longitude = decode_coordinate(fields[:position_long], -180.0, 180.0, "longitude")
           latitude = longitude = nil unless latitude && longitude
@@ -202,8 +202,8 @@ module Allure
         # The device's own speed, in m/s. Most GNSS watches derive it from the
         # Doppler shift, far steadier than differentiating positions; on a
         # positioned recording it only arbitrates anomalies, never a metric
-        # (PLAN_M1.md §8.10), while a positionless one measures its movement
-        # with it (PLAN_NO_GPS.md §4).
+        # (docs/dev/WORKOUT.md), while a positionless one measures its movement
+        # with it (docs/dev/NO-GPS.md).
         def record_speed(fields)
           value = scaled_speed(fields[:enhanced_speed] || fields[:speed])
           value if value&.finite? && value >= 0
@@ -321,7 +321,7 @@ module Allure
         # all (an indoor activity) opens positionless segments from every
         # timed record, so its heart rate, power and device distance are
         # analysed instead of discarded. Only a file with fewer than two timed
-        # records is rejected (PLAN_NO_GPS.md §3).
+        # records is rejected (docs/dev/NO-GPS.md).
         def build_segments
           positioned = positioned_records
           if positioned
@@ -332,7 +332,7 @@ module Allure
 
           # A file that never reached a usable fix is positionless: its
           # records are kept, but a stray fix is stripped so no segment ever
-          # mixes coordinates with positionless points (PLAN_NO_GPS.md §3.1).
+          # mixes coordinates with positionless points (docs/dev/NO-GPS.md).
           split_segments(@records) do |segments, points|
             points = points.map { |point| point.positioned? ? point.with(latitude: nil, longitude: nil) : point }
             segments << Allure::Gpx::Segment.new(points:) if points.length >= 2
@@ -340,7 +340,7 @@ module Allure
         end
 
         # A virtual platform may draw the athlete somewhere else without moving
-        # them (PLAN_VIRTUAL.md §7.1). Those jumps close the recording segment
+        # them (docs/dev/VIRTUAL-PLATFORMS.md). Those jumps close the recording segment
         # like a timer stop, so no line crosses the map and no speed is
         # measured across them. An ordinary device keeps its timer stops only.
         def segment_marks(points)
@@ -391,7 +391,7 @@ module Allure
         end
 
         # A registered virtual platform draws its positions; the ergometer's
-        # recorded lap distance is the real one (PLAN_VIRTUAL.md §7).
+        # recorded lap distance is the real one (docs/dev/VIRTUAL-PLATFORMS.md).
         def calibrate_virtual_distance(segments)
           return segments unless Allure::Virtual::Platforms.for_file_id(@file_id)
 

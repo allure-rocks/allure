@@ -6,7 +6,7 @@ module Users
   # before the user row disappears. The tombstoned actor remains to answer
   # 410 and to deliver the withdrawal until its key is retired.
   #
-  # The deletion runs in phases (PLAN_ACCOUNT.md §2.2), each idempotent and
+  # The deletion runs in phases (docs/dev/ACCOUNT.md), each idempotent and
   # skipped once done, so a purge interrupted half-way resumes where it
   # stopped: the cut-off, provider subscription cancellation, the federation
   # withdrawal, the workouts one by one, then the row with its remaining small
@@ -43,7 +43,7 @@ module Users
     # the account's behalf and nobody can sign in to it. The purge job demands
     # the scheduled window it was enqueued for (`require_scheduled:`): the
     # cancellation just won the row lock between the job's guard and this
-    # one, and it must win for good (PLAN_ACCOUNT.md §4.3).
+    # one, and it must win for good (docs/dev/ACCOUNT.md).
     def cut_off!
       return if @user.deletion_started?
 
@@ -83,7 +83,7 @@ module Users
 
     # Account deletion withdraws every live participation the account holds as
     # participant, and their open notices, before the actor is tombstoned: the
-    # row must not stay live (PLAN_TOGETHER.md §4/§9). As source owner, the
+    # row must not stay live (docs/dev/SHARED-ACTIVITIES.md). As source owner, the
     # workouts' own destroy detaches the participants' credit rows, keeping
     # them, and withdraws the notices before the rows cascade (§6.5).
     def withdraw_participations(actor)
@@ -91,7 +91,7 @@ module Users
         Participations::Withdraw.new(participation:, user: @user).call!
       end
       # Invitations from other instances end too; the actor's Delete tells
-      # their owners (PLAN_TOGETHER.md §7.6).
+      # their owners (docs/dev/SHARED-ACTIVITIES.md).
       RemoteParticipation.active.where(recipient_actor: actor).find_each do |participation|
         Participations::RemoteWithdrawal.withdraw!(participation)
       end

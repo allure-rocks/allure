@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_API.md §5: the REST API names a publishing profile by a ShortUUID, never
+# docs/dev/API.md: the REST API names a publishing profile by a ShortUUID, never
 # by its bigint key. The web keeps its existing routes.
 class AddUuidToPublishingProfiles < ActiveRecord::Migration[8.1]
   def change

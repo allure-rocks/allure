@@ -2,7 +2,7 @@
 
 module Workouts
   # Turns a provider listing into the entries of a remote batch
-  # (PLAN_REMOTE_IMPORTS.md §5.2). Idempotent: an activity already listed in
+  # (docs/dev/REMOTE-IMPORTS.md). Idempotent: an activity already listed in
   # the batch is left alone, so a listing interrupted by the quota resumes.
   #
   # An activity without geometry is `skipped` at once, and one the connection
@@ -48,7 +48,7 @@ module Workouts
       elsif activity.manual
         # The provider holds a manual entry with no file at all; an indoor
         # activity without a GPS track keeps its file and is imported
-        # positionlessly (PLAN_NO_GPS.md §8).
+        # positionlessly (docs/dev/NO-GPS.md).
         record.assign_attributes(status: "skipped", skip_reason: "no_file", completed_at: now)
       else
         record.status = "queued"

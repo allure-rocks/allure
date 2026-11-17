@@ -4,7 +4,7 @@ module Allure
   module Withings
     # Maps Withings's workout categories (the enum the public API documents
     # and the private listing carries) onto Allure's vocabulary
-    # (PLAN_REMOTE_IMPORTS.md §7c.3). Two views over one table:
+    # (docs/dev/REMOTE-IMPORTS.md). Two views over one table:
     #
     # - `sport_name` is the TCX `<Activity Sport>` value, among the names
     #   Allure's TCX parser resolves (`Allure::Tcx::Parser::SPORT_ALIASES`);

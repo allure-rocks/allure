@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Webhook emission and delivery (PLAN_API.md §11)" do
+RSpec.describe "Webhook emission and delivery (docs/dev/API.md)" do
   include ActiveJob::TestHelper
   include ActiveSupport::Testing::TimeHelpers
 

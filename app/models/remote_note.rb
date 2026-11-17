@@ -4,7 +4,7 @@ require "uri"
 
 # A safe received representation of a remote Allure publication. It is never a
 # local workout: no source geometry, no owner attachments, no editing surface
-# (PLAN_M5 §7.2). Content is immutable except for the controlled deletion and
+# (docs/dev/FEDERATION.md). Content is immutable except for the controlled deletion and
 # location-redaction paths.
 class RemoteNote < ApplicationRecord
   STATUSES = %w[active deleted].freeze
@@ -205,7 +205,7 @@ class RemoteNote < ApplicationRecord
 
   # A closed thread is presence-only, like the origin's snapshot: the parser
   # stores `true` from the `comments` tag and omits the key otherwise
-  # (PLAN_COMMENTS.md §6.4).
+  # (docs/dev/COMMENTS.md).
   def validate_comments_closed(value)
     return if value.nil?
 

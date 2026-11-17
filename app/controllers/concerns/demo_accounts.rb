@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Demo mode's shared playground accounts (PLAN_DEMO.md §3). Their credentials
+# Demo mode's shared playground accounts (docs/dev/DEMO.md). Their credentials
 # are published on the sign-in page, so no visitor may lock the next one out:
 # every mutation of the account's credential state is refused server-side —
 # never merely hidden in the UI. Everything else stays writable, which is the

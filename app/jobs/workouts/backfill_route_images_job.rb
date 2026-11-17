@@ -3,7 +3,7 @@
 module Workouts
   # Re-renders every owner route image whose stored renderer generation is
   # older than the current one, or that was reset to 0 when a re-analysis
-  # replaced the geometry (PLAN_DERIVATIONS.md §4). Bounded id-cursor batches
+  # replaced the geometry (docs/dev/DERIVATIONS.md). Bounded id-cursor batches
   # that resume themselves on the low-concurrency `route_images` worker.
   # Publication images are snapshot media and are deliberately out of scope.
   class BackfillRouteImagesJob < ApplicationJob
@@ -16,7 +16,7 @@ module Workouts
 
     class << self
       # A credit row and a positionless recording have no track to draw
-      # (PLAN_TOGETHER.md §6.6, PLAN_NO_GPS.md §6).
+      # (docs/dev/SHARED-ACTIVITIES.md, docs/dev/NO-GPS.md).
       def pending_scope
         Workout.positioned.where(route_image_version: ...RouteImage::VERSION)
       end
