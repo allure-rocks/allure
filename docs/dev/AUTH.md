@@ -588,7 +588,7 @@ The companion is a separate repository; this repository owns the server side.
 
 Two gauges without identifiers: `allure_users_second_factor{state="satisfied|grace|required"}`
 and `allure_users_sign_in_methods{method="password|provider"}`, mapped to the
-`/admin` accounts panel in `Metrics::Catalog` (`[devdoc:metrics]`).
+`/admin` accounts panel in `Metrics::Catalog` ([METRICS.md](METRICS.md)).
 
 ## 12. Federation boundary
 

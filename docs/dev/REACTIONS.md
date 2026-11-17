@@ -222,5 +222,5 @@ the newest reacting account its actor, and the payload counts the reactions:
 
 Course (segment) reactions, reactor avatars, complete reactor lists outside the
 tooltip's names, live fan-out of counts, email or push, reaction metrics in
-`[devdoc:metrics]`, retention of the reaction when its source workout is
+[METRICS.md](METRICS.md), retention of the reaction when its source workout is
 deleted, and reactions to comments ([COMMENTS.md](COMMENTS.md) keeps them out).

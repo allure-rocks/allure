@@ -421,7 +421,7 @@ keeps announcing, as today. The API contract ([API.md](API.md)) is updated.
   locale labels); it rebuilds inline from the stored points.
 - `allure_power_efforts_rebuild_duration_seconds{phase,context}` is declared in
   `Metrics::Schema` and mapped in `Metrics::Catalog` (admin: nil), with the
-  metrics contract (`[devdoc:metrics]`) updated; the catalog guard spec fails
+  metrics contract ([METRICS.md](METRICS.md)) updated; the catalog guard spec fails
   otherwise.
 - The release runs `best_efforts:backfill` once for the power-led cleanup and
   `power_efforts:backfill` once for the curve. The release note says that the

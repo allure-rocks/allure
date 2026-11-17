@@ -1031,7 +1031,7 @@ migration (`db:migrate`, applied on boot).
 ### Added
 
 - A reference Grafana dashboard for the Prometheus exporter,
-  `docs/grafana/allure.json` (« Allure — Instance », `[devdoc:metrics]`).
+  `docs/grafana/allure.json` (« Allure — Instance », [METRICS.md](docs/dev/METRICS.md)).
   Import it through Grafana's *Dashboards → Import*; it is documentation, not
   provisioned by the application, and carries no alert. Its rows cover
   instance health, HTTP, background jobs, federation, usage, and imports and
@@ -2368,7 +2368,7 @@ migration (`db:migrate`, applied on boot).
   histogram splitting every best-efforts rebuild into its pure `compute` phase
   and its transactional `persist` phase, labelled `context` (`import`,
   `reanalysis`, `backfill`). It measures how much derived-data work actually
-  runs under the write locks (`[devdoc:metrics]`).
+  runs under the write locks ([METRICS.md](docs/dev/METRICS.md)).
 - Display smoothing for tracks: workout maps carry an on/off toggle in the map
   options icon — now a compact icon button aligned with the colour selector —
   that persists the account preference, and the intensity is chosen on
@@ -2702,7 +2702,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- A Prometheus exporter at `/metrics` for Grafana (`[devdoc:metrics]`): bearer
+- A Prometheus exporter at `/metrics` for Grafana ([METRICS.md](docs/dev/METRICS.md)): bearer
   `METRICS_TOKEN` access (404 while unset), `yabeda-rails` request metrics,
   Solid Queue queue/process gauges, federation status counts, activity-based
   active and connected user metrics, storage and database sizes, and Ruby
