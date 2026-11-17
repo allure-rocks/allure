@@ -45,7 +45,7 @@ module Workouts
       return "sport" if profile.auto_publish_excludes_sport?(@workout.sport)
       return "profile_unavailable" unless profile.publishable?
       # A positionless recording cannot be published at all, so it never
-      # waits on enrichments that will not run (PLAN_NO_GPS.md §7).
+      # waits on enrichments that will not run (docs/dev/NO-GPS.md).
       return "no_geometry" unless @workout.positioned?
 
       nil

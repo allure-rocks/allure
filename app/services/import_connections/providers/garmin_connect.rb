@@ -94,7 +94,7 @@ module ImportConnections
           started_at: parse_gmt(item["startTimeGMT"]),
           sport_hint: item.dig("activityType", "typeKey").presence,
           # A manual activity carries no file to fetch; an indoor one is
-          # fetched and imported positionlessly (PLAN_NO_GPS.md §8).
+          # fetched and imported positionlessly (docs/dev/NO-GPS.md).
           geometry: item["hasPolyline"] == true,
           manual: item["manualActivity"] == true
         )

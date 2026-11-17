@@ -48,7 +48,7 @@ module Workouts
       elsif activity.manual
         # The provider holds a manual entry with no file at all; an indoor
         # activity without a GPS track keeps its file and is imported
-        # positionlessly (PLAN_NO_GPS.md §8).
+        # positionlessly (docs/dev/NO-GPS.md).
         record.assign_attributes(status: "skipped", skip_reason: "no_file", completed_at: now)
       else
         record.status = "queued"

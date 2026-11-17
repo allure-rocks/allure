@@ -714,7 +714,7 @@ module WorkoutsHelper
     names.join(" · ")
   end
 
-  # A recording imported without a GPS position (PLAN_NO_GPS.md §9) carries no
+  # A recording imported without a GPS position (docs/dev/NO-GPS.md) carries no
   # elevation at all, and one whose file recorded no distance either is a
   # duration-only session: both would render zeros the device never measured.
   # A publication view is always a positioned snapshot.
@@ -725,7 +725,7 @@ module WorkoutsHelper
   end
 
   # A positionless recording with no distance plots elapsed time: there is no
-  # kilometre to place a point at (PLAN_NO_GPS.md §9).
+  # kilometre to place a point at (docs/dev/NO-GPS.md).
   def workout_time_axis?(workout) = workout_positionless?(workout) && !workout_distance_recorded?(workout)
 
   # The list row's distance and ascent cells: a figure the file did not

@@ -109,14 +109,14 @@ module Laps
         colour_group: @workout.sport.colour_group,
         stopped_speed_threshold_km_h: @workout.sport.stopped_speed_threshold,
         # A positionless recording has no gradient, so no grade-adjusted pace
-        # exists anywhere in its derived laps (PLAN_NO_GPS.md §4).
+        # exists anywhere in its derived laps (docs/dev/NO-GPS.md).
         grade_adjusted_pace: grade_adjusted_pace?
       ).call
     end
 
     # A stop or a speed interval is a statement about movement. A positionless
     # recording whose file recorded neither a speed reading nor a distance
-    # step (a duration-only session, PLAN_NO_GPS.md §4.2) has no movement
+    # step (a duration-only session, docs/dev/NO-GPS.md) has no movement
     # signal at all: its zero speeds are unknown speeds, not a 45-minute
     # standstill.
     def movement_evidence?(points)
@@ -137,7 +137,7 @@ module Laps
     end
 
     # Grade-adjusted pace needs a gradient, which only a positioned recording
-    # has (PLAN_NO_GPS.md §4).
+    # has (docs/dev/NO-GPS.md).
     def grade_adjusted_pace?
       @workout.sport.grade_adjusted_pace? && @workout.positioned?
     end

@@ -47,7 +47,7 @@ module Api
             origin: workout.origin,
             # Whether the workout carries a track of its own: false for a
             # positionless recording (which cannot be published yet,
-            # PLAN_NO_GPS.md §9) and false for a credited workout, whose
+            # docs/dev/NO-GPS.md) and false for a credited workout, whose
             # geometry belongs to its source.
             positioned: workout.positioned?,
             credit: credit_facts,

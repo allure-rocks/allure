@@ -194,7 +194,7 @@ class Workout < ApplicationRecord
   # credit row is someone else's recording and is never edited in bulk.
   scope :authored, -> { where(origin: %w[import manual]) }
   # Recordings the geometry-driven derivations may touch: the ones with a
-  # track (PLAN_NO_GPS.md §6). A positionless recording has no map, no route
+  # track (docs/dev/NO-GPS.md). A positionless recording has no map, no route
   # image, no toponymy and no segment matching.
   scope :positioned, -> { recordings.where.not(start_point: nil) }
   scope :unpositioned, -> { recordings.where(start_point: nil) }
@@ -312,7 +312,7 @@ class Workout < ApplicationRecord
   # A credit from another instance's publication (docs/dev/SHARED-ACTIVITIES.md).
   def credit_remote? = credit? && remote_participation_id.present?
 
-  # A positioned recording has geometry; a positionless one (PLAN_NO_GPS.md)
+  # A positioned recording has geometry; a positionless one (docs/dev/NO-GPS.md)
   # was recorded without a fix and carries none. A credit row is never
   # positioned. The pair `start_point`/`bounds` exists or does not together.
   def positioned? = recording? && start_point.present?
@@ -326,7 +326,7 @@ class Workout < ApplicationRecord
   # The figures this workout may show at all. A positionless recording carries
   # no elevation, and one whose file recorded no distance has no distance,
   # pace or speed to divide: those tiles would print zeros nobody measured
-  # (PLAN_NO_GPS.md §9).
+  # (docs/dev/NO-GPS.md).
   ELEVATION_METRIC_KEYS = %i[ascent descent min_elevation max_elevation].freeze
   DISTANCE_METRIC_KEYS = %i[
     distance average_speed max_speed average_pace best_pace grade_adjusted_pace
@@ -349,7 +349,7 @@ class Workout < ApplicationRecord
     !(positionless? && !distance_recorded? && DISTANCE_METRIC_KEYS.include?(key))
   end
 
-  # A recording imported without any position (PLAN_NO_GPS.md).
+  # A recording imported without any position (docs/dev/NO-GPS.md).
   def positionless? = recording? && !positioned?
 
   # Whether the file's distance is worth showing: a duration-only session

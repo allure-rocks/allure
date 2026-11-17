@@ -34,7 +34,7 @@ module Allure
 
       def call(segments:, laps:)
         # A positionless recording has no drawn course to fit; its distance
-        # already comes from the device (PLAN_NO_GPS.md).
+        # already comes from the device (docs/dev/NO-GPS.md).
         return segments unless segments.all?(&:positioned?)
 
         cleaned = segments.map { |segment| Allure::Gpx::Outliers.filter(segment.points) }

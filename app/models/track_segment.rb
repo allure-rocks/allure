@@ -4,7 +4,7 @@
 # Not to be confused with `Segment` (PLAN_SEGMENTS.md), which is a reusable,
 # leaderboarded portion of a course.
 #
-# A segment of a positionless recording (PLAN_NO_GPS.md) has no `geom` and no
+# A segment of a positionless recording (docs/dev/NO-GPS.md) has no `geom` and no
 # coordinates in its points; `positioned?` tells the two apart.
 class TrackSegment < ApplicationRecord
   belongs_to :workout, inverse_of: :track_segments
@@ -26,7 +26,7 @@ class TrackSegment < ApplicationRecord
   validate :point_coordinates_are_valid
 
   # A positioned segment has a LineString; a positionless one has none and
-  # must not pretend otherwise (PLAN_NO_GPS.md §5).
+  # must not pretend otherwise (docs/dev/NO-GPS.md).
   def positioned? = !geom.nil?
 
   private

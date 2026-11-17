@@ -278,7 +278,7 @@ RSpec.describe Allure::Tcx::Parser do
   end
 
   # A Garmin indoor export: DistanceMeters and TPX Speed on every trackpoint,
-  # no Position anywhere (PLAN_NO_GPS.md §3).
+  # no Position anywhere (docs/dev/NO-GPS.md).
   def indoor_tcx
     <<~TCX
       <?xml version="1.0"?>

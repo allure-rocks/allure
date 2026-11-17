@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_NO_GPS.md §5: a recording whose file carries no usable position (an
+# docs/dev/NO-GPS.md: a recording whose file carries no usable position (an
 # indoor trainer ride, a treadmill run, an erg session, a duration-only
 # session) is imported, never rejected for lacking geometry.
 #

@@ -367,7 +367,7 @@ module Workouts
     end
 
     # Everything geography-driven is skipped for a positionless recording
-    # (PLAN_NO_GPS.md §6): no venue, no route image, no segment matching, no
+    # (docs/dev/NO-GPS.md): no venue, no route image, no segment matching, no
     # co-presence detection, no terrain elevation, no toponymy. Smart laps,
     # best efforts and records are derived from the points inside the
     # persistence transaction or by their own job.
@@ -401,7 +401,7 @@ module Workouts
     end
 
     # A positionless recording has no geometry to match, so it derives its
-    # smart laps and records directly (PLAN_NO_GPS.md §6). The loop generation
+    # smart laps and records directly (docs/dev/NO-GPS.md). The loop generation
     # is stamped at import: no loop or route effort will ever arrive for it.
     def enqueue_laps(workout)
       workout.update_columns(loop_reuse_version: Segments::LoopReuse::VERSION)
@@ -535,7 +535,7 @@ module Workouts
     end
 
     # RGeo helpers. A positionless recording has no coordinates at all, so
-    # both builders answer nil and the columns stay empty (PLAN_NO_GPS.md §5).
+    # both builders answer nil and the columns stay empty (docs/dev/NO-GPS.md).
     def factory = RGeo::Geographic.spherical_factory(srid: 4326)
 
     def build_point(lon_lat)

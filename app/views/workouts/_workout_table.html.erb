@@ -71,7 +71,7 @@
           <td class="text-nowrap"><%= format_started_at(display.started_at) %></td>
           <%# A positionless recording shows a dash where the file recorded
               nothing: no distance on a duration-only session, and no ascent
-              on any of them (PLAN_NO_GPS.md §9). %>
+              on any of them (docs/dev/NO-GPS.md). %>
           <td class="text-end"><%= display.metrics_present? ? workout_table_distance(display) : "—" %></td>
           <td class="text-end"><%= display.metrics_present? ? format_duration(display.duration) : "—" %></td>
           <td class="text-end"><%= display.metrics_present? ? workout_table_ascent(display) : "—" %></td>

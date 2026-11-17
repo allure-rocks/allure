@@ -110,7 +110,7 @@ module Workouts
       end
 
       # A manual activity has no file to fetch; an indoor one without a GPS
-      # track does, and is imported positionlessly (PLAN_NO_GPS.md §8).
+      # track does, and is imported positionlessly (docs/dev/NO-GPS.md).
       return skip_entry(entry, "no_file") if activity.manual
       # Positioned-only import (Withings fed by Apple Health, §7c.3): a
       # session without a route is skipped before any fetch.

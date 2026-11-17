@@ -159,7 +159,7 @@ RSpec.describe Allure::Gpx::Analyzer do
     let(:start) { Time.zone.parse("2026-06-01 08:00:00 UTC") }
 
     # A trainer session: cumulative device distance and speed, one 30 s
-    # standstill in the middle, no coordinates anywhere (PLAN_NO_GPS.md §4).
+    # standstill in the middle, no coordinates anywhere (docs/dev/NO-GPS.md).
     # Speeds are consistent with the distance steps so the fixture carries no
     # anomaly of its own.
     subject(:metrics) do
