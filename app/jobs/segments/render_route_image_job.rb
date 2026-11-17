@@ -4,7 +4,7 @@ module Segments
   # Renders the owner image for a segment, route or loop on the dedicated
   # route_images worker, with the same MapLibre -> raster -> tile-less fallback
   # chain as workout images (docs/dev/DERIVATIONS.md). Course images are always
-  # smoothed at the medium level (PLAN_MAPLIBRE.md §9): a course is a reusable
+  # smoothed at the medium level (docs/dev/MAPS.md): a course is a reusable
   # corridor, not a recording, and the live segment map reads the same display
   # geometry. The image is derived from the segment's own geometry, never from
   # the source workout's track, and is served only through its application

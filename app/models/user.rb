@@ -11,7 +11,7 @@ class User < ApplicationRecord
   ROUTE_IMAGE_THEMES = %w[auto light dark].freeze
   UNIT_SYSTEMS = %w[metric imperial].freeze
   WEEK_STARTS = %w[monday sunday].freeze
-  # Track-display smoothing intensities (PLAN_MAPLIBRE.md §9). The window is a
+  # Track-display smoothing intensities (docs/dev/MAPS.md). The window is a
   # display transform only: it never changes a payload, snapshot, or metric.
   TRACK_SMOOTHING_LEVELS = %w[light medium strong].freeze
   # The self-declared leaderboard category (PLAN_SEGMENTS.md §8.7). It only

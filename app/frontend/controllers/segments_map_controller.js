@@ -91,7 +91,7 @@ export default class extends Controller {
     const { NavigationControl, FullscreenControl, ScaleControl, GeolocateControl, AttributionControl } = maplibre;
     this.map.addControl(new NavigationControl({ visualizePitch: true }), "top-right");
     // The discover map is the one map allowed to ask where the reader is
-    // (PLAN_MAPLIBRE.md Slice 5): a granted permission centres it silently,
+    // (docs/dev/MAPS.md Slice 5): a granted permission centres it silently,
     // otherwise only this button ever prompts.
     this.locateControl = new GeolocateControl({
       positionOptions: { enableHighAccuracy: false, timeout: 8_000 },
