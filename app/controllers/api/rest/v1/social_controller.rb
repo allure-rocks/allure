@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # Social reads (PLAN_API.md §6.5, §10): the feed, publications and
+      # Social reads (docs/dev/API.md): the feed, publications and
       # received notes, their threads and reactions, and the account's
       # relationships. Every read goes through the service or policy the web
       # page uses, with the token's account as a signed-in browser reader, so

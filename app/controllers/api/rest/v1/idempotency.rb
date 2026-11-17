@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # `Idempotency-Key` on a POST (PLAN_API.md §5). The first response is
+      # `Idempotency-Key` on a POST (docs/dev/API.md). The first response is
       # kept 24 hours per (token, key); a retry with the same request gets it
       # back with `Idempotency-Replayed: true`. The same key on a different
       # request is refused, and so is a retry while the first is still running.

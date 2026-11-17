@@ -1,4 +1,4 @@
-// The Scalar API reference document (PLAN_API.md §13.2), loaded inside the
+// The Scalar API reference document (docs/dev/API.md), loaded inside the
 // /developers/api page's iframe. It is a document of its own, without Tabler:
 // Tabler's utility classes (.grid, .p-3, .rounded…) share names with Scalar's
 // and would otherwise rewrite its layout.

@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # Webhook endpoints and their deliveries (PLAN_API.md §6.6, §7.5). The
+      # Webhook endpoints and their deliveries (docs/dev/API.md). The
       # secret appears only in the responses that create or rotate it.
       module WebhookSerializers
         module_function

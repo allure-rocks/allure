@@ -68,7 +68,7 @@ module Notifications
     private
 
     # The webhook event of the same fact goes whatever the in-app switch
-    # says: subscribing an endpoint is the preference (PLAN_API.md §11.2). It
+    # says: subscribing an endpoint is the preference (docs/dev/API.md). It
     # is a side effect of the side effect: a failure there is reported and
     # never costs the in-app notification.
     def emit_webhook

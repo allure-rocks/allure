@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The problem codes of the REST API (PLAN_API.md §5). Titles and details
+      # The problem codes of the REST API (docs/dev/API.md). Titles and details
       # are protocol text, English only (§13.3); `code` is what clients branch
       # on, and docs/openapi/v1.yaml lists the same set.
       module Problems

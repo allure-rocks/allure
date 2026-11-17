@@ -8,7 +8,7 @@ module Workouts
   # event is created here, so cancelling inside a delay leaves no trace.
   class Publisher
     class PublicationError < StandardError
-      # A stable code for programs (PLAN_API.md §6.4); the message stays the
+      # A stable code for programs (docs/dev/API.md); the message stays the
       # translated sentence the web shows.
       attr_reader :code
 

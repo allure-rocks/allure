@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Webhooks
-  # Emits one event to an account's webhooks (PLAN_API.md §11.2). Nothing is
+  # Emits one event to an account's webhooks (docs/dev/API.md). Nothing is
   # written for an account with no deliverable endpoint subscribed to the
   # type, nor for a suspended account. Called inside a transaction, it waits
   # for the commit, so an event never announces something rolled back; the

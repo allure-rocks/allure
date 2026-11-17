@@ -7,8 +7,8 @@ module Workouts
 
     Result = Data.define(:publication, :delete_event, :created)
 
-    # `reason` names the withdrawal to the owner's webhooks (PLAN_API.md
-    # §11.2): `deleted` by default, `operator` for the operator's.
+    # `reason` names the withdrawal to the owner's webhooks
+    # (docs/dev/API.md): `deleted` by default, `operator` for the operator's.
     def initialize(user:, workout: nil, publication: nil, operator: false, reason: nil)
       @user = user
       @workout = workout

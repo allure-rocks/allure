@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_API.md §5: the first response to a POST carrying an Idempotency-Key,
+# docs/dev/API.md: the first response to a POST carrying an Idempotency-Key,
 # kept 24 hours per (token, key) and replayed to a retry. A row without a
 # status is a request still in flight.
 class CreateApiIdempotencyKeys < ActiveRecord::Migration[8.1]

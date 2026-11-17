@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "The OpenAPI document (PLAN_API.md §12)", type: :request do
+RSpec.describe "The OpenAPI document (docs/dev/API.md)", type: :request do
   let(:user) { create(:user) }
 
   it "is members-only" do
@@ -43,7 +43,7 @@ RSpec.describe "The OpenAPI document (PLAN_API.md §12)", type: :request do
   end
 end
 
-RSpec.describe "The OpenAPI document matches the routes (PLAN_API.md §12)" do
+RSpec.describe "The OpenAPI document matches the routes (docs/dev/API.md)" do
   let(:document) { YAML.safe_load_file(Rails.root.join("docs/openapi/v1.yaml"), aliases: true) }
 
   def routed_operations

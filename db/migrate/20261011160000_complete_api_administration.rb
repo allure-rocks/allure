@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_API.md §11.4, §14 (Slice 6): the `webhook_disabled` notification and
+# docs/dev/API.md (Slice 6): the `webhook_disabled` notification and
 # its switch, the operator's audited token revocation and webhook disabling,
 # and a public id for participations, which webhook payloads name.
 class CompleteApiAdministration < ActiveRecord::Migration[8.1]

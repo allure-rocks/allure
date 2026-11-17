@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// The iframe holding the Scalar API reference (PLAN_API.md §13.2). The
+// The iframe holding the Scalar API reference (docs/dev/API.md). The
 // reference is its own document, so it follows the page's light/dark switch
 // through a same-origin message: on load, and on every allure:theme-changed.
 export default class extends Controller {

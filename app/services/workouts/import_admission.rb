@@ -12,7 +12,7 @@ module Workouts
     DAILY_UPLOAD_LABEL = "6 GB"
     WINDOW = 24.hours
 
-    # `reason` is the API's code (PLAN_API.md §5); `message` the form's text;
+    # `reason` is the API's code (docs/dev/API.md); `message` the form's text;
     # `retry_after` the seconds until the refusal may lift.
     Refusal = Data.define(:reason, :message, :retry_after)
 

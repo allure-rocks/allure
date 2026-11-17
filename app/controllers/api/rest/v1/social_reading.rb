@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The reader the social endpoints act as (PLAN_API.md §10): the token's
+      # The reader the social endpoints act as (docs/dev/API.md): the token's
       # account as a signed-in browser, the principal every web page uses, and
       # the page's batched reaction and comment counts.
       module SocialReading

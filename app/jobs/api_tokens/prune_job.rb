@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module ApiTokens
-  # Revoked and expired tokens stay listed for 90 days, then go
-  # (PLAN_API.md §4.1); stored idempotent responses go after 24 hours (§5).
+  # Revoked and expired tokens stay listed for 90 days, then go; stored
+  # idempotent responses go after 24 hours (docs/dev/API.md).
   class PruneJob < ApplicationJob
     queue_as :default
 

@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # Value formats shared by every representation (PLAN_API.md §5): RFC 3339
+      # Value formats shared by every representation (docs/dev/API.md): RFC 3339
       # UTC instants and plain JSON numbers.
       module Formats
         module_function

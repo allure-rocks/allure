@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_API.md §4.1: personal API tokens. Only a SHA-256 digest of the secret
+# docs/dev/API.md: personal API tokens. Only a SHA-256 digest of the secret
 # is stored; the prefix identifies a token in lists without revealing it.
 class CreateApiTokens < ActiveRecord::Migration[8.1]
   SCOPES = %w[read write import publish social:read webhooks].freeze

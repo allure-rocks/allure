@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The owner's Workout representation (PLAN_API.md §7.1). SI units as
+      # The owner's Workout representation (docs/dev/API.md). SI units as
       # persisted; nullable measurements stay null when not recorded. The list
       # form omits the free text and the owner-only analysis detail.
       class WorkoutSerializer

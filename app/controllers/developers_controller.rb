@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The API reference (PLAN_API.md §13, DESIGN.md §20.19). `api` is the Allure
+# The API reference (docs/dev/API.md, DESIGN.md §20.19). `api` is the Allure
 # page; `reference` is the bare Scalar document it embeds in a same-origin
 # iframe, which loads the OpenAPI document with the member's session.
 class DevelopersController < ApplicationController

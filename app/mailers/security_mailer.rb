@@ -4,7 +4,7 @@
 # its identity is mailed to its address, so a change the person did not make
 # is noticed. Localized to the account, since the mails are queued. API tokens
 # act on the account's behalf, so their creation and revocation are mailed too
-# (PLAN_API.md §4.4).
+# (docs/dev/API.md).
 class SecurityMailer < ApplicationMailer
   EVENTS = %w[
     totp_enrolled totp_removed passkey_added passkey_removed

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API imports (PLAN_API.md §6.3, §8)", type: :request do
+RSpec.describe "REST API imports (docs/dev/API.md)", type: :request do
   include ActiveJob::TestHelper
 
   let(:user) { create(:user) }

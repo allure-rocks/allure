@@ -97,7 +97,7 @@ Rails.application.routes.draw do
     # PLAN_ACCOUNT.md §4.4: the operator schedules or cancels a deletion.
     post "/accounts/:id/deletion", to: "accounts#schedule_deletion", as: :account_deletion
     delete "/accounts/:id/deletion", to: "accounts#cancel_deletion", as: nil
-    # PLAN_API.md §14: audited token revocation and webhook disabling.
+    # docs/dev/API.md: audited token revocation and webhook disabling.
     post "/accounts/:account_id/api_tokens/:id/revocation", to: "api_access#revoke_token", as: :account_api_token_revocation
     post "/accounts/:account_id/webhooks/:id/disabling", to: "api_access#disable_webhook", as: :account_webhook_disabling
     get "/invitations", to: "invitations#index", as: :invitations
@@ -330,7 +330,7 @@ Rails.application.routes.draw do
     end
     resource :recovery_codes, only: %i[show create], path: "security/recovery-codes"
     resources :identities, only: :destroy, path: "security/identities"
-    # API tokens (PLAN_API.md §4.4, DESIGN.md §20.18).
+    # API tokens (docs/dev/API.md, DESIGN.md §20.18).
     resource :api, only: :show, controller: "api"
     resources :api_tokens, only: %i[new create destroy], path: "api/tokens" do
       get :created, on: :collection
@@ -386,7 +386,7 @@ Rails.application.routes.draw do
   get "/api/v1/segment/:id", to: "federation/segments#show", as: :segment_publication
   # A local author's comment as an object (PLAN_COMMENTS.md §6.5).
   get "/api/v1/comment/:id", to: "federation/comments#show", as: :comment_object
-  # The public REST API (PLAN_API.md §3). Under /api/rest/v1, never /api/v1,
+  # The public REST API (docs/dev/API.md). Under /api/rest/v1, never /api/v1,
   # which names the ActivityPub objects above. docs/openapi/v1.yaml documents
   # exactly these paths, and a guard spec keeps the two in step.
   namespace :api do
@@ -412,7 +412,7 @@ Rails.application.routes.draw do
         patch "publications/:id", to: "publications#update", as: nil
         delete "publications/:id", to: "publications#destroy", as: nil
         post "publications/:id/activation", to: "publications#activate", as: nil
-        # Social reads (PLAN_API.md §6.5): what the account may read on the web.
+        # Social reads (docs/dev/API.md): what the account may read on the web.
         get "feed", to: "social#feed"
         get "followers", to: "social#followers"
         get "following", to: "social#following"
@@ -427,7 +427,7 @@ Rails.application.routes.draw do
         get "remote_notes/:id/route_image", to: "remote_notes#route_image", as: nil
         get "remote_notes/:id/comments", to: "remote_notes#comments", as: nil
         resources :records, only: :index
-        # Webhooks (PLAN_API.md §6.6).
+        # Webhooks (docs/dev/API.md).
         resources :webhooks, only: %i[index show create destroy]
         patch "webhooks/:id", to: "webhooks#update", as: nil
         post "webhooks/:id/ping", to: "webhooks#ping", as: nil
@@ -445,7 +445,7 @@ Rails.application.routes.draw do
   # The Model Context Protocol endpoint for AI assistants (PLAN_MCP.md §3).
   post "/mcp", to: "mcp#create", as: :mcp
   match "/mcp", to: "mcp#method_not_allowed", via: %i[get delete put patch]
-  # The API reference (PLAN_API.md §13), members-only.
+  # The API reference (docs/dev/API.md), members-only.
   get "/developers/api", to: "developers#api", as: :developers_api
   get "/developers/api/reference", to: "developers#reference", as: :developers_api_reference
   get "/developers", to: redirect("/developers/api")

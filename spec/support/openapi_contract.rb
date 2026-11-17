@@ -2,7 +2,7 @@
 
 require "openapi_first"
 
-# Contract tests for the REST API (PLAN_API.md §12): a request spec calls
+# Contract tests for the REST API (docs/dev/API.md): a request spec calls
 # `expect_api_contract` after a request, and the request and its response are
 # validated against docs/openapi/v1.yaml.
 module OpenapiContract

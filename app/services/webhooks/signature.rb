@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Webhooks
-  # Standard Webhooks signing (PLAN_API.md §11.3): HMAC-SHA256 with the
+  # Standard Webhooks signing (docs/dev/API.md): HMAC-SHA256 with the
   # Base64-decoded secret over "<id>.<timestamp>.<body>", sent as
   # `v1,<base64>`; several secrets give several space-separated signatures.
   module Signature

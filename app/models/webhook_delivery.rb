@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# One event's delivery chain to one endpoint (PLAN_API.md §11.4): pending
+# One event's delivery chain to one endpoint (docs/dev/API.md): pending
 # through its retries, then succeeded, failed (the endpoint answered 410), or
 # abandoned once the retries ran out or the endpoint went away.
 class WebhookDelivery < ApplicationRecord

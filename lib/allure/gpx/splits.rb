@@ -17,7 +17,7 @@ module Allure
       EPSILON = 1e-9
 
       # `interval:` (metres) overrides the unit's kilometre or mile, for the
-      # REST API's `?distance=` (PLAN_API.md §6.2).
+      # REST API's `?distance=` (docs/dev/API.md).
       def initialize(segments:, workout_started_at:, unit: nil, interval: nil, stopped_speed_threshold_km_h: 0.0,
                      grade_adjusted_pace: false, elevation_filter: nil)
         @segments = segments

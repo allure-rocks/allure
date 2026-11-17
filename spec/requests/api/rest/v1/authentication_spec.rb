@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "REST API authentication (PLAN_API.md §4.5)", type: :request do
+RSpec.describe "REST API authentication (docs/dev/API.md)", type: :request do
   let(:user) { create(:user) }
 
   def problem = response.parsed_body
@@ -92,7 +92,7 @@ RSpec.describe "REST API authentication (PLAN_API.md §4.5)", type: :request do
     expect(response.headers["Cache-Control"]).to include("private")
   end
 
-  describe "rate limits (PLAN_API.md §4.6)" do
+  describe "rate limits (docs/dev/API.md)" do
     # The test cache is a null store; this counts as a store would, so the
     # bucket a request lands in can be observed.
     let(:counts) { Hash.new(0) }

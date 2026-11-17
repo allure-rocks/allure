@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # `GET /me` and `GET /sports` (PLAN_API.md §6.1): readable with any scope.
+      # `GET /me` and `GET /sports` (docs/dev/API.md): readable with any scope.
       class AccountsController < BaseController
         def me
           render json: CatalogSerializers.me(current_user, Current.api_token)

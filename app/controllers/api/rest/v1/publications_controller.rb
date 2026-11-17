@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # Publishing through the API (PLAN_API.md §6.4, §9). A second caller of
+      # Publishing through the API (docs/dev/API.md). A second caller of
       # the web's services, with no publication rule of its own except the
       # explicit `acknowledge`: privacy-zone preparation, fail-closed
       # refusals, the safety delay and the replacement of an audience's live

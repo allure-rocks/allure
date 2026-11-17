@@ -42,7 +42,7 @@ module Workouts
       count
     end
 
-    # One `workout.updated` per workout changed (PLAN_API.md §11.2).
+    # One `workout.updated` per workout changed (docs/dev/API.md).
     def announce(ids, field)
       @user.workouts.where(id: ids).find_each { Webhooks::Events.workout_updated(it, [ field ]) }
     end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Webhooks
-  # One attempt of one delivery (PLAN_API.md §11.4). A 2xx succeeds, a 410
+  # One attempt of one delivery (docs/dev/API.md). A 2xx succeeds, a 410
   # disables the endpoint (`gone`), anything else schedules the next retry
   # until they run out. A suspended account's or a paused endpoint's delivery
   # waits, pending, for the recovery sweep.

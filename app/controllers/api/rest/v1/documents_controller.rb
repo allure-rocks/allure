@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The OpenAPI document (PLAN_API.md §12). Members-only like every page,
+      # The OpenAPI document (docs/dev/API.md). Members-only like every page,
       # it is the one API resource that also accepts a signed-in browser, so
       # the reference page can load it; any valid token, whatever its scopes,
       # reads it too.

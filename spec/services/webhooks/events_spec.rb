@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Webhook events at their call sites (PLAN_API.md §11.2)" do
+RSpec.describe "Webhook events at their call sites (docs/dev/API.md)" do
   let(:user) { create(:user) }
   let!(:endpoint) { user.webhook_endpoints.create!(url: "https://hooks.example.com/", events: [ "*" ]) }
   let(:workout) { create(:workout, user:) }

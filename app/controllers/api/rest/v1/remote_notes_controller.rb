@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # A received note (PLAN_API.md §6.5, §7.3), only while
+      # A received note (docs/dev/API.md), only while
       # `Federation::RemoteNotePolicy` lets the token's account read it: a
       # public note for any member, a followers note with an active
       # entitlement. Media is this instance's cached copy; nothing is fetched

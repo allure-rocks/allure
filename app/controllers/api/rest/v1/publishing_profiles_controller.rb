@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # The account's publishing profiles (PLAN_API.md §6.2), named by their
+      # The account's publishing profiles (docs/dev/API.md), named by their
       # ShortUUID for the publication endpoints.
       class PublishingProfilesController < BaseController
         require_scope "read"

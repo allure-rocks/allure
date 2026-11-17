@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Webhooks on « API et webhooks » (DESIGN.md §20.18, PLAN_API.md §11), the
+  # Webhooks on « API et webhooks » (DESIGN.md §20.18, docs/dev/API.md), the
   # same operations as the REST API through `Webhooks::Management`. A secret
   # is shown once, after creation or rotation: the session holds only which
   # endpoint to reveal, never the secret.

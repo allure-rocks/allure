@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_API.md §11.1: an account's webhook endpoints, the events emitted to
+# docs/dev/API.md: an account's webhook endpoints, the events emitted to
 # them with their payload frozen, and one delivery chain per (event,
 # endpoint).
 class CreateWebhooks < ActiveRecord::Migration[8.1]
