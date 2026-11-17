@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :workouts do
-  desc "Enqueue MapLibre regeneration for every missing or stale owner route image (PLAN_DERIVATIONS.md)"
+  desc "Enqueue MapLibre regeneration for every missing or stale owner route image (docs/dev/DERIVATIONS.md)"
   task route_images: :environment do
     count = Workouts::BackfillRouteImagesJob.pending_scope.count
     Workouts::BackfillRouteImagesJob.perform_later
@@ -21,7 +21,7 @@ namespace :workouts do
 end
 
 namespace :segments do
-  desc "Enqueue MapLibre regeneration for every missing or stale owner segment image (PLAN_DERIVATIONS.md)"
+  desc "Enqueue MapLibre regeneration for every missing or stale owner segment image (docs/dev/DERIVATIONS.md)"
   task route_images: :environment do
     count = Segments::BackfillRouteImagesJob.pending_scope.count
     Segments::BackfillRouteImagesJob.perform_later

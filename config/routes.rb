@@ -173,7 +173,7 @@ Rails.application.routes.draw do
     resources :routes, only: %i[new create]
     resource :original_file, only: :show, controller: "workout_files"
     resource :route_image, only: :show, controller: "workout_route_images"
-    # Owner-requested re-render of the owner image (PLAN_DERIVATIONS.md §4);
+    # Owner-requested re-render of the owner image (docs/dev/DERIVATIONS.md);
     # the bulk maintenance lives in /settings/data and /admin/jobs. The path
     # deliberately avoids the `/route_image` prefix so the detail page's
     # "no stored image URL" guard stays an unambiguous substring check.
@@ -295,7 +295,7 @@ Rails.application.routes.draw do
     # Push on the iOS companion (PLAN_PUSH.md §5): the current session's own
     # subscription, JSON only.
     resource :push_subscription, only: %i[create update destroy], controller: "push_subscriptions"
-    # Data (PLAN_DERIVATIONS.md §7): owner-scoped rebuilds of derived data.
+    # Data (docs/dev/DERIVATIONS.md): owner-scoped rebuilds of derived data.
     # Every action is scoped to the current account's workouts.
     resource :data, only: :show, controller: "data"
     post "data/rebuild", to: "data#rebuild", as: :data_rebuild

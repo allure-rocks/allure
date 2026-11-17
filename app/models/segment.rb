@@ -90,7 +90,7 @@ class Segment < ApplicationRecord
   after_create_commit :enqueue_backfill, unless: -> { kind == "loop" }
   # The owner image is derived media: created missing, rendered once on the
   # dedicated route_images worker, then re-rendered only by the sweeps
-  # (PLAN_DERIVATIONS.md §4).
+  # (docs/dev/DERIVATIONS.md).
   after_create_commit :enqueue_route_image
   # The nearby place is geocoded once from the course midpoint: the geometry
   # never changes afterwards (PLAN_SEGMENTS.md §8.4).

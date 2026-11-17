@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Segments
-  # The generation of the owner segment image render (PLAN_DERIVATIONS.md).
+  # The generation of the owner segment image render (docs/dev/DERIVATIONS.md).
   # Bump it when the rendered contract changes (style, chevrons, framing,
   # renderer swap, smoothing level); Segments::RenderRouteImageJob stamps the
   # version it produced, and the rebuild sweeps re-render only the images whose

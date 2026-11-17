@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_DERIVATIONS.md: the file-derived facts of a workout (recording device,
+# docs/dev/DERIVATIONS.md: the file-derived facts of a workout (recording device,
 # re-detectable sport, virtual venue) get their own generation marker, so a
 # catalogue change never forces a re-analysis of every stored track.
 # Existing rows start at 0 and are reconciled by the next rebuild sweep.

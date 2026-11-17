@@ -1,6 +1,6 @@
 <%# Live counters fragment, re-rendered in place by live_frame_controller.
     Every count is scoped to the current account's workouts
-    (PLAN_DERIVATIONS.md §7); the buttons stay disabled while nothing is
+    (docs/dev/DERIVATIONS.md); the buttons stay disabled while nothing is
     pending. %>
 <p class="text-secondary small" role="status" aria-live="polite">
   <%= t("settings.data.live_hint", time: l(Time.current, format: :short)) %>

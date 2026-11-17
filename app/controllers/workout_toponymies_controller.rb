@@ -2,7 +2,7 @@
 
 # Reads the owner's stored toponymy. The page never schedules geocoding: the
 # import, the re-analysis, the sweeps and the recovery job do
-# (PLAN_DERIVATIONS.md §4), so this endpoint has no side effect.
+# (docs/dev/DERIVATIONS.md), so this endpoint has no side effect.
 class WorkoutToponymiesController < ApplicationController
   def show
     workout = current_user.workouts.positioned.find_by_short_id!(params[:workout_id])

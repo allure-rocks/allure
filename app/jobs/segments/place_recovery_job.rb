@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Segments
-  # Recurring recovery for course places (PLAN_DERIVATIONS.md §4): reschedules
+  # Recurring recovery for course places (docs/dev/DERIVATIONS.md): reschedules
   # a course left pending past any plausible queue wait (a lost job) and a
   # recent failure. Older rows — legacy courses included — are left to the
   # operator's sweep, so a place the provider cannot name is not asked about

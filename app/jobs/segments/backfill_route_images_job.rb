@@ -2,8 +2,8 @@
 
 module Segments
   # Re-renders every owner segment image whose stored renderer generation is
-  # older than the current one, or that was never rendered (PLAN_DERIVATIONS.md
-  # §5). Bounded id-cursor batches that resume themselves on the low-concurrency
+  # older than the current one, or that was never rendered
+  # (docs/dev/DERIVATIONS.md). Bounded id-cursor batches that resume themselves on the low-concurrency
   # `route_images` worker. Publication images are snapshot media and are
   # deliberately out of scope.
   class BackfillRouteImagesJob < ApplicationJob

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Owner-scoped derived-data maintenance (PLAN_DERIVATIONS.md §7). The page
+  # Owner-scoped derived-data maintenance (docs/dev/DERIVATIONS.md). The page
   # shows how many of the account's workouts are concerned by each rebuild and
   # enqueues one throttled cursor sweep per action; the counters refresh
   # through the shared live frame. Nothing here reaches another account's

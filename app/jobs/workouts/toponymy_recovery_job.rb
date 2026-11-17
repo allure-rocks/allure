@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Recurring recovery for geocoding (PLAN_DERIVATIONS.md §4): reschedules a
+  # Recurring recovery for geocoding (docs/dev/DERIVATIONS.md): reschedules a
   # recent toponymy that failed, and one left pending past any plausible queue
   # wait (a lost job, or a deferred import whose terrain re-analysis kept the
   # recorded profile). Older failures are left to the owner's « Lieux » action

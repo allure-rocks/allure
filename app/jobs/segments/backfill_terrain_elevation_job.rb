@@ -2,7 +2,7 @@
 
 module Segments
   # Gives every eligible course the terrain service's elevation figures
-  # (docs/dev/ELEVATION.md, PLAN_DERIVATIONS.md §5): those never tried and
+  # (docs/dev/ELEVATION.md, docs/dev/DERIVATIONS.md): those never tried and
   # those whose last try failed. Bounded id-cursor batches that resume
   # themselves; each course goes through its own job, paced by the provider
   # throttle. `user_id` narrows the sweep to one account, when it consents.
