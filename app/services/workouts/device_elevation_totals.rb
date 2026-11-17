@@ -5,7 +5,7 @@ module Workouts
   # carries them. Complete recorded laps win over the session summary; the
   # session is the fallback when the laps are missing or incomplete. A nil
   # result means the caller must fall back to the computed profile
-  # (PLAN_ELEVATION.md §3bis).
+  # (docs/dev/ELEVATION.md).
   module DeviceElevationTotals
     # A missing final partial lap is normal, so laps may cover slightly less
     # than the whole activity.

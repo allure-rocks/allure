@@ -8,7 +8,7 @@ module Workouts
   #
   # `elevation_source:` overrides the workout's effective source for this run
   # (`"device"` or `"dem"`). A `dem` run applies the cached terrain profile
-  # before analysis and forces the DEM ascent class (PLAN_ELEVATION.md); without
+  # before analysis and forces the DEM ascent class (docs/dev/ELEVATION.md); without
   # it the stored effective source is reused.
   class Reanalyzer
     MissingOriginalFileError = OriginalTrack::MissingOriginalFileError

@@ -2,7 +2,7 @@
 
 module Allure
   module Elevation
-    # The terrain profile of a course (PLAN_ELEVATION.md §10): sampling along
+    # The terrain profile of a course (docs/dev/ELEVATION.md): sampling along
     # its stored line and the figures the terrain answers give. A course is
     # short, so it is sampled finer than a workout, never coarser than the
     # configured interval unless the provider budget requires it.

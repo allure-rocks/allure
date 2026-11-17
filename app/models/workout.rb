@@ -14,7 +14,7 @@ class Workout < ApplicationRecord
   IMPORT_FORMATS = %w[gpx fit tcx kml].freeze
 
   # The analysis source of the elevation profile: the recording device or the
-  # configured DEM service (PLAN_ELEVATION.md).
+  # configured DEM service (docs/dev/ELEVATION.md).
   ELEVATION_SOURCES = %w[device dem].freeze
 
   # A recording comes from an imported file; a credit row stands for a
@@ -94,7 +94,7 @@ class Workout < ApplicationRecord
            dependent: :delete_all,
            inverse_of: :workout
   # Terrain elevation fetched for a workout without a recorded profile, or
-  # chosen by the owner instead of it (PLAN_ELEVATION.md).
+  # chosen by the owner instead of it (docs/dev/ELEVATION.md).
   has_one :elevation,
           class_name: "WorkoutElevation",
           dependent: :destroy,

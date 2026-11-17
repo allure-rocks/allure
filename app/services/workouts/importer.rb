@@ -465,7 +465,7 @@ module Workouts
 
     # Terrain elevation is fetched and applied only for a workout whose
     # recorded profile is empty, on a sport that records elevation, for an
-    # account that opted in (PLAN_ELEVATION.md §5).
+    # account that opted in (docs/dev/ELEVATION.md).
     def enqueue_elevation(workout)
       return unless Allure::Elevation::Config.configured?
       return unless workout.sport.records_elevation?
@@ -490,7 +490,7 @@ module Workouts
     end
 
     # The device's own totals win over the computed profile when the file
-    # carries them (PLAN_ELEVATION.md §3). Sports that ignore elevation keep
+    # carries them (docs/dev/ELEVATION.md). Sports that ignore elevation keep
     # the computed zero.
     def device_elevation_totals(track, metrics, sport)
       return nil unless sport.records_elevation?

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Adds the terrain-elevation backfill maintenance action to the operator audit
-# log (PLAN_ELEVATION.md §7).
+# log (docs/dev/ELEVATION.md).
 class AddElevationBackfillToAdminEvents < ActiveRecord::Migration[8.1]
   ACTIONS = %w[
     domain_blocked domain_unblocked actor_blocked actor_unblocked

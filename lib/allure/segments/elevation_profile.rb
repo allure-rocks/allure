@@ -4,7 +4,7 @@ module Allure
   module Segments
     # The course elevation profile: a bounded distance/elevation snapshot taken
     # once from the source recording and stored on the segment. Only the
-    # terrain profile replaces it (PLAN_ELEVATION.md §10); it never enters a
+    # terrain profile replaces it (docs/dev/ELEVATION.md); it never enters a
     # publication and never federates; a remote course has no profile and
     # reads as empty.
     class ElevationProfile

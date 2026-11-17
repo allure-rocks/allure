@@ -206,7 +206,7 @@ module Admin
     end
 
     # Gives every eligible course the terrain service's elevation figures
-    # (PLAN_ELEVATION.md §10), through the paced per-course job. Read-only when
+    # (docs/dev/ELEVATION.md), through the paced per-course job. Read-only when
     # nothing is pending or no provider is set.
     def backfill_segment_terrain_elevation
       count = segment_terrain_elevation_backfill_count
