@@ -22,7 +22,7 @@ RSpec.describe PublishingProfile do
       expect(profile.settings).to include("route" => true, "route_image" => true, "basemap" => true, "gpx" => false)
     end
 
-    it "shares no heart rate in a new profile, while accepting it when ticked (PLAN_HEART_RATE.md D7)" do
+    it "shares no heart rate in a new profile, while accepting it when ticked (docs/dev/HEART-RATE.md)" do
       default = build(:publishing_profile, settings: {})
       default.validate
 

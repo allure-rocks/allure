@@ -11,7 +11,7 @@ const NARROW_WIDTH = 576
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => `&#${character.charCodeAt(0)};`)
 
-// Time in each heart-rate zone per week or month (PLAN_HEART_RATE.md §4):
+// Time in each heart-rate zone per week or month (docs/dev/HEART-RATE.md):
 // stacked bars in hours, or in shares of each period when the scale is
 // `share` (the intensity distribution, whatever the volume), Z1 at the foot
 // in the palest step of the primary ramp (DESIGN.md §10.21). The payload is embedded; the table below the chart

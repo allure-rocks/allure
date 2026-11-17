@@ -24,7 +24,7 @@ module Workouts
   # - `loops`: positioned recordings with an older detection/reuse generation,
   #   even without a loop yet (Segments::MatchWorkoutJob);
   # - `heart_rate`: recordings whose heart-rate histogram is missing or older
-  #   than the current version (PLAN_HEART_RATE.md §3.4), rebuilt inline from
+  #   than the current version (docs/dev/HEART-RATE.md), rebuilt inline from
   #   the stored points;
   # - `route_suggestions`: recordings the recurring-route detector has not
   #   examined yet (PLAN_SEGMENTS.md §7.7); the account sweep walks them newest

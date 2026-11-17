@@ -193,7 +193,7 @@ class User < ApplicationRecord
   validate :username_not_operator, on: :self_registration
   validate :username_not_instance_name, on: :self_registration
   validate :default_sports_are_allowed
-  # The heart-rate profile (PLAN_HEART_RATE.md §3.1).
+  # The heart-rate profile (docs/dev/HEART-RATE.md).
   validates :max_heart_rate, numericality: { only_integer: true, in: 100..220 }, allow_nil: true
   validates :resting_heart_rate, numericality: { only_integer: true, in: 25..120 }, allow_nil: true
   validates :heart_rate_zone_basis, inclusion: { in: Allure::HeartRate::Zones::BASES }

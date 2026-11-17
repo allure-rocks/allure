@@ -383,7 +383,7 @@ class MeController < ApplicationController
     Segments::Standings.new(segments:, viewer: current_user).call.index_by { |row| [ row.segment.id, row.sport.id ] }
   end
 
-  # The training-load card (PLAN_HEART_RATE.md §4): nil until a recording
+  # The training-load card (docs/dev/HEART-RATE.md): nil until a recording
   # carries usable heart rate; without a profile, only the invitation to set
   # one. The load covers every sport, whatever the page filter.
   def training_load

@@ -2,7 +2,7 @@
 
 module Allure
   module Stats
-    # Training load over days (PLAN_HEART_RATE.md §4): fitness (chronic load)
+    # Training load over days (docs/dev/HEART-RATE.md): fitness (chronic load)
     # and fatigue (acute load) are exponentially weighted averages of the daily
     # load over 42 and 7 days, both starting at 0 on the first day of history,
     # and form is yesterday's fitness minus yesterday's fatigue — what a

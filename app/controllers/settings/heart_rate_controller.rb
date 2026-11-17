@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # The account's heart-rate profile (PLAN_HEART_RATE.md §3.1): maximum,
+  # The account's heart-rate profile (docs/dev/HEART-RATE.md): maximum,
   # resting value, zone basis and bounds. Saving re-slices the account's
   # histograms under the new zones; clearing it removes every interpretation.
   # Nothing here is ever published.

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_HEART_RATE.md §3.3, histogram version 2: coverage is read against the
+# docs/dev/HEART-RATE.md, histogram version 2: coverage is read against the
 # time the device recorded (pauses excluded), frozen strap values are counted
 # apart, and a recording whose points are too far apart is marked sparse.
 # Version 1 rows read as before (covered = recorded) until the sweep rebuilds

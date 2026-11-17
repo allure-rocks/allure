@@ -43,7 +43,7 @@ class StatsController < ApplicationController
   end
 
   # Time in each heart-rate zone per week (last 26) or month (last 24), for
-  # every sport or one (PLAN_HEART_RATE.md §4). HTML only: the chart payload
+  # every sport or one (docs/dev/HEART-RATE.md). HTML only: the chart payload
   # is embedded and the table below it is its text equivalent.
   HEART_RATE_WINDOWS = { "week" => 26, "month" => 24 }.freeze
   HEART_RATE_SCALES = %w[time share].freeze

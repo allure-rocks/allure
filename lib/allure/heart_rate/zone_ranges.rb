@@ -2,7 +2,7 @@
 
 module Allure
   module HeartRate
-    # Where along the route each zone was ridden (PLAN_HEART_RATE.md §3.5): per
+    # Where along the route each zone was ridden (docs/dev/HEART-RATE.md): per
     # zone, the distance stretches whose readings fall in it, on the workout's
     # cumulative distance (recording segments laid end to end, like
     # Segments::PointStream), so the profile and the map can shade them.

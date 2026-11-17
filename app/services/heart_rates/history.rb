@@ -2,7 +2,7 @@
 
 module HeartRates
   # An account's heart-rate history under its current zones
-  # (PLAN_HEART_RATE.md §4): the daily training loads and the time in each
+  # (docs/dev/HEART-RATE.md): the daily training loads and the time in each
   # zone per week or month. Reads the usable rows of the account's own
   # recordings; a row the rezone job has not reached yet is sliced from its
   # histogram here, so the totals never mix two zone definitions. Days are the

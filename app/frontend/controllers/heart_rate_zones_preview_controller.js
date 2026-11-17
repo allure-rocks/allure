@@ -13,7 +13,7 @@ const integerIn = (input, min, max) => {
 }
 
 // The zone table of /settings/heart-rate follows the form as it is typed
-// (PLAN_HEART_RATE.md §3.1), so a change of basis or bound shows its bpm
+// (docs/dev/HEART-RATE.md), so a change of basis or bound shows its bpm
 // before it is saved. Same rule and rounding as Allure::HeartRate::Zones;
 // anything the model would refuse shows dashes. Nothing is sent.
 export default class extends Controller {

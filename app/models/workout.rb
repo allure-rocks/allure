@@ -105,7 +105,7 @@ class Workout < ApplicationRecord
           class_name: "WorkoutWeather",
           dependent: :destroy,
           inverse_of: :workout
-  # The recording's heart-rate histogram (PLAN_HEART_RATE.md). Owner-only.
+  # The recording's heart-rate histogram (docs/dev/HEART-RATE.md). Owner-only.
   has_one :heart_rate,
           class_name: "WorkoutHeartRate",
           dependent: :delete,

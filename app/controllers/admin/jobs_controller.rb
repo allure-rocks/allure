@@ -263,7 +263,7 @@ module Admin
     end
 
     # Computes the heart-rate histogram of every recording the current version
-    # has not seen, from the stored points (PLAN_HEART_RATE.md §3.4).
+    # has not seen, from the stored points (docs/dev/HEART-RATE.md).
     def backfill_heart_rate
       count = HeartRates::BackfillJob.pending_scope.count
       if count.positive?

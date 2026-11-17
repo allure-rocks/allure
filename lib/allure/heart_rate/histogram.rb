@@ -2,7 +2,7 @@
 
 module Allure
   module HeartRate
-    # Seconds spent at each whole bpm of a recording (PLAN_HEART_RATE.md §3.3).
+    # Seconds spent at each whole bpm of a recording (docs/dev/HEART-RATE.md).
     # Zones are sliced from it at read time, so changing a threshold never
     # re-reads a point. Reads recording segments through the PointSerializer
     # keys: the analyzer's in-memory segment metrics and the stored track

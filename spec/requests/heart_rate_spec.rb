@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_HEART_RATE.md slice 1: the profile page, the « Zones » analysis tab,
+# docs/dev/HEART-RATE.md: the profile page, the « Zones » analysis tab,
 # the owner's rebuild, and the API fields.
 RSpec.describe "Heart rate", type: :request do
   include ActiveSupport::Testing::TimeHelpers
