@@ -19,6 +19,9 @@ contract, the contract wins and `DESIGN.md` is amended.
 `docs/dev/CHARTS.md` is the charts contract: the shared ECharts foundation, the
 rules every chart follows and the chart-by-chart contracts.
 
+`docs/dev/MAPS.md` is the maps contract: the MapLibre engine, the basemap, the
+controls, the track colouring, the hover synchronisation and the smoothing.
+
 `docs/dev/ACCESS.md` is the access contract: every browser surface requires an
 account, while the ActivityPub wire contract is unchanged.
 

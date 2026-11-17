@@ -2666,7 +2666,7 @@ Rules:
 - the circle is drawn in the warning colour at low opacity, so it reads as
   "protected area", not as a route;
 - **no geolocation control.** Asking a user to click "find me" to place a
-  privacy zone is exactly the wrong instinct, and `[devdoc:maps]` already
+  privacy zone is exactly the wrong instinct, and [MAPS.md](MAPS.md) already
   excludes `GeolocateControl`;
 - the place search is the deliberate alternative: the owner types an address,
   picks one of at most five results, and the marker, the fields and the map
@@ -2744,7 +2744,7 @@ Rules:
   told apart from the elevation area by its shape and its legend entry — and
   it is drawn display-smoothed over a window that follows the plotted span
   (about 1 % of it, 1/60 on phones, never under the map's medium window,
-  `[devdoc:maps]`): same point count, gaps preserved, run endpoints
+  [MAPS.md](MAPS.md)): same point count, gaps preserved, run endpoints
   fixed. The tooltip and the data table keep the recorded values, so the
   trend is a drawing and the numbers stay data. The selector is absent
   from non-owner pages; detailed point signals remain owner-only until the
@@ -2922,7 +2922,7 @@ Rules:
 
 ### 15.2 Maps
 
-The component contract in `[devdoc:maps]` stands. Design adds only sizing and
+The component contract in [MAPS.md](MAPS.md) stands. Design adds only sizing and
 placement.
 
 | Modifier | Height | Used on |
