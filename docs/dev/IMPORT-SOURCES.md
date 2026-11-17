@@ -141,7 +141,7 @@ private note, commute flag, gear — to each original file, and creating the gea
 the account lacks. Its panel owns its fields and its submit (`POST
 /workout_imports/strava_archive`), so the shared options card and the footer
 submit hide while it is selected, as for a remote source. It is always enabled
-and needs no credential. `[devdoc:strava-archive]` is the contract.
+and needs no credential. [STRAVA-ARCHIVE.md](STRAVA-ARCHIVE.md) is the contract.
 
 ## 5. iGPSPORT device source
 

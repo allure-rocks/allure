@@ -600,7 +600,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Import a Strava archive (`[devdoc:strava-archive]`): a new « Archive Strava »
+- Import a Strava archive ([STRAVA-ARCHIVE.md](docs/dev/STRAVA-ARCHIVE.md)): a new « Archive Strava »
   tab on the import page takes the ZIP Strava sends (up to 2 GB) and imports
   each activity's original file with its Strava name, type, description,
   private note, commute flag and gear, in any Strava language. Missing gear is

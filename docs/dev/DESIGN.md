@@ -4339,7 +4339,7 @@ montrer où elle a été prise, même sans sa position GPS. »
 
 ### 19.36 Strava archive — on the « Archive Strava » import panel
 
-Placement: the panel of the Strava archive source (`[devdoc:strava-archive]`), in an `alert-info` above its submit. Persistent and non-dismissible.
+Placement: the panel of the Strava archive source ([STRAVA-ARCHIVE.md](STRAVA-ARCHIVE.md)), in an `alert-info` above its submit. Persistent and non-dismissible.
 
 > **FR** — « Seuls activities.csv, le dossier activities, bikes.csv et
 > shoes.csv sont lus ; les photos, abonnés, commentaires et le reste de
@@ -4841,7 +4841,7 @@ secondary sentence saying the import should work and pointing at the
 connection log. A device outside the iGPSPORT family is refused in the status
 line with its name. The shared options apply to every file and device source.
 
-The Strava archive source (`[devdoc:strava-archive]`) is an `archive` kind:
+The Strava archive source ([STRAVA-ARCHIVE.md](STRAVA-ARCHIVE.md)) is an `archive` kind:
 like a remote source it hides the shared options card and the footer submit,
 since each activity brings its own title, type, texts, commute flag and gear.
 Its panel carries one `.zip` field, an optional fallback sport (« Aucun
