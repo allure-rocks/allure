@@ -773,7 +773,7 @@ migration (`db:migrate`, applied on boot).
   `heart_rate_profile` on `/me`; the account export carries the profile.
   Nothing derived from heart rate is ever published or federated.
 - Courses take their elevation from the terrain service by default when the
-  instance configures one (`[devdoc:elevation]`): a public course with the
+  instance configures one ([ELEVATION.md](docs/dev/ELEVATION.md)): a public course with the
   service alone, a private or followers-only one with its owner's consent. The
   course's ascent, descent, grade and profile are recomputed once from its own
   line, the chart carries the « Altitudes estimées (MNT) » badge, and
@@ -2177,7 +2177,7 @@ migration (`db:migrate`, applied on boot).
   timeline's step dots become the same circles as the places and carry their
   step icon (`DESIGN.md` §15.1). The owner elevation-source switch moves from
   its own « Altitudes » card into the header `⋯` menu as a single toggle, with
-  its pending and failed states (`[devdoc:elevation]`).
+  its pending and failed states ([ELEVATION.md](docs/dev/ELEVATION.md)).
 
 ## [0.3.6] - 2026-09-29
 
@@ -2325,7 +2325,7 @@ migration (`db:migrate`, applied on boot).
   device with a running-power channel had its session power maximum stored as
   ascent (an Amazfit Balance 2 showed 443 m for a 298 m run and 397 m for a
   25 m one). The session total of that family is trusted again; complete laps
-  still win and the computed profile remains the fallback ([FIT.md](docs/dev/FIT.md), `[devdoc:elevation]`).
+  still win and the computed profile remains the fallback ([FIT.md](docs/dev/FIT.md), [ELEVATION.md](docs/dev/ELEVATION.md)).
 - Consecutive points sharing a timestamp — a GPX export rounds to the second —
   keep their path length in the workout distance instead of being dropped: a
   6.4 km run exported as GPX read 5.9 km while its own geometry measured
@@ -2589,7 +2589,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Terrain elevation for workouts without altitude (`[devdoc:elevation]`). When
+- Terrain elevation for workouts without altitude ([ELEVATION.md](docs/dev/ELEVATION.md)). When
   the instance configures an OpenTopoData-compatible `ELEVATION_BASE_URL` and
   the account opts in from `/settings/elevation`, an elevation-less workout is
   enriched after import from the configured dataset: coordinates are sampled

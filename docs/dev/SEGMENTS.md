@@ -223,7 +223,7 @@ replace them.
 `elevation_profile` is a frozen course profile, an array of `{ "d", "ele" }` up
 to 240 points with distance rebased to 0. `NULL` means not built, `[]` means
 built without usable elevation. It is written once at creation (or by the
-backfill sweep), replaced once by the terrain profile (`[devdoc:elevation]`),
+backfill sweep), replaced once by the terrain profile ([ELEVATION.md](ELEVATION.md)),
 and never federated. `average_grade` is signed: the net change from the first
 to the last valid elevation over the distance, so a descent reads negative; a
 reversed copy negates it.
