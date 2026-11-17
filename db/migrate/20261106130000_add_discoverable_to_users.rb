@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_PEOPLE.md §2: whether an account may be found by name search and
+# docs/dev/PEOPLE.md: whether an account may be found by name search and
 # suggestions. `none` is the default for every account, existing and new, so
 # the directory starts empty and a member opts in explicitly. An exact handle
 # still reaches a hidden account: following needs it.

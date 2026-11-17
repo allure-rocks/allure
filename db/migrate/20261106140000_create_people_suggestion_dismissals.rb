@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_PEOPLE.md §4: a dismissed suggestion never returns for that account.
+# docs/dev/PEOPLE.md: a dismissed suggestion never returns for that account.
 # The row is owner-scoped and names the suggested actor, so a later suggestion
 # pass reads the dismissal without touching the relationship itself.
 class CreatePeopleSuggestionDismissals < ActiveRecord::Migration[8.1]

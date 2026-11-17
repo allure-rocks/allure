@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Federation
-  # PLAN_PEOPLE.md §5: the followed account ends one accepted follow. A local
+  # docs/dev/PEOPLE.md: the followed account ends one accepted follow. A local
   # follower is simply undone; a remote one gets the signed `Reject` of its
   # Follow, which is how ActivityPub software tells an account its follow no
   # longer stands. Nothing is recalled from the follower's instance: every

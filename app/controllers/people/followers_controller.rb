@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module People
-  # PLAN_PEOPLE.md §5: the followed account ends one accepted follow. The row
+  # docs/dev/PEOPLE.md: the followed account ends one accepted follow. The row
   # is scoped to the local actor that owns it, so another account's follower
   # is a 404.
   class FollowersController < ApplicationController

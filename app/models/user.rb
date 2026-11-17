@@ -20,7 +20,7 @@ class User < ApplicationRecord
   # Local profile sections only, never publication or federation audiences.
   PROFILE_SHARING_AUDIENCES = %w[none followers members].freeze
   # Whether the account may be found by name search and suggestions
-  # (PLAN_PEOPLE.md §2). `none` is the default for everyone: the directory is
+  # (docs/dev/PEOPLE.md). `none` is the default for everyone: the directory is
   # opt-in, and an exact handle still reaches a hidden account.
   DISCOVERABILITY = %w[none members].freeze
   TIME_ZONE_IDENTIFIERS = TZInfo::Timezone.all_identifiers.freeze
@@ -204,7 +204,7 @@ class User < ApplicationRecord
   # Accounts whose deletion window has ended, including a purge that stopped
   # half-way and must resume (docs/dev/ACCOUNT.md).
   scope :deletion_due, ->(now = Time.current) { where(deletion_scheduled_at: ..now) }
-  # The accounts name search and suggestions may return (PLAN_PEOPLE.md §2).
+  # The accounts name search and suggestions may return (docs/dev/PEOPLE.md).
   # A deactivated account is never discoverable, whatever its setting says.
   scope :discoverable, -> { where(discoverable: "members", suspended_at: nil, deletion_scheduled_at: nil) }
 
@@ -232,7 +232,7 @@ class User < ApplicationRecord
   # webhook, synchronisation or automatic publication.
   def deactivated? = suspended? || deletion_scheduled?
 
-  # Found by name search and suggestions (PLAN_PEOPLE.md §2). The setting alone
+  # Found by name search and suggestions (docs/dev/PEOPLE.md). The setting alone
   # is not enough: a deactivated account never appears.
   def discoverable? = discoverable == "members" && !deactivated?
 
