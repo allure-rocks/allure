@@ -61,6 +61,10 @@ source and the course terrain.
 `docs/dev/DERIVATIONS.md` is the derived-data contract: the derivation map, the
 generation markers, the sweeps and the owner-scoped rebuilds.
 
+`docs/dev/HEART-RATE.md` is the heart-rate contract: the profile, the zones,
+the histogram, the training load, the zone distribution and the privacy
+boundary.
+
 `docs/dev/REMOTE-IMPORTS.md` is the remote-imports contract: the provider
 registry, the connection model, the adapter contract, the batch job, the shared
 lifecycle and the provider capabilities. The detailed sign-in and operational
@@ -178,7 +182,7 @@ behaviours updates its page in every language in the same patch.
   each derived dataset carries its own version or status marker, and none of it
   enters a publication snapshot unless its profile setting says so.
   [docs/dev/ELEVATION.md](docs/dev/ELEVATION.md) `[devdoc:weather]`
-  `[devdoc:heart-rate]` `[devdoc:photos]`
+  [docs/dev/HEART-RATE.md](docs/dev/HEART-RATE.md) `[devdoc:photos]`
 - **Virtual platforms and positionless recordings.**
   `Allure::Virtual::Platforms` names a platform from the FIT `file_id`; a
   virtual world's map image is drawn instead of the basemap and its attribution

@@ -330,7 +330,7 @@ that boundary and are deleted with the workout.
   a selected lap, and "save this climb as a segment".
 - Cadence-block detection and configurable thresholds (FTP, HR zones).
   Heart-rate zones exist as a per-workout « Zones cardiaques » tab
-  (`[devdoc:heart-rate]`); zone-driven detected intervals stay out of scope.
+  ([HEART-RATE.md](HEART-RATE.md)); zone-driven detected intervals stay out of scope.
 - The legacy loop fallback (`Workout#loop_efforts` and the old
   recorded-else-loop table) was removed; loop efforts now reach the page only
   as detected laps.
