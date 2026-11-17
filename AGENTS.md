@@ -70,6 +70,9 @@ persistence, the skipped derivations and the publication refusal.
 two-level opt-in, the sampling and profile, the device totals, the per-workout
 source and the course terrain.
 
+`docs/dev/WEATHER.md` is the weather contract: the provider, the hourly series
+and the wind exposure, the publication summary and the device temperature.
+
 `docs/dev/DERIVATIONS.md` is the derived-data contract: the derivation map, the
 generation markers, the sweeps and the owner-scoped rebuilds.
 
@@ -202,7 +205,8 @@ behaviours updates its page in every language in the same patch.
   with stripped derivatives and placement, and geocoded places. Each is opt-in,
   each derived dataset carries its own version or status marker, and none of it
   enters a publication snapshot unless its profile setting says so.
-  [docs/dev/ELEVATION.md](docs/dev/ELEVATION.md) `[devdoc:weather]`
+  [docs/dev/ELEVATION.md](docs/dev/ELEVATION.md)
+  [docs/dev/WEATHER.md](docs/dev/WEATHER.md)
   [docs/dev/HEART-RATE.md](docs/dev/HEART-RATE.md)
   [docs/dev/PHOTOS.md](docs/dev/PHOTOS.md)
 - **Virtual platforms and positionless recordings.**

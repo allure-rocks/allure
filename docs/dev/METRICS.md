@@ -167,7 +167,7 @@ never the body.
 | `allure_photos` | gauge | `status` | owner photos: `processing`, `ready`, `failed` (`PHOTOS.md`) |
 | `allure_photo_bytes` | gauge | — | owner photo originals and derivatives, including bytes reserved by processing uploads |
 | `allure_account_deletions_scheduled` | gauge | — | accounts in their deletion window or purge (`ACCOUNT.md`) |
-| `allure_workout_weathers` | gauge | `status` | workout weather rows: `pending`, `ready`, `unavailable`, `failed` (`[devdoc:weather]`) |
+| `allure_workout_weathers` | gauge | `status` | workout weather rows: `pending`, `ready`, `unavailable`, `failed` ([WEATHER.md](WEATHER.md)) |
 | `allure_weather_requests_total` | counter | `endpoint`, `result` | Open-Meteo requests: `endpoint` `forecast` or `archive`; `result` `ok`, `unavailable` (429, 5xx or no answer, retried) or `rejected` |
 | `allure_push_deliveries_total` | counter | `result` | pushes sent to the relay: `delivered`, `gone` (404/410, subscription deleted), `rejected` (another 4xx, or a relay no longer listed), `failed` (429, 5xx or no answer, retried) |
 | `allure_storage_blobs` | gauge | — | Active Storage blobs |

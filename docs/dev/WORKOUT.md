@@ -336,7 +336,7 @@ Rules:
 | `hr` | heart rate, omitted when unavailable or non-positive (strap dropout) |
 | `cad` | source cadence, omitted when unavailable |
 | `pw` | power, omitted when unavailable |
-| `temp` | the device's air temperature in whole °C (FIT `record.temperature`, GPX `atemp`), omitted when unavailable or outside −60…70 (`[devdoc:weather]`) |
+| `temp` | the device's air temperature in whole °C (FIT `record.temperature`, GPX `atemp`), omitted when unavailable or outside −60…70 ([WEATHER.md](WEATHER.md)) |
 
 Only `Allure::Gpx::PointSerializer` writes this shape. Define key constants near
 the serializer and use them in chart extraction. `d` and `ele` round to one

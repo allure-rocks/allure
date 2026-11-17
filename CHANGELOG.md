@@ -930,7 +930,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Historical weather along outdoor workouts (`[devdoc:weather]`), from
+- Historical weather along outdoor workouts ([WEATHER.md](docs/dev/WEATHER.md)), from
   Open-Meteo.
   - **Opt-in:** offered while `WEATHER_ENABLED` is set (with optional
     `WEATHER_*` tuning, see `.env.example`), and fetched only for an account
