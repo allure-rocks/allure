@@ -112,7 +112,7 @@ module AllureMcp
             places: Array(workout.places).filter_map { it["name"] if it.is_a?(Hash) },
             # `credit`: another account recorded it; metrics only, no track
             # (docs/dev/SHARED-ACTIVITIES.md). `manual`: typed in by hand, no track
-            # and no sensor series (PLAN_MANUAL_ENTRY.md §8).
+            # and no sensor series (docs/dev/MANUAL-ENTRY.md).
             origin: workout.origin
           }
         end

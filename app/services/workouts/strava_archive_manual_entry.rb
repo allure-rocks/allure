@@ -3,7 +3,7 @@
 module Workouts
   # An archive row without a file — an activity typed in by hand on Strava —
   # becomes a manual entry (PLAN_STRAVA_ARCHIVE.md §11, slice 2;
-  # PLAN_MANUAL_ENTRY.md) through `Workouts::ManualEntry`, the single write
+  # docs/dev/MANUAL-ENTRY.md) through `Workouts::ManualEntry`, the single write
   # seam. The start comes from the localized `Activity Date` (UTC), the
   # figures from the row's SI block. A figure a manual entry would refuse
   # (outside `Workout::MANUAL_LIMITS`, an ascent for a sport that measures

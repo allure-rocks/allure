@@ -41,7 +41,7 @@
           <% if bulk_enabled %>
             <td class="allure-bulk-cell d-none d-lg-table-cell">
               <%# A credit row is not selectable (docs/dev/SHARED-ACTIVITIES.md); a
-                  manual entry is (PLAN_MANUAL_ENTRY.md §6). %>
+                  manual entry is (docs/dev/MANUAL-ENTRY.md). %>
               <% if workout.authored? %>
                 <input type="checkbox" class="form-check-input m-0 allure-bulk-check" form="workout-bulk-form"
                        name="workout_ids[]" value="<%= workout.to_param %>"

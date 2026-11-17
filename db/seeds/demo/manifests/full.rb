@@ -78,7 +78,7 @@ module DemoSeed
               title: "Argentière – Lac Blanc", description: "Montée directe au lac, descente par les Chéserys.",
               equipment: [ "Hoka Speedgoat" ], publish: :public }
           ],
-          # Typed in by hand (PLAN_MANUAL_ENTRY.md): a gym session and a run
+          # Typed in by hand (docs/dev/MANUAL-ENTRY.md): a gym session and a run
           # the watch missed. They count in the totals and the shoes' wear,
           # never in the records.
           manual_workouts: [

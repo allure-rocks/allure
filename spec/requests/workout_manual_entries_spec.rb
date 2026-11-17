@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The manual import source (PLAN_MANUAL_ENTRY.md): a workout typed in from the
+# The manual import source (docs/dev/MANUAL-ENTRY.md): a workout typed in from the
 # import page, shown and edited by its owner, never published.
 RSpec.describe "Manual entries" do
   let(:owner) { create(:user, time_zone: "Europe/Paris") }

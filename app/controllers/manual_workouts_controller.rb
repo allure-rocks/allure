@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The manual import source (PLAN_MANUAL_ENTRY.md §5): a workout typed in from
+# The manual import source (docs/dev/MANUAL-ENTRY.md): a workout typed in from
 # the import page's « Saisie manuelle » panel. A refused form returns to that
 # panel with what was typed; editing an entry goes through the workout's own
 # edit page (WorkoutsController).

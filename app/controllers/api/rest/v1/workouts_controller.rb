@@ -19,7 +19,7 @@ module Api
         BOOLEANS = { "true" => true, "false" => false }.freeze
         EDITABLE = %w[title description notes sport commute equipment_ids].freeze
         TEXT_FIELDS = %w[title description notes].freeze
-        # The figures of a manual entry (PLAN_MANUAL_ENTRY.md §8), named as the
+        # The figures of a manual entry (docs/dev/MANUAL-ENTRY.md), named as the
         # representation names them, with the column each one writes. A
         # recording's figures are measured from its file and never written.
         MANUAL_FIELDS = {
@@ -72,7 +72,7 @@ module Api
                     disposition: "attachment"
         end
 
-        # A manual entry (PLAN_MANUAL_ENTRY.md §8): the web's « Saisie
+        # A manual entry (docs/dev/MANUAL-ENTRY.md): the web's « Saisie
         # manuelle » form, in SI units. Files go through /imports.
         def create
           body = request.request_parameters

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# A workout typed in by hand (PLAN_MANUAL_ENTRY.md): no file, no geometry,
+# A workout typed in by hand (docs/dev/MANUAL-ENTRY.md): no file, no geometry,
 # only the declared figures and what follows from them.
 RSpec.describe Workouts::ManualEntry do
   let(:user) { create(:user) }

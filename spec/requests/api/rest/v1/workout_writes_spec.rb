@@ -92,7 +92,7 @@ RSpec.describe "REST API workout writes (docs/dev/API.md)", type: :request do
     end
   end
 
-  describe "POST /workouts (PLAN_MANUAL_ENTRY.md §8)" do
+  describe "POST /workouts (docs/dev/MANUAL-ENTRY.md)" do
     let(:body) do
       { sport: "running", started_at: "2026-10-17T07:30:00+02:00", elapsed_time: 2730, distance: 8500,
         ascent: 120, average_heart_rate: 145, max_heart_rate: 170, title: "Footing sans montre" }

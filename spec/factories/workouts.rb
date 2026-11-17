@@ -59,7 +59,7 @@ FactoryBot.define do
       max_elevation { nil }
     end
 
-    # A workout typed in by hand (PLAN_MANUAL_ENTRY.md §3): the declared
+    # A workout typed in by hand (docs/dev/MANUAL-ENTRY.md): the declared
     # figures only, no location, no file, nothing an analysis derives.
     trait :manual do
       origin { "manual" }

@@ -127,7 +127,7 @@ Rails.application.routes.draw do
   patch "/workouts/bulk/:id", to: "workout_bulk_operations#update"
   get "/workouts/bulk/:id/status", to: "workout_bulk_operations#status", as: :status_workout_bulk_operation
   post "/workouts/bulk/:id/cancel", to: "workout_bulk_operations#cancel", as: :cancel_workout_bulk_operation
-  # A workout typed in by hand from the import page (PLAN_MANUAL_ENTRY.md §5);
+  # A workout typed in by hand from the import page (docs/dev/MANUAL-ENTRY.md);
   # it is edited through the workout's own edit page.
   post "/workouts/manual", to: "manual_workouts#create", as: :manual_workouts
   # The M1 single-file import page merged into the one import surface

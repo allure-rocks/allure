@@ -33,7 +33,7 @@ module DemoSeed
             { key: :hike, title: "Randonnée", description: "Exemple importé depuis les fichiers de test FIT pour le développement local.",
               file: "Activity/2023/Activity_20230610_017_003_Hiking_Trail_Suunto-Vertical_d149673ba8d0667bef7a9fb68d91925d.fit" }
           ],
-          # A workout typed in by hand (PLAN_MANUAL_ENTRY.md).
+          # A workout typed in by hand (docs/dev/MANUAL-ENTRY.md).
           manual_workouts: [
             { key: :gym, sport: "strength_training", title: "Renforcement", started_at: "2026-02-16T18:30",
               duration: 2700, average_heart_rate: 115, calories: 290 }

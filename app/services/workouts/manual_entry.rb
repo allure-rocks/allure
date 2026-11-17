@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Creates and edits a manual entry (PLAN_MANUAL_ENTRY.md): a workout its
+  # Creates and edits a manual entry (docs/dev/MANUAL-ENTRY.md): a workout its
   # owner typed in, with no file, no geometry and nothing derived from a track.
   # The figures arrive in SI, as persisted; the web form and the REST API each
   # convert their own input first. What a recording's analysis would derive

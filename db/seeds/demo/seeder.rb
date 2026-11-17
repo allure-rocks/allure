@@ -241,7 +241,7 @@ module DemoSeed
       end
     end
 
-    # The figures a manual entry declares (PLAN_MANUAL_ENTRY.md §3), in SI as
+    # The figures a manual entry declares (docs/dev/MANUAL-ENTRY.md), in SI as
     # Workouts::ManualEntry takes them.
     MANUAL_FIGURES = %i[duration moving_time distance ascent average_heart_rate max_heart_rate calories average_power].freeze
 
