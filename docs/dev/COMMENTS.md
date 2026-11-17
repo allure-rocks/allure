@@ -824,7 +824,7 @@ recipients and the withdrawal. Withdrawn by `Comments::Delete`,
 sweeps. Per-account switch `users.notify_comments`, on by default, added to
 `Notifications::Create::PREFERENCES`, the settings form and its permit list,
 `Notification::KINDS`, the `notifications_kind` check, and the notifications
-contract (`[devdoc:notifications]`) in the same patch.
+contract ([NOTIFICATIONS.md](NOTIFICATIONS.md)) in the same patch.
 
 ## 11. Surfaces
 
