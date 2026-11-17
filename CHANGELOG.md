@@ -152,7 +152,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   when the selected profile shares photos, and says so otherwise. Uploads get a
   translated picker and drop zone, answer size, type and slot refusals before
   sending, and refresh without interrupting an open viewer or a caption being
-  typed (`DESIGN.md` §10.22, `[devdoc:photos]`).
+  typed (`DESIGN.md` §10.22, [PHOTOS.md](docs/dev/PHOTOS.md)).
 
 ## [0.9.8] - 2026-11-07
 

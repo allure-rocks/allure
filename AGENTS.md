@@ -68,6 +68,10 @@ generation markers, the sweeps and the owner-scoped rebuilds.
 the histogram, the training load, the zone distribution and the privacy
 boundary.
 
+`docs/dev/PHOTOS.md` is the photos contract: the owner's photos, the quota,
+the placement along the route, the frozen publication copies and the
+programmatic surfaces.
+
 `docs/dev/REMOTE-IMPORTS.md` is the remote-imports contract: the provider
 registry, the connection model, the adapter contract, the batch job, the shared
 lifecycle and the provider capabilities. The detailed sign-in and operational
@@ -185,7 +189,8 @@ behaviours updates its page in every language in the same patch.
   each derived dataset carries its own version or status marker, and none of it
   enters a publication snapshot unless its profile setting says so.
   [docs/dev/ELEVATION.md](docs/dev/ELEVATION.md) `[devdoc:weather]`
-  [docs/dev/HEART-RATE.md](docs/dev/HEART-RATE.md) `[devdoc:photos]`
+  [docs/dev/HEART-RATE.md](docs/dev/HEART-RATE.md)
+  [docs/dev/PHOTOS.md](docs/dev/PHOTOS.md)
 - **Virtual platforms and positionless recordings.**
   `Allure::Virtual::Platforms` names a platform from the FIT `file_id`; a
   virtual world's map image is drawn instead of the basemap and its attribution
