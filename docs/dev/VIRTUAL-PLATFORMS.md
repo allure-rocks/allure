@@ -173,7 +173,7 @@ comes from the file's fingerprint, not from a user choice.
 
 The facts of a workout — recording device, re-detectable sport, virtual venue —
 are one phase of the unified rebuild sweep, not a dedicated backfill
-(`[devdoc:derivations]`). `Workouts::RebuildJob` parses the immutable original
+([DERIVATIONS.md](DERIVATIONS.md)). `Workouts::RebuildJob` parses the immutable original
 once through `Workouts::OriginalTrack` and reconciles, fail-closed:
 
 - `workouts.source` is filled when empty, or replaced when it is one of the

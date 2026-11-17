@@ -87,7 +87,7 @@ history being imported.
 ## 4. Readiness
 
 `Workouts::AutoPublicationReadiness` waits for every enrichment the import
-started, each read from its own derivation marker (`[devdoc:derivations]`):
+started, each read from its own derivation marker ([DERIVATIONS.md](DERIVATIONS.md)):
 
 - **elevation** — `workouts.elevation_source_requested` is blank. The importer
   records `dem` when it enqueues terrain elevation; applying it (`Reanalyzer`)

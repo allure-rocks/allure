@@ -2139,7 +2139,7 @@ migration (`db:migrate`, applied on boot).
   "all sports" when the recordings disagree. `Segments::BackfillLoopReuseJob`
   converges already-duplicated loops onto the oldest one, audited at
   `/admin/jobs` and available per account at `/settings/data`
-  ([SEGMENTS.md](docs/dev/SEGMENTS.md), `[devdoc:derivations]`).
+  ([SEGMENTS.md](docs/dev/SEGMENTS.md), [DERIVATIONS.md](docs/dev/DERIVATIONS.md)).
 
 ## [0.3.7] - 2026-10-01
 
@@ -2218,7 +2218,7 @@ migration (`db:migrate`, applied on boot).
   the workout's place through the venue catalog, and a virtual sport is never
   reverse-geocoded; the unambiguous FIT `fitness_equipment` indoor sub-sports
   now resolve to their virtual sports ([VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)).
-- Derived data has one rebuild model (`[devdoc:derivations]`): the new owner
+- Derived data has one rebuild model ([DERIVATIONS.md](docs/dev/DERIVATIONS.md)): the new owner
   page `/settings/data` and the administration console launch owner-scoped or
   instance-wide rebuilds — one file parse reconciles the import facts (device,
   re-detectable sport, virtual venue) and the analysis, route images are

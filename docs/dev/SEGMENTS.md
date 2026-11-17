@@ -427,7 +427,7 @@ keeps one name, one owner image and one effort history; the sport widens to
 recording whose detection/reuse generation is old, including recordings with
 no detected loop, so new discovery also reaches previously missed circuits and
 legacy duplicates converge onto the renamed loop when one exists, otherwise
-onto the oldest segment (`[devdoc:derivations]`). A loop the owner renamed is
+onto the oldest segment ([DERIVATIONS.md](DERIVATIONS.md)). A loop the owner renamed is
 never a disposable derived row: the sweep never removes it, and only the owner
 deletes it. The rename mark is only ever set by an explicit rename; a stored
 name cannot tell an auto-generated "<title> loop" from an owner's choice.
@@ -500,7 +500,7 @@ the existing history, through the audited `Segments::RouteSuggestionSweepJob`
 walks one account from its newest recording to its oldest, so the suggestion's
 reference — the geometry the route form uses — is the most recent occurrence.
 `workouts.route_suggestion_version` marks the recordings the detector has
-examined (`[devdoc:derivations]`).
+examined ([DERIVATIONS.md](DERIVATIONS.md)).
 
 The banner appears on the owner's page of every member of a pending suggestion
 (`DESIGN.md` §10.18): « Enregistrer en itinéraire » opens the ordinary route
@@ -643,7 +643,7 @@ from a road to the settlement around it. The midpoint leaves the instance only
 when the operator configured `GEOCODING_BASE_URL`, the same consent as workout
 toponymy. A virtual course is never geocoded. The place is local presentation:
 it never enters a publication, the course `Note` or the API. The markers and
-the sweeps are in `[devdoc:derivations]`.
+the sweeps are in [DERIVATIONS.md](DERIVATIONS.md).
 
 The viewer's standing lives on the course page: the detail page previews the
 board as the top 10 per sport under the Classements container — with a link to

@@ -565,7 +565,7 @@ twice.
   commit, bounded to the mutual-follow set) and via an audited backfill at
   `/admin/jobs` (`Together::BackfillDetectionJob` over the recordings whose
   `workouts.together_detection_version` is below the detector's version, which
-  every detection run stamps; `[devdoc:derivations]`).
+  every detection run stamps; [DERIVATIONS.md](DERIVATIONS.md)).
 - **Cost guardrail**: the detector stays linear in points with a sliding merge;
   no O(n²) scan of segments, one candidate pass per workout pair.
 - **Credit-to-link suggestion**: when the participant imports their own

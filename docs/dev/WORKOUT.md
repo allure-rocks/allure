@@ -787,7 +787,7 @@ and immutable publication snapshots.
 `Workouts::BackfillRebuildJob.perform_later` schedules all rows older than
 `Allure::Gpx::Analyzer::VERSION` or `Workouts::ImportDetection::VERSION` in
 bounded batches; each row advances versions only after successful persistence
-(`[devdoc:derivations]`). Start the rebuild sweep after deployment from the
+([DERIVATIONS.md](DERIVATIONS.md)). Start the rebuild sweep after deployment from the
 administration console (`/admin/jobs`, « Recalculer les activités ») or with:
 
 ```sh
@@ -886,7 +886,7 @@ The operator finds the image count and its audited sweep on `/admin/jobs`
 (« Régénérer les images »), and the owner on `/settings/data` or through the
 per-workout « Régénérer l'image » menu action. Publication images are snapshot
 media: they are rendered once before delivery and a visual change means
-republishing (`[devdoc:derivations]`).
+republishing ([DERIVATIONS.md](DERIVATIONS.md)).
 
 ## 9. HTTP surface
 
@@ -975,7 +975,7 @@ The owner's toponymy is served separately by `GET /workouts/:id/toponymy`, so
 polling while asynchronous enrichment runs never retransmits the 1,000-point
 chart response. It only reads: it never creates a row or schedules geocoding,
 and answers `unavailable` when no toponymy exists. Enrichment is scheduled on
-the server through `Workouts::ToponymyRefresh` (`[devdoc:derivations]`).
+the server through `Workouts::ToponymyRefresh` ([DERIVATIONS.md](DERIVATIONS.md)).
 Owner toponymy is not filtered by privacy zones; a publication derives and
 freezes a separate result from the already-filtered publication route. The
 response carries no coordinates, raw provider response or errors, and non-owner
