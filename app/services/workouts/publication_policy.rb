@@ -120,7 +120,7 @@ module Workouts
       when :gpx, :route_image
         attachment_allowed?(resource)
       when :photos
-        # The frozen photo copies (PLAN_PHOTOS.md §5.4): only what the
+        # The frozen photo copies (docs/dev/PHOTOS.md): only what the
         # snapshot shared, whatever the profile says today.
         @publication.profile_settings["photos"] == true && @publication.representation["photos"].is_a?(Array)
       else

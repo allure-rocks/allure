@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Which photos a publication freezes, and what of each (PLAN_PHOTOS.md
-  # §5.2). Pure decisions over the owner's rows; the copies are made by
+  # Which photos a publication freezes, and what of each
+  # (docs/dev/PHOTOS.md). Pure decisions over the owner's rows; the copies are made by
   # PublicationCandidate.
   #
   # A photo is sensitive when its placement or its EXIF position lies inside

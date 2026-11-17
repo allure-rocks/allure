@@ -23,7 +23,7 @@ module Allure
         raise Invalid, "unreadable" if image.get_typeof("n-pages").positive? && image.get("n-pages") > 1
 
         # Capture time and position are read before stripping, for the
-        # owner's placement only (PLAN_PHOTOS.md §3.2).
+        # owner's placement only (docs/dev/PHOTOS.md).
         exif = Exif.parse(exif_fields(image))
         image = image.autorot
         display = render(image, Config::DISPLAY_SIZE)
@@ -38,7 +38,7 @@ module Allure
 
       Copies = Data.define(:display, :thumbnail, :width, :height)
 
-      # A publication's own copies (PLAN_PHOTOS.md §5.3), from an already
+      # A publication's own copies (docs/dev/PHOTOS.md), from an already
       # stripped display file: bounded again and encoded without metadata.
       # The caller closes both tempfiles.
       def self.publication_copies(path)

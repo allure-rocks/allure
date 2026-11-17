@@ -475,7 +475,7 @@ class WorkoutsController < ApplicationController
     PublishingProfile.ensure_built_ins_for!(current_user)
   end
 
-  # The publish form's photo list (PLAN_PHOTOS.md §5.2): `photo_selection`
+  # The publish form's photo list (docs/dev/PHOTOS.md): `photo_selection`
   # marks that a list was shown, so an empty choice shares no photo; without
   # it the default selection applies.
   def photo_choice
@@ -499,7 +499,7 @@ class WorkoutsController < ApplicationController
         "shared" => helpers.publication_preview_fields(profile),
         "withheld" => helpers.publication_withheld_fields(profile),
         # The publish form shows its photo choice only for a profile that
-        # shares photos (PLAN_PHOTOS.md §5.2, DESIGN.md §19.35).
+        # shares photos (docs/dev/PHOTOS.md, DESIGN.md §19.35).
         "photos" => profile.settings["photos"] == true,
         "delay" => profile.publish_delay_seconds
       }

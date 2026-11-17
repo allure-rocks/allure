@@ -150,7 +150,7 @@ export default class extends Controller {
     celsiusUnit: String,
     fahrenheitUnit: String,
     anomalies: { type: Array, default: [] },
-    // The owner's placed photos (PLAN_PHOTOS.md §7): id, distance, label.
+    // The owner's placed photos (docs/dev/PHOTOS.md): id, distance, label.
     photos: { type: Array, default: [] },
   };
 

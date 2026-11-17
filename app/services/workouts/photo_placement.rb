@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Applies `Allure::Photos::Placement` to a workout's photos (PLAN_PHOTOS.md
-  # §4). Automatic placements (`exif`, `time`, `none`) are recomputed whenever
+  # Applies `Allure::Photos::Placement` to a workout's photos
+  # (docs/dev/PHOTOS.md). Automatic placements (`exif`, `time`, `none`) are recomputed whenever
   # the photo, the camera offset or the recording changes; the owner's own
   # choices (`manual`, `cleared`) are never overwritten.
   class PhotoPlacement
@@ -29,7 +29,7 @@ module Workouts
     end
 
     # Why an automatic placement found nothing, for the owner's page
-    # (PLAN_PHOTOS.md §4). Nil for a photo that is placed, still processing, or
+    # (docs/dev/PHOTOS.md). Nil for a photo that is placed, still processing, or
     # whose sources left no clue at all.
     def diagnose(photo)
       return unless photo.ready? && photo.location_source == "none"

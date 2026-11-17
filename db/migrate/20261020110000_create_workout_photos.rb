@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Photos on workouts (PLAN_PHOTOS.md §2): one row per photo, its original kept
+# Photos on workouts (docs/dev/PHOTOS.md): one row per photo, its original kept
 # for the owner and two stripped WebP derivatives attached through Active
 # Storage, the camera's wall clock and position read from EXIF, and the bytes
 # the account's photo quota counts. The gallery order is unique per workout

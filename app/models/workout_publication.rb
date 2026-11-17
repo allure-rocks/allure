@@ -42,7 +42,7 @@ class WorkoutPublication < ApplicationRecord
            inverse_of: :workout_publication,
            dependent: :restrict_with_exception
 
-  # The photos frozen at publish time (PLAN_PHOTOS.md §5.3).
+  # The photos frozen at publish time (docs/dev/PHOTOS.md).
   has_many :photos, -> { order(:position) }, class_name: "WorkoutPublicationPhoto",
                                               inverse_of: :workout_publication, dependent: :destroy
   has_one_attached :gpx, dependent: :purge_later
@@ -380,7 +380,7 @@ class WorkoutPublication < ApplicationRecord
 
   PHOTO_KEYS = %w[id width height caption distance].freeze
 
-  # The frozen photos (PLAN_PHOTOS.md §5.3): an identifier, dimensions, an
+  # The frozen photos (docs/dev/PHOTOS.md): an identifier, dimensions, an
   # optional caption and an optional distance along the published route —
   # never a coordinate, a capture time or any EXIF field.
   def validate_photos(photos)

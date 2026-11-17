@@ -16,7 +16,7 @@ module Workouts
   #
   # - photos: no photo of the workout is still being processed, so an
   #   automatic publication takes every photo uploaded in time
-  #   (PLAN_PHOTOS.md §5.3).
+  #   (docs/dev/PHOTOS.md).
   #
   # A failed enrichment counts as settled: it will not improve by waiting.
   class AutoPublicationReadiness

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_PHOTOS.md §5: what a publication freezes of the owner's photos.
+# docs/dev/PHOTOS.md: what a publication freezes of the owner's photos.
 RSpec.describe "Publishing workout photos" do
   let(:user) { create(:user) }
   let(:workout) { create(:workout, user:) }

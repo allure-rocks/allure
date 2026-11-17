@@ -48,7 +48,7 @@ module Workouts
       mark_failed(photo, "processing_error")
     ensure
       blobs&.each { |blob| blob.purge unless blob.attachments.exists? }
-      # A waiting automatic publication waits for every photo (PLAN_PHOTOS.md §5.3).
+      # A waiting automatic publication waits for every photo (docs/dev/PHOTOS.md).
       nudge(photo)
     end
 
@@ -62,7 +62,7 @@ module Workouts
       Rails.error.report(error, handled: true, context: { component: self.class.name, photo_id: photo.id })
     end
 
-    # The gallery follows the capture time (PLAN_PHOTOS.md §2.1); ordering is
+    # The gallery follows the capture time (docs/dev/PHOTOS.md); ordering is
     # never a reason to fail a processed photo.
     def reorder(photo)
       PhotoOrder.new(workout: photo.workout).apply
