@@ -528,7 +528,7 @@ HTML.
 
 | Route | Purpose |
 |---|---|
-| `GET /people` | signed-in relationship hub: following, followers, incoming requests, outgoing pending, search (`[devdoc:people]`) |
+| `GET /people` | signed-in relationship hub: following, followers, incoming requests, outgoing pending, search ([PEOPLE.md](PEOPLE.md)) |
 | `GET /people/search` | name-search fragment over discoverable members and existing relationships |
 | `POST /people/resolve` | resolve `@user@domain` or actor URI, cache the actor, redirect to the remote profile |
 | `GET /@:handle` | remote profile when the handle contains `@`; local `/@:username` is unaffected |

@@ -186,7 +186,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Finding people is an opt-in, minimal name search (`[devdoc:people]`):
+- Finding people is an opt-in, minimal name search ([PEOPLE.md](docs/dev/PEOPLE.md)):
   `/people` becomes a tabbed relationship hub (following, followers,
   requests), a live prefix search covers discoverable members and the remote
   accounts you already have a relationship with, and up to five suggestions
