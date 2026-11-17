@@ -51,7 +51,7 @@ Two limits are deliberate and documented rather than incidental:
   inbound processing of the same; the comment object endpoint
   `GET /api/v1/comment/:id`.
 - The transport extension for *secondary publication events* (§9), shared
-  with the deferred `Invite` of `[devdoc:shared-activities]`.
+  with the deferred `Invite` of [`SHARED-ACTIVITIES.md`](SHARED-ACTIVITIES.md).
 - The `comment` notification kind.
 - Ring coverage in `dip fed_test` and `dip fed_restricted_test`.
 
@@ -729,7 +729,7 @@ Expander`, `Federation::Delivery::Deliver`, `Workouts::PublicationWithdrawal`
 and `Workouts::PublicationReplacement` assume that an event with a
 publication subject *is* the publication: its `object_uri` is the note's and
 its `Create` is the one that fans out. An owner's comment `Create`, an
-`Announce`, and the `Invite` of `[devdoc:shared-activities]` are **secondary**:
+`Announce`, and the `Invite` of [`SHARED-ACTIVITIES.md`](SHARED-ACTIVITIES.md) are **secondary**:
 publication subject, different `object_uri`. The extension is stated here so
 the two contracts share it:
 
@@ -1008,7 +1008,7 @@ never "the remote actor"; "envoyé", never "delivered as an activity".
 | Workout deletion | rows cascade; peers hide the thread with the note tombstone |
 | Profile change | future publications only, like every setting; the live switch is the owner's tool in between |
 | Account suspension (`/admin`) | nothing on rows; a suspended account cannot sign in to post |
-| Participations (`[devdoc:shared-activities]`) | no interaction: a participant comments like any member who sees the publication |
+| Participations ([`SHARED-ACTIVITIES.md`](SHARED-ACTIVITIES.md)) | no interaction: a participant comments like any member who sees the publication |
 | Reactions | independent rows; a comment never changes a count |
 
 ## 14. Tests
