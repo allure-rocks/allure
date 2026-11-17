@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_TOGETHER.md §9: the participation notices. The kind list is a checked
+# docs/dev/SHARED-ACTIVITIES.md: the participation notices. The kind list is a checked
 # constraint in the database (PLAN_NOTIFICATIONS.md §2), so the three kinds are
 # admitted here, not only in Notification::KINDS. The per-account preferences
 # follow the existing `notify_*` boolean column convention: one switch covers

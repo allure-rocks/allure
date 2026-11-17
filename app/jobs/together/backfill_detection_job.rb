@@ -2,7 +2,7 @@
 
 module Together
   # Bounded, resumable co-presence detection over the recordings the current
-  # detector has not compared yet (PLAN_TOGETHER.md §8, slice 3d), launched and
+  # detector has not compared yet (docs/dev/SHARED-ACTIVITIES.md), launched and
   # audited from /admin/jobs. Each recording is detected by its own job, which
   # stamps the version, so a rerun only finds what is left; a pair is
   # suggested once whichever side runs first.

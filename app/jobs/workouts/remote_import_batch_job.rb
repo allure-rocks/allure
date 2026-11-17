@@ -210,7 +210,7 @@ module Workouts
     # An activity recorded at the same moment already exists, imported some
     # other way (a file, another provider): it is not imported twice. A credit
     # row is not a recording, so the participant's own recording of a credited
-    # outing is still imported (PLAN_TOGETHER.md §6.6).
+    # outing is still imported (docs/dev/SHARED-ACTIVITIES.md).
     def near_duplicate(user, started_at)
       return nil unless started_at
 

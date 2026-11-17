@@ -44,7 +44,7 @@ FactoryBot.define do
       import_format { "fit" }
     end
 
-    # A participant's credit row (PLAN_TOGETHER.md §3.2): the credited metric
+    # A participant's credit row (docs/dev/SHARED-ACTIVITIES.md): the credited metric
     # set only, no location, no file, no device.
     trait :credit do
       origin { "credit" }

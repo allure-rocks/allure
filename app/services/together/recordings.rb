@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Together
-  # A workout as the co-presence detector reads it (PLAN_TOGETHER.md §8): its
+  # A workout as the co-presence detector reads it (docs/dev/SHARED-ACTIVITIES.md): its
   # stored points in time order and the facts that gate a match. Shared by
   # detection, the credit-to-link suggestion and the backfill.
   module Recordings

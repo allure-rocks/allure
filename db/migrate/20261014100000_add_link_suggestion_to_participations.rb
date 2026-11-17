@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_TOGETHER.md §8, slice 3c: when a credited participant imports their own
+# docs/dev/SHARED-ACTIVITIES.md: when a credited participant imports their own
 # recording of the same outing, detection suggests turning the credit into a
 # link. The suggestion lives on the participation (the recording it names,
 # nullified if that recording is deleted, and the participant's dismissal),

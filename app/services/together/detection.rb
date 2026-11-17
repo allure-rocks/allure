@@ -2,7 +2,7 @@
 
 module Together
   # Compares a recording with its candidates and suggests a link for each
-  # match (PLAN_TOGETHER.md §8). A suggestion is a pending `detection` link
+  # match (docs/dev/SHARED-ACTIVITIES.md). A suggestion is a pending `detection` link
   # that both accounts must confirm; both learn of it at once through the
   # same `participation_suggested` notice, which names the counterpart and
   # nothing else. A pair already known to a participation, in any state and
@@ -31,7 +31,7 @@ module Together
 
         suggest(@workout, other)
       end
-      # The generation marker the history backfill counts (§8, slice 3d).
+      # The generation marker the history backfill counts.
       @workout.update_columns(together_detection_version: Allure::Together::Detector::VERSION)
       suggested
     end

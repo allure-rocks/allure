@@ -7,7 +7,7 @@
 <div class="col-sm-6 col-lg-4<%= " col-xxl-3" if linked %>">
   <div class="card<%= " position-relative workout-card--linked" if linked %>">
     <%# A credit row has no image of its own: it shows its source's
-        publication image when the viewer may read it (PLAN_TOGETHER.md §10). %>
+        publication image when the viewer may read it (docs/dev/SHARED-ACTIVITIES.md). %>
     <% image_view = if owner_view
                       workout.credit? ? credit_source_display(workout) : nil
                     else

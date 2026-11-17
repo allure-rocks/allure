@@ -835,7 +835,7 @@ module WorkoutsHelper
     workout.average_power.present?
   end
 
-  # The credited metric set (PLAN_TOGETHER.md §4.1): the only metrics a
+  # The credited metric set (docs/dev/SHARED-ACTIVITIES.md): the only metrics a
   # participant ever reads from a source workout. Physiological channels,
   # calories, the device, the description, and the places never appear.
   PARTICIPANT_METRIC_KEYS = %i[

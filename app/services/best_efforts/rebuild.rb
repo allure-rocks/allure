@@ -55,7 +55,7 @@ module BestEfforts
 
     # A credit row is rebuilt from its source's points and anomalies, with the
     # participant as athlete; a detached one has no points left and keeps its
-    # frozen efforts (PLAN_TOGETHER.md §6.3).
+    # frozen efforts (docs/dev/SHARED-ACTIVITIES.md).
     def call
       track = @workout.track_workout
       return [] unless track

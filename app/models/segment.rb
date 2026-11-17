@@ -136,7 +136,7 @@ class Segment < ApplicationRecord
   # private course, which only its owner reads. A shared course shows each
   # viewer their own board's count instead (`Segments::Listing.participants_count`,
   # PLAN_SEGMENTS.md §8.2). A credited effort does not count: its athlete did
-  # not record the course (PLAN_TOGETHER.md §6.4).
+  # not record the course (docs/dev/SHARED-ACTIVITIES.md).
   def participants_count
     segment_efforts.joins(:workout).merge(Workout.recordings).distinct.count("segment_efforts.user_id")
   end

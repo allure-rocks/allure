@@ -2,7 +2,7 @@
 
 module Segments
   # The counters and personal-best flags a segment derives from its current
-  # efforts (PLAN_SEGMENTS.md, PLAN_TOGETHER.md §6.4). Run after any change to
+  # efforts (PLAN_SEGMENTS.md, docs/dev/SHARED-ACTIVITIES.md). Run after any change to
   # the effort set — a match, a released or dropped loop effort, a deleted
   # workout — so the stored figures never outlive the efforts they count.
   # Deterministic: a re-run is a no-op.
@@ -15,7 +15,7 @@ module Segments
 
     # The counters count recorded efforts only: a credited effort repeats a
     # traversal its source already counts, by an athlete who did not record
-    # it (PLAN_TOGETHER.md §6.4). Personal bests cover credited efforts too.
+    # it (docs/dev/SHARED-ACTIVITIES.md). Personal bests cover credited efforts too.
     #
     # The segment row is locked first, so two refreshes of one segment never
     # interleave their writes over its efforts. `FOR NO KEY UPDATE` leaves the

@@ -3,7 +3,7 @@
 module Federation
   module Inbox
     # Receives a remote owner's invitation to confirm taking part in a
-    # publication (PLAN_TOGETHER.md §7). It is addressed to one local account,
+    # publication (docs/dev/SHARED-ACTIVITIES.md). It is addressed to one local account,
     # which must hold the publication — an active received note by that owner
     # and an active entitlement, never a public note read by chance — and
     # still follow its owner, and it

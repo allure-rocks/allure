@@ -64,7 +64,7 @@ module Federation
 
       # An owner's comment, the host's relay of a comment, and an owner's
       # participation Invite ride on their publication without being it
-      # (PLAN_COMMENTS.md §9, PLAN_TOGETHER.md §7): a Create, an Announce or an
+      # (PLAN_COMMENTS.md §9, docs/dev/SHARED-ACTIVITIES.md): a Create, an Announce or an
       # Invite reaches only an instance that holds, or is being sent, the
       # publication, and still passes the publication's rules; a Delete
       # follows its own Create and an Undo the activity it undoes, like any

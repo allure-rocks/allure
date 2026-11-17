@@ -147,7 +147,7 @@ module Webhooks
 
     # A participation on a local workout names that workout; an invitation
     # received from another instance names the received note it is about
-    # (PLAN_TOGETHER.md §7), and is always a credit.
+    # (docs/dev/SHARED-ACTIVITIES.md), and is always a credit.
     def participation_data(subject, author)
       id = Allure::ShortId.encode(subject.uuid)
       if subject.is_a?(RemoteParticipation)

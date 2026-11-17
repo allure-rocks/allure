@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# A remote invitation as the owner's instance sends it (PLAN_TOGETHER.md §7):
+# A remote invitation as the owner's instance sends it (docs/dev/SHARED-ACTIVITIES.md):
 # only to an account that holds the workout's publication and follows the
 # owner, only when the publication shares the credited figures, as an Invite
 # addressed to that account alone, riding on the publication.

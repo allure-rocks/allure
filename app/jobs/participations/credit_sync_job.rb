@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Participations
-  # Follows a source's changes on its attached credit rows (PLAN_TOGETHER.md
-  # §6.2): an edit, a re-analysis, a sport change, a climb rebuild. One run at
+  # Follows a source's changes on its attached credit rows
+  # (docs/dev/SHARED-ACTIVITIES.md): an edit, a re-analysis, a sport change, a climb rebuild. One run at
   # a time per source.
   class CreditSyncJob < ApplicationJob
     queue_as :default

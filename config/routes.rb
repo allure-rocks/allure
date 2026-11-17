@@ -181,7 +181,7 @@ Rails.application.routes.draw do
     # The local reaction gesture (PLAN_REACTIONS.md §4.4): one PUT toggles the
     # viewer's reaction on the active publication.
     resource :reaction, only: :update, controller: "workout_reactions"
-    # Shared activities (PLAN_TOGETHER.md): the owner invites, the participant
+    # Shared activities (docs/dev/SHARED-ACTIVITIES.md): the owner invites, the participant
     # answers or later links their own recording, either party withdraws.
     resources :participations, only: %i[create update destroy], controller: "workout_participations" do
       patch :convert, on: :member
@@ -485,7 +485,7 @@ Rails.application.routes.draw do
   get "/remote_notes/:id/chart", to: "remote_note_charts#show", as: :remote_note_chart
   get "/remote_notes/:id", to: "remote_notes#show", as: :remote_note
   # The invited account's answer to another instance's invitation
-  # (PLAN_TOGETHER.md §7).
+  # (docs/dev/SHARED-ACTIVITIES.md).
   resources :remote_participations, only: :update
   # The local reaction gesture on a received note (PLAN_REACTIONS.md §4.4).
   put "/remote_notes/:id/reaction", to: "remote_note_reactions#update", as: :remote_note_reaction

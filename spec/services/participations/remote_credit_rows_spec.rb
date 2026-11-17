@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_TOGETHER.md §7, slice 4c: a confirmed invitation from another
+# docs/dev/SHARED-ACTIVITIES.md: a confirmed invitation from another
 # instance counts for the account through a credit row built from the
 # received note's figures, removed with the participation, detached and kept
 # when the note is deleted, re-attached for the republished outing.

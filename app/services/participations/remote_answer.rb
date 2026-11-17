@@ -2,7 +2,7 @@
 
 module Participations
   # A local account's answer to an invitation from another instance
-  # (PLAN_TOGETHER.md §7): confirm or decline while it is pending, sending
+  # (docs/dev/SHARED-ACTIVITIES.md): confirm or decline while it is pending, sending
   # the owner an `Accept` or a `Reject` of the Invite, or later withdraw a
   # confirmation with an `Undo` of that `Accept`. A refusal is terminal. The
   # answer commits with its outbox intent; expansion runs after commit.

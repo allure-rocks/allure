@@ -2,7 +2,7 @@
 
 module Allure
   module Together
-    # Which sports two co-present recordings may carry (PLAN_TOGETHER.md §8).
+    # Which sports two co-present recordings may carry (docs/dev/SHARED-ACTIVITIES.md).
     # Two devices on the same outing often disagree on the variant (a road
     # ride against a generic ride, a trail run against a run), so detection
     # compares curated families rather than slugs. The families are the

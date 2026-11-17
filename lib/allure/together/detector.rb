@@ -3,7 +3,7 @@
 module Allure
   module Together
     # Decides whether two recordings are the same outing done together
-    # (PLAN_TOGETHER.md §8): compatible sports, no commute, recording windows
+    # (docs/dev/SHARED-ACTIVITIES.md): compatible sports, no commute, recording windows
     # that overlap enough, and, sampled along the shared window, both athletes
     # at the same place at the same moment most of the time. Pure and linear:
     # each recording is walked once by a forward cursor.

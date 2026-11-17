@@ -234,7 +234,7 @@ module Admin
     end
 
     # Compares every recording the current detector has not seen with its
-    # owner's partners on the same outing (PLAN_TOGETHER.md §8). Suggestions
+    # owner's partners on the same outing (docs/dev/SHARED-ACTIVITIES.md). Suggestions
     # for old outings reach both accounts once.
     def backfill_together_detection
       count = Together::BackfillDetectionJob.pending_scope.count

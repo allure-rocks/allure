@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Participations
-  # An answer to a participation (PLAN_TOGETHER.md §5, §8). For an invitation
+  # An answer to a participation (docs/dev/SHARED-ACTIVITIES.md). For an invitation
   # the participant answers: confirming records the second confirmation, and
   # may turn the proposed credit into a link by naming their own recording.
   # For a detection both accounts answer, each for their own side; each
@@ -57,7 +57,7 @@ module Participations
       @participation.update!(attributes)
       Notifications::Withdraw.new(user: @user, subject: @participation, kind: "participation_suggested").call!
       notify_other_side(side)
-      # A confirmed credit gets its credit row (PLAN_TOGETHER.md §6.2).
+      # A confirmed credit gets its credit row (docs/dev/SHARED-ACTIVITIES.md).
       CreditJob.perform_later(@participation) if @participation.kind == "credit"
       @participation
     end

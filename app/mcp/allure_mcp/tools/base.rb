@@ -111,7 +111,7 @@ module AllureMcp
             average_power: workout.average_power,
             places: Array(workout.places).filter_map { it["name"] if it.is_a?(Hash) },
             # `credit`: another account recorded it; metrics only, no track
-            # (PLAN_TOGETHER.md §3.2). `manual`: typed in by hand, no track
+            # (docs/dev/SHARED-ACTIVITIES.md). `manual`: typed in by hand, no track
             # and no sensor series (PLAN_MANUAL_ENTRY.md §8).
             origin: workout.origin
           }

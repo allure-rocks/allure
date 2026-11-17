@@ -38,7 +38,7 @@ module Federation
         following.undo!
         withdraw_entitlements!(local_actor, target_actor)
         # Invitations from this owner end with the relationship; a
-        # confirmation taken back is told (PLAN_TOGETHER.md §7).
+        # confirmation taken back is told (docs/dev/SHARED-ACTIVITIES.md).
         participation_events = Participations::RemoteWithdrawal.for_pair!(
           recipient_actor: local_actor, origin_actor: target_actor, notify_origin: true
         )

@@ -74,7 +74,7 @@ module Api
 
         # A credit row names who recorded the outing and whether that
         # recording still exists, never the source's identifier
-        # (PLAN_TOGETHER.md §10).
+        # (docs/dev/SHARED-ACTIVITIES.md).
         def credit_facts
           return nil unless @workout.credit?
 

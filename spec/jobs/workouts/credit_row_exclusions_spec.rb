@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_TOGETHER.md §6.6: the sweeps that assume a track never pick a credit
+# docs/dev/SHARED-ACTIVITIES.md: the sweeps that assume a track never pick a credit
 # row, the participant's own recording of a credited outing is still
 # imported, and the instance counts an outing once.
 RSpec.describe "Credit row exclusions" do

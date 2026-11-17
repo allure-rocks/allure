@@ -74,7 +74,7 @@ module Segments
 
     # A detached credit row has no points left to match again, so its efforts
     # survive a matching change while the segment stays active and its sport
-    # still admits them (PLAN_TOGETHER.md §6.4). Read after the new attributes
+    # still admits them (docs/dev/SHARED-ACTIVITIES.md). Read after the new attributes
     # are assigned.
     def frozen_efforts
       return SegmentEffort.none unless @segment.active

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_TOGETHER.md §3.2: a confirmed credit gives the participant a credit row,
+# docs/dev/SHARED-ACTIVITIES.md: a confirmed credit gives the participant a credit row,
 # a workout of their own that carries only the credited metric set and no
 # geometry. The location and file columns become nullable for credit rows
 # only; the shape checks pin what each origin may and may not hold. The

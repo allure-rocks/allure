@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Shared activities (PLAN_TOGETHER.md §4/§5/§10, DESIGN.md §10.18): the owner
+# Shared activities (docs/dev/SHARED-ACTIVITIES.md, DESIGN.md §10.18): the owner
 # invites an accepted follow, the participant confirms or declines from the
 # metrics-only presentation, and everyone else gets a 404.
 RSpec.describe "Workout participations" do

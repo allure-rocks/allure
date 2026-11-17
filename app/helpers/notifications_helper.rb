@@ -169,7 +169,7 @@ module NotificationsHelper
     actor = notification.actor
     return t("notifications.kinds.#{notification.kind}_deleted") if actor_deleted?(actor)
     # An invitation received from another instance names its received note
-    # (PLAN_TOGETHER.md §7).
+    # (docs/dev/SHARED-ACTIVITIES.md).
     if participation.is_a?(RemoteParticipation) && participation.remote_note
       return t("notifications.kinds.#{notification.kind}", name: actor_name(actor), title: participation.remote_note.title)
     end

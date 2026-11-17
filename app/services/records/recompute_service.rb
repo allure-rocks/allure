@@ -81,7 +81,7 @@ module Records
     # laps are rebuilt asynchronously, so `Segments::MatchWorkoutJob` and
     # `Laps::BackfillJob` recompute records once the climbs are fresh. A credit
     # row competes with the single number it carries, `credited_max_climb`
-    # (PLAN_TOGETHER.md §6.3); ties go to the earlier workout.
+    # (docs/dev/SHARED-ACTIVITIES.md); ties go to the earlier workout.
     def recompute_max_climb
       if @sport.records_elevation
         candidates = [ recorded_max_climb, credited_max_climb ].compact

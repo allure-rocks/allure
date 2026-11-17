@@ -198,7 +198,7 @@ module Workouts
     end
 
     # A credit row is not a recording, so a credited outing does not stop the
-    # participant's own recording of it (PLAN_TOGETHER.md §6.6).
+    # participant's own recording of it (docs/dev/SHARED-ACTIVITIES.md).
     def near_duplicate(started_at)
       return nil unless @near_duplicate_window && started_at
 
@@ -410,7 +410,7 @@ module Workouts
       Rails.error.report(error, handled: true, context: { component: self.class.name, workout_id: workout.id })
     end
 
-    # Co-presence detection (PLAN_TOGETHER.md §8) reads only the stored points.
+    # Co-presence detection (docs/dev/SHARED-ACTIVITIES.md) reads only the stored points.
     def enqueue_together_detection(workout)
       Together::DetectWorkoutJob.perform_later(workout)
     rescue StandardError => error

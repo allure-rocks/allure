@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Presentation rules for shared activities (PLAN_TOGETHER.md, DESIGN.md §10.18).
+# Presentation rules for shared activities (docs/dev/SHARED-ACTIVITIES.md, DESIGN.md §10.18).
 # The card names accounts through the shared actor helpers and states the kind
 # and the state as badges; it never renders a location, a distance, or a score.
 module ParticipationsHelper
@@ -25,7 +25,7 @@ module ParticipationsHelper
   end
 
   # The viewer's open suggestions to link this recording to a credit
-  # (PLAN_TOGETHER.md §8), for the banner on the recording's own page.
+  # (docs/dev/SHARED-ACTIVITIES.md), for the banner on the recording's own page.
   def open_link_suggestions_for(recording)
     actor = current_user&.actor
     return [] unless actor && recording.recording? && recording.user_id == current_user.id
@@ -35,7 +35,7 @@ module ParticipationsHelper
       .includes(:workout, :suggested_workout).to_a
   end
 
-  # A detection still waiting for the given side's answer (PLAN_TOGETHER.md §8).
+  # A detection still waiting for the given side's answer (docs/dev/SHARED-ACTIVITIES.md).
   def participation_awaits_side?(participation, side)
     return false unless participation.origin == "detection" && participation.active?
 
@@ -49,7 +49,7 @@ module ParticipationsHelper
   end
 
   # A tombstoned participant renders as a deleted account, without a handle
-  # (PLAN_TOGETHER.md §3.1); the avatar falls back to generated art.
+  # (docs/dev/SHARED-ACTIVITIES.md); the avatar falls back to generated art.
   def participation_actor_name(actor)
     return t("workouts.participations.deleted_account") if actor_deleted?(actor)
 
@@ -68,14 +68,14 @@ module ParticipationsHelper
   end
 
   # A credit row names the account that recorded it; once its source is
-  # deleted, the badge says so (PLAN_TOGETHER.md §6.5, §10).
+  # deleted, the badge says so (docs/dev/SHARED-ACTIVITIES.md).
   def credit_badge_text(workout)
     name = participation_actor_name(workout.credited_by)
     workout.credit_detached? ? t("workouts.credit.badge_detached", name:) : t("workouts.participations.badge", name:)
   end
 
   # The source's publication as the viewer may read it, for a credit row's
-  # route image and map (PLAN_TOGETHER.md §10): never the source's own media.
+  # route image and map (docs/dev/SHARED-ACTIVITIES.md): never the source's own media.
   # A remote credit reads its received note instead (§7). Nil once detached
   # or when nothing serves the viewer.
   def credit_source_display(workout)
@@ -109,7 +109,7 @@ module ParticipationsHelper
   end
 
   # The viewer's recordings of the same outing the link picker offers
-  # (PLAN_TOGETHER.md §10): their own, starting within six hours of the
+  # (docs/dev/SHARED-ACTIVITIES.md): their own, starting within six hours of the
   # source, closest first.
   def participation_recording_candidates(participation)
     return [] unless current_user && participation
@@ -137,7 +137,7 @@ module ParticipationsHelper
   # single linked source, never to a profile. Lists that preloaded
   # `workout_participations` and `participant_links` are read without another
   # query. Participants are live state for the owner only: they never enter a
-  # publication (PLAN_TOGETHER.md).
+  # publication (docs/dev/SHARED-ACTIVITIES.md).
   def owner_together_badges(workout, fit: :auto)
     if workout.credit?
       source = workout.credited_from

@@ -111,7 +111,7 @@ module Federation
         following.pending? ? following.reject!(at: @now) : following.undo!(at: @now)
         withdraw_entitlements!(following)
         # The owner refused this account's follow: its invitations from that
-        # owner end, and a confirmation taken back is told (PLAN_TOGETHER.md §7).
+        # owner end, and a confirmation taken back is told (docs/dev/SHARED-ACTIVITIES.md).
         if following.follower_actor.local?
           @outbox_events.concat(Participations::RemoteWithdrawal.for_pair!(
             recipient_actor: following.follower_actor, origin_actor: following.followed_actor,
@@ -299,7 +299,7 @@ module Federation
       end
 
       # A remote owner invites a local account to confirm it took part in a
-      # publication it holds (PLAN_TOGETHER.md §7).
+      # publication it holds (docs/dev/SHARED-ACTIVITIES.md).
       def process_participation_invite
         Inbox::ParticipationInvite.new(item: @item, activity: @activity, now: @now).call!
       rescue Inbox::Rejected => error
@@ -307,7 +307,7 @@ module Federation
       end
 
       # An answer to, or a withdrawal of, a remote participation
-      # (PLAN_TOGETHER.md §7); false when the activity names none.
+      # (docs/dev/SHARED-ACTIVITIES.md); false when the activity names none.
       def participation_answered?(step)
         Inbox::ParticipationAnswer.new(item: @item, activity: @activity, now: @now).public_send(step)
       rescue Inbox::Rejected => error

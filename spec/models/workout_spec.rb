@@ -215,7 +215,7 @@ RSpec.describe Workout do
     end
   end
 
-  # PLAN_TOGETHER.md §3.2: a credit row holds the credited metric set only.
+  # docs/dev/SHARED-ACTIVITIES.md: a credit row holds the credited metric set only.
   describe "credit rows" do
     let(:credit) { create(:workout, :credit) }
 

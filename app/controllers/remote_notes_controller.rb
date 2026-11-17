@@ -28,7 +28,7 @@ class RemoteNotesController < ApplicationController
   private
 
   # An invitation from the note's owner to this account, pending or
-  # confirmed (PLAN_TOGETHER.md §7); a refused one is closed for good.
+  # confirmed (docs/dev/SHARED-ACTIVITIES.md); a refused one is closed for good.
   def remote_participation
     actor = current_user&.actor
     return unless actor

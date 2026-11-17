@@ -19,7 +19,7 @@ class Workout < ApplicationRecord
 
   # A recording comes from an imported file; a credit row stands for a
   # confirmed credit participation and carries only the credited metric set,
-  # no geometry (PLAN_TOGETHER.md §3.2); a manual entry carries the figures its
+  # no geometry (docs/dev/SHARED-ACTIVITIES.md); a manual entry carries the figures its
   # owner typed in, no file and no geometry (PLAN_MANUAL_ENTRY.md). Mirrors
   # workouts_origin.
   ORIGINS = %w[import credit manual].freeze
@@ -73,7 +73,7 @@ class Workout < ApplicationRecord
   # (PLAN_COMMENTS.md): it belongs to the workout, not to one publication
   # identity, so republishing keeps it.
   has_many :comments, inverse_of: :workout, dependent: :delete_all
-  # Confirmed shared activities (PLAN_TOGETHER.md). This workout is the source
+  # Confirmed shared activities (docs/dev/SHARED-ACTIVITIES.md). This workout is the source
   # of each row; `participant_links` are the rows where another account's
   # recording names this workout as its source. Never federated in v1.
   has_many :workout_participations, dependent: :destroy, inverse_of: :workout
@@ -141,14 +141,14 @@ class Workout < ApplicationRecord
   has_one_attached :original_file, dependent: :purge_later
   # A credit row's source while attached (the foreign key nullifies it when the
   # source is deleted) and the source's owner, kept after detachment for the
-  # « Avec @X » badge (PLAN_TOGETHER.md §3.2, §6.5).
+  # « Avec @X » badge (docs/dev/SHARED-ACTIVITIES.md).
   belongs_to :credited_from, class_name: "Workout", foreign_key: :credited_from_workout_id,
                              optional: true, inverse_of: :credit_rows
   belongs_to :credited_by, class_name: "Actor", foreign_key: :credited_by_actor_id, optional: true
   has_many :credit_rows, class_name: "Workout", foreign_key: :credited_from_workout_id,
                          inverse_of: :credited_from
   # A credit confirmed for an invitation from another instance: its figures
-  # come from the received note, it has no local source (PLAN_TOGETHER.md §7).
+  # come from the received note, it has no local source (docs/dev/SHARED-ACTIVITIES.md).
   belongs_to :remote_participation, optional: true, inverse_of: :credit_row
 
   validates :uuid, uniqueness: true, allow_nil: true
@@ -206,12 +206,12 @@ class Workout < ApplicationRecord
     where(id: WorkoutPublication.visible_to(user).select(:workout_id))
   }
   # Recordings whose recorded duration reaches the given moment, whatever
-  # their start (the co-presence window's overlap test, PLAN_TOGETHER.md).
+  # their start (the co-presence window's overlap test, docs/dev/SHARED-ACTIVITIES.md).
   scope :ending_at_or_after, ->(time) {
     where("workouts.started_at + make_interval(secs => workouts.duration) >= ?", time)
   }
   # Closest start first, the oldest row on a tie: the order the recording
-  # picker offers same-outing recordings in (PLAN_TOGETHER.md §10).
+  # picker offers same-outing recordings in (docs/dev/SHARED-ACTIVITIES.md).
   scope :ordered_by_start_proximity_to, ->(time) {
     order(
       Arel.sql(sanitize_sql_array([ "ABS(EXTRACT(EPOCH FROM (workouts.started_at - ?::timestamp)))", time ])),
@@ -235,11 +235,11 @@ class Workout < ApplicationRecord
   before_destroy :decrement_equipment_totals
   # The efforts cascade with the workout, so the segments they sat on are
   # captured first (prepended ahead of the `dependent: :destroy` callbacks) and
-  # refreshed after commit (PLAN_TOGETHER.md §6.4).
+  # refreshed after commit (docs/dev/SHARED-ACTIVITIES.md).
   before_destroy :capture_effort_segment_ids, prepend: true
   after_commit :refresh_effort_segments, on: :destroy
 
-  # Credit rows (PLAN_TOGETHER.md §6.2, §6.5). A source's change reaches its
+  # Credit rows (docs/dev/SHARED-ACTIVITIES.md). A source's change reaches its
   # attached credit rows; deleting a source detaches and keeps them; deleting
   # a credit row withdraws its participation so it is never recreated. Both
   # run ahead of the `dependent: :destroy` callbacks, while the
@@ -309,7 +309,7 @@ class Workout < ApplicationRecord
     credit? && (credit_detached_at.present? || (credited_from_workout_id.nil? && remote_participation_id.nil?))
   end
 
-  # A credit from another instance's publication (PLAN_TOGETHER.md §7).
+  # A credit from another instance's publication (docs/dev/SHARED-ACTIVITIES.md).
   def credit_remote? = credit? && remote_participation_id.present?
 
   # A positioned recording has geometry; a positionless one (PLAN_NO_GPS.md)
@@ -320,7 +320,7 @@ class Workout < ApplicationRecord
   # The workout whose stored points derive this one's best efforts and
   # segment efforts: itself for a recording, the source for an attached credit
   # row, nil for a detached one, whose derived rows are frozen
-  # (PLAN_TOGETHER.md §6.3).
+  # (docs/dev/SHARED-ACTIVITIES.md).
   def track_workout = recording? ? self : credited_from
 
   # The figures this workout may show at all. A positionless recording carries

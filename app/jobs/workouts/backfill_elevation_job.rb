@@ -14,7 +14,7 @@ module Workouts
 
     class << self
       # A credit row and a positionless recording have no track to sample
-      # (PLAN_TOGETHER.md §6.6, PLAN_NO_GPS.md §6).
+      # (docs/dev/SHARED-ACTIVITIES.md, PLAN_NO_GPS.md §6).
       def pending_scope
         Workout.positioned
           .where(recorded_elevation: false)

@@ -3,7 +3,7 @@
 module Federation
   module Outbox
     # The owner takes back an invitation sent to a remote account
-    # (PLAN_TOGETHER.md §7): an `Undo` of the Invite, sent exactly where the
+    # (docs/dev/SHARED-ACTIVITIES.md): an `Undo` of the Invite, sent exactly where the
     # Invite was attempted; deliveries never attempted are cancelled instead,
     # so an invitation that never left stays unsent. Like the comment relay's
     # withdrawal, it rides on the Invite's publication.
