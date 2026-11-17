@@ -56,7 +56,7 @@ x-app: &app
     AUTH_OIDC_REQUIRED_AMR: ${AUTH_OIDC_REQUIRED_AMR:-}
     # Prometheus /metrics bearer token. Unset disables the endpoint (404).
     METRICS_TOKEN: ${METRICS_TOKEN:-}
-    # Push notifications for the iOS companion (PLAN_PUSH.md §5). Off until
+    # Push notifications for the iOS companion (docs/dev/PUSH.md). Off until
     # the three VAPID values are set (`bin/rails push:vapid_keys`).
     VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
     VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}

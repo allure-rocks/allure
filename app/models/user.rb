@@ -85,7 +85,7 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_one_attached :gravatar_cache
   has_many :sessions, dependent: :destroy
-  # Each goes with its session (PLAN_PUSH.md §5), through the cascade.
+  # Each goes with its session (docs/dev/PUSH.md), through the cascade.
   has_many :push_subscriptions, dependent: :delete_all
   # Second factors (docs/dev/AUTH.md).
   encrypts :otp_secret

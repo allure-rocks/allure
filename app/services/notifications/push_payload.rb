@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Notifications
-  # The plaintext of one push (PLAN_PUSH.md §4): the inbox's own sentence in
+  # The plaintext of one push (docs/dev/PUSH.md): the inbox's own sentence in
   # the recipient's locale, or the generic copy when the device hides the
   # content, plus where it opens and the unread count. Never coordinates,
   # workout content beyond the title the inbox shows, or remote HTML. The

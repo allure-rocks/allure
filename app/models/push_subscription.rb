@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # The push subscription of one signed-in session on the iOS companion
-# (PLAN_PUSH.md §5). The endpoint is a relay URL listed in
+# (docs/dev/PUSH.md). The endpoint is a relay URL listed in
 # `PUSH_RELAY_ORIGINS` — the instance never posts a push anywhere else — and
 # `p256dh`/`auth` are the device's RFC 8291 keys the payload is encrypted for.
 # The row goes with its session through the foreign-key cascade.

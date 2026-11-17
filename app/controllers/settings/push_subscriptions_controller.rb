@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # The push subscription of the current session (PLAN_PUSH.md §5), written
+  # The push subscription of the current session (docs/dev/PUSH.md), written
   # by the « Sur cet iPhone » card from the companion's bridge answer. JSON
   # only; it never reaches another session's row, and it does not exist
   # while push is unconfigured.

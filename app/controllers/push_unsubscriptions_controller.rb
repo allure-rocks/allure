@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# `POST /push/unsubscribe` (PLAN_PUSH.md §5): the companion calls it natively
+# `POST /push/unsubscribe` (docs/dev/PUSH.md): the companion calls it natively
 # when it leaves this server, just before its web data is wiped, so it has no
 # session and no CSRF token. Knowing the device's `auth` secret is the proof.
 # The answer is 204 whether anything matched, so it reveals nothing.

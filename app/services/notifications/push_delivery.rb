@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Notifications
-  # Sends one encrypted payload to one push subscription (PLAN_PUSH.md §3.2,
+  # Sends one encrypted payload to one push subscription (docs/dev/PUSH.md,
   # §5). The body is encrypted for the device (RFC 8291, `aes128gcm`) and the
   # request signed for the relay (VAPID, RFC 8292) with the `web-push` gem's
   # primitives; the request itself goes through the federation client and its

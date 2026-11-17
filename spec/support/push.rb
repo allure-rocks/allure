@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Push notifications (PLAN_PUSH.md): a configured instance, a device key pair,
+# Push notifications (docs/dev/PUSH.md): a configured instance, a device key pair,
 # and the receiving side of RFC 8291 so a spec can read what the instance
 # actually posted to the relay.
 module PushHelpers
