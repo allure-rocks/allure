@@ -115,7 +115,7 @@ The row is created `processing` with its `original` attached, then
 `Workouts::PhotoProcessJob` is enqueued after commit.
 
 Remote import sources attach photos through the same intake: the Strava
-archive's `media/` photos (`[devdoc:strava-archive]`) and a virtual platform's
+archive's `media/` photos ([STRAVA-ARCHIVE.md](STRAVA-ARCHIVE.md)) and a virtual platform's
 activity snapshots (`REMOTE-IMPORTS.md`). They arrive unplaced, since the game
 writes no EXIF, and the owner places them from the map.
 

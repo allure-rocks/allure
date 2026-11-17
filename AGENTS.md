@@ -114,6 +114,9 @@ and the manual source.
 `docs/dev/MANUAL-ENTRY.md` is the manual-entry contract: the typed workout,
 its shape and validation, and what it counts for.
 
+`docs/dev/STRAVA-ARCHIVE.md` is the Strava archive contract: the source, the
+reading bounds, the sport mapping, the job and the archive's photos.
+
 `docs/dev/BULK-ACTIONS.md` is the bulk-actions contract: the selection, the
 quick actions and the reviewable background operations.
 
@@ -202,7 +205,7 @@ behaviours updates its page in every language in the same patch.
   and each appears only when its variable is set; the Strava archive source is
   always available. No health data is imported.
   [docs/dev/REMOTE-IMPORTS.md](docs/dev/REMOTE-IMPORTS.md)
-  `[devdoc:strava-archive]`
+  [docs/dev/STRAVA-ARCHIVE.md](docs/dev/STRAVA-ARCHIVE.md)
 - **API, webhooks, MCP.** A versioned REST API under `/api/rest/v1` (not
   `/api/v1`, which names the ActivityPub objects), scoped `ApiToken`s, RFC 9457
   problems, encrypted keyset cursors, rate limits, ETag and `Idempotency-Key`.
