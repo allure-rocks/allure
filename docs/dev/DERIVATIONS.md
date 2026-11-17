@@ -23,7 +23,7 @@ rebuilds are launched.
 
 The workout-side contracts are in `WORKOUT.md`, the course-side ones in
 `SEGMENTS.md`, the terrain profile in `ELEVATION.md`, the toponymy and places in
-`[devdoc:maps]`.
+[MAPS.md](MAPS.md).
 
 Publication route images are **not** in this table: a publication is an
 immutable snapshot, its image is rendered once before delivery, and changing it
@@ -81,7 +81,7 @@ the workout keeps showing up in the rebuild count instead of disappearing.
 - `segments.route_image_version` — the same marker for the owner image of a
   segment, route or loop, stamped by `Segments::RenderRouteImageJob` with
   `Segments::RouteImage::VERSION`, covering both variants. Course images are
-  always smoothed at the medium level (`[devdoc:maps]`) and live on the same
+  always smoothed at the medium level ([MAPS.md](MAPS.md)) and live on the same
   `route_images` worker; the marker is separate because the two rendered
   contracts change independently.
 - `workouts.loop_reuse_version` — stamped by `Segments::MatchWorkoutJob` with

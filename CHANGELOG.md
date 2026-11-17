@@ -2375,7 +2375,7 @@ migration (`db:migrate`, applied on boot).
   `/settings/appearance` (*Léger* / *Moyen* / *Fort*, default off at medium).
   Course (segment) maps and publication images are always smoothed at the
   medium level. Smoothing preserves the point count, so payloads, snapshots,
-  metrics, hover and the colour ramp are unchanged (`[devdoc:maps]`).
+  metrics, hover and the colour ramp are unchanged ([MAPS.md](docs/dev/MAPS.md)).
 - Rowing and virtual rowing display their pace over 500 m (`2:00 /500m`) in
   every tile, card, analysis table, leaderboard, record, stat and chart axis,
   in either unit system, instead of speed. Their fourth summary tile is average
@@ -2411,7 +2411,7 @@ migration (`db:migrate`, applied on boot).
   a wider track-coloured halo, one every 240 screen pixels — on the live map and
   every route PNG, replacing the filled notch shape. Each chevron is placed on
   the straightest candidate of its slot, so it never sits on a corner
-  (`DESIGN.md` §15.2/§15.4, `[devdoc:maps]`).
+  (`DESIGN.md` §15.2/§15.4, [MAPS.md](docs/dev/MAPS.md)).
 
 ## [0.3.2] - 2026-09-25
 
@@ -2478,7 +2478,7 @@ migration (`db:migrate`, applied on boot).
   feeds, publications, and received notes, including the raster and tile-less
   fallbacks. Direction comes from the geometry alone, so no track payload,
   snapshot, or federated representation changes (`DESIGN.md` §15.2/§15.4,
-  `[devdoc:maps]`).
+  [MAPS.md](docs/dev/MAPS.md)).
 
 ### Fixed
 
