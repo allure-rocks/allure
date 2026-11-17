@@ -16,6 +16,9 @@ all UI work. Read it before writing any view, Stimulus controller, navigation
 entry, or user-facing string. Where it conflicts with a data or protocol
 contract, the contract wins and `DESIGN.md` is amended.
 
+`docs/dev/CHARTS.md` is the charts contract: the shared ECharts foundation, the
+rules every chart follows and the chart-by-chart contracts.
+
 `docs/dev/ACCESS.md` is the access contract: every browser surface requires an
 account, while the ActivityPub wire contract is unchanged.
 
