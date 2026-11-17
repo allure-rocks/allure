@@ -22,6 +22,9 @@ account, while the ActivityPub wire contract is unchanged.
 `docs/dev/AUTH.md` is the authentication contract: the two sign-in paths, the
 second factor, the identity providers, the sessions and the iOS handoff.
 
+`docs/dev/API.md` is the API contract: the REST resources, the API tokens, the
+webhooks and the OpenAPI document.
+
 `docs/dev/PUBLISHING.md` is the publishing contract: the source workout, the
 profile, the immutable publication, the audiences and the federation boundary.
 `docs/dev/DELAYED-PUBLISHING.md` is the safety-delay contract, and
@@ -173,7 +176,7 @@ behaviours updates its page in every language in the same patch.
   deliveries. `POST /mcp` serves read-only tools through `AllureMcp::Server`;
   coordinates leave only at the token's `mcp_geometry` level. The OpenAPI 3.1
   document is hand-written at `docs/openapi/v1.yaml`, validated by the suite and
-  served at `/developers/api`. `[devdoc:api]` `[devdoc:mcp]`
+  served at `/developers/api`. [docs/dev/API.md](docs/dev/API.md) `[devdoc:mcp]`
 - **Administration and operations.** `/admin` sits behind the single
   env-configured operator (`Admin::BaseController` answers 404 to everyone
   else); `AdminEvent` and `Admin::Audit` record every operator mutation

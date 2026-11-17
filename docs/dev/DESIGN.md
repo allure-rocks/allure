@@ -281,9 +281,9 @@ of good visual design repairs.
 | Device-held credential | passkey | clé d'accès | Also covers a hardware security key. Never "WebAuthn" in UI copy. |
 | Single-use fallback code | recovery code | code de récupération | Ten per generation, shown once. |
 | Google, Apple or an OpenID Connect service that signs the person in | identity provider | fournisseur d'identité | Buttons name the provider: « Continuer avec Google ». Never "OAuth", "OIDC" or "SSO" in UI copy. |
-| Secret that lets a program use the API for the account | API token | jeton d'API | `[devdoc:api]`. Never "clé", "PAT" or "personal access token" in UI copy. |
+| Secret that lets a program use the API for the account | API token | jeton d'API | [API.md](API.md). Never "clé", "PAT" or "personal access token" in UI copy. |
 | What a token is allowed to do | permission | permission | The `read`/`write`/… scopes; the UI names each in words (« Lire mes activités »), never the scope code alone. |
-| A URL Allure notifies of account events | webhook | webhook | `[devdoc:api]`. Same word in both languages. |
+| A URL Allure notifies of account events | webhook | webhook | [API.md](API.md). Same word in both languages. |
 | One signed notification sent to a webhook | delivery | envoi | Never "call" or « appel ». |
 
 Discovering a new loop requires at least two complete same-direction tours,
@@ -1231,7 +1231,7 @@ configures a provider, API et webhooks, Sécurité).
 | `/settings/privacy-zones` | the zone collection (existing route) |
 | `/settings/security` | three groups (§20.15): two-step verification first (obligation, authenticator app, passkeys, recovery codes); the ways in side by side, password and identity providers; then the active sessions (paginated, sortable table with device, sign-in time and method, last activity and the lifetime rule) with « Fermer toutes les sessions » in its header; closing a session re-authenticates first |
 | `/settings/data` | derived-data maintenance for the account's own workouts: rebuild, route images, places, elevation ([DERIVATIONS.md](DERIVATIONS.md)) |
-| `/settings/api` | « API et webhooks »: API tokens and webhooks (§20.18, `[devdoc:api]`); never rendered in the iOS companion's settings navigation |
+| `/settings/api` | « API et webhooks »: API tokens and webhooks (§20.18, [API.md](API.md)); never rendered in the iOS companion's settings navigation |
 | `/settings/account` | « Compte »: « Exporter mes données » (a live card: prepare, preparing, ready with size and expiry, failed, expired, cooldown) and « Supprimer mon compte » (§19.29), last in the « Système » group; a deactivated account lands on `/settings/account/deletion` in the auth layout (`[devdoc:account]`) |
 
 Two rules:
@@ -4124,7 +4124,7 @@ publier », whose confirmation reads:
 Placement: the token creation form carries the first text as a persistent
 `alert-warning` above its submit; the page that shows a new token carries the
 second beside the secret; the webhook form carries the third as a persistent
-`alert-warning`. None is dismissible (`[devdoc:api]`).
+`alert-warning`. None is dismissible ([API.md](API.md)).
 
 > **FR** — « Un jeton d'API agit en votre nom, sans double authentification,
 > avec les permissions que vous cochez — y compris sur vos activités non
@@ -5613,7 +5613,7 @@ for publishing profiles.
 ┌ Scalar reference, full width ────────────────────────────┐
 ```
 
-The reference is the embedded Scalar component (`[devdoc:api]`): it
+The reference is the embedded Scalar component ([API.md](API.md)): it
 follows the light/dark theme, uses the brand tokens for its accent, never
 fetches outside the instance and never stores a pasted token. It lives in a
 same-origin frame filling the viewport's height, because Tabler and Scalar
