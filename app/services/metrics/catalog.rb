@@ -2,7 +2,7 @@
 
 module Metrics
   # The contract between the exporter and the administration console
-  # (PLAN_METRICS.md §8). Every exported family declares the console concept it
+  # (docs/dev/METRICS.md). Every exported family declares the console concept it
   # mirrors: `admin` is an i18n key the operator can see, or nil for technical
   # families (HTTP/process internals) with no admin counterpart.
   #

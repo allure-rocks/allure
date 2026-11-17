@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Metrics bootstrap (PLAN_METRICS.md).
+# Metrics bootstrap (docs/dev/METRICS.md).
 #
 # yabeda-rails installs its request metrics only when it detects a known
 # application server, which leaves consoles, tests, and `bin/jobs` without the

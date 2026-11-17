@@ -3,7 +3,7 @@
 module Metrics
   # Declares every Allure metric. Prometheus names are prefixed by the `allure`
   # group, so `gauge :users` becomes `allure_users`. The name and label
-  # vocabulary is the stable interface documented in PLAN_METRICS.md §3.
+  # vocabulary is the stable interface documented in docs/dev/METRICS.md
   class Schema
     GAUGES = [
       { name: :info, tags: %i[version], comment: "Build identity; always 1." },
