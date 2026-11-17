@@ -20,7 +20,7 @@ Non-goals, deliberately:
   detection for it;
 - no manual entry without a file: this contract is about imported files. A
   workout typed in by hand is its own origin, `manual`, specified by
-  `[devdoc:manual-entry]`; it shares this contract's refusal to publish.
+  [MANUAL-ENTRY.md](MANUAL-ENTRY.md); it shares this contract's refusal to publish.
 
 ## 2. Concepts
 
@@ -162,7 +162,7 @@ Sharing a route-less activity needs its own contract: a Note without a route
 or location, no GPX and no route-image attachments, `has_route: false`, an
 amended `FEDERATION.md`, and the strict Allure Note parser taught to accept
 it. Until that contract exists, `no_geometry` is the refusal. The same refusal
-covers a manual entry (`[devdoc:manual-entry]`), and the same future contract
+covers a manual entry ([MANUAL-ENTRY.md](MANUAL-ENTRY.md)), and the same future contract
 would publish both.
 
 ## 8. Remote import sources

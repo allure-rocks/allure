@@ -31,7 +31,7 @@ truth:
   `:file` is an uploaded archive, `:device` is a browser-side download,
   `:remote` is a server-side provider, `:archive` is one uploaded export of
   another service read with its own metadata, and `:manual` is a workout typed
-  in by hand (`[devdoc:manual-entry]`);
+  in by hand ([MANUAL-ENTRY.md](MANUAL-ENTRY.md));
 - `ALL` lists the registered sources; `for(key)` resolves a string or symbol;
 - every source owns a translation at
   `workouts.batch_import.sources.<key>.label` and a panel partial at
@@ -306,7 +306,7 @@ there.
 `manual` (`MANUAL`, kind `:manual`, icon `pencil`) is always enabled. It reads no
 file and stores nothing in the batch pipeline: its panel posts to
 `POST /workouts/manual` and creates one `origin: "manual"` workout through
-`Workouts::ManualEntry`. `[devdoc:manual-entry]` is its contract.
+`Workouts::ManualEntry`. [MANUAL-ENTRY.md](MANUAL-ENTRY.md) is its contract.
 
 ## 8. Verification
 
