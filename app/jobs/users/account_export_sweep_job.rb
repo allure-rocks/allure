@@ -3,7 +3,7 @@
 module Users
   # A ready export is downloadable for AccountExport::LIFETIME; this daily
   # sweep expires the past-due ones and purges their archive
-  # (PLAN_ACCOUNT.md §3.2). A job that died mid-build is closed as failed so
+  # (docs/dev/ACCOUNT.md). A job that died mid-build is closed as failed so
   # the account may ask again.
   class AccountExportSweepJob < ApplicationJob
     queue_as :default

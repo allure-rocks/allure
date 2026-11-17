@@ -24,7 +24,7 @@ module Federation
     end
 
     # An account in its deletion window is deactivated: its publications are
-    # hidden locally until the purge withdraws them (PLAN_ACCOUNT.md §4.2),
+    # hidden locally until the purge withdraws them (docs/dev/ACCOUNT.md),
     # exactly as WorkoutPublication.of_available_owners reads it. The union is
     # raw SQL, so the rule is spelled here for every local fragment.
     OWNER_AVAILABLE = <<~SQL.squish

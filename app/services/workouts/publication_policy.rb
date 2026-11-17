@@ -58,7 +58,7 @@ module Workouts
     def followers_publication? = @publication.audience == "followers"
 
     # A deactivated owner's publications are refused to everyone until the
-    # purge withdraws them (PLAN_ACCOUNT.md §4.2).
+    # purge withdraws them (docs/dev/ACCOUNT.md).
     def owner_deletion_scheduled? = @publication.actor&.user&.deletion_scheduled? || false
 
     def follower_actor

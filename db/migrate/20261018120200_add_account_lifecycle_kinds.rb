@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_ACCOUNT.md: the deletion lifecycle is audited, and a ready export is
+# docs/dev/ACCOUNT.md: the deletion lifecycle is audited, and a ready export is
 # notified in-app.
 class AddAccountLifecycleKinds < ActiveRecord::Migration[8.1]
   PREVIOUS_ACTIONS = %w[

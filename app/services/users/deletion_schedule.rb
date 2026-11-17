@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-  # The deletion window (PLAN_ACCOUNT.md §4): a request deactivates the
+  # The deletion window (docs/dev/ACCOUNT.md): a request deactivates the
   # account at once and schedules its deletion GRACE later; cancelling within
   # the window restores it. Nothing federates during the window, because a
   # withdrawn publication can never be restored. Once the purge has started

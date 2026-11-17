@@ -95,7 +95,7 @@ module Admin
       redirect_to admin_account_path(account), notice: t("admin.accounts.flash.reinstated", username: account.username)
     end
 
-    # PLAN_ACCOUNT.md §4.4: the same seven-day window as a member's own
+    # docs/dev/ACCOUNT.md: the same seven-day window as a member's own
     # request; only the operator may cancel it. The operator account is never
     # deleted from the web.
     def schedule_deletion

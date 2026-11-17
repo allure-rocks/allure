@@ -24,7 +24,7 @@ class User < ApplicationRecord
   # opt-in, and an exact handle still reaches a hidden account.
   DISCOVERABILITY = %w[none members].freeze
   TIME_ZONE_IDENTIFIERS = TZInfo::Timezone.all_identifiers.freeze
-  # Who asked for a scheduled deletion (PLAN_ACCOUNT.md §4.1).
+  # Who asked for a scheduled deletion (docs/dev/ACCOUNT.md).
   DELETION_REQUESTERS = %w[self operator].freeze
 
   # Generic sports an import detects when the file carries no usable sub-type
@@ -202,7 +202,7 @@ class User < ApplicationRecord
   after_commit :refresh_gravatar_cache, on: :update, if: :saved_change_to_gravatar_opt_in?
 
   # Accounts whose deletion window has ended, including a purge that stopped
-  # half-way and must resume (PLAN_ACCOUNT.md §4.3).
+  # half-way and must resume (docs/dev/ACCOUNT.md).
   scope :deletion_due, ->(now = Time.current) { where(deletion_scheduled_at: ..now) }
   # The accounts name search and suggestions may return (PLAN_PEOPLE.md §2).
   # A deactivated account is never discoverable, whatever its setting says.
@@ -221,7 +221,7 @@ class User < ApplicationRecord
   # Operator suspension (PLAN_ADMIN.md §7): access is revoked, content is not.
   def suspended? = suspended_at.present?
 
-  # A scheduled deletion (PLAN_ACCOUNT.md §4.2) deactivates the account for
+  # A scheduled deletion (docs/dev/ACCOUNT.md) deactivates the account for
   # its window: its content is hidden and nothing runs on its behalf.
   def deletion_scheduled? = deletion_scheduled_at.present?
 
@@ -328,7 +328,7 @@ class User < ApplicationRecord
 
   # A deleted account's actor keeps its URI forever, and the URI derives from
   # the username: handing the name out again would leave the new account
-  # unable to federate (PLAN_ACCOUNT.md §2.1). Only the tombstoned actor of a
+  # unable to federate (docs/dev/ACCOUNT.md). Only the tombstoned actor of a
   # deleted account reserves the name — a live owner is the uniqueness rule's.
   def username_not_retired
     return if username.blank? || !username.match?(USERNAME_FORMAT)

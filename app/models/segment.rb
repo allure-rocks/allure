@@ -115,7 +115,7 @@ class Segment < ApplicationRecord
   def viewable_by?(viewer)
     return true if viewer == user
     # A deactivated owner's courses are hidden for the deletion window
-    # (PLAN_ACCOUNT.md §4.2).
+    # (docs/dev/ACCOUNT.md).
     return false if user.deletion_scheduled?
 
     case visibility

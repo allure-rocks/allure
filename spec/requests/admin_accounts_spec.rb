@@ -160,7 +160,7 @@ RSpec.describe "Admin accounts" do
     end
   end
 
-  describe "scheduled deletion (PLAN_ACCOUNT.md §4.4)" do
+  describe "scheduled deletion (docs/dev/ACCOUNT.md)" do
     before { sign_in_as(operator) }
 
     it "schedules a member's deletion, signs them out everywhere, and audits" do

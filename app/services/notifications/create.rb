@@ -25,7 +25,7 @@ module Notifications
       "auto_publication_failed" => :notify_auto_publication_failed,
       "webhook_disabled" => :notify_webhooks,
       # The account asked for its export: telling it is part of the answer,
-      # so no switch turns it off (PLAN_ACCOUNT.md §3.2).
+      # so no switch turns it off (docs/dev/ACCOUNT.md).
       "account_export_ready" => nil,
       "funding_recorded" => nil
     }.freeze

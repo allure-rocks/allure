@@ -94,7 +94,7 @@ Rails.application.routes.draw do
     post "/accounts/:id/suspend", to: "accounts#suspend", as: :account_suspend
     post "/accounts/:id/reinstate", to: "accounts#reinstate", as: :account_reinstate
     post "/accounts/:id/reset_second_factor", to: "accounts#reset_second_factor", as: :account_reset_second_factor
-    # PLAN_ACCOUNT.md §4.4: the operator schedules or cancels a deletion.
+    # docs/dev/ACCOUNT.md: the operator schedules or cancels a deletion.
     post "/accounts/:id/deletion", to: "accounts#schedule_deletion", as: :account_deletion
     delete "/accounts/:id/deletion", to: "accounts#cancel_deletion", as: nil
     # docs/dev/API.md: audited token revocation and webhook disabling.
@@ -310,7 +310,7 @@ Rails.application.routes.draw do
     # Heart rate (docs/dev/HEART-RATE.md): the account's maximum, resting
     # value and zones. Owner-only; nothing here is ever published.
     resource :heart_rate, only: %i[show update destroy], path: "heart-rate", controller: "heart_rate"
-    # Account (PLAN_ACCOUNT.md): the data export and the self-service
+    # Account (docs/dev/ACCOUNT.md): the data export and the self-service
     # deletion, with the page a deactivated account lands on.
     resource :account, only: :show, controller: "account"
     resources :account_exports, only: :create, path: "account/exports" do

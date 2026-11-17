@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Settings: account (PLAN_ACCOUNT.md)", type: :request do
+RSpec.describe "Settings: account (docs/dev/ACCOUNT.md)", type: :request do
   include ActiveJob::TestHelper
 
   let(:user) { create(:user, :with_totp) }
@@ -165,7 +165,7 @@ RSpec.describe "Settings: account (PLAN_ACCOUNT.md)", type: :request do
   end
 end
 
-RSpec.describe "An account in its deletion window (PLAN_ACCOUNT.md §4.2)", type: :request do
+RSpec.describe "An account in its deletion window (docs/dev/ACCOUNT.md)", type: :request do
   let(:owner) { create(:user) }
   let(:reader) { create(:user, :with_totp) }
   let!(:publication) { create(:workout_publication, workout: create(:workout, user: owner)) }

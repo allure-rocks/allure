@@ -144,7 +144,7 @@ RSpec.describe Users::ExportArchive do
     ])
   end
 
-  it "writes federated text into the CSV files as text, never as a formula (PLAN_ACCOUNT.md §3.3)" do
+  it "writes federated text into the CSV files as text, never as a formula (docs/dev/ACCOUNT.md)" do
     actor = Federation::ActorProvisioner.new(user:).call!
     hyperlink = %(=HYPERLINK("http://evil.example","Open")@evil.example)
     create(:following, :accepted, follower_actor: create(:actor, acct: hyperlink), followed_actor: actor)
