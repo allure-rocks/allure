@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Funding test material (PLAN_FUNDING.md). The `:funding` tag turns the
+# Funding test material (docs/dev/FUNDING.md). The `:funding` tag turns the
 # feature on with static manual links and isolates every funding variable from
 # the developer's own .env — the Stripe keys included, so an automated
 # provider never leaks into a manual-link example. The `:stripe_funding` tag

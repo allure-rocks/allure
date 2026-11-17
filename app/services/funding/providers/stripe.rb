@@ -5,7 +5,7 @@ require "uri"
 
 module Funding
   module Providers
-    # Rails-facing Stripe adapter (PLAN_FUNDING.md §6.1). The webhook body only
+    # Rails-facing Stripe adapter (docs/dev/FUNDING.md). The webhook body only
     # supplies an event type and object id after HMAC verification; every fact
     # used for binding, state or money is read back through the pinned API.
     class Stripe

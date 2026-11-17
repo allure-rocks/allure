@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The provider contract (PLAN_FUNDING.md §5), pinned for every automated
+# The provider contract (docs/dev/FUNDING.md), pinned for every automated
 # adapter. Include it from a spec whose `described_class` is the adapter
 # class; `env:` holds that provider's complete test configuration.
 RSpec.shared_examples "a funding provider" do |env: {}|

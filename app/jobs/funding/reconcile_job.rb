@@ -2,7 +2,7 @@
 
 module Funding
   # Recurring recovery for lost or reordered provider notifications
-  # (PLAN_FUNDING.md §6.7). Idempotent recording makes a replay harmless.
+  # (docs/dev/FUNDING.md). Idempotent recording makes a replay harmless.
   class ReconcileJob < ApplicationJob
     queue_as :default
 
