@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_AUTH.md slice 3: signing in, signing up, linking and re-authenticating
+# docs/dev/AUTH.md: signing in, signing up, linking and re-authenticating
 # through an identity provider, and password-less accounts.
 RSpec.describe "Identity providers" do
   include ActiveSupport::Testing::TimeHelpers

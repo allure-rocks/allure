@@ -7,7 +7,7 @@ module Users
   # a "7-day active user" can never mean two different things (PLAN_METRICS.md
   # §8). Active users are activity-based (workout or publication), never
   # sign-in-only; connected users hold at least one open session, and a session
-  # is open until sign-out, revocation, or expiry (PLAN_AUTH.md §8).
+  # is open until sign-out, revocation, or expiry (docs/dev/AUTH.md).
   class Engagement
     def initialize(now: Time.current)
       @now = now

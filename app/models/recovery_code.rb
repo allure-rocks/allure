@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# One-time recovery codes (PLAN_AUTH.md §4.3). Ten per generation, each shown
+# One-time recovery codes (docs/dev/AUTH.md). Ten per generation, each shown
 # once and usable once. A code carries 50 random bits, so a keyed HMAC is
 # enough to keep the stored digest useless without the application secret,
 # and it lets a code be found by its digest instead of trying every row.

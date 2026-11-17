@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module SecondFactorHelper
-  # The grace-period reminder (PLAN_AUTH.md §5.3): the policy while the
+  # The grace-period reminder (docs/dev/AUTH.md): the policy while the
   # account owes a second factor and has not hidden the reminder today. The
   # security page states the obligation itself.
   def second_factor_reminder
@@ -13,7 +13,7 @@ module SecondFactorHelper
     policy if policy.grace?
   end
 
-  # How an account signs in, for the operator's account page (PLAN_AUTH.md §6).
+  # How an account signs in, for the operator's account page (docs/dev/AUTH.md).
   def admin_sign_in_methods(account)
     methods = []
     methods << t("admin.accounts.password_method") if account.password?
@@ -21,7 +21,7 @@ module SecondFactorHelper
     methods.to_sentence
   end
 
-  # One line for the operator's account page (PLAN_AUTH.md §5.7).
+  # One line for the operator's account page (docs/dev/AUTH.md).
   def admin_second_factor_state(account, policy)
     case policy.state
     when :satisfied

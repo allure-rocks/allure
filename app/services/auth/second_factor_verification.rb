@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Auth
-  # Checks one second-factor answer (PLAN_AUTH.md §5.1): a passkey assertion
+  # Checks one second-factor answer (docs/dev/AUTH.md): a passkey assertion
   # when one was sent, otherwise a six-digit authenticator code, otherwise a
   # recovery code. Returns the method that passed, or nil.
   module SecondFactorVerification

@@ -23,8 +23,8 @@ class PasswordsController < ApplicationController
 
   def update
     # A password-less account reaches this page only through the operator's
-    # setup link; its new password owes a second factor at once (PLAN_AUTH.md
-    # §6.5), so the next password sign-in leads to enrolment.
+    # setup link; its new password owes a second factor at once
+    # (docs/dev/AUTH.md), so the next password sign-in leads to enrolment.
     unless @user.password?
       @user.second_factor_required_since ||= Time.current - Allure::Auth::Config.second_factor_grace
     end

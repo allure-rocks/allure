@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The return from an identity provider (PLAN_AUTH.md §6). OmniAuth has already
+# The return from an identity provider (docs/dev/AUTH.md). OmniAuth has already
 # checked the state, the nonce and the ID token; this controller decides what
 # the verified identity means for this instance. A round trip the iOS
 # companion started in the system browser is handed back to the app instead

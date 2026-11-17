@@ -2,7 +2,7 @@
 
 module Allure
   module Auth
-    # Identity providers (PLAN_AUTH.md §3, §6). A provider is enabled when all
+    # Identity providers (docs/dev/AUTH.md). A provider is enabled when all
     # its environment variables are present; the OmniAuth middleware is built
     # from the same answers at boot, so changing them needs a restart. Names
     # are product names and are never translated.
@@ -21,7 +21,7 @@ module Allure
       def enabled?(name) = find(name).present?
 
       # The providers the iOS companion offers: App Store guideline 4.8 asks
-      # for Sign in with Apple wherever Google is offered (PLAN_AUTH.md §9).
+      # for Sign in with Apple wherever Google is offered (docs/dev/AUTH.md).
       def for_companion
         providers = enabled
         providers.any? { |provider| provider.name == "apple" } ? providers : providers.reject { |provider| provider.name == "google" }
@@ -49,7 +49,7 @@ module Allure
 
       # An authentication method the generic provider must report in the ID
       # token's `amr` (RFC 8176), e.g. `mfa`, for providers whose `acr` never
-      # varies (PLAN_AUTH.md §6.4).
+      # varies (docs/dev/AUTH.md).
       def oidc_required_amr = value("AUTH_OIDC_REQUIRED_AMR")
 
       # Environment files cannot hold a multi-line PEM; `\n` stands for a newline.

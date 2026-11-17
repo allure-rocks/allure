@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The second step of a password sign-in (PLAN_AUTH.md §5.1). No session exists
+# The second step of a password sign-in (docs/dev/AUTH.md). No session exists
 # until one factor passes: a passkey, an authenticator code, or a recovery
 # code. Five wrong answers, five minutes, or a password change end the attempt.
 class SessionChallengesController < ApplicationController
@@ -17,7 +17,7 @@ class SessionChallengesController < ApplicationController
   end
 
   # Cancel: the pending sign-in ends here rather than lingering in the
-  # browser for whoever uses it next (PLAN_AUTH.md §8).
+  # browser for whoever uses it next (docs/dev/AUTH.md).
   def cancel
     session.delete(:pending_sign_in)
     session.delete(:webauthn_authentication_challenge)

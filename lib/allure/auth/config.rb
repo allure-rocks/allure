@@ -2,7 +2,7 @@
 
 module Allure
   module Auth
-    # Authentication settings (PLAN_AUTH.md §3). Read from the environment at
+    # Authentication settings (docs/dev/AUTH.md). Read from the environment at
     # call time; a missing, non-numeric or non-positive value falls back to the
     # documented default rather than disabling the limit.
     module Config
@@ -33,7 +33,7 @@ module Allure
       end
 
       # Comma-separated `TEAMID.bundle` identifiers allowed to use this
-      # instance's passkeys (PLAN_AUTH.md §9).
+      # instance's passkeys (docs/dev/AUTH.md).
       def ios_app_ids
         ENV.fetch("IOS_APP_IDS", "").split(",").map(&:strip).grep(/\A[A-Z0-9]{10}\.[A-Za-z0-9.-]+\z/)
       end

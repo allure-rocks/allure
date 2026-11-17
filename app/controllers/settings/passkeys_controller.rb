@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Passkey and security-key registration (PLAN_AUTH.md §5.2). The browser asks
+  # Passkey and security-key registration (docs/dev/AUTH.md). The browser asks
   # for creation options, the person's device creates the credential, and the
   # signed answer is verified against the single-use challenge.
   class PasskeysController < ApplicationController

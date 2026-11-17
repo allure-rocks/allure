@@ -6,7 +6,7 @@
 Rails.application.config.filter_parameters += [
   :passw, :email, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn, :cvv, :cvc,
   :screenshot, :screenshot_base64, :privacy_zone, :latitude, :longitude, :radius_meters, :center,
-  # Authentication proofs (PLAN_AUTH.md §5, §6, §9): authenticator, recovery
+  # Authentication proofs (docs/dev/AUTH.md): authenticator, recovery
   # and Garmin MFA codes, OAuth authorization codes, passkey responses, and the
   # iOS handoff's PKCE verifier. An unspent recovery code stays valid
   # indefinitely, so none of them may reach a log.
@@ -29,5 +29,5 @@ Rails.application.config.filter_parameters += [
 ]
 
 # Rails logs redirect locations verbatim. The iOS companion's handoff carries
-# its single-use token in the location (PLAN_AUTH.md §9).
+# its single-use token in the location (docs/dev/AUTH.md).
 Rails.application.config.filter_redirect << %r{\Aallure://auth/handoff}

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Sign in with Apple answers with a cross-site form POST (PLAN_AUTH.md §6.1),
+# Sign in with Apple answers with a cross-site form POST (docs/dev/AUTH.md),
 # which carries no SameSite=Lax cookie: the session holding the OmniAuth state
 # is missing. This page re-posts Apple's fields to the OmniAuth callback from
 # this origin, where the browser sends the session cookie again. It reads and

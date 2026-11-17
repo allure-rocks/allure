@@ -2,7 +2,7 @@
 
 module Users
   # An expired session is refused on its next request; this daily sweep removes
-  # the rows of browsers that never come back (PLAN_AUTH.md §8), with the iOS
+  # the rows of browsers that never come back (docs/dev/AUTH.md), with the iOS
   # companion's uncollected provider handoffs (§9).
   class PruneExpiredSessionsJob < ApplicationJob
     queue_as :default

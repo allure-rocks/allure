@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Auth
-  # What follows a change to an account's second factors (PLAN_AUTH.md §5, §7):
+  # What follows a change to an account's second factors (docs/dev/AUTH.md):
   # recovery codes at the first enrolment, the enrolling session lifted out of
   # enrolment-only, other enrolment-only sessions closed, and a security email.
   module FactorChanges
@@ -34,7 +34,7 @@ module Auth
       codes
     end
 
-    # Operator reset (PLAN_AUTH.md §5.7): every factor goes, every session
+    # Operator reset (docs/dev/AUTH.md): every factor goes, every session
     # closes, and the next password sign-in leads straight to enrolment.
     def reset!(user, now: Time.current)
       User.transaction do
@@ -47,7 +47,7 @@ module Auth
       SecurityMailer.notice(user, "second_factor_reset").deliver_later
     end
 
-    # A password account may not remove its last factor (PLAN_AUTH.md §1.8).
+    # A password account may not remove its last factor (docs/dev/AUTH.md).
     def removable?(user)
       user.password_digest.blank? || user.second_factor_count > 1
     end

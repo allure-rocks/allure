@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # The iOS companion's web view collects a provider sign-in made in the system
-# browser (PLAN_AUTH.md §9): the app posts the handoff token with its PKCE
+# browser (docs/dev/AUTH.md): the app posts the handoff token with its PKCE
 # verifier, and the verified answer is resolved here exactly as the browser
 # callback would — signing in, account creation, linking, re-authentication,
 # or a refusal — in the web view's own session.

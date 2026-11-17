@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_AUTH.md slice 1: session lifetimes and re-authentication before a
+# docs/dev/AUTH.md: session lifetimes and re-authentication before a
 # sensitive action.
 RSpec.describe "Session hardening" do
   include ActiveSupport::Testing::TimeHelpers
@@ -55,7 +55,7 @@ RSpec.describe "Session hardening" do
       expect(current_session.reauthenticated_at).to be_within(5.seconds).of(Time.current)
     end
 
-    it "rotates the CSRF token at sign-in (PLAN_AUTH.md §6.8)" do
+    it "rotates the CSRF token at sign-in (docs/dev/AUTH.md)" do
       with_forgery_protection do
         get new_session_path
         token = response.parsed_body.at_css('input[name="authenticity_token"]')["value"]

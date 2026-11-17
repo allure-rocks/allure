@@ -44,14 +44,14 @@ x-rails: &rails
     # Where members read the running code (AGPL-3.0 §13); the upstream
     # repository unless set.
     ALLURE_SOURCE_URL: ${ALLURE_SOURCE_URL:-}
-    # Session idle timeout and absolute lifetime in days (PLAN_AUTH.md §8).
+    # Session idle timeout and absolute lifetime in days (docs/dev/AUTH.md).
     AUTH_SESSION_IDLE_DAYS: ${AUTH_SESSION_IDLE_DAYS:-}
     AUTH_SESSION_MAX_DAYS: ${AUTH_SESSION_MAX_DAYS:-}
     # Two-step verification grace period in days, and the iOS app identifiers
-    # allowed to use passkeys (PLAN_AUTH.md §3).
+    # allowed to use passkeys (docs/dev/AUTH.md).
     AUTH_2FA_GRACE_DAYS: ${AUTH_2FA_GRACE_DAYS:-}
     IOS_APP_IDS: ${IOS_APP_IDS:-}
-    # Identity providers (PLAN_AUTH.md §3), each enabled only when complete.
+    # Identity providers (docs/dev/AUTH.md), each enabled only when complete.
     AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID:-}
     AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET:-}
     AUTH_APPLE_SERVICES_ID: ${AUTH_APPLE_SERVICES_ID:-}

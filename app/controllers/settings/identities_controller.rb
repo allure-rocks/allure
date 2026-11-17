@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Unlinking a provider identity (PLAN_AUTH.md §6.5). Linking happens through
+  # Unlinking a provider identity (docs/dev/AUTH.md). Linking happens through
   # the provider round trip itself (ProviderCallbacksController).
   class IdentitiesController < ApplicationController
     before_action :require_recent_authentication

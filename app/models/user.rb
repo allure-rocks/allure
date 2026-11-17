@@ -72,7 +72,7 @@ class User < ApplicationRecord
   AVATAR_PALETTE = Allure::Avatar::Palette::COLOURS
 
   # An account created through an identity provider has no password
-  # (PLAN_AUTH.md §6.3), so Rails' built-in presence rule is replaced by the
+  # (docs/dev/AUTH.md), so Rails' built-in presence rule is replaced by the
   # explicit validations below.
   has_secure_password validations: false
   # Set by the provider sign-up, the only path that creates an account
@@ -87,7 +87,7 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   # Each goes with its session (PLAN_PUSH.md §5), through the cascade.
   has_many :push_subscriptions, dependent: :delete_all
-  # Second factors (PLAN_AUTH.md §4.1–§4.3).
+  # Second factors (docs/dev/AUTH.md).
   encrypts :otp_secret
   has_many :webauthn_credentials, dependent: :delete_all
   has_many :recovery_codes, dependent: :delete_all
@@ -132,7 +132,7 @@ class User < ApplicationRecord
   before_create :assign_avatar_seed
   # A password account owes a second factor from the moment it holds a
   # password — at creation or when a password-less account adds one; the
-  # grace period counts from here (PLAN_AUTH.md §5.3).
+  # grace period counts from here (docs/dev/AUTH.md).
   before_save :start_second_factor_requirement
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }

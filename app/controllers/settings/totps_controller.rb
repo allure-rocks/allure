@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Authenticator-app enrolment (PLAN_AUTH.md §5.2). The secret lives in the
+  # Authenticator-app enrolment (docs/dev/AUTH.md). The secret lives in the
   # encrypted Rails session until a valid code confirms the person's app holds
   # it; only then is it stored on the account.
   class TotpsController < ApplicationController
@@ -50,7 +50,7 @@ module Settings
     end
 
     # The secret being enrolled, bound to its account: another account in the
-    # same browser always gets its own (PLAN_AUTH.md §8).
+    # same browser always gets its own (docs/dev/AUTH.md).
     def pending_secret
       pending = session[:pending_otp_secret]
       pending["secret"] if pending.is_a?(Hash) && pending["user_id"] == current_user.id

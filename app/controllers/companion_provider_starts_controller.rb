@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Where the iOS companion's system browser (ASWebAuthenticationSession) starts
-# a provider sign-in (PLAN_AUTH.md §9). OmniAuth only starts on a POST carrying
+# a provider sign-in (docs/dev/AUTH.md). OmniAuth only starts on a POST carrying
 # this browser's Rails token, so this page posts at once to the request phase,
 # with the app's PKCE challenge in the query string that OmniAuth hands back to
 # the callback.

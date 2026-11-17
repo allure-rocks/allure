@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Identity providers answer through OmniAuth's test mode (PLAN_AUTH.md §10):
+# Identity providers answer through OmniAuth's test mode (docs/dev/AUTH.md):
 # no discovery, token or JWKS request leaves the test process.
 OmniAuth.config.test_mode = true
 

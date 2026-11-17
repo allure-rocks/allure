@@ -634,7 +634,7 @@ class FederationRingTest
     session
   end
 
-  # The seeded demo accounts carry an authenticator app (PLAN_AUTH.md §10).
+  # The seeded demo accounts carry an authenticator app (docs/dev/AUTH.md).
   def answer_second_factor(session, session_user)
     session.get("/session/challenge/new")
     token = session.response.body[/name="authenticity_token" value="([^"]+)"/, 1]

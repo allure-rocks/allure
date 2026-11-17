@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# A signed-in browser (PLAN_AUTH.md §8). It lives until sign-out or
+# A signed-in browser (docs/dev/AUTH.md). It lives until sign-out or
 # revocation, and at most until it has been idle for the idle timeout or has
 # reached its absolute lifetime, whichever comes first.
 class Session < ApplicationRecord
@@ -56,7 +56,7 @@ class Session < ApplicationRecord
     update!(attributes)
   end
 
-  # The operator console re-confirms a second factor (PLAN_AUTH.md §5.4).
+  # The operator console re-confirms a second factor (docs/dev/AUTH.md).
   def recent_second_factor?(now = Time.current)
     second_factor_at.present? && second_factor_at > now - Allure::Auth::Config.step_up_window
   end

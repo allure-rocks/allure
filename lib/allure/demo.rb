@@ -6,7 +6,7 @@ module Allure
   # credentials are published on the sign-in page. The switch is read from
   # DEMO_INSTANCE and changes three things, nothing else:
   #
-  # 1. no second factor is owed by anyone (PLAN_AUTH.md §5.3's demo exception),
+  # 1. no second factor is owed by anyone (docs/dev/AUTH.md's demo exception),
   #    and the operator console's step-up accepts a recent password proof;
   # 2. the accounts named by DEMO_ACCOUNTS are shared playgrounds: no visitor
   #    may lock the next one out by changing a password, enrolling a factor or

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Re-authentication before a sensitive action (PLAN_AUTH.md §5.5) and the
+# Re-authentication before a sensitive action (docs/dev/AUTH.md) and the
 # operator's second-factor step-up (§5.4). A signed-in person proves their
 # identity again — the password, and a second factor once one is enrolled —
 # and the current session remembers it for the window.

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Auth
-  # Passkeys and security keys (PLAN_AUTH.md §5.2). The relying party is this
+  # Passkeys and security keys (docs/dev/AUTH.md). The relying party is this
   # instance: its ID is the federation host and its only origin the base URL,
   # both from Allure::Federation::Config. Challenges are single use and kept by
   # the caller in the encrypted Rails session.
