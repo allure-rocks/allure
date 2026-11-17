@@ -4237,7 +4237,7 @@ that the entry cannot be published.
 
 ### 19.31 Weather — on `/settings/weather` and the weather card
 
-Placement: under the consent switch of `/settings/weather` ([devdoc:weather]), the sentence naming what leaves the instance; on the profile form,
+Placement: under the consent switch of `/settings/weather` ([WEATHER.md](WEATHER.md)), the sentence naming what leaves the instance; on the profile form,
 the `weather` setting's hint; on a sensor-only card, the warning that a
 device's reading is not the air temperature.
 
@@ -4591,7 +4591,7 @@ there is no original-data card and no danger zone.
 [Social]      the social row (§10.17) right under the summary, with a
               publication: [💬 3] → the thread's page, below lg only, on the
               left; the reactions on the right, on every screen
-[Météo]       weather card ([devdoc:weather]) after the Analyse card
+[Météo]       weather card ([WEATHER.md](WEATHER.md)) after the Analyse card
               (after the profile for a reader); the header badge row carries
               its badge (condition icon, mean temperature, linking here): the
               condition icon (an animated monochrome Meteocons SVG, day or
