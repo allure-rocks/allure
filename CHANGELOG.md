@@ -1932,7 +1932,7 @@ migration (`db:migrate`, applied on boot).
   image; remote receipt, purge, retention and replacement cover both blobs
   (`DESIGN.md` §15.4, [WORKOUT.md](docs/dev/WORKOUT.md), [FEDERATION.md](docs/dev/FEDERATION.md)).
 - The workout list's table view supports bulk updates from `lg` up
-  (`[devdoc:bulk-actions]`): a selection column and a bulk bar with the live
+  ([BULK-ACTIONS.md](docs/dev/BULK-ACTIONS.md)): a selection column and a bulk bar with the live
   count, a « Sélectionner les N activités filtrées » scope and synchronous quick
   actions (commute, equipment). A sport change or a deletion is frozen into a
   `WorkoutBulkOperation` draft, reviewed with its exact counts, exclusions and

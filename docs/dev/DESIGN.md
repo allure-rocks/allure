@@ -2010,7 +2010,7 @@ records who else did the workout, and the participant's confirmation surface.
 
 ### 10.19 Multi-selection and bulk action bar
 
-The desktop bulk workflow on the workout list (`[devdoc:bulk-actions]`). It is a
+The desktop bulk workflow on the workout list ([BULK-ACTIONS.md](BULK-ACTIONS.md)). It is a
 power feature for the owner's own history: it exists only in the table view,
 only from `lg` up, and never in the iOS companion. It changes no single-workout
 rule — every action delegates to the service the workout page already uses.

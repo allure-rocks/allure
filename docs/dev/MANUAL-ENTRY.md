@@ -101,7 +101,7 @@ translated under `activerecord.errors.models.workout`.
   totals, the account export, the REST API, webhooks and MCP.
 - **Never counts:** the seven column records (`Records::RecomputeService`
   skips `origin = 'manual'`) and everything derived from a track.
-- **Bulk actions** (`[devdoc:bulk-actions]`): selectable
+- **Bulk actions** ([BULK-ACTIONS.md](BULK-ACTIONS.md)): selectable
   (`Workouts::BulkSelection` reads `authored`). Commute and equipment apply as
   for a recording; a sport change goes through `Workouts::SportChange`, which
   changes a manual entry's sport alone (no file, no analysis) and fails with
