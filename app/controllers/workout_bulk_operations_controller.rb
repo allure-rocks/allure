@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Bulk activity operations (PLAN_BULK_ACTIONS.md, DESIGN.md §10.19, §20.4).
+# Bulk activity operations (docs/dev/BULK-ACTIONS.md, DESIGN.md §10.19, §20.4).
 # The owner selects rows in the desktop table view: quick actions apply in the
 # request; reviewable operations are frozen into a draft ledger and executed
 # by Workouts::BulkOperationJob. Every lookup is owner-scoped and foreign

@@ -3,7 +3,7 @@
 # The workout <-> equipment join rows (`workout_equipments`). Both sides keep
 # their HABTM association; this model exists so a bulk equipment change writes
 # the join rows in one statement and refreshes the denormalized totals once
-# (PLAN_BULK_ACTIONS.md §3).
+# (docs/dev/BULK-ACTIONS.md).
 class WorkoutEquipment < ApplicationRecord
   self.table_name = "workout_equipments"
 

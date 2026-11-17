@@ -1,4 +1,4 @@
-// Bulk selection (DESIGN.md §10.19, PLAN_BULK_ACTIONS.md §7).
+// Bulk selection (DESIGN.md §10.19, docs/dev/BULK-ACTIONS.md).
 //
 // The bar exists only in the table card and only while a row is checked. The
 // `:has()` reveal needs no JavaScript; the controller adds a class for the

@@ -117,7 +117,7 @@ Rails.application.routes.draw do
   # Owner-only place-name suggestions for the workout list's autocomplete
   # (DESIGN.md §13). Declared before the resource so it never matches `:id`.
   get "/workouts/place_suggestions", to: "workout_place_suggestions#index", as: :workout_place_suggestions
-  # Bulk activity operations (PLAN_BULK_ACTIONS.md, DESIGN.md §10.19). The
+  # Bulk activity operations (docs/dev/BULK-ACTIONS.md, DESIGN.md §10.19). The
   # static collection paths come before the member `:id` so `/workouts/bulk/
   # apply` and `/review` never resolve as an operation id; everything is
   # owner-scoped in the controller.

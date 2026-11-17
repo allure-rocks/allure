@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 // Bulk selection on the workout table (DESIGN.md §10.19,
-// PLAN_BULK_ACTIONS.md §7).
+// docs/dev/BULK-ACTIONS.md).
 //
 // The bar and the checkboxes work without JavaScript: the form is plain, the
 // row boxes are associated with `form=`, and CSS `:has()` reveals the bar.

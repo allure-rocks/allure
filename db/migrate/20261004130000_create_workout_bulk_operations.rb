@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# The durable ledger behind reviewable bulk operations (PLAN_BULK_ACTIONS.md
-# §4): a draft freezes the selection under review, the job walks its items in
+# The durable ledger behind reviewable bulk operations
+# (docs/dev/BULK-ACTIONS.md): a draft freezes the selection under review, the job walks its items in
 # order, and item rows survive the deletion of their workout so the progress
 # report can state the outcome.
 class CreateWorkoutBulkOperations < ActiveRecord::Migration[8.1]

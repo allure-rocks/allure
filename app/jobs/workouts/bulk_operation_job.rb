@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Executes a confirmed bulk operation (PLAN_BULK_ACTIONS.md §5): the queued
+  # Executes a confirmed bulk operation (docs/dev/BULK-ACTIONS.md): the queued
   # items are applied in position order, BATCH_SIZE per invocation, and the job
   # re-enqueues itself while work remains, so a long operation never holds a
   # worker. It is resumable (queued items are the cursor), idempotent per item

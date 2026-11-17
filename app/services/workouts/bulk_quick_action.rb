@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The synchronous bulk actions (PLAN_BULK_ACTIONS.md §3): the commute flag
+  # The synchronous bulk actions (docs/dev/BULK-ACTIONS.md): the commute flag
   # and equipment links. Each call touches only the owner's rows, counts only
   # actual changes, and refreshes equipment totals once per equipment — never
   # per workout.
