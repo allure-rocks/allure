@@ -1232,7 +1232,7 @@ configures a provider, API et webhooks, Sécurité).
 | `/settings/security` | three groups (§20.15): two-step verification first (obligation, authenticator app, passkeys, recovery codes); the ways in side by side, password and identity providers; then the active sessions (paginated, sortable table with device, sign-in time and method, last activity and the lifetime rule) with « Fermer toutes les sessions » in its header; closing a session re-authenticates first |
 | `/settings/data` | derived-data maintenance for the account's own workouts: rebuild, route images, places, elevation ([DERIVATIONS.md](DERIVATIONS.md)) |
 | `/settings/api` | « API et webhooks »: API tokens and webhooks (§20.18, [API.md](API.md)); never rendered in the iOS companion's settings navigation |
-| `/settings/account` | « Compte »: « Exporter mes données » (a live card: prepare, preparing, ready with size and expiry, failed, expired, cooldown) and « Supprimer mon compte » (§19.29), last in the « Système » group; a deactivated account lands on `/settings/account/deletion` in the auth layout (`[devdoc:account]`) |
+| `/settings/account` | « Compte »: « Exporter mes données » (a live card: prepare, preparing, ready with size and expiry, failed, expired, cooldown) and « Supprimer mon compte » (§19.29), last in the « Système » group; a deactivated account lands on `/settings/account/deletion` in the auth layout ([ACCOUNT.md](ACCOUNT.md)) |
 
 Two rules:
 
@@ -4192,7 +4192,7 @@ Placement: the export card states what the archive holds and what it never
 holds; the deletion card states the window, then what leaves, then what stays
 on other servers, above the username field, the acknowledgement checkbox and
 the danger button, whose confirmation dialog (§10.10) repeats the window
-(`[devdoc:account]`). The values interpolate
+([ACCOUNT.md](ACCOUNT.md)). The values interpolate
 `Users::DeletionSchedule::GRACE`.
 
 > **FR** — « Elle ne contient aucun secret : ni mot de passe, ni double

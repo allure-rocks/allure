@@ -22,6 +22,9 @@ account, while the ActivityPub wire contract is unchanged.
 `docs/dev/AUTH.md` is the authentication contract: the two sign-in paths, the
 second factor, the identity providers, the sessions and the iOS handoff.
 
+`docs/dev/ACCOUNT.md` is the account contract: the export archive, the
+seven-day deletion window and the resumable purge.
+
 `docs/dev/API.md` is the API contract: the REST resources, the API tokens, the
 webhooks and the OpenAPI document.
 
@@ -188,7 +191,8 @@ behaviours updates its page in every language in the same patch.
 - **Accounts and authentication.** Session lifetimes, a second factor (TOTP,
   passkey, recovery code), identity providers, re-authentication, the iOS
   sign-in handoff, the self-service export, and the seven-day deletion window
-  with a resumable purge. [docs/dev/AUTH.md](docs/dev/AUTH.md) `[devdoc:account]`
+  with a resumable purge. [docs/dev/AUTH.md](docs/dev/AUTH.md)
+  [docs/dev/ACCOUNT.md](docs/dev/ACCOUNT.md)
 - **Enrichment.** Terrain elevation (an OpenTopoData-compatible server),
   historical weather (Open-Meteo), heart-rate zones and training load, photos
   with stripped derivatives and placement, and geocoded places. Each is opt-in,

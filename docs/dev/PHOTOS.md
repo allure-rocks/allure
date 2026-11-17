@@ -331,7 +331,7 @@ bridge is out of scope.
 
 ## 7. Programmatic surfaces
 
-- **Export** (`[devdoc:account]`): `photos/<workout id>/<photo id>.<ext>`
+- **Export** ([ACCOUNT.md](ACCOUNT.md)): `photos/<workout id>/<photo id>.<ext>`
   originals plus `photos/index.json` (caption, order, placement). Photos are
   not re-imported.
 - **Admin and metrics**: `/admin/accounts/:id` shows usage and the override;
