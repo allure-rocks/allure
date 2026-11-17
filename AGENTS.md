@@ -31,6 +31,9 @@ webhooks and the OpenAPI document.
 `docs/dev/METRICS.md` is the metrics contract: the endpoint, the metric
 catalog, the privacy negatives and the reference dashboard.
 
+`docs/dev/ADMIN.md` is the administration contract: the operator console, its
+panels, the audit log and the suspension and invitation rules.
+
 `docs/dev/PUBLISHING.md` is the publishing contract: the source workout, the
 profile, the immutable publication, the audiences and the federation boundary.
 `docs/dev/DELAYED-PUBLISHING.md` is the safety-delay contract, and
@@ -193,7 +196,7 @@ behaviours updates its page in every language in the same patch.
   env-configured operator (`Admin::BaseController` answers 404 to everyone
   else); `AdminEvent` and `Admin::Audit` record every operator mutation
   append-only. `/metrics` is the Prometheus exporter behind `METRICS_TOKEN`.
-  `[devdoc:admin]`
+  [docs/dev/ADMIN.md](docs/dev/ADMIN.md)
   [docs/dev/METRICS.md](docs/dev/METRICS.md)
 - **Accounts and authentication.** Session lifetimes, a second factor (TOTP,
   passkey, recovery code), identity providers, re-authentication, the iOS

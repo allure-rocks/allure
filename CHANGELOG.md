@@ -2640,7 +2640,7 @@ migration (`db:migrate`, applied on boot).
   `workouts:backfill_analysis` rake task and an audited « Recalculer les
   analyses » action in `/admin/jobs`, which shows how many workouts are on an
   older analysis version. Both enqueue the same self-rescheduling job
-  ([WORKOUT.md](docs/dev/WORKOUT.md), `[devdoc:admin]`).
+  ([WORKOUT.md](docs/dev/WORKOUT.md), [ADMIN.md](docs/dev/ADMIN.md)).
 - The import page picks its panel from the `Allure::ImportSources` registry, so
   a source is a registry entry plus a partial ([IMPORT-SOURCES.md](docs/dev/IMPORT-SOURCES.md)). The
   first non-file source downloads recorded FIT activities straight from an

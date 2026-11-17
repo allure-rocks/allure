@@ -814,7 +814,7 @@ The auth and error layouts keep their own minimal chrome and carry no footer.
 ### 7.6 Administration view
 
 `/admin` is a second chrome for the single instance operator
-(`INSTANCE_OPERATOR_USERNAME`); `[devdoc:admin]` is the binding contract. It is
+(`INSTANCE_OPERATOR_USERNAME`); [ADMIN.md](ADMIN.md) is the binding contract. It is
 not part of the product information architecture: it has no bottom bar, no
 feedback widget, no import action, and its menu never appears in the product
 topbar.
@@ -1261,7 +1261,7 @@ rebuild is available for one workout from the header `⋯` menu
 (« Régénérer l'image »).
 
 M5 shipped federation diagnostics inside this shell; the administration
-console (§7.6, `[devdoc:admin]`) now owns them at `/admin/federation`, and
+console (§7.6, [ADMIN.md](ADMIN.md)) now owns them at `/admin/federation`, and
 `/settings/federation` redirects there for the operator. A `wanderer` sub-page
 remains post-M5, alongside the external-peer interoperability backlog.
 
@@ -5966,7 +5966,7 @@ of it forces a redesign.
 | Remote profiles and publications | The avatar component (§9.5), the workout card and the workout detail visual language, unchanged — they already accept an identity rather than a `User`. |
 | Remote courses | The same remote page, media frame and card language as remote publications (§20.16/§20.17), plus the §19.16 copy panel and the §19.17 tombstone. The course card is not added to the feed. |
 | Notifications | Shipped (`§10.16`): the topbar bell left of the account menu, its count badge, and `/notifications`; per-kind switches live at `/settings/notifications`. |
-| Federation diagnostics | The administration console (§7.6, `[devdoc:admin]`); the former settings sub-page redirects there for the configured instance operator. A `wanderer` sub-page remains open in the settings shell (§8.5). |
+| Federation diagnostics | The administration console (§7.6, [ADMIN.md](ADMIN.md)); the former settings sub-page redirects there for the configured instance operator. A `wanderer` sub-page remains open in the settings shell (§8.5). |
 | Comments and likes | Shipped: reactions in the header and on feed cards (§10.17); comments as the full-width card after "Partage" (§10.20), with their count on feed cards. |
 
 **Rules**
