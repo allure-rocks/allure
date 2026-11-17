@@ -10,8 +10,8 @@ module Segments
   class RenderPublicationRouteImageJob < ApplicationJob
     class StorageError < StandardError; end
 
-    # Course images are always smoothed at the medium level (PLAN_MAPLIBRE.md
-    # §9): a course is a reusable corridor, not a recording, and the display
+    # Course images are always smoothed at the medium level (docs/dev/MAPS.md):
+    # a course is a reusable corridor, not a recording, and the display
     # transform happens after sanitization, on the immutable representation.
     # Workout images stay unsmoothed.
     SMOOTHING = "medium"

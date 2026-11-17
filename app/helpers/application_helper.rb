@@ -267,7 +267,7 @@ module ApplicationHelper
     )
   end
 
-  # The viewer's effective workout-map smoothing level (PLAN_MAPLIBRE.md §9).
+  # The viewer's effective workout-map smoothing level (docs/dev/MAPS.md).
   # Course maps hard-code their own medium level; workout maps follow this
   # account preference, and the map options toggle persists it.
   def account_track_smoothing = current_user&.smooth_tracks ? current_user.track_smoothing_level : "off"

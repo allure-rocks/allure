@@ -20,7 +20,7 @@ module Allure
     # but it is not a privacy-strict posture either. Point these at a
     # self-hosted tile server and no application code changes.
     #
-    # See PLAN_MAPLIBRE.md §2.1.
+    # See docs/dev/MAPS.md
     class Config
       class InvalidStyleUrl < StandardError; end
       class InvalidRasterTemplate < StandardError; end
