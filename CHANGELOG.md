@@ -1399,7 +1399,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- `[devdoc:mcp]` specifies a Model Context Protocol endpoint for AI
+- [MCP.md](docs/dev/MCP.md) specifies a Model Context Protocol endpoint for AI
   assistants; `DESIGN.md` gains the §19.27 copy and the location badge.
 - `POST /mcp` serves AI assistants statelessly behind the API token boundary
   (`read` scope) with three read-only tools: `list_workouts`,

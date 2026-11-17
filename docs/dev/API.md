@@ -26,7 +26,7 @@ Not in scope, deliberately:
   account itself. OAuth (authorization code + PKCE, registered applications) is
   a later contract; §15 lists what this one reserves for it.
 - **AI assistants.** The Model Context Protocol endpoint (`POST /mcp`) is its
-  own contract, `[devdoc:mcp]`. It reuses this contract's token boundary
+  own contract, [MCP.md](MCP.md). It reuses this contract's token boundary
   (§4.5, §4.6) and serializers, needs the `read` scope, and adds one column to
   `api_tokens` (`mcp_geometry`, the token's location level for assistants).
 - **Federation.** The ActivityPub surfaces (`/api/v1/trail|segment|comment`,

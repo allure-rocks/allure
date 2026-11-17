@@ -31,6 +31,9 @@ seven-day deletion window and the resumable purge.
 `docs/dev/API.md` is the API contract: the REST resources, the API tokens, the
 webhooks and the OpenAPI document.
 
+`docs/dev/MCP.md` is the MCP contract: the endpoint, the location levels and
+the read tools.
+
 `docs/dev/METRICS.md` is the metrics contract: the endpoint, the metric
 catalog, the privacy negatives and the reference dashboard.
 
@@ -204,7 +207,8 @@ behaviours updates its page in every language in the same patch.
   deliveries. `POST /mcp` serves read-only tools through `AllureMcp::Server`;
   coordinates leave only at the token's `mcp_geometry` level. The OpenAPI 3.1
   document is hand-written at `docs/openapi/v1.yaml`, validated by the suite and
-  served at `/developers/api`. [docs/dev/API.md](docs/dev/API.md) `[devdoc:mcp]`
+  served at `/developers/api`. [docs/dev/API.md](docs/dev/API.md)
+  [docs/dev/MCP.md](docs/dev/MCP.md)
 - **Administration and operations.** `/admin` sits behind the single
   env-configured operator (`Admin::BaseController` answers 404 to everyone
   else); `AdminEvent` and `Admin::Audit` record every operator mutation

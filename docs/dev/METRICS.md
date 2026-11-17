@@ -158,7 +158,7 @@ never the body.
 | `allure_import_connection_errors` | gauge | `provider` | linked connections whose last sync failed |
 | `allure_api_tokens` | gauge | `status` | API tokens: `active`, `expired`, `revoked` (`API.md`) |
 | `allure_api_requests_total` | counter | `scope`, `status_class` | REST API requests by required scope (`any` before one is checked) and `2xx`…`5xx` |
-| `allure_mcp_requests_total` | counter | `method`, `tool`, `outcome` | MCP JSON-RPC requests (`[devdoc:mcp]`): `method` is `initialize`, `ping`, `tools/list`, `tools/call` or `other`; `tool` a known tool name, `unknown`, or `none` outside `tools/call`; `outcome` `ok`, `not_found`, `invalid` or `error` |
+| `allure_mcp_requests_total` | counter | `method`, `tool`, `outcome` | MCP JSON-RPC requests ([MCP.md](MCP.md)): `method` is `initialize`, `ping`, `tools/list`, `tools/call` or `other`; `tool` a known tool name, `unknown`, or `none` outside `tools/call`; `outcome` `ok`, `not_found`, `invalid` or `error` |
 | `allure_webhook_endpoints` | gauge | `status` | webhook endpoints: `active`, `inactive`, `disabled` |
 | `allure_webhook_deliveries` | gauge | `status` | webhook deliveries created in the last 24 hours |
 | `allure_webhook_delivery_oldest_pending_seconds` | gauge | — | age of the oldest pending delivery; 0 when none |

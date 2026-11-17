@@ -4156,7 +4156,7 @@ second beside the secret; the webhook form carries the third as a persistent
 
 Placement: under the « Localisation pour les assistants IA » radio list of the
 token creation form, a persistent `alert-warning`, not dismissible
-(`[devdoc:mcp]`). The creation mail repeats the level in one sentence
+([MCP.md](MCP.md)). The creation mail repeats the level in one sentence
 for `filtered` and `raw`.
 
 > **FR** — « Allure ne peut pas savoir où un assistant envoie ce qu'il lit :
