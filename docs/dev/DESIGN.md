@@ -1567,7 +1567,7 @@ action groups.
 | Rank marker | **The laurel, you against others.** A leaderboard place renders its **numeral**; the top three lead with the laurel of their place (`ti-laurel-wreath-1/2/3`) in the place colour — there is no round disc. Every numeral speaks its rank (`Rang 4`), the top three also carry the `1re place` / `2e place` / `3e place` tooltip, so colour is never the only encoding. With a board size it reads `2 / 12`, the suffix rendered by `rank_medal`, on every surface (board, the segment index's « Mon RP » column, the hub, the workout's segment tab). A **podium stamp** (`rank_stamp`, the same laurel on its tier's disc) marks a top-three standing on a summary tile (§20.6) |
 | Personal place on a segment effort | The trophy pill of the personal place (`RP` gold, `2e` silver, `3e` bronze), then — only for `RP` and only when the board ranks the effort — the laurel rank with the board size beside it (trophy `RP`, then laurel `2 / 12`). The rank never tints the pill, the pill never takes a laurel |
 | Commute | `bg-secondary-lt` with `ti-briefcase` and the translated label; shown wherever the workout (or a publication that shares the flag) is presented |
-| Manual entry | « Saisie manuelle » / "Manual entry": `bg-secondary-lt` with `ti-pencil` and the label, on the owner's page header of a workout typed in by hand (`[devdoc:manual-entry]`); its card top states it in place of a route image. Owner-only: a manual entry is never published |
+| Manual entry | « Saisie manuelle » / "Manual entry": `bg-secondary-lt` with `ti-pencil` and the label, on the owner's page header of a workout typed in by hand ([MANUAL-ENTRY.md](MANUAL-ENTRY.md)); its card top states it in place of a route image. Owner-only: a manual entry is never published |
 | Import entry status | `bg-*-lt` with icon: imported / failed / duplicate / cancelled / queued |
 | Equipment state | active / inactive |
 | Segment kind | segment `ti-route` (the one segment icon everywhere: navigation, tabs, pages, empty states), route `ti-route-2`, loop `ti-repeat` |
@@ -4217,7 +4217,7 @@ the danger button, whose confirmation dialog (§10.10) repeats the window
 
 Placement: the `alert-info` note leading the « Saisie manuelle » panel of the
 import page, and the muted line under the summary of the entry's page
-(`[devdoc:manual-entry]`). Both say what a typed figure counts for and
+([MANUAL-ENTRY.md](MANUAL-ENTRY.md)). Both say what a typed figure counts for and
 that the entry cannot be published.
 
 > **FR** — « Saisissez une activité sans fichier, une séance en salle ou une
@@ -4672,7 +4672,7 @@ original-file download and the deletion alone; the sharing card states that
 there is no route to share instead of offering the publish form, and the
 workout card shows the no-position state where the route image would be.
 
-A **manual entry** (`[devdoc:manual-entry]`) is its owner's alone and has
+A **manual entry** ([MANUAL-ENTRY.md](MANUAL-ENTRY.md)) is its owner's alone and has
 its own template: the header with « Modifier » and a `⋯` menu holding the
 deletion, the « Saisie manuelle » pill and the commute badge, the summary of
 the typed figures only (distance, moving time and pace/speed when a distance
@@ -4797,7 +4797,7 @@ each source renders its own panel, and the shared options card sits below the
 panels: the fallback sport, the single-file title, the equipment, the commute
 flag and the notes. The former M1 single-file form (`/workouts/new`) redirects
 here. The manual source (« Saisie manuelle »,
-`[devdoc:manual-entry]`) is the exception: its panel is a form of its own,
+[MANUAL-ENTRY.md](MANUAL-ENTRY.md)) is the exception: its panel is a form of its own,
 and the upload form — panels, options and footer — hides while it is
 selected.
 

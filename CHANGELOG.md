@@ -969,7 +969,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Manual entries (`[devdoc:manual-entry]`): a « Saisie manuelle » tab on the
+- Manual entries ([MANUAL-ENTRY.md](docs/dev/MANUAL-ENTRY.md)): a « Saisie manuelle » tab on the
   import page records a workout typed in by hand — no file, no position, only
   the typed figures (`origin: "manual"`). It counts in totals, statistics and
   equipment wear, never in records, and cannot be published. The REST API
