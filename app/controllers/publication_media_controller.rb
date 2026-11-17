@@ -31,7 +31,7 @@ class PublicationMediaController < ApplicationController
     )
   end
 
-  # A frozen photo copy (PLAN_PHOTOS.md §5.4), `display` or `thumbnail`.
+  # A frozen photo copy (docs/dev/PHOTOS.md), `display` or `thumbnail`.
   def photo
     photo = publication.photos.find_by_short_id!(params[:photo_id])
     variant = params[:variant] == "thumbnail" ? :thumbnail : :display

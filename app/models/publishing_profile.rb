@@ -59,7 +59,7 @@ class PublishingProfile < ApplicationRecord
     "basemap" => true,
     "mask_start" => true,
     "mask_finish" => true,
-    # Photos are shared only by an explicit choice (PLAN_PHOTOS.md §5.1).
+    # Photos are shared only by an explicit choice (docs/dev/PHOTOS.md).
     "photos" => false,
     "photo_captions" => false,
     "photo_positions" => false

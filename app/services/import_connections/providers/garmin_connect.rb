@@ -48,7 +48,7 @@ module ImportConnections
         archive&.close!
       end
 
-      # Garmin Connect photos are not imported yet (PLAN_PHOTOS.md §6).
+      # Garmin Connect photos are not imported yet (docs/dev/PHOTOS.md).
       def photos(_activity) = Allure::RemoteImports::PhotoSet.new
 
       def equipment

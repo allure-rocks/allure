@@ -4,7 +4,7 @@
 <% available_series = local_assigns.fetch(:available_series, [ :elevation ]) %>
 <% toponymy = local_assigns.fetch(:toponymy, false) %>
 <% anomalies = local_assigns.fetch(:anomalies, []) %>
-<%# The owner's placed photos (PLAN_PHOTOS.md §7); nil on every other chart. %>
+<%# The owner's placed photos (docs/dev/PHOTOS.md); nil on every other chart. %>
 <% photos = local_assigns[:photos] %>
 <% secondary_options = local_assigns.fetch(:configurable, false) ? workout_chart_secondary_options(display, available_series) : [] %>
 <% table_series = workout_chart_display_series(display, available_series) %>

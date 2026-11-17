@@ -3,7 +3,7 @@
 module Allure
   module Photos
     # Distances along a published (sanitized) route, the only geometry a
-    # shared photo position may refer to (PLAN_PHOTOS.md §5.2). `segments` are
+    # shared photo position may refer to (docs/dev/PHOTOS.md). `segments` are
     # the published LineStrings' coordinates, [longitude, latitude]. The
     # distance runs over the published points in order; a gap between
     # segments adds nothing, so a receiver can measure it again from the same

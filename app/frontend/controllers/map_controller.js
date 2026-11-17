@@ -119,7 +119,7 @@ export default class extends Controller {
     // Owner-only position and timing findings (DESIGN.md §15.5): distance
     // ranges along the track, plus the coordinates of rejected positions.
     anomalies: { type: Array, default: [] },
-    // The owner's placed photos (PLAN_PHOTOS.md §7): id, lon, lat, thumbnail
+    // The owner's placed photos (docs/dev/PHOTOS.md): id, lon, lat, thumbnail
     // endpoint and label. Thumbnails sharing a spot at the current zoom are
     // grouped under one marker with a count.
     photos: { type: Array, default: [] },

@@ -24,7 +24,7 @@
 <% smoothing_persist_url = local_assigns[:smoothing_persist_url] %>
 <%# Owner-only flagged readings drawn as short dashes (DESIGN.md §15.5). %>
 <% anomalies = local_assigns.fetch(:anomalies, []) %>
-<%# The owner's placed photos (PLAN_PHOTOS.md §7); nil on every other map. %>
+<%# The owner's placed photos (docs/dev/PHOTOS.md); nil on every other map. %>
 <% photos = local_assigns[:photos] %>
 <%# A virtual world's own map image replaces the ordinary basemap
     (docs/dev/VIRTUAL-PLATFORMS.md); nil on every real-world activity. %>

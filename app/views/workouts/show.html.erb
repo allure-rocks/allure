@@ -37,7 +37,7 @@
 <% header_weather = weather_state == :ready ? @workout.weather.summary : reader_weather %>
 <%# The owner's preview reads the page as a reader would, without the thread. %>
 <% comment_card = reader_preview ? nil : comment_card_for(@workout) %>
-<%# The owner's own photos on their map and profile (PLAN_PHOTOS.md §7);
+<%# The owner's own photos on their map and profile (docs/dev/PHOTOS.md);
     never on a reader's page or the owner's reader preview. %>
 <%# A reader, and the owner's reader preview, see the photos the
     publication froze, placed only by their shared distance. %>

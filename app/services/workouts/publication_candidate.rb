@@ -31,7 +31,7 @@ module Workouts
 
     # `photo_ids` is the owner's explicit choice of photos (nil takes every
     # ready, non-sensitive one); `photos_acknowledged` lets that choice
-    # include a photo taken inside a privacy zone (PLAN_PHOTOS.md §5.2).
+    # include a photo taken inside a privacy zone (docs/dev/PHOTOS.md).
     def initialize(user:, workout:, profile:, photo_ids: nil, photos_acknowledged: false)
       @user = user
       @workout = workout
@@ -207,7 +207,7 @@ module Workouts
       end
     end
 
-    # PLAN_PHOTOS.md §5.2: the photos and what of each the profile shares.
+    # docs/dev/PHOTOS.md: the photos and what of each the profile shares.
     # Each gets its publication identity now, so the snapshot and the copies
     # name the same photo.
     PhotoEntry = Data.define(:uuid, :photo, :caption, :distance)
@@ -237,7 +237,7 @@ module Workouts
     end
 
     # Independent copies, made from the owner's already stripped display
-    # file and encoded again without metadata (PLAN_PHOTOS.md §5.3).
+    # file and encoded again without metadata (docs/dev/PHOTOS.md).
     def build_photo_copies
       @photo_entries.each_with_index.map do |entry, position|
         copies = entry.photo.display.blob.open { |file| Allure::Photos::Processor.publication_copies(file.path) }

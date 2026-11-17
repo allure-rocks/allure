@@ -27,7 +27,7 @@ module Workouts
     end
 
     # `photo_ids`/`photos_acknowledged`: the owner's choice of photos
-    # (PLAN_PHOTOS.md §5.2); nil takes every ready, non-sensitive photo.
+    # (docs/dev/PHOTOS.md); nil takes every ready, non-sensitive photo.
     def initialize(user:, workout:, profile:, delay: nil, photo_ids: nil, photos_acknowledged: false)
       @user = user
       @workout = workout

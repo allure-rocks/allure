@@ -54,7 +54,7 @@ module Workouts
 
     def comments_closed? = @representation["comments_closed"] == true
 
-    # The frozen photos (PLAN_PHOTOS.md §5.4), each served by the
+    # The frozen photos (docs/dev/PHOTOS.md), each served by the
     # publication's own media endpoint, in their published order.
     PhotoItem = Data.define(:id, :width, :height, :caption, :distance)
 

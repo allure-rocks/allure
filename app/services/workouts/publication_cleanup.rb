@@ -69,7 +69,7 @@ module Workouts
       @publication.gpx.purge if @publication.gpx.attached?
       @publication.route_image.purge if @publication.route_image.attached?
       @publication.route_image_dark.purge if @publication.route_image_dark.attached?
-      # The frozen photo copies go with the rest of the media (PLAN_PHOTOS.md §5.3).
+      # The frozen photo copies go with the rest of the media (docs/dev/PHOTOS.md).
       @publication.photos.each do |photo|
         photo.display.purge if photo.display.attached?
         photo.thumbnail.purge if photo.thumbnail.attached?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# One photo frozen into a publication (PLAN_PHOTOS.md §5.3): its own stripped
+# One photo frozen into a publication (docs/dev/PHOTOS.md): its own stripped
 # WebP copies, never the owner's files, so editing or deleting the source
 # photo leaves the publication as it was published. Immutable once written;
 # the publication's cleanup purges it with the rest of its media.
