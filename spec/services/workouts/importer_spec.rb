@@ -74,7 +74,7 @@ RSpec.describe Workouts::Importer do
     end
   end
 
-  it "stores the heart-rate histogram with the workout (PLAN_HEART_RATE.md §3.4)" do
+  it "stores the heart-rate histogram with the workout (docs/dev/HEART-RATE.md)" do
     user.update!(max_heart_rate: 190)
 
     workout = importer("with_extensions").call.workout

@@ -2,7 +2,7 @@
 
 module HeartRates
   # The highest heart rate the account's recordings hold, as a proposal for
-  # its maximum (PLAN_HEART_RATE.md §3.1): the highest bpm a recording spent
+  # its maximum (docs/dev/HEART-RATE.md): the highest bpm a recording spent
   # at least HELD_SECONDS at or above, read from its histogram, so a single
   # plausible-looking spike never sets it. The last 12 months first, the whole
   # history otherwise; never a recording whose maximum the anomaly pass

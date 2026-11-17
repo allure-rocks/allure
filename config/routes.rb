@@ -234,7 +234,7 @@ Rails.application.routes.draw do
     collection do
       get :by_time
       get :by_sport
-      # Time in each heart-rate zone per week or month (PLAN_HEART_RATE.md §4).
+      # Time in each heart-rate zone per week or month (docs/dev/HEART-RATE.md).
       get :heart_rate
     end
   end
@@ -307,7 +307,7 @@ Rails.application.routes.draw do
     post "data/loops", to: "data#loops", as: :data_loops
     post "data/heart_rate", to: "data#heart_rate", as: :data_heart_rate
     post "data/route_suggestions", to: "data#route_suggestions", as: :data_route_suggestions
-    # Heart rate (PLAN_HEART_RATE.md §3.1): the account's maximum, resting
+    # Heart rate (docs/dev/HEART-RATE.md): the account's maximum, resting
     # value and zones. Owner-only; nothing here is ever published.
     resource :heart_rate, only: %i[show update destroy], path: "heart-rate", controller: "heart_rate"
     # Account (PLAN_ACCOUNT.md): the data export and the self-service

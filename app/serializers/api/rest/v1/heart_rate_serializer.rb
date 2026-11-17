@@ -3,7 +3,7 @@
 module Api
   module Rest
     module V1
-      # Heart-rate analysis in the API (PLAN_HEART_RATE.md §3.7). Owner-only
+      # Heart-rate analysis in the API (docs/dev/HEART-RATE.md). Owner-only
       # by construction: only the token's own workouts and account reach it.
       module HeartRateSerializer
         module_function

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # A recording's seconds-per-bpm histogram and what it gives under the owner's
-# current zones (PLAN_HEART_RATE.md §3.4). Owner-only: never in a snapshot, a
+# current zones (docs/dev/HEART-RATE.md). Owner-only: never in a snapshot, a
 # Note, a credit row or a webhook payload.
 class WorkoutHeartRate < ApplicationRecord
   belongs_to :workout, inverse_of: :heart_rate

@@ -2,7 +2,7 @@
 
 module HeartRates
   # Re-slices an account's histograms under its current zones after the
-  # heart-rate profile changes (PLAN_HEART_RATE.md §3.4), or clears the zone
+  # heart-rate profile changes (docs/dev/HEART-RATE.md), or clears the zone
   # columns when the profile is gone. Reads no point. Rows already sliced
   # under the current fingerprint are left alone, so a re-run is a no-op.
   class RezoneJob < ApplicationJob

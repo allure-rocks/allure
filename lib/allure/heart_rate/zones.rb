@@ -5,8 +5,8 @@ require "json"
 
 module Allure
   module HeartRate
-    # Five heart-rate zones from an account's profile (PLAN_HEART_RATE.md
-    # §3.2). `bounds` are the lower edges of Z2…Z5 in percent of the maximum
+    # Five heart-rate zones from an account's profile
+    # (docs/dev/HEART-RATE.md). `bounds` are the lower edges of Z2…Z5 in percent of the maximum
     # (`max` basis) or of the reserve (`reserve`, Karvonen). Z1 has no floor
     # and Z5 no ceiling; thresholds are whole bpm, so slicing the per-bpm
     # histogram is exact.

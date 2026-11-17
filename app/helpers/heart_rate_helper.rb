@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Presentation of the owner's heart-rate zones (PLAN_HEART_RATE.md §3.5,
+# Presentation of the owner's heart-rate zones (docs/dev/HEART-RATE.md,
 # DESIGN.md §10.21). Owner-only surfaces.
 module HeartRateHelper
   HEART_RATE_ANOMALY_KINDS = %w[hr_frozen hr_jump hr_missing hr_out_of_range].freeze
@@ -64,8 +64,8 @@ module HeartRateHelper
     }
   end
 
-  # The owner's zone reading of a recording, or nil (PLAN_HEART_RATE.md
-  # §3.5): nil without a profile or a histogram. A histogram too thin to
+  # The owner's zone reading of a recording, or nil
+  # (docs/dev/HEART-RATE.md): nil without a profile or a histogram. A histogram too thin to
   # slice gives a state that says why (`:sparse`, `:partial`) instead of a
   # tab that silently disappears. Never for a credit row or a manual entry,
   # which hold no histogram.
@@ -80,7 +80,7 @@ module HeartRateHelper
     end
   end
 
-  # The training-load chart payload (PLAN_HEART_RATE.md §4): one point per
+  # The training-load chart payload (docs/dev/HEART-RATE.md): one point per
   # day with the figures rounded for display and the day already formatted,
   # and the last day of the warm-up when it falls in the window.
   def training_load_payload(days, warmup_until: nil)

@@ -2,8 +2,8 @@
 
 module Allure
   module HeartRate
-    # The readings a strap held while losing its signal (PLAN_HEART_RATE.md
-    # §3.3): the same value repeated over at least HR_FROZEN_SAMPLES samples
+    # The readings a strap held while losing its signal
+    # (docs/dev/HEART-RATE.md): the same value repeated over at least HR_FROZEN_SAMPLES samples
     # and HR_FROZEN_SECONDS, followed by at least HR_FROZEN_FOLLOWING_SECONDS
     # without heart rate. The definition is the anomaly pass's `hr_frozen`
     # (Allure::Gpx::Anomalies), applied to one recording segment; the held

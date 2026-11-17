@@ -23,7 +23,7 @@ const signed = (value) => {
   return rounded < 0 ? `−${formatNumber(-rounded, 0)}` : "0"
 }
 
-// Training load over 90 days (PLAN_HEART_RATE.md §4, DESIGN.md §15.1):
+// Training load over 90 days (docs/dev/HEART-RATE.md, DESIGN.md §15.1):
 // fitness as a primary area, fatigue as a muted line, form as thin bars around
 // zero on the same axis, and the first six weeks of the history shaded. The
 // payload is embedded in the card; its weekly table is the text equivalent.

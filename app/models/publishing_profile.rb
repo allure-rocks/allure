@@ -21,7 +21,7 @@ class PublishingProfile < ApplicationRecord
     average_heart_rate max_heart_rate
     average_cadence max_cadence average_power max_power calories
   ].freeze
-  # Heart rate is health data (PLAN_HEART_RATE.md D7): a new profile shares
+  # Heart rate is health data (docs/dev/HEART-RATE.md): a new profile shares
   # none until its owner ticks it. Existing profiles keep their stored list.
   HEALTH_METRIC_KEYS = %w[average_heart_rate max_heart_rate].freeze
   # The form's three groups, in METRIC_KEYS order.

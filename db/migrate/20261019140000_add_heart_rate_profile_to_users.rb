@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_HEART_RATE.md §3.1: an account's heart-rate profile. Without a maximum
+# docs/dev/HEART-RATE.md: an account's heart-rate profile. Without a maximum
 # Allure interprets nothing; the bounds are the lower edges of Z2…Z5 in
 # percent of the maximum or of the reserve.
 class AddHeartRateProfileToUsers < ActiveRecord::Migration[8.1]
