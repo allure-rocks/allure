@@ -83,7 +83,7 @@ the activation notification.
   in the request path, with the activation job enqueued first as a fallback.
 - `Workouts::ScheduledPublicationActivation` activates one publication: lock,
   no-op unless still scheduled, wait while the owner's deletion window is open
-  (`[devdoc:account]`), defer when the job fires before `scheduled_for`,
+  ([ACCOUNT.md](ACCOUNT.md)), defer when the job fires before `scheduled_for`,
   otherwise `activate!`, create the `Create` intent (`preparing` only while the
   route image is still rendering), enqueue expansion, and notify. `forced:`
   backs the owner's Publish now.

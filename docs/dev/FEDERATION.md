@@ -321,7 +321,7 @@ Local actor deletion is a signed withdrawal, not a bare row delete:
   expansion; on the wire each destination receives only the actors of its own
   authorities.
 - `Users::DeleteAccount` destroys the user row only after the Delete intent is
-  durable (`[devdoc:account]`).
+  durable ([ACCOUNT.md](ACCOUNT.md)).
 
 ## 5. Inbox, outbox and delivery
 

@@ -844,7 +844,7 @@ migration (`db:migrate`, applied on boot).
 - The feed hides a deactivated account's publications: the following stream's
   raw union now applies the deletion-window rule
   (`WorkoutPublication.of_available_owners`) like every other local surface
-  (`[devdoc:account]`).
+  ([ACCOUNT.md](docs/dev/ACCOUNT.md)).
 - A due scheduled publication waits out its owner's deletion window instead of
   activating behind it: the publication policy refuses a deactivated owner's
   deliveries, so it would have gone live without reaching anyone. The recovery
@@ -853,7 +853,7 @@ migration (`db:migrate`, applied on boot).
 - A confirmed cancellation stops a purge that had already read the schedule:
   the cut-off re-checks it under the row lock and raises
   `Users::DeleteAccount::Cancelled`, which the purge job swallows
-  (`[devdoc:account]`).
+  ([ACCOUNT.md](docs/dev/ACCOUNT.md)).
 - Push subscription secrets are filtered from the logs (`[devdoc:push]`).
 - A push registration replaces only the current account's earlier row for
   the same endpoint, and only when the new subscription saves: an endpoint
@@ -974,7 +974,7 @@ migration (`db:migrate`, applied on boot).
   the typed figures (`origin: "manual"`). It counts in totals, statistics and
   equipment wear, never in records, and cannot be published. The REST API
   creates one with `POST /api/rest/v1/workouts` and edits it through `PATCH`.
-- Data export and account deletion (`[devdoc:account]`), on
+- Data export and account deletion ([ACCOUNT.md](docs/dev/ACCOUNT.md)), on
   `/settings/account`.
   - **Export:** one ZIP built in the background with the original files (in
     nested archives the import page reads back), the workouts as JSON and
