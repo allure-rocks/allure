@@ -131,7 +131,7 @@ For credit rows only, `start_point`, `bounds`, `points_count` and
 - `workouts_origin`: `origin IN ('import', 'credit', 'manual')`;
 - `workouts_recording_shape`: a recording has `points_count` and
   `import_format`, and has both `start_point` and `bounds` or neither (a
-  positionless recording has no location, `[devdoc:no-gps]`), while a credit
+  positionless recording has no location, [NO-GPS.md](NO-GPS.md)), while a credit
   row has none of the four;
 - `workouts_credit_shape`: an import implies the credit columns are NULL; a
   credit implies `credited_by_actor_id IS NOT NULL`, `credited_from_workout_id

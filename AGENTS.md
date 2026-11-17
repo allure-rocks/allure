@@ -50,6 +50,10 @@ remote notes and media, the safety gate and the restricted audience.
 catalogue, the world maps, virtual sports, venue naming, distance calibration
 and teleports.
 
+`docs/dev/NO-GPS.md` is the positionless-recordings contract: the
+classification, the device readings, the analysis without geometry, the
+persistence, the skipped derivations and the publication refusal.
+
 `docs/dev/ELEVATION.md` is the terrain-elevation contract: the provider, the
 two-level opt-in, the sampling and profile, the device totals, the per-workout
 source and the course terrain.
@@ -182,7 +186,7 @@ behaviours updates its page in every language in the same patch.
   distance and speed, stored with empty geometry, and refused publication with
   `no_geometry`.
   [docs/dev/VIRTUAL-PLATFORMS.md](docs/dev/VIRTUAL-PLATFORMS.md)
-  `[devdoc:no-gps]`
+  [docs/dev/NO-GPS.md](docs/dev/NO-GPS.md)
 - **Demo and seeds.** `db/seeds.rb` seeds the reference catalogs in every
   environment and the demo dataset in development only; `Allure::Demo` turns an
   instance into a throwaway demo; `DemoSeed::Runner` drives the manifests

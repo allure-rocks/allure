@@ -4661,7 +4661,7 @@ there is no original-data card and no danger zone.
               the header, the §19.20 sentence, one row per participation
 ```
 
-A **positionless recording** (`[devdoc:no-gps]`) follows the same layout without
+A **positionless recording** ([NO-GPS.md](NO-GPS.md)) follows the same layout without
 its geography: no map rail, so the summary leads the single column and the
 chart plots elapsed minutes when the file recorded no distance; a neutral
 « Sans position GPS » pill sits in the badge line; the elevation figures and —

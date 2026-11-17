@@ -1177,7 +1177,7 @@ migration (`db:migrate`, applied on boot).
 ### Added
 
 - An activity file that records no position at all is imported instead of
-  being rejected (`[devdoc:no-gps]`): a trainer ride, a treadmill run, an erg
+  being rejected ([NO-GPS.md](docs/dev/NO-GPS.md)): a trainer ride, a treadmill run, an erg
   session, a pool swim or a duration-only session takes its distance, duration
   and pace from the device's own records rather than from GPS, and its page
   drops the map for the « Sans position GPS » state. It has no route to share,
