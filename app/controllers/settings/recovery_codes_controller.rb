@@ -6,7 +6,7 @@ module Settings
   class RecoveryCodesController < ApplicationController
     before_action :require_recent_authentication, only: :create
     # A visitor on a demo's shared account must not rotate a factor's way in
-    # (PLAN_DEMO.md §3).
+    # (docs/dev/DEMO.md).
     before_action :refuse_demo_account_lockout, only: :create
 
     def show

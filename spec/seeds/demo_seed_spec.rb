@@ -219,7 +219,7 @@ RSpec.describe DemoSeed::Runner do
     expect(link.participant_confirmed_at).to be_present
   end
 
-  it "re-dates every recording and skips second factors when the demo asks for it (PLAN_DEMO.md §4)" do
+  it "re-dates every recording and skips second factors when the demo asks for it (docs/dev/DEMO.md)" do
     shift = 86_400 * 10
     summary = described_class.new(
       manifest:,
@@ -311,7 +311,7 @@ RSpec.describe DemoSeed::Runner do
     end
   end
 
-  it "assigns the passwords the demo's callable names, overwriting what exists (PLAN_DEMO.md §3)" do
+  it "assigns the passwords the demo's callable names, overwriting what exists (docs/dev/DEMO.md)" do
     run
     described_class.new(
       manifest:,

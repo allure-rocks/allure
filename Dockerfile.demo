@@ -1,14 +1,14 @@
 # syntax=docker/dockerfile:1
 # check=error=true
 
-# The public demo image (PLAN_DEMO.md, RUNBOOK_DEMO.md): the production app
+# The public demo image (docs/dev/DEMO.md): the production app
 # image of the same commit plus what bin/demo-boot seeds from — the demo
 # loader, the GPX fixtures its manifests name and only the FIT corpus files
 # they name (db/seeds/demo/corpus_files.txt, ~50 MB of the corpus). The
 # production build context keeps all three out (spec/config/dockerfile_spec.rb);
 # Dockerfile.demo.dockerignore admits them for this build alone.
 #
-# The demo host builds it from a release tag (RUNBOOK_DEMO.md §1): the corpus
+# The demo host builds it from a release tag (docs/dev/DEMO.md): the corpus
 # is third-party data with no licence, so CI never publishes this image.
 #
 #     ALLURE_IMAGE=<app image> docker compose ... build rails worker

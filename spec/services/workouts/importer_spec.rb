@@ -39,7 +39,7 @@ RSpec.describe Workouts::Importer do
     expect(result.workout.source_digest).to match(/\A\h{64}\z/)
   end
 
-  describe "with a time shift (PLAN_DEMO.md §4)" do
+  describe "with a time shift (docs/dev/DEMO.md)" do
     let(:shift) { 86_400 * 195 }
     let(:other_user) { create(:user) }
 

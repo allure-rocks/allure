@@ -1,4 +1,4 @@
-# The public demo instance (PLAN_DEMO.md, RUNBOOK_DEMO.md). Modeled on
+# The public demo instance (docs/dev/DEMO.md). Modeled on
 # docker-compose.production.yml with four deltas, and nothing else:
 #
 # 1. the rails container boots through bin/demo-boot, which seeds the demo
@@ -9,7 +9,7 @@
 #    keeps all of them out of the production image, and that guard must keep
 #    holding. The demo host builds it from a release tag and never publishes
 #    it (the corpus is third-party data); build ALLURE_IMAGE first
-#    (docker-compose.production.yml, RUNBOOK_DEMO.md §1);
+#    (docker-compose.production.yml, docs/dev/DEMO.md);
 # 3. DEMO_INSTANCE and friends are set: shared accounts, no second factor,
 #    no session IP, the warning strip (lib/allure/demo.rb);
 # 4. the whole project is recreated every night by bin/demo-nightly-reset, so
@@ -62,7 +62,7 @@ x-rails: &rails
     INSTANCE_HOST_NAME: ${INSTANCE_HOST_NAME:-}
     INSTANCE_HOST_URL: ${INSTANCE_HOST_URL:-}
     ALLURE_SOURCE_URL: ${ALLURE_SOURCE_URL:-}
-    # The demo mode (PLAN_DEMO.md): the shared account named below, no second
+    # The demo mode (docs/dev/DEMO.md): the shared account named below, no second
     # factor anywhere, no session IP, and the warning strip. Marie stays the
     # operator, but her credentials are never published: only the member
     # account is shared, and every background persona holds a random

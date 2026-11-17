@@ -44,7 +44,7 @@ RSpec.describe Workouts::ImportBatchJob do
     expect(batch.entries.order(:position).map { |entry| entry.workout.original_file.filename.to_s }).to eq([ "one.gpx", "two.gpx" ])
   end
 
-  it "passes the demo time shift through to every imported workout (PLAN_DEMO.md §4)" do
+  it "passes the demo time shift through to every imported workout (docs/dev/DEMO.md)" do
     other = create(:user)
     plain = create(:workout_import_batch, user: other, sport:)
     attach_source(plain, "archive.zip", zip_content("one.gpx" => gpx))

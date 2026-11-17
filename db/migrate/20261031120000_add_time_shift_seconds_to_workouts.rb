@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # A demo instance dates its seeded recordings near the present instead of the
-# day the file was recorded (PLAN_DEMO.md §4). The offset in seconds is stored
+# day the file was recorded (docs/dev/DEMO.md). The offset in seconds is stored
 # on the workout so every re-analysis of the immutable original re-applies it
 # through Workouts::OriginalTrack and never falls back to the file's own
 # dates. Every ordinary import keeps the default zero.
