@@ -55,7 +55,7 @@ when `limit` workouts were deleted and work remains (the job re-enqueues).
 | Phase | What happens | Done when |
 |---|---|---|
 | `cut_off` | `deletion_started_at` set; sessions, push subscriptions, API tokens, recovery codes, passkeys and identities deleted; import connections and their credentials deleted; queued imports and bulk operations cancelled; webhooks stay but deliver nothing for a deactivated account and cascade with the row | `deletion_started_at` present |
-| `funding` | every live provider subscription matched to the account — including one bound by a late verified checkout notification during the window (`Funding::Reference.resolve for_billing:`, `[devdoc:funding]`) — is cancelled at the provider (renewal stopped; paid periods retained); billing identifiers are purged only with the rows at the end | every live subscription answered `canceled` / confirmed `cancel_at_period_end`, or none existed; an unexplained provider 404 blocks the phase fail-closed with the billing identifiers intact |
+| `funding` | every live provider subscription matched to the account — including one bound by a late verified checkout notification during the window (`Funding::Reference.resolve for_billing:`, [FUNDING.md](FUNDING.md)) — is cancelled at the provider (renewal stopped; paid periods retained); billing identifiers are purged only with the rows at the end | every live subscription answered `canceled` / confirmed `cancel_at_period_end`, or none existed; an unexplained provider 404 blocks the phase fail-closed with the billing identifiers intact |
 | `federation` | live participations withdrawn, then `Federation::ActorDeletion` (publications withdrawn, comments taken out, signed actor `Delete`, tombstone) | actor absent or tombstoned |
 | `workouts` | `Workouts::WorkoutDeletion` one by one, at most `limit` per call: participants' credit rows are detached, segment counters refreshed, blobs purged later | no workout left |
 | `rest` | `@user.destroy!` cascades the remaining small rows (segments, equipment, profiles, zones, records, exports, notifications) | row gone |
@@ -164,7 +164,7 @@ which `suspended?` also implies):
   still binds its subscription to the account as billing owner — no badge, no
   notification — so the purge's cancellation reaches it; once the purge has
   started, the notification cancels the renewal at the provider immediately
-  (`[devdoc:funding]`). While the window is open the subscription stays live,
+  ([FUNDING.md](FUNDING.md)). While the window is open the subscription stays live,
   so a cancelled deletion keeps it.
 
 Cancelling clears the three columns and mails a confirmation

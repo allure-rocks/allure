@@ -1430,7 +1430,7 @@ explains the voluntary contribution before three equal tier cards (one column
 on phones, three from `md`), each naming its drink and linking to the
 operator's hosted checkout. Unconfigured tiers have no payment button. No
 amount is invented locally. A persistent notice explains manual confirmation.
-The automated annual-subscription contract is `[devdoc:funding]` (not yet
+The automated annual-subscription contract is [FUNDING.md](FUNDING.md) (not yet
 implemented). Before enabling an automated provider, the page must explicitly
 name **annual automatic renewal**, distinguish subscription management status
 from the badge's paid-through date, and offer a web-only hosted management /
