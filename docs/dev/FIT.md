@@ -246,7 +246,7 @@ GPX parser's contract exactly.
 | Power | uint16 watts |
 | Calories | `session.total_calories`, kcal, matching the existing `workouts.calories` column |
 | Maximum speed | Prefer `session.enhanced_max_speed`, then `session.max_speed`, then the greatest lap maximum; speed scale 1000, persisted as m/s |
-| Device elevation totals | The recorded laps are summed by `Workouts::DeviceElevationTotals` when they cover at least 95 % of the activity; otherwise `session.total_ascent`/`total_descent` are exposed as `Track#source_ascent`/`source_descent` (`[devdoc:elevation]`) |
+| Device elevation totals | The recorded laps are summed by `Workouts::DeviceElevationTotals` when they cover at least 95 % of the activity; otherwise `session.total_ascent`/`total_descent` are exposed as `Track#source_ascent`/`source_descent` ([ELEVATION.md](ELEVATION.md)) |
 | Creator | A registered virtual-platform fingerprint on `file_id` ([VIRTUAL-PLATFORMS.md](VIRTUAL-PLATFORMS.md)); else `file_id.product_name`; else the `manufacturer`/`product` model; else `manufacturer`; else `device_info.product_name`; else `device_info.manufacturer` |
 
 Units already match the SI storage contract of `WORKOUT.md` §2.1, so no

@@ -50,6 +50,10 @@ remote notes and media, the safety gate and the restricted audience.
 catalogue, the world maps, virtual sports, venue naming, distance calibration
 and teleports.
 
+`docs/dev/ELEVATION.md` is the terrain-elevation contract: the provider, the
+two-level opt-in, the sampling and profile, the device totals, the per-workout
+source and the course terrain.
+
 `docs/dev/REMOTE-IMPORTS.md` is the remote-imports contract: the provider
 registry, the connection model, the adapter contract, the batch job, the shared
 lifecycle and the provider capabilities. The detailed sign-in and operational
@@ -166,8 +170,8 @@ behaviours updates its page in every language in the same patch.
   with stripped derivatives and placement, and geocoded places. Each is opt-in,
   each derived dataset carries its own version or status marker, and none of it
   enters a publication snapshot unless its profile setting says so.
-  `[devdoc:elevation]` `[devdoc:weather]` `[devdoc:heart-rate]`
-  `[devdoc:photos]`
+  [docs/dev/ELEVATION.md](docs/dev/ELEVATION.md) `[devdoc:weather]`
+  `[devdoc:heart-rate]` `[devdoc:photos]`
 - **Virtual platforms and positionless recordings.**
   `Allure::Virtual::Platforms` names a platform from the FIT `file_id`; a
   virtual world's map image is drawn instead of the basemap and its attribution

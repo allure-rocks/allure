@@ -1226,7 +1226,7 @@ configures a provider, API et webhooks, Sécurité).
 | `/settings/units` | unit system, time zone, week start |
 | `/settings/sports` | default variant per generic sport (cycling, running, walking) used at import ([WORKOUT.md](WORKOUT.md)) |
 | `/settings/notifications` | « Notifications dans l'application »: one switch per kind, saved by the card's submit; then, only in a companion registering the `push` bridge component on an instance with push configured, the « Sur cet iPhone » card (§7.7, §19.28) |
-| `/settings/elevation` | terrain elevation opt-in, only when the instance configures a provider (`[devdoc:elevation]`) |
+| `/settings/elevation` | terrain elevation opt-in, only when the instance configures a provider ([ELEVATION.md](ELEVATION.md)) |
 | `/settings/publishing-profiles` | the profile collection (existing route) |
 | `/settings/privacy-zones` | the zone collection (existing route) |
 | `/settings/security` | three groups (§20.15): two-step verification first (obligation, authenticator app, passkeys, recovery codes); the ways in side by side, password and identity providers; then the active sessions (paginated, sortable table with device, sign-in time and method, last activity and the lifetime rule) with « Fermer toutes les sessions » in its header; closing a session re-authenticates first |
@@ -3183,7 +3183,7 @@ badge.
   every analysis row; a kind holding more findings than stored ends with « Et
   N autres, non détaillées. ». A tab holding an elevation mismatch ends with
   the one correction available, the terrain-profile switch, and only where the
-  instance configured a provider and the account opted in (`[devdoc:elevation]`). Last, folded in a `<details>`, « Habituel pour
+  instance configured a provider and the account opted in ([ELEVATION.md](ELEVATION.md)). Last, folded in a `<details>`, « Habituel pour
   cet appareil » lists the device's signature kinds, which are not flagged.
 
 ---

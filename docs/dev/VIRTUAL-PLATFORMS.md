@@ -231,7 +231,7 @@ laps cover less than 90 % of the recording span, when the ratio falls outside
 catalogue is never calibrated, and neither is a positionless recording: it has
 no drawn course, and its distance already comes from the device
 (`[devdoc:no-gps]`). The change is analyzer version 10
-(`[devdoc:elevation]`), so the rebuild sweep reanalyzes existing workouts and
+([ELEVATION.md](ELEVATION.md)), so the rebuild sweep reanalyzes existing workouts and
 `Workouts::Reanalyzer` re-renders the route image of those whose geometry moved.
 
 ### 7.1 Teleports

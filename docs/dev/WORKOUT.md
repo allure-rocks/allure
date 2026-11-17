@@ -631,10 +631,10 @@ speed_km_h = distance_metres / seconds * 3.6
 - Elevation is never bridged across missing values: intervals touching a
   missing elevation carry no grade and are skipped rather than faked. A terrain
   profile fetched for an elevation-less workout is a distinct, owner-chosen
-  source applied before analysis (`[devdoc:elevation]`), not a bridge.
+  source applied before analysis ([ELEVATION.md](ELEVATION.md)), not a bridge.
 - The workout-level ascent and descent prefer the device's own totals when the
   file carries them (FIT session, else recorded laps covering ≥ 95 % of the
-  activity, `[devdoc:elevation]`); the computed profile remains the fallback
+  activity, [ELEVATION.md](ELEVATION.md)); the computed profile remains the fallback
   and the per-segment values are always computed. A terrain-profile analysis
   uses the `dem` class (80 m smoothing half-window, 8 m threshold).
 - The workout value aggregates the per-segment adjusted distance and moving
