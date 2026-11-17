@@ -83,7 +83,7 @@ module Workouts
     private
 
     # An account in its deletion window runs nothing on its behalf
-    # (PLAN_ACCOUNT.md §4.2): a due publication waits there, its deliveries
+    # (docs/dev/ACCOUNT.md): a due publication waits there, its deliveries
     # being refused by the publication policy anyway, and the purge cancels it
     # with its workout. The recovery sweep activates it after a cancellation,
     # when the owner is available again.

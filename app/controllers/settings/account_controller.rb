@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # « Compte » (PLAN_ACCOUNT.md): the data export and the self-service
+  # « Compte » (docs/dev/ACCOUNT.md): the data export and the self-service
   # deletion. Both actions require a recent proof of identity in their own
   # controllers; this page only reads.
   class AccountController < ApplicationController

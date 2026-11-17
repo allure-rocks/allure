@@ -71,7 +71,7 @@ class WorkoutPublication < ApplicationRecord
   # public set used by federation and operator aggregates.
   # An account whose deletion is scheduled is deactivated for its window: its
   # publications are hidden locally and refused on the wire until the purge
-  # withdraws them (PLAN_ACCOUNT.md §4.2).
+  # withdraws them (docs/dev/ACCOUNT.md).
   scope :of_available_owners, -> {
     where.not(actor_id: Actor.joins(:user).where.not(users: { deletion_scheduled_at: nil }).select(:id))
   }

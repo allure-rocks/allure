@@ -3,7 +3,7 @@
 require "csv"
 
 module Allure
-  # CSV cells a spreadsheet opens safely (PLAN_ACCOUNT.md §3.3): a text cell
+  # CSV cells a spreadsheet opens safely (docs/dev/ACCOUNT.md): a text cell
   # starting with a formula character gets a leading `'`, so Excel or
   # LibreOffice shows it as text instead of evaluating it. Text written to an
   # export can come from another instance (a credit row's title, a remote

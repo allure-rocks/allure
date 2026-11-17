@@ -32,7 +32,7 @@ module Authentication
     end
 
     # The pages an account in its deletion window may reach
-    # (PLAN_ACCOUNT.md §4.2).
+    # (docs/dev/ACCOUNT.md).
     def allow_deletion_window_access(**options)
       skip_before_action :enforce_deletion_window, **options
     end
@@ -101,7 +101,7 @@ module Authentication
     end
 
     # An account whose deletion is scheduled is deactivated: every page leads
-    # to the one that offers to cancel it (PLAN_ACCOUNT.md §4.2).
+    # to the one that offers to cancel it (docs/dev/ACCOUNT.md).
     def enforce_deletion_window
       return unless Current.session&.user&.deletion_scheduled?
 

@@ -12,7 +12,7 @@ class ProfilesController < ApplicationController
   def show
     @user = User.find_by(username: params[:username].to_s.downcase)
     raise ActiveRecord::RecordNotFound unless @user
-    # Hidden for the deletion window (PLAN_ACCOUNT.md §4.2).
+    # Hidden for the deletion window (docs/dev/ACCOUNT.md).
     raise ActiveRecord::RecordNotFound if @user.deletion_scheduled?
 
     # While federation is off no actor is provisioned for a visit: an account

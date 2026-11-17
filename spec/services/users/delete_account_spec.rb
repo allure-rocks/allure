@@ -51,7 +51,7 @@ RSpec.describe Users::DeleteAccount do
     expect(Notification.where(kind: "participation_requested")).to be_empty
   end
 
-  describe "phases (PLAN_ACCOUNT.md §2.2)" do
+  describe "phases (docs/dev/ACCOUNT.md)" do
     it "cuts the account off before anything else and audits the deletion once" do
       user.sessions.create!(user_agent: "RSpec", ip_address: "192.0.2.1", last_seen_at: now)
       ApiToken.issue!(user:, name: "Spec client", scopes: %w[read])
@@ -198,7 +198,7 @@ RSpec.describe Users::DeleteAccount do
     end
   end
 
-  describe "the username afterwards (PLAN_ACCOUNT.md §2.1)" do
+  describe "the username afterwards (docs/dev/ACCOUNT.md)" do
     it "is never handed out again" do
       federated = create(:user)
       Federation::ActorProvisioner.new(user: federated).call!
