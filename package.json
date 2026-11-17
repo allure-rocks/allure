@@ -13,7 +13,7 @@
     "@hotwired/hotwire-native-bridge": "^1.2.2",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23",
-    "@scalar/api-reference": "1.75.0",
+    "@scalar/api-reference": "1.80.0",
     "@tabler/core": "1.6.1",
     "@tabler/icons-webfont": "3.49.0",
     "echarts": "^6.1.0",
