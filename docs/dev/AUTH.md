@@ -227,7 +227,7 @@ is checked. Registration also counts as the sign-in of a password account
 - An `enrolment_only` session whose account gained a factor in another session
   (or from the console) is signed out on its next request: it only ever
   proved the password, so the next sign-in asks for the factor.
-- **Demo exception** (`[devdoc:demo]`): when `DEMO_INSTANCE` is set the policy
+- **Demo exception** ([DEMO.md](DEMO.md)): when `DEMO_INSTANCE` is set the policy
   answers `:satisfied` for everyone, the operator included — nothing is owed,
   the banner never renders, and `counts` reports no `grace` or `required`. An
   account that *is* enrolled still answers its factor at sign-in; only the
@@ -241,7 +241,7 @@ is checked. Registration also counts as the sign-in of a password account
 `Current.session.second_factor_at` within 15 minutes. Otherwise it redirects
 to the re-authentication page (§5.5), which for an enrolled account asks for
 the password and a factor, and returns to the admin page. On a demo instance
-(`[devdoc:demo]`) the operator holds no factor at all, so a recent password
+([DEMO.md](DEMO.md)) the operator holds no factor at all, so a recent password
 proof is accepted instead. This applies whatever path the operator used to
 sign in.
 

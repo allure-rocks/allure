@@ -117,6 +117,9 @@ its shape and validation, and what it counts for.
 `docs/dev/STRAVA-ARCHIVE.md` is the Strava archive contract: the source, the
 reading bounds, the sport mapping, the job and the archive's photos.
 
+`docs/dev/DEMO.md` is the demo contract: the mode switch, the re-dated data,
+the shared accounts, the nightly reset and the reset strip.
+
 `docs/dev/BULK-ACTIONS.md` is the bulk-actions contract: the selection, the
 quick actions and the reviewable background operations.
 
@@ -246,7 +249,7 @@ behaviours updates its page in every language in the same patch.
 - **Demo and seeds.** `db/seeds.rb` seeds the reference catalogs in every
   environment and the demo dataset in development only; `Allure::Demo` turns an
   instance into a throwaway demo; `DemoSeed::Runner` drives the manifests
-  through the ordinary services. `[devdoc:demo]`
+  through the ordinary services. [docs/dev/DEMO.md](docs/dev/DEMO.md)
 
 ## Locked Stack
 
