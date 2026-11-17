@@ -2153,7 +2153,7 @@ page carries no card: the thread lives on its own page (see **Phones**).
 ### 10.21 Heart-rate zone bar
 
 The time a recording spent in each of the five heart-rate zones
-(`[devdoc:heart-rate]`), in the « Zones cardiaques » tab of the owner's
+([HEART-RATE.md](HEART-RATE.md)), in the « Zones cardiaques » tab of the owner's
 analysis card only.
 
 - **Shape.** Tabler's stacked `progress progress-separated`, 1.5 rem high,
@@ -2177,7 +2177,7 @@ analysis card only.
   (« Zones en pourcentage de votre fréquence maximale (190 bpm). ») with
   « Modifier mes zones » to `/settings/heart-rate`.
 - **Coverage.** Coverage is read against the time the device recorded, pauses
-  excluded (`[devdoc:heart-rate]`), so a paused timer never reads as a
+  excluded ([HEART-RATE.md](HEART-RATE.md)), so a paused timer never reads as a
   lost strap. Under 95 %, one muted sentence under the bar says how much
   carried a heart rate and that zones and load cover that time only. Frozen
   values left out are named with their duration; a heart-rate finding of the
@@ -2703,7 +2703,7 @@ Apache ECharts only (SVG renderer, `[devdoc:charts]`). No second charting librar
 | Stats by sport | horizontal bar, one bar per sport, identified by its label |
 | `/me` intensity pulse | a mirrored weekly waveform over the whole history — one capsule per week around a baseline, height and tint both carrying the 0–100 score, rest weeks as muted dots, the selected period in the primary ramp and the rest of the history in a grey ramp — X labels, a "week · score / facts" tooltip, a peak named by the reading line below, navigation buttons and an explanatory ⓘ hint |
 | `/me` sport mix | donut, one slice per sport, legend at its side, primary shade ramp |
-| `/me` training load | the last 90 days of every sport (`[devdoc:heart-rate]`): fitness as a primary line over a light primary area, fatigue as a thin muted line, form as faint muted bars around zero on the same axis, a legend naming the three; above it the three figures of today (form signed), a short ⓘ hint naming the method and the unit as Allure's own, the first six weeks of the history shaded when they fall in the window (with a sentence), the counts of sessions without and with partial heart rate, « Comment lire ces chiffres » folded, and a table per calendar week of the account behind « Voir les données », the unfinished week marked. Shown once a recording carries usable heart rate; without a heart-rate profile, the invitation to set one |
+| `/me` training load | the last 90 days of every sport ([HEART-RATE.md](HEART-RATE.md)): fitness as a primary line over a light primary area, fatigue as a thin muted line, form as faint muted bars around zero on the same axis, a legend naming the three; above it the three figures of today (form signed), a short ⓘ hint naming the method and the unit as Allure's own, the first six weeks of the history shaded when they fall in the window (with a sentence), the counts of sessions without and with partial heart rate, « Comment lire ces chiffres » folded, and a table per calendar week of the account behind « Voir les données », the unfinished week marked. Shown once a recording carries usable heart rate; without a heart-rate profile, the invitation to set one |
 | Heart-rate zones per period | `/me/stats/heart_rate`: an introduction naming the zones' basis with « Modifier mes zones »; one stacked column per week (last 26) or month (last 24), in hours or in shares of each period (« Heures » / « Répartition »), Z1 at the foot, the zone ramp of §10.21, empty periods kept on the axis; the hub's toolbar (§8.4) — from `md` the sport pills with each sport's recordings with heart rate in the window and « Semaines » / « Mois » as a segmented control, on phones one row of two native selects — while « Heures » / « Répartition » sits in the chart card's header (§10.15, a native select on phones); a three-figure strip low / moderate / high (Z1–Z2, Z3, Z4–Z5) with a landmark-not-prescription hint; a table of the periods that hold heart rate, newest first, in time or in shares, and on phones a list of the same periods, each with its total, a thin zone bar and the five values; on a phone-wide chart the legend names the zones by number |
 | Activity calendar | not a chart library — a CSS grid (§15.3) |
 
@@ -4260,7 +4260,7 @@ device's reading is not the air temperature.
 
 ### 19.32 Heart rate — on `/settings/heart-rate` and the publishing profile form
 
-Placement: at the foot of `/settings/heart-rate` (`[devdoc:heart-rate]`),
+Placement: at the foot of `/settings/heart-rate` ([HEART-RATE.md](HEART-RATE.md)),
 with the lock glyph; under the « Capteurs » metric group of the publishing
 profile form, described-by of both heart-rate boxes (§3.6). New profiles start
 with both boxes unticked.
@@ -4280,7 +4280,7 @@ with both boxes unticked.
 
 Placement: the « Comment lire ces chiffres » fold of the `/me` training-load
 card, the short ⓘ of the same card, and the load line of the « Zones
-cardiaques » tab (`[devdoc:heart-rate]`). The figures are never
+cardiaques » tab ([HEART-RATE.md](HEART-RATE.md)). The figures are never
 presented as comparable with another application or another person, and a
 missing heart rate is never presented as estimated.
 

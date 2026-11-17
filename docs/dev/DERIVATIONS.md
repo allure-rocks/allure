@@ -17,7 +17,7 @@ rebuilds are launched.
 | Toponymy | stored track segments | Nominatim | `workout_toponymies.algorithm_version` + `status` | `Workouts::ToponymyRefresh` → `Workouts::EnrichToponymyJob` |
 | Assembled places | stored toponymy | no | `workout_toponymies.places_algorithm_version` | `Workouts::PlaceNamer` |
 | Terrain elevation | stored track + DEM | DEM service | `workout_elevations.status` | `Workouts::ApplyElevationSourceJob` |
-| Heart-rate histogram and zones | stored track segments + the owner's heart-rate profile | no | `workouts.heart_rate_version` (histogram), `workout_heart_rates.zones_fingerprint` (zones) | `HeartRates::Rebuild`, `HeartRates::RezoneJob` (`[devdoc:heart-rate]`) |
+| Heart-rate histogram and zones | stored track segments + the owner's heart-rate profile | no | `workouts.heart_rate_version` (histogram), `workout_heart_rates.zones_fingerprint` (zones) | `HeartRates::Rebuild`, `HeartRates::RezoneJob` ([HEART-RATE.md](HEART-RATE.md)) |
 | Course elevation profile | stored source track segments (frozen) | no | `segments.elevation_profile` (`NULL` = not built, `[]` = built empty) | `Segments::Creator`, `Segments::BuildElevationProfileJob` |
 | Recurring-route suggestions | stored track segments | no | `workouts.route_suggestion_version` | `Segments::RouteSuggestionDetector` (`Segments::SuggestRouteJob`, `Segments::RouteSuggestionSweepJob`) |
 
@@ -165,7 +165,7 @@ the workout keeps showing up in the rebuild count instead of disappearing.
 | `Segments::BackfillTerrainElevationJob` | `device` courses never tried or `failed`, eligible for the terrain (`ELEVATION.md`), configured provider | id cursor, 100 (one paced `ApplyTerrainElevationJob` each) |
 | `Segments::BackfillPlacesJob` | segments whose `place_status` is `pending` or `failed`, configured provider | id cursor, 100 (schedules the paced geocoding) |
 | `Together::BackfillDetectionJob` | recordings whose `together_detection_version` is below `Allure::Together::Detector::VERSION` (`SHARED-ACTIVITIES.md`) | id cursor, 100 (one `DetectWorkoutJob` each, which stamps the version) |
-| `HeartRates::BackfillJob` | recordings whose `heart_rate_version` is below `Allure::HeartRate::Histogram::VERSION` (`[devdoc:heart-rate]`) | id cursor, 100 (inline, from the stored points) |
+| `HeartRates::BackfillJob` | recordings whose `heart_rate_version` is below `Allure::HeartRate::Histogram::VERSION` ([HEART-RATE.md](HEART-RATE.md)) | id cursor, 100 (inline, from the stored points) |
 | `Segments::RouteSuggestionSweepJob` | positioned recordings whose `route_suggestion_version` is below `RouteSuggestionDetector::VERSION`, one sweep per account, newest first (`SEGMENTS.md`) | per-account keyset, 25 |
 
 All of them are idempotent and resume themselves. Operator surfaces:

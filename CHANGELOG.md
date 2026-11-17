@@ -669,7 +669,7 @@ migration (`db:migrate`, applied on boot).
 ### Changed
 
 - Heart-rate coverage is read against the time the device recorded, pauses
-  excluded (`[devdoc:heart-rate]`, histogram version 2): a paused timer no
+  excluded ([HEART-RATE.md](docs/dev/HEART-RATE.md), histogram version 2): a paused timer no
   longer reads as a lost strap. Values a losing strap held are left out of the
   zones and the load, and a recording whose points are minutes apart is named
   « trop espacé » instead of being sliced. Run the heart-rate sweep from
@@ -751,7 +751,7 @@ migration (`db:migrate`, applied on boot).
 
 ### Added
 
-- Heart-rate zones (`[devdoc:heart-rate]`). An account sets its maximum and
+- Heart-rate zones ([HEART-RATE.md](docs/dev/HEART-RATE.md)). An account sets its maximum and
   optional resting heart rate, the zone basis (percent of the maximum, or of
   the reserve after Karvonen) and the lower bounds of zones 2 to 5 at
   `/settings/heart-rate`, which proposes the highest observed maximum the
