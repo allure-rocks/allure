@@ -2,7 +2,7 @@
 
 module Comments
   # Expansion of a comment's activities runs after the comment and its intent
-  # are committed (PLAN_COMMENTS.md §5.1). A queue error never rolls a gesture
+  # are committed (docs/dev/COMMENTS.md). A queue error never rolls a gesture
   # back: the recovery sweep owns pending events.
   module Outbound
     def self.enqueue!(*events)

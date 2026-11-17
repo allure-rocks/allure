@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Explicit per-segment leaderboard participation (PLAN_SEGMENTS.md §8.2): an
+# Explicit per-segment leaderboard participation (docs/dev/SEGMENTS.md): an
 # effort is ranked only when its athlete joined the segment. The owner is a
 # participant of their own segment and needs no row. No backfill: existing
 # listed efforts do not imply consent.

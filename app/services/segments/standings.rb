@@ -4,7 +4,7 @@ module Segments
   # The viewer's position on each board they read and have run: one row per
   # (segment, sport) they have an effort on, carrying the rank and time the
   # board shows them plus the number of athletes they see ranked. A viewer whose effort is not
-  # eligible still gets a row, flagged `ranked: false` (PLAN_SEGMENTS.md §8.2).
+  # eligible still gets a row, flagged `ranked: false` (docs/dev/SEGMENTS.md).
   #
   # Two queries cover a whole page of segments: the eligible efforts that make
   # up each ranking, and the viewer's own efforts (ranked or not).

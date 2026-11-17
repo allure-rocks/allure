@@ -2,7 +2,7 @@
 
 module Segments
   # Runs recurring-route detection for one freshly imported recording
-  # (PLAN_SEGMENTS.md §7.7). Serialized per account with the history sweep, so
+  # (docs/dev/SEGMENTS.md). Serialized per account with the history sweep, so
   # two imports of the same circuit never create two suggestions.
   class SuggestRouteJob < ApplicationJob
     queue_as :default

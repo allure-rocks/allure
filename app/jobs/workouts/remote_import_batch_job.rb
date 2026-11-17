@@ -272,7 +272,7 @@ module Workouts
     end
 
     # A manual retrieval skipped the per-recording route-suggestion pass; the
-    # account sweep now walks its recordings newest first (PLAN_SEGMENTS.md
+    # account sweep now walks its recordings newest first (docs/dev/SEGMENTS.md
     # §7.7). A scheduled sync does not, since its imports are not bulk.
     def enqueue_route_suggestion_sweep(batch)
       return unless batch.status == "completed"

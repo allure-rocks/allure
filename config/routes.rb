@@ -178,7 +178,7 @@ Rails.application.routes.draw do
     # deliberately avoids the `/route_image` prefix so the detail page's
     # "no stored image URL" guard stays an unambiguous substring check.
     post "regenerate_route_image", to: "workout_route_images#regenerate", as: :regenerate_route_image
-    # The local reaction gesture (PLAN_REACTIONS.md §4.4): one PUT toggles the
+    # The local reaction gesture (docs/dev/REACTIONS.md): one PUT toggles the
     # viewer's reaction on the active publication.
     resource :reaction, only: :update, controller: "workout_reactions"
     # Shared activities (docs/dev/SHARED-ACTIVITIES.md): the owner invites, the participant
@@ -187,7 +187,7 @@ Rails.application.routes.draw do
       patch :convert, on: :member
       patch :dismiss_link_suggestion, on: :member
     end
-    # The workout's thread (PLAN_COMMENTS.md §11.5): a reader posts a comment
+    # The workout's thread (docs/dev/COMMENTS.md): a reader posts a comment
     # or a reply, the owner closes or reopens it. The index is the thread's own
     # page, the one the phone layout opens (DESIGN.md §10.20).
     resources :comments, only: %i[index create], controller: "workout_comments"
@@ -196,7 +196,7 @@ Rails.application.routes.draw do
   # The author deletes a comment, the thread host removes one: one route, the
   # controller tells them apart.
   resources :comments, only: :destroy
-  # Recurring-route suggestions (PLAN_SEGMENTS.md §7.7): the owner dismisses
+  # Recurring-route suggestions (docs/dev/SEGMENTS.md): the owner dismisses
   # one from its banner; saving the route is the acceptance.
   resources :route_suggestions, only: [] do
     patch :dismiss, on: :member
@@ -286,7 +286,7 @@ Rails.application.routes.draw do
     # Weather (docs/dev/WEATHER.md): explicit consent to send coarsened
     # positions and times to Open-Meteo, and the deletion of stored weather.
     resource :weather, only: %i[show update destroy], controller: "weather"
-    # Sports (PLAN_M1.md §3.4): which variant replaces a detected generic
+    # Sports (docs/dev/WORKOUT.md): which variant replaces a detected generic
     # sport (cycling, running, walking) at import time.
     resource :sports, only: %i[show update], controller: "sports"
     # Notifications (docs/dev/NOTIFICATIONS.md): which follow events reach the
@@ -378,13 +378,13 @@ Rails.application.routes.draw do
   get "/api/v1/trail/:id/media/route-image", to: "federation/media#route_image", as: :workout_publication_route_image
   get "/api/v1/trail/:id/media/route-image-dark", to: "federation/media#route_image_dark", as: :workout_publication_route_image_dark
   get "/api/v1/trail/:id", to: "federation/workouts#show", as: :workout_publication
-  # Course publications (PLAN_SEGMENTS_FEDERATION.md §6.5). The dedicated path
+  # Course publications (docs/dev/SEGMENTS-FEDERATION.md). The dedicated path
   # is what distinguishes a course Note from a workout Note on the wire.
   get "/api/v1/segment/:id/media/gpx", to: "federation/segment_media#gpx", as: :segment_publication_gpx
   get "/api/v1/segment/:id/media/route-image", to: "federation/segment_media#route_image", as: :segment_publication_route_image
   get "/api/v1/segment/:id/media/route-image-dark", to: "federation/segment_media#route_image_dark", as: :segment_publication_route_image_dark
   get "/api/v1/segment/:id", to: "federation/segments#show", as: :segment_publication
-  # A local author's comment as an object (PLAN_COMMENTS.md §6.5).
+  # A local author's comment as an object (docs/dev/COMMENTS.md).
   get "/api/v1/comment/:id", to: "federation/comments#show", as: :comment_object
   # The public REST API (docs/dev/API.md). Under /api/rest/v1, never /api/v1,
   # which names the ActivityPub objects above. docs/openapi/v1.yaml documents
@@ -487,14 +487,14 @@ Rails.application.routes.draw do
   # The invited account's answer to another instance's invitation
   # (docs/dev/SHARED-ACTIVITIES.md).
   resources :remote_participations, only: :update
-  # The local reaction gesture on a received note (PLAN_REACTIONS.md §4.4).
+  # The local reaction gesture on a received note (docs/dev/REACTIONS.md).
   put "/remote_notes/:id/reaction", to: "remote_note_reactions#update", as: :remote_note_reaction
-  # A comment on a received note, sent to its origin (PLAN_COMMENTS.md §11.5).
+  # A comment on a received note, sent to its origin (docs/dev/COMMENTS.md).
   # Its thread's own page comes first and names the helper both share.
   get "/remote_notes/:id/comments", to: "remote_note_comments#index", as: :remote_note_comments
   post "/remote_notes/:id/comments", to: "remote_note_comments#create"
   # Received courses: the same application-mediated boundary as remote notes,
-  # with a copy-as-local action and no chart (PLAN_SEGMENTS_FEDERATION.md §12).
+  # with a copy-as-local action and no chart (docs/dev/SEGMENTS-FEDERATION.md).
   get "/remote_segments/:id/media/gpx", to: "remote_segment_media#gpx", as: :remote_segment_gpx
   get "/remote_segments/:id/media/route-image", to: "remote_segment_media#route_image", as: :remote_segment_route_image
   get "/remote_segments/:id/track", to: "remote_segment_tracks#show", as: :remote_segment_track
@@ -503,7 +503,7 @@ Rails.application.routes.draw do
   get "/@:username", to: "profiles#show", as: :profile
   get "/@:username/avatar", to: "avatars#show", as: :profile_avatar
   resource :feedback, only: :create, controller: "feedback"
-  # Discover map (PLAN_SEGMENTS.md §8.2/§8.4): the viewport read behind the
+  # Discover map (docs/dev/SEGMENTS.md): the viewport read behind the
   # Découvrir map. Declared before the resource so `discover_map` never matches
   # `:id`.
   get "/segments/discover_map", to: "segment_discoveries#show", as: :segments_discover_map
@@ -526,7 +526,7 @@ Rails.application.routes.draw do
     # The stored course elevation profile, same visibility gate as the track.
     resource :chart, only: :show, controller: "segment_charts"
     # The owner route image, served through the application at the course's own
-    # visibility like the track; never a raw storage URL (PLAN_SEGMENTS.md §8.1).
+    # visibility like the track; never a raw storage URL (docs/dev/SEGMENTS.md).
     resource :route_image, only: :show, controller: "segment_route_images"
   end
   # Public publications feed. Canonical address for the feed and the anchor for

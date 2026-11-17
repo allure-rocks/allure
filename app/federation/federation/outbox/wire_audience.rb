@@ -3,7 +3,7 @@
 module Federation
   module Outbox
     # The addressing a payload carries on the wire for one destination
-    # (docs/dev/FEDERATION.md, §12.6). An event that names its recipients one by one —
+    # (docs/dev/FEDERATION.md). An event that names its recipients one by one —
     # an actor Delete, the Delete of a withdrawn publication or comment —
     # keeps the whole list on the outbox row for expansion, but each
     # destination only sees the actors of its own authorities: the list is the

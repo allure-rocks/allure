@@ -5,8 +5,8 @@
 # delete. The value is stored in the type's SI base unit; presentation converts
 # to viewer units. No ShortUUID and no show route: records are read on the
 # owner's grouped `/me/records` page, with an opt-in label/value projection on
-# the local member profile (PLAN_M3.md §8). See sections 6.2 and 7.4; `MC`
-# (biggest climb) reads the detected climbs per PLAN_BEST_EFFORTS.md.
+# the local member profile (docs/dev/BEST-EFFORTS.md). `MC`
+# (biggest climb) reads the detected climbs per the same document.
 class Record < ApplicationRecord
   TYPES = %w[AP AS BP FD HA LD MS MC].freeze
 

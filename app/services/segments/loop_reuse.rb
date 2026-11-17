@@ -2,7 +2,7 @@
 
 module Segments
   # Reuses the owner's existing loop segment for a newly detected circuit
-  # instead of creating one private loop per workout (PLAN_SEGMENTS.md §7.3).
+  # instead of creating one private loop per workout (docs/dev/SEGMENTS.md).
   # The candidate and the stored geometry must describe the same circuit within
   # the segment's own matching tolerance; a loop the owner renamed is elected
   # first — its name is the identity the owner chose — and otherwise the oldest

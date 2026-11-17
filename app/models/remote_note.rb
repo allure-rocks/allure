@@ -205,7 +205,7 @@ class RemoteNote < ApplicationRecord
 
   # A closed thread is presence-only, like the origin's snapshot: the parser
   # stores `true` from the `comments` tag and omits the key otherwise
-  # (PLAN_COMMENTS.md §6.4).
+  # (docs/dev/COMMENTS.md).
   def validate_comments_closed(value)
     return if value.nil?
 

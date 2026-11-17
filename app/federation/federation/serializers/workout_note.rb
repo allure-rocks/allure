@@ -171,7 +171,7 @@ module Federation
 
       # A profile that closed comments says so on the wire, so a receiving
       # instance never offers a composer this one would refuse; absence means
-      # open (PLAN_COMMENTS.md §6.4).
+      # open (docs/dev/COMMENTS.md).
       def comments_tags
         return [] unless @representation["comments_closed"] == true
 

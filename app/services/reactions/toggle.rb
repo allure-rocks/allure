@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Reactions
-  # The single local write seam for reactions (PLAN_REACTIONS.md §4.1). One
+  # The single local write seam for reactions (docs/dev/REACTIONS.md). One
   # gesture means: add the reaction, withdraw it by repeating the same type, or
   # switch by withdrawing the old appreciation and creating a new reaction with
   # its own identity. The service authorizes the target, keeps the
@@ -66,7 +66,7 @@ module Reactions
     end
 
     # A self-reaction is not a social gesture: the owner sees the counts
-    # without buttons (PLAN_REACTIONS.md §4.4).
+    # without buttons (docs/dev/REACTIONS.md).
     def workout_allowed?
       return false if @target.user_id == @user.id
 
@@ -103,7 +103,7 @@ module Reactions
       reaction
     end
 
-    # The audience the reaction is named to (PLAN_REACTIONS.md §2). While a
+    # The audience the reaction is named to (docs/dev/REACTIONS.md). While a
     # public version the reactor may read is live, the gesture reveals nothing
     # about them and is public, even when they were served a narrower version;
     # otherwise it keeps the audience of the version they read. A received

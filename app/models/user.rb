@@ -14,7 +14,7 @@ class User < ApplicationRecord
   # Track-display smoothing intensities (docs/dev/MAPS.md). The window is a
   # display transform only: it never changes a payload, snapshot, or metric.
   TRACK_SMOOTHING_LEVELS = %w[light medium strong].freeze
-  # The self-declared leaderboard category (PLAN_SEGMENTS.md §8.7). It only
+  # The self-declared leaderboard category (docs/dev/SEGMENTS.md). It only
   # offers a filtered view of a board; `unspecified` keeps the general board.
   LEADERBOARD_CATEGORIES = %w[unspecified women men].freeze
   # Local profile sections only, never publication or federation audiences.
@@ -28,7 +28,7 @@ class User < ApplicationRecord
   DELETION_REQUESTERS = %w[self operator].freeze
 
   # Generic sports an import detects when the file carries no usable sub-type
-  # (PLAN_M1.md §3.4). An account may replace each of them with a variant of
+  # (docs/dev/WORKOUT.md). An account may replace each of them with a variant of
   # the same icon family; the columns stay nil to keep the detected generic.
   SPORT_DEFAULT_KEYS = Sport::GENERIC_SLUGS.index_with { |slug| :"default_#{slug}_sport" }.freeze
 
@@ -112,7 +112,7 @@ class User < ApplicationRecord
   has_many :privacy_zones, dependent: :destroy, inverse_of: :user
   has_many :notifications, dependent: :destroy
   has_many :people_suggestion_dismissals, dependent: :delete_all
-  # Recurring-route suggestions (PLAN_SEGMENTS.md §7.7): owner-only bookkeeping,
+  # Recurring-route suggestions (docs/dev/SEGMENTS.md): owner-only bookkeeping,
   # never a course and never published.
   has_many :route_suggestions, dependent: :destroy
   has_many :account_exports, dependent: :destroy
@@ -370,7 +370,7 @@ class User < ApplicationRecord
   private
 
   # A default must be an active sport from the generic's curated target list
-  # (PLAN_M1.md §3.4.2), which includes the generic itself; nil means the same
+  # (docs/dev/WORKOUT.md), which includes the generic itself; nil means the same
   # as choosing it.
   def default_sports_are_allowed
     SPORT_DEFAULT_KEYS.each do |generic_slug, attribute|

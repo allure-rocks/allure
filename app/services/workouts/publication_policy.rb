@@ -101,11 +101,11 @@ module Workouts
         true
       when :react
         # The owner reads the counts but never reacts to their own workout
-        # (PLAN_REACTIONS.md §4.4); `:like` stays the inbound ActivityPub gate.
+        # (docs/dev/REACTIONS.md); `:like` stays the inbound ActivityPub gate.
         !owner?
       when :comment
         # Unlike a reaction, the owner takes part in the thread; everyone the
-        # audience serves may write while comments are open (PLAN_COMMENTS.md
+        # audience serves may write while comments are open (docs/dev/COMMENTS.md
         # §4.1).
         @publication.comments_open?
       when :analysis

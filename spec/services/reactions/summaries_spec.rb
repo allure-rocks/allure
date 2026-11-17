@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The batched reaction summary (PLAN_REACTIONS.md §4.2): counts and the
+# The batched reaction summary (docs/dev/REACTIONS.md): counts and the
 # viewer's own type per target, plus the newest reactors per type the pill's
 # tooltip names (DESIGN.md §10.17).
 RSpec.describe Reactions::Summaries do
@@ -76,7 +76,7 @@ RSpec.describe Reactions::Summaries do
       expect(summary.reactors("beer")).to be_empty
     end
 
-    # PLAN_REACTIONS.md §4.2: counts are global, names follow the audience.
+    # docs/dev/REACTIONS.md: counts are global, names follow the audience.
     context "with a reaction given through the followers version" do
       let(:follower) { local_actor("Paul") }
       let(:stranger) { local_actor("Léa") }

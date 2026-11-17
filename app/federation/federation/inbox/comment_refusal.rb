@@ -2,7 +2,7 @@
 
 module Federation
   module Inbox
-    # The thread host's Reject of a comment written here (PLAN_COMMENTS.md
+    # The thread host's Reject of a comment written here (docs/dev/COMMENTS.md
     # §7.4). Its object is the comment's Create; only the host of the received
     # note may send it. `removed` takes an accepted comment out of the thread;
     # any other reason means the host never accepted it. An absent or unknown

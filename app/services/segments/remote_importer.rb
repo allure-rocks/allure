@@ -4,7 +4,7 @@ module Segments
   # Turns a received course into a private, owner-only local segment,
   # re-deriving the geometry, distance, and signature from the verified remote
   # track. Remote course metrics are display-only; the copy never matches
-  # against the remote row (PLAN_SEGMENTS_FEDERATION.md §12.4).
+  # against the remote row (docs/dev/SEGMENTS-FEDERATION.md).
   class RemoteImporter
     class ImportError < StandardError; end
 

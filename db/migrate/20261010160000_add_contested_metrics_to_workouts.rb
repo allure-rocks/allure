@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_M1.md §8.10: the workout columns an anomaly makes wrong beyond the
+# docs/dev/WORKOUT.md: the workout columns an anomaly makes wrong beyond the
 # device's ordinary error. Personal records skip a workout for those columns.
 class AddContestedMetricsToWorkouts < ActiveRecord::Migration[8.1]
   def change

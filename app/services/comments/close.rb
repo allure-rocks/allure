@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Comments
-  # The owner's live switch on a workout's thread (PLAN_COMMENTS.md §5.4).
+  # The owner's live switch on a workout's thread (docs/dev/COMMENTS.md).
   # Closing keeps every existing comment and federates nothing; reopening
   # clears the instant. A publication whose profile closed comments stays
   # closed whatever this switch says.

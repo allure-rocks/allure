@@ -297,7 +297,7 @@ module Workouts
     end
 
     # A bulk import skipped the per-recording route-suggestion pass; the
-    # account sweep now walks its recordings newest first (PLAN_SEGMENTS.md
+    # account sweep now walks its recordings newest first (docs/dev/SEGMENTS.md
     # §7.7). A failed or cancelled batch suggests nothing.
     def enqueue_route_suggestion_sweep(batch)
       return unless batch.status == "completed"

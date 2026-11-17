@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Comments
-  # Active comment counts for one page of targets (PLAN_COMMENTS.md §5.5): one
+  # Active comment counts for one page of targets (docs/dev/COMMENTS.md): one
   # grouped query per target class, so a feed page never counts per card. A
   # workout counts only the threads the viewer may read (docs/dev/PUBLISHING.md).
   class Counts

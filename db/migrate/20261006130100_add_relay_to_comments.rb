@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_COMMENTS.md §3.1, §7.5: what a relayed comment remembers. A third
+# docs/dev/COMMENTS.md: what a relayed comment remembers. A third
 # party's comment records the host whose Announce delivered it and that
 # Announce's identity, so the host's Undo finds it; this instance's own comment
 # coming back in the host's Announce records when the host confirmed it.

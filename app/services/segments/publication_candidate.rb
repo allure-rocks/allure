@@ -3,7 +3,7 @@
 module Segments
   # Builds the immutable course representation, the sanitized GPX blob, and the
   # source fingerprint for a segment publication
-  # (PLAN_SEGMENTS_FEDERATION.md §9.1). There is no publishing profile: the
+  # (docs/dev/SEGMENTS-FEDERATION.md). There is no publishing profile: the
   # segment's own visibility is the audience policy, and the corridor is never
   # zone-filtered, only consent-gated.
   class PublicationCandidate

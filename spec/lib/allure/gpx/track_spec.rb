@@ -55,7 +55,7 @@ RSpec.describe Allure::Gpx::Track do
     expect(track.laps).to be_frozen
   end
 
-  it "clips the text a file hands on, leaving short and missing values alone (PLAN_M1.md §7.3)" do
+  it "clips the text a file hands on, leaving short and missing values alone (docs/dev/WORKOUT.md)" do
     track = described_class.new(creator: "c" * 300, name: "n" * 300, description: "d" * 10_001, segments: [])
     lap = Allure::Gpx::Lap.new(number: 1, started_at: Time.utc(2026, 6, 1), elapsed_time: 60, moving_time: 60,
                                lap_trigger: "t" * 40)

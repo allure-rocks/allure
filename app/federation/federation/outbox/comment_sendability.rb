@@ -3,7 +3,7 @@
 module Federation
   module Outbox
     # A comment's Create, and the host's Announce relaying it, travel only
-    # while the comment is still in its thread (PLAN_COMMENTS.md §8): a
+    # while the comment is still in its thread (docs/dev/COMMENTS.md): a
     # comment deleted or removed before its activity left never leaves.
     # Expansion and delivery both ask, so an unexpanded event is cancelled as
     # surely as a queued delivery.

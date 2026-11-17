@@ -3,7 +3,7 @@
 module Segments
   # The single authorization boundary for a course publication: the public
   # protocol GETs, their media, and the signed followers-only branch
-  # (PLAN_SEGMENTS_FEDERATION.md §9.2). The local HTML course page stays
+  # (docs/dev/SEGMENTS-FEDERATION.md). The local HTML course page stays
   # governed by `Segment#viewable_by?`; this policy answers protocol
   # principals.
   class PublicationPolicy

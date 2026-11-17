@@ -7,7 +7,7 @@ module Federation
     # Processes a Delete for a received note or course: durable tombstone,
     # entitlement withdrawal, and synchronous location redaction. A Delete for
     # an object never seen locally creates a tombstone so a later Create cannot
-    # resurrect it (docs/dev/FEDERATION.md, §8.6; PLAN_SEGMENTS_FEDERATION.md §10.4).
+    # resurrect it (docs/dev/FEDERATION.md; docs/dev/SEGMENTS-FEDERATION.md).
     class Delete
       def initialize(item:, activity:, now: Time.current, outbox_events: [])
         @item = item
@@ -24,7 +24,7 @@ module Federation
         comment = ::Comment.find_by(uri: object_uri)
         return delete_comment!(comment) if comment
         # A comment tombstone needs a thread, which a bare Delete never names:
-        # an unknown comment is refused instead (PLAN_COMMENTS.md §7.3).
+        # an unknown comment is refused instead (docs/dev/COMMENTS.md).
         raise Rejected, "comment is unknown" if comment_path?(object_uri)
 
         model = object_model(object_uri)

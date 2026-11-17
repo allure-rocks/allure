@@ -7,7 +7,7 @@ module Allure
     # `Message` values and lets `Allure::Fit::Parser` interpret them.
     #
     # Handles the parts of the container that fail *silently* when omitted,
-    # which is why each is called out in PLAN_FIT.md section 3:
+    # which is why each is called out in docs/dev/FIT.md:
     #
     # - normal and compressed-timestamp record headers;
     # - little- and big-endian definition messages;

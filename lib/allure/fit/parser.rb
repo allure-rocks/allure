@@ -6,7 +6,7 @@ module Allure
     # values, the same contract `Allure::Gpx::Parser` produces. Everything
     # downstream — the analyzer, point serializer, chart and track series,
     # splits, route image, segment matching and publishing — therefore works
-    # on a FIT import with no change. See PLAN_FIT.md section 2.2 for why the
+    # on a FIT import with no change. See docs/dev/FIT.md for why the
     # shared value objects keep their `Gpx` name.
     #
     # Never saves anything and knows nothing about Active Record.
@@ -202,7 +202,7 @@ module Allure
         # The device's own speed, in m/s. Most GNSS watches derive it from the
         # Doppler shift, far steadier than differentiating positions; on a
         # positioned recording it only arbitrates anomalies, never a metric
-        # (PLAN_M1.md §8.10), while a positionless one measures its movement
+        # (docs/dev/WORKOUT.md), while a positionless one measures its movement
         # with it (docs/dev/NO-GPS.md).
         def record_speed(fields)
           value = scaled_speed(fields[:enhanced_speed] || fields[:speed])

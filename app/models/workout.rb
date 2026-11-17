@@ -45,7 +45,7 @@ class Workout < ApplicationRecord
   # Recording segments: one per contiguous GPX <trkseg>, or per run of FIT
   # records between timer stop_all events. Deliberately not named `segments`:
   # that word belongs to the reusable course portions specified in
-  # PLAN_SEGMENTS.md.
+  # docs/dev/SEGMENTS.md.
   has_many :track_segments,
            -> { order(:position) },
            dependent: :destroy,
@@ -70,7 +70,7 @@ class Workout < ApplicationRecord
   has_and_belongs_to_many :equipments, join_table: "workout_equipments"
   has_many :reactions, inverse_of: :workout, dependent: :destroy
   # The thread this instance hosts for the workout's publications
-  # (PLAN_COMMENTS.md): it belongs to the workout, not to one publication
+  # (docs/dev/COMMENTS.md): it belongs to the workout, not to one publication
   # identity, so republishing keeps it.
   has_many :comments, inverse_of: :workout, dependent: :delete_all
   # Confirmed shared activities (docs/dev/SHARED-ACTIVITIES.md). This workout is the source
@@ -134,7 +134,7 @@ class Workout < ApplicationRecord
            class_name: "Segment",
            foreign_key: :source_workout_id,
            inverse_of: :source_workout
-  # Recurring-route suggestions naming this recording (PLAN_SEGMENTS.md §7.7).
+  # Recurring-route suggestions naming this recording (docs/dev/SEGMENTS.md).
   # Owner-only derived bookkeeping: deleting the workout drops its membership,
   # and a suggestion left without a member disappears.
   has_many :route_suggestion_workouts, dependent: :destroy, inverse_of: :workout
@@ -358,7 +358,7 @@ class Workout < ApplicationRecord
 
   def metrics_present? = true
 
-  # Readings flagged by the analyzer (PLAN_M1.md §8.10). Owner-only derived
+  # Readings flagged by the analyzer (docs/dev/WORKOUT.md). Owner-only derived
   # data: never part of a publication snapshot or federation.
   def anomaly_findings = Array(data_anomalies&.fetch("findings", nil))
 

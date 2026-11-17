@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Per-account sport defaults (PLAN_M1.md §3.4): the variant used when an
+  # Per-account sport defaults (docs/dev/WORKOUT.md): the variant used when an
   # import detects a generic sport (`cycling`, `running`, `walking`). Nil keeps
   # the detected generic; an explicit detection is never overridden.
   class SportsController < ApplicationController

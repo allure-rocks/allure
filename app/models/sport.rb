@@ -8,11 +8,11 @@ class Sport < ApplicationRecord
   CADENCE_UNITS = %w[rpm spm].freeze
 
   # Generic sports an import detects when the file carries no usable sub-type
-  # (PLAN_M1.md §3.4). They are the keys of the per-account sport defaults.
+  # (docs/dev/WORKOUT.md). They are the keys of the per-account sport defaults.
   GENERIC_SLUGS = %w[cycling running walking].freeze
 
   # Choices offered as a per-account default for each generic sport
-  # (PLAN_M1.md §3.4.2). A curated list, not the icon family: tennis and padel
+  # (docs/dev/WORKOUT.md). A curated list, not the icon family: tennis and padel
   # share the running family, and halfbike and inline skating the cycling one.
   # The generic itself comes first and means "keep the detected generic".
   DEFAULT_TARGET_SLUGS = {
@@ -93,7 +93,7 @@ class Sport < ApplicationRecord
   def grade_adjusted_pace? = records_elevation? && pace_speed_display != "speed"
 
   # The fastest plausible speed for the sport, used only to flag anomalies
-  # (PLAN_M1.md §8.10). A virtual platform draws its own positions, so none
+  # (docs/dev/WORKOUT.md). A virtual platform draws its own positions, so none
   # applies.
   def speed_ceiling_km_h = virtual? ? nil : Allure::Gpx::Anomalies.speed_ceiling_for(slug)
 end

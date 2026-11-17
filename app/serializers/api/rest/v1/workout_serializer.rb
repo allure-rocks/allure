@@ -110,7 +110,7 @@ module Api
         end
 
         # The value a contested figure would have without the anomaly, as the
-        # owner's page shows it under the figure (PLAN_M1.md §8.10).
+        # owner's page shows it under the figure (docs/dev/WORKOUT.md).
         def plausible_values
           impact = @workout.data_anomalies.is_a?(Hash) ? @workout.data_anomalies.fetch("impact", {}) : {}
           %w[max_speed distance max_heart_rate].each_with_object({}) do |metric, values|

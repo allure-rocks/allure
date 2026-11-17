@@ -95,7 +95,7 @@ RSpec.describe Reactions::Toggle do
       expect(toggle.call!.audience).to eq("public")
     end
 
-    # PLAN_REACTIONS.md §2: a follower served the followers version reveals
+    # docs/dev/REACTIONS.md: a follower served the followers version reveals
     # nothing by reacting while the public version is live too.
     it "records a follower's reaction as public while both versions are live" do
       allow(Allure::Federation::Config).to receive(:restricted_enabled?).and_return(true)

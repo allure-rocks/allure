@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # The global participation preference is superseded by the explicit per-segment
-# opt-in (PLAN_SEGMENTS.md §8.2). Values are discarded, not migrated: joining a
+# opt-in (docs/dev/SEGMENTS.md). Values are discarded, not migrated: joining a
 # segment is now the only way to appear on its board.
 class DropLeaderboardParticipationFromUsers < ActiveRecord::Migration[8.1]
   def up

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_SEGMENTS.md §6.3/§8.2: the publishing profile's `segment` setting is the
+# docs/dev/SEGMENTS.md: the publishing profile's `segment` setting is the
 # athlete's general consent to appear on segment leaderboards. It defaults to
 # on, so every existing profile gains it explicitly; profiles created later get
 # it from PublishingProfile::DEFAULT_SETTINGS. Existing publications keep the

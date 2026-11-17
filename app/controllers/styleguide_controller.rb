@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Component styleguide (DESIGN.md §22, PLAN_M4 Slice 3). Development and test
+# Component styleguide (DESIGN.md §22). Development and test
 # only — never production. The deterministic Playwright target for all
 # frontend work: every shared component in every variant and state, both
 # themes (via the topbar toggle) and both locales (via ?locale=).

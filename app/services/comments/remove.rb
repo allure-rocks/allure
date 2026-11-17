@@ -2,7 +2,7 @@
 
 module Comments
   # The owner of a workout takes someone else's comment out of the thread
-  # (PLAN_COMMENTS.md §5.3). The comment stays a durable `removed` row, its
+  # (docs/dev/COMMENTS.md). The comment stays a durable `removed` row, its
   # author still sees it with that state — told through a Reject when the
   # author is on another instance — and replies to it keep their place under a
   # stub. A repeated request changes nothing.

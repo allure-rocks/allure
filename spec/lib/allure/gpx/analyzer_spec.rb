@@ -4,7 +4,7 @@ require "rails_helper"
 
 # Expected values below are independently derived from the equirectangular /
 # haversine / outlier / elevation-filter / threshold formulas documented in
-# PLAN_M1.md sections 8.1-8.9, not by running this analyzer and recording its
+# docs/dev/WORKOUT.md, not by running this analyzer and recording its
 # output.
 RSpec.describe Allure::Gpx::Analyzer do
   describe "galibier: normal timed 3D route" do

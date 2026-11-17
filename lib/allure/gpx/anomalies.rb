@@ -15,7 +15,7 @@ module Allure
     # `TrackSeries`/`ChartSeries`, so the map and the chart place a finding
     # exactly where the stored points are.
     #
-    # See PLAN_M1.md section 8.10 for the locked contract.
+    # See docs/dev/WORKOUT.md for the locked contract.
     class Anomalies
       KINDS = {
         "gps_rejected" => "gps",

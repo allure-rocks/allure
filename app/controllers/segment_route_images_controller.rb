@@ -2,7 +2,7 @@
 
 # The owner route image of a course, served through the application like every
 # other derived media: the visibility that admits the course admits its image
-# (PLAN_SEGMENTS.md §8.1), and no viewer ever receives a raw storage URL. The
+# (docs/dev/SEGMENTS.md), and no viewer ever receives a raw storage URL. The
 # image is rendered from the segment's own geometry, never from the source
 # workout's track.
 class SegmentRouteImagesController < ApplicationController

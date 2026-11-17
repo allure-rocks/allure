@@ -2,7 +2,7 @@
 
 module Segments
   # The name proposed when a recurring route is saved from its suggestion
-  # (PLAN_SEGMENTS.md §7.7): the departure and arrival places when the
+  # (docs/dev/SEGMENTS.md): the departure and arrival places when the
   # toponymy named them, the workout title otherwise. The owner edits it in
   # the ordinary route form.
   class RouteSuggestionName

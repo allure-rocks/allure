@@ -26,7 +26,7 @@ module ImportConnections
     # fallback sport for files that name none (an EXR file always names its
     # platform, so it needs neither), and a session whose end the card shows
     # (EXR's five-year cookie, Withings's day, Zwift's eight-day refresh token,
-    # docs/dev/REMOTE-IMPORTS.md, §7d.2).
+    # docs/dev/REMOTE-IMPORTS.md).
     CAPABILITIES = {
       "garmin_connect" => %i[equipment fallback_sport],
       "exr" => %i[session_expiry],

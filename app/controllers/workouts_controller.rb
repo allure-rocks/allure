@@ -56,7 +56,7 @@ class WorkoutsController < ApplicationController
       @publication = Workouts::PublicationResolver.new(workout: @workout, user: current_user, audience: params[:audience]).call
       @reader_preview = @publication.present?
     end
-    # The reaction bar's batched summary (PLAN_REACTIONS.md §4.4).
+    # The reaction bar's batched summary (docs/dev/REACTIONS.md).
     @reaction_targets = [ @workout ]
     @display_workout = if @publication
       Workouts::PublicationView.new(@publication, principal: Workouts::PublicationPrincipal.browser(current_user))

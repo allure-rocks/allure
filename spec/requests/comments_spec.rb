@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The comments card and its gestures (PLAN_COMMENTS.md §11, DESIGN.md §10.20):
+# The comments card and its gestures (docs/dev/COMMENTS.md, DESIGN.md §10.20):
 # every gesture re-renders the card inside its Turbo Frame and returns to the
 # thread without one; denial is 404, a closed thread or a refused text
 # re-renders the card with its explanation.
@@ -403,7 +403,7 @@ RSpec.describe "Comments" do
     end
   end
 
-  # PLAN_COMMENTS.md §11.2: the same card on a received note, whose origin
+  # docs/dev/COMMENTS.md: the same card on a received note, whose origin
   # hosts the thread.
   describe "on a received note" do
     let(:host) do

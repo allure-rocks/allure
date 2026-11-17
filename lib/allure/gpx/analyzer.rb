@@ -9,7 +9,7 @@ module Allure
     #
     # All persisted speed/pace values are SI (metres/second, seconds/km); the
     # sport's `stopped_speed_threshold` is km/h and is converted here only for
-    # the moving/stopped threshold comparison, per PLAN_M1.md section 5.1.
+    # the moving/stopped threshold comparison, per docs/dev/WORKOUT.md
     #
     # The analyzer owns the canonical point stream: implausible GPS positions
     # are removed, the elevation profile is filtered once (section 8.6), and
@@ -303,7 +303,7 @@ module Allure
           # The distance is the recorded path length, independent of timestamp
           # resolution: second-precision exports repeat timestamps across real
           # movement, and that movement still belongs to the workout. Only
-          # moving time and speed require positive time (PLAN_M1.md §8.1/§8.3).
+          # moving time and speed require positive time (docs/dev/WORKOUT.md).
           distance = delta.negative? ? 0.0 : point_distance(previous_point, current_point)
           duration = [ delta, 0.0 ].max
           speed = duration.positive? ? distance / duration : 0.0
@@ -312,7 +312,7 @@ module Allure
       end
 
       # Sports that do not record elevation always use 2D distance, even if
-      # the file happens to supply elevation values (PLAN_M1.md section 8.6).
+      # the file happens to supply elevation values (docs/dev/WORKOUT.md).
       def point_distance(previous_point, current_point)
         return Geo.distance(previous_point, current_point) if @records_elevation
 

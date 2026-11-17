@@ -22,7 +22,7 @@ module Allure
     # `speed` is the device's own speed reading in metres per second (FIT
     # `enhanced_speed`/`speed`, usually Doppler-derived), never a value the
     # analyzer computes. On a positioned recording it only arbitrates
-    # anomalies (PLAN_M1.md §8.10); on a positionless one it supplies the
+    # anomalies (docs/dev/WORKOUT.md); on a positionless one it supplies the
     # movement the track cannot measure.
     #
     # `temperature` is the device's own air-temperature reading in °C (FIT

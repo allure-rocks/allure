@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_COMMENTS.md §10: the comment notice. The kind list is a checked
+# docs/dev/COMMENTS.md: the comment notice. The kind list is a checked
 # constraint in the database (docs/dev/NOTIFICATIONS.md), so the new kind must be
 # admitted here, not only in Notification::KINDS. The per-account preference
 # follows the existing `notify_*` boolean column convention.

@@ -4,7 +4,7 @@ require "digest"
 require "securerandom"
 
 module Reactions
-  # The durable identity of a reaction (PLAN_REACTIONS.md §4.3). A reaction to
+  # The durable identity of a reaction (docs/dev/REACTIONS.md). A reaction to
   # a received note carries the URI of the ActivityPub Like that will be
   # delivered, derived from the local actor and a fresh key, so the outbox
   # event and its later Undo always reference the same activity. A purely

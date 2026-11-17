@@ -3,7 +3,7 @@
 module Settings
   # The current user's public identity: display name, biography, and avatar
   # (upload, shuffle the generated art, pick Gravatar, or remove the upload).
-  # The self-declared leaderboard category lives here too (PLAN_SEGMENTS.md
+  # The self-declared leaderboard category lives here too (docs/dev/SEGMENTS.md
   # §8.7); leaderboard participation itself lives on each segment page.
   class ProfilesController < ApplicationController
     def show

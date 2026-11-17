@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # One recorded place of a workout, derived from its stored toponymy by
-# Workouts::PlaceNamer (PLAN_M1.md §11.1). The indexable source of the owner's
+# Workouts::PlaceNamer (docs/dev/WORKOUT.md). The indexable source of the owner's
 # place filter and autocomplete: it covers every recorded marker, not just the
 # few places the workout displays. Owner-only, never published or federated,
 # and never carrying a coordinate.

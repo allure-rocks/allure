@@ -3,7 +3,7 @@
 module Segments
   # Atomically replaces the active course publication with a new immutable
   # identity: the new Create and the old Delete are decided in one transaction
-  # (PLAN_SEGMENTS_FEDERATION.md §9.3).
+  # (docs/dev/SEGMENTS-FEDERATION.md).
   class PublicationReplacement
     Result = Data.define(:old_publication, :new_publication, :delete_event, :create_event)
 

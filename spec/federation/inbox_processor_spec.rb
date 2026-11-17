@@ -332,7 +332,7 @@ RSpec.describe Federation::Inbox::Processor do
     expect(item.reload).to be_rejected
   end
 
-  # PLAN_REACTIONS.md §2: a Like keeps the audience of the publication it
+  # docs/dev/REACTIONS.md: a Like keeps the audience of the publication it
   # reached, so its author is named only to the readers of that audience.
   it "records the audience of the publication a Like reached" do
     allow(Allure::Federation::Config).to receive(:restricted_enabled?).and_return(true)

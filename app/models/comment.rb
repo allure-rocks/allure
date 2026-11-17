@@ -2,7 +2,7 @@
 
 require "uri"
 
-# One comment or reply on a published workout's thread (PLAN_COMMENTS.md). The
+# One comment or reply on a published workout's thread (docs/dev/COMMENTS.md). The
 # thread lives on the local workout when this instance hosts it, or on a
 # received note when the publication's origin hosts it. A comment is never
 # edited: its author deletes it, the thread host removes it, the origin
@@ -16,9 +16,9 @@ class Comment < ApplicationRecord
   AUDIENCES = %w[public followers].freeze
   REMOVAL_REASONS = %w[owner blocked actor_deleted closed not_allowed inactive full unknown].freeze
   MAX_BODY_LENGTH = 2_000
-  # The bound on one thread, local or received (PLAN_COMMENTS.md §4.4).
+  # The bound on one thread, local or received (docs/dev/COMMENTS.md).
   MAX_ACTIVE_PER_THREAD = 1_000
-  # The object path of a local comment (PLAN_COMMENTS.md §6.1).
+  # The object path of a local comment (docs/dev/COMMENTS.md).
   OBJECT_PATH = "/api/v1/comment/"
 
   belongs_to :actor, inverse_of: :comments
@@ -26,7 +26,7 @@ class Comment < ApplicationRecord
   belongs_to :remote_note, optional: true, inverse_of: :comments
   belongs_to :parent, class_name: "Comment", optional: true, inverse_of: :replies
   # The thread host whose Announce delivered a third party's comment here
-  # (PLAN_COMMENTS.md §7.5).
+  # (docs/dev/COMMENTS.md).
   belongs_to :relayed_by_actor, class_name: "Actor", optional: true
   has_many :replies, class_name: "Comment", foreign_key: :parent_id, inverse_of: :parent
 
@@ -86,14 +86,14 @@ class Comment < ApplicationRecord
   def local_author? = actor&.local? == true
 
   # The actor hosting the thread: the workout's owner here, the received
-  # note's author elsewhere (PLAN_COMMENTS.md §1).
+  # note's author elsewhere (docs/dev/COMMENTS.md).
   def thread_host_actor = workout ? workout.user&.actor : remote_note&.actor
 
   # The thread host's own words, which travel to the publication's audience
   # instead of to a host (§6.2).
   def by_thread_host? = thread_host_actor.present? && actor_id == thread_host_actor.id
 
-  # The author withdraws their own words (PLAN_COMMENTS.md §5.2), and the
+  # The author withdraws their own words (docs/dev/COMMENTS.md), and the
   # words go: the row keeps its identity so a late Create stays refused, never
   # the text. Written through the relation, the controlled terminal exception
   # to the readonly received object.

@@ -3,7 +3,7 @@
 # One user's gear item with denormalized lifetime totals. Totals are
 # maintained by `Equipments::Totals` on associate/dissociate/metric-change
 # and repaired by the refresh endpoint; they are never edited directly.
-# See PLAN_M3.md sections 6.3 and 7.5.
+# See docs/dev/WORKOUT.md and docs/dev/BEST-EFFORTS.md.
 class Equipment < ApplicationRecord
   include HasShortId
 

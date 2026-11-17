@@ -6,7 +6,7 @@ module Federation
     # published workout (docs/dev/SHARED-ACTIVITIES.md): an ActivityStreams `Invite`
     # whose object is the publication the account already holds and whose
     # target is that account, addressed to it alone. It rides on its
-    # publication as a secondary event (PLAN_COMMENTS.md §9), so it waits for
+    # publication as a secondary event (docs/dev/COMMENTS.md), so it waits for
     # the publication's Create, passes the publication's rules, and stops with
     # it. It carries no metric and no geometry: the receiver reads the figures
     # from the note it holds, and only the sport slug and the start, which the

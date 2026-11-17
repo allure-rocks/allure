@@ -4,7 +4,7 @@ module Segments
   # Batched board reads shared by the standings and the index: the ranking a
   # viewer reads per (segment, sport) — best effort per athlete, ordered like
   # the board — and the viewer's own best effort per (segment, sport), ranked
-  # or not (PLAN_SEGMENTS.md §8.2). Two queries cover a whole page of courses.
+  # or not (docs/dev/SEGMENTS.md). Two queries cover a whole page of courses.
   module Rankings
     module_function
 

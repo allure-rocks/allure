@@ -71,7 +71,7 @@ RSpec.describe "Workout detail layout" do
     expect(page.at_css("#section-participants")).to be_nil
     expect(page.at_css(".allure-danger-zone")).to be_nil
     # The full-width zone carries the thread every reader shares
-    # (PLAN_COMMENTS.md §11.1) and nothing of the owner's.
+    # (docs/dev/COMMENTS.md) and nothing of the owner's.
     expect(page.at_css(".allure-detail-fullwidth").element_children.map { |child| child["id"] }).to eq([ "comments" ])
   end
 

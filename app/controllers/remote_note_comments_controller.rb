@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Posting a comment or a reply on a received note (PLAN_COMMENTS.md §5.1,
+# Posting a comment or a reply on a received note (docs/dev/COMMENTS.md,
 # §8.1): the comment is stored here and sent to the note's origin, which hosts
 # the thread. Denial is 404, never 403; a thread the origin's profile closed
 # or a refused text re-renders the card with its explanation and the text the
@@ -9,7 +9,7 @@ class RemoteNoteCommentsController < ApplicationController
   include CommentCardRendering
 
   before_action :set_note
-  # The same per-account bound as on a workout (PLAN_COMMENTS.md §4.4).
+  # The same per-account bound as on a workout (docs/dev/COMMENTS.md).
   rate_limit to: 20, within: 1.minute, only: :create, by: -> { current_user.id },
              with: -> { render_comment_card(@note, status: :too_many_requests, composer: refused(:rate_limited)) }
 

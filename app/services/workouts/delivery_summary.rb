@@ -20,7 +20,7 @@ module Workouts
       return Result.new(state: :federation_disabled, delivered_accounts: 0, delivered_servers: 0, failed_deliveries: 0) unless Allure::Federation::Config.enabled?
 
       # The publication's own Create: an owner's comment rides on the same
-      # publication with its own object (PLAN_COMMENTS.md §9) and never
+      # publication with its own object (docs/dev/COMMENTS.md) and never
       # changes the publication's state.
       create_event = PublicationWithdrawal.find_create_event(@publication)
       return Result.new(state: :no_recipients, delivered_accounts: 0, delivered_servers: 0, failed_deliveries: 0) unless create_event

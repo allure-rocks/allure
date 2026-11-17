@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_SEGMENTS.md §7.7: a recurring route is suggested, never created. The
+# docs/dev/SEGMENTS.md: a recurring route is suggested, never created. The
 # suggestion is owner-only bookkeeping — one row per circuit, one membership
 # row per recording, and a generation marker on the recordings the detector
 # has already examined. Nothing here is a course and nothing is published.

@@ -22,7 +22,7 @@ class WorkoutPublication < ApplicationRecord
   SERVED_ORDER_SQL = "workout_publications.workout_id, #{AUDIENCE_RANK_SQL}, workout_publications.id"
   # The frozen profile shares the route and the route was not redacted: a
   # board or reach computation never reveals a passage whose publication
-  # hides where it went (PLAN_SEGMENTS.md §8.2).
+  # hides where it went (docs/dev/SEGMENTS.md).
   ROUTE_SHARED_SQL = <<~SQL.squish
     workout_publications.profile_snapshot -> 'settings' ->> 'route' = 'true'
     AND COALESCE(workout_publications.route_metadata ->> 'redacted', 'false') <> 'true'
@@ -147,7 +147,7 @@ class WorkoutPublication < ApplicationRecord
   def publication_description = representation["description"]
 
   # Comments are open while the snapshot's profile allowed them and the owner
-  # has not closed the thread live (PLAN_COMMENTS.md §1, §4.1).
+  # has not closed the thread live (docs/dev/COMMENTS.md).
   def comments_closed_by_profile? = representation["comments_closed"] == true
   def comments_open? = !comments_closed_by_profile? && workout.present? && workout.comments_closed_at.nil?
   def publication_started_at = representation["started_at"]
@@ -424,7 +424,7 @@ class WorkoutPublication < ApplicationRecord
   end
 
   # A profile that disabled comments freezes `comments_closed: true` into the
-  # snapshot; absence means open (PLAN_COMMENTS.md §6.4).
+  # snapshot; absence means open (docs/dev/COMMENTS.md).
   def validate_comments_closed(value)
     return if value.nil?
 

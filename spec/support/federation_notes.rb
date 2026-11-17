@@ -34,7 +34,7 @@ module FederationNoteFixtures
     }.merge(overrides)
   end
 
-  # A remote reader's comment (PLAN_COMMENTS.md §6.2): addressed to the
+  # A remote reader's comment (docs/dev/COMMENTS.md): addressed to the
   # thread host only, answering a publication or a comment.
   def federation_comment_activity(in_reply_to:, to:, id: "https://remote.example/api/v1/comment/c1",
                                   content: "Belle sortie !<br>On y retourne ?", actor: "https://remote.example/users/demo")

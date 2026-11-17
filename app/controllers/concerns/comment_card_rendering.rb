@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Every comment gesture answers the same way (PLAN_COMMENTS.md §11.1): inside
+# Every comment gesture answers the same way (docs/dev/COMMENTS.md): inside
 # the card's Turbo Frame the card re-renders, so only the thread changes;
 # without one the request returns to the thread's own page, carrying a refusal
 # as a flash. A reader who can no longer see the thread never gets it back.

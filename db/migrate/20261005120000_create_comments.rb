@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_COMMENTS.md §3.1: one row per comment or reply, local or remote, on the
+# docs/dev/COMMENTS.md: one row per comment or reply, local or remote, on the
 # thread its target hosts — a local workout, or a received note whose origin
 # hosts the thread. A comment is never edited: deletion by its author, removal
 # by the thread host and refusal by the origin are durable states that keep the

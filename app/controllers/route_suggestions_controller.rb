@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The owner's answer to a recurring-route suggestion (PLAN_SEGMENTS.md §7.7):
+# The owner's answer to a recurring-route suggestion (docs/dev/SEGMENTS.md):
 # dismissing closes it for good, and later repeats of the same circuit join it
 # silently. Accepting happens by saving the route from the banner, through
 # RoutesController.

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The local reaction gesture on a received note (PLAN_REACTIONS.md §4.4). Same
+# The local reaction gesture on a received note (docs/dev/REACTIONS.md). Same
 # toggle semantics as WorkoutReactionsController; the policy requires an active
 # note the viewer is entitled to, and the replacement of the reaction delivers
 # the outbound Like or Undo.

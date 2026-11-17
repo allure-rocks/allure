@@ -8,7 +8,7 @@ module Allure
     # gap between them — a barometer that re-zeroed after a pause, a profile
     # that never referenced sea level, a sensor drifting over the outing —
     # inflates ascent and descent without showing anywhere else, and no
-    # single-segment check can see it (PLAN_M1.md section 8.10).
+    # single-segment check can see it (docs/dev/WORKOUT.md).
     #
     # Pure and framework-independent, and it works on the whole workout
     # because the gap commonly appears at a resume, between two recording

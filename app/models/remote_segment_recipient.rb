@@ -2,7 +2,7 @@
 
 # One local actor's entitlement to one received course. Entitlements are what
 # make recipient-aware reads possible: a followers-only course delivered for
-# one account never appears for another (PLAN_SEGMENTS_FEDERATION.md §7.3).
+# one account never appears for another (docs/dev/SEGMENTS-FEDERATION.md).
 class RemoteSegmentRecipient < ApplicationRecord
   STATUSES = %w[active withdrawn].freeze
   WITHDRAWAL_REASONS = %w[unfollow rejected blocked deleted unreachable].freeze

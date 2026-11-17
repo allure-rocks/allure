@@ -26,7 +26,7 @@ module Federation
         @actor.with_lock do
           event = create_delete_event!
           # The account's comments on other workouts leave their threads with
-          # it, and threads hosted here stop relaying them (PLAN_COMMENTS.md
+          # it, and threads hosted here stop relaying them (docs/dev/COMMENTS.md
           # §7.6); its own workouts take theirs along.
           removal.call!
           @actor.tombstone!(at: @now)

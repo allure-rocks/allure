@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Secondary publication events (PLAN_COMMENTS.md §9): the owner's comment
+# Secondary publication events (docs/dev/COMMENTS.md): the owner's comment
 # rides on its publication without being it. It reaches only the instances
 # the publication went to, after the publication itself; it stops with its
 # comment or its publication; and it never changes what the owner and the

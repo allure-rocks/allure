@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Reactions generalize the M2 FederationLike state (PLAN_REACTIONS.md): one
+# Reactions generalize the M2 FederationLike state (docs/dev/REACTIONS.md): one
 # table holds inbound ActivityPub Likes, outbound local appreciations of
 # received notes, and purely local reactions to local publications, each with
 # one of four types. `undone_at` keeps the withdrawal history; one active

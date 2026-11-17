@@ -112,7 +112,7 @@ module NotificationsHelper
   private
 
   # One digest per workout (docs/dev/NOTIFICATIONS.md). A single reaction names
-  # its gesture (PLAN_REACTIONS.md §5); several name the newest account and
+  # its gesture (docs/dev/REACTIONS.md); several name the newest account and
   # count the others.
   def reaction_notification_text(notification)
     workout = notification.subject
@@ -140,7 +140,7 @@ module NotificationsHelper
 
   # A comment notice names the account and, for the workout's owner, the
   # workout; a reply to the recipient's own comment says so instead, and never
-  # names a title the recipient may not be allowed to read (PLAN_COMMENTS.md
+  # names a title the recipient may not be allowed to read (docs/dev/COMMENTS.md
   # §10).
   def comment_notification_text(notification)
     comment = notification.subject

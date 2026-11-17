@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Comments
-  # The comment notice (PLAN_COMMENTS.md §10): the owner of a local thread
+  # The comment notice (docs/dev/COMMENTS.md): the owner of a local thread
   # hears about every comment, and the local author of a parent hears about
   # its replies. Notifications::Create skips the author, honours each
   # account's switch, and its unique index collapses an owner who is also the

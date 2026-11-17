@@ -3,7 +3,7 @@
 # One file-recorded lap: a FIT `lap` message or a GPX `<lap>` element, parsed
 # at import and persisted in order. Laps are file-recorded and display-only — never
 # URL-addressable, no ShortUUID — and a workout simply shows them (in preference
-# to detected loops) on its own page. See PLAN_M3.md section 6.1.
+# to detected loops) on its own page. See docs/dev/WORKOUT.md.
 class Lap < ApplicationRecord
   belongs_to :workout, inverse_of: :laps
 

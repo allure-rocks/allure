@@ -3,7 +3,7 @@
 module Allure
   module Gpx
     # Pure horizontal/3D distance calculation between two coordinates.
-    # See PLAN_M1.md section 8.1 for the locked algorithm.
+    # See docs/dev/WORKOUT.md for the locked algorithm.
     module Geo
       EARTH_RADIUS_METRES = 6_378_137.0
       SHORT_DELTA_THRESHOLD_DEGREES = 0.2

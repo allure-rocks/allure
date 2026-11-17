@@ -7,7 +7,7 @@ module Allure
   module GarminConnect
     # Exchanges an SSO service ticket for the Garmin Connect mobile
     # application's "DI" OAuth2 token, and refreshes it
-    # (docs/dev/REMOTE-IMPORTS.md, §7.3).
+    # (docs/dev/REMOTE-IMPORTS.md).
     class DiToken
       CLIENT_IDS = %w[
         GARMIN_CONNECT_MOBILE_ANDROID_DI_2025Q2

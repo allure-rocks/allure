@@ -3,7 +3,7 @@
 module Federation
   module Outbox
     # The ActivityPub Undo for a withdrawn reaction on a received note
-    # (PLAN_REACTIONS.md §4.3). The nested object is the Like identity stored
+    # (docs/dev/REACTIONS.md). The nested object is the Like identity stored
     # on the reaction row, so the peer always retires the activity it admitted.
     class ReactionUndo
       def initialize(reaction:)

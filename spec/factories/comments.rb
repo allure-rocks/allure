@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  # A local account's comment on a local workout's thread (PLAN_COMMENTS.md
+  # A local account's comment on a local workout's thread (docs/dev/COMMENTS.md
   # §3.1). Its URI is minted from its own identifier, like every local object.
   factory :comment do
     workout

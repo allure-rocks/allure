@@ -2,7 +2,7 @@
 
 module Comments
   # Takes every active comment of some actors out of their threads at once,
-  # with the notices those comments caused (PLAN_COMMENTS.md §7.6): a local or
+  # with the notices those comments caused (docs/dev/COMMENTS.md): a local or
   # remote account deletion, or a block. An author whose account is gone takes
   # their words along — the rows keep their identity, and the Creates this
   # instance sent for them are redacted — while a block only takes the

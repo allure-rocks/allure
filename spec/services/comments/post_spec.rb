@@ -171,7 +171,7 @@ RSpec.describe Comments::Post do
     end
   end
 
-  # PLAN_COMMENTS.md §8.1, §8.2: the outbound intent each comment carries.
+  # docs/dev/COMMENTS.md: the outbound intent each comment carries.
   describe "federation" do
     let(:host) { create(:actor, uri: "https://remote.example/users/demo") }
     let(:note) { create(:remote_note, actor: host) }
@@ -217,7 +217,7 @@ RSpec.describe Comments::Post do
       )
     end
 
-    # PLAN_COMMENTS.md §6.6: the owner relays a member's comment on a public
+    # docs/dev/COMMENTS.md: the owner relays a member's comment on a public
     # workout; a followers thread is never relayed.
     it "relays a member's comment on a public workout through the owner" do
       publication = publish!

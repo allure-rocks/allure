@@ -2,7 +2,7 @@
 
 module Segments
   # Who sees the viewer on a course's board, or why nobody does
-  # (PLAN_SEGMENTS.md §8.2, DESIGN.md §20.6). The board follows each reader, so
+  # (docs/dev/SEGMENTS.md, DESIGN.md §20.6). The board follows each reader, so
   # the athlete's own line states the widest reach of their efforts:
   #
   # - `public` — a public publication sharing the route: every member who sees

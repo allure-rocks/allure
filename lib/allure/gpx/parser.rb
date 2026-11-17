@@ -10,7 +10,7 @@ module Allure
     #
     # Uses `Nokogiri::XML::Reader`, a forward-only pull parser, so the
     # `<trkpt>` limit can be enforced while reading instead of after loading
-    # the whole document into memory (see PLAN_M1.md section 7.1). Parsing is
+    # the whole document into memory (see docs/dev/WORKOUT.md). Parsing is
     # non-networked: only `ParseOptions::NONET` is set, and DTD loading/entity
     # substitution are left off so an external entity reference (XXE) is
     # never resolved and never fetched over the network.

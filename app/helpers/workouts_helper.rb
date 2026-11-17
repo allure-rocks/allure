@@ -645,7 +645,7 @@ module WorkoutsHelper
   end
 
   # Targets for a generic-sport default: the curated variant list for that
-  # generic (PLAN_M1.md §3.4.2), in alphabetical order.
+  # generic (docs/dev/WORKOUT.md), in alphabetical order.
   def sport_default_options_for(generic_slug)
     slugs = Sport::DEFAULT_TARGET_SLUGS.fetch(generic_slug.to_s, [])
     Sport.alphabetical(Sport.where(slug: slugs)).map { |sport| [ sport_display_name(sport), sport.id ] }

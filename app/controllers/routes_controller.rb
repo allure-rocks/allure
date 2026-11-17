@@ -26,7 +26,7 @@ class RoutesController < ApplicationController
 
     if @route.persisted?
       # Saving the route from one of a suggestion's recordings accepts it
-      # (PLAN_SEGMENTS.md §7.7): the banner closes and the route keeps the
+      # (docs/dev/SEGMENTS.md): the banner closes and the route keeps the
       # identity the owner chose.
       Segments::RouteSuggestionAcceptance.call(@route)
       redirect_to segment_path(@route), notice: t("routes.create.success")

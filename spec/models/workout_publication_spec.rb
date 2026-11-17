@@ -386,7 +386,7 @@ RSpec.describe WorkoutPublication do
     end
   end
 
-  # The board's route rule (PLAN_SEGMENTS.md §8.2): the frozen profile shares
+  # The board's route rule (docs/dev/SEGMENTS.md): the frozen profile shares
   # the route and the route was not redacted.
   describe "route_shared" do
     it "keeps publications whose frozen profile shares the route" do

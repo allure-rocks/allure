@@ -17,7 +17,7 @@ module Admin
         column = @kind == "courses" ? :segment_publication_id : :workout_publication_id
         table = @kind == "courses" ? "segment_publications" : "workout_publications"
         # Only the publication's own Create: an owner's comment rides on the
-        # same publication with its own object (PLAN_COMMENTS.md §9).
+        # same publication with its own object (docs/dev/COMMENTS.md).
         rows = FederationDelivery.joins(:outbox_event)
           .joins("INNER JOIN #{table} ON #{table}.id = federation_outbox_events.#{column} " \
                  "AND #{table}.object_uri = federation_outbox_events.object_uri")

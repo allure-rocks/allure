@@ -54,7 +54,7 @@ module Records
     end
 
     # A workout whose figure an anomaly contests never holds that record
-    # (PLAN_M1.md §8.10): the second best takes its place. A manual entry
+    # (docs/dev/WORKOUT.md): the second best takes its place. A manual entry
     # holds none: a typed figure counts in the totals, never as a record
     # (docs/dev/MANUAL-ENTRY.md).
     def find_winner(config)

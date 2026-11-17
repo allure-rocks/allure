@@ -3,7 +3,7 @@
 module Federation
   module Inbox
     # Receives a thread host's Announce of a comment on its public
-    # publication (PLAN_COMMENTS.md §7.5). Only the host relays its own thread,
+    # publication (docs/dev/COMMENTS.md). Only the host relays its own thread,
     # and only a public one. This instance's own comment coming back is
     # confirmed without a fetch; anyone else's is verified against the
     # author's own copy before it is stored, because the host could otherwise

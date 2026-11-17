@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # An immutable, sanitized course representation distributed to remote Allure
-# instances (PLAN_SEGMENTS_FEDERATION.md §7.1). It carries geometry, name,
+# instances (docs/dev/SEGMENTS-FEDERATION.md). It carries geometry, name,
 # description, sport, and course metrics only: no effort, athlete, alias,
 # leaderboard row, or activity timestamp is ever part of it.
 class SegmentPublication < ApplicationRecord
