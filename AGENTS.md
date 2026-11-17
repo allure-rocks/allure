@@ -102,6 +102,9 @@ and the manual source.
 `docs/dev/MANUAL-ENTRY.md` is the manual-entry contract: the typed workout,
 its shape and validation, and what it counts for.
 
+`docs/dev/BULK-ACTIONS.md` is the bulk-actions contract: the selection, the
+quick actions and the reviewable background operations.
+
 The deeper contracts — workout core, publishing, federation, segments, remote
 imports, authentication, the API — are being reorganised and published
 progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
