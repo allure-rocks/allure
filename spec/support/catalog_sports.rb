@@ -133,7 +133,7 @@ module CatalogSports
       records_elevation: false,
       records_power: false
     },
-    # The duration-only indoor catch-all (PLAN_NO_GPS.md §3.3), the Allure
+    # The duration-only indoor catch-all (docs/dev/NO-GPS.md), the Allure
     # equivalent of a bare FIT `fitness_equipment` session.
     "fitness" => {
       label: "Fitness",

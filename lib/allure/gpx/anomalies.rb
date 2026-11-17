@@ -466,7 +466,7 @@ module Allure
           # A positionless segment has no positions to judge: the GPS family
           # (rejected fixes, jumps, skew, implausible speed) never runs, and
           # the time, heart-rate, power and cadence families do
-          # (PLAN_NO_GPS.md §4.3). Nothing is marked major, because no derived
+          # (docs/dev/NO-GPS.md). Nothing is marked major, because no derived
           # figure depends on a coordinate here.
           if positioned?
             rejected_positions

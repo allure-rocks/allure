@@ -161,7 +161,7 @@ module Workouts
     end
 
     # Until the publication contract carries a route-less Note, a positionless
-    # recording is refused before any privacy work (PLAN_NO_GPS.md §7).
+    # recording is refused before any privacy work (docs/dev/NO-GPS.md).
     def validate_geometry!
       return if @workout.positioned?
 

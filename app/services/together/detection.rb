@@ -18,7 +18,7 @@ module Together
 
     def call
       # Co-presence compares tracks; a positionless recording has none
-      # (PLAN_NO_GPS.md §6).
+      # (docs/dev/NO-GPS.md).
       return [] unless @workout.recording? && @workout.positioned?
 
       CreditLinkSuggestion.for_recording(@workout)

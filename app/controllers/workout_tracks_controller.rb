@@ -20,7 +20,7 @@ class WorkoutTracksController < ApplicationController
 
       track = publication.track
     elsif workout.user == current_user
-      # A positionless recording has no track at all (PLAN_NO_GPS.md §6).
+      # A positionless recording has no track at all (docs/dev/NO-GPS.md).
       raise ActiveRecord::RecordNotFound unless workout.positioned?
 
       track = Allure::Gpx::TrackSeries.new(segments: workout.track_segments).call

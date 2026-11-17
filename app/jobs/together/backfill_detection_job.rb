@@ -15,7 +15,7 @@ module Together
              ActiveRecord::SerializationFailure, wait: :polynomially_longer, attempts: 5
 
     # Co-presence compares tracks, so a positionless recording is out of
-    # scope entirely (PLAN_NO_GPS.md §6).
+    # scope entirely (docs/dev/NO-GPS.md).
     def self.pending_scope
       Workout.positioned.where(together_detection_version: ...Allure::Together::Detector::VERSION)
     end

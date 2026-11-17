@@ -14,7 +14,7 @@ RSpec.describe ImportConnections::Providers::GarminConnect do
   let(:list_url) { %r{\A#{api}/activitylist-service/activities/search/activities} }
   let(:gpx) { Rails.root.join("spec/fixtures/gpx/galibier.gpx").binread }
   # An indoor ride: sport and sub-sport with cumulative distance, speed and
-  # power, and not one position (PLAN_NO_GPS.md).
+  # power, and not one position (docs/dev/NO-GPS.md).
   let(:indoor_fit) do
     start = Time.utc(2026, 6, 2, 18, 0, 0)
     build_fit(sport: 2, sub_sport: 6, calories: 420, points: [
@@ -45,7 +45,7 @@ RSpec.describe ImportConnections::Providers::GarminConnect do
     stub_request(:get, "#{api}/download-service/files/activity/101")
       .to_return(status: 200, body: zip_of("101_ACTIVITY.gpx", gpx))
     # The indoor activity keeps its file: it is imported as a positionless
-    # recording, never skipped for lacking a GPS track (PLAN_NO_GPS.md §8).
+    # recording, never skipped for lacking a GPS track (docs/dev/NO-GPS.md).
     stub_request(:get, "#{api}/download-service/files/activity/102")
       .to_return(status: 200, body: zip_of("102_ACTIVITY.fit", indoor_fit))
     stub_request(:get, "#{api}/gear-service/gear/filterGear").with(query: { "userProfilePk" => "151984342" })

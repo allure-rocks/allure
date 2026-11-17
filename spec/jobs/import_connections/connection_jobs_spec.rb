@@ -34,7 +34,7 @@ RSpec.describe "Import connection jobs" do
       expect(provider.listed_windows.sole).to eq([ now - 25.hours, now ])
       batch = connection.import_batches.where(trigger: "scheduled").sole
       # An indoor activity without a GPS track is queued like any other: it is
-      # imported positionlessly (PLAN_NO_GPS.md §8).
+      # imported positionlessly (docs/dev/NO-GPS.md).
       expect(batch.entries.order(:position).pluck(:external_id, :status)).to eq([ %w[2 queued], %w[3 queued] ])
       expect(Workouts::RemoteImportBatchJob).to have_received(:perform_later).with(batch)
       expect(connection.reload.last_synced_at).to eq(now)

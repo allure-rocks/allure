@@ -7,7 +7,7 @@ module Allure
     #
     # A segment is positioned when its first point is: a file's points are
     # either all positioned or all unpositioned, never mixed
-    # (PLAN_NO_GPS.md).
+    # (docs/dev/NO-GPS.md).
     Segment = Data.define(:points) do
       def initialize(points:)
         super(points: points.frozen? ? points : points.freeze)

@@ -16,7 +16,7 @@ module Allure
     # rescan per point. An indoor session writes one trackpoint per
     # heart-rate sample without a `Position`: Allure's TCX parser opens a
     # positionless recording from those exactly as from a device's indoor
-    # export (PLAN_NO_GPS.md §3). A session whose location answer carries
+    # export (docs/dev/NO-GPS.md). A session whose location answer carries
     # fewer than two samples falls back to the heart-rate timeline: one
     # fix is not a route, and no position a sample does not carry is ever
     # invented. No distance is interpolated either: the summary lap keeps

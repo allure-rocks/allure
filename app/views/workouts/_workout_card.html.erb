@@ -37,7 +37,7 @@
     <% elsif owner_view && workout.recording? && !workout.positioned? %>
       <%# A positionless recording has no track, so no route image ever
           comes: the card top names the state instead of waiting forever
-          (PLAN_NO_GPS.md §9). %>
+          (docs/dev/NO-GPS.md). %>
       <div class="ratio ratio-16x9 bg-secondary-lt" role="status">
         <div class="d-flex align-items-center justify-content-center">
           <span class="small text-secondary">
@@ -127,7 +127,7 @@
               their speed: the platform's speed is a game output
               (docs/dev/VIRTUAL-PLATFORMS.md). A publication that withholds power keeps
               the speed. A duration-only session recorded no distance to
-              divide: its card names no pace or speed (PLAN_NO_GPS.md §9). %>
+              divide: its card names no pace or speed (docs/dev/NO-GPS.md). %>
           <% if display.sport&.power_led? && display.metric_visible?(:average_power) && display.average_power.present? %>
             <% facts << format_power(display.average_power) %>
           <% elsif display.metric_visible?(:average_speed) || display.metric_visible?(:average_pace) %>

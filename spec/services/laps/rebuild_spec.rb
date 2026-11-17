@@ -241,7 +241,7 @@ RSpec.describe Laps::Rebuild do
     expect(interval.distance).to be_within(320.0).of(4_800.0)
   end
 
-  # A positionless recording (PLAN_NO_GPS.md §4) has no gradient: even when
+  # A positionless recording (docs/dev/NO-GPS.md) has no gradient: even when
   # its sport would normally carry a grade-adjusted pace, its derived speed
   # intervals are built without one instead of crashing on nil coordinates.
   it "derives speed intervals without grade-adjusted pace for a positionless recording" do
@@ -260,7 +260,7 @@ RSpec.describe Laps::Rebuild do
     expect(interval.grade_adjusted_pace).to be_nil
   end
 
-  # A duration-only session (PLAN_NO_GPS.md §4.2) records neither speed nor
+  # A duration-only session (docs/dev/NO-GPS.md) records neither speed nor
   # distance: its flat distance is an absence of data, not a standstill.
   it "detects no stop or speed interval for a workout with no movement signal" do
     workout = create(:workout, :unpositioned)

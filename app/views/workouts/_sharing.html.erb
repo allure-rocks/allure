@@ -12,7 +12,7 @@
     `active_publications`, `scheduled_publications`, `profiles`, `readiness`,
     `delivery_summaries`, `auto_publications`. %>
 <%# A positionless recording has no route to share, so the card states why
-    instead of offering the form (PLAN_NO_GPS.md §7, §9). %>
+    instead of offering the form (docs/dev/NO-GPS.md). %>
 <% positionless = workout.recording? && !workout.positioned? %>
 <% add_profile = @selected_profile %>
 <% add_form_id = "workout-publish-form-add" %>

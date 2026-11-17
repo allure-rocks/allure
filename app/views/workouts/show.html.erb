@@ -8,7 +8,7 @@
 <% publication_view = @display_workout.is_a?(Workouts::PublicationView) %>
 <% device_name = owner ? @workout.source : (publication_view ? @display_workout.device : nil) %>
 <%# The owner's map needs a track: a positionless recording has none
-    (PLAN_NO_GPS.md §9). A publication always carries one. %>
+    (docs/dev/NO-GPS.md). A publication always carries one. %>
 <% map_visible = (owner && @workout.positioned?) || (publication_view && @display_workout.map_visible?) %>
 <% public_segment_count = if owner
      @workout.track_segments.size
@@ -87,7 +87,7 @@
                 <%= link_to t("workouts.show.edit"), edit_workout_path(@workout), class: "dropdown-item d-md-none" %>
                 <%# A positionless recording has no geometry to cut a course
                     from, to draw, or to sample for terrain elevation
-                    (PLAN_NO_GPS.md §9). %>
+                    (docs/dev/NO-GPS.md). %>
                 <% if @workout.positioned? %>
                   <%= link_to t("workouts.show.create_segment"), new_workout_segment_path(@workout), class: "dropdown-item" %>
                   <%= link_to t("workouts.show.save_as_route"), new_workout_route_path(@workout), class: "dropdown-item" %>
@@ -174,7 +174,7 @@
         <%= render "commute_badge" %>
       <% end %>
       <%# The owner's own recording imported without a GPS position
-          (PLAN_NO_GPS.md §9). It never appears on a publication: a
+          (docs/dev/NO-GPS.md). It never appears on a publication: a
           positionless workout is not publishable yet. %>
       <% if owner && @workout.recording? && !@workout.positioned? %>
         <span class="badge bg-secondary-lt">
@@ -258,7 +258,7 @@
       <section id="section-profile" class="allure-detail-section">
         <% if @workout.min_elevation || @workout.max_elevation || @chart_available_series.any? %>
           <%# A positionless recording has no places to mark and no distances
-              to place its findings at (PLAN_NO_GPS.md §9). %>
+              to place its findings at (docs/dev/NO-GPS.md). %>
           <%= render "elevation_chart", workout: @workout, display: @display_workout, table_points: @chart_table,
                                         available_series: @chart_available_series, configurable: true,
                                         toponymy: @workout.positioned?, photos: photo_markers,

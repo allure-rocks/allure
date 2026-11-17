@@ -23,7 +23,7 @@ module Allure
     # When no trackpoint carries a position (Garmin's indoor exports), the
     # file is imported as a positionless recording: every timed trackpoint is
     # kept with its heart rate, cadence, watts, cumulative `DistanceMeters`
-    # and TPX `Speed` (PLAN_NO_GPS.md §3).
+    # and TPX `Speed` (docs/dev/NO-GPS.md).
     class Parser
       DEFAULT_MAX_POINTS = Allure::Gpx::Parser::DEFAULT_MAX_POINTS
 
@@ -103,7 +103,7 @@ module Allure
           # TCX marks no pauses, so the whole recording is one segment. A file
           # with a positioned segment stays positioned even if a few
           # trackpoints lacked a fix; one with none opens a positionless
-          # segment from every timed point (PLAN_NO_GPS.md §3).
+          # segment from every timed point (docs/dev/NO-GPS.md).
           if @positioned_points.length >= 2
             @segments << Allure::Gpx::Segment.new(points: @positioned_points)
           elsif @timed_points.length >= 2

@@ -47,7 +47,7 @@ sport_rows = [
   [ "tennis_outdoor", "Tennis (Outdoor)", "run", 0.1, "speed", nil, false, false ],
   [ "padel_outdoor", "Padel (Outdoor)", "run", 0.1, "speed", nil, false, false ],
   [ "paragliding", "Paragliding", "other", 0.1, "speed", nil, true, false ],
-  # Indoor sessions without a distance at all (PLAN_NO_GPS.md §3.3): a
+  # Indoor sessions without a distance at all (docs/dev/NO-GPS.md): a
   # strength workout and the generic fitness catch-all.
   [ "strength_training", "Strength Training", "other", 0.1, "speed", nil, false, false ],
   [ "fitness", "Fitness", "other", 0.1, "speed", nil, false, false ]

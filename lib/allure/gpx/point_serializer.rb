@@ -38,7 +38,7 @@ module Allure
         # A point of a positionless recording carries no coordinates at all:
         # the keys are absent, never null, so every coordinate consumer fails
         # loudly instead of reading a meaningless 0° position
-        # (PLAN_NO_GPS.md).
+        # (docs/dev/NO-GPS.md).
         if !latitude.nil? && !longitude.nil?
           hash[KEY_LATITUDE] = latitude
           hash[KEY_LONGITUDE] = longitude

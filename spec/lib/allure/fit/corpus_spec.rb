@@ -31,13 +31,13 @@ RSpec.describe "FIT conformance corpus" do
   }.freeze
 
   # Files a device exported without ever reaching a fix: they are imported as
-  # positionless recordings (PLAN_NO_GPS.md §3), analysed from the device's
+  # positionless recordings (docs/dev/NO-GPS.md), analysed from the device's
   # own distance and speed. Diving stays out of the list: those records carry
   # no usable timestamp and the file is still rejected.
   POSITIONLESS_MARKERS = %w[Treadmill Yoga Strength-Training Breathing].freeze
   NO_TIMED_RECORDS_MARKERS = %w[Diving].freeze
   # Outdoor recordings whose devices write a fix only on a minority of their
-  # one-second records; they must keep their route (PLAN_NO_GPS.md §3.1).
+  # one-second records; they must keep their route (docs/dev/NO-GPS.md).
   SPARSE_FIX_SAMPLES = %w[
     Activity/2023/Activity_20230610_017_003_Hiking_Trail_Suunto-Vertical_3139dfeee3252b9c7d50729f13b51d04.fit
     Activity/2020/Activity_20201023_002_008_Cycling_Mountain_Suunto-Spartan-Sport-Wrist-HR-Baro_405f58c2aced451bf4bfa97d81f7b7c0.fit
@@ -82,7 +82,7 @@ RSpec.describe "FIT conformance corpus" do
           expect(track.points_count).to eq(points.length)
           expect(points.map(&:time)).to eq(points.map(&:time).sort)
           # A real file is either fully positioned or fully positionless
-          # (PLAN_NO_GPS.md §3.1); a mix would mean the classification leaked
+          # (docs/dev/NO-GPS.md); a mix would mean the classification leaked
           # into the segments.
           if track.positioned?
             expect(points).to all(be_positioned)

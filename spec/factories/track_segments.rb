@@ -30,7 +30,7 @@ FactoryBot.define do
     end
 
     # A segment of a positionless recording: coordinates absent from every
-    # point, no geometry (PLAN_NO_GPS.md §5).
+    # point, no geometry (docs/dev/NO-GPS.md).
     trait :unpositioned do
       points do
         [

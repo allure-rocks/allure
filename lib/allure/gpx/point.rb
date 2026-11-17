@@ -8,7 +8,7 @@ module Allure
     # named attributes instead.
     #
     # `latitude` and `longitude` are both nil for a point of a positionless
-    # recording (an indoor FIT/TCX activity, PLAN_NO_GPS.md): the point still
+    # recording (an indoor FIT/TCX activity, docs/dev/NO-GPS.md): the point still
     # carries its time and sensor readings, so no timed record is ever
     # discarded for lacking a fix. A point is either fully positioned or fully
     # unpositioned; parsers never build a mixed point.

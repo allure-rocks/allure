@@ -109,7 +109,7 @@ export default class extends Controller {
     selection: { type: Boolean, default: false },
     unitSystem: { type: String, default: "metric" },
     // "distance" for every workout with a track; "time" for a positionless
-    // recording whose file recorded no distance at all (PLAN_NO_GPS.md §9):
+    // recording whose file recorded no distance at all (docs/dev/NO-GPS.md):
     // the x axis then reads elapsed minutes, never a row of zeros.
     axisMode: { type: String, default: "distance" },
     // A power-led virtual ride opens on its watts, and keeps its own stored

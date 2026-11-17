@@ -30,9 +30,9 @@ FactoryBot.define do
       source { "Allure Test Device" }
     end
 
-    # An indoor recording imported without a GPS position (PLAN_NO_GPS.md):
-    # metrics and sensor readings, no location, no elevation (PLAN_NO_GPS.md
-    # §5). Its track segments are the `:unpositioned` ones.
+    # An indoor recording imported without a GPS position (docs/dev/NO-GPS.md):
+    # metrics and sensor readings, no location, no elevation. Its track
+    # segments are the `:unpositioned` ones.
     trait :unpositioned do
       start_point { nil }
       bounds { nil }

@@ -208,7 +208,7 @@ module Workouts
     # A nil geometry never compares equal to coordinates: a positionless
     # recording keeps its empty shape, and a versioned run that would move a
     # workout between shapes (only a changed parser rule can) is treated as a
-    # change and re-renders nothing (PLAN_NO_GPS.md §6).
+    # change and re-renders nothing (docs/dev/NO-GPS.md).
     def geometry_changed?(segments)
       stored = @workout.track_segments.map { |segment| segment.geom&.points&.map { |point| [ point.x, point.y ] } }
       stored != segments.map(&:coordinates)
@@ -271,7 +271,7 @@ module Workouts
 
     # RGeo helpers. A positionless recording has no coordinates: both builders
     # answer nil and the columns stay empty, exactly as the importer stores
-    # them (PLAN_NO_GPS.md §5).
+    # them (docs/dev/NO-GPS.md).
     def factory = RGeo::Geographic.spherical_factory(srid: 4326)
 
     def build_point(lon_lat)

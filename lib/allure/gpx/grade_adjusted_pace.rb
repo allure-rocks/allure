@@ -55,7 +55,7 @@ module Allure
           duration = current.time - previous.time
           next unless duration.positive?
 
-          # A positionless recording (PLAN_NO_GPS.md §4) has no gradient at
+          # A positionless recording (docs/dev/NO-GPS.md) has no gradient at
           # all: its unpositioned points are skipped here, so a positionless
           # track answers +nil+ — the documented "no eligible interval"
           # contract — instead of crashing on nil coordinates.
