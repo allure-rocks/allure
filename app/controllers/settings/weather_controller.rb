@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Weather consent (PLAN_WEATHER.md §1, §7): off for every account until it
+  # Weather consent (docs/dev/WEATHER.md): off for every account until it
   # opts in. Withdrawing consent stops every request at once and keeps the
   # weather already stored until the owner deletes it here.
   class WeatherController < ApplicationController

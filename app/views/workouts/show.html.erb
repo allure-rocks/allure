@@ -30,7 +30,7 @@
 <% anomaly_notes = owner ? workout_anomaly_notes(@workout) : {} %>
 <%# The owner reads the stored weather and its states; a reader reads the
     summary the publication froze, when its profile shared it
-    (PLAN_WEATHER.md §6). %>
+    (docs/dev/WEATHER.md). %>
 <% device_temperature = owner ? workout_device_temperature(@workout) : nil %>
 <% weather_state = owner ? workout_weather_state(@workout, device_temperature:) : nil %>
 <% reader_weather = !owner && !participant_metrics_only && publication_view ? @display_workout.weather : nil %>

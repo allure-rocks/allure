@@ -451,7 +451,7 @@ module Workouts
       Rails.error.report(error, handled: true, context: { component: self.class.name, workout_id: workout.id })
     end
 
-    # Weather is fetched for an account that consented (PLAN_WEATHER.md §5);
+    # Weather is fetched for an account that consented (docs/dev/WEATHER.md);
     # the refresh itself checks every condition. Like the geocoding, it waits
     # for a requested terrain profile, whose re-analysis (or the apply job
     # giving up) schedules it on the final elevations.

@@ -12,7 +12,7 @@ module Workouts
   # - places: the toponymy reached a terminal state (virtual sports have none);
   # - route_image: the owner image is of the current renderer generation;
   # - weather: the weather reached a terminal state, waited for only when a
-  #   waiting automatic publication's profile shares it (PLAN_WEATHER.md §5).
+  #   waiting automatic publication's profile shares it (docs/dev/WEATHER.md).
   #
   # - photos: no photo of the workout is still being processed, so an
   #   automatic publication takes every photo uploaded in time

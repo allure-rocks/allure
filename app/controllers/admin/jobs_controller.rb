@@ -134,7 +134,7 @@ module Admin
     end
 
     # Schedules the weather of every consenting account's eligible workouts
-    # that have none or an older generation (PLAN_WEATHER.md §9). The weather
+    # that have none or an older generation (docs/dev/WEATHER.md). The weather
     # job is paced; read-only while the feature is off or nothing is pending.
     def backfill_weather
       count = Workouts::BackfillWeatherJob.pending_scope.count

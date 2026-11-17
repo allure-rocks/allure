@@ -7,7 +7,7 @@ require "uri"
 
 module Allure
   module Weather
-    # Thin Open-Meteo historical weather client (PLAN_WEATHER.md §2).
+    # Thin Open-Meteo historical weather client (docs/dev/WEATHER.md).
     #
     # Framework-independent: Net::HTTP only. `hourly` asks one endpoint for the
     # hourly values of up to ten locations over a UTC date range and returns

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # Recurring recovery for weather (PLAN_WEATHER.md §5): reschedules a recent
+  # Recurring recovery for weather (docs/dev/WEATHER.md): reschedules a recent
   # weather that failed, and one left pending past any plausible queue wait
   # (a lost job, or a budget that ran out). Older failures are left to the
   # owner's « Actualiser la météo » action and the operator's sweep.

@@ -96,7 +96,7 @@ RSpec.describe "REST API workouts (docs/dev/API.md)", type: :request do
     end
   end
 
-  describe "GET /workouts/:id weather (PLAN_WEATHER.md §8)" do
+  describe "GET /workouts/:id weather (docs/dev/WEATHER.md)" do
     it "carries the status, the SI summary and the hourly series" do
       workout = workout_at("2026-08-10 07:00")
       create(:workout_weather, workout:)

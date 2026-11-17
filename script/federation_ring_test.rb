@@ -132,7 +132,7 @@ class FederationRingTest
 
   # The ring never reaches Open-Meteo: the gate stores a ready weather summary
   # so the shared weather path runs end to end — snapshot, Note tags, strict
-  # remote parsing (PLAN_WEATHER.md §6).
+  # remote parsing (docs/dev/WEATHER.md).
   def ensure_weather(workout)
     WorkoutWeather.find_or_initialize_by(workout:).update!(
       status: "ready", fetch_version: Workouts::WeatherEnricher::FETCH_VERSION,

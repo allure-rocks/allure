@@ -91,7 +91,7 @@ RSpec.describe "Automatic publishing" do
       expect(described_class.new(workout.reload)).to be_ready
     end
 
-    it "waits for the weather only when the waiting profile shares it (PLAN_WEATHER.md §5)", :weather do
+    it "waits for the weather only when the waiting profile shares it (docs/dev/WEATHER.md)", :weather do
       user.update!(weather_enrichment_enabled: true)
       profile
       enroll

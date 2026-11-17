@@ -3,7 +3,7 @@
 module Allure
   module Weather
     # The weather read at every recorded point, for the profile chart
-    # (PLAN_WEATHER.md §7): the air temperature interpolated in time from the
+    # (docs/dev/WEATHER.md): the air temperature interpolated in time from the
     # series, and the effective headwind of the ~100 m stretch the point
     # belongs to (positive against, negative behind; nil while stopped).
     # Returns one `{ temperature:, headwind: }` per input point, aligned.

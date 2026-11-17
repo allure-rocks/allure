@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Historical weather met along one workout (PLAN_WEATHER.md §4). Owner-only:
+# Historical weather met along one workout (docs/dev/WEATHER.md). Owner-only:
 # only `summary` may enter a publication snapshot, and only when the profile
 # shares it.
 class WorkoutWeather < ApplicationRecord

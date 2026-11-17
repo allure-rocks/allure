@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Workouts
-  # The weather channels of the owner's profile chart (PLAN_WEATHER.md §7):
+  # The weather channels of the owner's profile chart (docs/dev/WEATHER.md):
   # one `{ temperature:, headwind: }` per stored point, in the global point
   # order `Allure::Gpx::ChartSeries` reads, or nil when the workout has no
   # ready weather. Owner-only, like every other stored channel.

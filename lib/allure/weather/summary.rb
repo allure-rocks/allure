@@ -2,7 +2,7 @@
 
 module Allure
   module Weather
-    # The weather of a whole workout in a few figures (PLAN_WEATHER.md §3):
+    # The weather of a whole workout in a few figures (docs/dev/WEATHER.md):
     # the only weather a publication may carry. It names no place and no
     # instant; values stay SI (°C, %, mm, m/s, degrees the wind blows from).
     module Summary
@@ -12,7 +12,7 @@ module Allure
       ].freeze
       HOUR = 3_600
       # The plausible bounds a stored or received summary must respect
-      # (PLAN_WEATHER.md §6). Anything outside is refused, never clamped.
+      # (docs/dev/WEATHER.md). Anything outside is refused, never clamped.
       RANGES = {
         "temperature_min" => -90.0..60.0, "temperature_max" => -90.0..60.0, "temperature_mean" => -90.0..60.0,
         "apparent_temperature" => -100.0..70.0, "humidity" => 0.0..100.0, "precipitation" => 0.0..1_000.0,
