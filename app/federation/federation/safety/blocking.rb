@@ -102,7 +102,7 @@ module Federation
       end
 
       # A block ends every shared activity with the blocked actors, in both
-      # directions, and tells nobody (PLAN_TOGETHER.md §4, §7): invitations
+      # directions, and tells nobody (docs/dev/SHARED-ACTIVITIES.md): invitations
       # received from them, and this instance's participations naming them.
       def withdraw_participations!(actors)
         RemoteParticipation.active.joins(:remote_note).where(remote_notes: { actor_id: actors.select(:id) })

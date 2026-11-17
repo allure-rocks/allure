@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_TOGETHER.md §8: a credited participant's own recording of the same
+# docs/dev/SHARED-ACTIVITIES.md: a credited participant's own recording of the same
 # outing is suggested as a link, through the detector, never by start time.
 RSpec.describe Together::CreditLinkSuggestion do
   include ActiveJob::TestHelper

@@ -77,7 +77,7 @@ module Workouts
           )
       end
 
-      # Credit rows have no track: no image, no geocoding (PLAN_TOGETHER.md §6.6).
+      # Credit rows have no track: no image, no geocoding (docs/dev/SHARED-ACTIVITIES.md).
       def route_image_scope(user)
         user.workouts.recordings.where(route_image_version: ...RouteImage::VERSION)
       end

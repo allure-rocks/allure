@@ -3,7 +3,7 @@
 <% participant = !owner && !reader_preview && @participant_participation.present? %>
 <%# The credited metrics-only presentation applies only while the source is
     unpublished; a participant of a published source reads the standard
-    publication presentation, as any reader (PLAN_TOGETHER.md §4/§10). %>
+    publication presentation, as any reader (docs/dev/SHARED-ACTIVITIES.md). %>
 <% participant_metrics_only = participant && !@publication %>
 <% publication_view = @display_workout.is_a?(Workouts::PublicationView) %>
 <% device_name = owner ? @workout.source : (publication_view ? @display_workout.device : nil) %>

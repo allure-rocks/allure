@@ -48,7 +48,7 @@ module Admin
       end
 
       # Recordings only: a credit row repeats an outing already counted
-      # (PLAN_TOGETHER.md §6.6).
+      # (docs/dev/SHARED-ACTIVITIES.md).
       def workouts
         recordings = Workout.recordings
         {

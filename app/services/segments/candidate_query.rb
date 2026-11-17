@@ -8,7 +8,7 @@ module Segments
     # A workout matches its owner's segments plus other users' shared
     # (`visibility != private`) segments. Routes stay owner-scoped; they are
     # never shared. A credit row is matched for its participant on its
-    # source's track (PLAN_TOGETHER.md §6.3); a detached one has none.
+    # source's track (docs/dev/SHARED-ACTIVITIES.md); a detached one has none.
     def self.for_workout(workout)
       track = workout.track_workout
       return Segment.none unless track

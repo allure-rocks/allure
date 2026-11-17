@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_TOGETHER.md lot 1: one row per shared activity between a source workout
+# docs/dev/SHARED-ACTIVITIES.md: one row per shared activity between a source workout
 # and another account. A participation is a `credit` (the source workout counts
 # for the participant) or a `link` (the participant's own recording names the
 # source workout). Confirmation is mutual: `owner_confirmed_at` and

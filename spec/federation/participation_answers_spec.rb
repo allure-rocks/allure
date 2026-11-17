@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The answers and withdrawals of a remote participation (PLAN_TOGETHER.md §7),
+# The answers and withdrawals of a remote participation (docs/dev/SHARED-ACTIVITIES.md),
 # on each side of the wire.
 RSpec.describe "Remote participation answers" do
   def inbound(recipient, activity)

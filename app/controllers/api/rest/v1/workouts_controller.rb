@@ -95,7 +95,7 @@ module Api
         # also takes its figures.
         def update
           workout = owned_workout(includes: [ :sport, :equipments ])
-          # A credit row is read-only except for its deletion (PLAN_TOGETHER.md §6.6).
+          # A credit row is read-only except for its deletion (docs/dev/SHARED-ACTIVITIES.md).
           return render_problem(:unprocessable_content, "credited_workout") if workout.credit?
           return update_manual(workout) if workout.manual?
 

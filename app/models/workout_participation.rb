@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # One shared activity between a source workout and another account
-# (PLAN_TOGETHER.md). A `credit` means the participant has no recording of
+# (docs/dev/SHARED-ACTIVITIES.md). A `credit` means the participant has no recording of
 # their own and the source workout counts for them; a `link` names the
 # participant's own recording of the same activity, and nothing is counted
 # twice. Confirmation is mutual and derived from the two timestamps, so no
@@ -16,10 +16,10 @@ class WorkoutParticipation < ApplicationRecord
   belongs_to :participant_workout, class_name: "Workout", optional: true, inverse_of: :participant_links
   # A credit's participant appears to have recorded the outing too: detection
   # suggests converting the credit into a link to this recording
-  # (PLAN_TOGETHER.md §8). Nullified if the recording is deleted.
+  # (docs/dev/SHARED-ACTIVITIES.md). Nullified if the recording is deleted.
   belongs_to :suggested_workout, class_name: "Workout", optional: true
-  # The publication a remote participant's `Invite` rides on (PLAN_TOGETHER.md
-  # §7); nil for a local participant.
+  # The publication a remote participant's `Invite` rides on
+  # (docs/dev/SHARED-ACTIVITIES.md); nil for a local participant.
   belongs_to :workout_publication, optional: true
 
   validates :kind, inclusion: { in: KINDS }
@@ -54,7 +54,7 @@ class WorkoutParticipation < ApplicationRecord
   end
 
   # The participant's credit row for this source, while attached
-  # (PLAN_TOGETHER.md §3.2).
+  # (docs/dev/SHARED-ACTIVITIES.md).
   def credit_row
     user = participant_user
     return unless user && kind == "credit"

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_TOGETHER.md §7, lot 4 slice 4c: a confirmed invitation from another
+# docs/dev/SHARED-ACTIVITIES.md: a confirmed invitation from another
 # instance gives the local account a credit row like a local credit, built
 # from the received note's figures. The row names its participation (one
 # credit row per participation); a credit row has one source, local or

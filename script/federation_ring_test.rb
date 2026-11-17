@@ -651,7 +651,7 @@ class FederationRingTest
     wait_for("B delivered Create") { delivered?(event_for("Create")) }
   end
 
-  # PLAN_TOGETHER.md §7: B's owner invites A's account, which holds the
+  # docs/dev/SHARED-ACTIVITIES.md: B's owner invites A's account, which holds the
   # publication and follows her, to confirm the outing. A stores the
   # invitation, shows its card on the received note, and confirms: an Accept
   # goes back and A's account gets a credit row from the note's figures.

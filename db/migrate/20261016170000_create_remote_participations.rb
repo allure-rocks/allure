@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# PLAN_TOGETHER.md §7, lot 4 slice 4a: a local owner invites a remote Allure
+# docs/dev/SHARED-ACTIVITIES.md: a local owner invites a remote Allure
 # account through an outbound `Invite`, and an invited local account keeps
 # the invitation it received as a `RemoteParticipation`.
 #

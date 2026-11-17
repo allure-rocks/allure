@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_TOGETHER.md §8: detection suggests a link between two co-present
+# docs/dev/SHARED-ACTIVITIES.md: detection suggests a link between two co-present
 # recordings of mutual followers who both opted in, once per pair.
 RSpec.describe Together::Detection do
   let(:sport) { catalog_sport("cycling") }

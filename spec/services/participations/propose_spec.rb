@@ -88,7 +88,7 @@ RSpec.describe Participations::Propose do
   end
 
   # Remote invitations are covered end to end by
-  # spec/federation/participation_invite_delivery_spec.rb (PLAN_TOGETHER.md §7).
+  # spec/federation/participation_invite_delivery_spec.rb (docs/dev/SHARED-ACTIVITIES.md).
   # The refusal reason depends on the environment's federation settings
   # (an unresolvable host here, a non-HTTPS URI in CI): any refusal will do.
   it "refuses a remote handle that cannot be resolved instead of failing" do

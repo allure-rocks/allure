@@ -14,7 +14,7 @@ module Segments
   # - `route_hidden` — published, but no publication shares the route;
   # - `unpublished` — no live publication at all;
   # - `credited` — only efforts credited from another account's recording,
-  #   which shared boards never rank (PLAN_TOGETHER.md §4);
+  #   which shared boards never rank (docs/dev/SHARED-ACTIVITIES.md);
   # - nil — no effort on the course, or a course without a board.
   class Reach
     def initialize(segment:, user:)

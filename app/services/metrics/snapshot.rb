@@ -42,7 +42,7 @@ module Metrics
         users_new_7d: User.where(created_at: 7.days.ago..).count,
         users_new_30d: User.where(created_at: 30.days.ago..).count,
         # Recordings only: a credit row repeats an outing already counted
-        # (PLAN_TOGETHER.md §6.6).
+        # (docs/dev/SHARED-ACTIVITIES.md).
         workouts: Workout.recordings.count,
         workouts_new_7d: Workout.recordings.where(created_at: 7.days.ago..).count,
         workouts_new_30d: Workout.recordings.where(created_at: 30.days.ago..).count,

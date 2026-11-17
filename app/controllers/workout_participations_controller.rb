@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The local shared-activity gestures (PLAN_TOGETHER.md §5, §8): the owner
+# The local shared-activity gestures (docs/dev/SHARED-ACTIVITIES.md): the owner
 # invites, the participant confirms or declines (both sides answer a
 # detection), and either party withdraws. A detection counterpart answers
 # from their own recording, so answers return to the page they came from.
@@ -28,7 +28,7 @@ class WorkoutParticipationsController < ApplicationController
     ).call!
     redirect_to workout_path(@workout), notice: t("workouts.participations.notices.proposed")
   rescue Participations::Propose::NotAllowed
-    # A remote account has conditions of its own (PLAN_TOGETHER.md §7).
+    # A remote account has conditions of its own (docs/dev/SHARED-ACTIVITIES.md).
     remote = !Federation::TargetResolver.new.local_target?(participation_params[:handle])
     redirect_to workout_path(@workout),
                 alert: t(remote ? "workouts.participations.notices.not_allowed_remote" : "workouts.participations.notices.not_allowed")
@@ -61,7 +61,7 @@ class WorkoutParticipationsController < ApplicationController
   end
 
   # The participant keeps the credit: the suggestion of linking a recording
-  # closes for good (PLAN_TOGETHER.md §8).
+  # closes for good (docs/dev/SHARED-ACTIVITIES.md).
   def dismiss_link_suggestion
     if @participation.link_suggestion_open?
       @participation.update!(link_suggestion_dismissed_at: Time.current)

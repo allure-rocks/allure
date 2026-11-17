@@ -2,8 +2,8 @@
 
 module Federation
   module Inbox
-    # The answers and withdrawals of a remote participation (PLAN_TOGETHER.md
-    # §7), each resolved from the Invite it names:
+    # The answers and withdrawals of a remote participation
+    # (docs/dev/SHARED-ACTIVITIES.md), each resolved from the Invite it names:
     #
     # - on the owner's instance, the invited account's `Accept` or `Reject` of
     #   the Invite, and its `Undo` of that `Accept`;

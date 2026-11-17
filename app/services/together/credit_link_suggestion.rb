@@ -3,7 +3,7 @@
 module Together
   # Finds a credited participant's own recording of the outing they were
   # credited for, and suggests converting the credit into a link
-  # (PLAN_TOGETHER.md §8): same time and same place as the credit's source,
+  # (docs/dev/SHARED-ACTIVITIES.md): same time and same place as the credit's source,
   # through the co-presence detector, never a start-time window alone. Until
   # the participant links or dismisses it, the outing counts twice; the
   # suggestion says so. It depends on the participant's own detection switch

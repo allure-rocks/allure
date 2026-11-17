@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_TOGETHER.md §8: a detected outing is answered by both accounts, each
+# docs/dev/SHARED-ACTIVITIES.md: a detected outing is answered by both accounts, each
 # from their own workout; the counterpart's workout stays closed until both
 # confirmed.
 RSpec.describe "Co-presence suggestions" do

@@ -1,9 +1,10 @@
-<%# The participant's credit row (PLAN_TOGETHER.md §3.2, §10; DESIGN.md
+<%# The participant's credit row (docs/dev/SHARED-ACTIVITIES.md; DESIGN.md
     §10.18): the credited metric set of an outing someone else recorded, the
     « Avec @X » badge, and its removal. Nothing is drawn from a track, since
-    the row has none; slice 2c adds its analysis tabs. %>
+    the row has none; its analysis card keeps only the segments and
+    best-efforts tabs. %>
 <% source = @workout.credited_from %>
-<%# A remote credit's source is the received note (PLAN_TOGETHER.md §7). %>
+<%# A remote credit's source is the received note (docs/dev/SHARED-ACTIVITIES.md). %>
 <% remote_note = @workout.remote_participation&.remote_note if @workout.credit_remote? %>
 <% source_path = if source
                    workout_path(source)

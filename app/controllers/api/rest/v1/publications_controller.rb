@@ -150,7 +150,7 @@ module Api
           render_problem(:unprocessable_content, "publication_refused", detail: message, reason:)
         end
 
-        # A credit row is never published (PLAN_TOGETHER.md §6.6).
+        # A credit row is never published (docs/dev/SHARED-ACTIVITIES.md).
         def render_credited_workout
           render_problem(:unprocessable_content, "credited_workout")
         end

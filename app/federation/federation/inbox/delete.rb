@@ -77,7 +77,7 @@ module Federation
           end
           Participations::RemoteWithdrawal.close_pending!(RemoteNote.where(actor:), at: @now)
           # The deleted account took part in this instance's workouts: those
-          # participations end with it (PLAN_TOGETHER.md §7).
+          # participations end with it (docs/dev/SHARED-ACTIVITIES.md).
           WorkoutParticipation.active.where(participant_actor: actor).find_each do |participation|
             participation.update!(withdrawn_at: @now)
             Notifications::Withdraw.new(subject: participation).call!

@@ -5,7 +5,7 @@ class WorkoutsController < ApplicationController
 
   before_action :set_workout_for_show, only: :show
   before_action :set_owned_workout, only: %i[edit update destroy publish destroy_publication republish publication_preview delivery_refresh activate_publication reschedule_publication destroy_scheduled_publication destroy_auto_publication]
-  # A credit row is read-only except for its deletion (PLAN_TOGETHER.md §6.6).
+  # A credit row is read-only except for its deletion (docs/dev/SHARED-ACTIVITIES.md).
   before_action :refuse_credit_row, only: %i[edit update publish destroy_publication republish publication_preview delivery_refresh activate_publication reschedule_publication destroy_scheduled_publication destroy_auto_publication]
   before_action :ensure_publishing_profiles, only: %i[show publish republish publication_preview]
   before_action :set_equipments, only: %i[edit update]
@@ -37,7 +37,7 @@ class WorkoutsController < ApplicationController
 
   def show
     # The participant's own credit row has its own page: the credited metric
-    # set and its deletion, nothing drawn from a track (PLAN_TOGETHER.md §10).
+    # set and its deletion, nothing drawn from a track (docs/dev/SHARED-ACTIVITIES.md).
     return show_credit if @workout.credit? && @workout.user == current_user
     # A manual entry is its owner's alone and has its own page: the typed
     # figures, nothing drawn from a track (PLAN_MANUAL_ENTRY.md §7).
@@ -395,7 +395,7 @@ class WorkoutsController < ApplicationController
   end
 
   # A confirmed (or pending) participant reaches a source workout the
-  # publication policy would hide from them (PLAN_TOGETHER.md §4): they read
+  # publication policy would hide from them (docs/dev/SHARED-ACTIVITIES.md): they read
   # the credited metrics-only presentation while it is unpublished, and the
   # standard publication presentation once it is published. Everyone else
   # follows the publication policy and gets a 404.
@@ -411,7 +411,7 @@ class WorkoutsController < ApplicationController
   # An invitation admits its invitee at once: the owner chose to share. A
   # detection admits nobody until both accounts confirmed, since a suggestion
   # discloses a title and a date, never the counterpart's metrics
-  # (PLAN_TOGETHER.md §8).
+  # (docs/dev/SHARED-ACTIVITIES.md).
   def participant_participation
     actor = current_user&.actor
     return unless actor
@@ -534,7 +534,7 @@ class WorkoutsController < ApplicationController
     sample_chart_rows(Array(publication&.representation&.dig("chart")))
   end
 
-  # The participant's credit row (PLAN_TOGETHER.md §10): its own analysis
+  # The participant's credit row (docs/dev/SHARED-ACTIVITIES.md): its own analysis
   # rows, the convert action while attached, and the source's map and profile
   # only through the publication the participant may read, never the source's
   # raw track.
@@ -565,7 +565,7 @@ class WorkoutsController < ApplicationController
   end
 
   # A remote credit's map is its received note's, while the note is active
-  # and the account may still read it (PLAN_TOGETHER.md §7).
+  # and the account may still read it (docs/dev/SHARED-ACTIVITIES.md).
   def credit_remote_view
     note = @workout.remote_participation&.remote_note
     return unless note&.active?

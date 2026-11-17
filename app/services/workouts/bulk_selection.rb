@@ -27,7 +27,7 @@ module Workouts
 
     def filter_scope_ids
       # A credit row is never selectable: it is removed one by one
-      # (PLAN_TOGETHER.md §6.6).
+      # (docs/dev/SHARED-ACTIVITIES.md).
       scope = ListQuery.new(user: @user, params: @params).resolve(scope: @user.workouts.authored)
       raise TooManyWorkouts if scope.count > MAX_WORKOUTS
 

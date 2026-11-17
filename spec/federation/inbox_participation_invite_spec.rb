@@ -3,7 +3,7 @@
 require "rails_helper"
 
 # A remote invitation as the invited account's instance receives it
-# (PLAN_TOGETHER.md §7): addressed to one local account that holds the
+# (docs/dev/SHARED-ACTIVITIES.md): addressed to one local account that holds the
 # publication through an active entitlement, idempotent, never re-offered
 # after a refusal.
 RSpec.describe "Receiving a remote participation invitation" do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Participations
-  # Either party ends a live participation (PLAN_TOGETHER.md §5). Withdrawal is
+  # Either party ends a live participation (docs/dev/SHARED-ACTIVITIES.md). Withdrawal is
   # the privacy consequence: open notifications disappear, and the attached
   # credit row is destroyed, its destroy hooks recomputing the participant's
   # records. A remote participant's instance hears of it through an `Undo` of
