@@ -457,7 +457,7 @@ Rails.application.routes.draw do
                                                  as: :apple_app_site_association
   get "/.well-known/webfinger", to: "federation/webfinger#show", as: :webfinger
   # Prometheus text exposition for external Grafana/Prometheus scraping
-  # (PLAN_METRICS.md). The Rack endpoint answers 404 unless METRICS_TOKEN is
+  # (docs/dev/METRICS.md). The Rack endpoint answers 404 unless METRICS_TOKEN is
   # set, so an instance without metrics configured exposes nothing.
   mount Allure::Metrics::Endpoint.new => "/metrics"
   get "/.well-known/nodeinfo", to: "federation/node_info#discovery", as: :nodeinfo_discovery

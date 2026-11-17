@@ -2,7 +2,7 @@
 
 module Metrics
   # Builds every database-derived metric value in one pass for the Prometheus
-  # exporter (PLAN_METRICS.md §4). Each family is rescued independently: a
+  # exporter (docs/dev/METRICS.md). Each family is rescued independently: a
   # failing family is omitted from the exposition, never propagated into
   # Yabeda's collect block.
   #
@@ -117,7 +117,7 @@ module Metrics
     end
 
     # Active users are activity-based: a sign-in alone does not count
-    # (PLAN_METRICS.md §3). The definition is shared with the administration
+    # (docs/dev/METRICS.md). The definition is shared with the administration
     # dashboard through Users::Engagement.
     def activity_family
       engagement = Users::Engagement.new

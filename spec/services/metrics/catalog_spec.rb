@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The exporter ↔ administration-console contract (PLAN_METRICS.md §8). These
+# The exporter ↔ administration-console contract (docs/dev/METRICS.md). These
 # guards fail when a metric lands without declaring which console concept it
 # mirrors, when a mapping points at a label that no longer exists, or when an
 # attachment owner appears without a storage translation.

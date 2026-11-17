@@ -4,7 +4,7 @@ module Metrics
   # Fills the declared gauges from Metrics::Cache and the local process state.
   # Yabeda runs this on every scrape (collect block); each emission family is
   # isolated so a failing query never takes down the exposition
-  # (PLAN_METRICS.md §4).
+  # (docs/dev/METRICS.md).
   class Collector
     PROCESS_KINDS = %w[Worker Dispatcher Scheduler Supervisor].freeze
 

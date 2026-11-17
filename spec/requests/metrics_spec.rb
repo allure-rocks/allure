@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The Prometheus endpoint (PLAN_METRICS.md): bearer-token access, 404 while
+# The Prometheus endpoint (docs/dev/METRICS.md): bearer-token access, 404 while
 # disabled, and a session-free machine response.
 RSpec.describe "Metrics endpoint" do
   around do |example|

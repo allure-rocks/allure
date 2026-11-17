@@ -49,7 +49,7 @@ gem "solid_cable"
 # Metrics for Prometheus/Grafana. Yabeda is the collector framework, the
 # Prometheus adapter renders the text exposition, and yabeda-rails supplies the
 # request count/duration metrics. There is no Solid Queue adapter: queue and
-# federation gauges are scrape-time collect blocks (PLAN_METRICS.md).
+# federation gauges are scrape-time collect blocks (docs/dev/METRICS.md).
 gem "yabeda"
 gem "yabeda-prometheus"
 gem "yabeda-rails"
