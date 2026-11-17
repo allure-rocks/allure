@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# One immutable row per operator mutation (PLAN_ADMIN.md). The audit log is the
+# One immutable row per operator mutation (docs/dev/ADMIN.md). The audit log is the
 # operator's answer to "who did this, and when"; events are never updated or
 # deleted through the application. `metadata` stays aggregate and non-secret:
 # no payloads, coordinates, keys, or remote HTML.

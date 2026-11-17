@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # The operator audit log (PLAN_ADMIN.md §4.9, §5): every mutation, newest
+  # The operator audit log (docs/dev/ADMIN.md): every mutation, newest
   # first, filterable by action. Read-only.
   class EventsController < BaseController
     include Pagy::Method

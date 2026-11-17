@@ -218,7 +218,7 @@ class User < ApplicationRecord
 
   def second_factor_count = (totp_enrolled? ? 1 : 0) + webauthn_credentials.count
 
-  # Operator suspension (PLAN_ADMIN.md §7): access is revoked, content is not.
+  # Operator suspension (docs/dev/ADMIN.md): access is revoked, content is not.
   def suspended? = suspended_at.present?
 
   # A scheduled deletion (docs/dev/ACCOUNT.md) deactivates the account for

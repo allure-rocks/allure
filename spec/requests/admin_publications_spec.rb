@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Publication oversight and takedown (PLAN_ADMIN.md §4.4). Takedown walks the
+# Publication oversight and takedown (docs/dev/ADMIN.md). Takedown walks the
 # immutable withdrawal lifecycle with an explicit operator authorization; the
 # owner-only path must stay intact.
 RSpec.describe "Admin publications" do

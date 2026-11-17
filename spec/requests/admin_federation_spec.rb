@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The federation panel in the administration console (PLAN_ADMIN.md §4.3): the
+# The federation panel in the administration console (docs/dev/ADMIN.md): the
 # former /settings/federation surface, moved and expanded, with every mutation
 # audited and the legacy address reduced to a redirect.
 RSpec.describe "Admin federation" do

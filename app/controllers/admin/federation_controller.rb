@@ -3,7 +3,7 @@
 module Admin
   # The federation panel: the former /settings/federation diagnostics and safety
   # controls, now part of the administration console and extended with delivery
-  # health. Every mutation is audited (PLAN_ADMIN.md §4.3). The privacy contract
+  # health. Every mutation is audited (docs/dev/ADMIN.md). The privacy contract
   # is unchanged: counts and identifiers only, never coordinates, payloads,
   # keys, inbox bodies, or remote HTML.
   class FederationController < BaseController

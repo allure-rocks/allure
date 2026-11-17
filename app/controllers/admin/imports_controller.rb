@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # Import failure inspection (PLAN_ADMIN.md §4.7): the batch overview, by
+  # Import failure inspection (docs/dev/ADMIN.md): the batch overview, by
   # status and source, and the per-entry parser detail that until now was
   # only logged. The connections live in Admin::ImportConnectionsController.
   class ImportsController < BaseController

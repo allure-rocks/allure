@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  # The single write seam for the operator audit log (PLAN_ADMIN.md §5). Every
+  # The single write seam for the operator audit log (docs/dev/ADMIN.md). Every
   # admin mutation records through here, so a new control cannot silently skip
   # the log.
   module Audit

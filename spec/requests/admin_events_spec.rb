@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# The audit log panel (PLAN_ADMIN.md §4.9): newest first, filterable, read-only.
+# The audit log panel (docs/dev/ADMIN.md): newest first, filterable, read-only.
 RSpec.describe "Admin events" do
   let(:operator) { create(:user, :with_totp, username: "operator") }
   let(:member) { create(:user) }
