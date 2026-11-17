@@ -5,7 +5,7 @@ All notable changes to Allure are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-`[devdoc:<topic>]` marks developer documentation that is not published yet; see
+The developer contracts are published under `docs/dev/`; see
 [`AGENTS.md`](AGENTS.md).
 
 ## [Unreleased]
@@ -14,8 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A repository guide (`AGENTS.md`, with `CLAUDE.md` as its alias) and the
   design reference (`docs/dev/DESIGN.md`), so contributors and coding agents
-  share the same constraints. A contract whose documentation is not published
-  yet is marked `[devdoc:<topic>]` in those files.
+  share the same constraints. The developer contracts are published under
+  `docs/dev/`.
 
 ## [0.10.0] - 2026-11-13
 
@@ -2292,7 +2292,7 @@ migration (`db:migrate`, applied on boot).
   the fallbacks. Generated avatars are deterministic pink geometric art with
   no initials, seeded per account at creation and backfilled for existing
   accounts, and rotatable in place while the generated art is visible
-  (`DESIGN.md` §9.2/§9.4, `[devdoc:product-ui]`).
+  (`DESIGN.md` §9.2/§9.4).
 
 ### Changed
 

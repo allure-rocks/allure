@@ -187,9 +187,8 @@ hardcode user-facing English.
   `docker-compose.production.yml` or `production.env.example`, to an operator
   rake task or to the deployment updates its pages in the same patch.
 - `docs/dev/DESIGN.md` is the design reference and `AGENTS.md` is the
-  repository guide. A contract that is not published yet is marked
-  `[devdoc:<topic>]` in those files, and a pull request explains the contract
-  it implements until the document lands.
+  repository guide. The developer contracts are published under `docs/dev/`;
+  a pull request explains the contract it implements.
 
 ## Commits and pull requests
 

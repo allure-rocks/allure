@@ -144,8 +144,7 @@ development environment, the demo dataset, the checks and the DCO sign-off, and
 [SECURITY.md](SECURITY.md) to report a vulnerability privately. The design
 reference is [docs/dev/DESIGN.md](docs/dev/DESIGN.md), and
 [AGENTS.md](AGENTS.md) is the repository guide for contributors and coding
-agents. Where a contract is not published yet, those files mark it
-`[devdoc:<topic>]` and the pull request explains it until the document lands.
+agents. The developer contracts are published under `docs/dev/`.
 
 ## Credits
 
