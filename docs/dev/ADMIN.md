@@ -13,8 +13,7 @@ administration tasks into a first-class, audited surface:
 - an audit log of every operator action.
 
 It is explicitly **not** a multi-tenant moderation system. Reports, appeals,
-moderator roles, per-account blocks, and notification surfaces are out of scope
-(`[devdoc:roadmap]`).
+moderator roles, per-account blocks, and notification surfaces are out of scope.
 
 ## 1. Purpose and scope
 

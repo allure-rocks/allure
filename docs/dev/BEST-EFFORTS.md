@@ -145,7 +145,7 @@ climb's `ascent` in metres. Read-time display filtering hides it when
 The existing `effort_records` winners may also be projected as labels and
 durations on the local member profile when its owner explicitly enables
 `users.profile_records_audience` (`none` by default, accepted local followers or
-all instance members when shared; `[devdoc:tracking-depth]`). That projection
+all instance members when shared; `DESIGN.md`). That projection
 includes the whole personal history but never its source workout, achievement
 date, title, identifier, route or link. It does not make an effort
 URL-addressable or federated and does not change winner computation or

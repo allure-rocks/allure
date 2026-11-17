@@ -129,12 +129,9 @@ the supporter badge and the provider seam.
 `docs/dev/BULK-ACTIONS.md` is the bulk-actions contract: the selection, the
 quick actions and the reviewable background operations.
 
-The deeper contracts — workout core, publishing, federation, segments, remote
-imports, authentication, the API — are being reorganised and published
-progressively. Until a topic is published, `[devdoc:<topic>]` marks where its
-documentation belongs; the sentence around the marker states the rule that must
-hold. `grep -rn '\[devdoc:' AGENTS.md docs/dev` lists every pending topic.
-Never replace a marker with an invented link; keep it until the document lands.
+The developer contracts are published under `docs/dev/`; each document above is
+the current reference for its area. A new contract is written in its own file
+before the code that depends on it lands.
 
 `AGENTS.local.md`, when present in the checkout, adds local notes for this
 machine. It is ignored by Git and never published; read it after this file.
@@ -1228,4 +1225,4 @@ or cassette headers containing signatures.
 - Preserve Turbo lifecycle cleanup for every third-party browser library.
 - Preserve GeoJSON axis order and federation identity derivation.
 - When a decision changes a durable contract, update the matching developer
-  documentation in the same patch, or add its `[devdoc:<topic>]` marker.
+  documentation in the same patch, or add its own document.

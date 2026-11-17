@@ -2,22 +2,21 @@
 
 The single source of truth for how Allure looks, reads and behaves.
 
-`[devdoc:<topic>]` marks developer documentation that is not published yet.
-The sentence around the marker states the rule that must hold; keep the marker
-until the document lands. `grep -rn '\[devdoc:' docs/dev AGENTS.md` lists every
-pending topic. Milestone names (M3, M4.5, M5) refer to the roadmap
-(`[devdoc:roadmap]`).
+The developer contracts are published under `docs/dev/`; a link names the
+document that governs a rule. Milestone names (M3, M4.5, M5) refer to the
+roadmap.
 
 This document is **binding**, not aspirational. Where it contradicts a screen
 that exists today, the screen is wrong and the document names it in §25.
 
 It is a design reference only. It contains no delivery slices, no exit criteria
-and no schedule; those belong to the roadmap and the milestone specifications
-(`[devdoc:roadmap]`).
+and no schedule; those belong to the roadmap and the milestone specifications.
 
-It assumes the tracking-depth dataset described in `[devdoc:tracking-depth]`:
-reusable routes, loops, recorded laps, splits, personal bests, shared local
-leaderboards, TCX/KML/KMZ import, records and equipment. Statistics, the
+It assumes the dataset described in [SEGMENTS.md](SEGMENTS.md),
+[SMART-LAPS.md](SMART-LAPS.md), [BEST-EFFORTS.md](BEST-EFFORTS.md) and
+[WORKOUT.md](WORKOUT.md): reusable routes, loops, recorded laps, splits,
+personal bests, shared local leaderboards, TCX/KML/KMZ import, records and
+equipment. Statistics, the
 calendar dataset, and the navigation/UI consolidation are not shipped yet.
 Sections describing statistics and the calendar (§8.4, §15.3, §20.2, §20.10)
 therefore specify surfaces that do not exist yet; everything else describes
@@ -65,7 +64,7 @@ Every user-facing surface of the local product:
 
 ### 1.3 Relationship to the milestones
 
-`[devdoc:tracking-depth]` and `[devdoc:roadmap]` describe *which* screens are
+The milestone specifications describe *which* screens are
 built and *when*. This document describes *what they are*. A milestone may
 narrow the design (ship fewer screens); it may not contradict it (ship a
 different pattern).
@@ -1189,8 +1188,8 @@ The two detail pages live under the hub path, one click away:
 - `/me/records` — the eight record types and the per-distance best efforts,
   grouped by sport.
 
-The calendar lives here, not on `/feed`. `[devdoc:tracking-depth]` places it
-on "the dashboard"; `/me` **is** that dashboard. The M3 data contract (client-side
+The calendar lives here, not on `/feed`. `/me` is the dashboard the design
+refers to. The M3 data contract (client-side
 render of `by_time?time=day`, `sport_id`-filterable) is unchanged, and §15.3
 defines the calendar: one link per non-empty day.
 
@@ -5979,7 +5978,7 @@ of it forces a redesign.
    and card, plus an instance badge (`@user@instance`). Two visual languages for
    local and remote people would double every component.
 3. **The publication model does not become a federation model.** There is no
-   "federated visibility" control, ever. `[devdoc:roadmap]` locks this and the UI must
+   "federated visibility" control, ever. This is locked and the UI must
    not reintroduce it.
 4. **Anything fetched from another instance is proxied and cached**, following
    the Gravatar rule (§9.3): the browser talks only to its own instance.
@@ -6083,5 +6082,5 @@ depends on it, in both locales, with the styleguide updated.
 
 When a rule here conflicts with a data or protocol contract in
 [WORKOUT.md](WORKOUT.md), [PUBLISHING.md](PUBLISHING.md), [FEDERATION.md](FEDERATION.md),
-`[devdoc:tracking-depth]` or [SEGMENTS.md](SEGMENTS.md), the contract wins and this
+[SEGMENTS.md](SEGMENTS.md), [SMART-LAPS.md](SMART-LAPS.md) or [BEST-EFFORTS.md](BEST-EFFORTS.md), the contract wins and this
 document is amended — never the other way round, and never silently.
