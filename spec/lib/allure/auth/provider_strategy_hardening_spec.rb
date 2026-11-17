@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# PLAN_AUTH.md §6.7: the real openid_connect strategy, test mode off, against
+# docs/dev/AUTH.md: the real openid_connect strategy, test mode off, against
 # a Rack environment. No discovery, token or JWKS request is ever made: every
 # refusal happens before the strategy reaches the network.
 RSpec.describe Allure::Auth::ProviderStrategyHardening do

@@ -2,7 +2,7 @@
 
 # What a resolved provider answer (Auth::ProviderSignIn) does to the browser:
 # shared by the provider callback and the iOS companion's handoff exchange,
-# which resolves the same answer in the app's web view (PLAN_AUTH.md §9).
+# which resolves the same answer in the app's web view (docs/dev/AUTH.md).
 module ProviderSignInResponses
   extend ActiveSupport::Concern
 

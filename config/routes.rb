@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   resource :session
-  # The second step of a password sign-in (PLAN_AUTH.md §5.1).
+  # The second step of a password sign-in (docs/dev/AUTH.md).
   resource :session_challenge, only: %i[new create], path: "session/challenge" do
     post :options
     post :cancel
   end
-  # Identity providers (PLAN_AUTH.md §6). OmniAuth answers POST /auth/:provider
+  # Identity providers (docs/dev/AUTH.md). OmniAuth answers POST /auth/:provider
   # itself; these routes receive its verified callbacks.
   match "/auth/:provider/callback", to: "provider_callbacks#create", via: %i[get post],
                                     constraints: { provider: /google|oidc/ }, as: :provider_callback
@@ -13,12 +13,12 @@ Rails.application.routes.draw do
   # OmniAuth's test mode returns with a GET; the real return is the re-post.
   match "/auth/apple/return", to: "provider_callbacks#create", via: %i[get post], as: :apple_return
   get "/auth/failure", to: "provider_callbacks#failure", as: :provider_failure
-  # The iOS companion's provider sign-in (PLAN_AUTH.md §9): started in the
+  # The iOS companion's provider sign-in (docs/dev/AUTH.md): started in the
   # system browser, collected by the app's web view.
   get "/auth/ios/:provider", to: "companion_provider_starts#show", as: :companion_provider_start
   resource :session_handoff, only: :create, path: "session/handoff"
   resource :onboarding, only: %i[new create destroy], path: "auth/onboarding"
-  # Re-authentication before a sensitive action (PLAN_AUTH.md §5.5).
+  # Re-authentication before a sensitive action (docs/dev/AUTH.md).
   resource :reauthentication, only: %i[new create], path: "session/reauthenticate" do
     post :options
   end
@@ -322,7 +322,7 @@ Rails.application.routes.draw do
     patch "security/password", to: "security#update_password", as: :security_password
     delete "security/sessions/:id", to: "security#destroy_session", as: :security_session
     delete "security/sessions", to: "security#destroy_all_sessions", as: :destroy_all_security_sessions
-    # Second factors (PLAN_AUTH.md §5.2–§5.3).
+    # Second factors (docs/dev/AUTH.md).
     post "security/reminder/dismiss", to: "security#dismiss_reminder", as: :dismiss_second_factor_reminder
     resource :totp, only: %i[new create destroy], path: "security/totp"
     resources :passkeys, only: %i[create destroy], path: "security/passkeys" do
@@ -452,7 +452,7 @@ Rails.application.routes.draw do
   # Members' help on the product's concepts (DESIGN.md §20.20).
   get "/help", to: "help#index", as: :help
   get "/help/:topic", to: "help#show", as: :help_topic
-  # Passkeys in the iOS companion (PLAN_AUTH.md §9).
+  # Passkeys in the iOS companion (docs/dev/AUTH.md).
   get "/.well-known/apple-app-site-association", to: "apple_app_site_associations#show",
                                                  as: :apple_app_site_association
   get "/.well-known/webfinger", to: "federation/webfinger#show", as: :webfinger

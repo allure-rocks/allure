@@ -2,7 +2,7 @@
 
 module AuthenticationHelpers
   # Signs in through the real forms. An account with an authenticator app
-  # answers the second step with its current code (PLAN_AUTH.md §5.1).
+  # answers the second step with its current code (docs/dev/AUTH.md).
   def sign_in_as(user, password: "allure-test-password")
     post session_path, params: { email_address: user.email_address, password: }
     return unless response.redirect? && response.location.end_with?(new_session_challenge_path)

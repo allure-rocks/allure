@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Security notices (PLAN_AUTH.md §7): every change to how an account proves
+# Security notices (docs/dev/AUTH.md): every change to how an account proves
 # its identity is mailed to its address, so a change the person did not make
 # is noticed. Localized to the account, since the mails are queued. API tokens
 # act on the account's behalf, so their creation and revocation are mailed too

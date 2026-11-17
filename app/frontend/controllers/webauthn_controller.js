@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
-// Passkeys and security keys (PLAN_AUTH.md §5.2, DESIGN.md §20.15).
+// Passkeys and security keys (docs/dev/AUTH.md, DESIGN.md §20.15).
 //
 // Wraps a form. `start` asks the server for options, lets the person's device
 // create or sign the credential, writes the browser's JSON answer into the

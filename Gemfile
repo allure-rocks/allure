@@ -24,13 +24,13 @@ gem "jbuilder"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 
-# Second factors (PLAN_AUTH.md §2): authenticator codes, their enrolment QR
+# Second factors (docs/dev/AUTH.md): authenticator codes, their enrolment QR
 # code, and passkeys / security keys.
 gem "rotp", "~> 6.3"
 gem "rqrcode", "~> 3.1"
 gem "webauthn", "~> 3.4"
 
-# Identity providers (PLAN_AUTH.md §6): the OmniAuth handshake with Rails CSRF
+# Identity providers (docs/dev/AUTH.md): the OmniAuth handshake with Rails CSRF
 # protection on its request phase, OpenID Connect for Google and a generic
 # provider, and Sign in with Apple's form-post flow.
 gem "omniauth", "~> 2.1"

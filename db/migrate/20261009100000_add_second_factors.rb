@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Second factors (PLAN_AUTH.md §4–§5): authenticator codes on the account,
+# Second factors (docs/dev/AUTH.md): authenticator codes on the account,
 # passkeys and recovery codes in their own tables, and the session state that
 # records which factor was proved and whether the session may only enrol.
 #

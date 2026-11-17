@@ -1,6 +1,6 @@
 import { BridgeComponent } from "@hotwired/hotwire-native-bridge";
 
-// A provider sign-in from the iOS companion (PLAN_AUTH.md §9). Providers
+// A provider sign-in from the iOS companion (docs/dev/AUTH.md). Providers
 // refuse embedded web views, so the app opens the start URL in its system
 // browser with a PKCE challenge it keeps, and replies with the handoff token
 // and the verifier. They are posted here, from the web view, so the answer is

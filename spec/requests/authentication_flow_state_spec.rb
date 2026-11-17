@@ -3,7 +3,7 @@
 require "rails_helper"
 
 # The browser session's unfinished authentication steps belong to whoever was
-# using the browser (PLAN_AUTH.md §8): sign-in and every end of a session clear
+# using the browser (docs/dev/AUTH.md): sign-in and every end of a session clear
 # them, and per-account values are bound to their account.
 RSpec.describe "Authentication flow state" do
   let(:first) { create(:user, :with_totp) }

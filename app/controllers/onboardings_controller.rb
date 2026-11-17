@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Account creation from a provider identity (PLAN_AUTH.md §6.3). The verified
+# Account creation from a provider identity (docs/dev/AUTH.md). The verified
 # identity waits in the encrypted session for 15 minutes; the person confirms
 # what becomes permanent — the username is their federation identity — and the
 # account is created without a password.
@@ -33,7 +33,7 @@ class OnboardingsController < ApplicationController
   end
 
   # Cancel: the verified identity is discarded, so nobody else using this
-  # browser can finish the account with it (PLAN_AUTH.md §8).
+  # browser can finish the account with it (docs/dev/AUTH.md).
   def destroy
     session.delete(:pending_identity)
     redirect_to new_session_path, status: :see_other

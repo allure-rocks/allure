@@ -1,4 +1,4 @@
-# Development OpenID Connect provider (PLAN_AUTH.md §10). Started only with
+# Development OpenID Connect provider (docs/dev/AUTH.md). Started only with
 # `dip compose --profile oidc up -d dex`; never used by CI or production.
 # The issuer listens on the port it publishes, so the same URL resolves from
 # the host browser (127.0.0.1 dex.test), the Rails container and Playwright.

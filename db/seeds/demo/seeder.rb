@@ -11,7 +11,7 @@ require_relative "dating"
 # already did; a failing entry is reported and never stops the run.
 module DemoSeed
   PASSWORD = "allure-dev-password"
-  # A fixed, public development secret (PLAN_AUTH.md §10): every demo account
+  # A fixed, public development secret (docs/dev/AUTH.md): every demo account
   # signs in with a second factor, as the operator must. Any authenticator app
   # or `ROTP::TOTP.new(TOTP_SECRET).now` gives the current code.
   TOTP_SECRET = "ALLUREDEVTOTPSECRETDEMOACCOUNTS2"

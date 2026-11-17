@@ -25,11 +25,11 @@ x-app: &app
     # defaults to the seeded marie account so the console is reachable locally;
     # production must set this explicitly (or leave it unset to disable it).
     INSTANCE_OPERATOR_USERNAME: ${INSTANCE_OPERATOR_USERNAME:-marie}
-    # Session idle timeout and absolute lifetime in days (PLAN_AUTH.md §8).
+    # Session idle timeout and absolute lifetime in days (docs/dev/AUTH.md).
     AUTH_SESSION_IDLE_DAYS: ${AUTH_SESSION_IDLE_DAYS:-}
     AUTH_SESSION_MAX_DAYS: ${AUTH_SESSION_MAX_DAYS:-}
     # Two-step verification grace period in days, and the iOS app identifiers
-    # allowed to use passkeys (PLAN_AUTH.md §3).
+    # allowed to use passkeys (docs/dev/AUTH.md).
     AUTH_2FA_GRACE_DAYS: ${AUTH_2FA_GRACE_DAYS:-}
     IOS_APP_IDS: ${IOS_APP_IDS:-}
     # Demo mode (PLAN_DEMO.md): off unless the env file turns it on — a
@@ -40,7 +40,7 @@ x-app: &app
     DEMO_PASSWORD: ${DEMO_PASSWORD:-}
     DEMO_OPERATOR_PASSWORD: ${DEMO_OPERATOR_PASSWORD:-}
     DEMO_RESET_AT: ${DEMO_RESET_AT:-}
-    # Identity providers (PLAN_AUTH.md §3); each is enabled only when all its
+    # Identity providers (docs/dev/AUTH.md); each is enabled only when all its
     # keys are set. The `oidc` profile's Dex answers the generic provider.
     AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID:-}
     AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET:-}
@@ -225,7 +225,7 @@ services:
       SOLID_QUEUE_QUEUES: route_images
       SOLID_QUEUE_THREADS: 1
 
-  # Development OpenID Connect provider (PLAN_AUTH.md §10), outside `dip up`:
+  # Development OpenID Connect provider (docs/dev/AUTH.md), outside `dip up`:
   #   dip compose --profile oidc up -d dex
   # with AUTH_OIDC_ISSUER=http://dex.test:5556/dex, AUTH_OIDC_CLIENT_ID=allure-dev
   # and AUTH_OIDC_CLIENT_SECRET=allure-dev-secret in .env (user rider@dex.test,

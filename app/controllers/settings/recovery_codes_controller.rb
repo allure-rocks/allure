@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Settings
-  # Recovery codes (PLAN_AUTH.md §4.3): shown once, right after they are
+  # Recovery codes (docs/dev/AUTH.md): shown once, right after they are
   # generated, and never again. Regenerating replaces the whole set.
   class RecoveryCodesController < ApplicationController
     before_action :require_recent_authentication, only: :create

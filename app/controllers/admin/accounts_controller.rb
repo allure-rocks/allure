@@ -57,7 +57,7 @@ module Admin
       redirect_to admin_account_path(account), notice: t("photos.admin.saved")
     end
 
-    # PLAN_AUTH.md §5.7: removes every factor and session; the account enrols
+    # docs/dev/AUTH.md: removes every factor and session; the account enrols
     # again at its next password sign-in, with no grace period.
     def reset_second_factor
       account = User.find(params[:id])

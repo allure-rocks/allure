@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# A passkey or security key registered as a second factor (PLAN_AUTH.md §4.2,
+# A passkey or security key registered as a second factor (docs/dev/AUTH.md,
 # §5.2). The public key and the signature counter are what the server keeps;
 # the private key never leaves the person's device.
 class WebauthnCredential < ApplicationRecord

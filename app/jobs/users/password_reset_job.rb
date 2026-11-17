@@ -11,7 +11,7 @@ module Users
     def perform(email_address)
       user = User.find_by(email_address:)
       # A password-less account adds a password only from its settings, after
-      # re-authenticating (PLAN_AUTH.md §5.6); the answer stays the same.
+      # re-authenticating (docs/dev/AUTH.md); the answer stays the same.
       return unless user&.password?
 
       PasswordsMailer.reset(user).deliver_now

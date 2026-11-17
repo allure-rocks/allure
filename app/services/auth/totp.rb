@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Auth
-  # Authenticator-app codes (PLAN_AUTH.md §5.2): RFC 6238, SHA-1, six digits,
+  # Authenticator-app codes (docs/dev/AUTH.md): RFC 6238, SHA-1, six digits,
   # 30-second steps, one step of drift either way. A step at or below the last
   # accepted one is refused, so an observed code cannot be replayed.
   module Totp

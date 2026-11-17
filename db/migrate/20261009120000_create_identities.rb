@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Identity providers (PLAN_AUTH.md §4.4–§4.5): an account may sign in through
+# Identity providers (docs/dev/AUTH.md): an account may sign in through
 # a linked provider identity, keyed by its issuer and subject only, and may
 # then have no password at all. Each session records how it signed in.
 class CreateIdentities < ActiveRecord::Migration[8.1]

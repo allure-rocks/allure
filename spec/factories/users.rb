@@ -12,7 +12,7 @@ FactoryBot.define do
     profile_statistics_audience { "none" }
     profile_records_audience { "none" }
 
-    # An enrolled authenticator app (PLAN_AUTH.md §5.2); the global
+    # An enrolled authenticator app (docs/dev/AUTH.md); the global
     # `sign_in_as` answers the second step with its current code.
     trait :with_totp do
       otp_secret { ROTP::Base32.random }
