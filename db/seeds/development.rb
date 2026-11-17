@@ -10,7 +10,7 @@
 # quick run while working on the seed itself.
 #
 # The dataset is re-dated near the present like the demo instance's
-# (PLAN_DEMO.md §2): it ends yesterday on a fresh database, and a database that
+# (docs/dev/DEMO.md): it ends yesterday on a fresh database, and a database that
 # already holds it keeps the dates of its first run. DEMO_SEED_SHIFT=0 keeps the
 # files' own dates instead.
 require_relative "demo/seeder"

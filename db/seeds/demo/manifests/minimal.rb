@@ -7,7 +7,7 @@
 # not been fetched. Every entry keeps a committed GPX fixture as fallback.
 module DemoSeed
   module Manifests
-    # Re-dating anchors (PLAN_DEMO.md §2). This dataset falls back on its
+    # Re-dating anchors (docs/dev/DEMO.md). This dataset falls back on its
     # committed GPX fixtures when the corpus is missing, and those are the
     # newest recordings it can import, so the files anchor is the newest of
     # either source; spec/seeds/demo_manifest_spec.rb keeps it honest.

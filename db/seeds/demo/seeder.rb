@@ -35,7 +35,7 @@ module DemoSeed
       @fixtures_root = Pathname(fixtures_root)
       @out = out
       @limit = limit
-      # The seed dates its recordings near the present (PLAN_DEMO.md §2,
+      # The seed dates its recordings near the present (docs/dev/DEMO.md,
       # DemoSeed::Dating): the two offsets in seconds are applied to file
       # imports (and their batches) and to typed manual entries respectively —
       # the manifest declares a separate anchor per family.
@@ -45,7 +45,7 @@ module DemoSeed
       # passes false so no account holds a second factor at all.
       @enrol_second_factor = enrol_second_factor
       # A callable receiving the username and answering that account's
-      # password (PLAN_DEMO.md §3): the demo publishes one shared password and
+      # password (docs/dev/DEMO.md): the demo publishes one shared password and
       # hands every other account a fresh random one, so nobody can sign in as
       # a background persona from the repository's public development
       # constant. When nil, every account keeps DemoSeed::PASSWORD and an

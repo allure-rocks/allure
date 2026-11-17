@@ -54,7 +54,7 @@ module Workouts
       # (docs/dev/STRAVA-ARCHIVE.md).
       @near_duplicate_window = near_duplicate_window
       # An offset in seconds applied to the parsed track before anything is
-      # derived from it (PLAN_DEMO.md §4): the demo seed dates its recordings
+      # derived from it (docs/dev/DEMO.md): the demo seed dates its recordings
       # near the present. Persisted on the workout so every re-analysis of the
       # original re-applies it. Every ordinary import leaves it unset.
       @time_shift = time_shift
@@ -68,7 +68,7 @@ module Workouts
       track = parse_track
       # The shift precedes every derivation, so metrics, laps, efforts and the
       # near-duplicate window all read the same shifted times
-      # (PLAN_DEMO.md §4).
+      # (docs/dev/DEMO.md).
       track = track.shifted(@time_shift) if @time_shift.to_i.nonzero?
       resolution = resolve_sport(track)
       metrics = analyze_track(track, resolution.sport)

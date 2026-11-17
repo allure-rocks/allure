@@ -122,7 +122,7 @@ module Authentication
     end
 
     # The operator console re-confirms a second factor (docs/dev/AUTH.md). A
-    # demo operator holds no factor at all (PLAN_DEMO.md §3): the console still
+    # demo operator holds no factor at all (docs/dev/DEMO.md): the console still
     # needs a recent proof of identity, and the password is the only one left.
     def require_recent_second_factor
       return if Current.session.recent_second_factor?
@@ -219,7 +219,7 @@ module Authentication
       now = Time.current
       user.sessions.create!(
         # A demo's shared accounts show their session list to strangers: no
-        # IP is ever persisted there (PLAN_DEMO.md §3).
+        # IP is ever persisted there (docs/dev/DEMO.md).
         user_agent: request.user_agent, ip_address: (Allure::Demo.enabled? ? nil : request.remote_ip),
         last_seen_at: now,
         reauthenticated_at: authenticated_at || now,

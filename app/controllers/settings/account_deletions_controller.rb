@@ -12,7 +12,7 @@ module Settings
     allow_deletion_window_access only: %i[show destroy]
     before_action :require_recent_authentication, only: :create
     # A visitor on a demo's shared account must not take the whole instance
-    # down with it (PLAN_DEMO.md §3).
+    # down with it (docs/dev/DEMO.md).
     before_action :refuse_demo_account_lockout, only: :create
     before_action :set_no_store
 

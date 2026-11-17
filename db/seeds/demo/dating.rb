@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DemoSeed
-  # Re-dates the demo dataset near the present (PLAN_DEMO.md §2), for the demo
+  # Re-dates the demo dataset near the present (docs/dev/DEMO.md), for the demo
   # instance and the development seed alike: each family of recordings (the
   # files, the typed manual entries) is shifted by whole days so its newest
   # anchor lands on the end date, yesterday on a fresh database.

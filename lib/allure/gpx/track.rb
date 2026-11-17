@@ -52,7 +52,7 @@ module Allure
 
       # Moves every point time and every recorded lap start by one offset in
       # seconds, leaving positions, durations and sensor readings untouched
-      # (PLAN_DEMO.md §4: a demo instance dates its seeded recordings near the
+      # (docs/dev/DEMO.md: a demo instance dates its seeded recordings near the
       # present instead of the day the file was recorded). The source track is
       # never mutated; a zero or nil offset returns it unchanged. The stored
       # original file always keeps its own dates.

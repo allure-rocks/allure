@@ -6,7 +6,7 @@ module Settings
   class IdentitiesController < ApplicationController
     before_action :require_recent_authentication
     # A visitor on a demo's shared account must not change how it signs in
-    # (PLAN_DEMO.md §3).
+    # (docs/dev/DEMO.md).
     before_action :refuse_demo_account_lockout, only: :destroy
 
     def destroy

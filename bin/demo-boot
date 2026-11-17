@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# Demo instance boot (PLAN_DEMO.md §5), used as the demo Compose file's `rails`
+# Demo instance boot (docs/dev/DEMO.md), used as the demo Compose file's `rails`
 # command. A fresh volume is prepared, the reference catalogs are seeded, then
 # the whole demo dataset is re-seeded with its dates re-anchored on the
 # present. The server starts only once the demo is ready, so the first visitor

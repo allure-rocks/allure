@@ -32,7 +32,7 @@ x-app: &app
     # allowed to use passkeys (docs/dev/AUTH.md).
     AUTH_2FA_GRACE_DAYS: ${AUTH_2FA_GRACE_DAYS:-}
     IOS_APP_IDS: ${IOS_APP_IDS:-}
-    # Demo mode (PLAN_DEMO.md): off unless the env file turns it on — a
+    # Demo mode (docs/dev/DEMO.md): off unless the env file turns it on — a
     # throwaway instance whose shared accounts and reset strip only exist for
     # testing or a public demo.
     DEMO_INSTANCE: ${DEMO_INSTANCE:-}

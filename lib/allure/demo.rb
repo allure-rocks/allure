@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Allure
-  # The demo mode (PLAN_DEMO.md): a throwaway public instance whose database is
+  # The demo mode (docs/dev/DEMO.md): a throwaway public instance whose database is
   # recreated from the development seed every night, and whose shared accounts'
   # credentials are published on the sign-in page. The switch is read from
   # DEMO_INSTANCE and changes three things, nothing else:
@@ -48,7 +48,7 @@ module Allure
       ENV.fetch("INSTANCE_OPERATOR_USERNAME", "").strip.downcase
     end
 
-    # The operator's stable password on a demo (PLAN_DEMO.md §3): the seed
+    # The operator's stable password on a demo (docs/dev/DEMO.md): the seed
     # assigns it on every pass, so the console survives the nightly reset and
     # the credential never appears on the sign-in page. Nil when the console is
     # closed (no operator configured).

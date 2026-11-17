@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Demo
-  # The seed half of the nightly reset (PLAN_DEMO.md §5). The database itself
+  # The seed half of the nightly reset (docs/dev/DEMO.md). The database itself
   # is recreated by the host (`docker compose down -v && up -d`); this service
   # re-seeds the demo dataset with every date re-anchored on the present. It
   # never wipes anything — find-before-create makes a mid-day re-run harmless —
@@ -40,7 +40,7 @@ module Demo
         out: @out,
         file_time_shift: dating.file_shift,
         manual_time_shift: dating.manual_shift,
-        # The demo's accounts sign in with a password alone (PLAN_DEMO.md §3).
+        # The demo's accounts sign in with a password alone (docs/dev/DEMO.md).
         enrol_second_factor: false,
         password_for:
       ).call
@@ -52,7 +52,7 @@ module Demo
     private
 
     # The seed's social steps leave every notification unread; a demo visitor
-    # should find a quiet bell, not a wall of red (PLAN_DEMO.md §3). Only the
+    # should find a quiet bell, not a wall of red (docs/dev/DEMO.md). Only the
     # published accounts' newest few stay unread.
     UNREAD_NOTIFICATIONS = 3
 
@@ -68,7 +68,7 @@ module Demo
     # stable DEMO_OPERATOR_PASSWORD so the console survives the nightly reset;
     # every other background persona gets a fresh random one, so the
     # repository's public development constant opens no door on a demo
-    # (PLAN_DEMO.md §3).
+    # (docs/dev/DEMO.md).
     def password_for
       shared = Allure::Demo.accounts
       published = ENV.fetch("DEMO_PASSWORD", "").presence || DemoSeed::PASSWORD
@@ -110,7 +110,7 @@ module Demo
     end
 
     # A fresh database hands out session ids from 1 again, and yesterday's
-    # signed cookie would resume tomorrow's stranger (PLAN_DEMO.md §5). The
+    # signed cookie would resume tomorrow's stranger (docs/dev/DEMO.md). The
     # sequence starts at a random offset instead — only while the table is
     # empty, so a mid-day re-run never collides with live sessions.
     def randomize_session_ids

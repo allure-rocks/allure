@@ -65,7 +65,7 @@ RSpec.describe Allure::Gpx::Track do
     expect(described_class.new(creator: "Garmin", segments: [])).to have_attributes(creator: "Garmin", name: nil)
   end
 
-  describe "#shifted (PLAN_DEMO.md §4)" do
+  describe "#shifted (docs/dev/DEMO.md)" do
     let(:start) { Time.zone.parse("2026-04-19 08:00:00") }
     let(:track) do
       described_class.new(

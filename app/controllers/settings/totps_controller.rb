@@ -8,7 +8,7 @@ module Settings
     allow_enrolment_only_access
     before_action :require_recent_authentication
     # A visitor on a demo's shared account must not enrol a factor the next
-    # visitor cannot answer (PLAN_DEMO.md §3).
+    # visitor cannot answer (docs/dev/DEMO.md).
     before_action :refuse_demo_account_lockout, only: %i[create destroy]
 
     def new

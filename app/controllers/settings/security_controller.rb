@@ -12,7 +12,7 @@ module Settings
     allow_enrolment_only_access only: :show
     before_action :require_recent_authentication, only: %i[destroy_session destroy_all_sessions]
     # A visitor on a demo's shared account must not lock the next one out
-    # (PLAN_DEMO.md §3).
+    # (docs/dev/DEMO.md).
     before_action :refuse_demo_account_lockout, only: :update_password
 
     SESSIONS_PER_PAGE = 10

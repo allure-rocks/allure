@@ -16,7 +16,7 @@ module Auth
     # Accounts per state, for the metrics exporter (docs/dev/AUTH.md). The
     # same rules as #state, in SQL.
     def self.counts(now: Time.current)
-      # A demo instance owes nothing (PLAN_DEMO.md §3).
+      # A demo instance owes nothing (docs/dev/DEMO.md).
       return { "satisfied" => User.count, "grace" => 0, "required" => 0 } if Allure::Demo.enabled?
 
       enrolled = User.where.not(otp_enrolled_at: nil).or(User.where(id: WebauthnCredential.select(:user_id)))
@@ -35,7 +35,7 @@ module Auth
 
     def state
       @state ||=
-        # A demo instance owes nothing (PLAN_DEMO.md §3): its shared accounts
+        # A demo instance owes nothing (docs/dev/DEMO.md): its shared accounts
         # sign in with a password alone, the operator included.
         if Allure::Demo.enabled?
           :satisfied

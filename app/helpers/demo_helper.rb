@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# The demo mode's chrome (PLAN_DEMO.md §6): the site-wide reset strip and the
+# The demo mode's chrome (docs/dev/DEMO.md): the site-wide reset strip and the
 # sign-in page's credentials block.
 module DemoHelper
   # The shared accounts in their configured order, for the sign-in page's

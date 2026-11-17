@@ -5,7 +5,7 @@ module Workouts
   # matches its stored import format. Reanalysis and terrain-elevation sampling
   # both read the same source so their geometry never diverges.
   #
-  # A workout imported with a time shift (PLAN_DEMO.md §4) re-applies it here,
+  # A workout imported with a time shift (docs/dev/DEMO.md) re-applies it here,
   # so every re-analysis derives the same dates the import did instead of
   # falling back to the original file's own recording day.
   class OriginalTrack

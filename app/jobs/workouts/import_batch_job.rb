@@ -13,7 +13,7 @@ module Workouts
     retry_on ActiveRecord::Deadlocked, wait: :polynomially_longer, attempts: 5
 
     # `time_shift:` is the optional offset in seconds the demo seed passes
-    # through to each import (PLAN_DEMO.md §4); ordinary batches never set it.
+    # through to each import (docs/dev/DEMO.md); ordinary batches never set it.
     def perform(batch, time_shift: nil)
       return if batch.terminal?
 
