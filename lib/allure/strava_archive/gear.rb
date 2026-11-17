@@ -4,7 +4,7 @@ require "csv"
 
 module Allure
   module StravaArchive
-    # Reads `bikes.csv` and `shoes.csv` (PLAN_STRAVA_ARCHIVE.md §5). The
+    # Reads `bikes.csv` and `shoes.csv` (docs/dev/STRAVA-ARCHIVE.md). The
     # English headers name the columns; a localized file is read by position,
     # name, brand and model first, as every known archive writes them. The
     # result is keyed by the name `activities.csv` uses for the gear,

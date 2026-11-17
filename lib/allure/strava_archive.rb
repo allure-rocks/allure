@@ -2,7 +2,7 @@
 
 module Allure
   # The archive Strava sends when an athlete requests their data
-  # (PLAN_STRAVA_ARCHIVE.md). The file source caps an upload at 500 MB; an
+  # (docs/dev/STRAVA-ARCHIVE.md). The file source caps an upload at 500 MB; an
   # archive is one file holding a whole history, so it gets its own cap.
   module StravaArchive
     MAX_BYTES = 2 * 1024 * 1024 * 1024

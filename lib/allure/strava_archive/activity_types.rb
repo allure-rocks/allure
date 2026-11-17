@@ -3,7 +3,7 @@
 module Allure
   module StravaArchive
     # Maps the activity type of an `activities.csv` row to a catalog sport
-    # (PLAN_STRAVA_ARCHIVE.md §4). The archive writes the type in the athlete's
+    # (docs/dev/STRAVA-ARCHIVE.md). The archive writes the type in the athlete's
     # display language: the API names, the English labels and the French and
     # German ones are listed here; any other label must equal an alias of
     # `Allure::ActivityTypeCatalog` exactly. Nothing is matched by substring, so

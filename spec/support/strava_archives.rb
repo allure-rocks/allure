@@ -4,7 +4,7 @@ require "csv"
 require "zip"
 require "zlib"
 
-# Synthetic Strava archives (PLAN_STRAVA_ARCHIVE.md §10): the leading columns of
+# Synthetic Strava archives (docs/dev/STRAVA-ARCHIVE.md): the leading columns of
 # `activities.csv` in the current, legacy (no private note) and localized
 # layouts, plus a few appended columns the reader must ignore. No real athlete
 # data is ever committed.

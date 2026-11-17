@@ -47,11 +47,11 @@ module Workouts
       # published automatically (docs/dev/AUTO-PUBLISHING.md).
       @bulk = bulk
       # The sport another service's metadata names, which outranks the file's
-      # detection (PLAN_STRAVA_ARCHIVE.md §4).
+      # detection (docs/dev/STRAVA-ARCHIVE.md).
       @declared_sport = declared_sport
       # When set, a recording already starting within this window is the same
       # outing imported another way, and this one is a duplicate
-      # (PLAN_STRAVA_ARCHIVE.md §7).
+      # (docs/dev/STRAVA-ARCHIVE.md).
       @near_duplicate_window = near_duplicate_window
       # An offset in seconds applied to the parsed track before anything is
       # derived from it (PLAN_DEMO.md §4): the demo seed dates its recordings

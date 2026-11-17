@@ -3,7 +3,7 @@
 require "digest"
 
 module Workouts
-  # Imports a Strava archive (PLAN_STRAVA_ARCHIVE.md §6). Discovery reads
+  # Imports a Strava archive (docs/dev/STRAVA-ARCHIVE.md). Discovery reads
   # `activities.csv` once and freezes one entry per activity — its name, type,
   # texts, commute flag and gear in the entry's metadata — then one per track
   # file the CSV does not name. Each entry then imports its original file

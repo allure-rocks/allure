@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# History runs behind new outings (PLAN_STRAVA_ARCHIVE.md §12). A bulk
+# History runs behind new outings (docs/dev/STRAVA-ARCHIVE.md). A bulk
 # import — a Strava archive, a file batch over five entries, a date-range
 # retrieval — queues thousands of enrichments (route images, places, segment
 # matching, weather, photos). Enqueued at the default

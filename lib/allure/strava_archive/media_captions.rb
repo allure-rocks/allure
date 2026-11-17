@@ -4,7 +4,7 @@ require "csv"
 
 module Allure
   module StravaArchive
-    # Reads `media.csv` (PLAN_STRAVA_ARCHIVE.md §6ter): the archive's photo
+    # Reads `media.csv` (docs/dev/STRAVA-ARCHIVE.md): the archive's photo
     # names and their captions, in the athlete's language, so by position —
     # name first, caption second. The result maps `media/<name>` to the
     # caption, blank captions left out.

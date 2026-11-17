@@ -51,13 +51,13 @@ module WorkoutImportsHelper
     end
   end
 
-  # The equipment a Strava archive created (PLAN_STRAVA_ARCHIVE.md §5).
+  # The equipment a Strava archive created (docs/dev/STRAVA-ARCHIVE.md).
   def import_batch_created_equipment(entries)
     entries.filter_map { |entry| entry.metadata["created_equipment"] }.uniq
   end
 
   # The photos a Strava archive attached, could not find and refused
-  # (PLAN_STRAVA_ARCHIVE.md §6ter), or nil when it listed none.
+  # (docs/dev/STRAVA-ARCHIVE.md), or nil when it listed none.
   def import_batch_photo_line(entries)
     counts = %w[photos photos_missing photos_refused].index_with do |key|
       entries.sum { |entry| entry.metadata[key].to_i }

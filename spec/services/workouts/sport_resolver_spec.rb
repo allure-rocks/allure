@@ -50,7 +50,7 @@ RSpec.describe Workouts::SportResolver do
       .to raise_error(described_class::MissingSport)
   end
 
-  describe "a declared sport (PLAN_STRAVA_ARCHIVE.md §4)" do
+  describe "a declared sport (docs/dev/STRAVA-ARCHIVE.md)" do
     it "outranks what the file detects" do
       trail = catalog_sport("trail")
       catalog_sport("cycling_road")
