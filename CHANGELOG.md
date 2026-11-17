@@ -2269,7 +2269,7 @@ migration (`db:migrate`, applied on boot).
   and each account controls the two kinds at `/settings/notifications`. An
   entry is withdrawn when its relationship ends — decision, unfollow, block,
   or a deleted remote account — and never carries coordinates, workout
-  content, or remote HTML (`[devdoc:notifications]`, `DESIGN.md` §10.16).
+  content, or remote HTML ([NOTIFICATIONS.md](docs/dev/NOTIFICATIONS.md), `DESIGN.md` §10.16).
 
 ### Changed
 

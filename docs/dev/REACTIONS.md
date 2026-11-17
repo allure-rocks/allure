@@ -168,7 +168,7 @@ through the REST API, which keeps `counts` and `mine`.
 ## 4. Notifications
 
 The reaction notice is one notification kind, `reaction`, kept as a single
-digest per workout (`[devdoc:notifications]`): the `Workout` is its subject,
+digest per workout ([NOTIFICATIONS.md](NOTIFICATIONS.md)): the `Workout` is its subject,
 the newest reacting account its actor, and the payload counts the reactions:
 
 - recounted for the owner of a local workout on a local reaction and on an

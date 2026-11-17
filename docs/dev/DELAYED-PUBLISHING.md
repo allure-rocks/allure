@@ -120,7 +120,7 @@ service with no actor (the owner caused it) and the publication as subject,
 honoring `notify_publication_activated`. Only the automatic activation notifies:
 the immediate publish and the owner's Publish now happen in front of the owner
 and are silent. The bell, inbox and read flows are unchanged. The notifications
-contract (`[devdoc:notifications]`) is amended in the same patch.
+contract ([NOTIFICATIONS.md](NOTIFICATIONS.md)) is amended in the same patch.
 
 ## 7. Admin and observability
 
