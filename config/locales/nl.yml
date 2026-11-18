@@ -4362,6 +4362,27 @@ nl:
         confirm_body: "Het weer van %{count} activiteit(en) wordt verwijderd. Je bestaande publicaties veranderen niet."
       destroy:
         success: "Weer verwijderd voor %{count} activiteit(en)."
+    assistant:
+      title: Assistent
+      summary_title: Samenvattingen van mijn activiteiten
+      description: "De assistent schrijft bij elk van je activiteiten een korte samenvatting op basis van de metingen die Allure heeft berekend. Die verschijnt op de pagina van de activiteit, waar je ook een nieuwe kunt aanvragen."
+      enrichment_label: Samenvattingen van mijn activiteiten schrijven
+      privacy: "Als je de assistent uitschakelt, wordt er geen nieuwe samenvatting meer geschreven; al geschreven samenvattingen blijven staan tot je ze verwijdert."
+      save: Wijzigingen opslaan
+      update:
+        enabled: Assistent ingeschakeld. Je volgende activiteiten krijgen een samenvatting.
+        disabled: Assistent uitgeschakeld. Er wordt geen nieuwe samenvatting meer geschreven; al geschreven samenvattingen blijven staan tot je ze verwijdert.
+      stored:
+        title: Opgeslagen samenvattingen
+        description:
+          zero: Geen enkele activiteit heeft een opgeslagen samenvatting.
+          one: 1 activiteit heeft een opgeslagen samenvatting.
+          other: "%{count} activiteiten hebben een opgeslagen samenvatting."
+        action: Opgeslagen samenvattingen verwijderen
+        confirm_title: Opgeslagen samenvattingen verwijderen?
+        confirm_body: "De samenvatting van %{count} activiteit(en) wordt verwijderd. Je bestaande publicaties veranderen niet."
+      destroy:
+        success: "Samenvattingen verwijderd voor %{count} activiteit(en)."
     security:
       title: Beveiliging
       pretitle: Account
@@ -5029,6 +5050,8 @@ nl:
           tb: TB
           pb: PB
           eb: EB
+  assistant:
+    notice: "Deze samenvatting wordt automatisch geschreven op basis van de metingen van deze activiteit. Ze kan zich vergissen: de cijfers op de kaarten zijn bepalend. De metingen worden naar het model gestuurd dat de beheerder van deze instantie heeft ingesteld."
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} tot %{high}"

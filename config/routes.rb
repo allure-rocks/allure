@@ -286,6 +286,9 @@ Rails.application.routes.draw do
     # Weather (docs/dev/WEATHER.md): explicit consent to send coarsened
     # positions and times to Open-Meteo, and the deletion of stored weather.
     resource :weather, only: %i[show update destroy], controller: "weather"
+    # Assistant (docs/dev/AI.md): explicit consent to have summaries written
+    # from the account's own metrics, and the deletion of stored summaries.
+    resource :assistant, only: %i[show update destroy], controller: "assistant"
     # Sports (docs/dev/WORKOUT.md): which variant replaces a detected generic
     # sport (cycling, running, walking) at import time.
     resource :sports, only: %i[show update], controller: "sports"

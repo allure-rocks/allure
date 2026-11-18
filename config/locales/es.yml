@@ -4362,6 +4362,27 @@ es:
         confirm_body: "Se eliminará la meteorología de %{count} actividad(es). Tus publicaciones existentes no cambian."
       destroy:
         success: "Meteorología eliminada de %{count} actividad(es)."
+    assistant:
+      title: Asistente
+      summary_title: Resúmenes de mis actividades
+      description: "El asistente redacta un resumen breve de cada una de tus actividades a partir de las métricas que Allure ha calculado. Aparece en la página de la actividad, donde también puedes pedir uno nuevo."
+      enrichment_label: Redactar los resúmenes de mis actividades
+      privacy: "Si desactivas el asistente, no se redactará ningún resumen nuevo; los ya escritos se quedan hasta que los elimines."
+      save: Guardar los cambios
+      update:
+        enabled: Asistente activado. Tus próximas actividades recibirán un resumen.
+        disabled: Asistente desactivado. No se redactará ningún resumen nuevo; los ya escritos se quedan hasta que los elimines.
+      stored:
+        title: Resúmenes guardados
+        description:
+          zero: Ninguna actividad tiene un resumen guardado.
+          one: 1 actividad tiene un resumen guardado.
+          other: "%{count} actividades tienen un resumen guardado."
+        action: Eliminar los resúmenes guardados
+        confirm_title: ¿Eliminar los resúmenes guardados?
+        confirm_body: "Se eliminará el resumen de %{count} actividad(es). Tus publicaciones existentes no cambian."
+      destroy:
+        success: "Resúmenes eliminados para %{count} actividad(es)."
     security:
       title: Seguridad
       pretitle: Cuenta
@@ -5029,6 +5050,8 @@ es:
           tb: TB
           pb: PB
           eb: EB
+  assistant:
+    notice: "Este resumen se redacta automáticamente a partir de las métricas de esta actividad. Puede equivocarse: las cifras de las tarjetas son la referencia. Las métricas se envían al modelo configurado por el operador de esta instancia."
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} a %{high}"

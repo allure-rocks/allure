@@ -24,6 +24,10 @@ class Workout < ApplicationRecord
   # workouts_origin.
   ORIGINS = %w[import credit manual].freeze
 
+  # Where the title came from (docs/dev/AI.md): the import form, the track's own
+  # name, or the member. Only the first two let the summary card propose one.
+  TITLE_SOURCES = %w[default file owner].freeze
+
   # The bounds a hand-typed figure must fall within (docs/dev/MANUAL-ENTRY.md):
   # SI, as persisted. A recording's figures are measured, never checked here.
   MANUAL_LIMITS = {
@@ -110,6 +114,12 @@ class Workout < ApplicationRecord
           class_name: "WorkoutHeartRate",
           dependent: :delete,
           inverse_of: :workout
+  # The assistant's summary of this workout (docs/dev/AI.md). Owner-only: it
+  # never enters a publication, a federation object or a programmatic answer.
+  has_one :assistant_summary,
+          class_name: "WorkoutSummary",
+          dependent: :destroy,
+          inverse_of: :workout
   # At most one live publication per audience (docs/dev/PUBLISHING.md), listed
   # from the narrowest audience to the widest. A reader is served the first
   # one their entitlements allow (Workouts::PublicationResolver).
@@ -153,6 +163,7 @@ class Workout < ApplicationRecord
 
   validates :uuid, uniqueness: true, allow_nil: true
   validates :origin, inclusion: { in: ORIGINS }
+  validates :title_source, inclusion: { in: TITLE_SOURCES }
   validates :source_digest, format: { with: /\A\h{64}\z/ }, allow_nil: true
   validates :started_at, presence: true
   validates :title, length: { maximum: 255 }, allow_nil: true

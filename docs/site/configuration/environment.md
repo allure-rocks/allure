@@ -240,6 +240,20 @@ See [API, webhooks and MCP](../features/api).
 |---|---|---|---|
 | `MCP_GEOMETRY_MAX` | no ceiling | env file | Most location an API token may hand to an AI assistant through `/mcp`: `none`, `filtered` (privacy zones removed) or `raw`. |
 
+## Workout assistant
+
+Off until both `AI_BASE_URL` and `AI_MODEL` are set. See
+[Workout assistant](../features/assistant).
+
+| Variable | Default | Compose | Description |
+|---|---|---|---|
+| `AI_BASE_URL` | none | env file | Root URL of an OpenAI-compatible endpoint, for example `http://litellm:4000`. No `/v1` of its own. |
+| `AI_MODEL` | none | env file | Model name or proxy alias; the assistant is offered only when this and `AI_BASE_URL` are both set. |
+| `AI_API_KEY` | none | env file | Bearer key for the endpoint, when it requires one. |
+| `AI_REQUEST_OPTIONS` | none | env file | JSON object merged into every request body, for example `{"reasoning_effort":"none"}` to turn a model's thinking mode off. |
+| `AI_TIMEOUT` | `300` | env file | Seconds allowed for one model answer. |
+| `AI_MAX_REQUESTS_PER_DAY` | `500` | env file | Provider calls allowed over any 24 hours; work waits while the budget is spent. |
+
 ## Monitoring
 
 | Variable | Default | Compose | Description |

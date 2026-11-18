@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
@@ -106,7 +106,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
     t.index ["action"], name: "index_admin_events_on_action"
     t.index ["subject_type", "subject_id"], name: "index_admin_events_on_subject_type_and_subject_id"
     t.index ["user_id"], name: "index_admin_events_on_user_id"
-    t.check_constraint "action::text = ANY (ARRAY['domain_blocked'::character varying::text, 'domain_unblocked'::character varying::text, 'actor_blocked'::character varying::text, 'actor_unblocked'::character varying::text, 'peer_policy_set'::character varying::text, 'peer_policy_removed'::character varying::text, 'media_retried'::character varying::text, 'job_retried'::character varying::text, 'job_discarded'::character varying::text, 'jobs_retried'::character varying::text, 'jobs_discarded'::character varying::text, 'queue_paused'::character varying::text, 'queue_resumed'::character varying::text, 'analysis_backfill_enqueued'::character varying::text, 'elevation_backfill_enqueued'::character varying::text, 'places_backfill_enqueued'::character varying::text, 'toponymy_backfill_enqueued'::character varying::text, 'import_redetection_enqueued'::character varying::text, 'workouts_rebuild_enqueued'::character varying::text, 'route_images_backfill_enqueued'::character varying::text, 'segment_route_images_backfill_enqueued'::character varying::text, 'loop_reuse_backfill_enqueued'::character varying::text, 'elevation_profiles_backfill_enqueued'::character varying::text, 'publication_withdrawn'::character varying::text, 'publication_schedule_cancelled'::character varying::text, 'account_suspended'::character varying::text, 'account_reinstated'::character varying::text, 'invitation_created'::character varying::text, 'invitation_revoked'::character varying::text, 'second_factor_reset'::character varying::text, 'password_setup_sent'::character varying::text, 'import_connection_revoked'::character varying::text, 'api_token_revoked'::character varying::text, 'webhook_endpoint_disabled'::character varying::text, 'segment_places_backfill_enqueued'::character varying::text, 'together_detection_backfill_enqueued'::character varying::text, 'account_deletion_scheduled'::character varying::text, 'account_deletion_cancelled'::character varying::text, 'account_deleted'::character varying::text, 'weather_backfill_enqueued'::character varying::text, 'segment_terrain_elevation_backfill_enqueued'::character varying::text, 'heart_rate_backfill_enqueued'::character varying::text, 'photo_quota_changed'::character varying::text, 'funding_granted'::character varying::text, 'funding_revoked'::character varying::text, 'funding_attached'::character varying::text, 'route_suggestions_backfill_enqueued'::character varying::text])", name: "admin_events_action"
+    t.check_constraint "action::text = ANY (ARRAY['domain_blocked'::character varying, 'domain_unblocked'::character varying, 'actor_blocked'::character varying, 'actor_unblocked'::character varying, 'peer_policy_set'::character varying, 'peer_policy_removed'::character varying, 'media_retried'::character varying, 'job_retried'::character varying, 'job_discarded'::character varying, 'jobs_retried'::character varying, 'jobs_discarded'::character varying, 'queue_paused'::character varying, 'queue_resumed'::character varying, 'analysis_backfill_enqueued'::character varying, 'elevation_backfill_enqueued'::character varying, 'places_backfill_enqueued'::character varying, 'toponymy_backfill_enqueued'::character varying, 'import_redetection_enqueued'::character varying, 'workouts_rebuild_enqueued'::character varying, 'route_images_backfill_enqueued'::character varying, 'segment_route_images_backfill_enqueued'::character varying, 'loop_reuse_backfill_enqueued'::character varying, 'elevation_profiles_backfill_enqueued'::character varying, 'publication_withdrawn'::character varying, 'publication_schedule_cancelled'::character varying, 'account_suspended'::character varying, 'account_reinstated'::character varying, 'invitation_created'::character varying, 'invitation_revoked'::character varying, 'second_factor_reset'::character varying, 'password_setup_sent'::character varying, 'import_connection_revoked'::character varying, 'api_token_revoked'::character varying, 'webhook_endpoint_disabled'::character varying, 'segment_places_backfill_enqueued'::character varying, 'together_detection_backfill_enqueued'::character varying, 'account_deletion_scheduled'::character varying, 'account_deletion_cancelled'::character varying, 'account_deleted'::character varying, 'weather_backfill_enqueued'::character varying, 'segment_terrain_elevation_backfill_enqueued'::character varying, 'heart_rate_backfill_enqueued'::character varying, 'photo_quota_changed'::character varying, 'funding_granted'::character varying, 'funding_revoked'::character varying, 'funding_attached'::character varying, 'route_suggestions_backfill_enqueued'::character varying]::text[])", name: "admin_events_action"
     t.check_constraint "jsonb_typeof(metadata) = 'object'::text", name: "admin_events_metadata_object"
   end
 
@@ -506,10 +506,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
     t.index ["provider", "external_id"], name: "index_funding_reversals_on_provider_and_external_id", unique: true
     t.check_constraint "amount_cents IS NULL OR amount_cents >= 0", name: "funding_reversals_amount_nonnegative"
     t.check_constraint "currency IS NULL OR currency::text ~ '\\A[A-Z]{3}\\Z'::text", name: "funding_reversals_currency_format"
-    t.check_constraint "kind::text = ANY (ARRAY['refund'::character varying::text, 'dispute'::character varying::text])", name: "funding_reversals_kind"
+    t.check_constraint "kind::text = ANY (ARRAY['refund'::character varying, 'dispute'::character varying]::text[])", name: "funding_reversals_kind"
     t.check_constraint "length(btrim(external_id::text)) > 0", name: "funding_reversals_external_id_present"
     t.check_constraint "provider::text ~ '\\A[a-z0-9_]+\\Z'::text", name: "funding_reversals_provider_format"
-    t.check_constraint "status::text = ANY (ARRAY['succeeded'::character varying::text, 'failed'::character varying::text, 'open'::character varying::text, 'won'::character varying::text, 'lost'::character varying::text])", name: "funding_reversals_status"
+    t.check_constraint "status::text = ANY (ARRAY['succeeded'::character varying, 'failed'::character varying, 'open'::character varying, 'won'::character varying, 'lost'::character varying]::text[])", name: "funding_reversals_status"
   end
 
   create_table "funding_subscriptions", force: :cascade do |t|
@@ -971,7 +971,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
     t.index ["sport_id"], name: "index_route_suggestions_on_sport_id"
     t.index ["user_id", "status"], name: "index_route_suggestions_on_user_id_and_status"
     t.index ["user_id"], name: "index_route_suggestions_on_user_id"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'dismissed'::character varying::text, 'accepted'::character varying::text])", name: "route_suggestions_status"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'dismissed'::character varying, 'accepted'::character varying]::text[])", name: "route_suggestions_status"
   end
 
   create_table "segment_efforts", force: :cascade do |t|
@@ -1293,6 +1293,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
     t.string "profile_statistics_audience", default: "none", null: false
     t.string "profile_records_audience", default: "none", null: false
     t.string "discoverable", default: "none", null: false
+    t.boolean "ai_enabled", default: false, null: false
     t.index "lower((username)::text)", name: "index_users_on_lower_username", unique: true
     t.index ["default_cycling_sport_id"], name: "index_users_on_default_cycling_sport_id"
     t.index ["default_running_sport_id"], name: "index_users_on_default_running_sport_id"
@@ -1305,7 +1306,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
     t.check_constraint "array_length(heart_rate_zone_bounds, 1) = 4", name: "users_heart_rate_zone_bounds"
     t.check_constraint "deletion_requested_at IS NULL AND deletion_scheduled_at IS NULL AND deletion_requested_by IS NULL OR deletion_requested_at IS NOT NULL AND deletion_scheduled_at IS NOT NULL AND (deletion_requested_by::text = ANY (ARRAY['self'::character varying::text, 'operator'::character varying::text]))", name: "users_deletion_request"
     t.check_constraint "deletion_started_at IS NULL OR deletion_scheduled_at IS NOT NULL", name: "users_deletion_started"
-    t.check_constraint "discoverable::text = ANY (ARRAY['none'::character varying::text, 'members'::character varying::text])", name: "users_discoverable"
+    t.check_constraint "discoverable::text = ANY (ARRAY['none'::character varying, 'members'::character varying]::text[])", name: "users_discoverable"
     t.check_constraint "funding_badge_color::text = ANY (ARRAY['primary'::character varying::text, 'blue'::character varying::text, 'teal'::character varying::text, 'orange'::character varying::text, 'purple'::character varying::text, 'slate'::character varying::text])", name: "users_funding_badge_color"
     t.check_constraint "heart_rate_zone_basis::text = ANY (ARRAY['max'::character varying::text, 'reserve'::character varying::text])", name: "users_heart_rate_zone_basis"
     t.check_constraint "leaderboard_category::text = ANY (ARRAY['unspecified'::character varying::text, 'women'::character varying::text, 'men'::character varying::text])", name: "users_leaderboard_category"
@@ -1733,6 +1734,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
     t.check_constraint "status::text = ANY (ARRAY['active'::character varying::text, 'scheduled'::character varying::text, 'deleted'::character varying::text])", name: "workout_publications_status"
   end
 
+  create_table "workout_summaries", force: :cascade do |t|
+    t.bigint "workout_id", null: false
+    t.string "status", default: "pending", null: false
+    t.string "locale", null: false
+    t.integer "version", default: 0, null: false
+    t.jsonb "facts", default: [], null: false
+    t.string "facts_digest"
+    t.string "title"
+    t.jsonb "sentences", default: [], null: false
+    t.string "model"
+    t.integer "requests_count", default: 0, null: false
+    t.datetime "requested_at"
+    t.datetime "generated_at"
+    t.string "last_error"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status", "updated_at"], name: "index_workout_summaries_on_status_and_updated_at"
+    t.index ["workout_id"], name: "index_workout_summaries_on_workout_id", unique: true
+    t.check_constraint "requests_count >= 0", name: "workout_summaries_requests_count"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'ready'::character varying, 'failed'::character varying]::text[])", name: "workout_summaries_status"
+    t.check_constraint "version >= 0", name: "workout_summaries_version"
+  end
+
   create_table "workout_toponymies", force: :cascade do |t|
     t.integer "algorithm_version", default: 1, null: false
     t.datetime "created_at", null: false
@@ -1850,6 +1874,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
     t.bigint "time_shift_seconds", default: 0, null: false
     t.boolean "photos_ordered_by_owner", default: false, null: false
     t.integer "route_suggestion_version", default: 0, null: false
+    t.string "title_source", default: "owner", null: false
     t.index ["analysis_version", "id"], name: "index_workouts_on_analysis_version_and_id"
     t.index ["credited_by_actor_id"], name: "index_workouts_on_credited_by_actor_id"
     t.index ["credited_from_workout_id", "user_id"], name: "index_workouts_on_live_credit", unique: true, where: "(credited_from_workout_id IS NOT NULL)"
@@ -1905,6 +1930,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
     t.check_constraint "remote_participation_id IS NULL OR origin::text = 'credit'::text AND credited_from_workout_id IS NULL", name: "workouts_remote_credit_shape"
     t.check_constraint "route_image_version >= 0", name: "workouts_route_image_version"
     t.check_constraint "route_suggestion_version >= 0", name: "workouts_route_suggestion_version"
+    t.check_constraint "title_source::text = ANY (ARRAY['default'::character varying, 'file'::character varying, 'owner'::character varying]::text[])", name: "workouts_title_source"
     t.check_constraint "together_detection_version >= 0", name: "workouts_together_detection_version"
   end
 
@@ -2044,6 +2070,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_120000) do
   add_foreign_key "workout_publications", "actors"
   add_foreign_key "workout_publications", "publishing_profiles", on_delete: :nullify
   add_foreign_key "workout_publications", "workouts", on_delete: :nullify
+  add_foreign_key "workout_summaries", "workouts", on_delete: :cascade
   add_foreign_key "workout_toponymies", "workouts", on_delete: :cascade
   add_foreign_key "workout_weathers", "workouts", on_delete: :cascade
   add_foreign_key "workouts", "actors", column: "credited_by_actor_id"

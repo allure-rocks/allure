@@ -6,7 +6,7 @@ module Metrics
   # "other": the label stays bounded no matter what a job declares
   # (docs/dev/METRICS.md).
   module QueueName
-    KNOWN = %w[default federation federation_media remote_imports route_images webhooks photos].freeze
+    KNOWN = %w[default ai federation federation_media remote_imports route_images webhooks photos].freeze
     OTHER = "other"
 
     module_function

@@ -4363,6 +4363,27 @@ fr:
         confirm_body: "La météo de %{count} activité(s) sera supprimée. Vos publications existantes ne changent pas."
       destroy:
         success: "Météo supprimée pour %{count} activité(s)."
+    assistant:
+      title: Assistant
+      summary_title: Synthèses de mes activités
+      description: "L'assistant rédige une courte synthèse de chacune de vos activités à partir des mesures qu'Allure a calculées. Elle s'affiche sur la page de l'activité, avec la possibilité d'en demander une nouvelle."
+      enrichment_label: Rédiger les synthèses de mes activités
+      privacy: "Désactiver l'assistant arrête toute nouvelle rédaction ; les synthèses déjà écrites restent jusqu'à leur suppression."
+      save: Enregistrer les modifications
+      update:
+        enabled: Assistant activé. Vos prochaines activités recevront une synthèse.
+        disabled: Assistant désactivé. Plus aucune synthèse ne sera rédigée ; celles déjà écrites restent jusqu'à leur suppression.
+      stored:
+        title: Synthèses enregistrées
+        description:
+          zero: Aucune activité n'a de synthèse enregistrée.
+          one: 1 activité a une synthèse enregistrée.
+          other: "%{count} activités ont une synthèse enregistrée."
+        action: Supprimer les synthèses enregistrées
+        confirm_title: Supprimer les synthèses enregistrées ?
+        confirm_body: "La synthèse de %{count} activité(s) sera supprimée. Vos publications existantes ne changent pas."
+      destroy:
+        success: "Synthèses supprimées pour %{count} activité(s)."
     security:
       title: Sécurité
       pretitle: Compte
@@ -5030,6 +5051,8 @@ fr:
           tb: To
           pb: Po
           eb: Eo
+  assistant:
+    notice: "Cette synthèse est rédigée automatiquement à partir des mesures de cette activité. Elle peut se tromper : les chiffres des cartes font foi. Les mesures sont envoyées au modèle configuré par l'opérateur de cette instance."
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} à %{high}"

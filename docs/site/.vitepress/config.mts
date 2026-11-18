@@ -81,6 +81,7 @@ export default defineConfig({
           { text: "Geocoding", link: "/features/geocoding" },
           { text: "Terrain elevation", link: "/features/elevation" },
           { text: "Weather", link: "/features/weather" },
+          { text: "Workout assistant", link: "/features/assistant" },
           { text: "Photos", link: "/features/photos" },
           { text: "Instance funding", link: "/features/funding" },
           { text: "Remote imports", link: "/features/remote-imports" },

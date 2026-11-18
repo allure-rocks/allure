@@ -4362,6 +4362,27 @@ de:
         confirm_body: "Das Wetter von %{count} Aktivität(en) wird gelöscht. Deine bestehenden Veröffentlichungen ändern sich nicht."
       destroy:
         success: "Wetter für %{count} Aktivität(en) gelöscht."
+    assistant:
+      title: Assistent
+      summary_title: Zusammenfassungen meiner Aktivitäten
+      description: "Der Assistent schreibt zu jeder deiner Aktivitäten eine kurze Zusammenfassung aus den Messwerten, die Allure berechnet hat. Sie erscheint auf der Seite der Aktivität, wo du auch eine neue anfordern kannst."
+      enrichment_label: Zusammenfassungen meiner Aktivitäten schreiben
+      privacy: "Wenn du den Assistenten ausschaltest, wird keine neue Zusammenfassung mehr geschrieben; bereits geschriebene bleiben, bis du sie löschst."
+      save: Änderungen speichern
+      update:
+        enabled: Assistent aktiviert. Deine nächsten Aktivitäten erhalten eine Zusammenfassung.
+        disabled: Assistent deaktiviert. Es wird keine neue Zusammenfassung mehr geschrieben; bereits geschriebene bleiben, bis du sie löschst.
+      stored:
+        title: Gespeicherte Zusammenfassungen
+        description:
+          zero: Keine Aktivität hat eine gespeicherte Zusammenfassung.
+          one: 1 Aktivität hat eine gespeicherte Zusammenfassung.
+          other: "%{count} Aktivitäten haben eine gespeicherte Zusammenfassung."
+        action: Gespeicherte Zusammenfassungen löschen
+        confirm_title: Gespeicherte Zusammenfassungen löschen?
+        confirm_body: "Die Zusammenfassung von %{count} Aktivität(en) wird gelöscht. Deine bestehenden Veröffentlichungen ändern sich nicht."
+      destroy:
+        success: "Zusammenfassungen für %{count} Aktivität(en) gelöscht."
     security:
       title: Sicherheit
       pretitle: Konto
@@ -5029,6 +5050,8 @@ de:
           tb: TB
           pb: PB
           eb: EB
+  assistant:
+    notice: "Diese Zusammenfassung wird automatisch aus den Messwerten dieser Aktivität geschrieben. Sie kann sich irren: Maßgeblich sind die Zahlen auf den Karten. Die Messwerte werden an das Modell gesendet, das der Betreiber dieser Instanz eingerichtet hat."
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} bis %{high}"

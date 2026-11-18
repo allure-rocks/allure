@@ -232,6 +232,22 @@ services:
       SOLID_QUEUE_QUEUES: route_images
       SOLID_QUEUE_THREADS: 1
 
+  # One model call at a time (docs/dev/AI.md): the GPU behind the endpoint is
+  # the bottleneck, so the assistant has its own single-threaded worker and is
+  # deliberately absent from the main worker's queue list.
+  ai-worker:
+    <<: *app
+    command: bin/jobs
+    init: true
+    cpus: 1
+    mem_limit: 1g
+    security_opt:
+      - no-new-privileges
+    environment:
+      <<: *env
+      SOLID_QUEUE_QUEUES: ai
+      SOLID_QUEUE_THREADS: 1
+
   # Development OpenID Connect provider (docs/dev/AUTH.md), outside `dip up`:
   #   dip compose --profile oidc up -d dex
   # with AUTH_OIDC_ISSUER=http://dex.test:5556/dex, AUTH_OIDC_CLIENT_ID=allure-dev

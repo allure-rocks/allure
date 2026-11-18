@@ -353,6 +353,7 @@ restarting the stack.
 | `vite` | Vite development server on host port 3037 |
 | `worker` | Solid Queue worker for the default, internal recurring (`solid_queue_recurring`), federation, federation-media, remote-imports, webhooks and photos queues |
 | `route-image-worker` | Low-concurrency Solid Queue worker with Chromium for `route_images` |
+| `ai-worker` | Single-threaded Solid Queue worker for the `ai` queue ([docs/dev/AI.md](docs/dev/AI.md)) |
 | `playwright` | Playwright MCP server on host port 8932 |
 
 The application source is bind-mounted at `/app`. Bundler and shell history use
