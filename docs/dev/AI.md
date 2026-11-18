@@ -190,12 +190,14 @@ Written in English; the answer is in the member's language. It states:
   `fact_ids` field and never in the text. Two to five sentences. Sober
   register, second person, no exclamation, no emoji, no training advice that a
   fact does not support. Write every number in digits, exactly as its fact
-  writes it. »;
-- the title is at most 60 characters and obeys the same rule as the sentences.
+  writes it; prefer the facts' own words for numbers, units and temperatures. »;
+- the title is a short name for the outing, at most 60 characters, never the
+  sport and the date alone the way an import names a file, and it uses only
+  numbers the facts carry.
 
 ### 4.2 User prompt
 
-A table of `id | display | sentiment`, then the sport and the local date.
+A table of `id | display | sentiment`, under the sport and the local date.
 Never a coordinate, a place name absent from the facts, or an account name.
 
 ### 4.3 Schema
