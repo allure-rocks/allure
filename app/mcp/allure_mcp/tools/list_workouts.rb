@@ -48,9 +48,9 @@ module AllureMcp
           more = rows.size > limit
           rows = rows.first(limit)
           {
-            account: account(user),
-            units: Base::UNITS,
-            workouts: rows.map { summary(it, user) },
+            account: Workouts::ContextPayload.account(user),
+            units: Workouts::ContextPayload::UNITS,
+            workouts: rows.map { Workouts::ContextPayload.summary(it, user) },
             next_cursor: (encode_cursor(rows.last) if more)
           }
         end

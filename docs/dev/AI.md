@@ -95,13 +95,13 @@ the verification retry), `max_tokens` (`Allure::Assistant::Client::MAX_TOKENS`,
 
 ### 3.1 Input
 
-`Workouts::ContextPayload` is extracted from
-`AllureMcp::Tools::GetWorkoutContext`: the owner-only body (`account`, `units`,
-`workout`, `equipment`, `records_set`, `laps`, `splits`, `best_efforts`,
-`segment_efforts`, `training`) built from the same services and the same REST
-serializers. The MCP tool keeps its token handling, its `location_level` and
-its optional geometry, and delegates the rest. The summary reads the same
-object with geometry off — one implementation of every metric.
+`Workouts::ContextPayload` (`app/services`) builds the owner-only body
+(`account`, `units`, `workout`, `equipment`, `records_set`, `laps`, `splits`,
+`best_efforts`, `segment_efforts`, `training`) from the same services and REST
+serializers. `AllureMcp::Tools::GetWorkoutContext` keeps its token handling,
+adds `location_level` and the optional series and geometry, and delegates the
+rest; the summary reads the same object, geometry off — one implementation of
+every metric.
 
 ### 3.2 A fact
 

@@ -186,8 +186,9 @@ coordinate.
 | `app/controllers/mcp_controller.rb` | boundary and transport |
 | `app/mcp/allure_mcp/server.rb` | the per-request server, tool list, instructions |
 | `app/mcp/allure_mcp/context.rb` | user, token, outcome |
-| `app/mcp/allure_mcp/tools/base.rb` | owner lookup, errors, rounding, shared rows |
+| `app/mcp/allure_mcp/tools/base.rb` | owner lookup, errors, rounding |
 | `app/mcp/allure_mcp/tools/*.rb` | one class per tool |
+| `app/services/workouts/context_payload.rb` | the owner-only context body `get_workout_context` serves and the assistant reads ([AI.md](AI.md) §3.1) |
 | `app/mcp/allure_mcp/workout_series.rb`, `workout_geometry.rb` | the two track readers |
 | `app/mcp/allure_mcp/metrics.rb` | the counter |
 
