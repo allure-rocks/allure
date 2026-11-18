@@ -70,6 +70,14 @@ The assistant is offered only while `AI_BASE_URL` and `AI_MODEL` are both set.
   30 days. Older ones are written on request, from the activity's page, so an
   archive import never queues months of model calls.
 
+## Existing activities
+
+Recent activities are summarised automatically. A member can ask for one from
+the activity's page; `/admin/jobs` (« Synthèses ») or
+`bin/rails workouts:summaries` queues the last 30 days, and a member can do the
+same from `/settings/data`. Both only schedule work: the `ai` queue paces the
+model.
+
 ## Metrics
 
 `allure_workout_summaries{status}`, `allure_ai_requests_total{kind,result}`,

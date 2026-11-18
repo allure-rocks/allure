@@ -24,6 +24,20 @@
     </div>
   <% end %>
 
+  <% if @user.ai_enabled? %>
+    <% pending = Workouts::UserBackfillJob.pending_scope(@user, "summaries").count %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("settings.assistant.backfill.title") %></h3>
+        <p class="text-secondary"><%= t("settings.assistant.backfill.description") %></p>
+        <p class="mb-3"><%= t("settings.data.count", count: pending) %></p>
+        <%= button_to t("settings.data.summaries.action"), settings_data_summaries_path,
+              class: "btn btn-outline-primary", disabled: pending.zero?,
+              form: { data: { turbo_frame: "_top" } } %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="card">
     <div class="card-body">
       <h3 class="card-title"><%= t("settings.assistant.stored.title") %></h3>

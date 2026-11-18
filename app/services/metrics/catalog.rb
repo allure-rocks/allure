@@ -64,6 +64,7 @@ module Metrics
       Entry.new(family: "allure_photos", kind: :gauge, admin: "photos.admin.title"),
       Entry.new(family: "allure_photo_bytes", kind: :gauge, admin: "photos.admin.title"),
       Entry.new(family: "allure_workout_weathers", kind: :gauge, admin: "admin.jobs.weather.title"),
+      Entry.new(family: "allure_workout_summaries", kind: :gauge, admin: "admin.jobs.summaries.title"),
       Entry.new(family: "allure_account_deletions_scheduled", kind: :gauge, admin: "admin.accounts.states.deletion_scheduled"),
       Entry.new(family: "allure_storage_blobs", kind: :gauge, admin: "admin.dashboard.storage.blobs"),
       Entry.new(family: "allure_storage_bytes", kind: :gauge, admin: "admin.dashboard.storage.title"),
@@ -134,12 +135,15 @@ module Metrics
       Entry.new(family: "allure_mcp_requests_total", kind: :counter, admin: nil),
       Entry.new(family: "allure_federation_inbox_refusals_total", kind: :counter, admin: nil),
       Entry.new(family: "allure_push_deliveries_total", kind: :counter, admin: nil),
-      Entry.new(family: "allure_weather_requests_total", kind: :counter, admin: nil)
+      Entry.new(family: "allure_weather_requests_total", kind: :counter, admin: nil),
+      Entry.new(family: "allure_ai_requests_total", kind: :counter, admin: nil),
+      Entry.new(family: "allure_ai_tokens_total", kind: :counter, admin: nil)
     ].freeze
 
     # Declared by Metrics::Schema; technical timings with no console panel.
     HISTOGRAMS = [
-      Entry.new(family: "allure_best_efforts_rebuild_duration_seconds", kind: :histogram, admin: nil)
+      Entry.new(family: "allure_best_efforts_rebuild_duration_seconds", kind: :histogram, admin: nil),
+      Entry.new(family: "allure_ai_request_duration_seconds", kind: :histogram, admin: nil)
     ].freeze
 
     # A family that may legitimately be absent from a scrape: RSS is only

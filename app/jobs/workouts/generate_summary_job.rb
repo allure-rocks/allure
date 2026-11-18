@@ -12,7 +12,7 @@ module Workouts
     # The day's provider budget is spent: wait, the row stays pending.
     class BudgetExhaustedError < StandardError; end
 
-    Outcome = Data.define(:verified, :model, :calls)
+    Outcome = Data.define(:verified, :model, :calls, :prompt_tokens, :completion_tokens)
 
     retry_on ActiveRecord::Deadlocked, ActiveRecord::ConnectionNotEstablished,
              ActiveRecord::SerializationFailure, wait: :polynomially_longer, attempts: 5
@@ -37,7 +37,9 @@ module Workouts
       return if row.ready? && row.version == Allure::Insights::VERSION && row.facts_digest == snapshot.digest
       raise BudgetExhaustedError if SummaryRefresh.budget_exhausted?
 
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       outcome = generate(snapshot)
+      record_metrics(outcome, Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
       row = WorkoutSummary.find_by(id: row.id)
       return unless row
 
@@ -58,8 +60,12 @@ module Workouts
       end
       row.save!
     rescue Allure::Assistant::Client::InvalidRequestError => error
+      count_request("rejected")
       fail_row(workout, "rejected")
       Rails.error.report(error, handled: true, context: { component: self.class.name })
+    rescue Allure::Assistant::Client::UnavailableError
+      count_request("unavailable")
+      raise
     end
 
     private
@@ -73,6 +79,8 @@ module Workouts
       calls = 0
       model = nil
       verified = nil
+      prompt_tokens = 0
+      completion_tokens = 0
       2.times do |attempt|
         begin
           result = client.complete(
@@ -88,11 +96,30 @@ module Workouts
         end
         calls += result.calls
         model = result.model
+        prompt_tokens += result.prompt_tokens
+        completion_tokens += result.completion_tokens
         answer = parse(result.content)
         verified = answer && verifier.call(answer)
         break if verified&.valid?
       end
-      Outcome.new(verified:, model:, calls:)
+      Outcome.new(verified:, model:, calls:, prompt_tokens:, completion_tokens:)
+    end
+
+    def record_metrics(outcome, duration)
+      result = outcome.verified&.valid? ? "ok" : "invalid"
+      Yabeda.allure.ai_requests_total.increment({ kind: "summary", result: }, by: outcome.calls)
+      Yabeda.allure.ai_request_duration_seconds.measure({ kind: "summary" }, duration)
+      Yabeda.allure.ai_tokens_total.increment({ kind: "summary", direction: "prompt" }, by: outcome.prompt_tokens)
+      Yabeda.allure.ai_tokens_total.increment({ kind: "summary", direction: "completion" },
+                                              by: outcome.completion_tokens)
+    rescue StandardError => error
+      Rails.error.report(error, handled: true, context: { component: "summary_metrics" })
+    end
+
+    def count_request(result)
+      Yabeda.allure.ai_requests_total.increment({ kind: "summary", result: })
+    rescue StandardError => error
+      Rails.error.report(error, handled: true, context: { component: "ai_requests_total" })
     end
 
     # The refused sentences are shown to the model, never logged.

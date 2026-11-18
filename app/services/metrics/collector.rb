@@ -130,6 +130,9 @@ module Metrics
         each_label(WorkoutWeather::STATUSES, domain[:workout_weathers]) do |status, count|
           set(:workout_weathers, { status: }, count)
         end
+        each_label(WorkoutSummary::STATUSES, domain[:workout_summaries]) do |status, count|
+          set(:workout_summaries, { status: }, count)
+        end
         each_label(AccountExport::STATUSES, domain[:account_exports]) do |status, count|
           set(:account_exports, { status: }, count)
         end

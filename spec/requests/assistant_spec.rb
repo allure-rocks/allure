@@ -25,6 +25,18 @@ RSpec.describe "Assistant settings" do
       expect(response.body).to include(ERB::Util.html_escape(I18n.t("settings.assistant.enrichment_label")))
     end
 
+    it "offers the recent backfill once consent is given" do
+      create(:workout, user:, started_at: 2.days.ago)
+      get settings_assistant_path
+      expect(response.body).not_to include(I18n.t("settings.assistant.backfill.title"))
+
+      user.update!(ai_enabled: true)
+      get settings_assistant_path
+
+      expect(response.body).to include(I18n.t("settings.assistant.backfill.title"))
+      expect(response.body).to include(settings_data_summaries_path)
+    end
+
     it "turns on and off without touching the stored summaries" do
       workout = create(:workout, user:)
       create(:workout_summary, :ready, workout:)

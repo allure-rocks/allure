@@ -409,6 +409,16 @@ fr:
         action: Récupérer la météo
         confirm_title: Récupérer la météo ?
         confirm_body: "La météo de %{count} activité(s) sera demandée à Open-Meteo, à un rythme limité et dans le budget quotidien."
+      summaries:
+        title: Synthèses
+        budget: "Appels au modèle sur 24 h : %{used} / %{limit}."
+        outdated:
+          one: 1 activité d'un compte consentant n'a pas de synthèse à jour.
+          other: "%{count} activités de comptes consentants n'ont pas de synthèse à jour."
+        current: Toutes les activités des comptes consentants ont leur synthèse.
+        action: Rédiger les synthèses
+        confirm_title: Rédiger les synthèses ?
+        confirm_body: "La synthèse de %{count} activité(s) sera demandée au modèle, une à la fois."
       elevation:
         title: Altitudes estimées
         outdated:
@@ -551,6 +561,10 @@ fr:
           one: "Météo demandée pour 1 activité."
           other: "Météo demandée pour %{count} activités."
         weather_backfill_current: Aucune activité n'attend sa météo.
+        summaries_backfill_enqueued:
+          one: "Synthèse demandée pour 1 activité."
+          other: "Synthèses demandées pour %{count} activités."
+        summaries_backfill_current: Aucune activité n'attend sa synthèse.
         places_backfill_enqueued:
           one: "Recalcul des lieux lancé pour 1 activité."
           other: "Recalcul des lieux lancé pour %{count} activités."
@@ -4369,6 +4383,9 @@ fr:
       description: "L'assistant rédige une courte synthèse de chacune de vos activités à partir des mesures qu'Allure a calculées. Elle s'affiche sur la page de l'activité, avec la possibilité d'en demander une nouvelle."
       enrichment_label: Rédiger les synthèses de mes activités
       privacy: "Désactiver l'assistant arrête toute nouvelle rédaction ; les synthèses déjà écrites restent jusqu'à leur suppression."
+      backfill:
+        title: Activités récentes
+        description: "Rédigez les synthèses des activités des 30 derniers jours. Les demandes partent une à la fois."
       save: Enregistrer les modifications
       update:
         enabled: Assistant activé. Vos prochaines activités recevront une synthèse.
@@ -4637,6 +4654,12 @@ fr:
         action: Récupérer la météo
         confirm_title: Récupérer la météo ?
         confirm_body: "%{count} activité(s) seront enrichies depuis Open-Meteo, à un rythme limité."
+      summaries:
+        title: Synthèses
+        description: "Activités récentes sans synthèse, ou dont la synthèse vient d'une version antérieure de l'assistant."
+        action: Rédiger mes synthèses
+        confirm_title: Rédiger vos synthèses ?
+        confirm_body: "%{count} activité(s) seront confiées au modèle, une à la fois, dans la limite du budget quotidien."
       heart_rate:
         title: Fréquence cardiaque
         description: "Temps passé à chaque fréquence cardiaque, d'où découlent vos zones. Calculé depuis les points enregistrés."
@@ -4665,6 +4688,8 @@ fr:
         elevation_current: Aucune altitude à estimer.
         weather: "Récupération de la météo lancée pour %{count} activité(s)."
         weather_current: Aucune météo à récupérer.
+        summaries: "Rédaction des synthèses lancée pour %{count} activité(s)."
+        summaries_current: Toutes vos synthèses sont à jour.
         heart_rate: "Calcul de la fréquence cardiaque lancé pour %{count} activité(s)."
         heart_rate_current: Votre fréquence cardiaque est déjà calculée.
         route_suggestions: "Recherche d'itinéraires réguliers lancée pour %{count} activité(s)."

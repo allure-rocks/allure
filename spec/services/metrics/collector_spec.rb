@@ -26,6 +26,17 @@ RSpec.describe Metrics::Collector do
     expect(metric_value(:process_threads)).to be_positive
   end
 
+  it "counts assistant summary rows by status" do
+    create(:workout_summary, :ready, workout: create(:workout))
+    create(:workout_summary, :failed, workout: create(:workout))
+
+    described_class.refresh!
+
+    expect(metric_value(:workout_summaries, status: "ready")).to eq(1)
+    expect(metric_value(:workout_summaries, status: "failed")).to eq(1)
+    expect(metric_value(:workout_summaries, status: "pending")).to eq(0)
+  end
+
   it "counts push subscriptions, never naming a device" do
     with_push_env do
       user = create(:user)

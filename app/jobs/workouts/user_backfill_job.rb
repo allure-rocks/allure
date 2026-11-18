@@ -29,12 +29,15 @@ module Workouts
   # - `route_suggestions`: recordings the recurring-route detector has not
   #   examined yet (docs/dev/SEGMENTS.md); the account sweep walks them newest
   #   first, so this kind enqueues it once instead of dispatching per record.
+  # - `summaries`: recordings of the last 30 days whose assistant summary is
+  #   missing, failed or older than the current generation (docs/dev/AI.md);
+  #   the generation queue paces the model.
   #
   # A user sweep never bypasses a contract: it only rebuilds to the state the
   # current code and catalogue already define.
   class UserBackfillJob < ApplicationJob
     BATCH_SIZE = 25
-    KINDS = %w[rebuild route_images segment_images places elevation weather loops heart_rate route_suggestions].freeze
+    KINDS = %w[rebuild route_images segment_images places elevation weather loops heart_rate route_suggestions summaries].freeze
 
     queue_as :default
     limits_concurrency key: ->(user_id, kind, **) { "user-backfill-#{user_id}-#{kind}" }, duration: 30.minutes
@@ -55,6 +58,7 @@ module Workouts
         when "loops" then loop_scope(user)
         when "heart_rate" then HeartRates::BackfillJob.pending_scope.where(user_id: user.id)
         when "route_suggestions" then Segments::RouteSuggestionSweepJob.pending_scope.where(user_id: user.id)
+        when "summaries" then BackfillSummariesJob.pending_scope.where(workouts: { user_id: user.id })
         else raise ArgumentError, "unknown user backfill kind: #{kind.inspect}"
         end
       end
@@ -159,6 +163,7 @@ module Workouts
       when "weather" then WeatherRefresh.new(workout: record).call
       when "loops" then Segments::MatchWorkoutJob.perform_later(record)
       when "heart_rate" then HeartRates::Rebuild.new(workout: record).call
+      when "summaries" then SummaryRefresh.schedule(record)
       end
     end
 

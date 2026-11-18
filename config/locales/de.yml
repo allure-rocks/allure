@@ -408,6 +408,16 @@ de:
         action: Wetter abrufen
         confirm_title: Wetter abrufen?
         confirm_body: "Das Wetter von %{count} Aktivität(en) wird bei Open-Meteo angefragt, in begrenztem Tempo und im Rahmen des Tagesbudgets."
+      summaries:
+        title: Zusammenfassungen
+        budget: "Modellaufrufe über 24 h: %{used} / %{limit}."
+        outdated:
+          one: 1 Aktivität eines zustimmenden Kontos hat keine aktuelle Zusammenfassung.
+          other: "%{count} Aktivitäten zustimmender Konten haben keine aktuelle Zusammenfassung."
+        current: Alle Aktivitäten zustimmender Konten haben ihre Zusammenfassung.
+        action: Zusammenfassungen schreiben
+        confirm_title: Zusammenfassungen schreiben?
+        confirm_body: "Die Zusammenfassung von %{count} Aktivität(en) wird nacheinander beim Modell angefordert."
       elevation:
         title: Geschätzte Höhe
         outdated:
@@ -550,6 +560,10 @@ de:
           one: "Wetter für 1 Aktivität angefragt."
           other: "Wetter für %{count} Aktivitäten angefragt."
         weather_backfill_current: Keine Aktivität wartet auf ihr Wetter.
+        summaries_backfill_enqueued:
+          one: "Zusammenfassung für 1 Aktivität angefordert."
+          other: "Zusammenfassungen für %{count} Aktivitäten angefordert."
+        summaries_backfill_current: Keine Aktivität wartet auf ihre Zusammenfassung.
         places_backfill_enqueued:
           one: "Neuberechnung des Orts für 1 Aktivität eingereiht."
           other: "Neuberechnung des Orts für %{count} Aktivitäten eingereiht."
@@ -4368,6 +4382,9 @@ de:
       description: "Der Assistent schreibt zu jeder deiner Aktivitäten eine kurze Zusammenfassung aus den Messwerten, die Allure berechnet hat. Sie erscheint auf der Seite der Aktivität, wo du auch eine neue anfordern kannst."
       enrichment_label: Zusammenfassungen meiner Aktivitäten schreiben
       privacy: "Wenn du den Assistenten ausschaltest, wird keine neue Zusammenfassung mehr geschrieben; bereits geschriebene bleiben, bis du sie löschst."
+      backfill:
+        title: Aktuelle Aktivitäten
+        description: "Schreibe die Zusammenfassungen der Aktivitäten der letzten 30 Tage. Die Anfragen gehen nacheinander hinaus."
       save: Änderungen speichern
       update:
         enabled: Assistent aktiviert. Deine nächsten Aktivitäten erhalten eine Zusammenfassung.
@@ -4636,6 +4653,12 @@ de:
         action: Wetter abrufen
         confirm_title: Wetter abrufen?
         confirm_body: "%{count} Aktivität(en) werden über Open-Meteo ergänzt, in begrenztem Tempo."
+      summaries:
+        title: Zusammenfassungen
+        description: "Aktuelle Aktivitäten ohne Zusammenfassung oder mit einer Zusammenfassung aus einer älteren Version des Assistenten."
+        action: Meine Zusammenfassungen schreiben
+        confirm_title: Deine Zusammenfassungen schreiben?
+        confirm_body: "Die Zusammenfassung von %{count} Aktivität(en) wird nacheinander innerhalb des Tagesbudgets an das Modell geschickt."
       heart_rate:
         title: Herzfrequenz
         description: "Die Zeit bei jeder Herzfrequenz, aus der sich deine Zonen ergeben. Aus den aufgezeichneten Punkten berechnet."
@@ -4664,6 +4687,8 @@ de:
         elevation_current: Keine Höhe zu schätzen.
         weather: "Wetterabruf für %{count} Aktivität(en) gestartet."
         weather_current: Kein Wetter abzurufen.
+        summaries: "Zusammenfassungen für %{count} Aktivität(en) gestartet."
+        summaries_current: Alle deine Zusammenfassungen sind aktuell.
         heart_rate: "Herzfrequenzberechnung für %{count} Aktivität(en) gestartet."
         heart_rate_current: Deine Herzfrequenz ist bereits berechnet.
         route_suggestions: "Suche nach regelmäßigen Strecken für %{count} Aktivität(en) gestartet."

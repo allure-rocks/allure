@@ -408,6 +408,16 @@ es:
         action: Obtener la meteorología
         confirm_title: ¿Obtener la meteorología?
         confirm_body: "La meteorología de %{count} actividad(es) se pedirá a Open-Meteo, a un ritmo limitado y dentro del presupuesto diario."
+      summaries:
+        title: Resúmenes
+        budget: "Llamadas al modelo en 24 h: %{used} / %{limit}."
+        outdated:
+          one: 1 actividad de una cuenta que ha dado su consentimiento no tiene un resumen al día.
+          other: "%{count} actividades de cuentas que han dado su consentimiento no tienen un resumen al día."
+        current: Todas las actividades de las cuentas que han dado su consentimiento tienen su resumen.
+        action: Redactar los resúmenes
+        confirm_title: ¿Redactar los resúmenes?
+        confirm_body: "El resumen de %{count} actividad(es) se pedirá al modelo, una a la vez."
       elevation:
         title: Altitud estimada
         outdated:
@@ -550,6 +560,10 @@ es:
           one: "Meteorología solicitada para 1 actividad."
           other: "Meteorología solicitada para %{count} actividades."
         weather_backfill_current: Ninguna actividad espera su meteorología.
+        summaries_backfill_enqueued:
+          one: "Resumen solicitado para 1 actividad."
+          other: "Resúmenes solicitados para %{count} actividades."
+        summaries_backfill_current: Ninguna actividad espera su resumen.
         places_backfill_enqueued:
           one: "Recálculo del lugar en cola para 1 actividad."
           other: "Recálculo del lugar en cola para %{count} actividades."
@@ -4368,6 +4382,9 @@ es:
       description: "El asistente redacta un resumen breve de cada una de tus actividades a partir de las métricas que Allure ha calculado. Aparece en la página de la actividad, donde también puedes pedir uno nuevo."
       enrichment_label: Redactar los resúmenes de mis actividades
       privacy: "Si desactivas el asistente, no se redactará ningún resumen nuevo; los ya escritos se quedan hasta que los elimines."
+      backfill:
+        title: Actividades recientes
+        description: "Redacta los resúmenes de las actividades de los últimos 30 días. Las peticiones salen una a la vez."
       save: Guardar los cambios
       update:
         enabled: Asistente activado. Tus próximas actividades recibirán un resumen.
@@ -4636,6 +4653,12 @@ es:
         action: Obtener la meteorología
         confirm_title: ¿Obtener la meteorología?
         confirm_body: "Se completarán %{count} actividad(es) con Open-Meteo, a un ritmo limitado."
+      summaries:
+        title: Resúmenes
+        description: "Actividades recientes sin resumen, o cuyo resumen viene de una versión anterior del asistente."
+        action: Redactar mis resúmenes
+        confirm_title: ¿Redactar tus resúmenes?
+        confirm_body: "El resumen de %{count} actividad(es) se enviará al modelo, una a la vez, dentro del presupuesto diario."
       heart_rate:
         title: Frecuencia cardíaca
         description: "Tiempo pasado en cada frecuencia cardíaca, del que se derivan tus zonas. Calculado a partir de los puntos grabados."
@@ -4664,6 +4687,8 @@ es:
         elevation_current: No hay altitud que estimar.
         weather: "Obtención de la meteorología iniciada para %{count} actividad(es)."
         weather_current: No hay meteorología que obtener.
+        summaries: "Redacción de los resúmenes iniciada para %{count} actividad(es)."
+        summaries_current: Todos tus resúmenes están al día.
         heart_rate: "Cálculo de la frecuencia cardíaca iniciado para %{count} actividad(es)."
         heart_rate_current: Tu frecuencia cardíaca ya está calculada.
         route_suggestions: "Búsqueda de rutas recurrentes iniciada para %{count} actividad(es)."

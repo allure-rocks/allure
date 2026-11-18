@@ -372,6 +372,16 @@ en:
         action: Fetch the weather
         confirm_title: Fetch the weather?
         confirm_body: "The weather of %{count} workout(s) will be requested from Open-Meteo, at a limited pace and within the daily budget."
+      summaries:
+        title: Summaries
+        budget: "Model calls over 24 h: %{used} / %{limit}."
+        outdated:
+          one: 1 workout of a consenting account has no current summary.
+          other: "%{count} workouts of consenting accounts have no current summary."
+        current: Every workout of consenting accounts has its summary.
+        action: Write the summaries
+        confirm_title: Write the summaries?
+        confirm_body: "The summary of %{count} workout(s) will be requested from the model, one at a time."
       elevation:
         title: Estimated elevation
         outdated:
@@ -514,6 +524,10 @@ en:
           one: "Weather requested for 1 workout."
           other: "Weather requested for %{count} workouts."
         weather_backfill_current: No workout is waiting for its weather.
+        summaries_backfill_enqueued:
+          one: "Summary requested for 1 workout."
+          other: "Summaries requested for %{count} workouts."
+        summaries_backfill_current: No workout is waiting for its summary.
         places_backfill_enqueued:
           one: "Place recomputation enqueued for 1 workout."
           other: "Place recomputation enqueued for %{count} workouts."
@@ -4332,6 +4346,9 @@ en:
       description: "The assistant writes a short summary of each of your workouts from the measurements Allure computed. It appears on the workout's page, where you can ask for a new one."
       enrichment_label: Write summaries of my workouts
       privacy: "Turning the assistant off stops every new summary; the ones already written remain until you delete them."
+      backfill:
+        title: Recent workouts
+        description: "Write the summaries of the workouts of the last 30 days. Requests go out one at a time."
       save: Save changes
       update:
         enabled: Assistant on. Your next workouts will get a summary.
@@ -4600,6 +4617,12 @@ en:
         action: Fetch the weather
         confirm_title: Fetch the weather?
         confirm_body: "%{count} workout(s) will be enriched from Open-Meteo, at a limited pace."
+      summaries:
+        title: Summaries
+        description: "Recent workouts without a summary, or whose summary comes from an older generation of the assistant."
+        action: Write my summaries
+        confirm_title: Write your summaries?
+        confirm_body: "%{count} workout(s) will be sent to the model, one at a time, within the daily budget."
       heart_rate:
         title: Heart rate
         description: "Time spent at each heart rate, from which your zones follow. Computed from the recorded points."
@@ -4628,6 +4651,8 @@ en:
         elevation_current: No elevation to estimate.
         weather: "Weather fetching started for %{count} workout(s)."
         weather_current: No weather to fetch.
+        summaries: "Summary writing started for %{count} workout(s)."
+        summaries_current: All your summaries are up to date.
         heart_rate: "Heart-rate computation started for %{count} workout(s)."
         heart_rate_current: Your heart rate is already computed.
         route_suggestions: "Recurring-route search started for %{count} workout(s)."

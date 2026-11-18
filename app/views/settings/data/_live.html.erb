@@ -180,4 +180,24 @@
       </div>
     </div>
   <% end %>
+  <% if local_assigns[:summaries_available] %>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title"><%= t("settings.data.summaries.title") %></h3>
+          <p class="text-secondary"><%= t("settings.data.summaries.description") %></p>
+          <p class="mb-3"><%= t("settings.data.count", count: counts.fetch("summaries")) %></p>
+          <%= button_to t("settings.data.summaries.action"), settings_data_summaries_path,
+                class: "btn btn-outline-primary",
+                disabled: counts.fetch("summaries").zero?,
+                form: { data: {
+                  turbo_frame: "_top",
+                  confirm_title: t("settings.data.summaries.confirm_title"),
+                  confirm_body: t("settings.data.summaries.confirm_body", count: counts.fetch("summaries")),
+                  confirm_verb: t("settings.data.summaries.action")
+                } } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>

@@ -189,6 +189,30 @@
   </div>
 <% end %>
 
+<% if Allure::Assistant::Config.enabled? %>
+  <div class="card mt-3">
+    <div class="card-header">
+      <h2 class="card-title"><%= t("admin.jobs.summaries.title") %></h2>
+    </div>
+    <div class="card-body">
+      <p class="text-secondary"><%= t("admin.jobs.summaries.budget", used: WorkoutSummary.where(updated_at: 24.hours.ago..).sum(:requests_count), limit: Allure::Assistant::Config.max_requests_per_day) %></p>
+      <% if @summaries_backfill_count.positive? %>
+        <p class="mb-3"><%= t("admin.jobs.summaries.outdated", count: @summaries_backfill_count) %></p>
+        <%= button_to t("admin.jobs.summaries.action"), admin_jobs_backfill_summaries_path,
+              class: "btn btn-outline-primary",
+              form: { data: {
+                turbo_frame: "_top",
+                confirm_title: t("admin.jobs.summaries.confirm_title"),
+                confirm_body: t("admin.jobs.summaries.confirm_body", count: @summaries_backfill_count),
+                confirm_verb: t("admin.jobs.summaries.action")
+              } } %>
+      <% else %>
+        <p class="mb-0 text-secondary"><%= t("admin.jobs.summaries.current") %></p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
 <% if Allure::Toponyms::Config.configured? %>
   <div class="card mt-3">
     <div class="card-header">

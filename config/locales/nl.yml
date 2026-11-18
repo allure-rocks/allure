@@ -408,6 +408,16 @@ nl:
         action: Weer ophalen
         confirm_title: Weer ophalen?
         confirm_body: "Het weer van %{count} activiteit(en) wordt opgevraagd bij Open-Meteo, in een beperkt tempo en binnen het dagbudget."
+      summaries:
+        title: Samenvattingen
+        budget: "Modelaanroepen over 24 u: %{used} / %{limit}."
+        outdated:
+          one: 1 activiteit van een account dat toestemming gaf heeft geen actuele samenvatting.
+          other: "%{count} activiteiten van accounts die toestemming gaven hebben geen actuele samenvatting."
+        current: Alle activiteiten van accounts die toestemming gaven hebben hun samenvatting.
+        action: Samenvattingen schrijven
+        confirm_title: Samenvattingen schrijven?
+        confirm_body: "De samenvatting van %{count} activiteit(en) wordt één voor één aan het model gevraagd."
       elevation:
         title: Geschatte hoogte
         outdated:
@@ -550,6 +560,10 @@ nl:
           one: "Weer opgevraagd voor 1 activiteit."
           other: "Weer opgevraagd voor %{count} activiteiten."
         weather_backfill_current: Geen activiteit wacht op haar weer.
+        summaries_backfill_enqueued:
+          one: "Samenvatting aangevraagd voor 1 activiteit."
+          other: "Samenvattingen aangevraagd voor %{count} activiteiten."
+        summaries_backfill_current: Geen enkele activiteit wacht op haar samenvatting.
         places_backfill_enqueued:
           one: "Herberekening van de plaats ingepland voor 1 activiteit."
           other: "Herberekening van de plaats ingepland voor %{count} activiteiten."
@@ -4368,6 +4382,9 @@ nl:
       description: "De assistent schrijft bij elk van je activiteiten een korte samenvatting op basis van de metingen die Allure heeft berekend. Die verschijnt op de pagina van de activiteit, waar je ook een nieuwe kunt aanvragen."
       enrichment_label: Samenvattingen van mijn activiteiten schrijven
       privacy: "Als je de assistent uitschakelt, wordt er geen nieuwe samenvatting meer geschreven; al geschreven samenvattingen blijven staan tot je ze verwijdert."
+      backfill:
+        title: Recente activiteiten
+        description: "Schrijf de samenvattingen van de activiteiten van de laatste 30 dagen. De aanvragen gaan één voor één de deur uit."
       save: Wijzigingen opslaan
       update:
         enabled: Assistent ingeschakeld. Je volgende activiteiten krijgen een samenvatting.
@@ -4636,6 +4653,12 @@ nl:
         action: Weer ophalen
         confirm_title: Weer ophalen?
         confirm_body: "%{count} activiteit(en) worden aangevuld via Open-Meteo, in een beperkt tempo."
+      summaries:
+        title: Samenvattingen
+        description: "Recente activiteiten zonder samenvatting, of waarvan de samenvatting uit een oudere versie van de assistent komt."
+        action: Mijn samenvattingen schrijven
+        confirm_title: Je samenvattingen schrijven?
+        confirm_body: "De samenvatting van %{count} activiteit(en) wordt één voor één binnen het dagbudget naar het model gestuurd."
       heart_rate:
         title: Hartslag
         description: "De tijd bij elke hartslag, waaruit je zones volgen. Berekend uit de opgenomen punten."
@@ -4664,6 +4687,8 @@ nl:
         elevation_current: Geen hoogte te schatten.
         weather: "Weer ophalen gestart voor %{count} activiteit(en)."
         weather_current: Geen weer op te halen.
+        summaries: "Samenvattingen schrijven gestart voor %{count} activiteit(en)."
+        summaries_current: Al je samenvattingen zijn up-to-date.
         heart_rate: "Hartslagberekening gestart voor %{count} activiteit(en)."
         heart_rate_current: Je hartslag is al berekend.
         route_suggestions: "Zoektocht naar terugkerende routes gestart voor %{count} activiteit(en)."
