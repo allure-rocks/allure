@@ -273,6 +273,8 @@ of good visual design repairs.
 | Pseudonymous leaderboard name | alias | alias | §19.5. |
 | Someone the instance knows | account | compte | Never "user" in UI copy. |
 | Distance/time/elevation values | metrics | mesures | |
+| The assistant-written account of a workout | summary | synthèse | [AI.md](AI.md). Never « analyse » (that is the metrics card) nor « résumé » (that is the workout's figures). |
+| What writes the summary and later answers questions | assistant | assistant | Never « coach » (it prescribes nothing) and never « IA » as the feature's name in UI copy. |
 | The uploaded file | original file | fichier d'origine | Never "source". |
 | Bringing files in | import | importer | Never "upload" as a noun. |
 | A second proof after the password | two-step verification | double authentification | [AUTH.md](AUTH.md). Never "2FA" or "MFA" in UI copy. |
@@ -353,6 +355,8 @@ table above defines the concept; the notes there apply here too. A row's
 | follower / to follow | Follower / folgen | seguidor / seguir | volger / volgen | |
 | instance | Instanz | instancia | instantie | |
 | metrics | Messwerte | métricas | meetwaarden | |
+| The assistant-written account of a workout | Zusammenfassung | resumen | samenvatting | de « Analyse », es « análisis », nl « analyse » (that is the metrics card) |
+| What writes the summary and later answers questions | Assistent | asistente | assistent | de « Trainer », es « entrenador », nl « trainer » (it prescribes nothing); no "KI", "IA" or "AI" as the feature's name |
 | original file | Originaldatei | archivo original | origineel bestand | « Quelle », « fuente », « bron » |
 | import | importieren / Import | importar / importación | importeren / import | « hochladen », « subir », « uploaden » as the action's name |
 | two-step verification | Bestätigung in zwei Schritten | verificación en dos pasos | verificatie in twee stappen | "2FA", "MFA" |
@@ -1216,7 +1220,8 @@ past a full-height index on every sub-page. The groups are **Compte** (Profil,
 Apparence, Unités, Sports par défaut),
 **Publication** (Profils de publication, Zones de confidentialité) and
 **Système** (Notifications, Données et recalculs, Altitudes when the instance
-configures a provider, API et webhooks, Sécurité).
+configures a provider, Assistant when it configures a model, API et webhooks,
+Sécurité).
 
 | Sub-page | Contents |
 |---|---|
@@ -1226,6 +1231,7 @@ configures a provider, API et webhooks, Sécurité).
 | `/settings/sports` | default variant per generic sport (cycling, running, walking) used at import ([WORKOUT.md](WORKOUT.md)) |
 | `/settings/notifications` | « Notifications dans l'application »: one switch per kind, saved by the card's submit; then, only in a companion registering the `push` bridge component on an instance with push configured, the « Sur cet iPhone » card (§7.7, §19.28) |
 | `/settings/elevation` | terrain elevation opt-in, only when the instance configures a provider ([ELEVATION.md](ELEVATION.md)) |
+| `/settings/assistant` | the assistant opt-in, only when the instance configures a model: the switch, the §19.40 sentence, the deletion of the stored summaries and the backfill of the recent workouts ([AI.md](AI.md)) |
 | `/settings/publishing-profiles` | the profile collection (existing route) |
 | `/settings/privacy-zones` | the zone collection (existing route) |
 | `/settings/security` | three groups (§20.15): two-step verification first (obligation, authenticator app, passkeys, recovery codes); the ways in side by side, password and identity providers; then the active sessions (paginated, sortable table with device, sign-in time and method, last activity and the lifetime rule) with « Fermer toutes les sessions » in its header; closing a session re-authenticates first |
@@ -2323,6 +2329,48 @@ native scroll-snap strip. The `paged-panels` Stimulus controller owns it.
   in sequence; Turbo teardown releases the resize observer and the pending
   scroll callback and restores that baseline before caching.
 
+### 10.26 Assistant summary card
+
+The owner-only card that renders the assistant's summary of one workout
+([AI.md](AI.md)); placed between the social row and the weather card (§20.3).
+It is never rendered for a reader, a participant, a manual entry or a credit
+row, and it disappears entirely when the instance configures no model or the
+member has not opted in.
+
+```
+┌ Synthèse ─────────────────────────────────── [Régénérer] ┐
+│ 62,4 km et 850 m de dénivelé, deux minutes de moins que  │
+│ votre meilleure boucle du lac. Le vent de face a coûté   │
+│ 41 s dans la seconde montée.                             │
+│ Titre proposé : « Le tour du lac par vent de face »      │
+│                                   [Utiliser ce titre]    │
+│ Rédigée automatiquement ; les chiffres des cartes font   │
+│ foi.                                                     │
+└──────────────────────────────────────────────────────────┘
+```
+
+- **Body:** two to five sentences as one flowing paragraph, never a list and
+  never more than five. The card never scrolls internally (§10.1).
+- **Attribution:** the first §19.40 sentence under the body, muted, always
+  rendered and never behind a disclosure. It names the assistant, not a
+  provider.
+- **Proposed title:** a small line and a secondary button, shown only while
+  `workouts.title_source` is `default` or `file` ([AI.md](AI.md) §5).
+  Accepting it replaces the page header's title and drops the line; nothing is
+  ever renamed without that action.
+- **Header action:** « Régénérer » as a ghost button, disabled while the row is
+  `pending` and for five minutes after the last request, with the wait named in
+  its tooltip. A failed row's action says « Réessayer ».
+- **States** (§11): `pending` is three muted skeleton lines under a
+  `role="status"` sentence « Rédaction de la synthèse… »; `failed` is one
+  sentence on what failed plus « Réessayer », never a provider message; a
+  workout older than the automatic window is never-populated empty with its one
+  action « Rédiger la synthèse ». The ready state is announced once through
+  `aria-live="polite"`, naming the section only (§18.8).
+- **Live:** the job broadcasts a `replace` of the card on the owner's account
+  stream; a Turbo Stream replacement needs no Stimulus controller, so there is
+  nothing to release on disconnect.
+
 ---
 
 ## 11. The four states
@@ -3346,6 +3394,9 @@ answer is an **equivalent, not an excuse**:
 - Batch import progress: `aria-live="polite"` on the status region, announcing
   only meaningful transitions — not every 2-second poll.
 - Filter result counts: `aria-live="polite"`.
+- The workout's assistant summary announces its ready state once, naming the
+  section and that the summary is ready — a Turbo Stream replacement does not
+  re-read the paragraph (§10.26).
 - Form error summaries: `role="alert"`.
 
 ### 18.9 Motion and language
@@ -4468,6 +4519,28 @@ It ends with a link to the settings card. The German, Spanish and Dutch texts
 faithfully translate both sentences. A hidden account is never presented as
 incomplete or as having lost something; the exact handle always works.
 
+### 19.40 Assistant summary — on `/settings/assistant` and the summary card
+
+Placement: under the consent switch of `/settings/assistant` ([AI.md](AI.md)),
+then under the summary text itself. Non-dismissible. The first sentence is the
+same key on both surfaces; the second appears only on the settings page.
+
+> **FR** — « Cette synthèse est rédigée automatiquement à partir des mesures de
+> cette activité. Elle peut se tromper : les chiffres des cartes font foi. Les
+> mesures sont envoyées au modèle configuré par l'opérateur de cette instance. »
+> « Désactiver l'assistant arrête toute nouvelle rédaction ; les synthèses déjà
+> écrites restent jusqu'à leur suppression. »
+>
+> **EN** — "This summary is written automatically from this workout's
+> measurements. It can be wrong: the figures on the cards are the reference. The
+> measurements are sent to the model configured by this instance's operator."
+> "Turning the assistant off stops every new summary; the ones already written
+> remain until you delete them."
+
+The German, Spanish and Dutch texts faithfully translate both sentences. No
+member surface names the provider's host, a model version, or a third party by
+name: the operator's configuration is the only place that does.
+
 ## 20. Screen anatomies
 
 Block diagrams of the twenty-two screens that define the product. Order is
@@ -4590,6 +4663,10 @@ there is no original-data card and no danger zone.
 [Social]      the social row (§10.17) right under the summary, with a
               publication: [💬 3] → the thread's page, below lg only, on the
               left; the reactions on the right, on every screen
+[Synthèse]    owner-only assistant card (§10.26, [AI.md](AI.md)): the
+              written summary, its attribution, the proposed title and
+              « Régénérer »; absent for a reader, a participant, a manual
+              entry, a credit row, and when the feature or the consent is off
 [Météo]       weather card ([WEATHER.md](WEATHER.md)) after the Analyse card
               (after the profile for a reader); the header badge row carries
               its badge (condition icon, mean temperature, linking here): the

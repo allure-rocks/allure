@@ -98,6 +98,7 @@ past-due exports `expired` and purges their archive.
 | `account.json` | profile, preferences, leaderboard category, notification switches, enrolled factors (kind and date), linked identity providers (provider and date), import connections (provider, status, dates) |
 | `sessions.json` | open sessions: device, IP address, sign-in method, created, last seen |
 | `workouts/index.csv`, `workouts/index.json` | one row per workout: the REST `Workout` detail representation (`API.md`) |
+| `assistant.json` | the account's assistant summaries ([AI.md](AI.md)): per workout its locale, proposed title, sentences, model and date — never the facts snapshot |
 | `workouts/originals-NNN.zip` | the original files, 1 000 per archive, named `<date>_<id>.<ext>` |
 | `records.json` | the seven classic records, best efforts and effort records |
 | `segments.json`, `segments.geojson` | the account's own segments, with their elevation profile |

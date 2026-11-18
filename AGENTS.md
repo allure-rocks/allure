@@ -94,6 +94,10 @@ source and the course terrain.
 `docs/dev/WEATHER.md` is the weather contract: the provider, the hourly series
 and the wind exposure, the publication summary and the device temperature.
 
+`docs/dev/AI.md` is the assistant contract: the provider seam, the computed
+facts, the prompt and its verification, the workout summary, the consent and
+the deferred conversation.
+
 `docs/dev/DERIVATIONS.md` is the derived-data contract: the derivation map, the
 generation markers, the sweeps and the owner-scoped rebuilds.
 
@@ -241,6 +245,11 @@ behaviours updates its page in every language in the same patch.
   [docs/dev/WEATHER.md](docs/dev/WEATHER.md)
   [docs/dev/HEART-RATE.md](docs/dev/HEART-RATE.md)
   [docs/dev/PHOTOS.md](docs/dev/PHOTOS.md)
+- **Assistant.** A workout summary written from facts Allure computed itself:
+  Ruby selects and formats the facts, a local model through an
+  OpenAI-compatible endpoint (typically LiteLLM) phrases them, and a verifier
+  refuses any number that a cited fact does not carry. Owner-only, opt-in, never
+  published or federated. [docs/dev/AI.md](docs/dev/AI.md)
 - **Virtual platforms and positionless recordings.**
   `Allure::Virtual::Platforms` names a platform from the FIT `file_id`; a
   virtual world's map image is drawn instead of the basemap and its attribution
