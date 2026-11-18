@@ -77,6 +77,9 @@ x-rails: &rails
     # through the same env file: one single source.
     DEMO_RESET_AT: ${DEMO_RESET_AT:-03:00}
     DEMO_DATASET: full
+    # The seeded accounts' address domain (docs/dev/DEMO.md): the host of
+    # FEDERATION_BASE_URL by default, which is the demo's own domain.
+    DEMO_EMAIL_DOMAIN: ${DEMO_EMAIL_DOMAIN:-}
     TZ: ${TZ:-UTC}
     # Historical weather for the accounts that opted in through the seed
     # (docs/dev/WEATHER.md): Open-Meteo's archive covers the re-dated past.
