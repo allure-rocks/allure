@@ -5053,6 +5053,32 @@ fr:
           eb: Eo
   assistant:
     notice: "Cette synthèse est rédigée automatiquement à partir des mesures de cette activité. Elle peut se tromper : les chiffres des cartes font foi. Les mesures sont envoyées au modèle configuré par l'opérateur de cette instance."
+  insights:
+    facts:
+      places:
+        first: "Meilleur temps"
+        second: "2e meilleur temps"
+        third: "3e meilleur temps"
+      ranks:
+        first: "1er"
+        second: "2e"
+        third: "3e"
+      effort: "%{place} sur %{label} : %{time}"
+      rank: "%{place} du classement sur %{label} (%{count} participants)"
+      faster: "%{delta} plus rapide que votre dernière fois sur %{label}"
+      slower: "%{delta} plus lent que votre dernière fois sur %{label}"
+      average_ratio: "%{ratio} fois votre activité moyenne sur 28 jours (%{average})"
+      volume: "%{count} activités, %{distance} sur 28 jours"
+      negative_split: "Seconde moitié %{delta} plus rapide que la première"
+      positive_split: "Seconde moitié %{delta} plus lente que la première"
+      best_split: "Meilleur %{distance} : %{time}"
+      heart_rate: "%{average} bpm de moyenne, %{max} au maximum"
+      zone: "%{share} du temps en zone %{zone}"
+      drift: "Fréquence cardiaque en hausse de %{percent} sur la seconde moitié"
+      wind: "Vent de face sur %{head} du parcours, de dos sur %{tail}"
+      temperature: "%{range}, %{condition}, ressenti %{apparent}"
+      climb: "%{name} : %{distance} à %{grade}"
+      intervals: "%{count} efforts rapides, le plus long %{distance} à %{speed}"
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} à %{high}"

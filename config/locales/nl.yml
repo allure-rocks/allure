@@ -5052,6 +5052,32 @@ nl:
           eb: EB
   assistant:
     notice: "Deze samenvatting wordt automatisch geschreven op basis van de metingen van deze activiteit. Ze kan zich vergissen: de cijfers op de kaarten zijn bepalend. De metingen worden naar het model gestuurd dat de beheerder van deze instantie heeft ingesteld."
+  insights:
+    facts:
+      places:
+        first: "Beste tijd"
+        second: "Op een na beste tijd"
+        third: "Op twee na beste tijd"
+      ranks:
+        first: "1e"
+        second: "2e"
+        third: "3e"
+      effort: "%{place} op %{label}: %{time}"
+      rank: "%{place} in het klassement van %{label} (%{count} deelnemers)"
+      faster: "%{delta} sneller dan je vorige poging op %{label}"
+      slower: "%{delta} langzamer dan je vorige poging op %{label}"
+      average_ratio: "%{ratio} keer je gemiddelde activiteit van de laatste 28 dagen (%{average})"
+      volume: "%{count} activiteiten, %{distance} in 28 dagen"
+      negative_split: "Tweede helft %{delta} sneller dan de eerste"
+      positive_split: "Tweede helft %{delta} langzamer dan de eerste"
+      best_split: "Beste %{distance}: %{time}"
+      heart_rate: "%{average} bpm gemiddeld, %{max} maximaal"
+      zone: "%{share} van de tijd in zone %{zone}"
+      drift: "Hartslag stijgt met %{percent} in de tweede helft"
+      wind: "Tegenwind op %{head} van de route, meewind op %{tail}"
+      temperature: "%{range}, %{condition}, gevoel %{apparent}"
+      climb: "%{name}: %{distance} aan %{grade}"
+      intervals: "%{count} snelle stukken, het langste %{distance} aan %{speed}"
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} tot %{high}"

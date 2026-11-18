@@ -5052,6 +5052,32 @@ de:
           eb: EB
   assistant:
     notice: "Diese Zusammenfassung wird automatisch aus den Messwerten dieser Aktivität geschrieben. Sie kann sich irren: Maßgeblich sind die Zahlen auf den Karten. Die Messwerte werden an das Modell gesendet, das der Betreiber dieser Instanz eingerichtet hat."
+  insights:
+    facts:
+      places:
+        first: "Bestzeit"
+        second: "Zweitbeste Zeit"
+        third: "Drittbeste Zeit"
+      ranks:
+        first: "1."
+        second: "2."
+        third: "3."
+      effort: "%{place} auf %{label}: %{time}"
+      rank: "%{place} Platz in der Bestenliste für %{label} (%{count} Teilnehmende)"
+      faster: "%{delta} schneller als dein letzter Versuch auf %{label}"
+      slower: "%{delta} langsamer als dein letzter Versuch auf %{label}"
+      average_ratio: "%{ratio}-mal deine durchschnittliche Aktivität der letzten 28 Tage (%{average})"
+      volume: "%{count} Aktivitäten, %{distance} in 28 Tagen"
+      negative_split: "Zweite Hälfte %{delta} schneller als die erste"
+      positive_split: "Zweite Hälfte %{delta} langsamer als die erste"
+      best_split: "Beste %{distance}: %{time}"
+      heart_rate: "%{average} bpm im Schnitt, %{max} maximal"
+      zone: "%{share} der Zeit in Zone %{zone}"
+      drift: "Herzfrequenz in der zweiten Hälfte um %{percent} höher"
+      wind: "Gegenwind auf %{head} der Strecke, Rückenwind auf %{tail}"
+      temperature: "%{range}, %{condition}, gefühlt %{apparent}"
+      climb: "%{name}: %{distance} bei %{grade}"
+      intervals: "%{count} schnelle Abschnitte, der längste %{distance} bei %{speed}"
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} bis %{high}"

@@ -101,7 +101,12 @@ the verification retry), `max_tokens` (`Allure::Assistant::Client::MAX_TOKENS`,
 serializers. `AllureMcp::Tools::GetWorkoutContext` keeps its token handling,
 adds `location_level` and the optional series and geometry, and delegates the
 rest; the summary reads the same object, geometry off — one implementation of
-every metric.
+every metric. The `workout` section already carries the weather summary and the
+heart-rate zones the REST serializer serves, so the facts read them there.
+
+The summary builder may add a `:series` — rows of `distance`,
+`elapsed_time` and `heart_rate` — for the cardiac drift. Without it that fact
+is simply absent; nothing else needs it.
 
 ### 3.2 A fact
 
@@ -109,40 +114,43 @@ A flat hash, never a sentence the model must complete:
 
 | key | contents |
 |---|---|
-| `id` | stable string (`record:10k`, `segment:123:rank`, `training:distance_28d`, `weather:headwind`), the model cites it and the verifier resolves it |
+| `id` | stable string (`record:best_effort:km10`, `segment:rank:<id>`, `training:ratio`, `weather:wind`), the model cites it and the verifier resolves it |
 | `kind` | `baseline`, `record`, `segment`, `comparison`, `training`, `pacing`, `heart_rate`, `weather`, `climb`, `interval` |
-| `display` | the value in the member's units and language (« 62,4 km », « 2:41 de plus que votre médiane sur 28 jours ») |
+| `display` | the value in the member's units and language (« 62,4 km », « 1,6 fois votre activité moyenne sur 28 jours (50,0 km) ») |
 | `value` | the SI number when the fact has one, else `nil` |
-| `unit` | the SI unit symbol, else `nil` |
+| `unit` | the SI unit symbol; a short token for a dimensionless value (`%`, `rank`, `share`, `count`, `ratio`); else `nil` |
 | `direction` | `up`, `down` or `flat`, relative to the member's better direction, else `nil` |
 | `sentiment` | `good`, `bad` or `neutral` |
 | `weight` | 0–100, the selection rank |
-| `source` | the context section it came from |
+| `source` | the context section the detector read (`workout`, `records_set`, `best_efforts`, `segment_efforts`, `training`, `splits`, `laps`) |
 
 ### 3.3 Detectors
 
 Each returns zero or more facts and never fabricates one: a missing source is
 simply no fact.
 
-- `baseline` — always present: the sport, the local date, the distance, the
-  moving time, the ascent, and the sport's preferred average.
-- `record` — a classic record or a best effort that holds a personal place,
-  with its margin.
-- `segment` — a segment effort with its rank, the athlete's own best, median
-  and previous attempt on that segment.
-- `comparison` — the same loop or route against the previous attempt
-  (`own_history`, loop reuse): the delta in time.
-- `training` — the 28 days before the sport: distance and moving time against
-  the 28 days before those, then the week against the week.
-- `pacing` — the second half against the first, from the splits, and the
-  fastest split.
-- `heart_rate` — the drift between the two halves of the recorded series, the
-  average against the 28-day average of the sport, and the zone distribution
-  when the profile exists.
-- `weather` — the headwind and tailwind shares, the mean headwind, the
-  temperature range and the dominant condition.
-- `climb` — the biggest detected climbs: length, ascent and grade.
-- `interval` — the detected effort blocks: count, length, pace or power.
+- `baseline` — always present: the local date, the sport, the distance, the
+  moving time, the ascent when there is one, and the sport's preferred average
+  (a pace for a pace-led sport, a speed otherwise).
+- `record` — a classic record this workout holds, and a best effort that holds
+  one of the athlete's three best times over its standard distance.
+- `segment` — a leaderboard podium (at least three participants: being first
+  of one is no achievement) or an effort among the athlete's three best on that
+  segment, with the time.
+- `comparison` — the same segment against the athlete's previous attempt
+  (`own_history`): the delta in time, from five seconds.
+- `training` — the four weeks before the sport: their volume, and the workout
+  against the sport's average workout of the window when the ratio is under
+  0.7 or at least 1.3.
+- `pacing` — the second half against the first, from the non-partial splits,
+  from three seconds per kilometre, and the fastest split.
+- `heart_rate` — the average and the maximum, the dominant zone when the
+  profile's zones were sliced, and the drift between the two halves of the
+  series when one is supplied, from three percent.
+- `weather` — the headwind and tailwind shares of the route, the temperature
+  range, the apparent temperature and the condition; only from a `ready` row.
+- `climb` — the biggest detected climb: its name, length and grade.
+- `interval` — the detected fast intervals: their count and the longest.
 
 ### 3.4 Selection
 
@@ -153,11 +161,13 @@ highest `weight`, at most three per kind, ties broken by kind order and then by
 ### 3.5 Formatting
 
 `Allure::Insights::Format` turns SI values into the member's units through
-`Allure::Units` and the `units.*` locale keys, with the precision and the
-number delimiters of `WorkoutsHelper#format_distance` and its neighbours
-(§3.5 of [DESIGN.md](DESIGN.md)). A spec renders a fixed sample through both
-paths, in metric and imperial and in the five locales, and requires identical
-strings: the formatter may not drift from the UI.
+`Allure::Units` and the `units.*` locale keys, with the rules and number
+delimiters of `WorkoutsHelper#format_distance` and its neighbours
+(§3.5 of [DESIGN.md](DESIGN.md)), at the precision each fact asks for. A spec
+renders a fixed sample through both paths, in metric and imperial and in the
+five locales, and requires identical strings: the formatter may not drift from
+the UI. The fact labels themselves live under `insights.facts.*` in the five
+locale files.
 
 ### 3.6 Digest
 

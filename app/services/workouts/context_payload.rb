@@ -121,7 +121,8 @@ module Workouts
           name: I18n.t("sports.#{sport.slug}", locale: :en, default: sport.label),
           family: sport.colour_group,
           virtual: sport.virtual,
-          pace_basis_metres: sport.pace_basis_metres || 1_000
+          pace_basis_metres: sport.pace_basis_metres || 1_000,
+          pace_speed_display: sport.pace_speed_display
         },
         average_pace: pace(workout.average_speed, sport),
         elevation_filter: workout.elevation_filter

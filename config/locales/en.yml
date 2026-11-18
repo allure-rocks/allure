@@ -5016,6 +5016,32 @@ en:
           eb: EB
   assistant:
     notice: "This summary is written automatically from this workout's measurements. It can be wrong: the figures on the cards are the reference. The measurements are sent to the model configured by this instance's operator."
+  insights:
+    facts:
+      places:
+        first: "Best time"
+        second: "Second best time"
+        third: "Third best time"
+      ranks:
+        first: "1st"
+        second: "2nd"
+        third: "3rd"
+      effort: "%{place} on %{label}: %{time}"
+      rank: "%{place} on the leaderboard for %{label} (%{count} participants)"
+      faster: "%{delta} faster than your last attempt on %{label}"
+      slower: "%{delta} slower than your last attempt on %{label}"
+      average_ratio: "%{ratio} times your average workout over 28 days (%{average})"
+      volume: "%{count} workouts, %{distance} over 28 days"
+      negative_split: "Second half %{delta} faster than the first"
+      positive_split: "Second half %{delta} slower than the first"
+      best_split: "Best %{distance}: %{time}"
+      heart_rate: "%{average} bpm average, %{max} maximum"
+      zone: "%{share} of the time in zone %{zone}"
+      drift: "Heart rate up %{percent} in the second half"
+      wind: "Headwind over %{head} of the route, tailwind over %{tail}"
+      temperature: "%{range}, %{condition}, feels like %{apparent}"
+      climb: "%{name}: %{distance} at %{grade}"
+      intervals: "%{count} fast efforts, the longest %{distance} at %{speed}"
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} to %{high}"
