@@ -63,6 +63,9 @@ class WorkoutsController < ApplicationController
     else
       @workout
     end
+    # The owner's assistant summary card (docs/dev/AI.md §7): never for a
+    # reader, the owner's reader preview, a manual entry or a credit row.
+    @summary_visible = owner && !@reader_preview && Workouts::SummaryEligibility.eligible?(@workout)
     @profiles = current_user&.publishing_profiles&.order(:position, :id) || []
     @publication_readiness = publication_readiness
     @selected_profile = selected_publishing_profile if @workout.user == current_user
@@ -152,6 +155,9 @@ class WorkoutsController < ApplicationController
     end
 
     if @workout.update(edit_params)
+      # A member-typed title is theirs: the summary card never proposes another
+      # one (docs/dev/AI.md §5).
+      @workout.update_columns(title_source: "owner") if @workout.saved_change_to_title?
       changed.concat(Webhooks::Events.changed_fields(@workout.saved_changes, %w[title description notes commute]))
       Equipments::Totals.sync(@workout, workout_params[:equipment_ids])
       changed << "equipment_ids" if @workout.reload.equipment_ids.sort != equipment_before

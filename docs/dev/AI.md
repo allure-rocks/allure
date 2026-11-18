@@ -354,8 +354,7 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
     never behind a disclosure;
   - the proposed title appears below the text only while `title_source` is
     `default` or `file`, with « Utiliser ce titre »: the action sets the title
-    and stamps `owner` through a Turbo Stream that replaces the header and the
-    card, so the line disappears for good;
+    and stamps `owner`, then reloads the page, so the line disappears for good;
   - card header actions: « Régénérer » (ghost), disabled while `pending` and
     within five minutes of the last request, the tooltip naming the wait; a
     `failed` row says « Réessayer »;
@@ -364,10 +363,10 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
     what failed and « Réessayer », never a provider message; outside
     `AUTO_WINDOW` and missing — the empty state with its one action « Rédiger
     la synthèse »;
-  - the page subscribes with `turbo_stream_from [current_user, :summaries]`;
-    the job broadcasts a `replace` to `[workout.user, :summaries]` for the
-    card's dom id. The stream name is signed and rendered only on the owner's
-    pages; a spec proves a non-owner page renders no stream tag.
+  - the page renders the card on load; the instance ships the browser's Turbo
+    but not the server-side Turbo Streams stack, so the card is not replaced
+    live while a generation runs: the owner reloads to see the result. A
+    follow-up may add the stream (signed, owner-scoped) with that stack.
   - the card announces its ready state once through `aria-live="polite"` —
     the section and the fact that it is ready, never a re-reading of the text
     ([DESIGN.md](DESIGN.md) §18.8).
@@ -447,7 +446,7 @@ non-streaming call is the single provider seam both versions use.
   verification retry, terminal failure, ineligible workout (no row).
 - Eligibility, `AUTO_WINDOW`, the five-minute throttle and the daily cap.
 - Request specs: the owner's card in each state, the 404 for another account,
-  the title action and `title_source`, the consent page, the Turbo Stream tag
-  absent from a non-owner page, and the broadcast on completion.
+  the title action and `title_source`, the five-minute throttle, the consent
+  page, and the card absent from a reader's page.
 - `spec/docs/environment_reference_spec.rb` and the five locale files.
 - `dip fed_test` is unchanged: nothing federates.

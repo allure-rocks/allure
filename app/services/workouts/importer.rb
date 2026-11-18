@@ -254,11 +254,13 @@ module Workouts
         anomalies: metrics.anomalies
       )
       heart_rate = HeartRates::Rebuild.compute(segments: metrics.segments)
+      title, title_source = resolved_title(metrics, track, sport)
 
       Workout.transaction do
         workout = @user.workouts.create!(
           sport: sport,
-          title: resolved_title(metrics, track, sport),
+          title:,
+          title_source:,
           description: resolved_description(track),
           notes: @notes.presence,
           # The file's own `commuting` statement is a fact and always wins; the
@@ -514,18 +516,20 @@ module Workouts
       I18n.t("workouts.import.errors.not_saved")
     end
 
+    # The title and where it came from (docs/dev/AI.md §5): only a generated
+    # or file title lets the summary card propose another one.
     def resolved_title(metrics, track, sport)
-      return @title.strip if @title.present? && @title.strip.present?
-      return track.name.strip if track.name.present? && track.name.strip.present?
+      return [ @title.strip, "owner" ] if @title.present? && @title.strip.present?
+      return [ track.name.strip, "file" ] if track.name.present? && track.name.strip.present?
 
       sport_name = begin
         sport.translated_name
       rescue I18n::MissingTranslationData
         sport.label
       end
-      I18n.t("workouts.defaults.title",
-             sport: sport_name,
-             date: I18n.l(metrics.started_at.in_time_zone(@user.time_zone).to_date))
+      [ I18n.t("workouts.defaults.title",
+                sport: sport_name,
+                date: I18n.l(metrics.started_at.in_time_zone(@user.time_zone).to_date)), "default" ]
     end
 
     def resolved_description(track)

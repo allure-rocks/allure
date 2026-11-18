@@ -34,7 +34,9 @@ module Workouts
       return if row&.pending?
 
       snapshot = SummaryFacts.new(workout).call
-      return if row&.ready? && row.version == Allure::Insights::VERSION && row.facts_digest == snapshot.digest
+      if !explicit && row&.ready? && row.version == Allure::Insights::VERSION && row.facts_digest == snapshot.digest
+        return
+      end
 
       row ||= workout.build_assistant_summary
       row.assign_attributes(
@@ -45,6 +47,7 @@ module Workouts
         facts_digest: snapshot.digest,
         last_error: nil
       )
+      row.requested_at = Time.current if explicit
       row.save!
       GenerateSummaryJob.set(wait: COALESCE).perform_later(workout)
     end

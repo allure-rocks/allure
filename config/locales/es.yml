@@ -2455,6 +2455,21 @@ es:
     weather:
       refreshed: Meteorología solicitada. Aparecerá en un momento.
       refresh_unavailable: No se puede obtener la meteorología de esta actividad.
+    summary:
+      title: Resumen
+      pending: Redactando el resumen…
+      failed: No se ha podido redactar el resumen.
+      empty: Todavía no hay ningún resumen para esta actividad.
+      generate: Redactar el resumen
+      regenerate: Volver a redactar
+      retry: Reintentar
+      proposed_title: "Título propuesto: «%{title}»"
+      use_title: Usar este título
+      wait: "Faltan %{minutes} min para otro resumen."
+      requested: Resumen solicitado. Aparecerá en unos instantes.
+      throttled: Acaba de solicitarse un resumen. Inténtalo de nuevo en unos minutos.
+      title_applied: Título modificado.
+      unavailable: El resumen no está disponible para esta actividad.
     index:
       title: Mis actividades
       empty:

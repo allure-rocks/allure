@@ -170,6 +170,10 @@ Rails.application.routes.draw do
     resource :elevation_source, only: :update, controller: "workout_elevation_sources"
     # Owner-requested weather refresh (docs/dev/WEATHER.md).
     resource :weather, only: :create, controller: "workout_weathers"
+    # Owner-only assistant summary (docs/dev/AI.md): request or regenerate,
+    # then accept the proposed title.
+    resource :summary, only: :create, controller: "workout_summaries"
+    post "summary/title", to: "workout_summaries#apply_title", as: :apply_summary_title
     resources :segments, only: %i[new create]
     resources :routes, only: %i[new create]
     resource :original_file, only: :show, controller: "workout_files"

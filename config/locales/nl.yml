@@ -2455,6 +2455,21 @@ nl:
     weather:
       refreshed: Weer aangevraagd. Het verschijnt zo.
       refresh_unavailable: Het weer kan voor deze activiteit niet worden opgehaald.
+    summary:
+      title: Samenvatting
+      pending: De samenvatting wordt geschreven…
+      failed: De samenvatting kon niet worden geschreven.
+      empty: Nog geen samenvatting voor deze activiteit.
+      generate: Samenvatting schrijven
+      regenerate: Opnieuw schrijven
+      retry: Opnieuw proberen
+      proposed_title: "Voorgestelde titel: ‘%{title}’"
+      use_title: Deze titel gebruiken
+      wait: "Nog %{minutes} min voor een nieuwe samenvatting."
+      requested: Samenvatting aangevraagd. Ze verschijnt over enkele ogenblikken.
+      throttled: Er is net een samenvatting aangevraagd. Probeer het over een paar minuten opnieuw.
+      title_applied: Titel gewijzigd.
+      unavailable: De samenvatting is niet beschikbaar voor deze activiteit.
     index:
       title: Mijn activiteiten
       empty:

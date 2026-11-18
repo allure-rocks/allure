@@ -2456,6 +2456,21 @@ fr:
     weather:
       refreshed: Météo demandée. Elle s'affichera dans quelques instants.
       refresh_unavailable: La météo ne peut pas être récupérée pour cette activité.
+    summary:
+      title: Synthèse
+      pending: Rédaction de la synthèse…
+      failed: La synthèse n'a pas pu être rédigée.
+      empty: Aucune synthèse pour cette activité pour le moment.
+      generate: Rédiger la synthèse
+      regenerate: Régénérer
+      retry: Réessayer
+      proposed_title: "Titre proposé : « %{title} »"
+      use_title: Utiliser ce titre
+      wait: "Encore %{minutes} min avant une nouvelle rédaction."
+      requested: Synthèse demandée. Elle s'affichera dans quelques instants.
+      throttled: Une synthèse vient d'être demandée. Réessayez dans quelques minutes.
+      title_applied: Titre modifié.
+      unavailable: La synthèse n'est pas disponible pour cette activité.
     index:
       title: Mes activités
       empty:

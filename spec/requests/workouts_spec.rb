@@ -1376,6 +1376,16 @@ RSpec.describe "Workouts" do
       expect(w.active_publications.first).to be_nil
     end
 
+    it "stamps a title typed by the member as theirs" do
+      w = create(:workout, user: user, sport: sport, title: "Morning ride", title_source: "default")
+      sign_in_user
+
+      patch workout_path(w), params: { workout: { title: "Le tour du lac" } }
+
+      expect(response).to redirect_to(workout_path(w))
+      expect(w.reload).to have_attributes(title: "Le tour du lac", title_source: "owner")
+    end
+
     it "changes the sport and re-analyses the workout" do
       cycling = catalog_sport("cycling")
       running = catalog_sport("running")

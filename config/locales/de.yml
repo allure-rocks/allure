@@ -2455,6 +2455,21 @@ de:
     weather:
       refreshed: Wetter angefordert. Es erscheint gleich.
       refresh_unavailable: Für diese Aktivität kann kein Wetter abgerufen werden.
+    summary:
+      title: Zusammenfassung
+      pending: Die Zusammenfassung wird geschrieben…
+      failed: Die Zusammenfassung konnte nicht geschrieben werden.
+      empty: Für diese Aktivität gibt es noch keine Zusammenfassung.
+      generate: Zusammenfassung schreiben
+      regenerate: Neu schreiben
+      retry: Erneut versuchen
+      proposed_title: "Vorgeschlagener Titel: „%{title}“"
+      use_title: Diesen Titel verwenden
+      wait: "Noch %{minutes} Min. bis zu einer neuen Zusammenfassung."
+      requested: Zusammenfassung angefordert. Sie erscheint in wenigen Augenblicken.
+      throttled: Es wurde gerade eine Zusammenfassung angefordert. Versuche es in ein paar Minuten erneut.
+      title_applied: Titel geändert.
+      unavailable: Die Zusammenfassung ist für diese Aktivität nicht verfügbar.
     index:
       title: Meine Aktivitäten
       empty:

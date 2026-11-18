@@ -2419,6 +2419,21 @@ en:
     weather:
       refreshed: Weather requested. It will show in a moment.
       refresh_unavailable: The weather cannot be fetched for this workout.
+    summary:
+      title: Summary
+      pending: Writing the summary…
+      failed: The summary could not be written.
+      empty: No summary for this workout yet.
+      generate: Write the summary
+      regenerate: Rewrite
+      retry: Retry
+      proposed_title: "Suggested title: “%{title}”"
+      use_title: Use this title
+      wait: "%{minutes} min before another summary."
+      requested: Summary requested. It will appear in a few moments.
+      throttled: A summary was just requested. Try again in a few minutes.
+      title_applied: Title changed.
+      unavailable: The summary is not available for this workout.
     index:
       title: My workouts
       empty:

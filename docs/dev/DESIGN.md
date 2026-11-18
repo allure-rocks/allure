@@ -2356,7 +2356,7 @@ member has not opted in.
   provider.
 - **Proposed title:** a small line and a secondary button, shown only while
   `workouts.title_source` is `default` or `file` ([AI.md](AI.md) §5).
-  Accepting it replaces the page header's title and drops the line; nothing is
+  Accepting it sets the title, reloads the page and drops the line; nothing is
   ever renamed without that action.
 - **Header action:** « Régénérer » as a ghost button, disabled while the row is
   `pending` and for five minutes after the last request, with the wait named in
@@ -2367,9 +2367,8 @@ member has not opted in.
   workout older than the automatic window is never-populated empty with its one
   action « Rédiger la synthèse ». The ready state is announced once through
   `aria-live="polite"`, naming the section only (§18.8).
-- **Live:** the job broadcasts a `replace` of the card on the owner's account
-  stream; a Turbo Stream replacement needs no Stimulus controller, so there is
-  nothing to release on disconnect.
+- **Live:** the card re-renders on the next page load; a live replacement needs
+  the server-side Turbo Streams stack, which this instance does not ship.
 
 ---
 
@@ -3395,8 +3394,8 @@ answer is an **equivalent, not an excuse**:
   only meaningful transitions — not every 2-second poll.
 - Filter result counts: `aria-live="polite"`.
 - The workout's assistant summary announces its ready state once, naming the
-  section and that the summary is ready — a Turbo Stream replacement does not
-  re-read the paragraph (§10.26).
+  section and that the summary is ready — a reloaded page does not re-read the
+  paragraph (§10.26).
 - Form error summaries: `role="alert"`.
 
 ### 18.9 Motion and language

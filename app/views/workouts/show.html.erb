@@ -250,6 +250,11 @@
     <%= render "comments/social_row", target: @workout, card: comment_card,
                                       reaction_summary: (reaction_summary_for(@workout) if @active_publications.any?),
                                       reactable: signed_in? && !owner && !reader_preview %>
+    <% if @summary_visible %>
+      <section id="section-summary-ai" class="allure-detail-section">
+        <%= render "workouts/summary", workout: @workout, summary: @workout.assistant_summary %>
+      </section>
+    <% end %>
     <%= render "description", description:, notes: %>
   </div>
 

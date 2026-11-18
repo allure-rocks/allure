@@ -1,0 +1,50 @@
+<%# The owner-only assistant summary (docs/dev/AI.md §7, DESIGN.md §10.26). The
+    same partial serves the page and the live replacement the generation job
+    broadcasts, so it reads only its locals. %>
+<% state = summary&.status&.to_sym || :missing %>
+<% wait_seconds = summary&.requested_at ? [ (summary.requested_at + 5.minutes - Time.current).ceil, 0 ].max : 0 %>
+<% waiting = wait_seconds.positive? %>
+<div id="workout-summary-<%= workout.id %>" class="card mb-3">
+  <div class="card-header">
+    <h2 class="card-title">
+      <i class="ti ti-sparkles me-1" aria-hidden="true"></i><%= t("workouts.summary.title") %>
+    </h2>
+    <% if %i[ready failed].include?(state) %>
+      <div class="card-actions">
+        <%= button_to(state == :failed ? t("workouts.summary.retry") : t("workouts.summary.regenerate"),
+              workout_summary_path(workout), method: :post,
+              class: "btn btn-sm btn-ghost-primary", disabled: waiting,
+              title: (t("workouts.summary.wait", minutes: (wait_seconds / 60.0).ceil) if waiting)) %>
+      </div>
+    <% end %>
+  </div>
+  <div class="card-body">
+    <% case state %>
+    <% when :pending %>
+      <p class="text-secondary mb-2" role="status"><%= t("workouts.summary.pending") %></p>
+      <div class="placeholder-glow" aria-hidden="true">
+        <span class="placeholder col-12 mb-2"></span>
+        <span class="placeholder col-10 mb-2"></span>
+        <span class="placeholder col-7"></span>
+      </div>
+    <% when :ready %>
+      <p class="mb-2"><%= Array(summary.sentences).map { it["text"] }.join(" ") %></p>
+      <% if summary.title.present? && workout.title_source.in?(%w[default file]) %>
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+          <span class="text-secondary small"><%= t("workouts.summary.proposed_title", title: summary.title) %></span>
+          <%= button_to t("workouts.summary.use_title"), workout_apply_summary_title_path(workout),
+                method: :post, class: "btn btn-sm btn-outline-primary" %>
+        </div>
+      <% end %>
+      <p class="text-secondary small mb-0">
+        <i class="ti ti-shield-lock me-1" aria-hidden="true"></i><%= t("assistant.notice") %>
+      </p>
+    <% when :failed %>
+      <p class="text-secondary mb-0"><%= t("workouts.summary.failed") %></p>
+    <% else %>
+      <p class="text-secondary mb-3"><%= t("workouts.summary.empty") %></p>
+      <%= button_to t("workouts.summary.generate"), workout_summary_path(workout), method: :post,
+            class: "btn btn-outline-primary" %>
+    <% end %>
+  </div>
+</div>
