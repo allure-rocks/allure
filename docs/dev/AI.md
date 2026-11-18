@@ -47,8 +47,10 @@ The reference deployment is LiteLLM in front of a Qwen-family model; the
 paragraphs below record what that pairing required, which is the behaviour the
 client is written and tested against.
 
-`POST {AI_BASE_URL}/chat/completions`, `Authorization: Bearer {AI_API_KEY}`
-when a key is set, `Content-Type: application/json`.
+`POST {AI_BASE_URL}/v1/chat/completions`, `Authorization: Bearer {AI_API_KEY}`
+when a key is set, `Content-Type: application/json`. `AI_BASE_URL` is the
+proxy's root (no `/v1` of its own), which is what the reference deployment and
+`.env.example` use.
 
 Body: `model` (`AI_MODEL`), `messages`, `temperature` (0.3, lowered to 0 on
 the verification retry), `max_tokens` (`Allure::Assistant::Client::MAX_TOKENS`,
@@ -174,10 +176,11 @@ Written in English; the answer is in the member's language. It states:
 - the target language and the [DESIGN.md](DESIGN.md) §4 glossary of that
   language (workout → activité, personal best → record, and so on);
 - « Use only the facts below. Never invent a number, a place, a person, a time
-  or a comparison. Every sentence cites at least one fact id. Two to five
-  sentences. Sober register, second person, no exclamation, no emoji, no
-  training advice that a fact does not support. Write every number in digits,
-  exactly as its fact writes it. »;
+  or a comparison. Every sentence cites at least one fact id, in its
+  `fact_ids` field and never in the text. Two to five sentences. Sober
+  register, second person, no exclamation, no emoji, no training advice that a
+  fact does not support. Write every number in digits, exactly as its fact
+  writes it. »;
 - the title is at most 60 characters and obeys the same rule as the sentences.
 
 ### 4.2 User prompt
