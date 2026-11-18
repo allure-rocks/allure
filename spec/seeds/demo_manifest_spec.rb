@@ -36,6 +36,7 @@ RSpec.describe "Demo seed manifests" do
         emails = accounts.map { |account| account.fetch(:email) }
         expect(emails).to eq(emails.uniq)
         accounts.each do |account|
+          expect(account.fetch(:email)).to eq(DemoSeed::Emails.for(account.fetch(:username)))
           expect(User::LOCALES).to include(account.fetch(:locale, "fr"))
           expect(User::THEMES).to include(account.fetch(:theme, "light"))
           expect(User::UNIT_SYSTEMS).to include(account.fetch(:unit_system, "metric"))

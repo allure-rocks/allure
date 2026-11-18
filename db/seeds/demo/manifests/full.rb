@@ -10,6 +10,8 @@
 # Workout keys are per account; a segment, a participation or a comment names
 # the account and the key. Segment anchors are coordinates on the source
 # workout, snapped to the nearest recorded points at seed time.
+require_relative "../emails"
+
 module DemoSeed
   module Manifests
     # The demo instance and the development seed re-date the whole dataset so
@@ -31,7 +33,7 @@ module DemoSeed
           weather_enrichment_enabled: true,
           profile_statistics_audience: "members",
           profile_records_audience: "members",
-          email: "marie@demo.allure.rocks",
+          email: DemoSeed::Emails.for("marie"),
           display_name: "Marie Dufour",
           bio: "Trail et cyclisme dans les Alpes, depuis Meylan.",
           locale: "fr",
@@ -104,7 +106,7 @@ module DemoSeed
           username: "paul",
           discoverable: "members",
           leaderboard_category: "men",
-          email: "paul@demo.allure.rocks",
+          email: DemoSeed::Emails.for("paul"),
           display_name: "Paul Martin",
           bio: "Bike commuter in North Portland. Long rides on weekends, Zwift when it rains.",
           locale: "en",
@@ -178,7 +180,7 @@ module DemoSeed
           leaderboard_category: "women",
           profile_statistics_audience: "followers",
           profile_records_audience: "followers",
-          email: "sophie@demo.allure.rocks",
+          email: DemoSeed::Emails.for("sophie"),
           display_name: "Sophie Weber",
           bio: "Coureuse depuis 2011, entre Strassen et Metz.",
           locale: "fr",
@@ -240,7 +242,7 @@ module DemoSeed
           weather_enrichment_enabled: true,
           profile_statistics_audience: "members",
           profile_records_audience: "members",
-          email: "tom@demo.allure.rocks",
+          email: DemoSeed::Emails.for("tom"),
           display_name: "Tom de Vries",
           bio: "Amsterdam Zuid. Running, road bike, and a training camp in Mallorca every winter.",
           locale: "en",
@@ -338,7 +340,7 @@ module DemoSeed
           username: "eva",
           discoverable: "members",
           leaderboard_category: "women",
-          email: "eva@demo.allure.rocks",
+          email: DemoSeed::Emails.for("eva"),
           display_name: "Eva Jansen",
           bio: "Runs with Tom, swims on Mondays, rows when it rains.",
           locale: "en",
@@ -381,7 +383,7 @@ module DemoSeed
           username: "joan",
           discoverable: "members",
           weather_enrichment_enabled: true,
-          email: "joan@demo.allure.rocks",
+          email: DemoSeed::Emails.for("joan"),
           display_name: "Joan Riera",
           bio: "Sol de Mallorca. Road, trail and the sea when it is flat.",
           locale: "en",
@@ -440,7 +442,7 @@ module DemoSeed
           discoverable: "members",
           leaderboard_category: "women",
           weather_enrichment_enabled: true,
-          email: "ines@demo.allure.rocks",
+          email: DemoSeed::Emails.for("ines"),
           display_name: "Inès Morel",
           bio: "Française installée à Santa Ponça. Course à pied, vélo avec les voisins.",
           locale: "fr",
@@ -490,7 +492,7 @@ module DemoSeed
           username: "kasia",
           discoverable: "members",
           leaderboard_category: "women",
-          email: "kasia@demo.allure.rocks",
+          email: DemoSeed::Emails.for("kasia"),
           display_name: "Kasia Nowak",
           bio: "Wrocław, Sępolno. Running most days, skiing when there is snow.",
           locale: "en",
@@ -554,7 +556,7 @@ module DemoSeed
           username: "owen",
           discoverable: "members",
           leaderboard_category: "men",
-          email: "owen@demo.allure.rocks",
+          email: DemoSeed::Emails.for("owen"),
           display_name: "Owen Hughes",
           bio: "Weymouth. Windsurfing in Portland Harbour, the coast path on foot.",
           locale: "en",
@@ -599,7 +601,7 @@ module DemoSeed
           username: "lucas",
           discoverable: "members",
           leaderboard_category: "men",
-          email: "lucas@demo.allure.rocks",
+          email: DemoSeed::Emails.for("lucas"),
           display_name: "Lucas Peeters",
           bio: "Diest. Short runs from the door, the Allerheiligenberg trails at the weekend.",
           locale: "en",
@@ -644,7 +646,7 @@ module DemoSeed
         },
         {
           username: "nina",
-          email: "nina@demo.allure.rocks",
+          email: DemoSeed::Emails.for("nina"),
           display_name: "Nina Lefèvre",
           bio: "Nouvelle ici.",
           locale: "fr",
@@ -654,7 +656,7 @@ module DemoSeed
         },
         {
           username: "promo_bot",
-          email: "promo@demo.allure.rocks",
+          email: DemoSeed::Emails.for("promo_bot"),
           display_name: "Best Deals",
           bio: "Visit our site for the best deals on bikes!!!",
           locale: "en",
@@ -750,7 +752,7 @@ module DemoSeed
 
       admin: {
         operator: "marie",
-        invitations: [ "invite@demo.allure.rocks" ],
+        invitations: [ DemoSeed::Emails.for("invite") ],
         suspended: [ { username: "promo_bot", reason: "Spam" } ],
         identities: [
           { username: "nina", provider: "oidc", issuer: "http://dex.test:5556/dex", subject: "6b3a3b1e-7d1a-4c3e-9f0b-2a4a1b6d8c01" }

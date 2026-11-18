@@ -40,6 +40,9 @@ x-app: &app
     DEMO_PASSWORD: ${DEMO_PASSWORD:-}
     DEMO_OPERATOR_PASSWORD: ${DEMO_OPERATOR_PASSWORD:-}
     DEMO_RESET_AT: ${DEMO_RESET_AT:-}
+    # Domain of the seeded accounts' addresses (docs/dev/DEMO.md); the instance
+    # host by default.
+    DEMO_EMAIL_DOMAIN: ${DEMO_EMAIL_DOMAIN:-}
     # Identity providers (docs/dev/AUTH.md); each is enabled only when all its
     # keys are set. The `oidc` profile's Dex answers the generic provider.
     AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID:-}

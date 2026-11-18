@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "digest"
+require_relative "accounts"
 require_relative "dating"
 
 # The development demo dataset loader (db/seeds/development.rb). It drives a
@@ -81,8 +82,13 @@ module DemoSeed
     # --- accounts ------------------------------------------------------------
 
     def seed_account(attributes)
-      user = User.find_or_initialize_by(email_address: attributes.fetch(:email))
+      # The username is the account's stable identity (it is immutable in the
+      # database); the address follows the instance's domain, so a re-seed on a
+      # database seeded elsewhere renames the account instead of colliding with
+      # it (docs/dev/DEMO.md).
+      user = Accounts.find_or_initialize(username: attributes.fetch(:username), email: attributes.fetch(:email))
       user.assign_attributes(
+        email_address: attributes.fetch(:email),
         username: attributes.fetch(:username),
         display_name: attributes[:display_name],
         bio: attributes[:bio],

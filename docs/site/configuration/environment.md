@@ -299,6 +299,7 @@ are retried after the scheduled time; keep this host-side state across deploys.
 | `DEMO_OPERATOR_PASSWORD` | none | override | The operator's stable password on a demo instance, assigned by the seed and never published. Required with `INSTANCE_OPERATOR_USERNAME`; at least 15 characters and different from `DEMO_PASSWORD`. |
 | `DEMO_RESET_AT` | `03:00` | override | The nightly reset, `HH:MM` in `TZ`; the host-side wrapper reads the same value, so the schedule exists in exactly one place. |
 | `DEMO_DATASET` | `full` | fixed (`full`) | Which seed manifest `bin/rails demo:reset` seeds. |
+| `DEMO_EMAIL_DOMAIN` | the instance host | override | Domain of the seeded accounts' addresses. `demo.allure.rocks` on the public demo follows its `FEDERATION_BASE_URL` with no setting; pin another domain when the addresses should not carry the host. |
 
 ## Feedback to GitLab
 
