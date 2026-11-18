@@ -26,15 +26,17 @@ RSpec.describe "Weather scheduling", :weather do
   end
 
   describe Workouts::EnrichWeatherJob do
-    it "stores the weather and nudges automatic publishing" do
+    it "stores the weather, nudges automatic publishing and schedules the summary" do
       stub_open_meteo
       workout = weather_workout(user:)
       allow(Workouts::AutoPublishJob).to receive(:nudge)
+      allow(Workouts::SummaryRefresh).to receive(:schedule)
 
       described_class.perform_now(workout)
 
       expect(workout.reload.weather).to be_ready
       expect(Workouts::AutoPublishJob).to have_received(:nudge).with(workout)
+      expect(Workouts::SummaryRefresh).to have_received(:schedule).with(workout)
     end
   end
 

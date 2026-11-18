@@ -8,9 +8,9 @@ module Allure
     class Verifier
       MAX_TITLE = 60
 
-      Result = Data.define(:title, :sentences, :refused_fact_ids) do
+      Result = Data.define(:title, :sentences, :refused_fact_ids, :refused_sentences) do
         def valid? = sentences.size >= 2
-        def dropped? = refused_fact_ids.any?
+        def dropped? = refused_sentences.any?
       end
 
       def initialize(facts)
@@ -19,10 +19,11 @@ module Allure
       end
 
       def call(answer)
-        return Result.new(title: nil, sentences: [], refused_fact_ids: []) unless answer.is_a?(Hash)
+        return Result.new(title: nil, sentences: [], refused_fact_ids: [], refused_sentences: []) unless answer.is_a?(Hash)
 
-        sentences, refused = accepted_sentences(answer["sentences"])
-        Result.new(title: accepted_title(answer["title"]), sentences:, refused_fact_ids: refused)
+        sentences, refused_ids, refused_sentences = accepted_sentences(answer["sentences"])
+        Result.new(title: accepted_title(answer["title"]), sentences:, refused_fact_ids: refused_ids,
+                   refused_sentences:)
       end
 
       private
@@ -31,20 +32,22 @@ module Allure
 
       def accepted_sentences(rows)
         kept = []
-        refused = []
+        refused_ids = []
+        refused_sentences = []
         Array(rows).each do |row|
           next unless row.is_a?(Hash)
 
           text = row["text"].to_s.strip
           ids = Array(row["fact_ids"]).map(&:to_s)
           if text.empty? || ids.empty? || ids.any? { !facts.key?(it) } || !covered?(text, ids)
-            refused.concat(ids)
+            refused_ids.concat(ids)
+            refused_sentences << { "text" => text, "fact_ids" => ids } unless text.empty?
             next
           end
 
           kept << { "text" => text, "fact_ids" => ids }
         end
-        [ kept, refused.uniq ]
+        [ kept, refused_ids.uniq, refused_sentences ]
       end
 
       def covered?(text, ids)

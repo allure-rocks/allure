@@ -57,6 +57,10 @@ production:
     class: Workouts::WeatherRecoveryJob
     queue: default
     schedule: every 15 minutes
+  summary_recovery:
+    class: Workouts::SummaryRecoveryJob
+    queue: default
+    schedule: every 15 minutes
   segment_place_recovery:
     class: Segments::PlaceRecoveryJob
     queue: default

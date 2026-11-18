@@ -57,6 +57,8 @@ module Segments
       Workouts::AutoPublishJob.nudge(workout)
       # The credited biggest climb follows the rebuilt climbs (docs/dev/SHARED-ACTIVITIES.md).
       Participations::CreditSyncJob.nudge(workout)
+      # The facts read the efforts and detected sections this job settled.
+      Workouts::SummaryRefresh.schedule(workout)
     end
 
     private

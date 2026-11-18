@@ -7,6 +7,16 @@ RSpec.describe Segments::MatchWorkoutJob do
     allow(Segments::BackfillSegmentJob).to receive(:perform_later)
   end
 
+  it "schedules the assistant summary once the efforts are settled" do
+    workout = create(:workout)
+    create(:track_segment, workout:)
+    allow(Workouts::SummaryRefresh).to receive(:schedule)
+
+    described_class.perform_now(workout)
+
+    expect(Workouts::SummaryRefresh).to have_received(:schedule).with(workout)
+  end
+
   it "persists owner efforts and updates segment counters" do
     workout = create(:workout)
     create(:track_segment, workout:)
