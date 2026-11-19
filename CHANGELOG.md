@@ -10,6 +10,8 @@ The developer contracts are published under `docs/dev/`; see
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-11-19
+
 ### Added
 
 - A repository guide (`AGENTS.md`, with `CLAUDE.md` as its alias) and the
