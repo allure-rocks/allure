@@ -25,6 +25,7 @@ module Workouts
     def perform(workout)
       WeatherEnricher.new(workout:).call
       AutoPublishJob.nudge(workout)
+      SummaryRefresh.schedule(workout)
     end
   end
 end

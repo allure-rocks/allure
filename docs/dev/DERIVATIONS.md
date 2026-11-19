@@ -20,6 +20,7 @@ rebuilds are launched.
 | Heart-rate histogram and zones | stored track segments + the owner's heart-rate profile | no | `workouts.heart_rate_version` (histogram), `workout_heart_rates.zones_fingerprint` (zones) | `HeartRates::Rebuild`, `HeartRates::RezoneJob` ([HEART-RATE.md](HEART-RATE.md)) |
 | Course elevation profile | stored source track segments (frozen) | no | `segments.elevation_profile` (`NULL` = not built, `[]` = built empty) | `Segments::Creator`, `Segments::BuildElevationProfileJob` |
 | Recurring-route suggestions | stored track segments | no | `workouts.route_suggestion_version` | `Segments::RouteSuggestionDetector` (`Segments::SuggestRouteJob`, `Segments::RouteSuggestionSweepJob`) |
+| Workout summary | the owner-only context, the analysis, the efforts, the weather, the zones and the places | AI provider | `workout_summaries.version` + `facts_digest` | `Workouts::SummaryRefresh` → `Workouts::GenerateSummaryJob` ([AI.md](AI.md)) |
 
 The workout-side contracts are in `WORKOUT.md`, the course-side ones in
 `SEGMENTS.md`, the terrain profile in `ELEVATION.md`, the toponymy and places in
@@ -149,6 +150,16 @@ the workout keeps showing up in the rebuild count instead of disappearing.
   kept failing. `Segments::PlaceRecoveryJob` (every 15 minutes in production)
   retries a `pending` row older than 2 hours and a `failed` one older than
   6 hours, both created within 2 days; older rows wait for the operator sweep.
+- `workout_summaries.version` and `facts_digest` — the assistant summary
+  ([AI.md](AI.md)). `version` covers the prompt, the schema and the fact
+  selection; bump `Allure::Insights::VERSION` when one of them changes. The
+  digest covers the facts themselves, their locale and the unit system, so a
+  detector, a locale or a units change re-generates without touching the
+  constant. `Workouts::SummaryRefresh` recomputes both on every scheduling
+  call and is a no-op while they match. The summary is a network derivation, so
+  the sweeps below only cover the last 30 days: an archive import never queues
+  months of model calls. `ready` rows beyond that window are regenerated only
+  by the owner's « Régénérer ».
 
 ## 4. Sweeps
 
@@ -167,6 +178,7 @@ the workout keeps showing up in the rebuild count instead of disappearing.
 | `Together::BackfillDetectionJob` | recordings whose `together_detection_version` is below `Allure::Together::Detector::VERSION` (`SHARED-ACTIVITIES.md`) | id cursor, 100 (one `DetectWorkoutJob` each, which stamps the version) |
 | `HeartRates::BackfillJob` | recordings whose `heart_rate_version` is below `Allure::HeartRate::Histogram::VERSION` ([HEART-RATE.md](HEART-RATE.md)) | id cursor, 100 (inline, from the stored points) |
 | `Segments::RouteSuggestionSweepJob` | positioned recordings whose `route_suggestion_version` is below `RouteSuggestionDetector::VERSION`, one sweep per account, newest first (`SEGMENTS.md`) | per-account keyset, 25 |
+| `Workouts::BackfillSummariesJob` | eligible workouts started in the last 30 days whose summary row is missing, `failed`, or below `Allure::Insights::VERSION` (`AI.md`) | id cursor, 100 |
 
 All of them are idempotent and resume themselves. Operator surfaces:
 
@@ -176,7 +188,8 @@ All of them are idempotent and resume themselves. Operator surfaces:
   `toponymy_backfill_enqueued`, `elevation_backfill_enqueued`,
   `loop_reuse_backfill_enqueued`, `elevation_profiles_backfill_enqueued`,
   `segment_places_backfill_enqueued`, `together_detection_backfill_enqueued`,
-  `heart_rate_backfill_enqueued`, `route_suggestions_backfill_enqueued`);
+  `heart_rate_backfill_enqueued`, `route_suggestions_backfill_enqueued`,
+  `summaries_backfill_enqueued`);
 - `bin/rails workouts:rebuild` (`AFTER_ID=` to resume),
   `bin/rails workouts:toponymy` (`AFTER_ID=` to resume),
   `bin/rails workouts:route_images`, `bin/rails workouts:regenerate_route_images`
@@ -186,7 +199,8 @@ All of them are idempotent and resume themselves. Operator surfaces:
   `bin/rails segments:elevation_profiles` for the course profile backfill,
   `bin/rails segments:places` for the course place backfill, and
   `bin/rails workouts:heart_rate` (`AFTER_ID=` to resume) for the heart-rate
-  histograms.
+  histograms, and `bin/rails workouts:summaries` (`AFTER_ID=` to resume) for
+  the assistant summaries.
 
 ## 5. Owner-scoped rebuilds
 
@@ -203,6 +217,7 @@ account, in batches of 25, throttled to one sweep per `(account, kind)`:
 | `loops` | `BackfillLoopReuseJob` scope, limited to the account | `Segments::MatchWorkoutJob` |
 | `heart_rate` | `HeartRates::BackfillJob` scope, limited to the account | `HeartRates::Rebuild`, inline |
 | `route_suggestions` | `RouteSuggestionSweepJob` scope, limited to the account | `Segments::RouteSuggestionSweepJob` (one newest-first walk) |
+| `summaries` | `BackfillSummariesJob` scope, limited to the account ([AI.md](AI.md)) | `Workouts::SummaryRefresh` |
 
 The settings page **Données et recalculs** (`/settings/data`,
 `Settings::DataController`) shows one counter per kind — refreshed through the

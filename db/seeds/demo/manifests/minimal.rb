@@ -5,6 +5,8 @@
 # (docker-compose.fed.yml sets DEMO_DATASET=minimal) so the Tier-2 gate keeps
 # its timing, and the full dataset falls back to it when the FIT corpus has
 # not been fetched. Every entry keeps a committed GPX fixture as fallback.
+require_relative "../emails"
+
 module DemoSeed
   module Manifests
     # Re-dating anchors (docs/dev/DEMO.md). This dataset falls back on its
@@ -18,7 +20,7 @@ module DemoSeed
         {
           username: "marie",
           discoverable: "members",
-          email: "marie@allure.test",
+          email: DemoSeed::Emails.for("marie"),
           display_name: "Marie Dufour",
           bio: "Trail et cyclisme dans les Alpes.",
           locale: "fr",
@@ -42,7 +44,7 @@ module DemoSeed
         {
           username: "paul",
           discoverable: "members",
-          email: "paul@allure.test",
+          email: DemoSeed::Emails.for("paul"),
           display_name: "Paul Martin",
           bio: "Road cycling and morning loops.",
           locale: "en",

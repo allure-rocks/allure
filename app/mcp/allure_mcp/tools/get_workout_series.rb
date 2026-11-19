@@ -47,7 +47,7 @@ module AllureMcp
           {
             workout_id: workout.to_param,
             sport: workout.sport.slug,
-            units: Base::UNITS,
+            units: Workouts::ContextPayload::UNITS,
             series: WorkoutSeries.new(workout, series:, from_distance:, to_distance:, from_time:, to_time:,
                                                max_points:).call
           }

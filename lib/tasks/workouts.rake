@@ -27,4 +27,13 @@ namespace :workouts do
     HeartRates::BackfillJob.perform_later(after_id:)
     puts "Enqueued HeartRates::BackfillJob from workout id > #{after_id}. Ensure the worker is running."
   end
+
+  desc "Enqueue the assistant-summary sweep for the last 30 days (resume with AFTER_ID=…)"
+  task summaries: :environment do
+    after_id = Integer(ENV.fetch("AFTER_ID", "0"), exception: false)
+    abort "AFTER_ID must be a non-negative integer." if after_id.nil? || after_id.negative?
+
+    Workouts::BackfillSummariesJob.perform_later(after_id:)
+    puts "Enqueued Workouts::BackfillSummariesJob from workout id > #{after_id}. Ensure the ai-worker is running."
+  end
 end

@@ -37,6 +37,8 @@ module SettingsHelper
                        active: controller_path == "settings/elevation" } if Allure::Elevation::Config.configured?
     system_items << { label: t("settings.weather.title"), path: settings_weather_path, icon: "cloud",
                        active: controller_path == "settings/weather" } if Allure::Weather::Config.enabled?
+    system_items << { label: t("settings.assistant.title"), path: settings_assistant_path, icon: "sparkles",
+                       active: controller_path == "settings/assistant" } if Allure::Assistant::Config.enabled?
     system_items << { label: t("settings.api.title"), path: settings_api_path, icon: "code",
                        active: controller_path.in?(%w[settings/api settings/api_tokens settings/webhooks]) } unless hotwire_native_app?
     system_items << { label: t("settings.hub.security.title"), path: settings_security_path, icon: "shield",

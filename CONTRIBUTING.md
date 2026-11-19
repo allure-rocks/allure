@@ -73,8 +73,12 @@ finish on the workers.
 
 Every account signs in with `allure-dev-password` and the shared authenticator
 secret `ALLUREDEVTOTPSECRETDEMOACCOUNTS2` (`ROTP::TOTP.new(secret).now` from
-`dip rails c` gives the current code; `nina` has no second factor yet). Tom's
-API token `allure_pat_dev-demo-token-0000000000000000000000000000` carries
+`dip rails c` gives the current code; `nina` has no second factor yet). A
+seeded account's address is `<username>@<instance host>`: `marie@allure.test`
+in the default development setup, `marie@demo.allure.rocks` on the public demo
+(`DEMO_EMAIL_DOMAIN` pins another domain).
+
+Tom's API token `allure_pat_dev-demo-token-0000000000000000000000000000` carries
 every scope with filtered MCP geometry, for REST and MCP experiments.
 
 Some outings were recorded by three devices at once, so Tom, Joan and Inès hold

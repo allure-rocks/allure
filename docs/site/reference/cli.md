@@ -43,6 +43,7 @@ accept `AFTER_ID=` to resume after the last id they reported.
 | `workouts:rebuild` | `AFTER_ID` | Re-analysis of activities with outdated facts or analysis. |
 | `workouts:toponymy` | `AFTER_ID` | Geocoding of activities missing it or outdated. |
 | `workouts:heart_rate` | `AFTER_ID` | Heart-rate zones of recordings missing them or outdated. |
+| `workouts:summaries` | `AFTER_ID` | Assistant summaries of recent activities missing them or outdated (needs the assistant). |
 | `workouts:route_images` | — | Missing or outdated activity images. |
 | `workouts:regenerate_route_images` | — | Every activity image, whatever its state. |
 | `segments:route_images` | — | Missing or outdated course images. |

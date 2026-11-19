@@ -122,8 +122,18 @@ quiet inbox with a badge worth clicking.
 The sign-in page's block names the account, the shared password and the
 privacy sentence (`demo.credentials.*`, `DESIGN.md` §20.21). Registration
 stays closed on a demo (`ALLOW_REGISTRATION=false`): the block is the only
-door. The dataset's accounts use the demo's own domain, so no address looks
-like a real person's mail.
+door.
+
+**Account addresses.** A manifest names its accounts; their addresses are
+built at seed time by `DemoSeed::Emails` — the local part is the username, the
+domain the instance's own host (`Allure::Federation::Config#host`). A
+development checkout therefore seeds `marie@allure.test`, the public demo
+`marie@demo.allure.rocks`, and the federation ring `marie@allure-a.test`; no
+address looks like a real person's mail and no manifest hardcodes a host.
+`DEMO_EMAIL_DOMAIN` pins another domain when the host is not the one the
+addresses should carry. The seeder finds an account by username, its immutable
+identity, then reassigns the address: a database seeded under another domain is
+renamed in place, never duplicated.
 
 The seed also turns on the optional surfaces the demo is meant to show
 (`WEATHER.md`, `DESIGN.md` §19.38): historical weather for the accounts a

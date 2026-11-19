@@ -25,13 +25,20 @@
       </dl>
     <% end %>
 
+    <%# The text block under the primary tiles (DESIGN.md §20.3): prepared by
+        the page, so this partial owns only its place and its separators. %>
+    <% lead = local_assigns[:lead] %>
+    <% if lead.present? %>
+      <div class="<%= "mt-4 pt-4 border-top" if primary_metrics.any? %>"><%= lead %></div>
+    <% end %>
+
     <% if secondary_metrics.any? %>
       <%# On phones the secondary metrics fold behind one toggle when the
           primary tiles already lead the card (DESIGN.md §20.3). The toggle
           sits above them, so it stays in place whether they are shown. %>
       <% collapsible = local_assigns.fetch(:collapsible, false) && primary_metrics.any? %>
       <% secondary_id = "workout-secondary-metrics" %>
-      <div class="<%= class_names("allure-secondary-metrics-wrap", "mt-4 pt-4 border-top" => primary_metrics.any?) %>"
+      <div class="<%= class_names("allure-secondary-metrics-wrap", "mt-4 pt-4 border-top" => primary_metrics.any? || lead.present?) %>"
            <% if collapsible %>data-controller="disclosure"
            data-disclosure-collapsed-label-value="<%= t("workouts.show.metrics.more", count: secondary_metrics.size) %>"
            data-disclosure-expanded-label-value="<%= t("workouts.show.metrics.less") %>"<% end %>>
@@ -72,13 +79,6 @@
     <% if local_assigns[:elevation_notice].present? %>
       <div class="<%= "mt-4 pt-4 border-top" if metrics.any? %>">
         <%= render "workouts/elevation_notice", workout:, notice: local_assigns[:elevation_notice] %>
-      </div>
-    <% end %>
-
-    <% if local_assigns.fetch(:show_description, true) && workout.description.present? %>
-      <div class="allure-workout-copy<%= " mt-4 pt-4 border-top" if metrics.any? %>">
-        <h3 class="h4"><%= t("workouts.show.description") %></h3>
-        <%= simple_format(h(workout.description), class: "mb-0") %>
       </div>
     <% end %>
 

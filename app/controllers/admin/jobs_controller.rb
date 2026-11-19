@@ -24,6 +24,7 @@ module Admin
         @together_detection_backfill_count = Together::BackfillDetectionJob.pending_scope.count
         @heart_rate_backfill_count = HeartRates::BackfillJob.pending_scope.count
         @route_suggestions_backfill_count = Segments::RouteSuggestionSweepJob.pending_scope.count
+        @summaries_backfill_count = Workouts::BackfillSummariesJob.pending_scope.count
         return
       end
 
@@ -144,6 +145,19 @@ module Admin
         redirect_to admin_jobs_path, notice: t("admin.jobs.flash.weather_backfill_enqueued", count:)
       else
         redirect_to admin_jobs_path, notice: t("admin.jobs.flash.weather_backfill_current")
+      end
+    end
+
+    # Enqueues the assistant-summary sweep of the last 30 days (docs/dev/AI.md).
+    # Read-only when every row is current, or when the assistant is off.
+    def backfill_summaries
+      count = Workouts::BackfillSummariesJob.pending_scope.count
+      if count.positive?
+        Workouts::BackfillSummariesJob.perform_later
+        audit(:summaries_backfill_enqueued, count:)
+        redirect_to admin_jobs_path, notice: t("admin.jobs.flash.summaries_backfill_enqueued", count:)
+      else
+        redirect_to admin_jobs_path, notice: t("admin.jobs.flash.summaries_backfill_current")
       end
     end
 

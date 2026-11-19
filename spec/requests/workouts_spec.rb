@@ -515,6 +515,53 @@ RSpec.describe "Workouts" do
       expect(summary.text).not_to include(I18n.t("workouts.show.metrics.average_power"))
     end
 
+    it "carries the shared description inside the figures card" do
+      w = create(:workout, user:, sport:, description: "Le lac était calme.")
+      create(:track_segment, workout: w, points: [
+        { "t" => 0, "d" => 0.0, "lat" => 45.08, "lon" => 6.42, "ele" => 0.0, "v" => 2.5 },
+        { "t" => 60, "d" => 250.0, "lat" => 45.09, "lon" => 6.43, "ele" => 10.0, "v" => 3.0 }
+      ])
+      profile = create(:publishing_profile, :without_endpoint_masks, user:)
+      publish_workout!(user:, workout: w, profile:)
+      sign_in_user(create(:user))
+
+      get workout_path(w)
+
+      page = response.parsed_body
+      expect(page.at_css(".allure-workout-summary .allure-workout-copy").text).to include("Le lac était calme.")
+      expect(page.at_css(".allure-workout-description")).to be_nil
+    end
+
+    it "keeps the description in its own card when no figures card is shown" do
+      w = create(:workout, user:, sport:, description: "Le lac était calme.")
+      create(:track_segment, workout: w, points: [
+        { "t" => 0, "d" => 0.0, "lat" => 45.08, "lon" => 6.42, "ele" => 0.0, "v" => 2.5 },
+        { "t" => 60, "d" => 250.0, "lat" => 45.09, "lon" => 6.43, "ele" => 10.0, "v" => 3.0 }
+      ])
+      profile = create(:publishing_profile, :without_endpoint_masks, user:)
+      profile.update!(settings: profile.settings.merge("metrics" => []))
+      publish_workout!(user:, workout: w, profile:)
+      sign_in_user(create(:user))
+
+      get workout_path(w)
+
+      page = response.parsed_body
+      expect(page.at_css(".allure-workout-summary")).to be_nil
+      expect(page.at_css(".allure-workout-description").text).to include("Le lac était calme.")
+    end
+
+    it "moves the owner's private notes into the figures card" do
+      w = create(:workout, user:, sport:, description: "Belle sortie.", notes: "Genou sensible.")
+      sign_in_user
+
+      get workout_path(w)
+
+      page = response.parsed_body
+      card = page.at_css(".allure-workout-summary")
+      expect(card.text).to include("Belle sortie.", "Genou sensible.")
+      expect(page.at_css(".allure-workout-description")).to be_nil
+    end
+
     it "carries the sport's pace basis on the elevation chart" do
       rowing = catalog_sport("rowing")
       w = create(:workout, user:, sport: rowing, average_pace: 240, average_speed: 4.16)
@@ -1374,6 +1421,16 @@ RSpec.describe "Workouts" do
       expect(response).to redirect_to(workout_path(w))
       w.reload
       expect(w.active_publications.first).to be_nil
+    end
+
+    it "stamps a title typed by the member as theirs" do
+      w = create(:workout, user: user, sport: sport, title: "Morning ride", title_source: "default")
+      sign_in_user
+
+      patch workout_path(w), params: { workout: { title: "Le tour du lac" } }
+
+      expect(response).to redirect_to(workout_path(w))
+      expect(w.reload).to have_attributes(title: "Le tour du lac", title_source: "owner")
     end
 
     it "changes the sport and re-analyses the workout" do

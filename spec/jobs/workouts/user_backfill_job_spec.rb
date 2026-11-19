@@ -23,7 +23,7 @@ RSpec.describe Workouts::UserBackfillJob do
     counts = described_class.counts(user)
 
     expect(counts.keys).to contain_exactly("rebuild", "route_images", "segment_images", "places", "elevation", "weather",
-                                         "loops", "heart_rate", "route_suggestions")
+                                           "loops", "heart_rate", "route_suggestions", "summaries")
     expect(counts.fetch("rebuild")).to eq(1)
   end
 

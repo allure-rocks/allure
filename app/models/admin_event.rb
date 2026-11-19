@@ -27,6 +27,7 @@ class AdminEvent < ApplicationRecord
     segment_terrain_elevation_backfill_enqueued
     heart_rate_backfill_enqueued
     route_suggestions_backfill_enqueued
+    summaries_backfill_enqueued
     photo_quota_changed
     funding_granted funding_revoked funding_attached
   ].freeze

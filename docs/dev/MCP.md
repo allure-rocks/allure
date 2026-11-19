@@ -141,7 +141,7 @@ Answer:
 
 | key | contents |
 |---|---|
-| `workout` | the REST owner `Workout` (`API.md`, detail form) without its REST links, plus `web_url`, `local_start`, `sport_details` (slug, English name, family, virtual, pace basis), `average_pace`, `elevation_filter` |
+| `workout` | the REST owner `Workout` (`API.md`, detail form) without its REST links, plus `web_url`, `local_start`, `sport_details` (slug, English name, family, virtual, pace basis, pace-or-speed display), `average_pace`, `elevation_filter` |
 | `equipment` | the REST `Equipment` of each attached item, with its totals |
 | `records_set` | the classic records this workout holds (`type`, `metric`, SI value; a pace record is seconds per kilometre) and its best-effort records |
 | `laps` | `recorded` laps, `detected` sections grouped by source (climb, descent, stop, pause, loop, route, speed and power intervals; at most 50 per source, `truncated_sources`), null fields dropped |
@@ -186,8 +186,9 @@ coordinate.
 | `app/controllers/mcp_controller.rb` | boundary and transport |
 | `app/mcp/allure_mcp/server.rb` | the per-request server, tool list, instructions |
 | `app/mcp/allure_mcp/context.rb` | user, token, outcome |
-| `app/mcp/allure_mcp/tools/base.rb` | owner lookup, errors, rounding, shared rows |
+| `app/mcp/allure_mcp/tools/base.rb` | owner lookup, errors, rounding |
 | `app/mcp/allure_mcp/tools/*.rb` | one class per tool |
+| `app/services/workouts/context_payload.rb` | the owner-only context body `get_workout_context` serves and the assistant reads ([AI.md](AI.md) §3.1) |
 | `app/mcp/allure_mcp/workout_series.rb`, `workout_geometry.rb` | the two track readers |
 | `app/mcp/allure_mcp/metrics.rb` | the counter |
 

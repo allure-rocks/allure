@@ -174,6 +174,8 @@ class User < ApplicationRecord
   validates :discoverable, inclusion: { in: DISCOVERABILITY }
   validates :elevation_enrichment_enabled, inclusion: { in: [ true, false ] }
   validates :weather_enrichment_enabled, inclusion: { in: [ true, false ] }
+  validates :ai_enabled, inclusion: { in: [ true, false ] }
+  validates :ai_summary_with_description, inclusion: { in: [ true, false ] }
   validates :funding_badge_hidden, inclusion: { in: [ true, false ] }
   validates :funding_badge_color, inclusion: { in: Allure::Funding::BADGE_COLORS }
   validates :notify_follow_requests, inclusion: { in: [ true, false ] }

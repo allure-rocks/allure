@@ -47,6 +47,7 @@ module Metrics
       { name: :photos, tags: %i[status], comment: "Owner workout photos by processing status." },
       { name: :photo_bytes, comment: "Owner photo bytes, originals and derivatives." },
       { name: :workout_weathers, tags: %i[status], comment: "Workout weather rows by status." },
+      { name: :workout_summaries, tags: %i[status], comment: "Assistant summary rows by status." },
       { name: :account_deletions_scheduled, comment: "Accounts in their deletion window or purge." },
       { name: :storage_blobs, comment: "Active Storage blobs." },
       { name: :storage_bytes, comment: "Active Storage bytes." },
@@ -97,13 +98,20 @@ module Metrics
       { name: :push_deliveries_total, tags: %i[result],
         comment: "Push deliveries to the relay by result: delivered, gone, rejected or failed." },
       { name: :weather_requests_total, tags: %i[endpoint result],
-        comment: "Open-Meteo requests by endpoint (forecast, archive) and result (ok, unavailable, rejected)." }
+        comment: "Open-Meteo requests by endpoint (forecast, archive) and result (ok, unavailable, rejected)." },
+      { name: :ai_requests_total, tags: %i[kind result],
+        comment: "Assistant provider calls by kind and result (ok, invalid, rejected, unavailable)." },
+      { name: :ai_tokens_total, tags: %i[kind direction],
+        comment: "Tokens reported by the assistant provider, by kind and direction (prompt, completion)." }
     ].freeze
 
     HISTOGRAMS = [
       { name: :best_efforts_rebuild_duration_seconds, tags: %i[phase context],
         buckets: [ 0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 30, 60 ],
-        comment: "Best-efforts rebuild duration; phase is compute or persist, context import, reanalysis, backfill, or credit." }
+        comment: "Best-efforts rebuild duration; phase is compute or persist, context import, reanalysis, backfill, or credit." },
+      { name: :ai_request_duration_seconds, tags: %i[kind],
+        buckets: [ 1, 2.5, 5, 10, 20, 30, 60, 120, 300 ],
+        comment: "Assistant provider call duration, by kind." }
     ].freeze
 
     class << self

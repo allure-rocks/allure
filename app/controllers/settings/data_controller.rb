@@ -13,10 +13,12 @@ module Settings
       @counts = Workouts::UserBackfillJob.counts(current_user)
       @elevation_available = elevation_available?
       @weather_available = weather_available?
+      @summaries_available = summaries_available?
       return if request.headers["Turbo-Frame"].blank?
 
       render partial: "settings/data/live",
-             locals: { counts: @counts, elevation_available: @elevation_available, weather_available: @weather_available },
+             locals: { counts: @counts, elevation_available: @elevation_available, weather_available: @weather_available,
+                       summaries_available: @summaries_available },
              layout: false
     end
 
@@ -29,6 +31,7 @@ module Settings
     def loops = enqueue("loops")
     def heart_rate = enqueue("heart_rate")
     def route_suggestions = enqueue("route_suggestions")
+    def summaries = enqueue("summaries")
 
     private
 
@@ -38,6 +41,9 @@ module Settings
       end
       if kind == "weather" && !weather_available?
         return redirect_to settings_data_path, notice: t("settings.data.flash.weather_current")
+      end
+      if kind == "summaries" && !summaries_available?
+        return redirect_to settings_data_path, notice: t("settings.data.flash.summaries_current")
       end
 
       count = Workouts::UserBackfillJob.pending_scope(current_user, kind).count
@@ -55,6 +61,10 @@ module Settings
 
     def weather_available?
       Allure::Weather::Config.enabled? && current_user.weather_enrichment_enabled?
+    end
+
+    def summaries_available?
+      Allure::Assistant::Config.enabled? && current_user.ai_enabled?
     end
 
     def set_no_store

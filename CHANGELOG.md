@@ -16,6 +16,31 @@ The developer contracts are published under `docs/dev/`; see
   design reference (`docs/dev/DESIGN.md`), so contributors and coding agents
   share the same constraints. The developer contracts are published under
   `docs/dev/`.
+- The assistant summary speaks with the interface's voice — now that of a
+  training partner, with the sport's own jargon and a single exclamation mark
+  allowed for a personal best — compares a workout with the owner's year (usual
+  pace and heart rate, longest and fastest since a date, the closest comparable
+  outing, the round year total), names the route's places and reads the route
+  as sections — the detected climbs and descents, or equal parts when the
+  terrain is missing — rather than two halves, so a slow section is never
+  mistaken for a failing when the road simply went up. A quiet outing gets one
+  sentence instead of a padded paragraph, and the suggested title is still
+  proposed ([AI.md](docs/dev/AI.md), [DESIGN.md](docs/dev/DESIGN.md) §10.26).
+  The verifier refuses any number a cited fact does not carry, and now also a
+  sentence or a title that writes a fact id in its text.
+  `Allure::Insights::VERSION` moves to 3, so the last 30 days regenerate on the
+  next `workouts:summaries` sweep or from `/admin/jobs`.
+
+### Changed
+
+- The workout page leads with its social row across the full width, under the
+  header, and its description now sits inside the figures card under the
+  primary tiles. The assistant summary takes that place when the workout has
+  no description; « Afficher aussi la synthèse quand une description existe »
+  in `/settings/assistant` shows both, description first. The summary fills the
+  card's width, its attribution is a small info icon at the end of the text,
+  and « Régénérer la synthèse » moves to the header's `⋯` menu
+  ([AI.md](docs/dev/AI.md) §7, [DESIGN.md](docs/dev/DESIGN.md) §10.26, §20.3).
 
 ## [0.10.0] - 2026-11-13
 

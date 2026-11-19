@@ -408,6 +408,16 @@ nl:
         action: Weer ophalen
         confirm_title: Weer ophalen?
         confirm_body: "Het weer van %{count} activiteit(en) wordt opgevraagd bij Open-Meteo, in een beperkt tempo en binnen het dagbudget."
+      summaries:
+        title: Samenvattingen
+        budget: "Modelaanroepen over 24 u: %{used} / %{limit}."
+        outdated:
+          one: 1 activiteit van een account dat toestemming gaf heeft geen actuele samenvatting.
+          other: "%{count} activiteiten van accounts die toestemming gaven hebben geen actuele samenvatting."
+        current: Alle activiteiten van accounts die toestemming gaven hebben hun samenvatting.
+        action: Samenvattingen schrijven
+        confirm_title: Samenvattingen schrijven?
+        confirm_body: "De samenvatting van %{count} activiteit(en) wordt één voor één aan het model gevraagd."
       elevation:
         title: Geschatte hoogte
         outdated:
@@ -550,6 +560,10 @@ nl:
           one: "Weer opgevraagd voor 1 activiteit."
           other: "Weer opgevraagd voor %{count} activiteiten."
         weather_backfill_current: Geen activiteit wacht op haar weer.
+        summaries_backfill_enqueued:
+          one: "Samenvatting aangevraagd voor 1 activiteit."
+          other: "Samenvattingen aangevraagd voor %{count} activiteiten."
+        summaries_backfill_current: Geen enkele activiteit wacht op haar samenvatting.
         places_backfill_enqueued:
           one: "Herberekening van de plaats ingepland voor 1 activiteit."
           other: "Herberekening van de plaats ingepland voor %{count} activiteiten."
@@ -933,6 +947,7 @@ nl:
         together_detection_backfill_enqueued: Herkenning van samen gedane activiteiten ingepland
         heart_rate_backfill_enqueued: Hartslagberekening van activiteiten ingepland
         route_suggestions_backfill_enqueued: Zoektocht naar terugkerende routes ingepland
+        summaries_backfill_enqueued: Samenvattingen van activiteiten gestart
         photo_quota_changed: Opslagquotum voor foto's gewijzigd
         funding_granted: Bijdrage vastgelegd
         funding_revoked: Bijdrage ingetrokken
@@ -2441,6 +2456,20 @@ nl:
     weather:
       refreshed: Weer aangevraagd. Het verschijnt zo.
       refresh_unavailable: Het weer kan voor deze activiteit niet worden opgehaald.
+    summary:
+      title: Samenvatting
+      pending: De samenvatting wordt geschreven…
+      failed: De samenvatting kon niet worden geschreven.
+      empty: Nog geen samenvatting voor deze activiteit.
+      generate: Samenvatting schrijven
+      retry: Opnieuw proberen
+      proposed_title: "Voorgestelde titel: ‘%{title}’"
+      use_title: Deze titel gebruiken
+      wait: "Nog %{minutes} min voor een nieuwe samenvatting."
+      requested: Samenvatting aangevraagd. Ze verschijnt over enkele ogenblikken.
+      throttled: Er is net een samenvatting aangevraagd. Probeer het over een paar minuten opnieuw.
+      title_applied: Titel gewijzigd.
+      unavailable: De samenvatting is niet beschikbaar voor deze activiteit.
     index:
       title: Mijn activiteiten
       empty:
@@ -2630,6 +2659,7 @@ nl:
           other: "%{count} punten"
       create_segment: Segment maken
       save_as_route: Opslaan als route
+      regenerate_summary: Samenvatting opnieuw maken
       segment_efforts:
         title: Segmentpogingen
         segment: Segment
@@ -4362,6 +4392,34 @@ nl:
         confirm_body: "Het weer van %{count} activiteit(en) wordt verwijderd. Je bestaande publicaties veranderen niet."
       destroy:
         success: "Weer verwijderd voor %{count} activiteit(en)."
+    assistant:
+      title: Assistent
+      summary_title: Samenvattingen van mijn activiteiten
+      description: "De assistent schrijft bij elk van je activiteiten een korte samenvatting op basis van de metingen die Allure heeft berekend. Die verschijnt onder de belangrijkste cijfers op de pagina van de activiteit, waar je ook een nieuwe kunt aanvragen."
+      enrichment_label: Samenvattingen van mijn activiteiten schrijven
+      layout:
+        label: De samenvatting ook tonen als er een beschrijving is
+        hint: "Anders vult je beschrijving alleen de plaats onder de belangrijkste cijfers; de samenvatting verschijnt daar wanneer de activiteit er geen heeft."
+      privacy: "Als je de assistent uitschakelt, wordt er geen nieuwe samenvatting meer geschreven; al geschreven samenvattingen blijven staan tot je ze verwijdert."
+      backfill:
+        title: Recente activiteiten
+        description: "Schrijf de samenvattingen van de activiteiten van de laatste 30 dagen. De aanvragen gaan één voor één de deur uit."
+      save: Wijzigingen opslaan
+      update:
+        enabled: Assistent ingeschakeld. Je volgende activiteiten krijgen een samenvatting.
+        disabled: Assistent uitgeschakeld. Er wordt geen nieuwe samenvatting meer geschreven; al geschreven samenvattingen blijven staan tot je ze verwijdert.
+        saved: Voorkeuren opgeslagen.
+      stored:
+        title: Opgeslagen samenvattingen
+        description:
+          zero: Geen enkele activiteit heeft een opgeslagen samenvatting.
+          one: 1 activiteit heeft een opgeslagen samenvatting.
+          other: "%{count} activiteiten hebben een opgeslagen samenvatting."
+        action: Opgeslagen samenvattingen verwijderen
+        confirm_title: Opgeslagen samenvattingen verwijderen?
+        confirm_body: "De samenvatting van %{count} activiteit(en) wordt verwijderd. Je bestaande publicaties veranderen niet."
+      destroy:
+        success: "Samenvattingen verwijderd voor %{count} activiteit(en)."
     security:
       title: Beveiliging
       pretitle: Account
@@ -4615,6 +4673,12 @@ nl:
         action: Weer ophalen
         confirm_title: Weer ophalen?
         confirm_body: "%{count} activiteit(en) worden aangevuld via Open-Meteo, in een beperkt tempo."
+      summaries:
+        title: Samenvattingen
+        description: "Recente activiteiten zonder samenvatting, of waarvan de samenvatting uit een oudere versie van de assistent komt."
+        action: Mijn samenvattingen schrijven
+        confirm_title: Je samenvattingen schrijven?
+        confirm_body: "De samenvatting van %{count} activiteit(en) wordt één voor één binnen het dagbudget naar het model gestuurd."
       heart_rate:
         title: Hartslag
         description: "De tijd bij elke hartslag, waaruit je zones volgen. Berekend uit de opgenomen punten."
@@ -4643,6 +4707,8 @@ nl:
         elevation_current: Geen hoogte te schatten.
         weather: "Weer ophalen gestart voor %{count} activiteit(en)."
         weather_current: Geen weer op te halen.
+        summaries: "Samenvattingen schrijven gestart voor %{count} activiteit(en)."
+        summaries_current: Al je samenvattingen zijn up-to-date.
         heart_rate: "Hartslagberekening gestart voor %{count} activiteit(en)."
         heart_rate_current: Je hartslag is al berekend.
         route_suggestions: "Zoektocht naar terugkerende routes gestart voor %{count} activiteit(en)."
@@ -5029,6 +5095,77 @@ nl:
           tb: TB
           pb: PB
           eb: EB
+  assistant:
+    notice: "Deze samenvatting wordt automatisch geschreven op basis van de metingen van deze activiteit. Ze kan zich vergissen: de cijfers op de kaarten zijn bepalend. De metingen worden naar het model gestuurd dat de beheerder van deze instantie heeft ingesteld."
+  insights:
+    facts:
+      places:
+        first: "Beste tijd"
+        second: "Op een na beste tijd"
+        third: "Op twee na beste tijd"
+      ranks:
+        first: "1e"
+        second: "2e"
+        third: "3e"
+      effort: "%{place} op %{label}: %{time}"
+      rank: "%{place} in het klassement van %{label} (%{count} deelnemers)"
+      faster: "%{delta} sneller dan je vorige poging op %{label}"
+      slower: "%{delta} langzamer dan je vorige poging op %{label}"
+      average_ratio: "%{ratio} keer je gemiddelde activiteit van de laatste 28 dagen (%{average})"
+      volume: "%{distance} in %{count} activiteiten in 28 dagen"
+      best_split: "Beste %{distance}: %{time}"
+      heart_rate: "%{average} bpm gemiddeld, %{max} maximaal"
+      zone: "%{share} van de tijd in zone %{zone}"
+      wind: "Tegenwind op %{head} van de route, meewind op %{tail}"
+      temperature: "%{range}, %{condition}, gevoel %{apparent}"
+      climb: "%{name}: %{distance} aan %{grade}"
+      intervals: "%{count} snelle stukken, het langste %{distance} aan %{speed}"
+      history_pace_faster: "%{delta} sneller dan je gebruikelijke tempo op deze afstand (%{usual})"
+      history_pace_slower: "%{delta} langzamer dan je gebruikelijke tempo op deze afstand (%{usual})"
+      history_speed_faster: "%{delta} sneller dan je gebruikelijke snelheid op deze afstand (%{usual})"
+      history_speed_slower: "%{delta} langzamer dan je gebruikelijke snelheid op deze afstand (%{usual})"
+      history_heart_rate_lower: "Hetzelfde tempo, %{delta} bpm lager dan anders"
+      history_heart_rate_higher: "Hetzelfde tempo, %{delta} bpm hoger dan anders"
+      longest_since: "Je langste activiteit sinds %{date}"
+      longest_since_ever: "Je langste activiteit in meer dan een jaar"
+      climb_since: "Je grootste hoogtemeters sinds %{date}"
+      climb_since_ever: "Je grootste hoogtemeters in meer dan een jaar"
+      fastest_since: "Je snelste tempo sinds %{date}"
+      fastest_since_ever: "Je snelste tempo in meer dan een jaar"
+      fastest_speed_since: "Je hoogste gemiddelde snelheid sinds %{date}"
+      fastest_speed_since_ever: "Je hoogste gemiddelde snelheid in meer dan een jaar"
+      similar_pace_faster: "Vergelijkbare activiteit van %{date} (%{distance}, %{ascent}): %{delta} sneller"
+      similar_pace_slower: "Vergelijkbare activiteit van %{date} (%{distance}, %{ascent}): %{delta} langzamer"
+      similar_speed_faster: "Vergelijkbare activiteit van %{date} (%{distance}, %{ascent}): %{delta} sneller"
+      similar_speed_slower: "Vergelijkbare activiteit van %{date} (%{distance}, %{ascent}): %{delta} langzamer"
+      gap: "%{sport}: eerste activiteit in %{count} dagen"
+      gap_year: "%{sport}: eerste activiteit in meer dan een jaar"
+      year_total: "Daarmee staat het jaar op %{distance} (%{sport})"
+      route: "Via %{places}"
+      first_visit: "Nieuwe plek: %{place}"
+      venue: "Wereld: %{place}"
+      regular_place: "%{place}: %{count} activiteiten dit jaar"
+      segment_median_faster: "%{delta} onder je gemiddelde tijd op %{label} (%{count} pogingen)"
+      segment_median_slower: "%{delta} boven je gemiddelde tijd op %{label} (%{count} pogingen)"
+      section:
+        range: "van %{from} tot %{to}"
+        flat: "vlak"
+        rolling: "golvend"
+        part: "deel"
+        climb: "klim, %{distance} aan %{grade}, %{ascent}"
+        climb_named: "klim ‘%{name}’, %{distance} aan %{grade}, %{ascent}"
+        climb_fallback: "de belangrijkste klim"
+        descent: "afdaling, %{descent}"
+        vs_average_faster: "%{share} sneller dan je gemiddelde"
+        vs_average_slower: "%{share} langzamer dan je gemiddelde"
+        heart_rate: "%{bpm} bpm"
+        flat_equivalent: "%{pace} vlak gerekend"
+      course:
+        strong_finish: "Aan het eind sneller dan in het begin op vergelijkbare grond: %{last} tegen %{first}"
+        fade: "Aan het eind langzamer dan in het begin op vergelijkbare grond: %{last} tegen %{first}"
+        climb_held: "Gelijkmatige inspanning in %{name}: %{gap} vlak gerekend, %{flat} op het vlakke"
+        hr_flat: "Hetzelfde tempo op het eind voor %{delta} bpm meer"
+        climb_share: "%{share} van de bewegingstijd klimmend"
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} tot %{high}"

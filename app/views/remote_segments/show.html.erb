@@ -25,7 +25,7 @@
 
 <div class="row row-deck row-cards">
   <div class="col-12">
-    <%= render "workouts/metrics", workout: @view, show_description: false %>
+    <%= render "workouts/metrics", workout: @view %>
   </div>
 
   <% if @segment.content_html.present? || @segment.description.present? %>

@@ -8,6 +8,6 @@
                data-controller="live-frame"
                data-live-frame-url-value="<%= settings_data_path %>"
                data-live-frame-interval-value="6000">
-    <%= render "settings/data/live", counts: @counts, elevation_available: @elevation_available, weather_available: @weather_available %>
+    <%= render "settings/data/live", counts: @counts, elevation_available: @elevation_available, weather_available: @weather_available, summaries_available: @summaries_available %>
   </turbo-frame>
 <% end %>

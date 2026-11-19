@@ -114,6 +114,9 @@ exclamation-mark enthusiasm, no fake congratulation.
 
 Personality lives in **word choice and rhythm**, never in volume.
 
+The assistant's workout summary goes one step further (§3.2): it may borrow the
+sport's own vocabulary and, for a personal best, one exclamation mark.
+
 | Do | Don't |
 |---|---|
 | "Nothing here yet. Import a GPX and this fills up fast." | "No workouts found. Please import a workout to continue." |
@@ -133,7 +136,7 @@ the risk seriously, and undermines the warning it decorates.
 
 | Register | Applies to |
 |---|---|
-| **Playful** | onboarding, empty states, import success, records and personal bests, statistics headings, the styleguide, the 404 page |
+| **Playful** | onboarding, empty states, import success, records and personal bests, statistics headings, the assistant's workout summary (§10.26), the styleguide, the 404 page |
 | **Neutral** | all form labels, table headers, metric names, navigation, settings descriptions, the 500 page |
 | **Sober** | publishing and publication preview, privacy zones, leaderboard opt-out consent and aliases, every destructive confirmation, session revocation, the 410 page |
 
@@ -165,6 +168,12 @@ creates pressure to train. None of them have a dataset in M3, and none of them
 survive the "would this still be kind on a bad week?" test.
 
 Celebration never animates beyond §16's limits and never blocks interaction.
+
+The assistant's summary (§10.26) is the one place the playful register may
+raise its voice: it talks like a training partner texting right after the
+outing, uses the sport's own vocabulary (§4), and may close a personal best or
+a first with a single exclamation mark. Still no emoji, no slogan, no fake
+congratulation, and one exclamation mark at most in the whole summary.
 
 ### 3.4 French address form
 
@@ -227,6 +236,11 @@ The terminology contract. These words mean exactly one thing each, in code, in
 the UI and in every language (§4.1 for German, Spanish and Dutch). Deviating creates a support burden that no amount
 of good visual design repairs.
 
+These words bind the interface. The assistant's workout summary may replace one
+with the sport's jargon — « D+ », « bosse », « fractionné » — because that is how
+the people who practise the sport talk; it never replaces a unit (`1 793 m`
+stays `1 793 m`).
+
 | Concept | English UI | French UI | Notes |
 |---|---|---|---|
 | Recorded training session | workout | activité | Never "activity" in English (collides with ActivityPub); never "entraînement". |
@@ -273,6 +287,8 @@ of good visual design repairs.
 | Pseudonymous leaderboard name | alias | alias | §19.5. |
 | Someone the instance knows | account | compte | Never "user" in UI copy. |
 | Distance/time/elevation values | metrics | mesures | |
+| The assistant-written account of a workout | summary | synthèse | [AI.md](AI.md). Never « analyse » (that is the metrics card) nor « résumé » (that is the workout's figures). |
+| What writes the summary and later answers questions | assistant | assistant | Never « coach » (it prescribes nothing) and never « IA » as the feature's name in UI copy. |
 | The uploaded file | original file | fichier d'origine | Never "source". |
 | Bringing files in | import | importer | Never "upload" as a noun. |
 | A second proof after the password | two-step verification | double authentification | [AUTH.md](AUTH.md). Never "2FA" or "MFA" in UI copy. |
@@ -353,6 +369,8 @@ table above defines the concept; the notes there apply here too. A row's
 | follower / to follow | Follower / folgen | seguidor / seguir | volger / volgen | |
 | instance | Instanz | instancia | instantie | |
 | metrics | Messwerte | métricas | meetwaarden | |
+| The assistant-written account of a workout | Zusammenfassung | resumen | samenvatting | de « Analyse », es « análisis », nl « analyse » (that is the metrics card) |
+| What writes the summary and later answers questions | Assistent | asistente | assistent | de « Trainer », es « entrenador », nl « trainer » (it prescribes nothing); no "KI", "IA" or "AI" as the feature's name |
 | original file | Originaldatei | archivo original | origineel bestand | « Quelle », « fuente », « bron » |
 | import | importieren / Import | importar / importación | importeren / import | « hochladen », « subir », « uploaden » as the action's name |
 | two-step verification | Bestätigung in zwei Schritten | verificación en dos pasos | verificatie in twee stappen | "2FA", "MFA" |
@@ -1216,7 +1234,8 @@ past a full-height index on every sub-page. The groups are **Compte** (Profil,
 Apparence, Unités, Sports par défaut),
 **Publication** (Profils de publication, Zones de confidentialité) and
 **Système** (Notifications, Données et recalculs, Altitudes when the instance
-configures a provider, API et webhooks, Sécurité).
+configures a provider, Assistant when it configures a model, API et webhooks,
+Sécurité).
 
 | Sub-page | Contents |
 |---|---|
@@ -1226,6 +1245,7 @@ configures a provider, API et webhooks, Sécurité).
 | `/settings/sports` | default variant per generic sport (cycling, running, walking) used at import ([WORKOUT.md](WORKOUT.md)) |
 | `/settings/notifications` | « Notifications dans l'application »: one switch per kind, saved by the card's submit; then, only in a companion registering the `push` bridge component on an instance with push configured, the « Sur cet iPhone » card (§7.7, §19.28) |
 | `/settings/elevation` | terrain elevation opt-in, only when the instance configures a provider ([ELEVATION.md](ELEVATION.md)) |
+| `/settings/assistant` | the assistant opt-in, only when the instance configures a model: the switch, the §19.40 sentence, the deletion of the stored summaries and the backfill of the recent workouts ([AI.md](AI.md)) |
 | `/settings/publishing-profiles` | the profile collection (existing route) |
 | `/settings/privacy-zones` | the zone collection (existing route) |
 | `/settings/security` | three groups (§20.15): two-step verification first (obligation, authenticator app, passkeys, recovery codes); the ways in side by side, password and identity providers; then the active sessions (paginated, sortable table with device, sign-in time and method, last activity and the lifetime rule) with « Fermer toutes les sessions » in its header; closing a session re-authenticates first |
@@ -1840,8 +1860,9 @@ full, paginated list is `/notifications`.
 ### 10.17 Reaction bar
 
 The appreciation control on a publication ([REACTIONS.md](REACTIONS.md)): one row of
-compact pills at the foot of a feed card and in the social row under the
-figures of the workout or received-note page, never a second visual language.
+compact pills at the foot of a feed card, in the social row under the header
+of the workout page and in the social row under the figures of a received
+note, never a second visual language.
 
 - **Types.** Bière, boisson énergisante, café, and j'aime, in that order, each
   with a Tabler glyph (`ti-beer`, `ti-bolt`, `ti-coffee`, `ti-thumb-up`) and
@@ -1888,13 +1909,15 @@ figures of the workout or received-note page, never a second visual language.
   keyboard focus and touch.
 - **Placement.** In a feed card the bar is the last row of the body and its
   pills are aligned to the right edge, closing the card on the side the
-  metric grid ends on; wrapped rows keep that right edge. On the workout and
-  received-note pages the bar sits in the **social row** right after the
-  summary card (`comments/_social_row`), on every screen and once per page,
-  its pills aligned to the right edge. Below `lg` the thread's button leads
-  the same row on the left (§10.20), the mirror of a sport app's usual order:
-  the conversation first, the appreciation closing the row. The row renders
-  nothing when it would hold neither.
+  metric grid ends on; wrapped rows keep that right edge. On the workout page
+  the bar sits in the **social row** across the page, immediately under the
+  page header and before the map and the figures card
+  (`comments/_social_row`), on every screen and once per page, its pills
+  aligned to the right edge. On a received note the row follows that page's
+  figures. Below `lg` the thread's button leads the same row on the left
+  (§10.20), the mirror of a sport app's usual order: the conversation first,
+  the appreciation closing the row. The row renders nothing when it would
+  hold neither.
 - **Copy.** The bar prints type names and counts only; the tooltip adds who
   reacted. The counts are numbers, never protocol terms. A reaction never
   creates a toast: the pressed pill is the feedback, and the owner hears about
@@ -2322,6 +2345,68 @@ native scroll-snap strip. The `paged-panels` Stimulus controller owns it.
 - **Without JavaScript** the selector is hidden and every page remains readable
   in sequence; Turbo teardown releases the resize observer and the pending
   scroll callback and restores that baseline before caching.
+
+### 10.26 Assistant summary block
+
+The owner-only block that renders the assistant's summary of one workout
+([AI.md](AI.md)); it lives inside the figures card, under the primary tiles
+(§20.3), never as a card of its own. It fills the card's width. It is never
+rendered for a reader, a participant, a manual entry or a credit row, and it
+disappears entirely when the instance configures no model or the member has
+not opted in.
+
+```
+Résumé
+┌ 62,4 km   3 h 12  13,1 km/h   850 m ┐
+│ Votre description…                    │
+│ ──────────────────────────────────── │
+│ 62,4 km et 850 m de dénivelé, deux    │
+│ minutes de moins que votre meilleure  │
+│ boucle du lac. Le vent de face a coûté│
+│ 41 s dans la seconde montée. ⓘ        │
+│ Titre proposé : « Le tour du lac »    │
+│                    [Utiliser ce titre]│
+│ ──────────────────────────────────── │
+│ Plus de mesures (5)                   │
+└───────────────────────────────────────┘
+```
+
+- **Placement and the description.** The figures card carries one text block
+  under its primary tiles. The owner's description leads it. The summary takes
+  that place when the workout has no description, and joins the description
+  only when the account turned on « Afficher aussi la synthèse quand une
+  description existe » in `/settings/assistant` ([AI.md](AI.md) §7). A
+  description-only page shows no assistant block, not even its action; the
+  setting is the way back to it. Without a figures card the description keeps
+  its own card at the foot of the column.
+- **Body:** one to five sentences as one flowing paragraph, never a list and
+  never more than five, filling the card's width with no measure cap. A quiet
+  outing gets one sentence and stops; the assistant never pads it to sound
+  busier. The block never scrolls internally (§10.1). No visible title names
+  it: the figures card's « Résumé » heading covers it, and the section carries
+  an accessible name for assistive technology.
+- **Attribution:** the first §19.40 sentence lives behind the small info icon
+  that closes the last line, muted. Its tooltip and its accessible name carry
+  the text, and a wider tooltip measure keeps it readable. It names the
+  assistant, not a provider.
+- **Proposed title:** a small line and a secondary button, shown only while
+  `workouts.title_source` is `default` or `file` ([AI.md](AI.md) §5).
+  Accepting it sets the title, reloads the page and drops the line; nothing is
+  ever renamed without that action.
+- **Action:** « Régénérer la synthèse » lives in the page header's `⋯` menu,
+  never in the block, and only while the row is `ready`. It is disabled for
+  five minutes after the last request, with the wait named in its tooltip. A
+  failed row keeps « Réessayer » on its sentence's line; a missing one keeps
+  « Rédiger la synthèse ».
+- **States** (§11): `pending` is three muted skeleton lines under a
+  `role="status"` sentence « Rédaction de la synthèse… »; `failed` is one
+  sentence on what failed, never a provider message, with « Réessayer » on the
+  same line; a workout older than the automatic window is never-populated
+  empty, its one action « Rédiger la synthèse » on the same line as the muted
+  sentence. The ready state is announced once through `aria-live="polite"`,
+  naming the section only (§18.8).
+- **Live:** the block re-renders on the next page load; a live replacement
+  needs the server-side Turbo Streams stack, which this instance does not ship.
 
 ---
 
@@ -3346,6 +3431,9 @@ answer is an **equivalent, not an excuse**:
 - Batch import progress: `aria-live="polite"` on the status region, announcing
   only meaningful transitions — not every 2-second poll.
 - Filter result counts: `aria-live="polite"`.
+- The workout's assistant summary announces its ready state once, naming the
+  section and that the summary is ready — a reloaded page does not re-read the
+  paragraph (§10.26).
 - Form error summaries: `role="alert"`.
 
 ### 18.9 Motion and language
@@ -4468,6 +4556,29 @@ It ends with a link to the settings card. The German, Spanish and Dutch texts
 faithfully translate both sentences. A hidden account is never presented as
 incomplete or as having lost something; the exact handle always works.
 
+### 19.40 Assistant summary — on `/settings/assistant` and the summary block
+
+Placement: under the consent switch of `/settings/assistant` ([AI.md](AI.md)),
+then in the small info icon that closes the summary's last line; its tooltip
+and accessible name carry the text. The first sentence is the same key on both
+surfaces; the second appears only on the settings page.
+
+> **FR** — « Cette synthèse est rédigée automatiquement à partir des mesures de
+> cette activité. Elle peut se tromper : les chiffres des cartes font foi. Les
+> mesures sont envoyées au modèle configuré par l'opérateur de cette instance. »
+> « Désactiver l'assistant arrête toute nouvelle rédaction ; les synthèses déjà
+> écrites restent jusqu'à leur suppression. »
+>
+> **EN** — "This summary is written automatically from this workout's
+> measurements. It can be wrong: the figures on the cards are the reference. The
+> measurements are sent to the model configured by this instance's operator."
+> "Turning the assistant off stops every new summary; the ones already written
+> remain until you delete them."
+
+The German, Spanish and Dutch texts faithfully translate both sentences. No
+member surface names the provider's host, a model version, or a third party by
+name: the operator's configuration is the only place that does.
+
 ## 20. Screen anatomies
 
 Block diagrams of the twenty-two screens that define the product. Order is
@@ -4554,10 +4665,11 @@ Signed-in home: `/` redirects here.
 ### 20.3 `/workouts/:id` — Workout detail
 
 Single scroll, one layout for the web, phones and the iOS companion. There is
-no sticky section navigation. The map leads the page; from `lg` (992 px) up it
-is the sticky left rail beside summary, profile and analysis. The header menu
-is the only place for the original file download and the workout deletion:
-there is no original-data card and no danger zone.
+no sticky section navigation. The social row opens the page under the header,
+then the map; from `lg` (992 px) up the map is the sticky left rail beside
+summary, profile and analysis. The header menu is the only place for the
+original file download and the workout deletion: there is no original-data
+card and no danger zone.
 
 ```
 ┌ page header ─────────────────────────────────────────────┐
@@ -4568,28 +4680,38 @@ there is no original-data card and no danger zone.
 │ (🌐) [ Record ] [ Trajet ] ⌚ appareil                   │
 │  ⋯: Modifier (< md) · Créer un segment · Enregistrer en  │
 │     itinéraire · Télécharger le fichier d'origine ·      │
-│     Régénérer l'image · Altitudes : passer au service /  │
-│     revenir à l'appareil (propriétaire, estimation       │
+│     Régénérer l'image · Régénérer la synthèse ·           │
+│     Altitudes : passer au service / revenir à l'appareil │
+│     (propriétaire, estimation                            │
 │     activée et profil enregistré requis) ·               │
 │     Supprimer l'activité                                 │
 └───────────────────────────────────────────────────────────┘
-[Carte]       map card, first under the header; sticky left rail from lg;
+[Social]      the social row (§10.17) across the page, right under the header
+              and before the map and the figures card; with a publication:
+              [💬 3] → the thread's page, below lg only, on the left; the
+              reactions on the right, on every screen
+[Carte]       map card, first under the social row; sticky left rail from lg;
               cooperative gestures on touch screens (§15.2); its text
               summary is screen-reader-only
 [Résumé]      four primary tiles: distance, temps en mouvement, the sport's
               preferred average, dénivelé + (power for a fixed-basis sport
               that recorded it, and in place of the speed for a power-led
               virtual sport); a record value carries the trophy card stamp
+              under the tiles, one text block: the description, then the
+              owner-only assistant block (§10.26, [AI.md](AI.md)) when the
+              workout has no description or the account asked for both; the
+              block carries the info icon of its attribution and the proposed
+              title, while « Régénérer la synthèse » sits in the header's ⋯
+              menu; it is absent for a reader, a participant, a manual entry,
+              a credit row, and when the feature or the consent is off
               secondary metrics in 2 / 3 / 4 columns by the card's width,
               folded on phones behind « Plus de mesures (N) » — N counts the
               recorded ones only; a metric the file did not record is never
               a dash, it is named once in « Non mesuré pour cette activité :
               fréquence cardiaque, puissance. », which folds with them
               an elevation-less owner workout carries a one-line « Altitudes »
-              notice under the tiles (enable estimation · estimate · retry)
-[Social]      the social row (§10.17) right under the summary, with a
-              publication: [💬 3] → the thread's page, below lg only, on the
-              left; the reactions on the right, on every screen
+              notice under the tiles (enable estimation · estimate · retry);
+              the owner's private notes close the card
 [Météo]       weather card ([WEATHER.md](WEATHER.md)) after the Analyse card
               (after the profile for a reader); the header badge row carries
               its badge (condition icon, mean temperature, linking here): the
@@ -4608,7 +4730,6 @@ there is no original-data card and no danger zone.
               la météo); a reader sees the frozen summary only when the
               profile shared it; a recording with only the device's
               readings shows « Temp. capteur » and the §19.31 sensor note
-[Description] its own card when present: description · notes privées (owner)
 [Profil]      elevation chart card (§15.1): floating axes, whole-distance
               ticks, selection zoom with « Vue d'ensemble »; « Voir les
               données » from md up (screen-reader list on phones); the

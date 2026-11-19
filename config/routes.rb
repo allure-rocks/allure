@@ -59,6 +59,7 @@ Rails.application.routes.draw do
     post "/jobs/segment_route_images", to: "jobs#backfill_segment_route_images", as: :jobs_backfill_segment_route_images
     post "/jobs/backfill_elevation", to: "jobs#backfill_elevation", as: :jobs_backfill_elevation
     post "/jobs/backfill_weather", to: "jobs#backfill_weather", as: :jobs_backfill_weather
+    post "/jobs/backfill_summaries", to: "jobs#backfill_summaries", as: :jobs_backfill_summaries
     post "/jobs/backfill_places", to: "jobs#backfill_places", as: :jobs_backfill_places
     post "/jobs/backfill_toponymy", to: "jobs#backfill_toponymy", as: :jobs_backfill_toponymy
     post "/jobs/loop_reuse", to: "jobs#backfill_loop_reuse", as: :jobs_backfill_loop_reuse
@@ -169,6 +170,10 @@ Rails.application.routes.draw do
     resource :elevation_source, only: :update, controller: "workout_elevation_sources"
     # Owner-requested weather refresh (docs/dev/WEATHER.md).
     resource :weather, only: :create, controller: "workout_weathers"
+    # Owner-only assistant summary (docs/dev/AI.md): request or regenerate,
+    # then accept the proposed title.
+    resource :summary, only: :create, controller: "workout_summaries"
+    post "summary/title", to: "workout_summaries#apply_title", as: :apply_summary_title
     resources :segments, only: %i[new create]
     resources :routes, only: %i[new create]
     resource :original_file, only: :show, controller: "workout_files"
@@ -286,6 +291,9 @@ Rails.application.routes.draw do
     # Weather (docs/dev/WEATHER.md): explicit consent to send coarsened
     # positions and times to Open-Meteo, and the deletion of stored weather.
     resource :weather, only: %i[show update destroy], controller: "weather"
+    # Assistant (docs/dev/AI.md): explicit consent to have summaries written
+    # from the account's own metrics, and the deletion of stored summaries.
+    resource :assistant, only: %i[show update destroy], controller: "assistant"
     # Sports (docs/dev/WORKOUT.md): which variant replaces a detected generic
     # sport (cycling, running, walking) at import time.
     resource :sports, only: %i[show update], controller: "sports"
@@ -307,6 +315,7 @@ Rails.application.routes.draw do
     post "data/loops", to: "data#loops", as: :data_loops
     post "data/heart_rate", to: "data#heart_rate", as: :data_heart_rate
     post "data/route_suggestions", to: "data#route_suggestions", as: :data_route_suggestions
+    post "data/summaries", to: "data#summaries", as: :data_summaries
     # Heart rate (docs/dev/HEART-RATE.md): the account's maximum, resting
     # value and zones. Owner-only; nothing here is ever published.
     resource :heart_rate, only: %i[show update destroy], path: "heart-rate", controller: "heart_rate"

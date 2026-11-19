@@ -695,7 +695,14 @@ RSpec.describe Workouts::Importer do
       result = fit_importer(build_fit(points: simple_fit_points)).call
 
       expect(result.workout.title).to be_present
+      expect(result.workout.title_source).to eq("default")
       expect(result.workout.description).to be_nil
+    end
+
+    it "keeps a title typed by the member and stamps it as theirs" do
+      result = fit_importer(build_fit(points: simple_fit_points), title: "Ma sortie").call
+
+      expect(result.workout).to have_attributes(title: "Ma sortie", title_source: "owner")
     end
 
     it "detects FIT content even when the file claims to be a GPX" do
@@ -924,7 +931,8 @@ RSpec.describe Workouts::Importer do
       result = described_class.new(user:, sport:, uploaded_file: uploaded_text(gpx, "long.gpx")).call
 
       expect(result).to be_success
-      expect(result.workout).to have_attributes(source: "D" * 255, title: "N" * 255, description: "d" * 10_000)
+      expect(result.workout).to have_attributes(source: "D" * 255, title: "N" * 255, title_source: "file",
+                                              description: "d" * 10_000)
     end
 
     it "clips an over-long lap trigger" do

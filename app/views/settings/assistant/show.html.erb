@@ -1,0 +1,62 @@
+<% content_for :title, t("settings.assistant.title") %>
+
+<%= render layout: "settings/shell", locals: { title: t("settings.assistant.title") } do %>
+  <%= form_with model: @user, url: settings_assistant_path, method: :patch do |form| %>
+    <%= render "shared/form_errors", form: form %>
+
+    <div class="card mb-3">
+      <div class="card-header">
+        <h2 class="card-title h3"><%= t("settings.assistant.summary_title") %></h2>
+      </div>
+      <div class="card-body">
+        <p class="text-secondary"><%= t("settings.assistant.description") %></p>
+        <label class="form-check form-switch">
+          <%= form.check_box :ai_enabled, class: "form-check-input", role: "switch" %>
+          <span class="form-check-label"><%= t("settings.assistant.enrichment_label") %></span>
+        </label>
+        <% if @user.ai_enabled? %>
+          <label class="form-check form-switch mt-3">
+            <%= form.check_box :ai_summary_with_description, class: "form-check-input", role: "switch",
+                  aria: { describedby: "assistant-layout-hint" } %>
+            <span class="form-check-label"><%= t("settings.assistant.layout.label") %></span>
+          </label>
+          <p class="text-secondary small mt-1 mb-0" id="assistant-layout-hint"><%= t("settings.assistant.layout.hint") %></p>
+        <% end %>
+        <p class="text-secondary mt-3 mb-0">
+          <i class="ti ti-shield-lock me-1" aria-hidden="true"></i><%= t("assistant.notice") %> <%= t("settings.assistant.privacy") %>
+        </p>
+      </div>
+      <div class="card-footer">
+        <%= form.submit t("settings.assistant.save"), class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @user.ai_enabled? %>
+    <% pending = Workouts::UserBackfillJob.pending_scope(@user, "summaries").count %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h3 class="card-title"><%= t("settings.assistant.backfill.title") %></h3>
+        <p class="text-secondary"><%= t("settings.assistant.backfill.description") %></p>
+        <p class="mb-3"><%= t("settings.data.count", count: pending) %></p>
+        <%= button_to t("settings.data.summaries.action"), settings_data_summaries_path,
+              class: "btn btn-outline-primary", disabled: pending.zero?,
+              form: { data: { turbo_frame: "_top" } } %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title"><%= t("settings.assistant.stored.title") %></h3>
+      <p class="text-secondary"><%= t("settings.assistant.stored.description", count: @stored_count) %></p>
+      <%= button_to t("settings.assistant.stored.action"), settings_assistant_path, method: :delete,
+            class: "btn btn-outline-danger", disabled: @stored_count.zero?,
+            form: { data: {
+              confirm_title: t("settings.assistant.stored.confirm_title"),
+              confirm_body: t("settings.assistant.stored.confirm_body", count: @stored_count),
+              confirm_verb: t("settings.assistant.stored.action")
+            } } %>
+    </div>
+  </div>
+<% end %>

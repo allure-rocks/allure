@@ -408,6 +408,16 @@ de:
         action: Wetter abrufen
         confirm_title: Wetter abrufen?
         confirm_body: "Das Wetter von %{count} Aktivität(en) wird bei Open-Meteo angefragt, in begrenztem Tempo und im Rahmen des Tagesbudgets."
+      summaries:
+        title: Zusammenfassungen
+        budget: "Modellaufrufe über 24 h: %{used} / %{limit}."
+        outdated:
+          one: 1 Aktivität eines zustimmenden Kontos hat keine aktuelle Zusammenfassung.
+          other: "%{count} Aktivitäten zustimmender Konten haben keine aktuelle Zusammenfassung."
+        current: Alle Aktivitäten zustimmender Konten haben ihre Zusammenfassung.
+        action: Zusammenfassungen schreiben
+        confirm_title: Zusammenfassungen schreiben?
+        confirm_body: "Die Zusammenfassung von %{count} Aktivität(en) wird nacheinander beim Modell angefordert."
       elevation:
         title: Geschätzte Höhe
         outdated:
@@ -550,6 +560,10 @@ de:
           one: "Wetter für 1 Aktivität angefragt."
           other: "Wetter für %{count} Aktivitäten angefragt."
         weather_backfill_current: Keine Aktivität wartet auf ihr Wetter.
+        summaries_backfill_enqueued:
+          one: "Zusammenfassung für 1 Aktivität angefordert."
+          other: "Zusammenfassungen für %{count} Aktivitäten angefordert."
+        summaries_backfill_current: Keine Aktivität wartet auf ihre Zusammenfassung.
         places_backfill_enqueued:
           one: "Neuberechnung des Orts für 1 Aktivität eingereiht."
           other: "Neuberechnung des Orts für %{count} Aktivitäten eingereiht."
@@ -933,6 +947,7 @@ de:
         together_detection_backfill_enqueued: Erkennung gemeinsamer Touren eingeplant
         heart_rate_backfill_enqueued: Herzfrequenzberechnung der Aktivitäten eingeplant
         route_suggestions_backfill_enqueued: Suche nach regelmäßigen Strecken eingeplant
+        summaries_backfill_enqueued: Aktivitätszusammenfassungen gestartet
         photo_quota_changed: Fotospeicher-Kontingent geändert
         funding_granted: Beitrag erfasst
         funding_revoked: Beitrag widerrufen
@@ -2441,6 +2456,20 @@ de:
     weather:
       refreshed: Wetter angefordert. Es erscheint gleich.
       refresh_unavailable: Für diese Aktivität kann kein Wetter abgerufen werden.
+    summary:
+      title: Zusammenfassung
+      pending: Die Zusammenfassung wird geschrieben…
+      failed: Die Zusammenfassung konnte nicht geschrieben werden.
+      empty: Für diese Aktivität gibt es noch keine Zusammenfassung.
+      generate: Zusammenfassung schreiben
+      retry: Erneut versuchen
+      proposed_title: "Vorgeschlagener Titel: „%{title}“"
+      use_title: Diesen Titel verwenden
+      wait: "Noch %{minutes} Min. bis zu einer neuen Zusammenfassung."
+      requested: Zusammenfassung angefordert. Sie erscheint in wenigen Augenblicken.
+      throttled: Es wurde gerade eine Zusammenfassung angefordert. Versuche es in ein paar Minuten erneut.
+      title_applied: Titel geändert.
+      unavailable: Die Zusammenfassung ist für diese Aktivität nicht verfügbar.
     index:
       title: Meine Aktivitäten
       empty:
@@ -2630,6 +2659,7 @@ de:
           other: "%{count} Punkte"
       create_segment: Segment erstellen
       save_as_route: Als Route speichern
+      regenerate_summary: Zusammenfassung neu schreiben
       segment_efforts:
         title: Segment-Durchgänge
         segment: Segment
@@ -4362,6 +4392,34 @@ de:
         confirm_body: "Das Wetter von %{count} Aktivität(en) wird gelöscht. Deine bestehenden Veröffentlichungen ändern sich nicht."
       destroy:
         success: "Wetter für %{count} Aktivität(en) gelöscht."
+    assistant:
+      title: Assistent
+      summary_title: Zusammenfassungen meiner Aktivitäten
+      description: "Der Assistent schreibt zu jeder deiner Aktivitäten eine kurze Zusammenfassung aus den Messwerten, die Allure berechnet hat. Sie erscheint unter den wichtigsten Zahlen auf der Seite der Aktivität, wo du auch eine neue anfordern kannst."
+      enrichment_label: Zusammenfassungen meiner Aktivitäten schreiben
+      layout:
+        label: Die Zusammenfassung auch anzeigen, wenn eine Beschreibung vorhanden ist
+        hint: "Sonst füllt deine Beschreibung allein den Platz unter den wichtigsten Zahlen; die Zusammenfassung erscheint dort, wenn die Aktivität keine hat."
+      privacy: "Wenn du den Assistenten ausschaltest, wird keine neue Zusammenfassung mehr geschrieben; bereits geschriebene bleiben, bis du sie löschst."
+      backfill:
+        title: Aktuelle Aktivitäten
+        description: "Schreibe die Zusammenfassungen der Aktivitäten der letzten 30 Tage. Die Anfragen gehen nacheinander hinaus."
+      save: Änderungen speichern
+      update:
+        enabled: Assistent aktiviert. Deine nächsten Aktivitäten erhalten eine Zusammenfassung.
+        disabled: Assistent deaktiviert. Es wird keine neue Zusammenfassung mehr geschrieben; bereits geschriebene bleiben, bis du sie löschst.
+        saved: Einstellungen gespeichert.
+      stored:
+        title: Gespeicherte Zusammenfassungen
+        description:
+          zero: Keine Aktivität hat eine gespeicherte Zusammenfassung.
+          one: 1 Aktivität hat eine gespeicherte Zusammenfassung.
+          other: "%{count} Aktivitäten haben eine gespeicherte Zusammenfassung."
+        action: Gespeicherte Zusammenfassungen löschen
+        confirm_title: Gespeicherte Zusammenfassungen löschen?
+        confirm_body: "Die Zusammenfassung von %{count} Aktivität(en) wird gelöscht. Deine bestehenden Veröffentlichungen ändern sich nicht."
+      destroy:
+        success: "Zusammenfassungen für %{count} Aktivität(en) gelöscht."
     security:
       title: Sicherheit
       pretitle: Konto
@@ -4615,6 +4673,12 @@ de:
         action: Wetter abrufen
         confirm_title: Wetter abrufen?
         confirm_body: "%{count} Aktivität(en) werden über Open-Meteo ergänzt, in begrenztem Tempo."
+      summaries:
+        title: Zusammenfassungen
+        description: "Aktuelle Aktivitäten ohne Zusammenfassung oder mit einer Zusammenfassung aus einer älteren Version des Assistenten."
+        action: Meine Zusammenfassungen schreiben
+        confirm_title: Deine Zusammenfassungen schreiben?
+        confirm_body: "Die Zusammenfassung von %{count} Aktivität(en) wird nacheinander innerhalb des Tagesbudgets an das Modell geschickt."
       heart_rate:
         title: Herzfrequenz
         description: "Die Zeit bei jeder Herzfrequenz, aus der sich deine Zonen ergeben. Aus den aufgezeichneten Punkten berechnet."
@@ -4643,6 +4707,8 @@ de:
         elevation_current: Keine Höhe zu schätzen.
         weather: "Wetterabruf für %{count} Aktivität(en) gestartet."
         weather_current: Kein Wetter abzurufen.
+        summaries: "Zusammenfassungen für %{count} Aktivität(en) gestartet."
+        summaries_current: Alle deine Zusammenfassungen sind aktuell.
         heart_rate: "Herzfrequenzberechnung für %{count} Aktivität(en) gestartet."
         heart_rate_current: Deine Herzfrequenz ist bereits berechnet.
         route_suggestions: "Suche nach regelmäßigen Strecken für %{count} Aktivität(en) gestartet."
@@ -5029,6 +5095,77 @@ de:
           tb: TB
           pb: PB
           eb: EB
+  assistant:
+    notice: "Diese Zusammenfassung wird automatisch aus den Messwerten dieser Aktivität geschrieben. Sie kann sich irren: Maßgeblich sind die Zahlen auf den Karten. Die Messwerte werden an das Modell gesendet, das der Betreiber dieser Instanz eingerichtet hat."
+  insights:
+    facts:
+      places:
+        first: "Bestzeit"
+        second: "Zweitbeste Zeit"
+        third: "Drittbeste Zeit"
+      ranks:
+        first: "1."
+        second: "2."
+        third: "3."
+      effort: "%{place} auf %{label}: %{time}"
+      rank: "%{place} Platz in der Bestenliste für %{label} (%{count} Teilnehmende)"
+      faster: "%{delta} schneller als dein letzter Versuch auf %{label}"
+      slower: "%{delta} langsamer als dein letzter Versuch auf %{label}"
+      average_ratio: "%{ratio}-mal deine durchschnittliche Aktivität der letzten 28 Tage (%{average})"
+      volume: "%{distance} in %{count} Aktivitäten in 28 Tagen"
+      best_split: "Beste %{distance}: %{time}"
+      heart_rate: "%{average} bpm im Schnitt, %{max} maximal"
+      zone: "%{share} der Zeit in Zone %{zone}"
+      wind: "Gegenwind auf %{head} der Strecke, Rückenwind auf %{tail}"
+      temperature: "%{range}, %{condition}, gefühlt %{apparent}"
+      climb: "%{name}: %{distance} bei %{grade}"
+      intervals: "%{count} schnelle Abschnitte, der längste %{distance} bei %{speed}"
+      history_pace_faster: "%{delta} schneller als dein übliches Tempo auf dieser Strecke (%{usual})"
+      history_pace_slower: "%{delta} langsamer als dein übliches Tempo auf dieser Strecke (%{usual})"
+      history_speed_faster: "%{delta} schneller als deine übliche Geschwindigkeit auf dieser Strecke (%{usual})"
+      history_speed_slower: "%{delta} langsamer als deine übliche Geschwindigkeit auf dieser Strecke (%{usual})"
+      history_heart_rate_lower: "Gleiches Tempo, %{delta} bpm weniger als sonst"
+      history_heart_rate_higher: "Gleiches Tempo, %{delta} bpm mehr als sonst"
+      longest_since: "Deine längste Aktivität seit dem %{date}"
+      longest_since_ever: "Deine längste Aktivität seit über einem Jahr"
+      climb_since: "Dein größter Anstieg seit dem %{date}"
+      climb_since_ever: "Dein größter Anstieg seit über einem Jahr"
+      fastest_since: "Dein schnellstes Tempo seit dem %{date}"
+      fastest_since_ever: "Dein schnellstes Tempo seit über einem Jahr"
+      fastest_speed_since: "Deine höchste Durchschnittsgeschwindigkeit seit dem %{date}"
+      fastest_speed_since_ever: "Deine höchste Durchschnittsgeschwindigkeit seit über einem Jahr"
+      similar_pace_faster: "Vergleichbare Aktivität vom %{date} (%{distance}, %{ascent}): %{delta} schneller"
+      similar_pace_slower: "Vergleichbare Aktivität vom %{date} (%{distance}, %{ascent}): %{delta} langsamer"
+      similar_speed_faster: "Vergleichbare Aktivität vom %{date} (%{distance}, %{ascent}): %{delta} schneller"
+      similar_speed_slower: "Vergleichbare Aktivität vom %{date} (%{distance}, %{ascent}): %{delta} langsamer"
+      gap: "%{sport}: erste Aktivität seit %{count} Tagen"
+      gap_year: "%{sport}: erste Aktivität seit über einem Jahr"
+      year_total: "Damit steht das Jahr bei %{distance} (%{sport})"
+      route: "Über %{places}"
+      first_visit: "Neuer Ort: %{place}"
+      venue: "Welt: %{place}"
+      regular_place: "%{place}: %{count} Aktivitäten in diesem Jahr"
+      segment_median_faster: "%{delta} unter deiner Medianzeit auf %{label} (%{count} Versuche)"
+      segment_median_slower: "%{delta} über deiner Medianzeit auf %{label} (%{count} Versuche)"
+      section:
+        range: "von %{from} bis %{to}"
+        flat: "flach"
+        rolling: "wellig"
+        part: "Abschnitt"
+        climb: "Anstieg, %{distance} bei %{grade}, %{ascent}"
+        climb_named: "Anstieg „%{name}“, %{distance} bei %{grade}, %{ascent}"
+        climb_fallback: "der Hauptanstieg"
+        descent: "Abfahrt, %{descent}"
+        vs_average_faster: "%{share} schneller als dein Schnitt"
+        vs_average_slower: "%{share} langsamer als dein Schnitt"
+        heart_rate: "%{bpm} bpm"
+        flat_equivalent: "%{pace} flach gerechnet"
+      course:
+        strong_finish: "Am Ende schneller als am Anfang bei vergleichbarem Gelände: %{last} gegen %{first}"
+        fade: "Am Ende langsamer als am Anfang bei vergleichbarem Gelände: %{last} gegen %{first}"
+        climb_held: "Gleichmäßiger Aufwand in %{name}: %{gap} flach gerechnet, %{flat} im Flachen"
+        hr_flat: "Gleiches Tempo am Ende für %{delta} bpm mehr"
+        climb_share: "%{share} der Fahrzeit im Anstieg"
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} bis %{high}"

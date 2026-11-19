@@ -118,4 +118,30 @@ RSpec.describe "Settings data" do
       expect(flash[:notice]).to eq(I18n.t("settings.data.flash.elevation_current"))
     end
   end
+
+  describe "assistant summaries", :assistant do
+    let(:user) { create(:user, ai_enabled: true) }
+
+    it "shows the card and enqueues the account's sweep" do
+      create(:workout, user:, started_at: 2.days.ago)
+      sign_in_as(user)
+
+      get settings_data_path
+      expect(response.body).to include(I18n.t("settings.data.summaries.title"))
+
+      post settings_data_summaries_path
+
+      expect(response).to redirect_to(settings_data_path)
+      expect(Workouts::UserBackfillJob).to have_been_enqueued.with(user.id, "summaries")
+    end
+
+    it "hides the card without the owner's consent" do
+      user.update!(ai_enabled: false)
+      sign_in_as(user)
+
+      get settings_data_path
+
+      expect(response.body).not_to include(I18n.t("settings.data.summaries.title"))
+    end
+  end
 end

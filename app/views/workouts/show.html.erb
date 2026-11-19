@@ -127,6 +127,15 @@
                     <% end %>
                   <% end %>
                 <% end %>
+                <%# The summary's own action lives here, never in the block
+                    (DESIGN.md §10.26). %>
+                <% if @assistant_summary&.ready? %>
+                  <% summary_waiting = assistant_summary_waiting?(@assistant_summary) %>
+                  <div class="dropdown-divider"></div>
+                  <%= button_to t("workouts.show.regenerate_summary"), workout_summary_path(@workout), method: :post,
+                                class: "dropdown-item", disabled: summary_waiting,
+                                title: (t("workouts.summary.wait", minutes: assistant_summary_wait_minutes(@assistant_summary)) if summary_waiting) %>
+                <% end %>
                 <div class="dropdown-divider"></div>
                 <%= button_to workout_path(@workout), method: :delete,
                               form: { data: { confirm_title: t("workouts.show.confirm.title"), confirm_body: t("workouts.show.confirm.body"), confirm_verb: t("workouts.show.confirm.verb") } },
@@ -213,6 +222,15 @@
   </div>
 <% end %>
 
+<%# The social row sits under the page header, across the page, before the map
+    and the figures (DESIGN.md §10.17, §20.3). Below `lg` its thread button
+    opens the thread's own page. %>
+<div class="allure-detail-social">
+  <%= render "comments/social_row", target: @workout, card: comment_card,
+                                    reaction_summary: (reaction_summary_for(@workout) if @active_publications.any?),
+                                    reactable: signed_in? && !owner && !reader_preview %>
+</div>
+
 <%# Map first: it leads the single column on phones and tablets, and becomes
     the sticky left rail from `lg` up, beside the summary and the analysis
     (DESIGN.md §20.3). %>
@@ -238,19 +256,35 @@
              else
                record_labels_from_types(@display_workout.record_types)
              end %>
-          <%= render "metrics", workout: @display_workout, show_description: false, collapsible: true,
+          <%# The text block under the primary tiles (DESIGN.md §20.3): the
+              description, then the assistant summary when the account asked
+              for both or when there is no description. %>
+          <% lead = capture do %>
+            <% if description.present? %>
+              <div class="allure-workout-copy">
+                <%= simple_format(h(description), class: "mb-0") %>
+              </div>
+            <% end %>
+            <% if @inline_summary %>
+              <section id="section-summary-ai" class="allure-detail-section"
+                       aria-label="<%= t("workouts.summary.title") %>">
+                <%= render "workouts/summary", workout: @workout, summary: @assistant_summary,
+                                               separated: description.present? %>
+              </section>
+            <% end %>
+          <% end %>
+          <%= render "metrics", workout: @display_workout, collapsible: true,
                                 record_labels: metric_record_labels,
                                 anomaly_notes:,
-                                elevation_notice: %>
+                                elevation_notice:,
+                                lead: (lead if lead.present?),
+                                notes: %>
         <% end %>
       </section>
+    <% else %>
+      <%# Without figures to carry it, the text keeps its own card. %>
+      <%= render "description", description:, notes: %>
     <% end %>
-    <%# Reactions and, on phones, the way to the thread follow the figures
-        (DESIGN.md §10.17, §20.3). %>
-    <%= render "comments/social_row", target: @workout, card: comment_card,
-                                      reaction_summary: (reaction_summary_for(@workout) if @active_publications.any?),
-                                      reactable: signed_in? && !owner && !reader_preview %>
-    <%= render "description", description:, notes: %>
   </div>
 
   <div class="allure-detail-after-map">

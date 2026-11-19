@@ -1,0 +1,50 @@
+<%# The owner-only assistant summary (docs/dev/AI.md §7, DESIGN.md §10.26).
+    It is a block inside the figures card, under the primary tiles, not a card
+    of its own; its regenerate action lives in the header's ⋯ menu. Locals:
+    `workout`, `summary`, `separated` (true when a description precedes it). %>
+<% state = summary&.status&.to_sym || :missing %>
+<% waiting = assistant_summary_waiting?(summary) %>
+<% wait_minutes = assistant_summary_wait_minutes(summary) %>
+<div id="workout-summary-<%= workout.id %>"
+     class="<%= class_names("allure-workout-assistant", "mt-4 pt-4 border-top": local_assigns.fetch(:separated, false)) %>">
+  <% case state %>
+  <% when :pending %>
+    <p class="text-secondary mb-2" role="status"><%= t("workouts.summary.pending") %></p>
+    <div class="placeholder-glow" aria-hidden="true">
+      <span class="placeholder col-12 mb-2"></span>
+      <span class="placeholder col-10 mb-2"></span>
+      <span class="placeholder col-7"></span>
+    </div>
+  <% when :ready %>
+    <div class="allure-workout-assistant__text mb-2">
+      <%= Array(summary.sentences).map { it["text"] }.join(" ") %>
+      <button type="button" class="allure-workout-assistant__info text-secondary"
+              aria-label="<%= t("assistant.notice") %>"
+              data-controller="tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-custom-class="allure-assistant-tooltip"
+              data-bs-title="<%= t("assistant.notice") %>">
+        <i class="ti ti-info-circle" aria-hidden="true"></i>
+      </button>
+    </div>
+    <% if summary.title.present? && workout.title_source.in?(%w[default file]) %>
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <span class="text-secondary small"><%= t("workouts.summary.proposed_title", title: summary.title) %></span>
+        <%= button_to t("workouts.summary.use_title"), workout_apply_summary_title_path(workout),
+              method: :post, class: "btn btn-sm btn-outline-primary" %>
+      </div>
+    <% end %>
+  <% when :failed %>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <p class="text-secondary mb-0"><%= t("workouts.summary.failed") %></p>
+      <%= button_to t("workouts.summary.retry"), workout_summary_path(workout), method: :post,
+            class: "btn btn-sm btn-ghost-primary", disabled: waiting,
+            title: (t("workouts.summary.wait", minutes: wait_minutes) if waiting) %>
+    </div>
+  <% else %>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <p class="text-secondary mb-0"><%= t("workouts.summary.empty") %></p>
+      <%= button_to t("workouts.summary.generate"), workout_summary_path(workout), method: :post,
+            class: "btn btn-sm btn-outline-primary" %>
+    </div>
+  <% end %>
+</div>

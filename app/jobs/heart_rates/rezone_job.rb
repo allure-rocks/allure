@@ -21,6 +21,8 @@ module HeartRates
         batch.each do |row|
           row.assign_zones(zones)
           row.save!
+          # The zone distribution is one of the summary's facts.
+          Workouts::SummaryRefresh.schedule(row.workout)
         end
       end
     end

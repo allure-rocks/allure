@@ -45,8 +45,10 @@ RSpec.describe "Heart-rate jobs" do
       expect(workout.reload.heart_rate.zone_seconds).to be_nil
 
       user.update!(max_heart_rate: 190)
+      allow(Workouts::SummaryRefresh).to receive(:schedule)
       described_class.perform_now(user)
 
+      expect(Workouts::SummaryRefresh).to have_received(:schedule).with(workout)
       row = workout.heart_rate.reload
       expect(row.zone_seconds).to eq([ 0, 20, 0, 0, 20 ])
       expect(row.zones_fingerprint).to eq(user.heart_rate_zones.fingerprint)

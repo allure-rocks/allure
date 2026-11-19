@@ -73,6 +73,14 @@ x-rails: &rails
     PUSH_RELAY_ORIGINS: ${PUSH_RELAY_ORIGINS:-}
     # Ceiling on MCP location for every token: none, filtered or raw (optional).
     MCP_GEOMETRY_MAX: ${MCP_GEOMETRY_MAX:-}
+    # Workout assistant (docs/dev/AI.md): an OpenAI-compatible endpoint such as
+    # a LiteLLM proxy. Off until AI_BASE_URL and AI_MODEL are both set.
+    AI_BASE_URL: ${AI_BASE_URL:-}
+    AI_MODEL: ${AI_MODEL:-}
+    AI_API_KEY: ${AI_API_KEY:-}
+    AI_REQUEST_OPTIONS: ${AI_REQUEST_OPTIONS:-}
+    AI_TIMEOUT: ${AI_TIMEOUT:-}
+    AI_MAX_REQUESTS_PER_DAY: ${AI_MAX_REQUESTS_PER_DAY:-}
     MAP_STYLE_URL: ${MAP_STYLE_URL:-}
     MAP_STYLE_URL_DARK: ${MAP_STYLE_URL_DARK:-}
     MAP_RASTER_TEMPLATE: ${MAP_RASTER_TEMPLATE:-}
@@ -185,6 +193,24 @@ services:
     networks:
       - backend
       - mail
+      - egress
+
+  # The assistant's queue is separate and single-threaded (docs/dev/AI.md): the
+  # GPU behind the endpoint is the bottleneck, and the main worker must never
+  # pick these jobs up with its three threads.
+  ai-worker:
+    <<: *rails
+    command: ["bin/jobs"]
+    environment:
+      <<: *rails-environment
+      SOLID_QUEUE_QUEUES: ai
+      SOLID_QUEUE_THREADS: "1"
+    cpus: 1
+    mem_limit: 1g
+    security_opt:
+      - no-new-privileges
+    networks:
+      - backend
       - egress
 
   smtp-forwarder:

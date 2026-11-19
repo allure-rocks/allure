@@ -409,6 +409,16 @@ fr:
         action: Récupérer la météo
         confirm_title: Récupérer la météo ?
         confirm_body: "La météo de %{count} activité(s) sera demandée à Open-Meteo, à un rythme limité et dans le budget quotidien."
+      summaries:
+        title: Synthèses
+        budget: "Appels au modèle sur 24 h : %{used} / %{limit}."
+        outdated:
+          one: 1 activité d'un compte consentant n'a pas de synthèse à jour.
+          other: "%{count} activités de comptes consentants n'ont pas de synthèse à jour."
+        current: Toutes les activités des comptes consentants ont leur synthèse.
+        action: Rédiger les synthèses
+        confirm_title: Rédiger les synthèses ?
+        confirm_body: "La synthèse de %{count} activité(s) sera demandée au modèle, une à la fois."
       elevation:
         title: Altitudes estimées
         outdated:
@@ -551,6 +561,10 @@ fr:
           one: "Météo demandée pour 1 activité."
           other: "Météo demandée pour %{count} activités."
         weather_backfill_current: Aucune activité n'attend sa météo.
+        summaries_backfill_enqueued:
+          one: "Synthèse demandée pour 1 activité."
+          other: "Synthèses demandées pour %{count} activités."
+        summaries_backfill_current: Aucune activité n'attend sa synthèse.
         places_backfill_enqueued:
           one: "Recalcul des lieux lancé pour 1 activité."
           other: "Recalcul des lieux lancé pour %{count} activités."
@@ -934,6 +948,7 @@ fr:
         together_detection_backfill_enqueued: Détection des sorties faites ensemble lancée
         heart_rate_backfill_enqueued: Calcul de la fréquence cardiaque des activités lancé
         route_suggestions_backfill_enqueued: Recherche d'itinéraires réguliers lancée
+        summaries_backfill_enqueued: Synthèses des activités lancées
         photo_quota_changed: Quota de stockage des photos modifié
         funding_granted: Soutien enregistré
         funding_revoked: Soutien révoqué
@@ -2442,6 +2457,20 @@ fr:
     weather:
       refreshed: Météo demandée. Elle s'affichera dans quelques instants.
       refresh_unavailable: La météo ne peut pas être récupérée pour cette activité.
+    summary:
+      title: Synthèse
+      pending: Rédaction de la synthèse…
+      failed: La synthèse n'a pas pu être rédigée.
+      empty: Aucune synthèse pour cette activité pour le moment.
+      generate: Rédiger la synthèse
+      retry: Réessayer
+      proposed_title: "Titre proposé : « %{title} »"
+      use_title: Utiliser ce titre
+      wait: "Encore %{minutes} min avant une nouvelle rédaction."
+      requested: Synthèse demandée. Elle s'affichera dans quelques instants.
+      throttled: Une synthèse vient d'être demandée. Réessayez dans quelques minutes.
+      title_applied: Titre modifié.
+      unavailable: La synthèse n'est pas disponible pour cette activité.
     index:
       title: Mes activités
       empty:
@@ -2631,6 +2660,7 @@ fr:
           other: "%{count} points"
       create_segment: Créer un segment
       save_as_route: Enregistrer en itinéraire
+      regenerate_summary: Régénérer la synthèse
       segment_efforts:
         title: Efforts sur segments
         segment: Segment
@@ -4363,6 +4393,34 @@ fr:
         confirm_body: "La météo de %{count} activité(s) sera supprimée. Vos publications existantes ne changent pas."
       destroy:
         success: "Météo supprimée pour %{count} activité(s)."
+    assistant:
+      title: Assistant
+      summary_title: Synthèses de mes activités
+      description: "L'assistant rédige une courte synthèse de chacune de vos activités à partir des mesures qu'Allure a calculées. Elle s'affiche sous les chiffres principaux de la page de l'activité, où vous pouvez aussi en demander une nouvelle."
+      enrichment_label: Rédiger les synthèses de mes activités
+      layout:
+        label: Afficher aussi la synthèse quand une description existe
+        hint: "Sinon, votre description tient seule la place sous les chiffres principaux ; la synthèse s'y affiche quand l'activité n'en a pas."
+      privacy: "Désactiver l'assistant arrête toute nouvelle rédaction ; les synthèses déjà écrites restent jusqu'à leur suppression."
+      backfill:
+        title: Activités récentes
+        description: "Rédigez les synthèses des activités des 30 derniers jours. Les demandes partent une à la fois."
+      save: Enregistrer les modifications
+      update:
+        enabled: Assistant activé. Vos prochaines activités recevront une synthèse.
+        disabled: Assistant désactivé. Plus aucune synthèse ne sera rédigée ; celles déjà écrites restent jusqu'à leur suppression.
+        saved: Préférences enregistrées.
+      stored:
+        title: Synthèses enregistrées
+        description:
+          zero: Aucune activité n'a de synthèse enregistrée.
+          one: 1 activité a une synthèse enregistrée.
+          other: "%{count} activités ont une synthèse enregistrée."
+        action: Supprimer les synthèses enregistrées
+        confirm_title: Supprimer les synthèses enregistrées ?
+        confirm_body: "La synthèse de %{count} activité(s) sera supprimée. Vos publications existantes ne changent pas."
+      destroy:
+        success: "Synthèses supprimées pour %{count} activité(s)."
     security:
       title: Sécurité
       pretitle: Compte
@@ -4616,6 +4674,12 @@ fr:
         action: Récupérer la météo
         confirm_title: Récupérer la météo ?
         confirm_body: "%{count} activité(s) seront enrichies depuis Open-Meteo, à un rythme limité."
+      summaries:
+        title: Synthèses
+        description: "Activités récentes sans synthèse, ou dont la synthèse vient d'une version antérieure de l'assistant."
+        action: Rédiger mes synthèses
+        confirm_title: Rédiger vos synthèses ?
+        confirm_body: "%{count} activité(s) seront confiées au modèle, une à la fois, dans la limite du budget quotidien."
       heart_rate:
         title: Fréquence cardiaque
         description: "Temps passé à chaque fréquence cardiaque, d'où découlent vos zones. Calculé depuis les points enregistrés."
@@ -4644,6 +4708,8 @@ fr:
         elevation_current: Aucune altitude à estimer.
         weather: "Récupération de la météo lancée pour %{count} activité(s)."
         weather_current: Aucune météo à récupérer.
+        summaries: "Rédaction des synthèses lancée pour %{count} activité(s)."
+        summaries_current: Toutes vos synthèses sont à jour.
         heart_rate: "Calcul de la fréquence cardiaque lancé pour %{count} activité(s)."
         heart_rate_current: Votre fréquence cardiaque est déjà calculée.
         route_suggestions: "Recherche d'itinéraires réguliers lancée pour %{count} activité(s)."
@@ -5030,6 +5096,77 @@ fr:
           tb: To
           pb: Po
           eb: Eo
+  assistant:
+    notice: "Cette synthèse est rédigée automatiquement à partir des mesures de cette activité. Elle peut se tromper : les chiffres des cartes font foi. Les mesures sont envoyées au modèle configuré par l'opérateur de cette instance."
+  insights:
+    facts:
+      places:
+        first: "Meilleur temps"
+        second: "2e meilleur temps"
+        third: "3e meilleur temps"
+      ranks:
+        first: "1er"
+        second: "2e"
+        third: "3e"
+      effort: "%{place} sur %{label} : %{time}"
+      rank: "%{place} du classement sur %{label} (%{count} participants)"
+      faster: "%{delta} plus rapide que votre dernière fois sur %{label}"
+      slower: "%{delta} plus lent que votre dernière fois sur %{label}"
+      average_ratio: "%{ratio} fois votre activité moyenne sur 28 jours (%{average})"
+      volume: "%{distance} sur %{count} activités en 28 jours"
+      best_split: "Meilleur %{distance} : %{time}"
+      heart_rate: "%{average} bpm de moyenne, %{max} au maximum"
+      zone: "%{share} du temps en zone %{zone}"
+      wind: "Vent de face sur %{head} du parcours, de dos sur %{tail}"
+      temperature: "%{range}, %{condition}, ressenti %{apparent}"
+      climb: "%{name} : %{distance} à %{grade}"
+      intervals: "%{count} efforts rapides, le plus long %{distance} à %{speed}"
+      history_pace_faster: "%{delta} plus rapide que votre allure habituelle sur cette distance (%{usual})"
+      history_pace_slower: "%{delta} plus lent que votre allure habituelle sur cette distance (%{usual})"
+      history_speed_faster: "%{delta} plus vite que votre vitesse habituelle sur cette distance (%{usual})"
+      history_speed_slower: "%{delta} moins vite que votre vitesse habituelle sur cette distance (%{usual})"
+      history_heart_rate_lower: "Même allure, %{delta} bpm de moins que d'ordinaire"
+      history_heart_rate_higher: "Même allure, %{delta} bpm de plus que d'ordinaire"
+      longest_since: "Votre plus longue sortie depuis le %{date}"
+      longest_since_ever: "Votre plus longue sortie depuis plus d'un an"
+      climb_since: "Le plus gros dénivelé depuis le %{date}"
+      climb_since_ever: "Le plus gros dénivelé depuis plus d'un an"
+      fastest_since: "Votre allure la plus rapide depuis le %{date}"
+      fastest_since_ever: "Votre allure la plus rapide depuis plus d'un an"
+      fastest_speed_since: "Votre vitesse moyenne la plus élevée depuis le %{date}"
+      fastest_speed_since_ever: "Votre vitesse moyenne la plus élevée depuis plus d'un an"
+      similar_pace_faster: "Sortie comparable du %{date} (%{distance}, %{ascent}) : %{delta} plus rapide"
+      similar_pace_slower: "Sortie comparable du %{date} (%{distance}, %{ascent}) : %{delta} plus lent"
+      similar_speed_faster: "Sortie comparable du %{date} (%{distance}, %{ascent}) : %{delta} plus vite"
+      similar_speed_slower: "Sortie comparable du %{date} (%{distance}, %{ascent}) : %{delta} moins vite"
+      gap: "%{sport} : première activité depuis %{count} jours"
+      gap_year: "%{sport} : première activité depuis plus d'un an"
+      year_total: "Ça porte l'année à %{distance} (%{sport})"
+      route: "Par %{places}"
+      first_visit: "Nouveau lieu : %{place}"
+      venue: "Monde : %{place}"
+      regular_place: "%{place} : %{count} activités cette année"
+      segment_median_faster: "%{delta} sous votre temps médian sur %{label} (%{count} passages)"
+      segment_median_slower: "%{delta} au-dessus de votre temps médian sur %{label} (%{count} passages)"
+      section:
+        range: "de %{from} à %{to}"
+        flat: "plat"
+        rolling: "vallonné"
+        part: "section"
+        climb: "montée, %{distance} à %{grade}, %{ascent}"
+        climb_named: "montée « %{name} », %{distance} à %{grade}, %{ascent}"
+        climb_fallback: "la montée principale"
+        descent: "descente, %{descent}"
+        vs_average_faster: "%{share} plus vite que votre moyenne"
+        vs_average_slower: "%{share} moins vite que votre moyenne"
+        heart_rate: "%{bpm} bpm"
+        flat_equivalent: "%{pace} à plat équivalent"
+      course:
+        strong_finish: "Fin de parcours plus rapide qu'au départ, à terrain égal : %{last} contre %{first}"
+        fade: "Plus lent en fin de parcours qu'au départ, à terrain égal : %{last} contre %{first}"
+        climb_held: "Effort régulier dans %{name} : %{gap} à plat équivalent, %{flat} sur le plat"
+        hr_flat: "Même allure en fin de parcours pour %{delta} bpm de plus"
+        climb_share: "%{share} du temps passé en montée"
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} à %{high}"

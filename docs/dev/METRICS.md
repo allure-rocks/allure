@@ -72,10 +72,10 @@ Zero-value series are emitted so panels do not flap.
 
 ### Background jobs — `allure_jobs_*`
 
-Fixed queue vocabulary: `default`, `federation`, `federation_media`,
-`remote_imports` (`REMOTE-IMPORTS.md`), `route_images`, `webhooks`
-(`API.md`), `photos` (`PHOTOS.md`); any unknown `queue_name` is reported under
-`other`.
+Fixed queue vocabulary: `default`, `ai` (`AI.md`), `federation`,
+`federation_media`, `remote_imports` (`REMOTE-IMPORTS.md`), `route_images`,
+`webhooks` (`API.md`), `photos` (`PHOTOS.md`); any unknown `queue_name` is
+reported under `other`.
 
 | Metric | Type | Labels | Meaning |
 |---|---|---|---|
@@ -182,6 +182,18 @@ administration dashboard also calls — a "7-day active user" cannot mean two
 different things (see §8). **Connected users are session-based**: a session row
 exists only while a device holds a valid session (sign-out and revocation delete
 it), so it measures usable sessions, not page views.
+
+### Assistant — `allure_ai_*`
+
+| Metric | Type | Labels | Meaning |
+|---|---|---|---|
+| `allure_workout_summaries` | gauge | `status` | assistant summary rows: `pending`, `ready`, `failed` ([AI.md](AI.md)) |
+| `allure_ai_requests_total` | counter | `kind`, `result` | provider calls: `kind` `summary` (the conversation adds `chat`); `result` `ok`, `invalid` (schema or verification), `rejected` (a terminal 4xx) or `unavailable` (429, 5xx, timeout, retried) |
+| `allure_ai_request_duration_seconds` | histogram | `kind` | one provider call, from the request to the last byte |
+| `allure_ai_tokens_total` | counter | `kind`, `direction` | tokens the answer's `usage` reported: `prompt` and `completion`; nothing when the endpoint reports none |
+
+Never a prompt, an answer, a fact, a model alias or an endpoint host: the
+labels are closed vocabularies like every other family here.
 
 ### Ruby process — `allure_process_*`
 
@@ -347,6 +359,7 @@ so a new gauge cannot land without deciding what it corresponds to.
 | Export des données, suppression programmée / Data export, deletion scheduled | `admin.accounts.export.title`, `admin.accounts.states.deletion_scheduled` | `allure_account_exports{status}`, `allure_account_deletions_scheduled` | the account page shows one account's last export and date, the metrics count every account's; never an account, a size or a date |
 | Photos / Photos | `photos.admin.title` | `allure_photos{status}`, `allure_photo_bytes` | the account page shows its quota and usage; metrics aggregate all accounts without identifiers |
 | Météo / Weather | `admin.jobs.weather.title` | `allure_workout_weathers{status}` | the panel shows the 24-hour request budget and the pending count, the gauge counts every row by status; never a workout, an account or a position |
+| Synthèses / Summaries | `admin.jobs.summaries.title` | `allure_workout_summaries{status}` | the panel shows the pending count and the day's requests against the cap, the gauge counts every row by status; never a workout, a member, a fact or a model answer |
 | Tâches de fond / Background jobs | `admin.jobs.*` | `allure_jobs_*` | queue/process/latency/paused labels match the panel columns; the « En échec » total is `sum(allure_jobs_failed)` |
 | Bases de données / Databases | `admin.system.databases` | `allure_database_size_bytes{database}` | same `primary/queue/cable` roles |
 | Version | `admin.system.versions` | `allure_info{version}` | likewise |

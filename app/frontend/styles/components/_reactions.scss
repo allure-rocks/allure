@@ -102,8 +102,9 @@
   font-variant-numeric: tabular-nums;
 }
 
-// The social row under a publication's figures (DESIGN.md §10.17, §10.20):
-// the thread's button on the left below `lg`, the reactions on the right.
+// The social row under the page header, across the page (DESIGN.md §10.17,
+// §10.20): the thread's button on the left below `lg`, the reactions on the
+// right.
 .allure-social-row {
   display: flex;
   flex-wrap: wrap;

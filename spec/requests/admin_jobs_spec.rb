@@ -259,6 +259,43 @@ RSpec.describe "Admin jobs" do
     end
   end
 
+  describe "summaries backfill", :assistant do
+    before { sign_in_as(operator) }
+
+    it "schedules the summaries of consenting accounts and audits the count" do
+      create(:workout, user: create(:user, ai_enabled: true), started_at: 2.days.ago)
+      create(:workout, user: member, started_at: 2.days.ago)
+
+      get admin_jobs_path
+      expect(response.body).to include(I18n.t("admin.jobs.summaries.action"))
+
+      post admin_jobs_backfill_summaries_path
+
+      expect(response).to redirect_to(admin_jobs_path)
+      expect(Workouts::BackfillSummariesJob).to have_been_enqueued
+      expect(AdminEvent.last).to have_attributes(action: "summaries_backfill_enqueued", user: operator)
+      expect(AdminEvent.last.metadata["count"]).to eq(1)
+    end
+
+    it "does nothing while the assistant is off" do
+      create(:workout, user: create(:user, ai_enabled: true), started_at: 2.days.ago)
+
+      without_assistant { post admin_jobs_backfill_summaries_path }
+
+      expect(Workouts::BackfillSummariesJob).not_to have_been_enqueued
+      expect(AdminEvent.count).to eq(0)
+    end
+
+    def without_assistant
+      keys = %w[AI_BASE_URL AI_MODEL]
+      previous = keys.to_h { |key| [ key, ENV[key] ] }
+      keys.each { |key| ENV.delete(key) }
+      yield
+    ensure
+      previous.each { |key, value| value.nil? ? ENV.delete(key) : ENV[key] = value }
+    end
+  end
+
   describe "places backfill" do
     before do
       sign_in_as(operator)

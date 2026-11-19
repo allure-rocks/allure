@@ -372,6 +372,16 @@ en:
         action: Fetch the weather
         confirm_title: Fetch the weather?
         confirm_body: "The weather of %{count} workout(s) will be requested from Open-Meteo, at a limited pace and within the daily budget."
+      summaries:
+        title: Summaries
+        budget: "Model calls over 24 h: %{used} / %{limit}."
+        outdated:
+          one: 1 workout of a consenting account has no current summary.
+          other: "%{count} workouts of consenting accounts have no current summary."
+        current: Every workout of consenting accounts has its summary.
+        action: Write the summaries
+        confirm_title: Write the summaries?
+        confirm_body: "The summary of %{count} workout(s) will be requested from the model, one at a time."
       elevation:
         title: Estimated elevation
         outdated:
@@ -514,6 +524,10 @@ en:
           one: "Weather requested for 1 workout."
           other: "Weather requested for %{count} workouts."
         weather_backfill_current: No workout is waiting for its weather.
+        summaries_backfill_enqueued:
+          one: "Summary requested for 1 workout."
+          other: "Summaries requested for %{count} workouts."
+        summaries_backfill_current: No workout is waiting for its summary.
         places_backfill_enqueued:
           one: "Place recomputation enqueued for 1 workout."
           other: "Place recomputation enqueued for %{count} workouts."
@@ -897,6 +911,7 @@ en:
         together_detection_backfill_enqueued: Detection of outings done together enqueued
         heart_rate_backfill_enqueued: Workout heart-rate computation enqueued
         route_suggestions_backfill_enqueued: Recurring-route search enqueued
+        summaries_backfill_enqueued: Workout summaries enqueued
         photo_quota_changed: Photo storage quota changed
         funding_granted: Contribution recorded
         funding_revoked: Contribution revoked
@@ -2405,6 +2420,20 @@ en:
     weather:
       refreshed: Weather requested. It will show in a moment.
       refresh_unavailable: The weather cannot be fetched for this workout.
+    summary:
+      title: Summary
+      pending: Writing the summary…
+      failed: The summary could not be written.
+      empty: No summary for this workout yet.
+      generate: Write the summary
+      retry: Retry
+      proposed_title: "Suggested title: “%{title}”"
+      use_title: Use this title
+      wait: "%{minutes} min before another summary."
+      requested: Summary requested. It will appear in a few moments.
+      throttled: A summary was just requested. Try again in a few minutes.
+      title_applied: Title changed.
+      unavailable: The summary is not available for this workout.
     index:
       title: My workouts
       empty:
@@ -2594,6 +2623,7 @@ en:
           other: "%{count} points"
       create_segment: Create segment
       save_as_route: Save as route
+      regenerate_summary: Regenerate the summary
       segment_efforts:
         title: Segment efforts
         segment: Segment
@@ -4326,6 +4356,34 @@ en:
         confirm_body: "The weather of %{count} workout(s) will be deleted. Your existing publications do not change."
       destroy:
         success: "Weather deleted for %{count} workout(s)."
+    assistant:
+      title: Assistant
+      summary_title: Summaries of my workouts
+      description: "The assistant writes a short summary of each of your workouts from the measurements Allure computed. It appears under the main figures on the workout's page, where you can also ask for a new one."
+      enrichment_label: Write summaries of my workouts
+      layout:
+        label: Show the summary too when a description exists
+        hint: "Otherwise your description alone fills the place under the main figures; the summary appears there when the workout has none."
+      privacy: "Turning the assistant off stops every new summary; the ones already written remain until you delete them."
+      backfill:
+        title: Recent workouts
+        description: "Write the summaries of the workouts of the last 30 days. Requests go out one at a time."
+      save: Save changes
+      update:
+        enabled: Assistant on. Your next workouts will get a summary.
+        disabled: Assistant off. No new summary will be written; the ones already written remain until you delete them.
+        saved: Preferences saved.
+      stored:
+        title: Stored summaries
+        description:
+          zero: No workout has a stored summary.
+          one: 1 workout has a stored summary.
+          other: "%{count} workouts have a stored summary."
+        action: Delete stored summaries
+        confirm_title: Delete stored summaries?
+        confirm_body: "The summary of %{count} workout(s) will be deleted. Your existing publications do not change."
+      destroy:
+        success: "Summaries deleted for %{count} workout(s)."
     security:
       title: Security
       pretitle: Account
@@ -4579,6 +4637,12 @@ en:
         action: Fetch the weather
         confirm_title: Fetch the weather?
         confirm_body: "%{count} workout(s) will be enriched from Open-Meteo, at a limited pace."
+      summaries:
+        title: Summaries
+        description: "Recent workouts without a summary, or whose summary comes from an older generation of the assistant."
+        action: Write my summaries
+        confirm_title: Write your summaries?
+        confirm_body: "%{count} workout(s) will be sent to the model, one at a time, within the daily budget."
       heart_rate:
         title: Heart rate
         description: "Time spent at each heart rate, from which your zones follow. Computed from the recorded points."
@@ -4607,6 +4671,8 @@ en:
         elevation_current: No elevation to estimate.
         weather: "Weather fetching started for %{count} workout(s)."
         weather_current: No weather to fetch.
+        summaries: "Summary writing started for %{count} workout(s)."
+        summaries_current: All your summaries are up to date.
         heart_rate: "Heart-rate computation started for %{count} workout(s)."
         heart_rate_current: Your heart rate is already computed.
         route_suggestions: "Recurring-route search started for %{count} workout(s)."
@@ -4993,6 +5059,77 @@ en:
           tb: TB
           pb: PB
           eb: EB
+  assistant:
+    notice: "This summary is written automatically from this workout's measurements. It can be wrong: the figures on the cards are the reference. The measurements are sent to the model configured by this instance's operator."
+  insights:
+    facts:
+      places:
+        first: "Best time"
+        second: "Second best time"
+        third: "Third best time"
+      ranks:
+        first: "1st"
+        second: "2nd"
+        third: "3rd"
+      effort: "%{place} on %{label}: %{time}"
+      rank: "%{place} on the leaderboard for %{label} (%{count} participants)"
+      faster: "%{delta} faster than your last attempt on %{label}"
+      slower: "%{delta} slower than your last attempt on %{label}"
+      average_ratio: "%{ratio} times your average workout over 28 days (%{average})"
+      volume: "%{distance} over %{count} workouts in 28 days"
+      best_split: "Best %{distance}: %{time}"
+      heart_rate: "%{average} bpm average, %{max} maximum"
+      zone: "%{share} of the time in zone %{zone}"
+      wind: "Headwind over %{head} of the route, tailwind over %{tail}"
+      temperature: "%{range}, %{condition}, feels like %{apparent}"
+      climb: "%{name}: %{distance} at %{grade}"
+      intervals: "%{count} fast efforts, the longest %{distance} at %{speed}"
+      history_pace_faster: "%{delta} faster than your usual pace over this distance (%{usual})"
+      history_pace_slower: "%{delta} slower than your usual pace over this distance (%{usual})"
+      history_speed_faster: "%{delta} faster than your usual speed over this distance (%{usual})"
+      history_speed_slower: "%{delta} slower than your usual speed over this distance (%{usual})"
+      history_heart_rate_lower: "Same pace, %{delta} bpm lower than usual"
+      history_heart_rate_higher: "Same pace, %{delta} bpm higher than usual"
+      longest_since: "Your longest workout since %{date}"
+      longest_since_ever: "Your longest workout in over a year"
+      climb_since: "Your biggest climb since %{date}"
+      climb_since_ever: "Your biggest climb in over a year"
+      fastest_since: "Your fastest pace since %{date}"
+      fastest_since_ever: "Your fastest pace in over a year"
+      fastest_speed_since: "Your highest average speed since %{date}"
+      fastest_speed_since_ever: "Your highest average speed in over a year"
+      similar_pace_faster: "Comparable workout on %{date} (%{distance}, %{ascent}): %{delta} faster"
+      similar_pace_slower: "Comparable workout on %{date} (%{distance}, %{ascent}): %{delta} slower"
+      similar_speed_faster: "Comparable workout on %{date} (%{distance}, %{ascent}): %{delta} faster"
+      similar_speed_slower: "Comparable workout on %{date} (%{distance}, %{ascent}): %{delta} slower"
+      gap: "%{sport}: first workout in %{count} days"
+      gap_year: "%{sport}: first workout in over a year"
+      year_total: "That brings the year to %{distance} (%{sport})"
+      route: "Through %{places}"
+      first_visit: "New place: %{place}"
+      venue: "World: %{place}"
+      regular_place: "%{place}: %{count} workouts this year"
+      segment_median_faster: "%{delta} under your median time on %{label} (%{count} attempts)"
+      segment_median_slower: "%{delta} over your median time on %{label} (%{count} attempts)"
+      section:
+        range: "%{from} to %{to}"
+        flat: "flat"
+        rolling: "rolling"
+        part: "section"
+        climb: "climb, %{distance} at %{grade}, %{ascent}"
+        climb_named: "climb “%{name}”, %{distance} at %{grade}, %{ascent}"
+        climb_fallback: "the main climb"
+        descent: "descent, %{descent}"
+        vs_average_faster: "%{share} quicker than your average"
+        vs_average_slower: "%{share} slower than your average"
+        heart_rate: "%{bpm} bpm"
+        flat_equivalent: "%{pace} flat-equivalent"
+      course:
+        strong_finish: "Faster at the end than at the start on similar ground: %{last} against %{first}"
+        fade: "Slower at the end than at the start on similar ground: %{last} against %{first}"
+        climb_held: "Even effort on %{name}: %{gap} flat-equivalent, %{flat} on the flat"
+        hr_flat: "Same pace late on for %{delta} bpm more"
+        climb_share: "%{share} of the moving time spent climbing"
   weather:
     range: "%{low}–%{high}"
     range_signed: "%{low} to %{high}"

@@ -381,6 +381,35 @@
   overflow-wrap: anywhere;
 }
 
+// The assistant summary inside the figures card (DESIGN.md §10.26): a block
+// under the primary tiles that fills the card's width, never a card of its
+// own. « Régénérer » and the attribution's info icon close the last line.
+.allure-workout-assistant__text {
+  overflow-wrap: anywhere;
+}
+
+.allure-workout-assistant__info {
+  margin-inline-start: 0.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  line-height: 1;
+  vertical-align: -0.125em;
+  cursor: help;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--allure-text);
+  }
+}
+
+// The §19.40 sentence is long; the tooltip keeps a readable measure instead of
+// Bootstrap's narrow default.
+.tooltip.allure-assistant-tooltip .tooltip-inner {
+  max-width: 22rem;
+  text-align: start;
+}
+
 @media (max-width: 575.98px) {
   .allure-primary-metrics {
     gap: 0.5rem;

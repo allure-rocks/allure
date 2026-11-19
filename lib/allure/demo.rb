@@ -56,6 +56,15 @@ module Allure
       ENV.fetch("DEMO_OPERATOR_PASSWORD", "").presence
     end
 
+    # The domain of the seeded accounts' addresses (docs/dev/DEMO.md): the
+    # instance's own host, so a development checkout seeds `allure.test` and the
+    # public demo its own domain without a second source of truth.
+    # DEMO_EMAIL_DOMAIN pins another one.
+    def email_domain
+      value = ENV.fetch("DEMO_EMAIL_DOMAIN", "").strip.downcase.delete_prefix("@")
+      value.presence || Allure::Federation::Config.new.host
+    end
+
     # Refuse a demo configuration that cannot authenticate its operator before
     # any server, worker or seed starts. #accounts keeps the shared-account
     # check on every read, so a seed or credential rendering cannot expose the

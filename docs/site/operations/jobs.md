@@ -10,9 +10,11 @@ in the `allure_production_queue` database. Nothing else (no Redis) is needed.
 |---|---|---|
 | `worker` | `default`, `solid_queue_recurring`, `federation`, `federation_media`, `remote_imports`, `webhooks`, `photos` | `JOB_THREADS`, 3 by default |
 | `route-image-worker` | `route_images` | 1 (Chromium is heavy) |
+| `ai-worker` | `ai` | 1 (the model is the bottleneck) |
 
 Some work is limited further on its own, whatever the threads: one geocoding
-job at a time by default, one weather job, five deliveries per remote instance,
+job at a time by default, one weather job, one assistant call (its own
+single-threaded worker), five deliveries per remote instance,
 two photo jobs, one job per linked import account, one file import and one
 Strava archive per member.
 
@@ -30,7 +32,7 @@ To give the `worker` more room, raise `JOB_THREADS` in `.env.production`, or
 |---|---|
 | 5 minutes | Federation recovery (stuck deliveries, inbox items, remote media, key retirement); webhook recovery |
 | 10 minutes | Automatic publishing sweep |
-| 15 minutes | Recovery of geocoding, weather, segment places and photo processing |
+| 15 minutes | Recovery of geocoding, weather, assistant summaries, segment places and photo processing |
 | hour (:05) | Remote import synchronisation |
 | hour (:12) | Clearing finished jobs from the queue database |
 | hour (:20) | Account deletion sweep |
@@ -61,6 +63,7 @@ and does nothing when nothing is outdated. Each is recorded in the audit log.
 | Workout rebuild | Facts and analysis read from the original files. |
 | Route images, Segment images | Missing or outdated pictures. |
 | Weather | Weather of consenting members' activities. |
+| Summaries | Assistant summaries of consenting members' recent activities. |
 | Estimated elevation | Terrain elevation of opted-in members' activities without altitude. |
 | Workout places | Place lists, from stored geocoding (no request). |
 | Workout geocoding | Missing or outdated geocoding. |

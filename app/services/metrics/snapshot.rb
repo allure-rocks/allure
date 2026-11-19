@@ -68,6 +68,7 @@ module Metrics
         photos: WorkoutPhoto.group(:status).count,
         photo_bytes: WorkoutPhoto.sum(:bytes_total),
         workout_weathers: WorkoutWeather.group(:status).count,
+        workout_summaries: WorkoutSummary.group(:status).count,
         account_deletions_scheduled: User.where.not(deletion_scheduled_at: nil).count
       }
     end

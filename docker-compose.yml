@@ -40,6 +40,9 @@ x-app: &app
     DEMO_PASSWORD: ${DEMO_PASSWORD:-}
     DEMO_OPERATOR_PASSWORD: ${DEMO_OPERATOR_PASSWORD:-}
     DEMO_RESET_AT: ${DEMO_RESET_AT:-}
+    # Domain of the seeded accounts' addresses (docs/dev/DEMO.md); the instance
+    # host by default.
+    DEMO_EMAIL_DOMAIN: ${DEMO_EMAIL_DOMAIN:-}
     # Identity providers (docs/dev/AUTH.md); each is enabled only when all its
     # keys are set. The `oidc` profile's Dex answers the generic provider.
     AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID:-}
@@ -65,6 +68,13 @@ x-app: &app
     # Ceiling on the location an API token may hand an AI assistant through
     # /mcp: none, filtered or raw. Unset means no ceiling (docs/dev/MCP.md).
     MCP_GEOMETRY_MAX: ${MCP_GEOMETRY_MAX:-}
+    # Members' assistant (docs/dev/AI.md): an OpenAI-compatible endpoint such
+    # as a LiteLLM proxy. Off until AI_BASE_URL and AI_MODEL are both set.
+    AI_BASE_URL: ${AI_BASE_URL:-}
+    AI_MODEL: ${AI_MODEL:-}
+    AI_API_KEY: ${AI_API_KEY:-}
+    AI_REQUEST_OPTIONS: ${AI_REQUEST_OPTIONS:-}
+    AI_TIMEOUT: ${AI_TIMEOUT:-}
     # Public presentation metadata (footer, NodeInfo, PWA description). All
     # unset by default; nothing is invented for the operator.
     INSTANCE_NAME: ${INSTANCE_NAME:-}
@@ -223,6 +233,22 @@ services:
       <<: *env
       CHROMIUM_EXECUTABLE_PATH: /usr/bin/chromium
       SOLID_QUEUE_QUEUES: route_images
+      SOLID_QUEUE_THREADS: 1
+
+  # One model call at a time (docs/dev/AI.md): the GPU behind the endpoint is
+  # the bottleneck, so the assistant has its own single-threaded worker and is
+  # deliberately absent from the main worker's queue list.
+  ai-worker:
+    <<: *app
+    command: bin/jobs
+    init: true
+    cpus: 1
+    mem_limit: 1g
+    security_opt:
+      - no-new-privileges
+    environment:
+      <<: *env
+      SOLID_QUEUE_QUEUES: ai
       SOLID_QUEUE_THREADS: 1
 
   # Development OpenID Connect provider (docs/dev/AUTH.md), outside `dip up`:
