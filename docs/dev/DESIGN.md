@@ -4724,7 +4724,7 @@ card and no danger zone.
               where it blows, km/h or mph, rafales), humidité, précipitations
               when above zero, the device's own « Temp. capteur »; the
               « Vent pendant l'effort » bar (face primary, côté muted, dos
-              success, legend as text) and the mean headwind;
+              success, legend as text) and the mean headwind; the
               « Données météo : Open-Meteo.com » attribution in the footer.
               Owner states: pending, failed (Réessayer), missing (Récupérer
               la météo); a reader sees the frozen summary only when the
