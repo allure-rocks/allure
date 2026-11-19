@@ -7,6 +7,11 @@
 # One locale root, one exact Allure::VERSION key per release, a list of short
 # sentences. Do not move existing entries: a user's seen marker is the version.
 fr:
+  "0.10.1":
+    - "L'assistant d'activité est là : une synthèse courte, écrite à partir des chiffres qu'Allure calcule, et visible par vous seul."
+    - "Il raconte la sortie comme un partenaire d'entraînement, avec le vocabulaire de votre sport et un seul point d'exclamation quand c'est un record."
+    - "Le parcours est lu section par section — les montées, les descentes, les passages faciles — au lieu de deux moitiés."
+    - "L'assistant est facultatif : activez-le dans Paramètres › Assistant, et supprimez les synthèses enregistrées depuis la même page."
   "0.10.0":
     - "Le code, les tickets et les contributions d'Allure vivent maintenant sur github.com/allure-rocks/allure."
     - "Une instance de démonstration publique est disponible sur demo.allure.rocks : les identifiants sont affichés sur la page de connexion, et tout est remis à zéro chaque nuit."
@@ -255,6 +260,11 @@ fr:
     - "Le badge de record de l'en-tête couvre désormais tous les records détenus par l'activité : types classiques, meilleurs efforts et plus grande ascension. Les tuiles de résumé portent le même trophée."
     - "Un nouveau réglage « records » des profils de publication, désactivé par défaut, partage ces marqueurs avec vos abonnés. Aucun chiffre n'est publié, et les marqueurs ne se mettent à jour qu'à la republication."
 en:
+  "0.10.1":
+    - "The workout assistant is here: a short summary written from the figures Allure computes, and only you can read it."
+    - "It talks like a training partner, uses your sport's own vocabulary, and allows a single exclamation mark for a record."
+    - "It reads the route section by section — the climbs, the descents, the easy stretches — instead of two halves."
+    - "The assistant is optional: turn it on in Settings › Assistant, and delete the stored summaries from the same page."
   "0.10.0":
     - "Allure is now published on GitHub: the code, the issues and the contributions live at github.com/allure-rocks/allure."
     - "A public demo instance is available at demo.allure.rocks: the credentials are on the sign-in page, and everything is reset every night."
@@ -505,6 +515,11 @@ en:
 # Release 0.9.4 adds native notes for the remaining supported locales; older
 # releases continue to use the English fallback when no translation exists.
 de:
+  "0.10.1":
+    - "Der Aktivitätsassistent ist da: eine kurze Zusammenfassung aus den Zahlen, die Allure selbst berechnet – nur du kannst sie lesen."
+    - "Sie klingt wie ein Trainingspartner, spricht die Sprache deines Sports und erlaubt bei einem Rekord ein einziges Ausrufezeichen."
+    - "Der Parcours wird Abschnitt für Abschnitt gelesen – Anstiege, Abfahrten, lockere Passagen –, nicht in zwei Hälften."
+    - "Der Assistent ist freiwillig: Du schaltest ihn in Einstellungen › Assistent ein und löschst die gespeicherten Zusammenfassungen auf derselben Seite."
   "0.10.0":
     - "Allure ist jetzt auf GitHub veröffentlicht: Code, Issues und Beiträge liegen unter github.com/allure-rocks/allure."
     - "Eine öffentliche Demo-Instanz ist unter demo.allure.rocks verfügbar: Die Zugangsdaten stehen auf der Anmeldeseite, und alles wird jede Nacht zurückgesetzt."
@@ -550,6 +565,11 @@ de:
     - "Eine vollständige Runde reicht jetzt aus, um einen bekannten Rundkurs wiederzuerkennen, auch nach einem Anlaufweg. Für einen neuen Rundkurs sind weiterhin zwei Runden nötig."
     - "Ältere Aktivitäten werden im Hintergrund neu berechnet: Doppelte Rundkurse werden zusammengeführt, ihr Name und ihr Verlauf bleiben erhalten. Deine Veröffentlichungen ändern sich nicht."
 es:
+  "0.10.1":
+    - "El asistente de actividades ya está aquí: un resumen breve escrito a partir de las cifras que calcula Allure, y solo tú puedes leerlo."
+    - "Habla como un compañero de entrenamiento, usa el vocabulario de tu deporte y permite un único signo de exclamación cuando hay un récord."
+    - "El recorrido se lee por tramos —las subidas, las bajadas, los tramos fáciles— en lugar de en dos mitades."
+    - "El asistente es opcional: actívalo en Ajustes › Asistente y borra los resúmenes guardados desde la misma página."
   "0.10.0":
     - "El código, las incidencias y las contribuciones de Allure ya están en github.com/allure-rocks/allure."
     - "Hay una instancia de demostración pública en demo.allure.rocks: las credenciales están en la página de inicio de sesión y todo se restablece cada noche."
@@ -595,6 +615,11 @@ es:
     - "Una vuelta completa ya basta para reconocer un circuito conocido, incluso tras un tramo de aproximación. Para descubrir un circuito nuevo siguen haciendo falta dos vueltas."
     - "Las actividades antiguas se recalculan en segundo plano: los circuitos duplicados se agrupan conservando su nombre y su historial. Tus publicaciones no cambian."
 nl:
+  "0.10.1":
+    - "De activiteitenassistent is er: een korte samenvatting op basis van de cijfers die Allure zelf berekent, en alleen jij kunt hem lezen."
+    - "Hij klinkt als een trainingspartner, gebruikt de taal van je sport en staat bij een record één uitroepteken toe."
+    - "De route wordt stuk voor stuk gelezen — de klimmen, de afdalingen, de makkelijke stukken — in plaats van in twee helften."
+    - "De assistent is vrijwillig: zet hem aan in Instellingen › Assistent en verwijder de opgeslagen samenvattingen op dezelfde pagina."
   "0.10.0":
     - "Allure staat nu op GitHub: de code, de issues en de bijdragen leven op github.com/allure-rocks/allure."
     - "Er is een openbare demo-instantie op demo.allure.rocks: de inloggegevens staan op de aanmeldpagina en alles wordt elke nacht gereset."
