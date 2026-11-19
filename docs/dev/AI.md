@@ -36,9 +36,11 @@ foundation it needs is written here.
 - **One sentence is a complete answer**: a quiet outing says one true sentence
   and stops; Ruby fixes the length from the facts, and the model is never
   asked to pad (§4.1).
-- **The voice is the interface's** (DESIGN.md §3.1): a knowledgeable friend,
-  direct and a little wry. The sober register stays reserved for privacy,
-  publishing and destructive actions (DESIGN.md §3.2).
+- **The voice is the interface's** (DESIGN.md §3.1–§3.2): a training partner
+  texting right after the outing, direct and a bit cheeky, with the sport's own
+  jargon and at most one exclamation mark for a personal best. The sober
+  register stays reserved for privacy, publishing and destructive actions
+  (DESIGN.md §3.2).
 - **The answer's model name is stored** and takes part in the regeneration
   marker.
 - Opting out stops every future request immediately. Stored summaries remain
@@ -147,6 +149,12 @@ between two segments is never bridged, and a stationary interval never enters
 the moving time. The point stream's elevations are already the canonical
 filtered profile (WORKOUT.md), so nothing is smoothed twice. No point, no
 coordinate and no raw series leaves Ruby. The MCP does not ask for the course.
+
+`Workouts::SummaryFacts` returns the snapshot the prompt is built from: the
+facts, the digest, the locale, the units, the course and the sport's slug. The
+slug selects the jargon family (§4.1) and never enters the text; it stays out
+of the digest because a sport change already rewrites the `baseline:sport`
+fact.
 
 ### 3.2 A fact
 
@@ -289,13 +297,30 @@ Written in English; the answer is in the member's language. It states:
 - the model is the instance's assistant and writes the summary of one workout
   for its owner;
 - the target language and the [DESIGN.md](DESIGN.md) §4 glossary of that
-  language (workout → activité, personal best → record, and so on);
-- the voice of [DESIGN.md](DESIGN.md) §3.1, not the sober register: « a
-  knowledgeable friend who respects their time: direct, concrete, a little
-  wry. Personality lives in word choice and rhythm, never in volume. Second
-  person. No exclamation mark, no emoji, no forced congratulation, no
-  motivational slogan. Stay kind: a hard day is told plainly, never as a
-  reproach, and never with training advice a fact does not support. »;
+  language (workout → activité, personal best → record, and so on), with the
+  note that the sport's jargon may replace one of those words in a sentence;
+- the voice of [DESIGN.md](DESIGN.md) §3.1–§3.2, one step past the ordinary
+  playful register: « a training partner texting right after the outing: warm,
+  direct, a bit cheeky. Spoken language, never a report. » The athlete is the
+  subject (« you rode 204.6 km », never « the route offered »), the verbs are
+  the sport's own, and the model is given the administrative words to avoid in
+  that language (inscrit, fixe, établi, offert, « a pris son temps »). The
+  address form is spelled out — `vous` in French, `du`/`tú`/`je` in German,
+  Spanish and Dutch (DESIGN.md §3.4–§3.4b). Sentences run to 20 words, one
+  idea each, opening on the number or the action; at most one « but » in the
+  summary; the date and the sport name are never restated, the page already
+  shows them; one exclamation mark at most, reserved to a personal best or a
+  first; no emoji, no slogan, no fake congratulation; a hard day stays kind.
+  This is where a small model was writing « Les 204,6 km inscrits ce 18 mars
+  fixent votre plus grande distance » and « Le parcours a offert 1 793 m de
+  dénivelé »: the two defects to avoid by name are the administrative verb and
+  the summary written around figures instead of around the athlete;
+- when the sport has a family in `Allure::Insights::Jargon`, a handful of words
+  of its vocabulary in the member's language — D+, bosse, col for cycling,
+  fractionné for running — with the instruction to borrow one or two, never a
+  glossary. A sport without a family gets no jargon line, so the model invents
+  none. No listed word carries a number or a unit, and a rule keeps the units
+  intact: jargon may replace a word, never a unit;
 - the narrative instruction: open with the highlighted fact, build one short
   story around it, never list the facts, restate the baseline figures only
   when they serve the story, and answer one quiet sentence when nothing is
@@ -310,15 +335,18 @@ Written in English; the answer is in the member's language. It states:
   or a comparison. You may name a place that a fact carries, to set the scene,
   but never a place it does not carry. Every sentence cites at least one fact
   id, in its `fact_ids` field and never in the text. Write between `min` and
-  `max` sentences, as stated. Write every number in digits, exactly as its
-  fact writes it; prefer the facts' own words for numbers, units and
-  temperatures. »;
-- the title is a short name for the outing, at most 60 characters, never the
-  sport and the date alone the way an import names a file, it uses only
-  numbers the facts carry, and a place from the facts makes a good title;
-- two style examples in the member's language — one rich outing, one quiet
-  one — marked as fictional facts whose places, numbers and wording must never
-  be reused. They show the rhythm; a small local model copies what it is shown.
+  `max` sentences, as stated. Write every number in digits with its unit,
+  exactly as its fact writes them. Jargon may replace a word, never a unit.
+  Rephrase the fact labels freely: they are data, not prose. »;
+- the title is a punchy nickname, 2 to 6 words and at most 60 characters, with
+  the sport's jargon welcome; it uses only numbers the facts carry, a place
+  from the facts makes a good one, and it is never the sport and the date alone
+  the way an import names a file;
+- three style examples in the member's language — one rich outing, one personal
+  best, one quiet one — marked as fictional facts whose places, numbers and
+  wording must never be reused. They show the rhythm; a small local model
+  copies what it is shown, and each number an example prints is one its own
+  fictional fact carries.
 
 The sentence bounds are computed, not chosen by the model: `Facts.sentence_range`
 counts the facts at or above `NOTABLE_WEIGHT` (70) whose sentiment is not
@@ -385,18 +413,23 @@ shape. `maxItems` is the upper bound §4.1 computes, clamped to five;
    the facts **that sentence cites** — compared on digits only, after
    normalising `,` and `.` decimals and space, narrow-space and `'` thousands
    separators, and ignoring `°` and unit suffixes;
-3. a title that fails the same rule is dropped, the sentences stay;
-4. a sentence that fails is dropped and logged with its fact ids
+3. a sentence that writes one of the snapshot's fact ids in its text is
+   dropped: the id is data for the machine, and a small model does slip
+   (« La montée de section:4 … »);
+4. a title that writes a fact id, or fails the number rule, is dropped, the
+   sentences stay;
+5. a sentence that fails is dropped and logged with its fact ids
    (`Rails.logger.warn`, never the text);
-5. no surviving sentence triggers one retry at `temperature: 0` with the
+6. no surviving sentence triggers one retry at `temperature: 0` with the
    refused sentences and their facts; still none, the row is `failed`;
-6. sentences beyond the computed bound are dropped, never rewritten: the
+7. sentences beyond the computed bound are dropped, never rewritten: the
    prompt-only fallback does not enforce `maxItems` by itself.
 
-The verifier never rewrites a sentence; it drops it. It checks numbers, not
-proper nouns: a place name the model invents is not caught here. The facts
-are the only place names it sees, the style examples forbid reusing theirs,
-and a place fact never enters a publication or a programmatic surface (§8).
+The verifier never rewrites a sentence; it drops it. It checks numbers and
+fact ids, not proper nouns: a place name the model invents is not caught here.
+The facts are the only place names it sees, the style examples forbid reusing
+theirs, and a place fact never enters a publication or a programmatic surface
+(§8).
 
 ## 5. Data model
 

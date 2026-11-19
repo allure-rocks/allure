@@ -63,6 +63,25 @@ RSpec.describe Allure::Insights::Verifier do
     expect(result.refused_fact_ids).to eq([ "baseline:distance" ])
   end
 
+  it "drops a sentence that writes a fact id in its text" do
+    result = verifier.call(answer([
+      { "text" => "La montée de baseline:distance a pris 62,4 km.", "fact_ids" => [ "baseline:distance" ] },
+      { "text" => "Votre meilleur 10 km reste à 41:32.", "fact_ids" => [ "best_effort:km10" ] }
+    ]))
+
+    expect(result.sentences.size).to eq(1)
+    expect(result.refused_fact_ids).to eq([ "baseline:distance" ])
+  end
+
+  it "drops a title that writes a fact id" do
+    result = verifier.call(answer([
+      { "text" => "Vous avez parcouru 62,4 km.", "fact_ids" => [ "baseline:distance" ] }
+    ], title: "Le tour de baseline:distance"))
+
+    expect(result.title).to be_nil
+    expect(result.sentences.size).to eq(1)
+  end
+
   it "drops a sentence citing an unknown fact" do
     result = verifier.call(answer([
       { "text" => "Vous avez parcouru 62,4 km.", "fact_ids" => [ "baseline:ghost" ] },

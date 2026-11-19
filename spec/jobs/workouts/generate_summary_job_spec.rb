@@ -57,6 +57,31 @@ RSpec.describe Workouts::GenerateSummaryJob, :assistant do
     expect(row.last_error).to be_nil
   end
 
+  it "asks the provider in the member's voice" do
+    schedule
+    stub_answers(valid_answer)
+
+    described_class.perform_now(workout)
+
+    expect(a_request(:post, url).with { |request|
+      system = JSON.parse(request.body)["messages"].first["content"]
+      system.include?('Address the owner as "vous"') && system.include?("a training partner")
+    }).to have_been_requested
+  end
+
+  it "lends the workout's sport's jargon to the provider" do
+    cycling = create(:workout, user:, sport: catalog_sport("cycling"), started_at: 2.days.ago)
+    Workouts::SummaryRefresh.schedule(cycling)
+    clear_enqueued_jobs
+    stub_answers(valid_answer)
+
+    described_class.perform_now(cycling)
+
+    expect(a_request(:post, url).with { |request|
+      JSON.parse(request.body)["messages"].first["content"].include?("D+, bosse, col")
+    }).to have_been_requested
+  end
+
   it "accepts one quiet sentence and asks the provider for the narrative bounds" do
     schedule
     # The first workout of a sport holds its records: drop them so the facts

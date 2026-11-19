@@ -78,7 +78,8 @@ module Workouts
     # One attempt, then one retry at temperature 0 when the verification
     # refused the answer (or the answer was not usable JSON).
     def generate(snapshot)
-      prompt = Allure::Insights::Prompt.new(facts: snapshot.facts, locale: snapshot.locale)
+      prompt = Allure::Insights::Prompt.new(facts: snapshot.facts, locale: snapshot.locale,
+                                            sport: snapshot.sport_slug)
       verifier = Allure::Insights::Verifier.new(snapshot.facts, max_sentences: prompt.max_sentences)
       client = Allure::Assistant::Config.client
       calls = 0

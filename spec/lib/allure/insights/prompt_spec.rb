@@ -24,22 +24,45 @@ RSpec.describe Allure::Insights::Prompt do
     expect(prompt.system).to include("workout = activité")
     expect(prompt.system).to include("Never write a fact id in the text")
     expect(prompt.system).to include("Write exactly one sentence")
-    expect(prompt.system).to include("exactly as its fact writes it")
+    expect(prompt.system).to include("exactly as its fact writes them")
+    expect(prompt.system).to include("Rephrase the fact labels freely")
   end
 
   it "carries the voice of the interface, not the sober register" do
-    expect(prompt.system).to include("a little wry")
-    expect(prompt.system).to include("No exclamation mark, no emoji")
+    expect(prompt.system).to include("a training partner texting right after the outing")
+    expect(prompt.system).to include("The athlete is the subject")
+    expect(prompt.system).to include("One exclamation mark at most")
+    expect(prompt.system).to include("No emoji")
+    expect(prompt.system).to include("never a unit")
+    expect(prompt.system).to include('Address the owner as "vous"')
     expect(prompt.system).to include("one quiet sentence is the right answer")
     expect(prompt.system).to include("The course table describes the route in order")
     expect(prompt.system).not_to include("Sober register")
   end
 
+  it "spells out the address form of the language" do
+    german = described_class.new(facts:, locale: "de")
+
+    expect(german.system).to include('Address the owner as "du"')
+    expect(german.system).to include("verzeichnet")
+  end
+
   it "gives a style example in the member's language, with no real place to copy" do
-    expect(prompt.system).to include("La montée sans à-coup")
-    expect(prompt.system).to include("Boucle tranquille")
+    expect(prompt.system).to include("Métronome dans la bosse")
+    expect(prompt.system).to include("Boucle pépère")
     expect(prompt.system).to include("never reuse their places, numbers, wording or sentences")
     expect(prompt.system).not_to include("Chevreuse")
+  end
+
+  it "lends the sport's jargon only when the sport has a family" do
+    cycling = described_class.new(facts:, locale: "fr", sport: "cycling_road")
+    trail = described_class.new(facts:, locale: "fr", sport: "trail")
+    tennis = described_class.new(facts:, locale: "fr", sport: "tennis_outdoor")
+
+    expect(cycling.system).to include("Talk the way people who do this sport talk")
+    expect(cycling.system).to include("D+, bosse, col")
+    expect(trail.system).to include("glossary — D+, footing, fractionné")
+    expect(tennis.system).not_to include("Talk the way people who do this sport talk")
   end
 
   it "asks one sentence when nothing is notable" do

@@ -114,6 +114,9 @@ exclamation-mark enthusiasm, no fake congratulation.
 
 Personality lives in **word choice and rhythm**, never in volume.
 
+The assistant's workout summary goes one step further (§3.2): it may borrow the
+sport's own vocabulary and, for a personal best, one exclamation mark.
+
 | Do | Don't |
 |---|---|
 | "Nothing here yet. Import a GPX and this fills up fast." | "No workouts found. Please import a workout to continue." |
@@ -165,6 +168,12 @@ creates pressure to train. None of them have a dataset in M3, and none of them
 survive the "would this still be kind on a bad week?" test.
 
 Celebration never animates beyond §16's limits and never blocks interaction.
+
+The assistant's summary (§10.26) is the one place the playful register may
+raise its voice: it talks like a training partner texting right after the
+outing, uses the sport's own vocabulary (§4), and may close a personal best or
+a first with a single exclamation mark. Still no emoji, no slogan, no fake
+congratulation, and one exclamation mark at most in the whole summary.
 
 ### 3.4 French address form
 
@@ -226,6 +235,11 @@ only for emphasis.
 The terminology contract. These words mean exactly one thing each, in code, in
 the UI and in every language (§4.1 for German, Spanish and Dutch). Deviating creates a support burden that no amount
 of good visual design repairs.
+
+These words bind the interface. The assistant's workout summary may replace one
+with the sport's jargon — « D+ », « bosse », « fractionné » — because that is how
+the people who practise the sport talk; it never replaces a unit (`1 793 m`
+stays `1 793 m`).
 
 | Concept | English UI | French UI | Notes |
 |---|---|---|---|

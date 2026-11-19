@@ -19,6 +19,7 @@ module Allure
 
       def initialize(facts, max_sentences: MAX_SENTENCES)
         @facts = facts.to_h { |fact| [ fact.id, fact ] }
+        @fact_ids = @facts.keys
         @numbers = @facts.transform_values { |fact| digits(fact.display) }
         @max_sentences = max_sentences.clamp(1, MAX_SENTENCES)
       end
@@ -33,7 +34,7 @@ module Allure
 
       private
 
-      attr_reader :facts, :numbers, :max_sentences
+      attr_reader :facts, :fact_ids, :numbers, :max_sentences
 
       def accepted_sentences(rows)
         kept = []
@@ -44,7 +45,7 @@ module Allure
 
           text = row["text"].to_s.strip
           ids = Array(row["fact_ids"]).map(&:to_s)
-          if text.empty? || ids.empty? || ids.any? { !facts.key?(it) } || !covered?(text, ids)
+          if text.empty? || ids.empty? || ids.any? { !facts.key?(it) } || !covered?(text, ids) || leaked_id?(text)
             refused_ids.concat(ids)
             refused_sentences << { "text" => text, "fact_ids" => ids } unless text.empty?
             next
@@ -60,11 +61,19 @@ module Allure
         digits(text).all? { allowed.include?(it) }
       end
 
+      # The prompt forbids writing a fact id in the text; a small model slips
+      # (« La montée de section:4 … »), and an internal id must never reach the
+      # member. An id is data for the machine, not prose.
+      def leaked_id?(text)
+        downcased = text.downcase
+        fact_ids.any? { |id| downcased.include?(id.downcase) }
+      end
+
       # The title cites nothing, so it may only use numbers present somewhere in
       # the facts.
       def accepted_title(title)
         text = title.to_s.strip
-        return if text.empty? || text.length > MAX_TITLE
+        return if text.empty? || text.length > MAX_TITLE || leaked_id?(text)
 
         allowed = numbers.values.flatten
         return unless digits(text).all? { allowed.include?(it) }

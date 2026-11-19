@@ -47,6 +47,10 @@ RSpec.describe Workouts::SummaryFacts do
     expect(second.digest).to eq(first.digest)
   end
 
+  it "carries the sport's slug for the prompt's jargon" do
+    expect(described_class.new(workout).call.sport_slug).to eq("cycling")
+  end
+
   it "cuts the recorded route around the detected climb" do
     climb = create(:workout, user:, sport:, started_at: Time.zone.parse("2026-11-17 09:00:00"),
                              distance: 4_000.0, average_speed: 2.5, ascent: 80.0,

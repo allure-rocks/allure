@@ -12,7 +12,7 @@ module Workouts
     ASCENT_TOLERANCE = 0.5
     ASCENT_FLOOR = 40.0
 
-    Snapshot = Data.define(:facts, :digest, :locale, :unit_system, :course)
+    Snapshot = Data.define(:facts, :digest, :locale, :unit_system, :course, :sport_slug)
 
     def initialize(workout)
       @workout = workout
@@ -27,7 +27,7 @@ module Workouts
       facts = Allure::Insights::Facts.build(context, locale:)
       digest = Allure::Insights::Facts.digest(facts, version: Allure::Insights::VERSION,
                                               locale:, unit_system:)
-      Snapshot.new(facts:, digest:, locale:, unit_system:, course:)
+      Snapshot.new(facts:, digest:, locale:, unit_system:, course:, sport_slug: workout.sport.slug)
     end
 
     private
