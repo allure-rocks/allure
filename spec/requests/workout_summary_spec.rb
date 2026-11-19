@@ -131,6 +131,22 @@ RSpec.describe "Workout assistant summary", :assistant do
     expect(flash[:notice]).to eq(I18n.t("workouts.summary.throttled"))
   end
 
+  it "requests a generation for a workout with heart-rate zones" do
+    user.update!(max_heart_rate: 190)
+    workout.update!(duration: 40, moving_time: 40, pause_time: 0, distance: 160.0,
+                    average_heart_rate: 150, max_heart_rate: 180)
+    points = [ 100, 150, 150, 180 ].each_with_index.map do |bpm, index|
+      { "t" => index * 10, "d" => index * 40.0, "lat" => 45.07 + (index * 0.0001), "lon" => 6.40, "hr" => bpm }
+    end
+    create(:track_segment, workout:, points:)
+    HeartRates::Rebuild.new(workout:).call
+    sign_in_as(user)
+
+    expect { post workout_summary_path(workout) }.to have_enqueued_job(Workouts::GenerateSummaryJob)
+    expect(response).to redirect_to(workout_path(workout))
+    expect(flash[:notice]).to eq(I18n.t("workouts.summary.requested"))
+  end
+
   it "refuses another account's workout" do
     sign_in_as(create(:user))
 
