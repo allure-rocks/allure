@@ -10,6 +10,17 @@ The developer contracts are published under `docs/dev/`; see
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-11-19
+
+### Fixed
+
+- Requesting a workout's assistant summary no longer fails when the workout
+  has a usable heart-rate histogram and the account has a zone profile: the
+  facts read the zone rows the API serializes (`zone`, `seconds`) instead of
+  summing their hashes, so the dominant zone is stated again. The request
+  created no summary row before failing, and no migration is needed
+  ([AI.md](docs/dev/AI.md) §3.3, [HEART-RATE.md](docs/dev/HEART-RATE.md)).
+
 ## [0.10.1] - 2026-11-19
 
 ### Added
