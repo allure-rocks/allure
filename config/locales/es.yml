@@ -2462,7 +2462,6 @@ es:
       failed: No se ha podido redactar el resumen.
       empty: Todavía no hay ningún resumen para esta actividad.
       generate: Redactar el resumen
-      regenerate: Volver a redactar
       retry: Reintentar
       proposed_title: "Título propuesto: «%{title}»"
       use_title: Usar este título
@@ -2660,6 +2659,7 @@ es:
           other: "%{count} puntos"
       create_segment: Crear un segmento
       save_as_route: Guardar como ruta
+      regenerate_summary: Regenerar el resumen
       segment_efforts:
         title: Esfuerzos en segmentos
         segment: Segmento
@@ -4395,8 +4395,11 @@ es:
     assistant:
       title: Asistente
       summary_title: Resúmenes de mis actividades
-      description: "El asistente redacta un resumen breve de cada una de tus actividades a partir de las métricas que Allure ha calculado. Aparece en la página de la actividad, donde también puedes pedir uno nuevo."
+      description: "El asistente redacta un resumen breve de cada una de tus actividades a partir de las métricas que Allure ha calculado. Aparece bajo las cifras principales de la página de la actividad, donde también puedes pedir uno nuevo."
       enrichment_label: Redactar los resúmenes de mis actividades
+      layout:
+        label: Mostrar también el resumen cuando hay una descripción
+        hint: "Si no, tu descripción ocupa sola el lugar bajo las cifras principales; el resumen aparece ahí cuando la actividad no tiene ninguna."
       privacy: "Si desactivas el asistente, no se redactará ningún resumen nuevo; los ya escritos se quedan hasta que los elimines."
       backfill:
         title: Actividades recientes
@@ -4405,6 +4408,7 @@ es:
       update:
         enabled: Asistente activado. Tus próximas actividades recibirán un resumen.
         disabled: Asistente desactivado. No se redactará ningún resumen nuevo; los ya escritos se quedan hasta que los elimines.
+        saved: Preferencias guardadas.
       stored:
         title: Resúmenes guardados
         description:

@@ -2426,7 +2426,6 @@ en:
       failed: The summary could not be written.
       empty: No summary for this workout yet.
       generate: Write the summary
-      regenerate: Rewrite
       retry: Retry
       proposed_title: "Suggested title: “%{title}”"
       use_title: Use this title
@@ -2624,6 +2623,7 @@ en:
           other: "%{count} points"
       create_segment: Create segment
       save_as_route: Save as route
+      regenerate_summary: Regenerate the summary
       segment_efforts:
         title: Segment efforts
         segment: Segment
@@ -4359,8 +4359,11 @@ en:
     assistant:
       title: Assistant
       summary_title: Summaries of my workouts
-      description: "The assistant writes a short summary of each of your workouts from the measurements Allure computed. It appears on the workout's page, where you can ask for a new one."
+      description: "The assistant writes a short summary of each of your workouts from the measurements Allure computed. It appears under the main figures on the workout's page, where you can also ask for a new one."
       enrichment_label: Write summaries of my workouts
+      layout:
+        label: Show the summary too when a description exists
+        hint: "Otherwise your description alone fills the place under the main figures; the summary appears there when the workout has none."
       privacy: "Turning the assistant off stops every new summary; the ones already written remain until you delete them."
       backfill:
         title: Recent workouts
@@ -4369,6 +4372,7 @@ en:
       update:
         enabled: Assistant on. Your next workouts will get a summary.
         disabled: Assistant off. No new summary will be written; the ones already written remain until you delete them.
+        saved: Preferences saved.
       stored:
         title: Stored summaries
         description:

@@ -118,9 +118,9 @@ RSpec.describe "Comments" do
   end
 
   # DESIGN.md §10.20: below `lg` the workout page carries a button to the
-  # thread's own page, beside the reactions under the figures.
+  # thread's own page, beside the reactions under the page header.
   describe "the social row and the thread's page" do
-    def social_row = response.parsed_body.at_css(".allure-detail-before-map .allure-social-row")
+    def social_row = response.parsed_body.at_css(".allure-detail-social .allure-social-row")
 
     it "puts the thread's button and the reactions under the figures, once" do
       publish!

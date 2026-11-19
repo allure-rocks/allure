@@ -28,6 +28,17 @@ The developer contracts are published under `docs/dev/`; see
   `Allure::Insights::VERSION` moves to 2, so the last 30 days regenerate on the
   next `workouts:summaries` sweep or from `/admin/jobs`.
 
+### Changed
+
+- The workout page leads with its social row across the full width, under the
+  header, and its description now sits inside the figures card under the
+  primary tiles. The assistant summary takes that place when the workout has
+  no description; « Afficher aussi la synthèse quand une description existe »
+  in `/settings/assistant` shows both, description first. The summary fills the
+  card's width, its attribution is a small info icon at the end of the text,
+  and « Régénérer la synthèse » moves to the header's `⋯` menu
+  ([AI.md](docs/dev/AI.md) §7, [DESIGN.md](docs/dev/DESIGN.md) §10.26, §20.3).
+
 ## [0.10.0] - 2026-11-13
 
 ### Added

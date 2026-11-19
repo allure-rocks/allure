@@ -32,8 +32,8 @@
 
 <div class="row row-deck row-cards">
   <div class="col-12">
-    <%= render "workouts/metrics", workout: @view, show_description: false,
-                                   record_labels: record_labels_from_types(@view.record_types) %>
+    <%= render "workouts/metrics", workout: @view,
+                                  record_labels: record_labels_from_types(@view.record_types) %>
   </div>
 
   <%# Reactions and, on phones, the way to the thread follow the figures

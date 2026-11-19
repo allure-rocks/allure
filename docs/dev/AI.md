@@ -25,7 +25,7 @@ foundation it needs is written here.
   not part of the REST representation, the MCP answer or the ActivityPub wire
   in this version (§8).
 - **The model proposes, the member decides**: the suggested title is an action
-  on the card; no title is ever renamed automatically.
+  in the summary; no title is ever renamed automatically.
 - **Additive**: a summary never changes a metric, a record, an effort, a
   publication or a notification.
 - **Automatic within 30 days** of the workout's start (`AUTO_WINDOW`), on
@@ -429,7 +429,7 @@ and a place fact never enters a publication or a programmatic surface (§8).
 
 The importer stamps `owner` when its form carried a title, `file` when the
 track named itself and `default` otherwise; the edit form and « Utiliser ce
-titre » stamp `owner`. The card offers the suggested title only while the
+titre » stamp `owner`. The block offers the suggested title only while the
 source is `default` or `file`. The migration stamps every existing row `owner`,
 so no historical title is ever proposed for replacement. A database check
 constraint carries the three values, like `workouts_origin`.
@@ -442,7 +442,7 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
 - **Eligibility** (`Workouts::SummaryEligibility`): the assistant configured,
   the owner opted in and not deactivated, `recording?`, and a stored analysis
   (`analysis_version` above zero). A refusal never writes a row: nothing is
-  queued, nothing is generated, and the card is not rendered.
+  queued, nothing is generated, and the block is not rendered.
 - `Workouts::SummaryRefresh.schedule(workout)` is the single scheduling seam,
   like `ToponymyRefresh`:
   - it returns untouched when eligibility fails;
@@ -459,7 +459,7 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
   - at the end of `Workouts::EnrichToponymyJob`: the places are facts, and the
     digest only moves when they changed;
   - at the end of `Workouts::EnrichWeatherJob` and `HeartRates::RezoneJob`;
-  - by the card's request (`POST /workouts/:id/summary`), which bypasses
+  - by the block's request (`POST /workouts/:id/summary`), which bypasses
     `AUTO_WINDOW`;
   - by `Settings::AssistantController#update` when the member opts in
     (`Workouts::UserBackfillJob` kind `summaries`, last 30 days);
@@ -496,32 +496,39 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
 
 - **Consent** `/settings/assistant` (group Système, rendered only while the
   instance configures a model): what the assistant does, the switch « Rédiger
-  les synthèses de mes activités », the §19.40 sentence, then « Supprimer les
-  synthèses enregistrées » when at least one exists (confirmation-guarded,
-  like the weather deletion) and « Rédiger les synthèses de mes activités
-  récentes » right after opting in.
-- **Workout page**: a `[Synthèse]` card between the social row and the weather
-  card, owner-only. It is absent for a reader, a participant, a manual entry
-  and a credit row. Anatomy in DESIGN.md §10.26:
+  les synthèses de mes activités », the second switch « Afficher aussi la
+  synthèse quand une description existe » once the first is on, the §19.40
+  sentence, then « Supprimer les synthèses enregistrées » when at least one
+  exists (confirmation-guarded, like the weather deletion) and « Rédiger les
+  synthèses de mes activités récentes » right after opting in.
+- **Workout page**: an owner-only block inside the figures card, under its
+  primary tiles (DESIGN.md §10.26, §20.3), filling the card's width. The
+  owner's description leads the block; the summary takes that place when the
+  workout has no description, and joins the description only when the account
+  turned on « Afficher aussi la synthèse quand une description existe ». It is
+  absent for a reader, a participant, a manual entry and a credit row, and a
+  description-only page shows no assistant block at all. Anatomy:
   - the sentences run as one flowing paragraph (one to five sentences, never
-    more); the attribution sentence sits under it, muted, always rendered and
-    never behind a disclosure;
+    more); a small info icon closes the last line and carries the §19.40
+    attribution in its tooltip and accessible name;
   - the proposed title appears below the text only while `title_source` is
     `default` or `file`, with « Utiliser ce titre »: the action sets the title
     and stamps `owner`, then reloads the page, so the line disappears for good;
-  - card header actions: « Régénérer » (ghost), disabled while `pending` and
-    within five minutes of the last request, the tooltip naming the wait; a
-    `failed` row says « Réessayer »;
+  - « Régénérer la synthèse » lives in the page header's `⋯` menu, never in
+    the block, and only while the row is `ready`; it is disabled within five
+    minutes of the last request, the tooltip naming the wait. A `failed` row
+    says « Réessayer » on its sentence's line;
   - states: `pending` — three muted skeleton lines under a `role="status"`
     sentence « Rédaction de la synthèse… »; `ready`; `failed` — one sentence on
     what failed and « Réessayer », never a provider message; outside
     `AUTO_WINDOW` and missing — the empty state with its one action « Rédiger
     la synthèse »;
-  - the page renders the card on load; the instance ships the browser's Turbo
-    but not the server-side Turbo Streams stack, so the card is not replaced
-    live while a generation runs: the owner reloads to see the result. A
-    follow-up may add the stream (signed, owner-scoped) with that stack.
-  - the card announces its ready state once through `aria-live="polite"` —
+  - the page renders the block on load; the instance ships the browser's
+    Turbo but not the server-side Turbo Streams stack, so the block is not
+    replaced live while a generation runs: the owner reloads to see the
+    result. A follow-up may add the stream (signed, owner-scoped) with that
+    stack.
+  - the block announces its ready state once through `aria-live="polite"` —
     the section and the fact that it is ready, never a re-reading of the text
     ([DESIGN.md](DESIGN.md) §18.8).
 - **Member limit**: one request per workout per five minutes (`requested_at`
@@ -611,9 +618,10 @@ non-streaming call is the single provider seam both versions use.
 - `spec/jobs/workouts/generate_summary_job_spec.rb`: success, digest no-op,
   verification retry, terminal failure, ineligible workout (no row).
 - Eligibility, `AUTO_WINDOW`, the five-minute throttle and the daily cap.
-- Request specs: the owner's card in each state, the 404 for another account,
-  the title action and `title_source`, the five-minute throttle, the consent
-  page, and the card absent from a reader's page.
+- Request specs: the owner's block in each state, the description-first rule,
+  the 404 for another account, the title action and `title_source`, the
+  five-minute throttle, the consent page, and the block absent from a reader's
+  page.
 - `spec/services/workouts/context_payload_spec.rb`: the history section's
   exclusions (later workouts, other sports, manual entries in `same_sport`),
   the gap's last outing (`last_same_sport_at`, typed sessions included), the

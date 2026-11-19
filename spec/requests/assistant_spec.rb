@@ -20,6 +20,7 @@ RSpec.describe "Assistant settings" do
 
       expect(response).to have_http_status(:ok)
       expect(user.ai_enabled).to be(false)
+      expect(user.ai_summary_with_description).to be(false)
       expect(response.body).to include(ERB::Util.html_escape(I18n.t("assistant.notice")))
       expect(response.body).to include(ERB::Util.html_escape(I18n.t("settings.assistant.privacy")))
       expect(response.body).to include(ERB::Util.html_escape(I18n.t("settings.assistant.enrichment_label")))
@@ -35,6 +36,26 @@ RSpec.describe "Assistant settings" do
 
       expect(response.body).to include(I18n.t("settings.assistant.backfill.title"))
       expect(response.body).to include(settings_data_summaries_path)
+    end
+
+    it "offers the layout switch only once consent is given" do
+      get settings_assistant_path
+      expect(response.body).not_to include(I18n.t("settings.assistant.layout.label"))
+
+      user.update!(ai_enabled: true)
+      get settings_assistant_path
+      expect(response.body).to include(ERB::Util.html_escape(I18n.t("settings.assistant.layout.label")))
+    end
+
+    it "stores the layout switch without changing the consent notice" do
+      user.update!(ai_enabled: true)
+
+      patch settings_assistant_path, params: { user: { ai_summary_with_description: "1" } }
+
+      expect(response).to redirect_to(settings_assistant_path)
+      expect(flash[:notice]).to eq(I18n.t("settings.assistant.update.saved"))
+      expect(user.reload.ai_summary_with_description).to be(true)
+      expect(user.ai_enabled).to be(true)
     end
 
     it "turns on and off without touching the stored summaries" do

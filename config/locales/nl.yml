@@ -2462,7 +2462,6 @@ nl:
       failed: De samenvatting kon niet worden geschreven.
       empty: Nog geen samenvatting voor deze activiteit.
       generate: Samenvatting schrijven
-      regenerate: Opnieuw schrijven
       retry: Opnieuw proberen
       proposed_title: "Voorgestelde titel: ‘%{title}’"
       use_title: Deze titel gebruiken
@@ -2660,6 +2659,7 @@ nl:
           other: "%{count} punten"
       create_segment: Segment maken
       save_as_route: Opslaan als route
+      regenerate_summary: Samenvatting opnieuw maken
       segment_efforts:
         title: Segmentpogingen
         segment: Segment
@@ -4395,8 +4395,11 @@ nl:
     assistant:
       title: Assistent
       summary_title: Samenvattingen van mijn activiteiten
-      description: "De assistent schrijft bij elk van je activiteiten een korte samenvatting op basis van de metingen die Allure heeft berekend. Die verschijnt op de pagina van de activiteit, waar je ook een nieuwe kunt aanvragen."
+      description: "De assistent schrijft bij elk van je activiteiten een korte samenvatting op basis van de metingen die Allure heeft berekend. Die verschijnt onder de belangrijkste cijfers op de pagina van de activiteit, waar je ook een nieuwe kunt aanvragen."
       enrichment_label: Samenvattingen van mijn activiteiten schrijven
+      layout:
+        label: De samenvatting ook tonen als er een beschrijving is
+        hint: "Anders vult je beschrijving alleen de plaats onder de belangrijkste cijfers; de samenvatting verschijnt daar wanneer de activiteit er geen heeft."
       privacy: "Als je de assistent uitschakelt, wordt er geen nieuwe samenvatting meer geschreven; al geschreven samenvattingen blijven staan tot je ze verwijdert."
       backfill:
         title: Recente activiteiten
@@ -4405,6 +4408,7 @@ nl:
       update:
         enabled: Assistent ingeschakeld. Je volgende activiteiten krijgen een samenvatting.
         disabled: Assistent uitgeschakeld. Er wordt geen nieuwe samenvatting meer geschreven; al geschreven samenvattingen blijven staan tot je ze verwijdert.
+        saved: Voorkeuren opgeslagen.
       stored:
         title: Opgeslagen samenvattingen
         description:

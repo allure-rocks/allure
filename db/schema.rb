@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_18_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_19_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
@@ -1294,6 +1294,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_130000) do
     t.string "profile_records_audience", default: "none", null: false
     t.string "discoverable", default: "none", null: false
     t.boolean "ai_enabled", default: false, null: false
+    t.boolean "ai_summary_with_description", default: false, null: false
     t.index "lower((username)::text)", name: "index_users_on_lower_username", unique: true
     t.index ["default_cycling_sport_id"], name: "index_users_on_default_cycling_sport_id"
     t.index ["default_running_sport_id"], name: "index_users_on_default_running_sport_id"

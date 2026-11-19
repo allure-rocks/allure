@@ -14,10 +14,8 @@ module Settings
 
     def update
       @user = current_user
-      enabling = ActiveModel::Type::Boolean.new.cast(assistant_params[:ai_enabled])
       if @user.update(assistant_params)
-        notice = enabling ? "settings.assistant.update.enabled" : "settings.assistant.update.disabled"
-        redirect_to settings_assistant_path, notice: t(notice)
+        redirect_to settings_assistant_path, notice: t(update_notice)
       else
         @stored_count = stored_scope.count
         render :show, status: :unprocessable_content
@@ -31,9 +29,17 @@ module Settings
 
     private
 
+    # The two switches share one form: only a change of consent earns the
+    # enabled/disabled sentence, the layout switch gets the neutral one.
+    def update_notice
+      return "settings.assistant.update.saved" unless @user.saved_change_to_ai_enabled?
+
+      @user.ai_enabled? ? "settings.assistant.update.enabled" : "settings.assistant.update.disabled"
+    end
+
     def stored_scope = WorkoutSummary.where(workout_id: current_user.workouts.select(:id))
 
-    def assistant_params = params.require(:user).permit(:ai_enabled)
+    def assistant_params = params.require(:user).permit(:ai_enabled, :ai_summary_with_description)
 
     def require_feature
       raise ActiveRecord::RecordNotFound unless Allure::Assistant::Config.enabled?

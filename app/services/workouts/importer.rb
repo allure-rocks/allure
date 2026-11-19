@@ -517,7 +517,7 @@ module Workouts
     end
 
     # The title and where it came from (docs/dev/AI.md §5): only a generated
-    # or file title lets the summary card propose another one.
+    # or file title lets the summary propose another one.
     def resolved_title(metrics, track, sport)
       return [ @title.strip, "owner" ] if @title.present? && @title.strip.present?
       return [ track.name.strip, "file" ] if track.name.present? && track.name.strip.present?

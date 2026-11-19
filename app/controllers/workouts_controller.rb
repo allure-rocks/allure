@@ -63,9 +63,15 @@ class WorkoutsController < ApplicationController
     else
       @workout
     end
-    # The owner's assistant summary card (docs/dev/AI.md §7): never for a
+    # The owner's assistant summary block (docs/dev/AI.md §7): never for a
     # reader, the owner's reader preview, a manual entry or a credit row.
     @summary_visible = owner && !@reader_preview && Workouts::SummaryEligibility.eligible?(@workout)
+    # Read once: the block and the header menu's regenerate action share it.
+    @assistant_summary = @summary_visible ? @workout.assistant_summary : nil
+    # The figures card's text block (DESIGN.md §20.3): the owner's description
+    # leads it, the summary takes its place when there is no description, and
+    # joins it only when the account asked for both.
+    @inline_summary = @summary_visible && (@workout.description.blank? || current_user.ai_summary_with_description?)
     @profiles = current_user&.publishing_profiles&.order(:position, :id) || []
     @publication_readiness = publication_readiness
     @selected_profile = selected_publishing_profile if @workout.user == current_user
@@ -155,7 +161,7 @@ class WorkoutsController < ApplicationController
     end
 
     if @workout.update(edit_params)
-      # A member-typed title is theirs: the summary card never proposes another
+      # A member-typed title is theirs: the summary never proposes another
       # one (docs/dev/AI.md §5).
       @workout.update_columns(title_source: "owner") if @workout.saved_change_to_title?
       changed.concat(Webhooks::Events.changed_fields(@workout.saved_changes, %w[title description notes commute]))

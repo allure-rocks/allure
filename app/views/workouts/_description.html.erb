@@ -1,6 +1,8 @@
-<%# The workout's text, its own card under the summary (DESIGN.md §20.3):
-    the shared description, then the owner's private notes. Locals:
-    `description`, `notes` (owner only, nil otherwise). %>
+<%# The workout's text as its own card (DESIGN.md §20.3), kept for a reader
+    whose figures card is absent or withholds the metrics: the shared
+    description, then the owner's private notes. Otherwise that text lives
+    under the primary tiles of the figures card. Locals: `description`,
+    `notes` (owner only, nil otherwise). %>
 <% description = local_assigns[:description] %>
 <% notes = local_assigns[:notes] %>
 <% if description.present? || notes.present? %>

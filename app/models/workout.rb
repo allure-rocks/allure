@@ -25,7 +25,7 @@ class Workout < ApplicationRecord
   ORIGINS = %w[import credit manual].freeze
 
   # Where the title came from (docs/dev/AI.md): the import form, the track's own
-  # name, or the member. Only the first two let the summary card propose one.
+  # name, or the member. Only the first two let the summary propose one.
   TITLE_SOURCES = %w[default file owner].freeze
 
   # The bounds a hand-typed figure must fall within (docs/dev/MANUAL-ENTRY.md):

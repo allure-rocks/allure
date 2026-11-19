@@ -2462,7 +2462,6 @@ de:
       failed: Die Zusammenfassung konnte nicht geschrieben werden.
       empty: Für diese Aktivität gibt es noch keine Zusammenfassung.
       generate: Zusammenfassung schreiben
-      regenerate: Neu schreiben
       retry: Erneut versuchen
       proposed_title: "Vorgeschlagener Titel: „%{title}“"
       use_title: Diesen Titel verwenden
@@ -2660,6 +2659,7 @@ de:
           other: "%{count} Punkte"
       create_segment: Segment erstellen
       save_as_route: Als Route speichern
+      regenerate_summary: Zusammenfassung neu schreiben
       segment_efforts:
         title: Segment-Durchgänge
         segment: Segment
@@ -4395,8 +4395,11 @@ de:
     assistant:
       title: Assistent
       summary_title: Zusammenfassungen meiner Aktivitäten
-      description: "Der Assistent schreibt zu jeder deiner Aktivitäten eine kurze Zusammenfassung aus den Messwerten, die Allure berechnet hat. Sie erscheint auf der Seite der Aktivität, wo du auch eine neue anfordern kannst."
+      description: "Der Assistent schreibt zu jeder deiner Aktivitäten eine kurze Zusammenfassung aus den Messwerten, die Allure berechnet hat. Sie erscheint unter den wichtigsten Zahlen auf der Seite der Aktivität, wo du auch eine neue anfordern kannst."
       enrichment_label: Zusammenfassungen meiner Aktivitäten schreiben
+      layout:
+        label: Die Zusammenfassung auch anzeigen, wenn eine Beschreibung vorhanden ist
+        hint: "Sonst füllt deine Beschreibung allein den Platz unter den wichtigsten Zahlen; die Zusammenfassung erscheint dort, wenn die Aktivität keine hat."
       privacy: "Wenn du den Assistenten ausschaltest, wird keine neue Zusammenfassung mehr geschrieben; bereits geschriebene bleiben, bis du sie löschst."
       backfill:
         title: Aktuelle Aktivitäten
@@ -4405,6 +4408,7 @@ de:
       update:
         enabled: Assistent aktiviert. Deine nächsten Aktivitäten erhalten eine Zusammenfassung.
         disabled: Assistent deaktiviert. Es wird keine neue Zusammenfassung mehr geschrieben; bereits geschriebene bleiben, bis du sie löschst.
+        saved: Einstellungen gespeichert.
       stored:
         title: Gespeicherte Zusammenfassungen
         description:

@@ -2463,7 +2463,6 @@ fr:
       failed: La synthèse n'a pas pu être rédigée.
       empty: Aucune synthèse pour cette activité pour le moment.
       generate: Rédiger la synthèse
-      regenerate: Régénérer
       retry: Réessayer
       proposed_title: "Titre proposé : « %{title} »"
       use_title: Utiliser ce titre
@@ -2661,6 +2660,7 @@ fr:
           other: "%{count} points"
       create_segment: Créer un segment
       save_as_route: Enregistrer en itinéraire
+      regenerate_summary: Régénérer la synthèse
       segment_efforts:
         title: Efforts sur segments
         segment: Segment
@@ -4396,8 +4396,11 @@ fr:
     assistant:
       title: Assistant
       summary_title: Synthèses de mes activités
-      description: "L'assistant rédige une courte synthèse de chacune de vos activités à partir des mesures qu'Allure a calculées. Elle s'affiche sur la page de l'activité, avec la possibilité d'en demander une nouvelle."
+      description: "L'assistant rédige une courte synthèse de chacune de vos activités à partir des mesures qu'Allure a calculées. Elle s'affiche sous les chiffres principaux de la page de l'activité, où vous pouvez aussi en demander une nouvelle."
       enrichment_label: Rédiger les synthèses de mes activités
+      layout:
+        label: Afficher aussi la synthèse quand une description existe
+        hint: "Sinon, votre description tient seule la place sous les chiffres principaux ; la synthèse s'y affiche quand l'activité n'en a pas."
       privacy: "Désactiver l'assistant arrête toute nouvelle rédaction ; les synthèses déjà écrites restent jusqu'à leur suppression."
       backfill:
         title: Activités récentes
@@ -4406,6 +4409,7 @@ fr:
       update:
         enabled: Assistant activé. Vos prochaines activités recevront une synthèse.
         disabled: Assistant désactivé. Plus aucune synthèse ne sera rédigée ; celles déjà écrites restent jusqu'à leur suppression.
+        saved: Préférences enregistrées.
       stored:
         title: Synthèses enregistrées
         description:

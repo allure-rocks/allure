@@ -1214,6 +1214,22 @@ module WorkoutsHelper
     nil
   end
 
+  # The five-minute floor between two explicit summary requests (docs/dev/AI.md
+  # §7), shared by the block's retry and the header menu's regenerate action.
+  def assistant_summary_wait_seconds(summary)
+    return 0 unless summary&.requested_at
+
+    [ (summary.requested_at + 5.minutes - Time.current).ceil, 0 ].max
+  end
+
+  def assistant_summary_waiting?(summary)
+    assistant_summary_wait_seconds(summary).positive?
+  end
+
+  def assistant_summary_wait_minutes(summary)
+    (assistant_summary_wait_seconds(summary) / 60.0).ceil
+  end
+
   private
 
   def metric_with_unit(value, unit)
