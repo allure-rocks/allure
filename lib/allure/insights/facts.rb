@@ -863,15 +863,25 @@ module Allure
           display = maximum ? t("insights.facts.heart_rate", average:, max: maximum) : format.bpm(average)
           facts << fact("heart_rate:average", "heart_rate", display, value: average, unit: "bpm", weight: 60)
         end
-        zones = workout.dig(:heart_rate, :zones)
-        if zones.is_a?(Array) && zones.sum.positive?
-          index = zones.each_with_index.max_by { it[0] }[1]
-          share = zones[index].to_f / zones.sum
+        zones = zone_rows
+        total = zones.sum { it[:seconds].to_i }
+        if total.positive?
+          dominant = zones.max_by { it[:seconds].to_i }
+          share = dominant[:seconds].to_f / total
           facts << fact("heart_rate:zone", "heart_rate",
-                        t("insights.facts.zone", share: format.share(share), zone: index + 1),
+                        t("insights.facts.zone", share: format.share(share),
+                                                zone: dominant[:zone] || zones.index(dominant) + 1),
                         value: share, unit: "share", weight: 62)
         end
         facts
+      end
+
+      # The API serializes one row per zone (`zone`, `lower_bpm`, `upper_bpm`,
+      # `seconds`); the dominant zone is the row with the most seconds, and its
+      # own number travels in the fact (AI.md §3.3).
+      def zone_rows
+        rows = workout.dig(:heart_rate, :zones)
+        rows.is_a?(Array) ? rows.grep(Hash) : []
       end
 
       # --- weather ----------------------------------------------------------

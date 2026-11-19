@@ -51,6 +51,24 @@ RSpec.describe Workouts::SummaryFacts do
     expect(described_class.new(workout).call.sport_slug).to eq("cycling")
   end
 
+  it "reads the heart-rate zone rows the API serializes" do
+    user.update!(max_heart_rate: 190)
+    heart_rate_workout = create(:workout, user:, sport:,
+                                          started_at: Time.zone.parse("2026-11-18 09:00:00"),
+                                          distance: 160.0, duration: 40, moving_time: 40, pause_time: 0,
+                                          average_heart_rate: 150, max_heart_rate: 180)
+    points = [ 100, 150, 150, 180 ].each_with_index.map do |bpm, index|
+      { "t" => index * 10, "d" => index * 40.0, "lat" => 45.07 + (index * 0.0001), "lon" => 6.40, "hr" => bpm }
+    end
+    create(:track_segment, workout: heart_rate_workout, points:)
+    HeartRates::Rebuild.new(workout: heart_rate_workout).call
+
+    zone = described_class.new(heart_rate_workout).call.facts.find { it.id == "heart_rate:zone" }
+
+    expect(zone).to be_present
+    expect(zone.display).to include("en zone 3")
+  end
+
   it "cuts the recorded route around the detected climb" do
     climb = create(:workout, user:, sport:, started_at: Time.zone.parse("2026-11-17 09:00:00"),
                              distance: 4_000.0, average_speed: 2.5, ascent: 80.0,

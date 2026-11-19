@@ -737,7 +737,15 @@ RSpec.describe Allure::Insights::Facts do
   describe "the heart rate" do
     it "states the average, the maximum and the dominant zone" do
       context = base_context
-      context[:workout][:heart_rate] = { zones: [ 300, 1_200, 1_800, 600, 0 ] }
+      context[:workout][:heart_rate] = {
+        zones: [
+          { zone: 1, lower_bpm: 90, upper_bpm: 110, seconds: 300 },
+          { zone: 2, lower_bpm: 110, upper_bpm: 130, seconds: 1_200 },
+          { zone: 3, lower_bpm: 130, upper_bpm: 150, seconds: 1_800 },
+          { zone: 4, lower_bpm: 150, upper_bpm: 170, seconds: 600 },
+          { zone: 5, lower_bpm: 170, upper_bpm: 190, seconds: 0 }
+        ]
+      }
 
       facts = build(context)
 
