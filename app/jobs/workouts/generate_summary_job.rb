@@ -12,6 +12,11 @@ module Workouts
     # The day's provider budget is spent: wait, the row stays pending.
     class BudgetExhaustedError < StandardError; end
 
+    # Warmer than a data extraction: the verifier, not the temperature, guards
+    # the numbers (AI.md §2).
+    TEMPERATURE = 0.6
+    RETRY_TEMPERATURE = 0
+
     Outcome = Data.define(:verified, :model, :calls, :prompt_tokens, :completion_tokens)
 
     retry_on ActiveRecord::Deadlocked, ActiveRecord::ConnectionNotEstablished,
@@ -74,7 +79,7 @@ module Workouts
     # refused the answer (or the answer was not usable JSON).
     def generate(snapshot)
       prompt = Allure::Insights::Prompt.new(facts: snapshot.facts, locale: snapshot.locale)
-      verifier = Allure::Insights::Verifier.new(snapshot.facts)
+      verifier = Allure::Insights::Verifier.new(snapshot.facts, max_sentences: prompt.max_sentences)
       client = Allure::Assistant::Config.client
       calls = 0
       model = nil
@@ -86,9 +91,9 @@ module Workouts
           result = client.complete(
             system: prompt.system,
             user: attempt.zero? ? prompt.user : retry_user(prompt, verified),
-            schema: Allure::Insights::SummarySchema.call,
+            schema: Allure::Insights::SummarySchema.call(max_sentences: prompt.max_sentences),
             schema_name: Allure::Insights::Prompt::SCHEMA_NAME,
-            temperature: attempt.zero? ? 0.3 : 0
+            temperature: attempt.zero? ? TEMPERATURE : RETRY_TEMPERATURE
           )
         rescue Allure::Assistant::Client::MalformedResponseError => error
           Rails.error.report(error, handled: true, context: { component: self.class.name })
@@ -135,7 +140,8 @@ module Workouts
 
         Your previous answer was refused: these sentences cite facts that do not carry their numbers.
         #{lines.join("\n")}
-        Rewrite the whole summary. Every number must appear in the facts you cite; cite the fact that carries it.
+        Rewrite the whole summary with at least one sentence. Every number must appear in the facts you cite;
+        cite the fact that carries it.
       TEXT
     end
 

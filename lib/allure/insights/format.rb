@@ -84,6 +84,36 @@ module Allure
         format("%d:%02d %s", seconds / 60, seconds % 60, t(imperial? ? "units.pace.per_mi" : "units.pace.per_km"))
       end
 
+      # An unsigned pace delta in prose (« 12 s /km », « 1 min 36 s /km »), from
+      # seconds per `basis` metres; the imperial form converts to the mile.
+      def pace_delta(seconds_per_basis, basis: 1_000)
+        return if seconds_per_basis.nil?
+
+        seconds = seconds_per_basis.to_i.abs
+        seconds = Allure::Units.seconds_per_kilometre_to_seconds_per_mile(seconds) if imperial? && basis.to_i == 1_000
+        unit = basis.to_i == 1_000 ? t(imperial? ? "units.pace.per_mi" : "units.pace.per_km") : pace_basis_unit(basis)
+        "#{delta_span(seconds)} #{unit}"
+      end
+
+      # « 1 min 36 s », « 2 min », « 18 s »: a pace delta reads as a duration,
+      # never as a clock time that could be mistaken for the pace itself.
+      def delta_span(seconds)
+        return t("units.duration.seconds", count: seconds) if seconds < 60
+
+        minutes = seconds / 60
+        rest = seconds % 60
+        return t("units.duration.minutes", count: minutes) if rest.zero?
+
+        "#{t("units.duration.minutes", count: minutes)} #{t("units.duration.seconds", count: rest)}"
+      end
+
+      # An unsigned speed delta, already in the member's units.
+      def speed_delta(mps)
+        return if mps.nil?
+
+        speed(mps.to_f.abs)
+      end
+
       def duration(seconds)
         return if seconds.nil?
 

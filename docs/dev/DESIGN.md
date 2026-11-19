@@ -133,7 +133,7 @@ the risk seriously, and undermines the warning it decorates.
 
 | Register | Applies to |
 |---|---|
-| **Playful** | onboarding, empty states, import success, records and personal bests, statistics headings, the styleguide, the 404 page |
+| **Playful** | onboarding, empty states, import success, records and personal bests, statistics headings, the assistant's workout summary (§10.26), the styleguide, the 404 page |
 | **Neutral** | all form labels, table headers, metric names, navigation, settings descriptions, the 500 page |
 | **Sober** | publishing and publication preview, privacy zones, leaderboard opt-out consent and aliases, every destructive confirmation, session revocation, the 410 page |
 
@@ -2349,8 +2349,10 @@ member has not opted in.
 └──────────────────────────────────────────────────────────┘
 ```
 
-- **Body:** two to five sentences as one flowing paragraph, never a list and
-  never more than five. The card never scrolls internally (§10.1).
+- **Body:** one to five sentences as one flowing paragraph, never a list and
+  never more than five. A quiet outing gets one sentence and stops; the
+  assistant never pads it to sound busier. The card never scrolls internally
+  (§10.1).
 - **Attribution:** the first §19.40 sentence under the body, muted, always
   rendered and never behind a disclosure. It names the assistant, not a
   provider.

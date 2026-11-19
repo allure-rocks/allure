@@ -34,6 +34,15 @@ RSpec.describe Allure::Insights::Verifier do
     expect(result).not_to be_dropped
   end
 
+  it "accepts a single sentence as a complete answer" do
+    result = verifier.call(answer([
+      { "text" => "Une sortie sans histoire, au rythme du jour.", "fact_ids" => [ "baseline:distance" ] }
+    ]))
+
+    expect(result).to be_valid
+    expect(result.sentences.size).to eq(1)
+  end
+
   it "drops a sentence that invents a number" do
     result = verifier.call(answer([
       { "text" => "Vous avez parcouru 63,4 km.", "fact_ids" => [ "baseline:distance" ] },
@@ -74,13 +83,24 @@ RSpec.describe Allure::Insights::Verifier do
     expect(result.sentences.size).to eq(2)
   end
 
-  it "is not valid with fewer than two surviving sentences" do
+  it "is not valid with no surviving sentence" do
     result = verifier.call(answer([
       { "text" => "Vous avez parcouru 63,4 km.", "fact_ids" => [ "baseline:distance" ] },
-      { "text" => "Votre meilleur 10 km reste à 41:32.", "fact_ids" => [ "best_effort:km10" ] }
+      { "text" => "Votre meilleur 10 km reste à 99:99.", "fact_ids" => [ "best_effort:km10" ] }
     ]))
 
     expect(result).not_to be_valid
+  end
+
+  it "keeps no more sentences than the prompt asked for" do
+    limited = described_class.new(facts, max_sentences: 1)
+    result = limited.call(answer([
+      { "text" => "Vous avez parcouru 62,4 km.", "fact_ids" => [ "baseline:distance" ] },
+      { "text" => "Votre meilleur 10 km reste à 41:32.", "fact_ids" => [ "best_effort:km10" ] }
+    ]))
+
+    expect(result.sentences.size).to eq(1)
+    expect(result).to be_valid
   end
 
   it "normalises thousands separators, decimals and units" do

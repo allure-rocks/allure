@@ -33,6 +33,60 @@ RSpec.describe Workouts::ContextPayload do
     end
   end
 
+  context "with the optional history section" do
+    let(:options) { { include_history: true } }
+    let(:workout) do
+      create(:workout, user:, sport:, distance: 60_000.0,
+                       started_at: Time.zone.parse("2026-11-17 09:00:00"))
+    end
+
+    it "adds one year of the same sport, without manual entries or later workouts" do
+      create(:workout, user:, sport:, distance: 5_000.0,
+                       started_at: Time.zone.parse("2026-10-01 09:00:00"))
+      create(:workout, user:, sport:, distance: 7_000.0,
+                       started_at: Time.zone.parse("2025-11-01 09:00:00"))
+      create(:workout, user:, sport: catalog_sport("running"),
+                       started_at: Time.zone.parse("2026-10-02 09:00:00"))
+      create(:workout, :manual, user:, sport:, started_at: Time.zone.parse("2026-10-03 09:00:00"))
+      create(:workout, user:, sport:, started_at: Time.zone.parse("2026-11-18 09:00:00"))
+
+      history = payload[:history]
+
+      expect(history[:window_days]).to eq(365)
+      expect(history[:same_sport].map { it[:distance] }).to eq([ 5_000 ])
+      expect(history[:older_same_sport]).to be(true)
+      expect(history[:previous_workouts]).to eq(4)
+      expect(history[:year_to_date][:workouts]).to eq(2)
+      expect(history[:last_same_sport_at]).to eq("2026-10-03T09:00:00Z")
+    end
+
+    it "takes the gap from the latest workout of the sport, a typed session included" do
+      create(:workout, user:, sport:, started_at: Time.zone.parse("2026-10-01 09:00:00"))
+      create(:workout, :manual, user:, sport:, started_at: Time.zone.parse("2026-11-10 09:00:00"))
+      create(:workout, user:, sport: catalog_sport("running"),
+                       started_at: Time.zone.parse("2026-11-12 09:00:00"))
+
+      expect(payload[:history][:last_same_sport_at]).to eq("2026-11-10T09:00:00Z")
+    end
+
+    it "counts this workout's places over the whole history and the year" do
+      workout.update!(places: [ { "name" => "Chevreuse", "kind" => "start" } ])
+      create(:workout, user:, sport:, started_at: Time.zone.parse("2026-10-01 09:00:00"),
+                       places: [ { "name" => "Chevreuse", "kind" => "start" } ])
+      create(:workout, user:, sport: catalog_sport("running"),
+                       started_at: Time.zone.parse("2026-09-01 09:00:00"),
+                       places: [ { "name" => "Chevreuse", "kind" => "start" } ])
+      create(:workout, user:, sport:, started_at: Time.zone.parse("2025-01-01 09:00:00"),
+                       places: [ { "name" => "Chevreuse", "kind" => "start" } ])
+
+      expect(payload[:history][:places]).to eq("Chevreuse" => { seen_before: true, year_count: 2 })
+    end
+
+    it "writes no place history without a place" do
+      expect(payload[:history][:places]).to eq({})
+    end
+  end
+
   it "serves the compact row of list_workouts to the same owner" do
     row = described_class.summary(workout, user)
 

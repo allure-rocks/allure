@@ -6,6 +6,6 @@ module Allure
   module Insights
     # Bumped when the prompt, the schema or the fact selection changes. A
     # summary generated under another version is stale (AI.md §5).
-    VERSION = 1
+    VERSION = 2
   end
 end

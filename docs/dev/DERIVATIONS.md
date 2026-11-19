@@ -20,7 +20,7 @@ rebuilds are launched.
 | Heart-rate histogram and zones | stored track segments + the owner's heart-rate profile | no | `workouts.heart_rate_version` (histogram), `workout_heart_rates.zones_fingerprint` (zones) | `HeartRates::Rebuild`, `HeartRates::RezoneJob` ([HEART-RATE.md](HEART-RATE.md)) |
 | Course elevation profile | stored source track segments (frozen) | no | `segments.elevation_profile` (`NULL` = not built, `[]` = built empty) | `Segments::Creator`, `Segments::BuildElevationProfileJob` |
 | Recurring-route suggestions | stored track segments | no | `workouts.route_suggestion_version` | `Segments::RouteSuggestionDetector` (`Segments::SuggestRouteJob`, `Segments::RouteSuggestionSweepJob`) |
-| Workout summary | the owner-only context, the analysis, the efforts, the weather and the zones | AI provider | `workout_summaries.version` + `facts_digest` | `Workouts::SummaryRefresh` → `Workouts::GenerateSummaryJob` ([AI.md](AI.md)) |
+| Workout summary | the owner-only context, the analysis, the efforts, the weather, the zones and the places | AI provider | `workout_summaries.version` + `facts_digest` | `Workouts::SummaryRefresh` → `Workouts::GenerateSummaryJob` ([AI.md](AI.md)) |
 
 The workout-side contracts are in `WORKOUT.md`, the course-side ones in
 `SEGMENTS.md`, the terrain profile in `ELEVATION.md`, the toponymy and places in

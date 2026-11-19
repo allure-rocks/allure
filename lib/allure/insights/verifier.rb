@@ -4,18 +4,23 @@ module Allure
   module Insights
     # What may be shown from a model answer (docs/dev/AI.md §4.4): each sentence
     # must cite known facts, and every number it writes must come from one of
-    # them. The verifier never rewrites; it drops.
+    # them. The verifier never rewrites; it drops, and keeps at most the number
+    # of sentences the prompt asked for.
     class Verifier
       MAX_TITLE = 60
+      MAX_SENTENCES = SummarySchema::MAX_SENTENCES
 
       Result = Data.define(:title, :sentences, :refused_fact_ids, :refused_sentences) do
-        def valid? = sentences.size >= 2
+        # One verified sentence is a complete answer: a quiet outing says one
+        # sentence and stops (AI.md §4.1).
+        def valid? = sentences.size >= 1
         def dropped? = refused_sentences.any?
       end
 
-      def initialize(facts)
+      def initialize(facts, max_sentences: MAX_SENTENCES)
         @facts = facts.to_h { |fact| [ fact.id, fact ] }
         @numbers = @facts.transform_values { |fact| digits(fact.display) }
+        @max_sentences = max_sentences.clamp(1, MAX_SENTENCES)
       end
 
       def call(answer)
@@ -28,7 +33,7 @@ module Allure
 
       private
 
-      attr_reader :facts, :numbers
+      attr_reader :facts, :numbers, :max_sentences
 
       def accepted_sentences(rows)
         kept = []
@@ -47,7 +52,7 @@ module Allure
 
           kept << { "text" => text, "fact_ids" => ids }
         end
-        [ kept, refused_ids.uniq, refused_sentences ]
+        [ kept.first(max_sentences), refused_ids.uniq, refused_sentences ]
       end
 
       def covered?(text, ids)

@@ -5,7 +5,7 @@ FactoryBot.define do
     workout
     locale { "fr" }
     status { "pending" }
-    version { 1 }
+    version { Allure::Insights::VERSION }
 
     trait :ready do
       status { "ready" }

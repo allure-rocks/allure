@@ -16,6 +16,17 @@ The developer contracts are published under `docs/dev/`; see
   design reference (`docs/dev/DESIGN.md`), so contributors and coding agents
   share the same constraints. The developer contracts are published under
   `docs/dev/`.
+- The assistant summary speaks with the interface's voice, compares a workout
+  with the owner's year (usual pace and heart rate, longest and fastest since a
+  date, the closest comparable outing, the round year total), names the
+  route's places and reads the route as sections — the detected climbs and
+  descents, or equal parts when the terrain is missing — rather than two halves,
+  so a slow section is never mistaken for a failing when the road simply went
+  up. A quiet outing gets one sentence instead of a padded paragraph, and the
+  suggested title is still proposed
+  ([AI.md](docs/dev/AI.md), [DESIGN.md](docs/dev/DESIGN.md) §10.26).
+  `Allure::Insights::VERSION` moves to 2, so the last 30 days regenerate on the
+  next `workouts:summaries` sweep or from `/admin/jobs`.
 
 ## [0.10.0] - 2026-11-13
 

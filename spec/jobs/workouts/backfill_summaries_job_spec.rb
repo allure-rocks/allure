@@ -18,7 +18,7 @@ RSpec.describe Workouts::BackfillSummariesJob, :assistant do
     failed = workout
     create(:workout_summary, :failed, workout: failed)
     outdated = workout
-    create(:workout_summary, workout: outdated, version: 0)
+    create(:workout_summary, workout: outdated, version: Allure::Insights::VERSION - 1)
     current = workout
     create(:workout_summary, :ready, workout: current)
     workout(owner: create(:user))

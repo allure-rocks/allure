@@ -57,13 +57,36 @@ RSpec.describe Workouts::GenerateSummaryJob, :assistant do
     expect(row.last_error).to be_nil
   end
 
+  it "accepts one quiet sentence and asks the provider for the narrative bounds" do
+    schedule
+    # The first workout of a sport holds its records: drop them so the facts
+    # carry nothing but the baseline and the bounds are one sentence.
+    workout.records.delete_all
+    quiet = JSON.generate(
+      "title" => "Boucle tranquille",
+      "sentences" => [ { "text" => "Une sortie sans histoire.", "fact_ids" => [ "baseline:distance" ] } ]
+    )
+    stub_answers(quiet)
+
+    described_class.perform_now(workout)
+
+    row = workout.reload.assistant_summary
+    expect(row).to be_ready
+    expect(row.sentences.size).to eq(1)
+    expect(a_request(:post, url).with { |request|
+      body = JSON.parse(request.body)
+      body["temperature"] == 0.6 &&
+        body.dig("response_format", "json_schema", "schema", "properties", "sentences", "maxItems") == 1
+    }).to have_been_requested
+  end
+
   it "retries once at temperature 0 when a sentence invents a number" do
     schedule
     invented = JSON.generate(
       "title" => "Le tour",
       "sentences" => [
         { "text" => "Vous avez parcouru 300 m.", "fact_ids" => [ "baseline:distance" ] },
-        { "text" => "Votre vitesse moyenne était de 18,0 km/h.", "fact_ids" => [ "baseline:average" ] }
+        { "text" => "Votre vitesse moyenne était de 99,0 km/h.", "fact_ids" => [ "baseline:average" ] }
       ]
     )
     stub_answers(invented, valid_answer)

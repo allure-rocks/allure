@@ -3,9 +3,9 @@
 module Workouts
   # The owner-only context of one workout (docs/dev/MCP.md §5.1, AI.md §3.1):
   # every figure Allure derives from it, its equipment and record set, its laps,
-  # splits and efforts, and the four weeks before. Built from the REST
-  # serializers and the services the web uses, so a metric has one
-  # implementation.
+  # splits and efforts, the four weeks before and — for the assistant, on
+  # request — the year before. Built from the REST serializers and the services
+  # the web uses, so a metric has one implementation.
   #
   # `AllureMcp::Tools::GetWorkoutContext` adds the token's location level, the
   # optional measurement series and the optional geometry; the assistant reads
@@ -33,6 +33,9 @@ module Workouts
     MAX_SPLITS = 60
     TRAINING_WINDOW = 28.days
     RECENT_SAME_SPORT = 5
+    # The assistant's comparisons (AI.md §3.3): one year of the same sport, a
+    # single bounded `pluck` per section, never a point or a coordinate.
+    HISTORY_WINDOW = 365.days
 
     class << self
       def account(user)
@@ -89,7 +92,7 @@ module Workouts
     end
 
     def call(include_laps: true, include_splits: true, split_distance: nil, include_efforts: true,
-             include_training: true)
+             include_training: true, include_history: false)
       body = {
         account: self.class.account(user),
         units: UNITS,
@@ -104,6 +107,7 @@ module Workouts
         body[:segment_efforts] = segment_efforts
       end
       body[:training] = training if include_training
+      body[:history] = history if include_history
       body
     end
 
@@ -229,6 +233,85 @@ module Workouts
         recent_same_sport: user.workouts.where(sport_id: workout.sport_id).where(started_at: ...workout.started_at)
                                .includes(:sport).newest_first.limit(RECENT_SAME_SPORT).map { summary(it) }
       }
+    end
+
+    # A year of the same sport, for the assistant's comparisons and its places
+    # (AI.md §3.1, §3.3). Manual entries carry no track and stay out: comparing
+    # a recorded ride with a typed one is not a comparison of outings.
+    def history
+      since = workout.started_at - HISTORY_WINDOW
+      before = user.workouts.where(started_at: since...workout.started_at)
+      same = before.where(sport_id: workout.sport_id).where.not(origin: "manual")
+      {
+        window_days: HISTORY_WINDOW.in_days.to_i,
+        same_sport: same.order(:started_at)
+                        .pluck(:started_at, :distance, :moving_time, :ascent, :average_speed,
+                               :average_heart_rate, :places)
+                        .map { |row| history_row(row) },
+        older_same_sport: user.workouts.where(sport_id: workout.sport_id).where(started_at: ...since).exists?,
+        # The gap reads every origin, a typed session included: a manual entry
+        # five days ago is still a workout of the sport.
+        last_same_sport_at: time(user.workouts.where(sport_id: workout.sport_id)
+                                     .where(started_at: ...workout.started_at).maximum(:started_at)),
+        previous_workouts: user.workouts.where(started_at: ...workout.started_at).count,
+        year_to_date: totals(year_to_date_scope),
+        places: place_history
+      }
+    end
+
+    def history_row(row)
+      {
+        local_start: local_time(row[0]),
+        started_at: time(row[0]),
+        distance: number(row[1]),
+        moving_time: row[2].to_i,
+        ascent: number(row[3]),
+        average_speed: number(row[4]),
+        average_heart_rate: row[5],
+        places: place_names(row[6])
+      }
+    end
+
+    # What the assistant knows about each of this workout's places (AI.md
+    # §3.3): whether it was visited before, and how often this year.
+    def place_history
+      names = place_names(workout.places)
+      return {} if names.empty?
+
+      names.to_h do |name|
+        [ name, { seen_before: seen_before?(name), year_count: year_count_for(name) } ]
+      end
+    end
+
+    def seen_before?(name)
+      workout_places_before.where("workouts.places @> ?", [ { name: } ].to_json).exists?
+    end
+
+    def year_count_for(name)
+      year_places_scope.where("workouts.places @> ?", [ { name: } ].to_json).count
+    end
+
+    # A place is about the year, not the sport: « 9e activité par Chevreuse »
+    # counts every outing that started or passed there.
+    def year_places_scope
+      @year_places_scope ||= user.workouts.where(started_at: local_year_start...workout.started_at)
+    end
+
+    def workout_places_before
+      @workout_places_before ||= user.workouts.where(started_at: ...workout.started_at)
+    end
+
+    def year_to_date_scope
+      @year_to_date_scope ||= user.workouts.where(sport_id: workout.sport_id, started_at: local_year_start...workout.started_at)
+    end
+
+    def local_year_start
+      zone = Time.find_zone(user.time_zone) || Time.zone
+      workout.started_at.in_time_zone(zone).beginning_of_year
+    end
+
+    def place_names(places)
+      Array(places).filter_map { it["name"] if it.is_a?(Hash) }
     end
 
     def totals(scope)

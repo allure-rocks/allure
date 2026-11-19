@@ -23,9 +23,24 @@ module Workouts
     def perform(workout)
       ToponymyEnricher.new(workout:).call
       AutoPublishJob.nudge(workout)
+      # The places are facts of the assistant summary (AI.md §3.3, §6): the
+      # digest only moves when they changed, so an unchanged route is a no-op.
+      schedule_summary(workout)
     rescue StandardError => error
       Rails.error.report(error, handled: false, context: { component: self.class.name, workout_id: workout.id })
       raise
+    end
+
+    private
+
+    # A summary error never replays the geocoding, whose provider is
+    # rate-limited: the summary is a derivation of the places, not the reason
+    # to fetch them again.
+    def schedule_summary(workout)
+      SummaryRefresh.schedule(workout)
+    rescue StandardError => error
+      Rails.error.report(error, handled: true,
+                                context: { component: "#{self.class.name}#summary", workout_id: workout.id })
     end
   end
 end

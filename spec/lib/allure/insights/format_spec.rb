@@ -59,6 +59,15 @@ RSpec.describe Allure::Insights::Format do
     expect(format.duration(372)).to eq("6:12")
   end
 
+  it "writes a pace delta as a duration, never as a clock time" do
+    format = format_for(:fr, "metric")
+
+    expect(format.pace_delta(33)).to eq("33 s /km")
+    expect(format.pace_delta(96)).to eq("1 min 36 s /km")
+    expect(format.pace_delta(120)).to eq("2 min /km")
+    expect(format.pace_delta(96, basis: 500)).to eq("1 min 36 s /500m")
+  end
+
   it "writes the local date in the member's language" do
     time = Time.iso8601("2026-11-17T09:00:00+01:00")
 
