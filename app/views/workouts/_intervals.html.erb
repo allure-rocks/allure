@@ -53,7 +53,7 @@
           <% if interval.average_power && !sport.power_led? %><span class="ms-1">· <%= format_power(interval.average_power) %></span><% end %>
         </div>
         <div class="text-secondary small allure-table-nums">
-          ↑ <%= format_elevation(interval.ascent) %> · ↓ <%= format_elevation(interval.descent) %>
+          <%= elevation_change(ascent: interval.ascent, descent: interval.descent) %>
         </div>
       </li>
     <% end %>

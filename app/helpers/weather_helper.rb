@@ -198,9 +198,20 @@ module WeatherHelper
     end
   end
 
-  def wind_label(speed, direction, gusts: nil)
+  # The weather card prints the wind and its gusts on one line; each figure stays
+  # whole when the line wraps (DESIGN.md §20.3). The map markers and the hourly
+  # table keep the plain text form.
+  def wind_label(speed, direction, gusts: nil, html: false)
     parts = [ format_wind_speed(speed), wind_compass(direction) ].compact.join(" ")
-    gusts.present? ? t("weather.wind_with_gusts", wind: parts, gusts: format_wind_speed(gusts)) : parts
+    return parts if gusts.blank?
+
+    if html
+      t("weather.wind_with_gusts_html",
+        wind: tag.span(parts, class: "text-nowrap"),
+        gusts: format_wind_speed(gusts))
+    else
+      t("weather.wind_with_gusts", wind: parts, gusts: format_wind_speed(gusts))
+    end
   end
 
   # The head / cross / tail shares as one bar, drawn as SVG widths (no inline

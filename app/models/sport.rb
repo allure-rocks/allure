@@ -7,6 +7,30 @@ class Sport < ApplicationRecord
   PACE_SPEED_DISPLAYS = %w[pace speed pace_and_speed].freeze
   CADENCE_UNITS = %w[rpm spm].freeze
 
+  # Pace and speed are one channel per sport: a ride reads its speed and never
+  # a pace, a run the reverse, and only a sport that declares both (`pace`
+  # and `speed` on the same recording) carries both. A sport whose pace is
+  # measured over a fixed basis (rowing's /500 m) never shows speed at all.
+  # Records follow the same rule (`Record.visible_type?`), and so do the
+  # summary (WorkoutsHelper) and a publication snapshot
+  # (Workouts::PublicationCandidate): a figure the sport cannot express is
+  # neither displayed nor published, whatever the file recorded.
+  PACE_CHANNEL_KEYS = %w[average_pace best_pace grade_adjusted_pace].freeze
+  SPEED_CHANNEL_KEYS = %w[average_speed max_speed].freeze
+
+  # `sport` also accepts the duck-typed stand-ins of a remote note or course,
+  # which answer `pace_speed_display` and `pace_basis_metres` themselves.
+  def self.metric_visible?(sport, key)
+    key = key.to_s
+    if SPEED_CHANNEL_KEYS.include?(key)
+      sport.pace_basis_metres.blank? && sport.pace_speed_display != "pace"
+    elsif PACE_CHANNEL_KEYS.include?(key)
+      sport.pace_speed_display != "speed"
+    else
+      true
+    end
+  end
+
   # Generic sports an import detects when the file carries no usable sub-type
   # (docs/dev/WORKOUT.md). They are the keys of the per-account sport defaults.
   GENERIC_SLUGS = %w[cycling running walking].freeze

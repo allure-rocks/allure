@@ -117,20 +117,21 @@ RSpec.describe "Comments" do
     end
   end
 
-  # DESIGN.md §10.20: below `lg` the workout page carries a button to the
-  # thread's own page, beside the reactions under the page header.
+  # DESIGN.md §10.20: the social row sits on the page header's badge line from
+  # `lg` up, and below `lg` the workout page carries a button to the thread's
+  # own page there, beside the reactions.
   describe "the social row and the thread's page" do
-    def social_row = response.parsed_body.at_css(".allure-detail-social .allure-social-row")
+    def social_row = response.parsed_body.at_css(".allure-workout-header .allure-social-row")
 
-    it "puts the thread's button and the reactions under the figures, once" do
+    it "puts the thread's button and the reactions in the page header, once" do
       publish!
       comment_by(owner, body: "Merci d'être passés")
       sign_in_as(viewer)
 
       get workout_path(workout)
 
-      expect(response.parsed_body.at_css(".page-header .allure-reactions")).to be_nil
       expect(response.parsed_body.css(".allure-reactions").size).to eq(1)
+      expect(response.parsed_body.at_css(".allure-workout-header .allure-reactions")).to be_present
       button = social_row.at_css("a.allure-social-row__comments")
       expect(button["href"]).to eq(workout_comments_path(workout))
       expect(button["aria-label"]).to eq("Voir le commentaire")

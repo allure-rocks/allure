@@ -2370,6 +2370,9 @@ de:
       day_before_yesterday: Vorgestern
     anomalies:
       intro: Diese Werte in der Originaldatei sehen falsch aus. Nur die Kennzahlen, die sie verfälschen, werden in der Übersicht markiert und bei Rekorden nicht berücksichtigt; kein Messwert wird korrigiert. Fahr mit der Maus über eine Zeile, um sie auf der Karte und im Profil zu finden.
+      points:
+        one: "Originaldatei: %{number} Punkt."
+        other: "Originaldatei: %{number} Punkte."
       inspect: Alle Auffälligkeiten auf der Karte und im Profil zeigen
       major: Verfälscht eine Kennzahl
       elevation_hint: "Diese Abweichungen stammen meist aus dem vom Gerät aufgezeichneten Profil. Das Profil des Dienstes kann sie korrigieren:"
@@ -2563,6 +2566,9 @@ de:
         body: Die Aktivität, ihre Originaldatei, ihre Aufzeichnungsabschnitte und ihre Segment-Durchgänge werden endgültig gelöscht. Ist sie veröffentlicht, wird die Veröffentlichung gelöscht; Kopien, die andere Server bereits abgerufen haben, lassen sich nicht zurückholen.
         verb: Löschen
       download_file: Originaldatei herunterladen
+      download_points:
+        one: 1 Punkt
+        other: "%{number} Punkte"
       device: Gerät
       private_notes: Private Notizen
       map:
@@ -2646,7 +2652,6 @@ de:
         average_power: Durchschnittsleistung
         max_power: Maximale Leistung
         calories: Kalorien
-        points_count: Punkte
       visibility:
         title: Sichtbarkeit
         workout: Aktivität
@@ -2673,6 +2678,7 @@ de:
         personal_best_margin: Vorsprung auf meine zweitbeste Zeit
       laps:
         title: Analyse
+        more: Mehr
         tabs:
           segments: Segmente
           detected: Erkannte Runden
@@ -5207,6 +5213,7 @@ de:
     badge:
       label: "%{condition}, durchschnittlich %{temperature}"
     wind_with_gusts: "%{wind}, Böen %{gusts}"
+    wind_with_gusts_html: '%{wind}, <span class="text-nowrap">Böen %{gusts}</span>'
     compass:
       n: "N"
       ne: "NO"
@@ -5243,6 +5250,7 @@ de:
       device_temperature: Sensortemp.
       device_hint: "Von deinem Gerät gemessen: in der Sonne oder am Körper zeigt es oft wärmer an als die Luft."
       attribution_html: "Wetterdaten: %{provider}"
+      hourly: Stündlich
     exposure:
       title: Wind während der Aktivität
       head: "Gegenwind %{share}"

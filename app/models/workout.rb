@@ -347,7 +347,7 @@ class Workout < ApplicationRecord
   # derives: no maximum speed, best pace, descent or elevation range.
   MANUAL_HIDDEN_METRIC_KEYS = %i[
     descent min_elevation max_elevation max_speed best_pace grade_adjusted_pace
-    average_cadence max_cadence max_power points_count
+    average_cadence max_cadence max_power
   ].freeze
   MANUAL_OPTIONAL_METRIC_KEYS = %i[average_heart_rate max_heart_rate calories average_power].freeze
 

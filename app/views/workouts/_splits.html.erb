@@ -59,7 +59,7 @@
           <%= format_distance(split.distance) %> · <%= effort_cell(average_pace: pace, average_speed: speed, average_power: split.average_power, sport: sport, grade_adjusted_pace: split.grade_adjusted_pace) %>
         </div>
         <div class="text-secondary small allure-table-nums">
-          ↑ <%= format_elevation(split.ascent) %> · ↓ <%= format_elevation(split.descent) %>
+          <%= elevation_change(ascent: split.ascent, descent: split.descent) %>
           <% if winds.any? && (wind = split_wind_label(winds[index])) != "—" %>
             · <%= wind %>
           <% end %>

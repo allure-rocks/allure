@@ -8,6 +8,8 @@
 <% workout = local_assigns[:workout] %>
 <%# The device's own readings, owner-only (docs/dev/WEATHER.md). %>
 <% device_temperature = local_assigns[:device_temperature] %>
+<%# The owner's link to the hourly table in the analysis card (DESIGN.md §20.3). %>
+<% hourly_href = local_assigns[:hourly_href] %>
 <div class="card mb-3 allure-weather-card">
   <div class="card-header">
     <h2 class="card-title"><%= t("weather.card.title") %></h2>
@@ -57,7 +59,7 @@
             <dt><%= t("weather.card.wind") %></dt>
             <dd class="d-flex align-items-center gap-1">
               <%= wind_arrow(summary["wind_direction"]) %>
-              <span><%= wind_label(summary["wind_speed"], summary["wind_direction"], gusts: summary["wind_gusts"]) %></span>
+              <span><%= wind_label(summary["wind_speed"], summary["wind_direction"], gusts: summary["wind_gusts"], html: true) %></span>
             </dd>
           </div>
         <% end %>
@@ -100,8 +102,13 @@
     <% end %>
   </div>
   <% if state == :ready %>
-    <div class="card-footer text-secondary small">
-      <%= t("weather.card.attribution_html", provider: link_to("Open-Meteo.com", "https://open-meteo.com/", rel: "noopener", target: "_blank")) %>
+    <div class="card-footer d-flex flex-wrap align-items-center justify-content-between gap-2 text-secondary small">
+      <span><%= t("weather.card.attribution_html", provider: link_to("Open-Meteo.com", "https://open-meteo.com/", rel: "noopener", target: "_blank")) %></span>
+      <% if hourly_href %>
+        <%= link_to hourly_href, class: "text-reset d-inline-flex align-items-center gap-1" do %>
+          <i class="ti ti-clock-hour-4" aria-hidden="true"></i><%= t("weather.card.hourly") %>
+        <% end %>
+      <% end %>
     </div>
   <% end %>
 </div>

@@ -43,8 +43,8 @@
           <strong class="allure-table-nums"><%= format_duration(descent.elapsed_time) %></strong>
         </div>
         <div class="text-secondary small allure-table-nums">
-          <%= format_distance(descent.distance) %> · ↓ <%= format_elevation(descent.descent) %>
-          · ↑ <%= format_elevation(descent.ascent) %> · <%= format_grade(descent.average_grade) %>
+          <%= format_distance(descent.distance) %> · <%= elevation_change(ascent: descent.ascent, descent: descent.descent, lead: :descent) %>
+          · <%= format_grade(descent.average_grade) %>
         </div>
       </li>
     <% end %>

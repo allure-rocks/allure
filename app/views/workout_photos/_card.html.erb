@@ -10,10 +10,10 @@
       <% end %>
     </h2>
     <div class="card-actions d-flex flex-wrap gap-2">
-      <button type="button" class="btn btn-sm btn-outline-primary" data-action="photo-upload#choose">
+      <%= link_to t("photos.manage"), workout_photos_path(workout), class: "btn btn-sm btn-outline-secondary" %>
+      <button type="button" class="btn btn-sm btn-primary" data-action="photo-upload#choose">
         <i class="ti ti-photo-plus me-1" aria-hidden="true"></i><%= t("photos.add") %>
       </button>
-      <%= link_to t("photos.manage"), workout_photos_path(workout), class: "btn btn-sm btn-outline-secondary" %>
     </div>
   </div>
   <div class="card-body">

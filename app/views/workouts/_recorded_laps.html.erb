@@ -51,7 +51,7 @@
           <%= format_distance(lap.distance) %> · <%= effort_cell(average_pace: lap.average_pace, average_speed: lap.average_speed, average_power: lap.average_power, sport: sport) %>
         </div>
         <div class="text-secondary small allure-table-nums">
-          ↑ <%= format_elevation(lap.ascent) %> · ↓ <%= format_elevation(lap.descent) %>
+          <%= elevation_change(ascent: lap.ascent, descent: lap.descent) %>
         </div>
       </li>
     <% end %>

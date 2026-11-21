@@ -458,6 +458,35 @@ RSpec.describe "Workouts" do
       expect(summary.text).not_to include(I18n.t("workouts.show.metrics.max_speed"))
     end
 
+    it "lists no pace on a ride and keeps the file's point count out of the summary" do
+      w = create(:workout, user:, sport:, average_pace: 200, best_pace: 180, points_count: 13_128)
+      w.original_file.attach(io: StringIO.new("<gpx></gpx>"), filename: "ride.gpx", content_type: "application/gpx+xml")
+      create(:track_segment, workout: w)
+      sign_in_user
+
+      get workout_path(w)
+
+      page = response.parsed_body
+      summary = page.at_css(".allure-workout-summary")
+      expect(summary.text).not_to include(I18n.t("workouts.show.metrics.average_pace"))
+      expect(summary.text).not_to include(I18n.t("workouts.show.metrics.best_pace"))
+
+      points = ActionController::Base.helpers.number_with_delimiter(13_128)
+      expect(summary.text).not_to include(points)
+      expect(page.at_css(".allure-workout-header .dropdown-menu").text).to include(points)
+    end
+
+    it "keeps the extra metrics next to the tiles, above the description" do
+      w = create(:workout, user:, sport:, description: "Sortie tranquille sous le soleil.")
+      create(:track_segment, workout: w)
+      sign_in_user
+
+      get workout_path(w)
+
+      summary = response.parsed_body.at_css(".allure-workout-summary").to_html
+      expect(summary.index("allure-secondary-metrics-wrap")).to be < summary.index("allure-workout-copy")
+    end
+
     it "leads a virtual ride with its power and opens its chart on it" do
       virtual = catalog_sport("cycling_virtual")
       w = create(:workout, user:, sport: virtual, average_speed: 8.0, average_power: 210, ascent: 120)
@@ -1117,6 +1146,18 @@ RSpec.describe "Workouts" do
         expect(chart.map { |entry| entry["tier"] }).to all(eq("minor"))
       end
 
+      it "names the file's point count in the data quality tab" do
+        w = create(:workout, user: user, sport: sport, data_anomalies: anomalies, points_count: 13_128)
+        create(:track_segment, workout: w)
+        sign_in_user
+
+        get workout_path(w)
+
+        points = ActionController::Base.helpers.number_with_delimiter(13_128)
+        expect(response.parsed_body.at_css("#workout-laps-anomalies").text)
+          .to include(I18n.t("workouts.anomalies.points", count: 13_128, number: points))
+      end
+
       it "annotates a figure an anomaly makes wrong with its plausible value" do
         speed_anomalies = {
           "findings" => [
@@ -1259,6 +1300,27 @@ RSpec.describe "Workouts" do
         expect(row["tabindex"]).to eq("0")
         expect(row["data-start-distance"]).to eq("0.0")
         expect(row["data-end-distance"]).to eq("200.0")
+      end
+
+      it "offers the tabs that do not fit in a « Plus » menu, listed once each" do
+        w = create(:workout, user: user, sport: sport)
+        create(:track_segment, workout: w)
+        create(:detected_lap, :climb, workout: w, number: 1, start_distance: 400.0, end_distance: 800.0)
+        sign_in_user
+
+        get workout_path(w)
+
+        page = response.parsed_body
+        more = page.at_css("#workout-laps-more")
+        expect(more.text.squish).to eq(I18n.t("workouts.show.laps.more"))
+        expect(more["aria-controls"]).to eq("workout-laps-more-menu")
+        expect(page.at_css(".allure-analysis-tabs__more")["class"]).to include("d-none")
+
+        menu = page.at_css("#workout-laps-more-menu")
+        panes = menu.css("button[data-pane]").map { |button| button["data-pane"] }
+        tabs = page.css(".allure-analysis-tabs [role=tab]").map { |tab| tab["data-pane"] }
+        expect(panes).to eq(tabs)
+        expect(panes).to include("workout-laps-climbs")
       end
 
       it "keeps the RP badge gold and sets the board rank medal beside it" do

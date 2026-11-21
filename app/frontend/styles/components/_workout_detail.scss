@@ -53,6 +53,26 @@
   }
 }
 
+// The badge line and the social row share one line from `lg`: the badges keep
+// the left edge, the reactions close the row on the right (DESIGN.md §10.17,
+// §20.3). Below `lg` the social row takes its own line under the badges.
+.allure-workout-header__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+
+  .allure-social-row {
+    margin-bottom: 0;
+  }
+
+  @media (min-width: 992px) {
+    .allure-social-row {
+      margin-inline-start: auto;
+    }
+  }
+}
+
 // On phones and small tablets Publish and the ⋯ menu stack in a narrow
 // column, so the title keeps most of the first line.
 // The stacked column spans the title and the next line (places or badges), so
@@ -78,12 +98,26 @@
     grid-row: 1 / span 2;
   }
 
+  // The meta wrapper dissolves so its own children join this grid: the badges
+  // keep the column beside the stacked actions, the social row takes its own
+  // full-width line.
+  .allure-workout-header__meta {
+    display: contents;
+  }
+
   .allure-workout-header__places,
-  .allure-workout-header > .page-pretitle {
+  .allure-workout-header > .page-pretitle,
+  .allure-workout-header__meta > .page-pretitle {
     grid-column: 1;
   }
 
-  .allure-workout-header > :not(.allure-workout-header__top, .allure-workout-header__places, .page-pretitle) {
+  .allure-workout-header__meta > .allure-social-row {
+    grid-column: 1 / -1;
+    // Its own line under the badges, at the badges' own breathing distance.
+    margin-top: 0.5rem;
+  }
+
+  .allure-workout-header > :not(.allure-workout-header__top, .allure-workout-header__places, .page-pretitle, .allure-workout-header__meta) {
     grid-column: 1 / -1;
   }
 
@@ -424,12 +458,17 @@
   }
 }
 
-// Analysis card (DESIGN.md §20.3, §12). The tabs keep one line at every width
-// and scroll sideways, the hidden side fading out; the tables and their
-// stacked lists switch on the card's own width, so the narrow right column of
-// the desktop layout gets the list rather than a clipped table.
+// Analysis card (DESIGN.md §20.3, §12). The tabs keep one line at every width;
+// the controller folds the ones that do not fit behind « Plus », so the line
+// no longer scrolls once it is managed. Without JavaScript it still scrolls
+// sideways. The tables and their stacked lists switch on the card's own width,
+// so the narrow right column of the desktop layout gets the list rather than a
+// clipped table.
 .allure-analysis-tabs {
   flex-wrap: nowrap;
+  // The line is `flex: 1` in the card header; without this it would grow to
+  // its content width instead of reporting the overflow (DESIGN.md §20.3).
+  min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -443,6 +482,20 @@
     white-space: nowrap;
   }
 
+}
+
+// Nothing scrolls once the controller has measured the line, and the menu must
+// escape it instead of being clipped by it.
+.allure-analysis-tabs--managed {
+  overflow: visible;
+}
+
+.allure-analysis-tabs__more {
+  flex: 0 0 auto;
+
+  .dropdown-menu {
+    margin-top: 0;
+  }
 }
 
 // Sideways-scrolling lines (scroll-fade controller): the edge that still
@@ -555,14 +608,6 @@
 .allure-sharing-card > .card-header {
   flex-wrap: wrap;
   gap: 0.5rem;
-}
-
-// The card's add action is a touch target too (§18.4), even though it sits in
-// the header rather than the row.
-@media (max-width: 991.98px), (pointer: coarse) {
-  .allure-sharing-card > .card-header .btn {
-    min-height: 44px;
-  }
 }
 
 // A publication row (DESIGN.md §20.3): badge and identity lead; from lg the

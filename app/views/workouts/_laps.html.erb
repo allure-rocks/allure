@@ -17,18 +17,47 @@
     <h2 class="card-title"><%= t("workouts.show.laps.title") %></h2>
   </div>
   <div class="card-header pt-0">
-    <ul class="nav nav-tabs card-header-tabs allure-analysis-tabs" role="tablist" data-workout-tabs-target="tablist" data-controller="scroll-fade">
+    <%# The tabs that do not fit fold behind « Plus » (DESIGN.md §20.3): the
+        controller measures the line and moves the tail of the list into the
+        menu. Without JavaScript the « Plus » entry stays hidden and the line
+        scrolls sideways as before. %>
+    <ul class="nav nav-tabs card-header-tabs allure-analysis-tabs" role="tablist"
+        data-workout-tabs-target="tablist">
       <% tabs.each_with_index do |tab, index| %>
-        <li class="nav-item" role="presentation">
+        <% label = t("workouts.show.laps.tabs.#{tab[:key]}") %>
+        <li class="nav-item" role="presentation" data-workout-tabs-target="item">
           <button class="nav-link<%= " active" if index.zero? %>" id="workout-laps-tab-<%= tab[:key] %>" type="button" role="tab"
                   aria-controls="<%= tab[:pane] %>" aria-selected="<%= index.zero? %>" tabindex="<%= index.zero? ? 0 : -1 %>"
                   data-workout-tabs-target="tab" data-pane="<%= tab[:pane] %>"
                   data-action="click->workout-tabs#select keydown->workout-tabs#keydown">
-            <i class="ti ti-<%= tab[:icon] %> me-1" aria-hidden="true"></i><%= t("workouts.show.laps.tabs.#{tab[:key]}") %>
+            <i class="ti ti-<%= tab[:icon] %> me-1" aria-hidden="true"></i><%= label %>
             <% unless tab[:count].nil? %><span class="badge bg-secondary-lt ms-1"><%= tab[:count] %></span><% end %>
           </button>
         </li>
       <% end %>
+      <li class="nav-item dropdown allure-analysis-tabs__more d-none" role="presentation" data-workout-tabs-target="more">
+      <%# The controller closes the line with this toggle: « Plus » and the
+            folded count; a folded active tab shows through the active state
+            only (DESIGN.md §20.3). %>
+        <button class="nav-link dropdown-toggle" type="button" id="workout-laps-more" tabindex="-1"
+                data-bs-toggle="dropdown" aria-expanded="false" aria-controls="workout-laps-more-menu"
+                data-workout-tabs-target="moreButton" data-action="keydown->workout-tabs#keydown">
+          <span><%= t("workouts.show.laps.more") %></span>
+          <span class="badge bg-secondary-lt ms-1 d-none" data-workout-tabs-target="moreBadge"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" id="workout-laps-more-menu">
+          <% tabs.each do |tab| %>
+            <% label = t("workouts.show.laps.tabs.#{tab[:key]}") %>
+            <li>
+              <button type="button" class="dropdown-item" data-pane="<%= tab[:pane] %>"
+                      data-workout-tabs-target="menuItem" data-action="workout-tabs#selectFromMenu">
+                <i class="ti ti-<%= tab[:icon] %> me-2" aria-hidden="true"></i><%= label %>
+                <% unless tab[:count].nil? %><span class="badge bg-secondary-lt ms-1"><%= tab[:count] %></span><% end %>
+              </button>
+            </li>
+          <% end %>
+        </ul>
+      </li>
     </ul>
   </div>
   <div class="tab-content">

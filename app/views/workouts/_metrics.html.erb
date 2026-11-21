@@ -9,6 +9,7 @@
 <% missing_labels = workout_missing_metric_labels(secondary_metrics) %>
 <% secondary_metrics = secondary_metrics.select { |metric| workout_metric_recorded?(metric) } %>
 <% primary_metrics.sort_by! { |metric| metric[:priority] } %>
+<% divider = "mt-4 pt-4 border-top" %>
 <div class="card mb-3 allure-workout-summary">
   <div class="card-header">
     <h2 class="card-title"><%= t("workouts.show.sections.summary") %></h2>
@@ -25,20 +26,23 @@
       </dl>
     <% end %>
 
-    <%# The text block under the primary tiles (DESIGN.md §20.3): prepared by
-        the page, so this partial owns only its place and its separators. %>
-    <% lead = local_assigns[:lead] %>
-    <% if lead.present? %>
-      <div class="<%= "mt-4 pt-4 border-top" if primary_metrics.any? %>"><%= lead %></div>
+    <%# The elevation notice sits with the figures it completes, above the
+        extra metrics (DESIGN.md §20.3). %>
+    <% elevation_notice = local_assigns[:elevation_notice] %>
+    <% if elevation_notice.present? %>
+      <div class="<%= divider if primary_metrics.any? %>">
+        <%= render "workouts/elevation_notice", workout:, notice: elevation_notice %>
+      </div>
     <% end %>
 
     <% if secondary_metrics.any? %>
       <%# On phones the secondary metrics fold behind one toggle when the
           primary tiles already lead the card (DESIGN.md §20.3). The toggle
-          sits above them, so it stays in place whether they are shown. %>
+          sits directly under the tiles and ahead of the text block, so it
+          stays next to the figures it belongs to. %>
       <% collapsible = local_assigns.fetch(:collapsible, false) && primary_metrics.any? %>
       <% secondary_id = "workout-secondary-metrics" %>
-      <div class="<%= class_names("allure-secondary-metrics-wrap", "mt-4 pt-4 border-top" => primary_metrics.any? || lead.present?) %>"
+      <div class="<%= class_names("allure-secondary-metrics-wrap", divider => primary_metrics.any? || elevation_notice.present?) %>"
            <% if collapsible %>data-controller="disclosure"
            data-disclosure-collapsed-label-value="<%= t("workouts.show.metrics.more", count: secondary_metrics.size) %>"
            data-disclosure-expanded-label-value="<%= t("workouts.show.metrics.less") %>"<% end %>>
@@ -73,13 +77,16 @@
     <% end %>
 
     <% if missing_labels.any? && secondary_metrics.none? %>
-      <%= render "workouts/metrics_missing", labels: missing_labels, class_name: ("mt-3" if metrics.any?) %>
+      <%= render "workouts/metrics_missing", labels: missing_labels,
+                 class_name: class_names(divider => primary_metrics.any? || elevation_notice.present?) %>
     <% end %>
 
-    <% if local_assigns[:elevation_notice].present? %>
-      <div class="<%= "mt-4 pt-4 border-top" if metrics.any? %>">
-        <%= render "workouts/elevation_notice", workout:, notice: local_assigns[:elevation_notice] %>
-      </div>
+    <%# The text block follows the figures (DESIGN.md §20.3): the description,
+        then the assistant summary. Prepared by the page, so this partial owns
+        only its place and its separators. %>
+    <% lead = local_assigns[:lead] %>
+    <% if lead.present? %>
+      <div class="<%= class_names(divider => metrics.any? || elevation_notice.present?) %>"><%= lead %></div>
     <% end %>
 
     <% if local_assigns[:notes].present? %>

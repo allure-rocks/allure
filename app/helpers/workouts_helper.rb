@@ -48,6 +48,26 @@ module WorkoutsHelper
     end
   end
 
+  # One line naming both elevation changes in the analysis lists. Each figure
+  # stays whole when the line wraps, and the arrow is decorative: the channel is
+  # named for screen readers instead of read as "up arrow" (DESIGN.md §20.3).
+  def elevation_change(ascent:, descent:, lead: :ascent)
+    channels = lead == :descent ? %i[descent ascent] : %i[ascent descent]
+    values = { ascent:, descent: }
+
+    safe_join(channels.map { |channel|
+      tag.span(class: "text-nowrap") do
+        safe_join([
+          tag.span(channel == :ascent ? "↑" : "↓", "aria-hidden": "true"),
+          " ",
+          tag.span(t("workouts.show.metrics.#{channel}"), class: "visually-hidden"),
+          " ",
+          format_elevation(values.fetch(channel))
+        ])
+      end
+    }, " · ")
+  end
+
   def format_duration(seconds)
     return "—" if seconds.nil?
 
@@ -737,13 +757,21 @@ module WorkoutsHelper
     sport = workout.sport
     items = workout_metric_definitions(workout).filter_map do |key, (value, has_unit)|
       next unless workout.metric_visible?(key)
-      next if sport.pace_basis_metres.present? && %i[average_speed max_speed].include?(key)
+      next unless workout_metric_channel_visible?(sport, key)
 
       { key:, label: t("workouts.show.metrics.#{key}"), value:, has_unit: }
     end
 
     primary_keys = workout_primary_metric_keys(workout)
     items.map { |item| item.merge(primary: primary_keys.include?(item[:key]), priority: primary_keys.index(item[:key])) }
+  end
+
+  # Pace and speed are one channel per sport (Sport.metric_visible?): a ride
+  # reads its speed and never a pace, a run the reverse, and only a sport that
+  # declares both lists both. A sport whose pace is measured over a fixed basis
+  # (rowing's /500 m) never shows speed at all.
+  def workout_metric_channel_visible?(sport, key)
+    Sport.metric_visible?(sport, key)
   end
 
   def workout_metric_definitions(workout)
@@ -768,8 +796,7 @@ module WorkoutsHelper
       max_cadence: [ metric_with_unit(workout.max_cadence, sport.cadence_unit), true ],
       average_power: [ metric_with_unit(workout.average_power, t("units.power.watt")), true ],
       max_power: [ metric_with_unit(workout.max_power, t("units.power.watt")), true ],
-      calories: [ metric_with_unit(workout.calories, t("units.energy.kilocalorie")), true ],
-      points_count: [ workout.points_count || "—", false ]
+      calories: [ metric_with_unit(workout.calories, t("units.energy.kilocalorie")), true ]
     }
   end
 

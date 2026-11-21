@@ -48,6 +48,14 @@
      publication_photo_markers(@display_workout).presence
    end %>
 <% content_for :title, @display_workout.title.presence || t("workouts.show.title") %>
+<%# The social row sits inside the page header, on the badge line from `lg` and
+    as its own line below, so it no longer costs a band above the map
+    (DESIGN.md §10.17, §20.3). %>
+<% social_row = capture do %>
+  <%= render "comments/social_row", target: @workout, card: comment_card,
+                                    reaction_summary: (reaction_summary_for(@workout) if @active_publications.any?),
+                                    reactable: signed_in? && !owner && !reader_preview %>
+<% end %>
 
 <% content_for :page_header do %>
   <%# The workout header (DESIGN.md §20.3): the sport tile leads the title,
@@ -96,7 +104,15 @@
                   <div class="dropdown-divider"></div>
                   <%= link_to workout_original_file_path(@workout), class: "dropdown-item",
                               data: { controller: "bridge--download", bridge__download_url_value: workout_original_file_path(@workout) } do %>
-                    <i class="ti ti-download me-2" aria-hidden="true"></i><%= t("workouts.show.download_file") %>
+                    <span class="d-flex align-items-start gap-2">
+                      <i class="ti ti-download mt-1" aria-hidden="true"></i>
+                      <span>
+                        <%= t("workouts.show.download_file") %>
+                        <% if @workout.points_count %>
+                          <span class="d-block text-secondary small"><%= t("workouts.show.download_points", count: @workout.points_count, number: number_with_delimiter(@workout.points_count)) %></span>
+                        <% end %>
+                      </span>
+                    </span>
                   <% end %>
                 <% end %>
                 <% if @workout.positioned? %>
@@ -199,8 +215,13 @@
         </span>
       <% end %>
     <% end %>
-    <% if badges.strip.present? %>
-      <div class="page-pretitle d-flex flex-wrap align-items-center gap-2 mt-2"><%= badges %></div>
+    <% if badges.strip.present? || social_row.present? %>
+      <div class="allure-workout-header__meta">
+        <% if badges.strip.present? %>
+          <div class="page-pretitle d-flex flex-wrap align-items-center gap-2 mt-2"><%= badges %></div>
+        <% end %>
+        <%= social_row %>
+      </div>
     <% end %>
   </div>
 <% end %>
@@ -222,14 +243,7 @@
   </div>
 <% end %>
 
-<%# The social row sits under the page header, across the page, before the map
-    and the figures (DESIGN.md §10.17, §20.3). Below `lg` its thread button
-    opens the thread's own page. %>
-<div class="allure-detail-social">
-  <%= render "comments/social_row", target: @workout, card: comment_card,
-                                    reaction_summary: (reaction_summary_for(@workout) if @active_publications.any?),
-                                    reactable: signed_in? && !owner && !reader_preview %>
-</div>
+<%# The social row now lives inside the page header (DESIGN.md §10.17, §20.3). %>
 
 <%# Map first: it leads the single column on phones and tablets, and becomes
     the sticky left rail from `lg` up, beside the summary and the analysis
@@ -333,7 +347,8 @@
     <% if weather_state %>
       <section id="section-weather" class="allure-detail-section">
         <%= render "weather/card", summary: @workout.weather&.summary, state: weather_state, workout: @workout,
-                                   device_temperature: %>
+                                   device_temperature:,
+                                   hourly_href: (weather_state == :ready && workout_weather_rows(@workout).any? ? "#workout-laps-weather" : nil) %>
       </section>
     <% elsif reader_weather %>
       <section id="section-weather" class="allure-detail-section">

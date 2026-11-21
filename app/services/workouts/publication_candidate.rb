@@ -260,6 +260,10 @@ module Workouts
 
     def workout_metrics
       PublishingProfile::METRIC_KEYS.index_with do |key|
+        # A figure the sport cannot express is never frozen into the snapshot
+        # (Sport.metric_visible?): pace for a ride, speed for a run.
+        next unless Sport.metric_visible?(@workout.sport, key)
+
         value = @workout.public_send(key)
         next if value.nil?
 

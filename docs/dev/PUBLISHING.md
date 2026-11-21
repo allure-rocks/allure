@@ -151,7 +151,10 @@ attachment as a fallback.
 
 Never in a publication: raw coordinates, private notes, original attachments,
 integer database identifiers, or a secret. Health data, photos, weather,
-device, commute and GPX are shared only when their setting says so.
+device, commute and GPX are shared only when their setting says so. A metric
+the sport cannot express is never frozen either: pace for a ride, speed for
+a run (`Sport.metric_visible?`, the same channel rule as records) — whatever
+the file recorded and the profile allows.
 
 ## 6. Audiences and readers
 
