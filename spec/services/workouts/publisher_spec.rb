@@ -102,11 +102,22 @@ RSpec.describe Workouts::Publisher do
   end
 
   it "publishes the workout-level grade-adjusted pace" do
-    workout.update!(grade_adjusted_pace: 187)
+    # Grade-adjusted pace is a pace channel (Sport#grade_adjusted_pace?): a
+    # speed-display sport never freezes one (Sport.metric_visible?).
+    workout.update!(sport: create(:sport, pace_speed_display: "pace", records_elevation: true), grade_adjusted_pace: 187)
 
     publication = publish
 
     expect(publication.representation.dig("metrics", "grade_adjusted_pace")).to eq(187)
+  end
+
+  it "never freezes the channel the sport cannot express" do
+    publication = publish
+
+    expect(publication.representation.dig("metrics")).not_to have_key("average_pace")
+    expect(publication.representation.dig("metrics")).not_to have_key("best_pace")
+    expect(publication.representation.dig("metrics")).not_to have_key("grade_adjusted_pace")
+    expect(publication.representation.dig("metrics", "average_speed")).to be_present
   end
 
   it "omits record markers by default" do

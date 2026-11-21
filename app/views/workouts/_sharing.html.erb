@@ -31,7 +31,7 @@
     </div>
     <div class="card-actions d-flex flex-wrap align-items-center gap-2">
       <% if can_add_publication %>
-        <%= link_to new_publication_workout_path(workout), class: "btn btn-sm btn-outline-primary" do %>
+        <%= link_to new_publication_workout_path(workout), class: "btn btn-sm btn-primary" do %>
           <i class="ti ti-plus me-1" aria-hidden="true"></i><%= t(listed ? "workouts.publication.add" : "workouts.publication.publish") %>
         <% end %>
       <% end %>

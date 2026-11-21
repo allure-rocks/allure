@@ -237,11 +237,45 @@ RSpec.describe WorkoutsHelper do
       expect(keys).not_to include(:grade_adjusted_pace)
     end
 
-    it "includes the recorded grade-adjusted pace" do
-      workout = build(:workout, grade_adjusted_pace: 250)
+    it "includes the recorded grade-adjusted pace on a pace sport" do
+      workout = build(:workout, sport: build(:sport, pace_speed_display: "pace"), grade_adjusted_pace: 250)
       item = helper.workout_metric_items(workout).find { |entry| entry[:key] == :grade_adjusted_pace }
 
       expect(item[:value]).to eq(helper.format_pace(250))
+    end
+
+    it "lists no pace on a sport that reads its speed" do
+      workout = build(:workout, sport: build(:sport, pace_speed_display: "speed"),
+                                average_pace: 200, best_pace: 180, grade_adjusted_pace: 190,
+                                average_speed: 5.0, max_speed: 6.0)
+      keys = helper.workout_metric_items(workout).map { |item| item[:key] }
+
+      expect(keys).to include(:average_speed, :max_speed)
+      expect(keys).not_to include(:average_pace, :best_pace, :grade_adjusted_pace)
+    end
+
+    it "lists no speed on a sport that reads its pace" do
+      workout = build(:workout, sport: build(:sport, pace_speed_display: "pace"),
+                                average_pace: 200, best_pace: 180,
+                                average_speed: 5.0, max_speed: 6.0)
+      keys = helper.workout_metric_items(workout).map { |item| item[:key] }
+
+      expect(keys).to include(:average_pace, :best_pace)
+      expect(keys).not_to include(:average_speed, :max_speed)
+    end
+
+    it "keeps both channels on a sport that declares both" do
+      workout = build(:workout, sport: build(:sport, pace_speed_display: "pace_and_speed"),
+                                average_pace: 200, average_speed: 5.0, max_speed: 6.0)
+      keys = helper.workout_metric_items(workout).map { |item| item[:key] }
+
+      expect(keys).to include(:average_pace, :average_speed, :max_speed)
+    end
+
+    it "never lists the raw point count as a metric" do
+      workout = build(:workout, points_count: 13_128)
+
+      expect(helper.workout_metric_items(workout).map { |item| item[:key] }).not_to include(:points_count)
     end
 
     it "drops speed and prefers power for a fixed-basis sport" do
@@ -320,6 +354,30 @@ RSpec.describe WorkoutsHelper do
 
       expect(helper.workout_chart_display_series(workout, %i[elevation speed power]))
         .to eq(%i[elevation speed power])
+    end
+  end
+
+  describe "#elevation_change" do
+    before { helper.define_singleton_method(:current_user) { nil } }
+
+    it "keeps each figure whole and names its channel for screen readers" do
+      I18n.with_locale(:fr) do
+        html = Nokogiri::HTML5.fragment(helper.elevation_change(ascent: 554.0, descent: 8.0))
+
+        expect(html.css("span.text-nowrap").map { |span| span.text.squish })
+          .to eq([ "↑ Dénivelé positif 554 m", "↓ Dénivelé négatif 8 m" ])
+        expect(html.css("span.text-nowrap > span[aria-hidden=true]").map(&:text)).to eq([ "↑", "↓" ])
+        expect(html.css("span.visually-hidden").map(&:text)).to eq([ "Dénivelé positif", "Dénivelé négatif" ])
+      end
+    end
+
+    it "leads with the descent on a descent list" do
+      I18n.with_locale(:fr) do
+        html = Nokogiri::HTML5.fragment(helper.elevation_change(ascent: 10.0, descent: 200.0, lead: :descent))
+
+        expect(html.css("span.text-nowrap").map { |span| span.text.squish })
+          .to eq([ "↓ Dénivelé négatif 200 m", "↑ Dénivelé positif 10 m" ])
+      end
     end
   end
 

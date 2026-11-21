@@ -2371,6 +2371,9 @@ fr:
       day_before_yesterday: Avant-hier
     anomalies:
       intro: Ces valeurs du fichier d'origine semblent bizarres. Seuls les chiffres qu'elles faussent sont signalés dans le résumé et retirés des records ; aucune mesure n'est corrigée. Survolez une ligne pour la situer sur la carte et le profil.
+      points:
+        one: "Fichier d'origine : %{number} point."
+        other: "Fichier d'origine : %{number} points."
       inspect: Montrer toutes les anomalies sur la carte et le profil
       major: Fausse un chiffre
       elevation_hint: "Ces écarts viennent souvent du profil enregistré par l'appareil. Le profil du service peut les corriger :"
@@ -2564,6 +2567,9 @@ fr:
         body: L'activité, son fichier d'origine, ses tronçons et ses passages de segment sont supprimés définitivement. Si elle est publiée, la publication est retirée ; les copies déjà récupérées par d'autres serveurs ne peuvent pas être rappelées.
         verb: Supprimer
       download_file: Télécharger le fichier d'origine
+      download_points:
+        one: 1 point
+        other: "%{number} points"
       device: Appareil
       private_notes: Notes privées
       map:
@@ -2647,7 +2653,6 @@ fr:
         average_power: Puissance moyenne
         max_power: Puissance maximale
         calories: Calories
-        points_count: Points
       visibility:
         title: Visibilité
         workout: Activité
@@ -2674,6 +2679,7 @@ fr:
         personal_best_margin: Marge sur mon deuxième meilleur temps
       laps:
         title: Analyse
+        more: Plus
         tabs:
           segments: Segments
           detected: Tours détectés
@@ -5208,6 +5214,7 @@ fr:
     badge:
       label: "%{condition}, %{temperature} de moyenne"
     wind_with_gusts: "%{wind}, rafales %{gusts}"
+    wind_with_gusts_html: '%{wind}, <span class="text-nowrap">rafales %{gusts}</span>'
     compass:
       n: "N"
       ne: "NE"
@@ -5244,6 +5251,7 @@ fr:
       device_temperature: Temp. capteur
       device_hint: "Mesurée par votre appareil : au soleil ou contre le corps, il indique souvent plus chaud que l'air."
       attribution_html: "Données météo : %{provider}"
+      hourly: Heure par heure
     exposure:
       title: Vent pendant l'effort
       head: "De face %{share}"

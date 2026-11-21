@@ -74,7 +74,7 @@
           · <%= effort_cell(average_pace: effort.average_pace, average_speed: effort.average_speed, average_power: effort.average_power, sport: workout.sport, grade_adjusted_pace: effort.grade_adjusted_pace) %>
         </div>
         <div class="text-secondary small allure-table-nums">
-          ↑ <%= format_elevation(segment_effort_elevation(effort, :ascent)) %> · ↓ <%= format_elevation(segment_effort_elevation(effort, :descent)) %>
+          <%= elevation_change(ascent: segment_effort_elevation(effort, :ascent), descent: segment_effort_elevation(effort, :descent)) %>
         </div>
       </li>
     <% end %>

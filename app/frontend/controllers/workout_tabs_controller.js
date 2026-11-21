@@ -6,42 +6,85 @@ import { Controller } from "@hotwired/stimulus";
 // profile can redraw without a request. Accessible tablist semantics are
 // maintained by hand.
 //
+// The card carries ten kinds of analysis; when they do not fit the card's
+// width the tail folds behind a « Plus » menu (DESIGN.md §20.3). The line is
+// measured on connect and on every resize, and the menu only ever lists the
+// tabs that are actually hidden.
+//
 // The same card drives the cross-surface highlight: hovering, focusing, or
 // pinning a row (tap/click) broadcasts its distance range so the chart shades
 // the band and the map thickens the matching slice. A pinned row survives the
 // pointer leaving; a hover or focus previews over it while active.
 const TAB_CHANGED = "allure:analysis-tab-changed";
 const ANALYSIS_HIGHLIGHT = "allure:analysis-highlight";
+const FIT_TOLERANCE = 1;
 
 export default class extends Controller {
-  static targets = ["tab", "pane", "tablist"];
+  static targets = ["tab", "pane", "tablist", "item", "more", "moreButton", "moreBadge", "menuItem"];
 
   connect() {
     this.activeRow = null;
     this.pinnedRow = null;
     this.stepPreviewData = null;
     this.publishedKey = null;
+    this.hiddenPanes = new Set();
+    this.moreVisible = false;
     this.publishActive();
+
+    // A `#workout-laps-<key>` fragment opens that tab, so the weather card can
+    // link to its hourly table (DESIGN.md §20.3) and any tab can be shared.
+    this.onHashChange = () => this.#openHashTarget();
+    window.addEventListener("hashchange", this.onHashChange);
+
+    this.#observeWidth();
+    this.#layoutTabs();
+    this.#openHashTarget();
+  }
+
+  disconnect() {
+    window.removeEventListener("hashchange", this.onHashChange);
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
+    if (this.hasTablistTarget) this.tablistTarget.classList.remove("allure-analysis-tabs--managed");
   }
 
   select(event) {
     this.#activate(event.currentTarget);
   }
 
+  // A tab chosen from the « Plus » menu: it may stay in the menu, so the
+  // toggle keeps carrying the active state and the focus.
+  selectFromMenu(event) {
+    const pane = event.currentTarget.dataset.pane;
+    const tab = this.tabTargets.find((candidate) => candidate.dataset.pane === pane);
+    if (!tab) return;
+
+    this.#activate(tab);
+    this.#closeMenu();
+    const target = this.hiddenPanes.has(pane) ? this.moreButtonTarget : tab;
+    target?.focus();
+  }
+
   keydown(event) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    const stops = this.#keyboardStops();
+    const index = stops.indexOf(event.currentTarget);
+    if (index === -1) return;
     event.preventDefault();
 
-    const tabs = this.tabTargets;
-    const index = tabs.indexOf(event.currentTarget);
     let next;
-    if (event.key === "Home") next = tabs[0];
-    else if (event.key === "End") next = tabs.at(-1);
+    if (event.key === "Home") next = stops[0];
+    else if (event.key === "End") next = stops.at(-1);
     else {
       const offset = event.key === "ArrowRight" ? 1 : -1;
-      next = tabs[(index + offset + tabs.length) % tabs.length];
+      next = stops[(index + offset + stops.length) % stops.length];
     }
-    if (!next) return;
+    if (!next || next === event.currentTarget) return;
+
+    if (next === this.moreButtonTarget) {
+      next.focus();
+      return;
+    }
 
     this.#activate(next);
     next.focus();
@@ -101,8 +144,144 @@ export default class extends Controller {
   }
 
   publishActive() {
-    const tab = this.tabTargets.find((candidate) => candidate.getAttribute("aria-selected") === "true");
+    const tab = this.#selectedTab();
     this.#publish(this.#paneFor(tab));
+  }
+
+  // The tab line is measured against the card's own width, and the window is
+  // not the only thing that moves it: the desktop split layout gives the card
+  // a different column on resize, and the icon font settles after connect.
+  #observeWidth() {
+    if (!this.hasTablistTarget) return;
+
+    this.tablistTarget.classList.add("allure-analysis-tabs--managed");
+    this.resizeObserver = new ResizeObserver(() => this.#layoutTabs());
+    this.resizeObserver.observe(this.tablistTarget);
+    document.fonts?.ready.then(() => {
+      if (this.element.isConnected) this.#layoutTabs();
+    });
+  }
+
+  // Show every tab, then fold the ones that do not fit, in reading order, into
+  // the « Plus » menu.
+  #layoutTabs() {
+    if (!this.hasTablistTarget || !this.hasItemTarget) return;
+    const list = this.tablistTarget;
+
+    for (const item of this.itemTargets) item.classList.remove("d-none");
+    if (this.hasMoreTarget) this.moreTarget.classList.add("d-none");
+    this.moreVisible = false;
+
+    if (list.scrollWidth <= list.clientWidth + FIT_TOLERANCE) {
+      this.#syncMore();
+      return;
+    }
+    if (!this.hasMoreTarget) return;
+
+    this.moreTarget.classList.remove("d-none");
+    this.moreVisible = true;
+    const budget = list.clientWidth - this.moreTarget.offsetWidth;
+
+    let used = 0;
+    for (const item of this.itemTargets) {
+      if (used + item.offsetWidth <= budget) {
+        used += item.offsetWidth;
+        continue;
+      }
+      item.classList.add("d-none");
+    }
+    this.#syncMore();
+  }
+
+  // The menu lists exactly the hidden tabs, and its entry for the active one
+  // is marked when that tab had to fold.
+  #syncMore() {
+    const hidden = new Set(
+      this.itemTargets
+        .filter((item) => item.classList.contains("d-none"))
+        .map((item) => item.querySelector("[data-pane]")?.dataset.pane)
+        .filter(Boolean)
+    );
+    this.hiddenPanes = hidden;
+
+    if (this.hasMenuItemTarget) {
+      const selected = this.#selectedTab()?.dataset.pane;
+      for (const item of this.menuItemTargets) {
+        item.classList.toggle("d-none", !hidden.has(item.dataset.pane));
+        const active = item.dataset.pane === selected;
+        item.classList.toggle("active", active);
+        if (active) item.setAttribute("aria-current", "true");
+        else item.removeAttribute("aria-current");
+      }
+    }
+
+    this.#renderToggle();
+    this.#updateRovingStops();
+  }
+
+  // The toggle says what it holds: « Plus » and the folded count. A folded
+  // active tab keeps the line readable through the toggle's active state, but
+  // never through its label — a tab name would outgrow a phone's line
+  // (DESIGN.md §20.3).
+  #renderToggle() {
+    if (!this.moreVisible) return;
+
+    if (this.hasMoreBadgeTarget) {
+      this.moreBadgeTarget.classList.remove("d-none");
+      this.moreBadgeTarget.textContent = this.hiddenPanes.size;
+    }
+  }
+
+  // One tab stop for the whole line: the selected tab when it is visible,
+  // otherwise the « Plus » toggle that now carries it.
+  #updateRovingStops() {
+    const selected = this.#selectedTab();
+    const selectedHidden = Boolean(selected && this.hiddenPanes.has(selected.dataset.pane));
+
+    for (const tab of this.tabTargets) {
+      tab.tabIndex = tab === selected && !selectedHidden ? 0 : -1;
+    }
+    if (this.hasMoreButtonTarget) {
+      this.moreButtonTarget.tabIndex = selectedHidden ? 0 : -1;
+      this.moreButtonTarget.classList.toggle("active", selectedHidden);
+    }
+  }
+
+  #selectedTab() {
+    return this.tabTargets.find((tab) => tab.getAttribute("aria-selected") === "true");
+  }
+
+  #visibleTabs() {
+    return this.tabTargets.filter((tab) => !this.hiddenPanes.has(tab.dataset.pane));
+  }
+
+  // Arrow keys walk the visible tabs and end on « Plus » when it is shown.
+  #keyboardStops() {
+    const stops = this.#visibleTabs();
+    return this.moreVisible && this.hasMoreButtonTarget ? [ ...stops, this.moreButtonTarget ] : stops;
+  }
+
+  // A fragment naming one of this card's panes opens that tab and brings the
+  // card into view: the pane is hidden until then, so the browser's own jump has
+  // nothing to land on (DESIGN.md §20.3).
+  #openHashTarget() {
+    const id = window.location.hash.replace(/^#/, "");
+    if (!id) return;
+    const tab = this.tabTargets.find((candidate) => candidate.dataset.pane === id);
+    if (!tab) return;
+
+    if (tab.getAttribute("aria-selected") !== "true") this.#activate(tab);
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const section = this.element.closest(".allure-detail-section") ?? this.element;
+    section.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+    // The browser's own fragment handling runs after this event and would drop
+    // the focus we set here, so the tab takes it on the next frame — or the
+    // toggle, when the tab folded into the menu.
+    requestAnimationFrame(() => {
+      const target = this.hiddenPanes.has(tab.dataset.pane) ? this.moreButtonTarget : tab;
+      target?.focus({ preventScroll: true });
+    });
   }
 
   #activate(tab) {
@@ -110,24 +289,12 @@ export default class extends Controller {
       const selected = candidate === tab;
       candidate.classList.toggle("active", selected);
       candidate.setAttribute("aria-selected", selected ? "true" : "false");
-      candidate.tabIndex = selected ? 0 : -1;
     }
     for (const pane of this.paneTargets) {
       const selected = pane.id === tab.dataset.pane;
       pane.classList.toggle("show", selected);
       pane.classList.toggle("active", selected);
       pane.hidden = !selected;
-    }
-
-    // A tab picked from the scrolled tab line slides fully into view.
-    const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (this.hasTablistTarget) {
-      const list = this.tablistTarget;
-      const left = tab.getBoundingClientRect().left - list.getBoundingClientRect().left + list.scrollLeft;
-      const right = left + tab.offsetWidth;
-      if (left < list.scrollLeft || right > list.scrollLeft + list.clientWidth) {
-        list.scrollTo({ left: Math.max(0, left - 16), behavior: smooth ? "smooth" : "auto" });
-      }
     }
 
     // A highlight that belongs to the pane being left would keep drawing a band
@@ -137,7 +304,13 @@ export default class extends Controller {
     if (this.activeRow && !pane?.contains(this.activeRow)) this.#setActiveRow(null);
     if (this.pinnedRow && !pane?.contains(this.pinnedRow)) this.#setPinnedRow(null);
 
+    this.#syncMore();
     this.#publish(pane);
+  }
+
+  #closeMenu() {
+    if (!this.hasMoreButtonTarget) return;
+    window.bootstrap?.Dropdown.getOrCreateInstance(this.moreButtonTarget).hide();
   }
 
   #setActiveRow(row) {

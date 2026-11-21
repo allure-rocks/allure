@@ -1554,6 +1554,14 @@ beneath.
 | Ghost | `btn-ghost-secondary` | Tertiary, in card headers and table rows. |
 | Danger | `btn-outline-danger`, or `btn-danger` inside a confirm modal | Never adjacent to the primary action. |
 
+**Card-header add actions.** Every fullwidth owner card declares its add
+action in its header — « Publier » / « Ajouter une publication » on
+Publications, « Ajouter des photos » on Photos, « Ajouter un participant »
+on Participants — and that card is the region: its add action is a small
+**full** primary (`btn-sm btn-primary`), the card's one primary. The header's
+other actions (« Gérer », retirements) stay outline or ghost, and one card's
+header button never changes height against its neighbours.
+
 Icon-only buttons require `aria-label` and a tooltip, and are only used in table
 rows and card headers, plus the topbar import action below `lg` (§7.3). Minimum target size 44×44 CSS px on touch (§18.4).
 
@@ -1910,11 +1918,12 @@ note, never a second visual language.
 - **Placement.** In a feed card the bar is the last row of the body and its
   pills are aligned to the right edge, closing the card on the side the
   metric grid ends on; wrapped rows keep that right edge. On the workout page
-  the bar sits in the **social row** across the page, immediately under the
-  page header and before the map and the figures card
-  (`comments/_social_row`), on every screen and once per page, its pills
-  aligned to the right edge. On a received note the row follows that page's
-  figures. Below `lg` the thread's button leads the same row on the left
+  the bar sits in the **social row inside the page header**: from `lg` it
+  shares the badge line, closing it on the right under the title's actions;
+  below `lg` it takes its own line under the places and badges
+  (`comments/_social_row`), on every screen and once per page. On a received
+  note the row follows that page's figures. Below `lg` the thread's button
+  leads the same row on the left
   (§10.20), the mirror of a sport app's usual order: the conversation first,
   the appreciation closing the row. The row renders nothing when it would
   hold neither.
@@ -2222,8 +2231,9 @@ analysis card only.
 The owner-only Photos card ([PHOTOS.md](PHOTOS.md)) follows the analysis
 and weather, before comments, full width. It also appears on manual entries,
 never credit rows or a reader preview. It is a glance, not a workspace: the
-header carries the count (« Photos · 3 »), « Ajouter des photos » (the picker)
-and « Gérer » (the manager, §20.24); the body carries the §19.34 line, a
+header carries the count (« Photos · 3 »), « Gérer » (the manager, §20.24)
+before « Ajouter des photos » (the picker, the card's §10.3 add action
+closing the header's actions); the body carries the §19.34 line, a
 compact intake zone and a square grid of the same thumbnails readers see. The
 whole card accepts a drop, and the obvious refusals — too large, wrong type,
 no slot left — are answered before anything is sent. Each file has its own
@@ -3259,7 +3269,9 @@ badge.
 - **Analysis tab** « Qualité des données » (`ti-alert-triangle`, last, its
   count the flagged findings): one sentence saying only the figures they make
   wrong are signalled and kept out of records and nothing is corrected, the
-  inspection switch, then « Chiffres faussés » (one line per contested
+  file's own point count (« Fichier d'origine : 13 128 points » — the only
+  other place it appears is the `⋯` menu's download line), the inspection
+  switch, then « Chiffres faussés » (one line per contested
   figure, previewing its stretch), then one group per kind — the kinds holding
   a major finding first, their icon in the warning colour, the others
   secondary — each row its distance, its moment, its detail and, when major,
@@ -4668,11 +4680,13 @@ Signed-in home: `/` redirects here.
 ### 20.3 `/workouts/:id` — Workout detail
 
 Single scroll, one layout for the web, phones and the iOS companion. There is
-no sticky section navigation. The social row opens the page under the header,
-then the map; from `lg` (992 px) up the map is the sticky left rail beside
-summary, profile and analysis. The header menu is the only place for the
-original file download and the workout deletion: there is no original-data
-card and no danger zone.
+no sticky section navigation. The map opens the page under the header; from
+`lg` (992 px) up it is the sticky left rail beside summary, profile and
+analysis. The header menu is the only place for the original file download —
+its entry carries the file's point count underneath — and the workout
+deletion: there is no original-data card and no danger zone. That point
+count also leads the « Qualité des données » analysis tab; the summary never
+lists it as a metric.
 
 ```
 ┌ page header ─────────────────────────────────────────────┐
@@ -4680,41 +4694,48 @@ card and no danger zone.
 │     Par Marie                     (autre compte)         │
 │     Course à pied · lun. 3 mars 07:30                    │
 │ (⌖) Valmorin · Cimefroide · Rochelune                        (owner) │
-│ (🌐) [ Record ] [ Trajet ] ⌚ appareil                   │
+│ (🌐) [ Record ] [ Trajet ] ⌚ appareil    [💬 3] [👍 2 …] │
 │  ⋯: Modifier (< md) · Créer un segment · Enregistrer en  │
-│     itinéraire · Télécharger le fichier d'origine ·      │
-│     Régénérer l'image · Régénérer la synthèse ·           │
-│     Altitudes : passer au service / revenir à l'appareil │
-│     (propriétaire, estimation                            │
-│     activée et profil enregistré requis) ·               │
+│     itinéraire · Télécharger le fichier d'origine (le    │
+│     nombre de points du fichier en dessous) · Régénérer  │
+│     l'image · Régénérer la synthèse · Altitudes : passer │
+│     au service / revenir à l'appareil (propriétaire,    │
+│     estimation activée et profil enregistré requis) ·    │
 │     Supprimer l'activité                                 │
 └───────────────────────────────────────────────────────────┘
-[Social]      the social row (§10.17) across the page, right under the header
-              and before the map and the figures card; with a publication:
-              [💬 3] → the thread's page, below lg only, on the left; the
-              reactions on the right, on every screen
-[Carte]       map card, first under the social row; sticky left rail from lg;
+[Social]      the social row (§10.17) is the page header's last line: from
+              `lg` its reactions close the badge line on the right, under the
+              title's actions, and the thread button hides (the thread being
+              the footer card); below `lg` the row takes its own line under
+              the places and badges, the thread's button leading on the left,
+              the reactions on the right. It renders nothing when it would
+              hold neither
+[Carte]       map card, first under the header; sticky left rail from lg;
               cooperative gestures on touch screens (§15.2); its text
               summary is screen-reader-only
 [Résumé]      four primary tiles: distance, temps en mouvement, the sport's
               preferred average, dénivelé + (power for a fixed-basis sport
               that recorded it, and in place of the speed for a power-led
               virtual sport); a record value carries the trophy card stamp
-              under the tiles, one text block: the description, then the
+              under the tiles, an elevation-less owner workout carries a
+              one-line « Altitudes » notice (enable estimation · estimate ·
+              retry), then « Plus de mesures (N) » and the secondary metrics
+              in 2 / 3 / 4 columns by the card's width, folded on phones
+              behind that toggle — N counts the recorded
+              ones only; a metric the file did not record is never
+              a dash, it is named once in « Non mesuré pour cette activité :
+              fréquence cardiaque, puissance. », which folds with them;
+              pace and speed are one channel per sport — a ride lists no
+              pace, a run lists no speed, only a sport that declares both
+              lists both. The text block closes the card: the description,
+              then the
               owner-only assistant block (§10.26, [AI.md](AI.md)) when the
               workout has no description or the account asked for both; the
               block carries the info icon of its attribution and the proposed
               title, while « Régénérer la synthèse » sits in the header's ⋯
               menu; it is absent for a reader, a participant, a manual entry,
-              a credit row, and when the feature or the consent is off
-              secondary metrics in 2 / 3 / 4 columns by the card's width,
-              folded on phones behind « Plus de mesures (N) » — N counts the
-              recorded ones only; a metric the file did not record is never
-              a dash, it is named once in « Non mesuré pour cette activité :
-              fréquence cardiaque, puissance. », which folds with them
-              an elevation-less owner workout carries a one-line « Altitudes »
-              notice under the tiles (enable estimation · estimate · retry);
-              the owner's private notes close the card
+              a credit row, and when the feature or the consent is off;
+              last, the owner's private notes
 [Météo]       weather card ([WEATHER.md](WEATHER.md)) after the Analyse card
               (after the profile for a reader); the header badge row carries
               its badge (condition icon, mean temperature, linking here): the
@@ -4725,10 +4746,14 @@ card and no danger zone.
               never makes the badge taller than its neighbours;
               ressenti, vent (an SVG arrow pointing
               where it blows, km/h or mph, rafales), humidité, précipitations
-              when above zero, the device's own « Temp. capteur »; the
+              when above zero, the device's own « Temp. capteur » — each
+              figure one whole group when the line wraps; the
               « Vent pendant l'effort » bar (face primary, côté muted, dos
               success, legend as text) and the mean headwind; the
-              « Données météo : Open-Meteo.com » attribution in the footer.
+              « Données météo : Open-Meteo.com » attribution in the footer,
+              closed by « Heure par heure », the owner's link that opens the
+              Analyse card's Météo tab (`#workout-laps-weather`); a reader
+              gets neither the link nor the tab.
               Owner states: pending, failed (Réessayer), missing (Récupérer
               la météo); a reader sees the frozen summary only when the
               profile shared it; a recording with only the device's
@@ -4741,8 +4766,16 @@ card and no danger zone.
               faded edges so the card keeps its height across analysis tabs;
               toponymy places numbered on the curve, the active analysis
               tab's layers and steps ([SMART-LAPS.md](SMART-LAPS.md))
-[Analyse]     one owner card, only non-empty tabs on one sideways-scrolling
-              line with faded edges, first one active:
+[Analyse]     one owner card, only non-empty tabs on one line, first one
+              active; a tab that does not fit the card's width folds behind
+              a « Plus » dropdown closing the line — the menu lists exactly
+              the folded tabs, the toggle stays « Plus » with their count as
+              its badge (a tab name would outgrow a phone's line), and a
+              folded active tab keeps the line readable through the toggle's
+              active state alone; the line stops scrolling sideways once the
+              controller has measured it; a `#workout-laps-<key>` fragment
+              opens that tab, focuses it and brings the card into view, so
+              any tab can be linked:
               Segments · Tours détectés · Montées · Descentes · Arrêts ·
               Efforts · Tours enregistrés · Intervalles · Météo ·
               Meilleurs efforts · Qualité des données (§15.5)
@@ -4758,6 +4791,9 @@ card and no danger zone.
               tables and stacked lists switch on the card's own width (36rem);
               HR, cadence, power, trigger and the effort date only from 56rem,
               except a power-led ride's climb power, which stays at every width
+              each elevation figure of a stacked list is one whole group —
+              the arrow is decorative and the channel is named to screen
+              readers (« ↑ Dénivelé positif 554 m · ↓ Dénivelé négatif 8 m »)
               hover/focus a row shades its range on the chart and thickens the
               matching slice on the map, both in the theme ink; tap pins it,
               Escape clears it
@@ -4766,8 +4802,8 @@ card and no danger zone.
               right, the owner's close/reopen as a small primary ghost button;
               below lg the card lives on /workouts/:id/comments
 [Publications] full-width owner card: header « Publier » or « Ajouter une
-               publication » (small outline primary, 44 px tall on touch)
-               while an audience is free; « Retirer toutes les publications »
+               publication » (small full primary, §10.3's card-header add
+               rule) while an audience is free; « Retirer toutes les publications »
                (ghost danger) from lg while one is live, each row's `⋯` carrying Retirer
                below lg. One row per publication, at most one per audience
                ([PUBLISHING.md](PUBLISHING.md)) — the scheduled ones (§19.19

@@ -896,7 +896,8 @@ longer see the thread after the gesture (the author deleting a comment on a
 withdrawn publication) gets an empty frame or the feed, never the thread.
 
 Below `lg` the workout page hides the card (`d-none d-lg-block`) and its
-social row under the header (`comments/_social_row`, `DESIGN.md` §10.17)
+social row — inside the page header, `comments/_social_row`,
+`DESIGN.md` §10.17, §20.3 —
 leads with a button to the thread's own page: `WorkoutCommentsController#index`
 renders the same card alone under a way back to the workout, for exactly the
 readers `CommentCard#visible?` admits, and 404 for anyone else. The feed's

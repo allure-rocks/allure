@@ -232,7 +232,11 @@ it).
   `prefers-reduced-motion`: the server inlines both and CSS shows one),
   « 12–18 °C », « ressenti 11 °C », wind
   « 15 km/h SO, rafales 32 km/h » with an arrow, precipitation when > 0, and
-  the exposure bar « De face 42 % · De côté 27 % · De dos 31 % ».
+  the exposure bar « De face 42 % · De côté 27 % · De dos 31 % ». The wind
+  and its gusts each stay one whole group when the line wraps. The footer's
+  attribution is closed by the owner-only « Heure par heure » link, which
+  opens the Analyse card's Météo tab through its fragment
+  (`#workout-laps-weather`); a reader never gets the link.
   States: pending, failed (« Réessayer »), missing (« Récupérer la météo »),
   unavailable (hidden).
 - **Analyse card**: a « Météo » tab — the hourly table, its icons static;

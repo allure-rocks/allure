@@ -2334,6 +2334,9 @@ en:
       day_before_yesterday: The day before
     anomalies:
       intro: These values in the original file look wrong. Only the figures they make wrong are flagged in the summary and left out of records; no metric is corrected. Hover a row to locate it on the map and the profile.
+      points:
+        one: "Original file: %{number} point."
+        other: "Original file: %{number} points."
       inspect: Show every anomaly on the map and the profile
       major: Makes a figure wrong
       elevation_hint: "These gaps usually come from the profile the device recorded. The service profile can correct them:"
@@ -2527,6 +2530,9 @@ en:
         body: The workout, its original file, its recording segments and its segment efforts are permanently deleted. If it is published, the publication is withdrawn; copies already fetched by other servers cannot be recalled.
         verb: Delete
       download_file: Download original file
+      download_points:
+        one: 1 point
+        other: "%{number} points"
       device: Device
       private_notes: Private notes
       map:
@@ -2610,7 +2616,6 @@ en:
         average_power: Average power
         max_power: Maximum power
         calories: Calories
-        points_count: Points
       visibility:
         title: Visibility
         workout: Workout
@@ -2637,6 +2642,7 @@ en:
         personal_best_margin: Margin over my second best time
       laps:
         title: Analysis
+        more: More
         tabs:
           segments: Segments
           detected: Detected laps
@@ -5171,6 +5177,7 @@ en:
     badge:
       label: "%{condition}, %{temperature} on average"
     wind_with_gusts: "%{wind}, gusts %{gusts}"
+    wind_with_gusts_html: '%{wind}, <span class="text-nowrap">gusts %{gusts}</span>'
     compass:
       n: "N"
       ne: "NE"
@@ -5207,6 +5214,7 @@ en:
       device_temperature: Sensor temp.
       device_hint: "Measured by your device: in the sun or against the body, it often reads warmer than the air."
       attribution_html: "Weather data: %{provider}"
+      hourly: Hour by hour
     exposure:
       title: Wind during the effort
       head: "Headwind %{share}"

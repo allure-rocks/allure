@@ -2370,6 +2370,9 @@ nl:
       day_before_yesterday: Eergisteren
     anomalies:
       intro: Deze waarden in het originele bestand lijken niet te kloppen. Alleen de cijfers die ze vertekenen, worden in het overzicht gemarkeerd en tellen niet mee voor records; er wordt geen meetwaarde gecorrigeerd. Beweeg over een rij om die op de kaart en in het profiel te vinden.
+      points:
+        one: "Origineel bestand: %{number} punt."
+        other: "Origineel bestand: %{number} punten."
       inspect: Alle afwijkingen op de kaart en in het profiel tonen
       major: Vertekent een cijfer
       elevation_hint: "Deze verschillen komen meestal uit het profiel dat het apparaat heeft opgenomen. Het profiel van de dienst kan ze corrigeren:"
@@ -2563,6 +2566,9 @@ nl:
         body: De activiteit, het originele bestand, de opnamedelen en de segmentpogingen worden definitief verwijderd. Als ze gepubliceerd is, wordt de publicatie verwijderd; kopieën die andere servers al hebben opgehaald, kunnen niet worden teruggehaald.
         verb: Verwijderen
       download_file: Origineel bestand downloaden
+      download_points:
+        one: 1 punt
+        other: "%{number} punten"
       device: Apparaat
       private_notes: Privénotities
       map:
@@ -2646,7 +2652,6 @@ nl:
         average_power: Gemiddeld vermogen
         max_power: Maximaal vermogen
         calories: Calorieën
-        points_count: Punten
       visibility:
         title: Zichtbaarheid
         workout: Activiteit
@@ -2673,6 +2678,7 @@ nl:
         personal_best_margin: Voorsprong op mijn op één na beste tijd
       laps:
         title: Analyse
+        more: Meer
         tabs:
           segments: Segmenten
           detected: Gedetecteerde ronden
@@ -5207,6 +5213,7 @@ nl:
     badge:
       label: "%{condition}, gemiddeld %{temperature}"
     wind_with_gusts: "%{wind}, windstoten %{gusts}"
+    wind_with_gusts_html: '%{wind}, <span class="text-nowrap">windstoten %{gusts}</span>'
     compass:
       n: "N"
       ne: "NO"
@@ -5243,6 +5250,7 @@ nl:
       device_temperature: Sensortemp.
       device_hint: "Gemeten door je apparaat: in de zon of tegen het lichaam geeft het vaak een hogere waarde dan de lucht."
       attribution_html: "Weergegevens: %{provider}"
+      hourly: Per uur
     exposure:
       title: Wind tijdens de inspanning
       head: "Tegenwind %{share}"

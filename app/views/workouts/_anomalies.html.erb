@@ -9,6 +9,9 @@
 <% groups = workout_anomaly_groups(workout, flagged) %>
 <div class="card-body pb-2">
   <p class="text-secondary small mb-2"><%= t("workouts.anomalies.intro") %></p>
+  <% if workout.points_count %>
+    <p class="text-secondary small mb-2 allure-table-nums"><%= t("workouts.anomalies.points", count: workout.points_count, number: number_with_delimiter(workout.points_count)) %></p>
+  <% end %>
   <label class="form-check form-switch mb-0 small">
     <input class="form-check-input" type="checkbox" data-controller="anomaly-inspect" data-action="change->anomaly-inspect#toggle">
     <span class="form-check-label"><%= t("workouts.anomalies.inspect") %></span>

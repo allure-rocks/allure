@@ -68,10 +68,25 @@ RSpec.describe "Weather", :weather do
       expect(response.body).to include(I18n.t("weather.conditions.partly_cloudy"))
       expect(response.body).to include("Open-Meteo.com")
       expect(response.body).to include(I18n.t("workouts.show.laps.tabs.weather"))
+      expect(response.body).to include(I18n.t("weather.card.hourly"), 'href="#workout-laps-weather"')
       expect(response.body).to include("#{I18n.t("weather.exposure.head", share: "")}42")
       expect(response.body).to include("allure-weather-badge", "13 °C")
       expect(response.body).to include("&quot;kind&quot;:&quot;weather&quot;")
       expect(response.body.index('id="section-laps"')).to be < response.body.index('id="section-weather"')
+    end
+
+    it "gives a reader the frozen summary without the hourly link" do
+      user.update!(weather_enrichment_enabled: true)
+      create(:workout_weather, workout:)
+      profile = public_publishing_profile_for(user)
+      profile.update!(settings: profile.settings.merge("weather" => true, "mask_start" => false, "mask_finish" => false))
+      publish_workout!(user:, workout:, profile:)
+
+      sign_in_as(create(:user))
+      get workout_path(workout)
+
+      expect(response.body).to include('id="section-weather"', "Open-Meteo.com")
+      expect(response.body).not_to include(I18n.t("weather.card.hourly"))
     end
 
     it "converts temperatures for an imperial reader" do

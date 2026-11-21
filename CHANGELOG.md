@@ -10,8 +10,50 @@ The developer contracts are published under `docs/dev/`; see
 
 ## [Unreleased]
 
+### Fixed
+
+- A sport shows only the measures it reads: pace and speed are one channel,
+  so a ride never lists « Allure moyenne 2:18 /km » and a run never lists a
+  speed, however complete the file was (`Sport.metric_visible?`, the rule
+  records already follow). A publication freezes only the channels its sport
+  can express, so its representation stops carrying a ride's pace values
+  ([PUBLISHING.md](docs/dev/PUBLISHING.md) §5).
+- Figures never break in the middle on a phone: an elevation pair in an
+  analysis list reads « ↑ Dénivelé positif 554 m · ↓ Dénivelé négatif 8 m »
+  as two whole groups, the arrow being decorative with the channel named to
+  screen readers, and the weather card's wind and gusts each stay on one
+  line ([DESIGN.md](docs/dev/DESIGN.md) §20.3, [WEATHER.md](docs/dev/WEATHER.md) §7).
+
 ### Changed
 
+- The workout page's summary keeps its figures together: the « Plus de
+  mesures » toggle now sits directly under the primary tiles and ahead of the
+  description and the assistant summary, and the elevation notice joins the
+  figures it completes. The raw point count leaves the summary: the `⋯`
+  menu's download entry carries it underneath, and the « Qualité des
+  données » tab names it above the findings
+  ([DESIGN.md](docs/dev/DESIGN.md) §15.5, §20.3).
+- The social row has moved into the page header: from `lg` the reactions
+  close the badge line under the title's actions — no empty band above the
+  map — and below `lg` the row keeps its own line with the thread's button on
+  the left ([DESIGN.md](docs/dev/DESIGN.md) §10.17, §20.3,
+  [COMMENTS.md](docs/dev/COMMENTS.md) §11.1).
+- The analysis card folds the tabs that do not fit behind a « Plus » menu at
+  the end of the line instead of scrolling sideways: the menu lists exactly
+  the folded tabs, its toggle stays « Plus » with their count as its badge —
+  never the tab's name, which would outgrow a phone's line — and the keyboard
+  walks the visible tabs and ends on the
+  toggle. A `#workout-laps-<key>` fragment
+  opens, focuses and scrolls to any tab, so the weather card's footer now
+  offers the owner « Heure par heure » to jump to the hourly table
+  ([WEATHER.md](docs/dev/WEATHER.md) §7, [DESIGN.md](docs/dev/DESIGN.md) §20.3).
+- The owner fullwidth cards' header add actions — « Publier » / « Ajouter une
+  publication », « Ajouter des photos », « Ajouter un participant » — are now
+  one thing: a small full primary in every card's header, all at the same
+  height (a phone's review had the Publications add action standing out at
+  44 px). The Photos card closes its header with the picker after
+  « Gérer ». The §10.3 button contract names the rule
+  ([DESIGN.md](docs/dev/DESIGN.md) §10.3, §10.22, §20.3).
 - Publishing, adding and replacing a publication open a dedicated owner-only
   page that names the activity and shows the profile with its audience, the
   delay, the shared and withheld fields, the warnings and the photo choice
@@ -21,8 +63,7 @@ The developer contracts are published under `docs/dev/`; see
   §19.1, §20.3).
 - On a phone, a publication row keeps the identity on the first line with a
   `⋯` menu for the shared media, Remplacer and Retirer, and the reader link
-  below. The card's add action meets the 44 px touch target
-  ([DESIGN.md](docs/dev/DESIGN.md) §20.3).
+  below ([DESIGN.md](docs/dev/DESIGN.md) §20.3).
 - The assistant summary now chooses what an outing is about: the facts arrive
   grouped by theme with no imposed opening and no style example, so summaries
   stop opening on a figure and a personal best. The sport's vocabulary is one

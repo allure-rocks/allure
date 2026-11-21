@@ -39,8 +39,7 @@
           <strong class="allure-table-nums"><%= format_duration(stop.elapsed_time) %></strong>
         </div>
         <div class="text-secondary small allure-table-nums">
-          <%= format_distance(stop.distance) %> · ↑ <%= format_elevation(stop.ascent) %>
-          · ↓ <%= format_elevation(stop.descent) %>
+          <%= format_distance(stop.distance) %> · <%= elevation_change(ascent: stop.ascent, descent: stop.descent) %>
         </div>
       </li>
     <% end %>

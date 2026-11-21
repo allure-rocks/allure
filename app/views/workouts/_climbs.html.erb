@@ -55,8 +55,8 @@
           <strong class="allure-table-nums"><%= format_duration(climb.elapsed_time) %></strong>
         </div>
         <div class="text-secondary small allure-table-nums">
-          <%= format_distance(climb.distance) %> · ↑ <%= format_elevation(climb.ascent) %>
-          · ↓ <%= format_elevation(climb.descent) %> · <%= format_grade(climb.average_grade) %>
+          <%= format_distance(climb.distance) %> · <%= elevation_change(ascent: climb.ascent, descent: climb.descent) %>
+          · <%= format_grade(climb.average_grade) %>
         </div>
         <div class="text-secondary small allure-table-nums"><%= t("workouts.show.laps.vam") %> <%= format_vam(climb) %><% if sport.power_led? && climb.average_power %> · <%= format_power(climb.average_power) %><% end %></div>
       </li>

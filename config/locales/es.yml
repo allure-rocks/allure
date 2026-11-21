@@ -2370,6 +2370,9 @@ es:
       day_before_yesterday: Anteayer
     anomalies:
       intro: Estos valores del archivo original parecen erróneos. Solo las cifras que falsean se marcan en el resumen y quedan fuera de los récords; no se corrige ninguna métrica. Pasa el cursor por una fila para localizarla en el mapa y en el perfil.
+      points:
+        one: "Archivo original: %{number} punto."
+        other: "Archivo original: %{number} puntos."
       inspect: Mostrar todas las anomalías en el mapa y en el perfil
       major: Falsea una cifra
       elevation_hint: "Estas diferencias suelen venir del perfil que grabó el dispositivo. El perfil del servicio puede corregirlas:"
@@ -2563,6 +2566,9 @@ es:
         body: La actividad, su archivo original, sus tramos de grabación y sus esfuerzos en segmentos se eliminan de forma definitiva. Si está publicada, la publicación se elimina; las copias que otros servidores ya hayan obtenido no se pueden recuperar.
         verb: Eliminar
       download_file: Descargar el archivo original
+      download_points:
+        one: 1 punto
+        other: "%{number} puntos"
       device: Dispositivo
       private_notes: Notas privadas
       map:
@@ -2646,7 +2652,6 @@ es:
         average_power: Potencia media
         max_power: Potencia máxima
         calories: Calorías
-        points_count: Puntos
       visibility:
         title: Visibilidad
         workout: Actividad
@@ -2673,6 +2678,7 @@ es:
         personal_best_margin: Margen sobre mi segundo mejor tiempo
       laps:
         title: Análisis
+        more: Más
         tabs:
           segments: Segmentos
           detected: Vueltas detectadas
@@ -5207,6 +5213,7 @@ es:
     badge:
       label: "%{condition}, %{temperature} de media"
     wind_with_gusts: "%{wind}, rachas %{gusts}"
+    wind_with_gusts_html: '%{wind}, <span class="text-nowrap">rachas %{gusts}</span>'
     compass:
       n: "N"
       ne: "NE"
@@ -5243,6 +5250,7 @@ es:
       device_temperature: Temp. del sensor
       device_hint: "Medida por tu dispositivo: al sol o pegado al cuerpo, suele marcar más que la temperatura del aire."
       attribution_html: "Datos meteorológicos: %{provider}"
+      hourly: Hora a hora
     exposure:
       title: Viento durante el esfuerzo
       head: "Viento de cara %{share}"

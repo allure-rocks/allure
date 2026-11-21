@@ -55,6 +55,17 @@ RSpec.describe WeatherHelper, type: :helper do
     end
   end
 
+  it "keeps the wind and its gusts whole when the card's line wraps" do
+    I18n.with_locale(:fr) do
+      plain = helper.wind_label(4.0, 225.0, gusts: 12.0)
+      expect(plain).to eq("14 km/h SO, rafales 43 km/h")
+
+      html = Nokogiri::HTML5.fragment(helper.wind_label(4.0, 225.0, gusts: 12.0, html: true))
+      expect(html.css("span.text-nowrap").map { |span| span.text.strip })
+        .to eq([ "14 km/h SO", "rafales 43 km/h" ])
+    end
+  end
+
   it "joins a range with a dash between positive values and words once a bound is negative" do
     I18n.with_locale(:fr) do
       expect(helper.format_temperature_range(11.2, 15.8)).to eq("11–16 °C")
