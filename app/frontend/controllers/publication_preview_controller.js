@@ -7,7 +7,7 @@ import { Controller } from "@hotwired/stimulus";
 // and the profile's default delay. A profile change only swaps that embedded
 // data — no request, no projection of the workout.
 export default class extends Controller {
-  static targets = ["profile", "delay", "shared", "withheld", "withheldGroup", "warnings", "submit", "photoChoice", "photoOff"];
+  static targets = ["profile", "delay", "audience", "audienceRow", "lists", "shared", "withheld", "withheldGroup", "warnings", "submit", "photoChoice", "photoOff"];
 
   static values = {
     readiness: Object,
@@ -20,17 +20,25 @@ export default class extends Controller {
   }
 
   update() {
+    const delay = this.status.delay;
+    if (typeof delay === "number") this.delayTarget.value = String(delay);
     this.render();
   }
 
-  // The delay select changed without a profile switch: only the action label
-  // follows.
   updateLabel() {
     this.setSubmitLabel();
+    this.setSubmitDisabled(this.status.ready !== true || this.delayTarget.value === "");
+  }
+
+  get status() {
+    return this.readinessValue[this.profileTarget.value] || {};
   }
 
   render() {
-    const status = this.readinessValue[this.profileTarget.value] || {};
+    const status = this.status;
+    this.audienceTarget.textContent = status.audience || "";
+    this.audienceRowTarget.hidden = !status.audience;
+    this.listsTarget.hidden = !status.audience;
     this.renderWarnings(status.warnings || []);
     if (Array.isArray(status.shared) && this.hasSharedTarget) {
       this.renderList(this.sharedTarget, status.shared, "ti-check text-success");
@@ -39,16 +47,9 @@ export default class extends Controller {
       this.renderList(this.withheldTarget, status.withheld, "ti-x text-secondary");
       if (this.hasWithheldGroupTarget) this.withheldGroupTarget.hidden = status.withheld.length === 0;
     }
-    this.setSubmitDisabled(status.ready === false);
-    this.setDelay(status.delay);
-    this.setPhotoChoice(status.photos === true);
-  }
-
-  // A profile that shares no photos gets the sentence and the way to the
-  // profiles, never a grid of ticks that would share nothing.
-  setPhotoChoice(shared) {
-    if (this.hasPhotoChoiceTarget) this.photoChoiceTarget.hidden = !shared;
-    if (this.hasPhotoOffTarget) this.photoOffTarget.hidden = shared;
+    this.updateLabel();
+    if (this.hasPhotoChoiceTarget) this.photoChoiceTarget.hidden = status.photos !== true;
+    if (this.hasPhotoOffTarget) this.photoOffTarget.hidden = !status.audience || status.photos === true;
   }
 
   renderList(list, fields, iconClasses) {
@@ -64,20 +65,9 @@ export default class extends Controller {
     );
   }
 
-  // The delay is a per-profile default; the owner can still override it for
-  // one publish with the same preset list. The submit label tells the truth:
-  // "Publish" for an immediate publication, "Schedule publication" when a hold
-  // is selected.
-  setDelay(delay) {
-    if (this.hasDelayTarget && typeof delay === "number") {
-      this.delayTarget.value = String(delay);
-    }
-    this.setSubmitLabel();
-  }
-
   setSubmitLabel() {
     if (!this.hasSubmitTarget) return;
-    const immediate = this.hasDelayTarget && this.delayTarget.value === "0";
+    const immediate = !this.delayTarget.value || this.delayTarget.value === "0";
     const label = immediate ? this.immediateLabelValue : this.delayedLabelValue;
     if (label) this.submitTarget.value = label;
   }

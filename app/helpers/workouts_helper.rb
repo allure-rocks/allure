@@ -681,14 +681,6 @@ module WorkoutsHelper
     safe_join(badges)
   end
 
-  # The profiles a publish form offers (docs/dev/PUBLISHING.md): those whose
-  # audience no live publication holds yet, plus — when replacing — the
-  # replaced publication's own audience.
-  def publish_form_profiles(workout, profiles, replaced: nil)
-    taken = workout.live_audiences - [ replaced&.audience ]
-    profiles.reject { |profile| taken.include?(profile.audience) }
-  end
-
   # The card view's month sections (DESIGN.md §20.4): adjacent cards sharing
   # the activity's calendar month in the viewer's zone, in list order.
   # `chunk_while` never reorders — only a date-sorted list may be sectioned.

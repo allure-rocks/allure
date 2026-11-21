@@ -638,8 +638,9 @@ RSpec.describe "Workouts" do
       get workout_path(w)
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Garmin Edge 530")
-      expect(response.body).to include(I18n.t("workouts.show.device"))
+      device = response.parsed_body.at_css(".page-header .ti-device-watch")
+      expect(device).to be_present
+      expect(device.parent.text.strip).to eq("Garmin Edge 530")
     end
 
     it "does not leak the recording device to a non-owner when the profile keeps it off" do

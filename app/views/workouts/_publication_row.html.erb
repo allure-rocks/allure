@@ -1,15 +1,16 @@
 <%# One active publication in the sharing list (DESIGN.md §20.3), one per
-    audience (docs/dev/PUBLISHING.md): its
-    audience, profile and date, the reader's view and the shared media, the
-    replace and withdraw actions, and a distribution alert when sending has a
-    problem. Locals: `workout`, `publication`, `delivery_summary`, `form_id`
-    (the replace form to unfold, or nil), `automatic` (an automatic profile
-    made it, docs/dev/AUTO-PUBLISHING.md). %>
+    audience (docs/dev/PUBLISHING.md): its audience, profile and date, the
+    reader's view and the shared media, the replace and withdraw actions, and a
+    distribution alert when sending has a problem. From lg every action sits on
+    the row's line; below lg the `⋯` menu closes the row's first line beside the
+    identity and the reader link stays on the line below, with 44 px touch
+    targets. Locals: `workout`, `publication`, `delivery_summary`, `automatic`
+    (an automatic profile made it, docs/dev/AUTO-PUBLISHING.md). %>
 <% profile_name = publication.profile_snapshot["name"].presence || publication.publishing_profile&.name %>
 <li class="list-group-item allure-publication-row">
-  <div class="d-flex flex-wrap align-items-center gap-2">
-    <%= publication_badge(publication.audience) %>
-    <div class="me-auto">
+  <div class="d-flex flex-wrap align-items-lg-center gap-2">
+    <span class="flex-shrink-0"><%= publication_badge(publication.audience) %></span>
+    <div class="allure-publication-row__identity text-break">
       <div class="fw-semibold"><%= profile_name.present? ? t("workouts.snapshot.profile", name: profile_name) : t("workouts.snapshot.profile_removed") %></div>
       <div class="text-secondary small">
         <%= t("workouts.snapshot.published_on", date: format_started_at(publication.published_at)) %>
@@ -18,35 +19,62 @@
         <% end %>
       </div>
     </div>
-    <div class="btn-list flex-nowrap">
-      <% if form_id %>
-        <button type="button" class="btn btn-sm btn-outline-secondary collapsed" data-bs-toggle="collapse"
-                data-bs-target="#<%= form_id %>" aria-expanded="false" aria-controls="<%= form_id %>">
-          <i class="ti ti-refresh me-1" aria-hidden="true"></i><%= t("workouts.publication.replace_short") %>
-        </button>
+    <%# Below lg the menu closes the row's first line, beside the identity
+        (DESIGN.md §20.3); the reader link stays on the line below. %>
+    <div class="dropdown allure-publication-row__menu ms-auto d-lg-none flex-shrink-0">
+      <button type="button" class="btn btn-sm btn-icon btn-ghost-secondary" data-bs-toggle="dropdown"
+              aria-expanded="false" aria-label="<%= t("workouts.publication.actions", audience: t("workouts.publication.audience.#{publication.audience}")) %>">
+        <i class="ti ti-dots" aria-hidden="true"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+        <% if publication.sanitized_attachment(:gpx) %>
+          <%= link_to publication_gpx_path(publication), class: "dropdown-item",
+                      data: { controller: "bridge--download", bridge__download_url_value: publication_gpx_path(publication) } do %>
+            <i class="ti ti-file-download me-2" aria-hidden="true"></i><%= t("workouts.snapshot.media_gpx") %>
+          <% end %>
+        <% end %>
+        <% if publication.sanitized_attachment(:route_image) %>
+          <%= link_to publication_route_image_path(publication), class: "dropdown-item" do %>
+            <i class="ti ti-photo me-2" aria-hidden="true"></i><%= t("workouts.snapshot.media_route_image") %>
+          <% end %>
+        <% end %>
+        <% if publication.sanitized_attachment(:gpx) || publication.sanitized_attachment(:route_image) %>
+          <div class="dropdown-divider"></div>
+        <% end %>
+        <%= link_to new_replacement_workout_path(workout, publication_id: publication.to_param), class: "dropdown-item" do %>
+          <i class="ti ti-refresh me-2" aria-hidden="true"></i><%= t("workouts.publication.replace_short") %>
+        <% end %>
+        <%= button_to publication_workout_path(workout), method: :delete, params: { publication_id: publication.to_param },
+                      form: { data: { confirm_title: t("workouts.publication.confirm.title"), confirm_body: t("workouts.publication.confirm.body"), confirm_verb: t("workouts.publication.confirm.verb") } },
+                      class: "dropdown-item text-danger" do %>
+          <i class="ti ti-trash me-2" aria-hidden="true"></i><%= t("workouts.publication.withdraw") %>
+        <% end %>
+      </div>
+    </div>
+    <div class="allure-publication-row__actions d-flex flex-wrap align-items-center gap-2">
+      <%= link_to workout_path(workout, as: :publication, audience: publication.audience), class: "btn btn-sm btn-ghost-primary text-wrap" do %>
+        <i class="ti ti-eye me-1" aria-hidden="true"></i><%= t("workouts.publication.view_as_reader") %>
+      <% end %>
+      <% if publication.sanitized_attachment(:gpx) %>
+        <%= link_to publication_gpx_path(publication), class: "btn btn-sm btn-ghost-secondary d-none d-lg-inline-flex",
+                    data: { controller: "bridge--download", bridge__download_url_value: publication_gpx_path(publication) } do %>
+          <i class="ti ti-file-download me-1" aria-hidden="true"></i><%= t("workouts.snapshot.media_gpx") %>
+        <% end %>
+      <% end %>
+      <% if publication.sanitized_attachment(:route_image) %>
+        <%= link_to publication_route_image_path(publication), class: "btn btn-sm btn-ghost-secondary d-none d-lg-inline-flex" do %>
+          <i class="ti ti-photo me-1" aria-hidden="true"></i><%= t("workouts.snapshot.media_route_image") %>
+        <% end %>
+      <% end %>
+      <%= link_to new_replacement_workout_path(workout, publication_id: publication.to_param), class: "btn btn-sm btn-outline-secondary d-none d-lg-inline-flex" do %>
+        <i class="ti ti-refresh me-1" aria-hidden="true"></i><%= t("workouts.publication.replace_short") %>
       <% end %>
       <%= button_to publication_workout_path(workout), method: :delete, params: { publication_id: publication.to_param },
-                    form: { data: { confirm_title: t("workouts.publication.confirm.title"), confirm_body: t("workouts.publication.confirm.body"), confirm_verb: t("workouts.publication.confirm.verb") } },
+                    form: { class: "d-none d-lg-inline-flex", data: { confirm_title: t("workouts.publication.confirm.title"), confirm_body: t("workouts.publication.confirm.body"), confirm_verb: t("workouts.publication.confirm.verb") } },
                     class: "btn btn-sm btn-ghost-danger" do %>
-        <%= t("workouts.publication.withdraw") %>
+        <i class="ti ti-trash me-1" aria-hidden="true"></i><%= t("workouts.publication.withdraw") %>
       <% end %>
     </div>
-  </div>
-  <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
-    <%= link_to workout_path(workout, as: :publication, audience: publication.audience), class: "btn btn-sm btn-ghost-primary" do %>
-      <i class="ti ti-eye me-1" aria-hidden="true"></i><%= t("workouts.publication.view_as_reader") %>
-    <% end %>
-    <% if publication.sanitized_attachment(:gpx) %>
-      <%= link_to publication_gpx_path(publication), class: "btn btn-sm btn-ghost-secondary",
-                  data: { controller: "bridge--download", bridge__download_url_value: publication_gpx_path(publication) } do %>
-        <i class="ti ti-file-download me-1" aria-hidden="true"></i><%= t("workouts.snapshot.media_gpx") %>
-      <% end %>
-    <% end %>
-    <% if publication.sanitized_attachment(:route_image) %>
-      <%= link_to publication_route_image_path(publication), class: "btn btn-sm btn-ghost-secondary" do %>
-        <i class="ti ti-photo me-1" aria-hidden="true"></i><%= t("workouts.snapshot.media_route_image") %>
-      <% end %>
-    <% end %>
   </div>
   <%= render "delivery_summary", workout:, publication:, summary: delivery_summary if delivery_summary %>
 </li>

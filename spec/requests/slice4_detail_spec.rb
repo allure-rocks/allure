@@ -83,6 +83,11 @@ RSpec.describe "Workout detail layout" do
 
       get workout_path(workout)
 
+      expect(response.body).not_to include("data-publication-preview-readiness-value")
+      expect(response.parsed_body.at_css("#section-sharing a[href='#{new_publication_workout_path(workout)}']")).to be_present
+
+      get new_publication_workout_path(workout)
+
       expect(response.body).to include("Voici exactement ce qui sera partagé")
       expect(response.body).to include("ne sont jamais partagés")
       expect(response.body).to include("Titre")
@@ -93,7 +98,7 @@ RSpec.describe "Workout detail layout" do
       create(:track_segment, workout:)
       sign_in_as(owner)
 
-      get workout_path(workout)
+      get new_publication_workout_path(workout)
 
       page = response.parsed_body
       shared = page.at_css('[data-publication-preview-target="shared"]')
@@ -188,8 +193,8 @@ RSpec.describe "Workout detail layout" do
 
       page = response.parsed_body
       header = page.at_css(".allure-workout-header")
-      expect(header.at_css("a[href='#section-sharing']")).to be_present
-      expect(page.at_css("#section-sharing form[action='#{publish_workout_path(workout)}']")).to be_present
+      expect(header.at_css("a[href='#{new_publication_workout_path(workout)}']")).to be_present
+      expect(page.at_css("#section-sharing a[href='#{new_publication_workout_path(workout)}']")).to be_present
 
       expect(header.at_css(".dropdown-menu a[href='#{workout_original_file_path(workout)}']")).to be_present
       expect(header.at_css(".dropdown-menu form[action='#{workout_path(workout)}']")).to be_present
@@ -220,7 +225,7 @@ RSpec.describe "Workout detail layout" do
       expect(metadata.at_css(".sport-tile")).to be_nil
       expect(metadata.at_css('[data-audience-state="unpublished"]').text).to include(I18n.t("workouts.publication.unpublished"))
       # Publish and the ⋯ menu share the title's row.
-      expect(header.at_css(".allure-workout-header__top .allure-workout-header__actions a[href='#section-sharing']")).to be_present
+      expect(header.at_css(".allure-workout-header__top .allure-workout-header__actions a[href='#{new_publication_workout_path(workout)}']")).to be_present
 
       places = header.at_css(".allure-workout-header__places")
       expect(places.at_css(".ti-map-pin")).to be_present

@@ -2790,6 +2790,12 @@ en:
       shared_heading: "Here is exactly what will be shared:"
       withheld_heading: "Not shared with this profile:"
       list_title: "Publications"
+      actions: "Publication actions (%{audience})"
+      publish_title: Publish workout
+      back_to_workout: Back to workout
+      choose_profile: Choose a profile
+      profile_option: "%{name} — %{audience}"
+      audience_label: "Audience:"
       delete_all: "Withdraw every publication"
       withdraw: "Withdraw"
       replace_short: "Replace"

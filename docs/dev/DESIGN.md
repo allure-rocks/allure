@@ -3463,7 +3463,8 @@ a native reviewer reads.
 
 ### 19.1 Publication preview — before publishing
 
-Placement: in the publish form, visible without a disclosure, updating live
+Placement: on the dedicated publish or replace page, before the submit button,
+visible without a disclosure, updating live
 when the profile selection changes. The workout is never projected (no
 preview card, no second map): the sentence is laid out as two short lists. The
 first is headed by its opening words, « Voici exactement ce qui sera
@@ -4764,24 +4765,38 @@ card and no danger zone.
               the composer with its §19.21 sentence and its submit on the
               right, the owner's close/reopen as a small primary ghost button;
               below lg the card lives on /workouts/:id/comments
-[Publications] full-width owner card: header « Retirer toutes les
-              publications » (ghost danger) while one is live; one row per
-              publication, at most one per audience ([PUBLISHING.md](PUBLISHING.md)) —
-              the scheduled ones (§19.19 notice, reschedule, cancel, publish
-              now) then the active ones, narrowest audience first (audience,
-              profile, date, « Voir comme vos lecteurs », shared media,
-              Remplacer, Retirer, a distribution alert only when sending
-              failed); « Ajouter une publication » closes the list and
-              unfolds the publish form limited to the free audiences, or
-              stays disabled with its reason (every audience taken, followers
-              turned off). Without a publication the publish form opens the
-              card: profile, delay, the §19.1 lists and warnings, « En savoir
-              plus » for the delay and safety hints; a row's « Remplacer »
-              unfolds the same form under the list, limited to its own
-              audience and the free ones
+[Publications] full-width owner card: header « Publier » or « Ajouter une
+               publication » (small outline primary, 44 px tall on touch)
+               while an audience is free; « Retirer toutes les publications »
+               (ghost danger) from lg while one is live, each row's `⋯` carrying Retirer
+               below lg. One row per publication, at most one per audience
+               ([PUBLISHING.md](PUBLISHING.md)) — the scheduled ones (§19.19
+               notice, reschedule, cancel, publish now) then the active
+               ones, narrowest audience first (audience, profile, date,
+               « Voir comme vos lecteurs », shared GPX and route image links,
+               and a distribution alert only when sending failed). From lg
+               the row's actions sit on its line after the identity: reader
+               link, media, Remplacer and Retirer; below lg the `⋯` menu
+               closes the row's first line beside the identity and groups the
+               media, Remplacer and Retirer, the reader link staying on the
+               line below, with 44 px touch targets. « Publier » or « Ajouter
+               une publication » links to the dedicated form when an
+               audience is free; otherwise the card states the reason under
+               its title. « Remplacer » links to the same form for the named
+               publication, limited to its own audience and the free ones.
 [Participants] full-width owner card (§10.18): « Ajouter un participant » in
               the header, the §19.20 sentence, one row per participation
 ```
+
+The owner-only publish and replace pages identify the activity by title and
+date and link back to its Publications card (`#section-sharing`). The form
+fills the available content width and shows the profile and its explicit
+audience, the delay, the §19.1 lists and
+applicable warnings and photo choices, then one primary action, full width
+on mobile. Optional delay and safety explanations stay under « En savoir
+plus ». A correctable error keeps the owner's choices; if the audience is
+no longer available the owner must choose another profile explicitly. Success
+returns to the Publications card.
 
 A **positionless recording** ([NO-GPS.md](NO-GPS.md)) follows the same layout without
 its geography: no map rail, so the summary leads the single column and the

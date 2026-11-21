@@ -351,14 +351,16 @@ a `Delete` followed by a new `Create` with a new identity.
 
 The « Publications » card lists the scheduled then the active publications,
 narrowest first. Each row carries its own Remplacer, Retirer, « Voir comme vos
-lecteurs » and distribution alert. « Ajouter une publication » unfolds the
-publish form restricted to the profiles of a free audience; it is disabled with
-the reason when every audience is taken or the followers audience is turned off
-by the operator. The header « Retirer toutes les publications » withdraws them
+lecteurs » and distribution alert. « Publier », « Ajouter une publication » and
+« Remplacer » open a dedicated owner-only page. The form offers profiles for
+free audiences and, when replacing, the named publication's audience. When
+there is no free audience, the card explains why there is no add action.
+The header « Retirer toutes les publications » withdraws them
 all. Owner lists show one audience badge per active publication.
 
-The card never projects the workout: the shared / not-shared sentence is laid
-out as a list pair driven by the per-profile readiness data. The owner reads
+The form never projects the workout: the shared / not-shared sentence is laid
+out as a list pair driven by the per-profile readiness data and shown before
+submission. The owner reads
 the published page itself through `?as=publication&audience=`.
 
 ## 10. Invariants and verification

@@ -4,10 +4,10 @@ class WorkoutsController < ApplicationController
   include Pagy::Method
 
   before_action :set_workout_for_show, only: :show
-  before_action :set_owned_workout, only: %i[edit update destroy publish destroy_publication republish publication_preview delivery_refresh activate_publication reschedule_publication destroy_scheduled_publication destroy_auto_publication]
+  before_action :set_owned_workout, only: %i[edit update destroy new_publication new_replacement publish destroy_publication republish publication_preview delivery_refresh activate_publication reschedule_publication destroy_scheduled_publication destroy_auto_publication]
   # A credit row is read-only except for its deletion (docs/dev/SHARED-ACTIVITIES.md).
-  before_action :refuse_credit_row, only: %i[edit update publish destroy_publication republish publication_preview delivery_refresh activate_publication reschedule_publication destroy_scheduled_publication destroy_auto_publication]
-  before_action :ensure_publishing_profiles, only: %i[show publish republish publication_preview]
+  before_action :refuse_credit_row, only: %i[edit update new_publication new_replacement publish destroy_publication republish publication_preview delivery_refresh activate_publication reschedule_publication destroy_scheduled_publication destroy_auto_publication]
+  before_action :ensure_publishing_profiles, only: %i[show new_publication new_replacement publish republish publication_preview]
   before_action :set_equipments, only: %i[edit update]
 
   # The filter vocabulary lives in Workouts::ListQuery, which the bulk
@@ -72,9 +72,7 @@ class WorkoutsController < ApplicationController
     # leads it, the summary takes its place when there is no description, and
     # joins it only when the account asked for both.
     @inline_summary = @summary_visible && (@workout.description.blank? || current_user.ai_summary_with_description?)
-    @profiles = current_user&.publishing_profiles&.order(:position, :id) || []
-    @publication_readiness = publication_readiness
-    @selected_profile = selected_publishing_profile if @workout.user == current_user
+    @can_add_publication = owner && !@reader_preview && @workout.positioned? && publication_form_profiles.any?
     @delivery_summaries = if owner
       @active_publications.to_h { |publication| [ publication.id, Workouts::DeliverySummary.new(publication:).call ] }
     else
@@ -179,13 +177,27 @@ class WorkoutsController < ApplicationController
     redirect_to workouts_path, notice: t("workouts.destroy.success")
   end
 
+  def new_publication
+    raise ActiveRecord::RecordNotFound unless @workout.positioned?
+
+    render_publication_form
+  end
+
+  def new_replacement
+    raise ActiveRecord::RecordNotFound unless @workout.positioned?
+
+    @replaced = named_publication(@workout.active_publications)
+    render_publication_form
+  end
+
   def publish
+    profile = selected_profile
     publication = Workouts::Publisher.new(
-      user: current_user, workout: @workout, profile: selected_profile, delay: publish_delay, **photo_choice
+      user: current_user, workout: @workout, profile:, delay: publish_delay, **photo_choice
     ).call!
-    redirect_to workout_path(@workout), notice: publication_notice(publication)
+    redirect_to workout_path(@workout, anchor: "section-sharing"), status: :see_other, notice: publication_notice(publication)
   rescue Workouts::Publisher::PublicationError => error
-    redirect_to workout_path(@workout), alert: error.message
+    render_publication_error(error, profile:)
   end
 
   # Withdraws the publication the row names, or every active one from the
@@ -200,17 +212,18 @@ class WorkoutsController < ApplicationController
   # publication to replace, publishes.
   def republish
     profile = selected_profile
-    replaced = named_publication(@workout.active_publications) if params[:publication_id].present?
-    publication = if replaced || @workout.active_publications.any?
-      Workouts::PublicationReplacement.new(
-        user: current_user, workout: @workout, profile:, delay: publish_delay, publication: replaced, **photo_choice
-      ).call!.new_publication
+    @replaced = named_publication(@workout.active_publications) if params[:publication_id].present?
+    publication = if @replaced || @workout.active_publications.any?
+      result = Workouts::PublicationReplacement.new(
+        user: current_user, workout: @workout, profile:, delay: publish_delay, publication: @replaced, **photo_choice
+      ).call!
+      result.new_publication
     else
       Workouts::Publisher.new(user: current_user, workout: @workout, profile:, delay: publish_delay, **photo_choice).call!
     end
-    redirect_to workout_path(@workout), notice: publication_notice(publication, republish: true)
+    redirect_to workout_path(@workout, anchor: "section-sharing"), status: :see_other, notice: publication_notice(publication, republish: true)
   rescue Workouts::Publisher::PublicationError => error
-    redirect_to workout_path(@workout), alert: error.message
+    render_publication_error(error, profile:)
   end
 
   # Leaves the safety delay early. The publication was never visible, so this
@@ -267,7 +280,7 @@ class WorkoutsController < ApplicationController
     # A candidate with failing included media still renders its details (200)
     # with ready:false so a client can disable Publish and explain what is not
     # ready. Only route/privacy failures without a candidate are 422. JSON
-    # only: the workout page lists what a profile shares instead of projecting
+    # only: the publish form lists what a profile shares instead of projecting
     # it (DESIGN.md §19.1).
     if result.candidate
       respond_to do |format|
@@ -309,12 +322,40 @@ class WorkoutsController < ApplicationController
     end
   end
 
-  # The profile the publish form opens on: the first publishable profile whose
-  # audience no live publication holds yet (docs/dev/PUBLISHING.md), so the form
-  # adds a publication beside the existing ones. Shared by the publication form
-  # and its shared-field lists.
-  def selected_publishing_profile
-    @profiles.find { |profile| profile.publishable? && @workout.live_audiences.exclude?(profile.audience) }
+  def publication_form_profiles
+    taken = @workout.live_audiences - [ @replaced&.audience ]
+    current_user.publishing_profiles.order(:position, :id).select do |profile|
+      profile.publishable? && taken.exclude?(profile.audience)
+    end
+  end
+
+  def render_publication_form(error: nil, profile: nil)
+    response.headers["Cache-Control"] = "private, no-store"
+    @publication_error = error
+    @profiles = publication_form_profiles
+    @selected_profile = if error
+      # Don't silently switch to a different audience if a concurrent
+      # publication took the submitted one.
+      @profiles.find { |option| option.id == profile.id }
+    else
+      @profiles.find { |option| option.id == @replaced&.publishing_profile_id } || @profiles.first
+    end
+    @selected_delay = if error && params[:publish_delay].present?
+      publish_delay if PublishingProfile::PUBLISH_DELAY_VALUES.include?(publish_delay)
+    else
+      @selected_profile&.publish_delay_seconds
+    end
+    @photo_choice = error ? photo_choice : {}
+    @publication_readiness = publication_readiness
+    render :publication_form, status: error ? :unprocessable_content : :ok
+  end
+
+  def render_publication_error(error, profile:)
+    # These activities have no browser form. Preserve the existing response
+    # for a direct submission rejected by the publishing service.
+    return redirect_to(workout_path(@workout), alert: error.message) unless @workout.positioned?
+
+    render_publication_form(error: error.message, profile:)
   end
 
   # A publication of this workout named by its short id in `publication_id`,
@@ -507,9 +548,9 @@ class WorkoutsController < ApplicationController
       statuses[profile.id.to_s] = {
         "ready" => result.ready?,
         "warnings" => result.warnings.map { |warning| t("workouts.publish.warnings.#{warning}") },
-        "preview" => helpers.publication_preview_text(profile),
         "shared" => helpers.publication_preview_fields(profile),
         "withheld" => helpers.publication_withheld_fields(profile),
+        "audience" => t("publishing_profiles.audiences.#{profile.audience}"),
         # The publish form shows its photo choice only for a profile that
         # shares photos (docs/dev/PHOTOS.md, DESIGN.md §19.35).
         "photos" => profile.settings["photos"] == true,
@@ -618,7 +659,7 @@ class WorkoutsController < ApplicationController
     value = params[:publish_delay].presence
     return nil unless value
 
-    Integer(value, exception: false)
+    Integer(value, exception: false) || value
   end
 
   # The immediate path is the default; a hold reports its planned moment and

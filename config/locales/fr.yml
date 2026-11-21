@@ -2827,6 +2827,12 @@ fr:
       shared_heading: "Voici exactement ce qui sera partagé :"
       withheld_heading: "Non partagé avec ce profil :"
       list_title: "Publications"
+      actions: "Actions de la publication (%{audience})"
+      publish_title: Publier l’activité
+      back_to_workout: Retour à l’activité
+      choose_profile: Choisir un profil
+      profile_option: "%{name} — %{audience}"
+      audience_label: "Audience :"
       delete_all: "Retirer toutes les publications"
       withdraw: "Retirer"
       replace_short: "Remplacer"
