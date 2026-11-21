@@ -26,6 +26,10 @@ The developer contracts are published under `docs/dev/`; see
 
 ### Changed
 
+- `Release` can be run manually to publish a `test-<suffix>` image of any
+  branch, or of the short commit SHA when no suffix is given. A manual run
+  never moves `latest` and never reuses a release tag; those stay a `v*` tag
+  push's alone (`.github/workflows/release.yml`, `CONTRIBUTING.md`).
 - The workout page's summary keeps its figures together: the « Plus de
   mesures » toggle now sits directly under the primary tiles and ahead of the
   description and the assistant summary, and the elevation notice joins the

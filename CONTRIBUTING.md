@@ -194,6 +194,23 @@ hardcode user-facing English.
   repository guide. The developer contracts are published under `docs/dev/`;
   a pull request explains the contract it implements.
 
+## Test images
+
+`Release` (`.github/workflows/release.yml`) builds the two production images
+from a `v*` tag push and publishes `<tag>` and `latest`. To try a branch on a
+real host without cutting a release, run the workflow manually (Actions →
+Release → Run workflow): it builds the selected branch and publishes
+`allurerocks/allure:test-<suffix>` and
+`allurerocks/allure-route-image:test-<suffix>`, where `<suffix>` is the
+optional input or the short commit SHA. A manual run never moves `latest` and
+never reuses a release tag. Point `ALLURE_IMAGE` and
+`ALLURE_ROUTE_IMAGE_IMAGE` at the two `test-` tags in `.env.production` to
+deploy them.
+
+The images are `linux/amd64`; on an Apple Silicon host they run under
+emulation, and a native image is built locally from the `Dockerfile` targets
+instead.
+
 ## Commits and pull requests
 
 - Keep commits focused and explain the why in the message, not only the what.

@@ -3,12 +3,18 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  # A manual run builds the selected branch as a test image. It publishes
+  # `test-<tag>` only: `latest` and the release tags belong to `v*` tag pushes.
   workflow_dispatch:
     inputs:
+      tag:
+        description: "Suffix of the test-<suffix> image tag; defaults to the short commit SHA"
+        type: string
+        required: false
       push:
         description: "Push the images to Docker Hub"
         type: boolean
-        default: false
+        default: true
 
 concurrency:
   group: release-${{ github.ref }}
@@ -25,6 +31,56 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+
+      # A tag push publishes the release itself; a manual run cannot reach
+      # those tags, nor `latest`, whatever its input says.
+      - name: Resolve the image tags
+        id: tags
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            tag="$GITHUB_REF_NAME"
+            latest=true
+          else
+            suffix="${INPUT_TAG:-${GITHUB_SHA:0:7}}"
+            if ! printf '%s' "$suffix" | grep -Eq '^[A-Za-z0-9_][A-Za-z0-9_.-]{0,120}$'; then
+              echo "::error::'$suffix' is not a valid Docker tag suffix."
+              exit 1
+            fi
+            tag="test-$suffix"
+            latest=false
+          fi
+
+          {
+            echo "tag=$tag"
+            echo "app<<EOF"
+            echo "allurerocks/allure:$tag"
+            if [ "$latest" = true ]; then echo "allurerocks/allure:latest"; fi
+            echo "EOF"
+            echo "route_image<<EOF"
+            echo "allurerocks/allure-route-image:$tag"
+            if [ "$latest" = true ]; then echo "allurerocks/allure-route-image:latest"; fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Summarize the image tags
+        env:
+          PUSH: ${{ github.event_name == 'push' || inputs.push }}
+        run: |
+          {
+            echo "### Container images"
+            echo
+            echo "- \`allurerocks/allure:${{ steps.tags.outputs.tag }}\`"
+            echo "- \`allurerocks/allure-route-image:${{ steps.tags.outputs.tag }}\`"
+            echo
+            if [ "$PUSH" = true ]; then
+              echo "Pushed to Docker Hub."
+            else
+              echo "Built only; nothing was pushed."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - uses: docker/setup-buildx-action@v4
 
       - name: Log in to Docker Hub
@@ -40,9 +96,7 @@ jobs:
           context: .
           target: app
           push: ${{ github.event_name == 'push' || inputs.push }}
-          tags: |
-            allurerocks/allure:${{ github.ref_name }}
-            allurerocks/allure:latest
+          tags: ${{ steps.tags.outputs.app }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -52,9 +106,7 @@ jobs:
           context: .
           target: route-image-worker
           push: ${{ github.event_name == 'push' || inputs.push }}
-          tags: |
-            allurerocks/allure-route-image:${{ github.ref_name }}
-            allurerocks/allure-route-image:latest
+          tags: ${{ steps.tags.outputs.route_image }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
