@@ -57,6 +57,9 @@ module Participations
       @participation.update!(attributes)
       Notifications::Withdraw.new(user: @user, subject: @participation, kind: "participation_suggested").call!
       notify_other_side(side)
+      # The summary may now name the participant (docs/dev/AI.md §6), once both
+      # sides have confirmed.
+      SummaryRefresh.confirmed!(@participation) if @participation.confirmed?
       # A confirmed credit gets its credit row (docs/dev/SHARED-ACTIVITIES.md).
       CreditJob.perform_later(@participation) if @participation.kind == "credit"
       @participation

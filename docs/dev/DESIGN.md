@@ -2379,10 +2379,10 @@ Résumé
   description-only page shows no assistant block, not even its action; the
   setting is the way back to it. Without a figures card the description keeps
   its own card at the foot of the column.
-- **Body:** one to five sentences as one flowing paragraph, never a list and
-  never more than five, filling the card's width with no measure cap. A quiet
-  outing gets one sentence and stops; the assistant never pads it to sound
-  busier. The block never scrolls internally (§10.1). No visible title names
+- **Body:** one to three sentences as one flowing paragraph, never a list,
+  filling the card's width with no measure cap. A quiet outing gets one
+  sentence and stops; the assistant never pads it to sound busier. The block
+  never scrolls internally (§10.1). No visible title names
   it: the figures card's « Résumé » heading covers it, and the section carries
   an accessible name for assistive technology.
 - **Attribution:** the first §19.40 sentence lives behind the small info icon
@@ -4564,14 +4564,16 @@ and accessible name carry the text. The first sentence is the same key on both
 surfaces; the second appears only on the settings page.
 
 > **FR** — « Cette synthèse est rédigée automatiquement à partir des mesures de
-> cette activité. Elle peut se tromper : les chiffres des cartes font foi. Les
-> mesures sont envoyées au modèle configuré par l'opérateur de cette instance. »
+> cette activité et du nom de ses participants confirmés. Elle peut se tromper :
+> les chiffres des cartes font foi. Ces informations sont envoyées au modèle
+> configuré par l'opérateur de cette instance. »
 > « Désactiver l'assistant arrête toute nouvelle rédaction ; les synthèses déjà
 > écrites restent jusqu'à leur suppression. »
 >
 > **EN** — "This summary is written automatically from this workout's
-> measurements. It can be wrong: the figures on the cards are the reference. The
-> measurements are sent to the model configured by this instance's operator."
+> measurements and the names of its confirmed participants. It can be wrong:
+> the figures on the cards are the reference. This information is sent to the
+> model configured by this instance's operator."
 > "Turning the assistant off stops every new summary; the ones already written
 > remain until you delete them."
 

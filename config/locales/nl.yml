@@ -5096,7 +5096,7 @@ nl:
           pb: PB
           eb: EB
   assistant:
-    notice: "Deze samenvatting wordt automatisch geschreven op basis van de metingen van deze activiteit. Ze kan zich vergissen: de cijfers op de kaarten zijn bepalend. De metingen worden naar het model gestuurd dat de beheerder van deze instantie heeft ingesteld."
+    notice: "Deze samenvatting wordt automatisch geschreven op basis van de metingen van deze activiteit en de namen van de bevestigde deelnemers. Ze kan zich vergissen: de cijfers op de kaarten zijn bepalend. Deze gegevens worden naar het model gestuurd dat de beheerder van deze instantie heeft ingesteld."
   insights:
     facts:
       places:
@@ -5117,7 +5117,12 @@ nl:
       heart_rate: "%{average} bpm gemiddeld, %{max} maximaal"
       zone: "%{share} van de tijd in zone %{zone}"
       wind: "Tegenwind op %{head} van de route, meewind op %{tail}"
-      temperature: "%{range}, %{condition}, gevoel %{apparent}"
+      weather:
+        night: "in de nacht"
+        apparent: "gevoel %{value}"
+        wind: "wind %{value}"
+        gusts: "windstoten %{value}"
+        precipitation: "%{value} neerslag"
       climb: "%{name}: %{distance} aan %{grade}"
       intervals: "%{count} snelle stukken, het langste %{distance} aan %{speed}"
       history_pace_faster: "%{delta} sneller dan je gebruikelijke tempo op deze afstand (%{usual})"
@@ -5142,9 +5147,31 @@ nl:
       gap_year: "%{sport}: eerste activiteit in meer dan een jaar"
       year_total: "Daarmee staat het jaar op %{distance} (%{sport})"
       route: "Via %{places}"
-      first_visit: "Nieuwe plek: %{place}"
+      first_visit: "Eerste bezoek: %{place} (%{role})"
+      place_roles:
+        start: "start"
+        finish: "finish"
+        passage: "onderweg"
       venue: "Wereld: %{place}"
       regular_place: "%{place}: %{count} activiteiten dit jaar"
+      place_kind: "%{name} (%{kind})"
+      place_kinds:
+        pass: "bergpas"
+        summit: "top"
+        hut: "berghut"
+        viewpoint: "uitzichtpunt"
+        waterfall: "waterval"
+        spring: "bron"
+        cave: "grot"
+        landmark: "bezienswaardigheid"
+      names_connector: "en"
+      with: "Samen met %{names}"
+      with_first: "Eerste activiteit met %{name}"
+      with_regular: "%{count} keer samen dit jaar met %{name}"
+      sport_count: "%{sport}: %{count}e activiteit tot nu toe"
+      sport_first: "%{sport}: eerste activiteit"
+      record_scale_first: "%{label} (je eerste activiteit)"
+      record_scale: "%{label} (van %{count} activiteiten)"
       segment_median_faster: "%{delta} onder je gemiddelde tijd op %{label} (%{count} pogingen)"
       segment_median_slower: "%{delta} boven je gemiddelde tijd op %{label} (%{count} pogingen)"
       section:

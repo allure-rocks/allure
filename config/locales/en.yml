@@ -5060,7 +5060,7 @@ en:
           pb: PB
           eb: EB
   assistant:
-    notice: "This summary is written automatically from this workout's measurements. It can be wrong: the figures on the cards are the reference. The measurements are sent to the model configured by this instance's operator."
+    notice: "This summary is written automatically from this workout's measurements and the names of its confirmed participants. It can be wrong: the figures on the cards are the reference. This information is sent to the model configured by this instance's operator."
   insights:
     facts:
       places:
@@ -5081,7 +5081,12 @@ en:
       heart_rate: "%{average} bpm average, %{max} maximum"
       zone: "%{share} of the time in zone %{zone}"
       wind: "Headwind over %{head} of the route, tailwind over %{tail}"
-      temperature: "%{range}, %{condition}, feels like %{apparent}"
+      weather:
+        night: "at night"
+        apparent: "feels like %{value}"
+        wind: "wind %{value}"
+        gusts: "gusts %{value}"
+        precipitation: "%{value} of rain"
       climb: "%{name}: %{distance} at %{grade}"
       intervals: "%{count} fast efforts, the longest %{distance} at %{speed}"
       history_pace_faster: "%{delta} faster than your usual pace over this distance (%{usual})"
@@ -5106,9 +5111,31 @@ en:
       gap_year: "%{sport}: first workout in over a year"
       year_total: "That brings the year to %{distance} (%{sport})"
       route: "Through %{places}"
-      first_visit: "New place: %{place}"
+      first_visit: "First visit: %{place} (%{role})"
+      place_roles:
+        start: "start"
+        finish: "finish"
+        passage: "on the way"
       venue: "World: %{place}"
       regular_place: "%{place}: %{count} workouts this year"
+      place_kind: "%{name} (%{kind})"
+      place_kinds:
+        pass: "pass"
+        summit: "summit"
+        hut: "hut"
+        viewpoint: "viewpoint"
+        waterfall: "waterfall"
+        spring: "spring"
+        cave: "cave"
+        landmark: "landmark"
+      names_connector: "and"
+      with: "With %{names}"
+      with_first: "First workout with %{name}"
+      with_regular: "Together %{count} times this year with %{name}"
+      sport_count: "%{sport}: workout %{count} to date"
+      sport_first: "%{sport}: first workout"
+      record_scale_first: "%{label} (your first workout)"
+      record_scale: "%{label} (out of %{count} workouts)"
       segment_median_faster: "%{delta} under your median time on %{label} (%{count} attempts)"
       segment_median_slower: "%{delta} over your median time on %{label} (%{count} attempts)"
       section:

@@ -12,13 +12,6 @@ module Workouts
     # The day's provider budget is spent: wait, the row stays pending.
     class BudgetExhaustedError < StandardError; end
 
-    # Warmer than a data extraction: the verifier, not the temperature, guards
-    # the numbers (AI.md §2).
-    TEMPERATURE = 0.6
-    RETRY_TEMPERATURE = 0
-
-    Outcome = Data.define(:verified, :model, :calls, :prompt_tokens, :completion_tokens)
-
     retry_on ActiveRecord::Deadlocked, ActiveRecord::ConnectionNotEstablished,
              ActiveRecord::SerializationFailure, wait: :polynomially_longer, attempts: 5
     retry_on BudgetExhaustedError, wait: 1.hour, attempts: 24
@@ -43,7 +36,7 @@ module Workouts
       raise BudgetExhaustedError if SummaryRefresh.budget_exhausted?
 
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      outcome = generate(snapshot)
+      outcome = SummaryGeneration.new.call(snapshot)
       record_metrics(outcome, Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
       row = WorkoutSummary.find_by(id: row.id)
       return unless row
@@ -75,42 +68,6 @@ module Workouts
 
     private
 
-    # One attempt, then one retry at temperature 0 when the verification
-    # refused the answer (or the answer was not usable JSON).
-    def generate(snapshot)
-      prompt = Allure::Insights::Prompt.new(facts: snapshot.facts, locale: snapshot.locale,
-                                            sport: snapshot.sport_slug)
-      verifier = Allure::Insights::Verifier.new(snapshot.facts, max_sentences: prompt.max_sentences)
-      client = Allure::Assistant::Config.client
-      calls = 0
-      model = nil
-      verified = nil
-      prompt_tokens = 0
-      completion_tokens = 0
-      2.times do |attempt|
-        begin
-          result = client.complete(
-            system: prompt.system,
-            user: attempt.zero? ? prompt.user : retry_user(prompt, verified),
-            schema: Allure::Insights::SummarySchema.call(max_sentences: prompt.max_sentences),
-            schema_name: Allure::Insights::Prompt::SCHEMA_NAME,
-            temperature: attempt.zero? ? TEMPERATURE : RETRY_TEMPERATURE
-          )
-        rescue Allure::Assistant::Client::MalformedResponseError => error
-          Rails.error.report(error, handled: true, context: { component: self.class.name })
-          next
-        end
-        calls += result.calls
-        model = result.model
-        prompt_tokens += result.prompt_tokens
-        completion_tokens += result.completion_tokens
-        answer = parse(result.content)
-        verified = answer && verifier.call(answer)
-        break if verified&.valid?
-      end
-      Outcome.new(verified:, model:, calls:, prompt_tokens:, completion_tokens:)
-    end
-
     def record_metrics(outcome, duration)
       result = outcome.verified&.valid? ? "ok" : "invalid"
       Yabeda.allure.ai_requests_total.increment({ kind: "summary", result: }, by: outcome.calls)
@@ -126,40 +83,6 @@ module Workouts
       Yabeda.allure.ai_requests_total.increment({ kind: "summary", result: })
     rescue StandardError => error
       Rails.error.report(error, handled: true, context: { component: "ai_requests_total" })
-    end
-
-    # The refused sentences are shown to the model, never logged.
-    def retry_user(prompt, verified)
-      refused = Array(verified&.refused_sentences).first(5)
-      return prompt.user if refused.empty?
-
-      lines = refused.map do |row|
-        "- #{row["text"].to_s.truncate(200)} (cites: #{Array(row["fact_ids"]).join(", ")})"
-      end
-      <<~TEXT
-        #{prompt.user}
-
-        Your previous answer was refused: these sentences cite facts that do not carry their numbers.
-        #{lines.join("\n")}
-        Rewrite the whole summary with at least one sentence. Every number must appear in the facts you cite;
-        cite the fact that carries it.
-      TEXT
-    end
-
-    # The schema is enforced by the provider where it can be; a prompt-only
-    # answer may fence its JSON.
-    def parse(content)
-      text = content.to_s.strip
-      JSON.parse(text)
-    rescue JSON::ParserError
-      fenced = text[/```(?:json)?\s*(.+?)```/m, 1] || text[/\{.*\}/m]
-      return unless fenced
-
-      begin
-        JSON.parse(fenced)
-      rescue JSON::ParserError
-        nil
-      end
     end
 
     def fail_row(workout, code)

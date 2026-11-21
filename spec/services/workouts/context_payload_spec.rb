@@ -85,6 +85,81 @@ RSpec.describe Workouts::ContextPayload do
     it "writes no place history without a place" do
       expect(payload[:history][:places]).to eq({})
     end
+
+    it "keeps the recorded route in order, with each place's nature" do
+      workout.place_names.create!(user:, name: "Le Tour", kind: "hamlet", position: 0)
+      workout.place_names.create!(user:, name: "Refuge Albert 1er", kind: "hut", position: 1)
+
+      expect(payload[:history][:route_places]).to eq(
+        [ { name: "Le Tour", kind: "hamlet" }, { name: "Refuge Albert 1er", kind: "hut" } ]
+      )
+    end
+
+    it "counts the earlier outings of the sport, a typed session included" do
+      create(:workout, user:, sport:, started_at: Time.zone.parse("2026-10-01 09:00:00"))
+      create(:workout, :manual, user:, sport:, started_at: Time.zone.parse("2026-11-01 09:00:00"))
+      create(:workout, user:, sport: catalog_sport("running"),
+                       started_at: Time.zone.parse("2026-11-02 09:00:00"))
+
+      expect(payload[:history][:sport_workouts]).to eq(2)
+    end
+  end
+
+  context "with the companions section" do
+    let(:options) { { include_history: true, include_companions: true } }
+    let(:workout) do
+      create(:workout, user:, sport:, started_at: Time.zone.parse("2026-11-17 09:00:00"))
+    end
+    let!(:owner_actor) { create(:actor, :local, user:) }
+    let(:sophie) { create(:user, display_name: "Sophie") }
+    let(:sophie_actor) { create(:actor, :local, user: sophie) }
+
+    it "names a confirmed participant and counts the outings already shared" do
+      create(:workout_participation, workout:, participant_actor: sophie_actor)
+      earlier = create(:workout, user:, sport:, started_at: Time.zone.parse("2026-11-07 09:00:00"))
+      create(:workout_participation, workout: earlier, participant_actor: sophie_actor)
+
+      people = payload[:companions][:people]
+
+      expect(people.map { it[:name] }).to eq([ "Sophie" ])
+      expect(people.first).to include(previous_together: 1, previous_this_year: 1)
+    end
+
+    it "counts an outing where the owner was the other account's participant" do
+      create(:workout_participation, workout:, participant_actor: sophie_actor)
+      theirs = create(:workout, user: sophie, sport:, started_at: 20.days.ago)
+      create(:workout_participation, workout: theirs, participant_actor: owner_actor)
+
+      expect(payload[:companions][:people].first).to include(name: "Sophie", previous_together: 1)
+    end
+
+    it "names nobody pending, declined or withdrawn" do
+      pending_account = create(:user, display_name: "Pending")
+      declined_account = create(:user, display_name: "Declined")
+      create(:workout_participation, :pending, workout:,
+                                                  participant_actor: create(:actor, :local, user: pending_account))
+      create(:workout_participation, :declined, workout:,
+                                                   participant_actor: create(:actor, :local, user: declined_account))
+      create(:workout_participation, :withdrawn, workout:, participant_actor: sophie_actor)
+
+      expect(payload[:companions][:people]).to eq([])
+    end
+
+    it "keeps a remote name on one line, without a column break" do
+      remote = create(:actor, display_name: "Sophie\n| Paul   #{'x' * 80}")
+      create(:workout_participation, workout:, participant_actor: remote)
+
+      name = payload[:companions][:people].first[:name]
+
+      expect(name).to start_with("Sophie Paul ")
+      expect(name).not_to include("\n", "|")
+      expect(name.length).to be <= described_class::COMPANION_NAME_LIMIT
+    end
+
+    it "keeps the section out of the payload unless it is asked for" do
+      expect(described_class.new(workout, user:).call.keys).not_to include(:companions)
+      expect(described_class.new(workout, user:).call(include_history: true).keys).not_to include(:companions)
+    end
   end
 
   it "serves the compact row of list_workouts to the same owner" do

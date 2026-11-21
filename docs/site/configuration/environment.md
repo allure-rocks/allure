@@ -250,7 +250,7 @@ Off until both `AI_BASE_URL` and `AI_MODEL` are set. See
 | `AI_BASE_URL` | none | env file | Root URL of an OpenAI-compatible endpoint, for example `http://litellm:4000`. No `/v1` of its own. |
 | `AI_MODEL` | none | env file | Model name or proxy alias; the assistant is offered only when this and `AI_BASE_URL` are both set. |
 | `AI_API_KEY` | none | env file | Bearer key for the endpoint, when it requires one. |
-| `AI_REQUEST_OPTIONS` | none | env file | JSON object merged into every request body, for example `{"reasoning_effort":"none"}` to turn a model's thinking mode off. |
+| `AI_REQUEST_OPTIONS` | none | env file | JSON object merged into every request body, for example `{"reasoning_effort":"none"}` to turn a model's thinking mode off. A thinking mode is an engine feature, not an Allure one: to try it, set `{"reasoning_effort":"medium","max_tokens":5000}` (the default answer limit counts the reasoning on most engines). Allure then asks for the answer in the prompt instead of through a JSON Schema, because the reference engine returns an empty answer when the two meet. Expect much slower answers (around two minutes per workout on the reference deployment) and measure before keeping it. |
 | `AI_TIMEOUT` | `300` | env file | Seconds allowed for one model answer. |
 | `AI_MAX_REQUESTS_PER_DAY` | `500` | env file | Provider calls allowed over any 24 hours; work waits while the budget is spent. |
 

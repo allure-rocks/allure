@@ -10,6 +10,22 @@ The developer contracts are published under `docs/dev/`; see
 
 ## [Unreleased]
 
+### Changed
+
+- The assistant summary now chooses what an outing is about: the facts arrive
+  grouped by theme with no imposed opening and no style example, so summaries
+  stop opening on a figure and a personal best. The sport's vocabulary is one
+  optional word tied to what the outing did, not a list to place. The answer is
+  bounded to three sentences and the prompt asks for one or two, so a workout is
+  not walked through fact by fact. A shared outing may name its confirmed
+  participants, the whole weather is a fact the model may use or ignore (a
+  light headwind is no longer a fact), a hut or a pass is named as such, and a
+  record on a young sport carries the size of the history behind it. The consent
+  copy names this data, and a participation change regenerates the summaries
+  involved, including an old workout ([AI.md](docs/dev/AI.md) §3–§7). A
+  configured thinking mode now asks for the answer in the prompt, since the
+  reference engine returns an empty answer when a JSON Schema constrains it.
+
 ## [0.10.2] - 2026-11-19
 
 ### Fixed

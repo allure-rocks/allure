@@ -143,6 +143,23 @@ RSpec.describe Allure::Assistant::Client do
     expect(client.complete(system: "s", user: "u", schema:).content).to eq('{"title":"Le tour"}')
   end
 
+  it "captures the reasoning only when the caller asks for it" do
+    body = answer.merge(
+      "choices" => [
+        { "finish_reason" => "stop",
+          "message" => { "role" => "assistant", "content" => '{"title":"Le tour"}',
+                         "reasoning_content" => "The snow is the story." } }
+      ]
+    )
+    stub_completion(body:)
+
+    quiet = client.complete(system: "s", user: "u")
+    captured = client.complete(system: "s", user: "u", capture_reasoning: true)
+
+    expect(quiet.reasoning).to be_nil
+    expect(captured.reasoning).to eq("The snow is the story.")
+  end
+
   it "retries once without response_format when the endpoint refuses the schema" do
     refusal = {
       "error" => {

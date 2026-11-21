@@ -21,7 +21,7 @@ module Workouts
     def call
       locale = workout.user.locale
       unit_system = workout.user.unit_system
-      context = ContextPayload.new(workout, user: workout.user).call(include_history: true)
+      context = ContextPayload.new(workout, user: workout.user).call(include_history: true, include_companions: true)
       course = course(context)
       context[:course] = course if course
       facts = Allure::Insights::Facts.build(context, locale:)

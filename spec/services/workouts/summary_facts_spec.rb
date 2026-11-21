@@ -33,11 +33,14 @@ RSpec.describe Workouts::SummaryFacts do
     expect(facts.find { it.id == "history:similar" }).to be_present
   end
 
-  it "omits the history facts when the sport has no earlier outing" do
+  it "says a first outing of the sport is one, and compares it with nothing" do
     other = create(:workout, user:, sport: catalog_sport("running"),
                              started_at: Time.zone.parse("2026-11-17 09:00:00"))
 
-    expect(described_class.new(other).call.facts.select { it.kind == "history" }).to be_empty
+    history = described_class.new(other).call.facts.select { it.kind == "history" }
+
+    expect(history.map(&:id)).to eq([ "history:sport_count" ])
+    expect(history.first.display).to eq("Course à pied : première sortie")
   end
 
   it "keeps a stable digest for unchanged facts" do
@@ -47,8 +50,10 @@ RSpec.describe Workouts::SummaryFacts do
     expect(second.digest).to eq(first.digest)
   end
 
-  it "carries the sport's slug for the prompt's jargon" do
-    expect(described_class.new(workout).call.sport_slug).to eq("cycling")
+  it "carries the sport's lifetime count so the model can weigh a record" do
+    fact = described_class.new(workout).call.facts.find { it.id == "history:sport_count" }
+
+    expect(fact).to have_attributes(value: 5, unit: "count")
   end
 
   it "reads the heart-rate zone rows the API serializes" do

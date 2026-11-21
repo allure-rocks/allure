@@ -38,6 +38,10 @@ contract, this document wins.
 - Participant lists are **live social state**, never part of a publication
   snapshot or a sanitized representation, exactly like reactions
   (`REACTIONS.md`). They are not federated inside the Note in v1.
+- The owner's assistant summary may name a **confirmed** participant
+  (`AI.md` §3.1, §3.3): the displayed name is owner-only, never published,
+  federated, served by the REST or MCP surfaces, and a withdrawal drops the
+  summary that carries it.
 
 ## 2. Why a credit row
 
