@@ -451,15 +451,22 @@ RSpec.describe Allure::Insights::Facts do
       expect(fact(facts, "place:first:0")).to be_nil
     end
 
-    it "states a first visit once the account has a history, below the notable threshold" do
+    it "states a first visit once the account has a history" do
       context = with_places(base_context, places: [ "Cernay" ],
                             history_places: { "Cernay" => { seen_before: false, year_count: 0 } })
 
       visit = fact(build(context), "place:first:0")
 
-      expect(visit.display).to eq("Nouveau lieu : Cernay")
-      expect(visit.weight).to eq(64)
-      expect(described_class.notable([ visit ])).to be_empty
+      expect(visit.display).to eq("Première visite : Cernay (départ)")
+      expect(visit).to have_attributes(kind: "place", sentiment: :good)
+    end
+
+    it "says where the first visit sits on the route" do
+      context = with_places(base_context, places: [ "Le Tour", "Refuge Albert 1er", "Herbagères" ],
+                            history_places: { "Herbagères" => { seen_before: false, year_count: 0 } })
+
+      expect(fact(build(context), "place:first:2").display)
+        .to eq("Première visite : Herbagères (arrivée)")
     end
 
     it "does not call everything a first visit on a new account" do
@@ -484,6 +491,96 @@ RSpec.describe Allure::Insights::Facts do
 
     it "writes nothing without a place" do
       expect(build.select { it.kind == "place" }).to be_empty
+    end
+
+    it "names a hut or a pass so the model knows what the toponym is" do
+      context = with_places(base_context, places: %w[Chevreuse])
+      context[:history][:route_places] = [
+        { name: "Chevreuse", kind: "town" },
+        { name: "Refuge Albert 1er", kind: "hut" },
+        { name: "Col du Galibier", kind: "pass" }
+      ]
+
+      expect(fact(build(context), "place:route").display)
+        .to eq("Par Chevreuse, Refuge Albert 1er (refuge), Col du Galibier (col)")
+    end
+  end
+
+  describe "the company" do
+    def with_company(context, people)
+      context[:companions] = { people: }
+      context
+    end
+
+    it "names the confirmed people and the first outing with one of them" do
+      context = with_company(base_context, [
+        { name: "Sophie", previous_together: 0, previous_this_year: 0 },
+        { name: "Paul", previous_together: 6, previous_this_year: 4 }
+      ])
+
+      facts = build(context)
+
+      expect(fact(facts, "company:with").display).to eq("Avec Sophie et Paul")
+      expect(fact(facts, "company:first:0").display).to eq("Première sortie avec Sophie")
+      expect(fact(facts, "company:first:1")).to be_nil
+      expect(fact(facts, "company:regular:1").display).to eq("5e sortie ensemble cette année avec Paul")
+    end
+
+    it "writes nothing without a confirmed participant" do
+      expect(build(base_context.merge(companions: { people: [] })).select { it.kind == "company" }).to be_empty
+    end
+  end
+
+  describe "the sport's lifetime count" do
+    it "says which outing of the sport this is" do
+      context = base_context
+      context[:history] = { sport_workouts: 3 }
+
+      lifetime = fact(build(context), "history:sport_count")
+
+      expect(lifetime).to have_attributes(value: 4, unit: "count")
+      expect(lifetime.display).to eq("Vélo route : 4e sortie à ce jour")
+    end
+
+    it "states the first outing of a sport, so a first record can be weighed" do
+      context = base_context
+      context[:history] = { sport_workouts: 0 }
+
+      expect(fact(build(context), "history:sport_count").display).to eq("Vélo route : première sortie")
+    end
+  end
+
+  describe "the scale of a record" do
+    def with_records(context, sport_workouts:)
+      context[:records_set][:records] = [
+        { sport: "cycling_road", type: "FD", metric: "distance", value: 204_565.876 }
+      ]
+      context[:history] = { sport_workouts: }
+      context
+    end
+
+    it "says the outing is a first" do
+      expect(fact(build(with_records(base_context, sport_workouts: 0)), "record:cycling_road:FD").display)
+        .to eq("Plus grande distance : 204,6 km (votre première sortie)")
+    end
+
+    it "says how many outings the record covers while the sport is young" do
+      expect(fact(build(with_records(base_context, sport_workouts: 3)), "record:cycling_road:FD").display)
+        .to eq("Plus grande distance : 204,6 km (sur 4 sorties)")
+    end
+
+    it "keeps the bare label once the sport is a habit" do
+      expect(fact(build(with_records(base_context, sport_workouts: 40)), "record:cycling_road:FD").display)
+        .to eq("Plus grande distance : 204,6 km")
+    end
+
+    it "scales a best effort the same way" do
+      context = base_context
+      context[:best_efforts] = [ { distance_key: "km10", elapsed_time: 2_492, personal_place: 1 } ]
+      context[:history] = { sport_workouts: 1 }
+
+      expect(fact(build(context), "record:best_effort:km10").display)
+        .to eq("Meilleur temps sur 10 km : 41:32 (sur 2 sorties)")
     end
   end
 
@@ -628,15 +725,15 @@ RSpec.describe Allure::Insights::Facts do
       expect(fact(build(context), "section:1").display).to include("6:00 /km à plat équivalent")
     end
 
-    it "keeps the sections out of the selection and the highlight" do
+    it "keeps the sections out of the facts the prompt may choose from" do
       context = pace_context
       section = course_section(distance: 4_000, moving_time: 1_600)
       context[:course] = course([ section ], [ course_slot(from: 0, to: 4_000, terrain: "climb") ])
 
       facts = build(context)
 
-      expect(described_class.notable(facts)).to be_empty
-      expect(described_class.highlight(facts).kind).not_to eq("section")
+      expect(facts.select { it.kind == "section" }).to all(be_a(Allure::Insights::Fact))
+      expect(facts.last.kind).to eq("section")
     end
 
     it "says when the last section was the fastest" do
@@ -767,20 +864,51 @@ RSpec.describe Allure::Insights::Facts do
   end
 
   describe "the weather" do
-    it "states the wind exposure and the temperature" do
+    it "states the wind exposure and the whole conditions" do
       context = base_context
       context[:workout][:weather] = {
         status: "ready",
         summary: { condition: "partly_cloudy", temperature_min: 7.7, temperature_max: 15.5,
-                   apparent_temperature: 11.7, wind_exposure: { head: 0.42, tail: 0.21, cross: 0.37 } }
+                   apparent_temperature: 11.7, wind_speed: 3.2, wind_gusts: 9.4, precipitation: 1.2,
+                   is_day: true, wind_exposure: { head: 0.42, tail: 0.21, cross: 0.37 } }
       }
 
       facts = build(context)
 
       expect(fact(facts, "weather:wind").display).to eq("Vent de face sur 42 % du parcours, de dos sur 21 %")
       expect(fact(facts, "weather:wind").sentiment).to eq(:bad)
-      expect(fact(facts, "weather:temperature").display)
-        .to eq("8–16 °C, Partiellement nuageux, ressenti 12 °C")
+      expect(fact(facts, "weather:conditions").display)
+        .to eq("Partiellement nuageux · 8–16 °C · ressenti 12 °C · vent 11,5 km/h · rafales 33,8 km/h · " \
+               "1,2 mm de précipitations")
+    end
+
+    it "keeps a light headwind out of the facts" do
+      context = base_context
+      context[:workout][:weather] = {
+        status: "ready",
+        summary: { condition: "overcast", temperature_min: 6.0, temperature_max: 8.0,
+                   wind_speed: 3.1, precipitation: 0.0, is_day: true,
+                   wind_exposure: { head: 0.16, tail: 0.19, cross: 0.65 } }
+      }
+
+      facts = build(context)
+
+      expect(fact(facts, "weather:wind")).to be_nil
+      expect(fact(facts, "weather:conditions").display).to include("vent 11,2 km/h")
+    end
+
+    it "marks a night outing and leaves out a dry day's zero" do
+      context = base_context
+      context[:workout][:weather] = {
+        status: "ready",
+        summary: { condition: "clear", temperature_min: 2.0, temperature_max: 5.0,
+                   apparent_temperature: 0.0, precipitation: 0.0, is_day: false }
+      }
+
+      display = fact(build(context), "weather:conditions").display
+
+      expect(display).to start_with("de nuit · Ciel dégagé")
+      expect(display).not_to include("précipitations")
     end
 
     it "ignores a weather row that is not ready" do
@@ -811,7 +939,7 @@ RSpec.describe Allure::Insights::Facts do
   end
 
   describe "the selection" do
-    it "keeps every baseline and at most three facts of a kind" do
+    it "keeps every baseline and every record, not just three" do
       context = base_context
       context[:records_set][:records] = [
         { sport: "cycling_road", type: "FD", metric: "distance", value: 204_565.876 },
@@ -822,74 +950,27 @@ RSpec.describe Allure::Insights::Facts do
 
       facts = build(context)
 
-      expect(facts.size).to be <= 18
-      expect(facts.count { it.kind == "record" }).to eq(3)
+      expect(facts.size).to be <= described_class::MAX_FACTS
+      expect(facts.count { it.kind == "record" }).to eq(4)
       expect(facts.select { it.kind == "baseline" }.size).to eq(6)
     end
 
-    it "orders the selected facts by weight" do
-      weights = build.map(&:weight)
+    it "bounds the prompt at 40 facts, keeping the heaviest extras" do
+      instance = described_class.new(base_context, locale: :fr)
+      records = 50.times.map do |index|
+        Allure::Insights::Fact.new(id: "record:#{index}", kind: "record", display: "x", value: nil, unit: nil,
+                                   direction: nil, sentiment: :good, weight: index, source: "records_set")
+      end
+      baseline = Allure::Insights::Fact.new(id: "baseline:date", kind: "baseline", display: "x", value: nil,
+                                            unit: nil, direction: nil, sentiment: :neutral, weight: 100,
+                                            source: "workout")
 
-      expect(weights).to eq(weights.sort.reverse)
-    end
-  end
+      selected = instance.send(:selected, [ baseline, *records ])
 
-  describe "the narrative length" do
-    def fact(id, kind, weight, sentiment: :good)
-      Allure::Insights::Fact.new(id:, kind:, display: id, value: nil, unit: nil, direction: nil,
-                                 sentiment:, weight:, source: "workout")
-    end
-
-    it "asks one sentence when only the baseline and a scene-setting place exist" do
-      facts = [ fact("baseline:date", "baseline", 100), fact("place:route", "place", 45) ]
-
-      expect(described_class.sentence_range(facts)).to eq(1..1)
-      expect(described_class.notable(facts)).to be_empty
-      expect(described_class.highlight(facts).id).to eq("place:route")
-    end
-
-    it "grows the range with the number of telling facts" do
-      one = [ fact("record:a", "record", 92) ]
-      two = %w[a b].map { |id| fact("record:#{id}", "record", 90) }
-      four = %w[a b c d].map { |id| fact("record:#{id}", "record", 90) }
-      six = %w[a b c d e f].map { |id| fact("record:#{id}", "record", 90) }
-
-      expect(described_class.sentence_range(one)).to eq(1..1)
-      expect(described_class.sentence_range(two)).to eq(1..2)
-      expect(described_class.sentence_range(four)).to eq(2..3)
-      expect(described_class.sentence_range(six)).to eq(3..5)
-    end
-
-    it "highlights the heaviest non-baseline fact, never a baseline" do
-      facts = [ fact("baseline:distance", "baseline", 100), fact("training:volume", "training", 55),
-                fact("record:fd", "record", 92) ]
-
-      expect(described_class.highlight(facts).id).to eq("record:fd")
-      expect(described_class.highlight([ fact("baseline:distance", "baseline", 100) ])).to be_nil
-    end
-
-    it "prefers a good or bad fact over a heavier neutral one" do
-      neutral = Allure::Insights::Fact.new(id: "training:ratio", kind: "training", display: "0,5 fois",
-                                           value: 0.5, unit: "ratio", direction: "down",
-                                           sentiment: :neutral, weight: 72, source: "training")
-      good = Allure::Insights::Fact.new(id: "record:fd", kind: "record", display: "204 km", value: 204_000.0,
-                                        unit: "m", direction: "up", sentiment: :good, weight: 70,
-                                        source: "records_set")
-
-      expect(described_class.highlight([ neutral, good ]).id).to eq("record:fd")
-    end
-
-    it "never calls a neutral figure a story" do
-      neutral = Allure::Insights::Fact.new(id: "training:ratio", kind: "training", display: "0,5 fois",
-                                           value: 0.5, unit: "ratio", direction: "down",
-                                           sentiment: :neutral, weight: 72, source: "training")
-      good = Allure::Insights::Fact.new(id: "record:fd", kind: "record", display: "204 km", value: 204_000.0,
-                                        unit: "m", direction: "up", sentiment: :good, weight: 70,
-                                        source: "records_set")
-
-      expect(described_class.notable([ neutral ])).to be_empty
-      expect(described_class.notable([ good ]).size).to eq(1)
-      expect(described_class.sentence_range([ neutral ])).to eq(1..1)
+      expect(selected.size).to eq(described_class::MAX_FACTS)
+      expect(selected.first.id).to eq("baseline:date")
+      expect(selected.map(&:id)).to include("record:49")
+      expect(selected.map(&:id)).not_to include("record:0")
     end
   end
 

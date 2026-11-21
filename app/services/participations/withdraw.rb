@@ -29,6 +29,8 @@ module Participations
       end
       Notifications::Withdraw.new(subject: @participation).call!
       Comments::Outbound.enqueue!(event)
+      # A name must not outlive the confirmation (docs/dev/AI.md §6).
+      SummaryRefresh.withdrawn!(@participation)
       @participation
     end
 

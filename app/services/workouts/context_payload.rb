@@ -36,6 +36,14 @@ module Workouts
     # The assistant's comparisons (AI.md §3.3): one year of the same sport, a
     # single bounded `pluck` per section, never a point or a coordinate.
     HISTORY_WINDOW = 365.days
+    # The names the summary may use (AI.md §3.3): a confirmed participation,
+    # never a suggestion, and a bounded list a small model can read.
+    COMPANION_LIMIT = 6
+    # A name sits on one line of the facts table the model reads: no control
+    # character, no column separator, and no more than an account's own
+    # display name allows (AI.md §3.1). A remote actor's name is validated by
+    # nothing.
+    COMPANION_NAME_LIMIT = 60
 
     class << self
       def account(user)
@@ -92,7 +100,7 @@ module Workouts
     end
 
     def call(include_laps: true, include_splits: true, split_distance: nil, include_efforts: true,
-             include_training: true, include_history: false)
+             include_training: true, include_history: false, include_companions: false)
       body = {
         account: self.class.account(user),
         units: UNITS,
@@ -108,6 +116,7 @@ module Workouts
       end
       body[:training] = training if include_training
       body[:history] = history if include_history
+      body[:companions] = companions if include_companions
       body
     end
 
@@ -254,9 +263,99 @@ module Workouts
         last_same_sport_at: time(user.workouts.where(sport_id: workout.sport_id)
                                      .where(started_at: ...workout.started_at).maximum(:started_at)),
         previous_workouts: user.workouts.where(started_at: ...workout.started_at).count,
+        # How much of a habit the sport is, so the model can weigh a record
+        # against three lifetime outings without a threshold of our own.
+        sport_workouts: user.workouts.where(sport_id: workout.sport_id)
+                             .where(started_at: ...workout.started_at).count,
         year_to_date: totals(year_to_date_scope),
+        # The whole recorded route in order, with the nature of each place:
+        # a hut, a pass or a summit tells a story a bare name does not.
+        route_places: route_places,
         places: place_history
       }
+    end
+
+    # The confirmed people on the outing (AI.md §3.1), owner-only and never
+    # part of the MCP payload. A pending invitation, a refusal or a withdrawal
+    # is not company; only a mutual confirmation names someone.
+    def companions
+      entries = companion_entries
+      return { people: [] } if entries.empty?
+
+      history = companion_history(entries)
+      { people: entries.map { |entry| entry.merge(history.fetch(entry[:actor_id], {})) } }
+    end
+
+    def companion_entries
+      people = workout.workout_participations.confirmed.includes(participant_actor: :user)
+                      .order(:participant_confirmed_at, :id).filter_map do |participation|
+        companion_entry(participation.participant_actor)
+      end
+      # Where this workout is the participant's own recording, the owner of
+      # the source workout is a companion too (SHARED-ACTIVITIES.md).
+      people.concat(
+        workout.participant_links.confirmed.includes(workout: :user).order(:owner_confirmed_at, :id)
+              .filter_map { |participation| companion_entry(participation.workout.user&.actor) }
+      )
+      people.compact.uniq { it[:actor_id] }.first(COMPANION_LIMIT)
+    end
+
+    def companion_entry(actor)
+      return if actor.nil? || actor.tombstoned?
+
+      account = actor.user
+      name = companion_name(account&.display_name.presence || actor.display_name.presence ||
+                            actor.handle.presence || actor.acct)
+      return if name.blank?
+
+      { actor_id: actor.id, user_id: account&.id, name: }
+    end
+
+    def companion_name(name)
+      name.to_s.gsub(/[[:cntrl:]]/, " ").delete("|").squish.truncate(COMPANION_NAME_LIMIT).presence
+    end
+
+    # How many outings the owner and each companion already shared, in both
+    # directions: the companion on the owner's workout, and the owner on the
+    # companion's. One bounded pair of queries, never one per person.
+    def companion_history(entries)
+      actor_ids = entries.filter_map { it[:actor_id] }
+      return {} if actor_ids.empty?
+
+      shared = Hash.new { |hash, key| hash[key] = { workouts: Set.new, this_year: Set.new } }
+      forward_rows(actor_ids).each do |actor_id, workout_id, started_at|
+        record_together(shared[actor_id], workout_id, started_at)
+      end
+      reverse_rows(entries).each do |user_id, workout_id, started_at|
+        entry = entries.find { it[:user_id] == user_id }
+        record_together(shared[entry[:actor_id]], workout_id, started_at) if entry
+      end
+      shared.transform_values do |row|
+        { previous_together: row[:workouts].size, previous_this_year: row[:this_year].size }
+      end
+    end
+
+    def forward_rows(actor_ids)
+      WorkoutParticipation.confirmed.joins(:workout)
+                           .where(participant_actor_id: actor_ids, workouts: { user_id: user.id })
+                           .where("workouts.started_at < ?", workout.started_at)
+                           .pluck(:participant_actor_id, "workouts.id", "workouts.started_at")
+    end
+
+    def reverse_rows(entries)
+      owner_actor = user.actor
+      user_ids = entries.filter_map { it[:user_id] }
+      return [] unless owner_actor && user_ids.any?
+
+      WorkoutParticipation.confirmed.joins(:workout)
+                           .where(participant_actor_id: owner_actor.id, workouts: { user_id: user_ids })
+                           .where("workouts.started_at < ?", workout.started_at)
+                           .pluck("workouts.user_id", "workouts.id", "workouts.started_at")
+    end
+
+    def record_together(row, workout_id, started_at)
+      row[:workouts] << workout_id
+      row[:this_year] << workout_id if started_at >= local_year_start
     end
 
     def history_row(row)
@@ -272,8 +371,26 @@ module Workouts
       }
     end
 
-    # What the assistant knows about each of this workout's places (AI.md
-    # §3.3): whether it was visited before, and how often this year.
+    # Every recorded place in route order, with its nature. The displayed
+    # `workouts.places` list is capped at three and loses the kind; the
+    # recorded rows keep both (WORKOUT.md, AI.md §3.3).
+    def route_places
+      @route_places ||= begin
+        rows = workout.place_names.order(:position).pluck(:name, :kind)
+        rows = place_names(workout.places).map { |name| [ name, nil ] } if rows.empty?
+        rows.filter_map do |name, kind|
+          value = name.to_s.strip
+          next if value.empty?
+
+          { name: value, kind: kind.to_s.presence }
+        end
+      end
+    end
+
+    # What the assistant knows about each displayed place (AI.md §3.3):
+    # whether it was visited before, and how often this year. The displayed
+    # list is what past workouts stored, so a route marker outside it never
+    # claims a first visit it cannot prove.
     def place_history
       names = place_names(workout.places)
       return {} if names.empty?

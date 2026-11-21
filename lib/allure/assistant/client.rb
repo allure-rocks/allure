@@ -43,13 +43,21 @@ module Allure
       # A refusal of the response format names one of these.
       FORMAT_REFUSAL = /response_format|json_schema/i
 
-      Result = Data.define(:content, :model, :usage, :calls, :prompt_only) do
+      Result = Data.define(:content, :model, :usage, :calls, :prompt_only, :reasoning) do
         def prompt_tokens = usage.fetch(:prompt_tokens, 0)
         def completion_tokens = usage.fetch(:completion_tokens, 0)
         def prompt_only? = prompt_only
       end
 
       attr_reader :base_url, :model, :timeout
+
+      # A thinking mode (AI.md §2): the reference engine returns an empty
+      # `content` when a JSON Schema constrains it, so the caller asks for the
+      # answer in the prompt instead.
+      def reasoning?
+        effort = @request_options["reasoning_effort"].to_s.downcase
+        effort.present? && effort != "none"
+      end
 
       def initialize(base_url:, model:, api_key: nil, request_options: {}, timeout: DEFAULT_TIMEOUT)
         @base_url = base_url.to_s
@@ -61,17 +69,20 @@ module Allure
 
       # `schema` is a JSON Schema object, named for the provider by
       # `schema_name`. Without one the answer is JSON requested in the prompt.
+      # `capture_reasoning` is for the local comparison only (AI.md §11): the
+      # reasoning is returned in the Result so a developer can read why a fact
+      # was chosen, and is never persisted.
       def complete(system:, user:, schema: nil, schema_name: "workout_summary",
-                   max_tokens: MAX_TOKENS, temperature: DEFAULT_TEMPERATURE)
+                   max_tokens: MAX_TOKENS, temperature: DEFAULT_TEMPERATURE, capture_reasoning: false)
         body = body_for(system:, user:, schema:, schema_name:, max_tokens:, temperature:, format: !schema.nil?)
         begin
-          return post(body, calls: 1, prompt_only: schema.nil?)
+          return post(body, calls: 1, prompt_only: schema.nil?, capture_reasoning:)
         rescue InvalidRequestError => error
           raise unless schema && error.message.match?(FORMAT_REFUSAL)
         end
 
         body = body_for(system:, user:, schema:, schema_name:, max_tokens:, temperature:, format: false)
-        post(body, calls: 2, prompt_only: true)
+        post(body, calls: 2, prompt_only: true, capture_reasoning:)
       end
 
       private
@@ -106,7 +117,7 @@ module Allure
         body
       end
 
-      def post(body, calls:, prompt_only:)
+      def post(body, calls:, prompt_only:, capture_reasoning: false)
         uri = URI.parse("#{base_url.chomp("/")}#{CHAT_PATH}")
         request = Net::HTTP::Post.new(uri)
         request["User-Agent"] = USER_AGENT
@@ -120,7 +131,7 @@ module Allure
                                                   open_timeout: OPEN_TIMEOUT, read_timeout: timeout) do |http|
             http.request(request) do |response|
               raw = read_body(response)
-              return parse(raw, calls:, prompt_only:) if response.is_a?(Net::HTTPSuccess)
+              return parse(raw, calls:, prompt_only:, capture_reasoning:) if response.is_a?(Net::HTTPSuccess)
 
               message = error_message(raw, response)
               raise UnavailableError, message if retryable?(response)
@@ -155,7 +166,7 @@ module Allure
         raw.to_s.strip.first(300).presence || "HTTP #{response.code}"
       end
 
-      def parse(raw, calls:, prompt_only:)
+      def parse(raw, calls:, prompt_only:, capture_reasoning: false)
         json = JSON.parse(raw)
         raise MalformedResponseError, "the answer is not a JSON object" unless json.is_a?(Hash)
 
@@ -163,7 +174,8 @@ module Allure
         content = message.is_a?(Hash) ? strip_reasoning(message["content"]) : nil
         raise MalformedResponseError, "the answer carries no content" if content.blank?
 
-        Result.new(content:, model: answer_model(json), usage: answer_usage(json), calls:, prompt_only:)
+        reasoning = capture_reasoning && message.is_a?(Hash) ? message["reasoning_content"].to_s.strip.presence : nil
+        Result.new(content:, model: answer_model(json), usage: answer_usage(json), calls:, prompt_only:, reasoning:)
       rescue JSON::ParserError
         raise MalformedResponseError, "the answer is not JSON"
       end

@@ -12,12 +12,14 @@ Only for members who opted in, and only for their own activities:
 
 - the measurements of the activity and the facts Allure derived from them:
   distance, times, elevation, averages, records, segment efforts, the training
-  of the last 28 days, the weather when enabled, the heart-rate zones when
-  configured;
-- a proposed title and two to five sentences, sent back.
+  of the last 28 days, the year's history, the weather when enabled, the
+  heart-rate zones when configured, the places of the route and, for a shared
+  activity, the displayed name of each confirmed participant;
+- a proposed title and one to three sentences, sent back.
 
 Never a position, a track point, a route, a photo, the original file, private
-notes, or another account's data. The summary never enters a publication, a
+notes, a pending invitation, or another account's data beyond the displayed
+name of a confirmed participant. The summary never enters a publication, a
 federation object, the REST API or the MCP endpoint. Members can withdraw
 consent and delete the stored summaries from the same page.
 
@@ -25,9 +27,9 @@ consent and delete the stored summaries from the same page.
 
 Every number in a sentence must come from a fact that the sentence cites, and
 the citations travel with the answer. A sentence that fails is dropped, a title
-that fails is dropped, and a summary left with fewer than two sentences is
-retried once at a lower temperature before being marked failed. A failed
-summary shows a retry action, never a provider message.
+that fails is dropped, and a summary left with no verified sentence is retried
+once at a lower temperature before being marked failed. A failed summary shows a
+retry action, never a provider message.
 
 ## Provider
 
@@ -37,12 +39,16 @@ Any OpenAI-compatible chat-completions endpoint works. The reference setup is
 - the client posts to `{AI_BASE_URL}/v1/chat/completions`;
 - it always sets `max_tokens`, and asks for a JSON Schema
   (`response_format: json_schema`); the endpoint that rejected `json_object`
-  is retried once without `response_format`, with the schema restated in the
-  prompt;
+  is retried once without `response_format`, with the answer shape restated in
+  the prompt;
 - `AI_REQUEST_OPTIONS` carries whatever the engine needs. Qwen models, for
   instance, ignore `chat_template_kwargs` and `enable_thinking` and obey
   `{"reasoning_effort":"none"}`; any thinking text that still reaches the
-  answer is stripped before verification.
+  answer is stripped before verification. A thinking mode
+  (`{"reasoning_effort":"medium","max_tokens":5000}`) is an experiment: Allure
+  then asks for the answer in the prompt, because the reference engine returns
+  an empty answer when a JSON Schema constrains a thinking model, and the
+  reference deployment takes around two minutes per activity.
 
 ## Configuration
 

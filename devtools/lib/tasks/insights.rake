@@ -48,18 +48,15 @@ module DevTools
 
     def preview(workout)
       snapshot = Workouts::SummaryFacts.new(workout).call
-      prompt = Allure::Insights::Prompt.new(facts: snapshot.facts, locale: snapshot.locale)
-      highlight = Allure::Insights::Facts.highlight(snapshot.facts)
-      notable = Allure::Insights::Facts.notable(snapshot.facts).size
+      prompt = Allure::Insights::Prompt.new(facts: snapshot.facts, locale: snapshot.locale,
+                                            sport: snapshot.sport_slug)
 
       puts "=" * 78
       puts "##{workout.id} #{workout.title} — #{workout.sport.slug} — #{workout.started_at}"
-      puts "facts: #{snapshot.facts.size} · notable: #{notable} · sentences: #{prompt.sentence_range} " \
-           "· highlight: #{highlight&.id}"
+      puts "facts: #{snapshot.facts.size} · sentences: #{prompt.sentence_range}"
       puts
       snapshot.facts.each do |fact|
-        flag = fact.weight >= Allure::Insights::Facts::NOTABLE_WEIGHT ? "*" : " "
-        puts format("%s %-34s %-10s %-8s %3d  %s", flag, fact.id, fact.kind, fact.sentiment, fact.weight,
+        puts format("%-34s %-10s %-8s %3d  %s", fact.id, fact.kind, fact.sentiment, fact.weight,
                     fact.display)
       end
       print_course(snapshot.course)
@@ -96,7 +93,7 @@ module DevTools
         system: prompt.system, user: prompt.user,
         schema: Allure::Insights::SummarySchema.call(max_sentences: prompt.max_sentences),
         schema_name: Allure::Insights::Prompt::SCHEMA_NAME,
-        temperature: Workouts::GenerateSummaryJob::TEMPERATURE
+        temperature: Workouts::SummaryGeneration::TEMPERATURE
       )
       verified = Allure::Insights::Verifier.new(snapshot.facts, max_sentences: prompt.max_sentences)
                                                .call(parse(result.content))

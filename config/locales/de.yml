@@ -5096,7 +5096,7 @@ de:
           pb: PB
           eb: EB
   assistant:
-    notice: "Diese Zusammenfassung wird automatisch aus den Messwerten dieser Aktivität geschrieben. Sie kann sich irren: Maßgeblich sind die Zahlen auf den Karten. Die Messwerte werden an das Modell gesendet, das der Betreiber dieser Instanz eingerichtet hat."
+    notice: "Diese Zusammenfassung wird automatisch aus den Messwerten dieser Aktivität und den Namen ihrer bestätigten Teilnehmenden geschrieben. Sie kann sich irren: Maßgeblich sind die Zahlen auf den Karten. Diese Angaben werden an das Modell gesendet, das der Betreiber dieser Instanz eingerichtet hat."
   insights:
     facts:
       places:
@@ -5117,7 +5117,12 @@ de:
       heart_rate: "%{average} bpm im Schnitt, %{max} maximal"
       zone: "%{share} der Zeit in Zone %{zone}"
       wind: "Gegenwind auf %{head} der Strecke, Rückenwind auf %{tail}"
-      temperature: "%{range}, %{condition}, gefühlt %{apparent}"
+      weather:
+        night: "nachts"
+        apparent: "gefühlt %{value}"
+        wind: "Wind %{value}"
+        gusts: "Böen %{value}"
+        precipitation: "%{value} Niederschlag"
       climb: "%{name}: %{distance} bei %{grade}"
       intervals: "%{count} schnelle Abschnitte, der längste %{distance} bei %{speed}"
       history_pace_faster: "%{delta} schneller als dein übliches Tempo auf dieser Strecke (%{usual})"
@@ -5142,9 +5147,31 @@ de:
       gap_year: "%{sport}: erste Aktivität seit über einem Jahr"
       year_total: "Damit steht das Jahr bei %{distance} (%{sport})"
       route: "Über %{places}"
-      first_visit: "Neuer Ort: %{place}"
+      first_visit: "Erster Besuch: %{place} (%{role})"
+      place_roles:
+        start: "Start"
+        finish: "Ziel"
+        passage: "unterwegs"
       venue: "Welt: %{place}"
       regular_place: "%{place}: %{count} Aktivitäten in diesem Jahr"
+      place_kind: "%{name} (%{kind})"
+      place_kinds:
+        pass: "Pass"
+        summit: "Gipfel"
+        hut: "Hütte"
+        viewpoint: "Aussichtspunkt"
+        waterfall: "Wasserfall"
+        spring: "Quelle"
+        cave: "Höhle"
+        landmark: "Wahrzeichen"
+      names_connector: "und"
+      with: "Zusammen mit %{names}"
+      with_first: "Erste Aktivität mit %{name}"
+      with_regular: "Zum %{count}. Mal dieses Jahr mit %{name} zusammen"
+      sport_count: "%{sport}: %{count}. Aktivität bis heute"
+      sport_first: "%{sport}: erste Aktivität"
+      record_scale_first: "%{label} (deine erste Aktivität)"
+      record_scale: "%{label} (von %{count} Aktivitäten)"
       segment_median_faster: "%{delta} unter deiner Medianzeit auf %{label} (%{count} Versuche)"
       segment_median_slower: "%{delta} über deiner Medianzeit auf %{label} (%{count} Versuche)"
       section:

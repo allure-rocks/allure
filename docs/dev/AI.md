@@ -34,13 +34,20 @@ foundation it needs is written here.
   from the facts the sentence cites (§4.4). A summary whose only surviving
   sentence fails the rule is `failed`, never shown.
 - **One sentence is a complete answer**: a quiet outing says one true sentence
-  and stops; Ruby fixes the length from the facts, and the model is never
+  and stops; the answer is bounded to three sentences and the model is never
   asked to pad (§4.1).
+- **Ruby computes, the model chooses**: the facts are true and verified, and
+  nothing decides the summary's angle in Ruby. No fact is imposed as the
+  opening, the facts are grouped by theme rather than ranked, and no style
+  example is shown — a small model copies what it is shown, and the previous
+  prompt produced the same figure-then-record opening almost every time
+  (§3.4, §4.1).
 - **The voice is the interface's** (DESIGN.md §3.1–§3.2): a training partner
-  texting right after the outing, direct and a bit cheeky, with the sport's own
-  jargon and at most one exclamation mark for a personal best. The sober
-  register stays reserved for privacy, publishing and destructive actions
-  (DESIGN.md §3.2).
+  texting right after the outing, direct and a bit cheeky, with at most one
+  exclamation mark for a personal best. The sport's own vocabulary is an offer
+  of one word at most, never a list, and most summaries take none
+  (§4.1). The sober register stays reserved for privacy, publishing and
+  destructive actions (DESIGN.md §3.2).
 - **The answer's model name is stored** and takes part in the regeneration
   marker.
 - Opting out stops every future request immediately. Stored summaries remain
@@ -61,8 +68,9 @@ proxy's root (no `/v1` of its own), which is what the reference deployment and
 `.env.example` use.
 
 Body: `model` (`AI_MODEL`), `messages`, `temperature` (the summary asks for
-0.6 — warmer than a data extraction, since the verifier, not the temperature,
-guards every number — lowered to 0 on the verification retry), `max_tokens`
+0.7 — warmer than a data extraction, since the verifier, not the temperature,
+guards every number, and a little warmth keeps the wording from settling into
+one formula — lowered to 0 on the verification retry), `max_tokens`
 (`Allure::Assistant::Client::MAX_TOKENS`, 1 200 — **always set**, the reference
 endpoint stalled without it), `stream: false`, and:
 
@@ -81,9 +89,21 @@ endpoint stalled without it), `stream: false`, and:
   engine behind the proxy, not to Allure: the reference Qwen ignores
   `chat_template_kwargs`, `enable_thinking` and a `/no_think` system message,
   and obeys `{"reasoning_effort": "none"}`.
+- **A thinking mode is an operator experiment, not a default.** When
+  `AI_REQUEST_OPTIONS.reasoning_effort` names anything but `none`,
+  `Client#reasoning?` is true and the call drops `response_format`: the
+  reference LiteLLM/Qwen pairing answered a schema-constrained request with an
+  empty `content` (the whole answer stayed in `reasoning_content`, at every
+  effort level) and a usable answer in prompt-only mode. The prompt then
+  carries the answer shape itself (§4.1). The measured cost on the reference
+  deployment was about two minutes and 2 200 completion tokens per summary,
+  against nine seconds and a few dozen without thinking; the local comparison
+  is the place to judge the result (§11).
 - `reasoning_content` (and any `reasoning` object a provider adds) is ignored
-  and never stored. A `content` that still carries a ` thinking…</think>` block
-  is stripped before validation.
+  and never stored. The local comparison may capture it with
+  `capture_reasoning: true` to show why a fact was chosen; the job never does.
+  A `content` that still carries a ` thinking…</think>` block is stripped before
+  validation.
 - The answer's `usage` feeds the token metrics; its `model` is what
   `workout_summaries.model` stores.
 - Errors: a 400 is terminal, except the one `json_schema` fallback; 401, 403
@@ -127,7 +147,20 @@ for the sport in the member's own calendar year, and `places` — for each of
 this workout's places, whether it was visited before and how many workouts this
 year passed there. Manual entries stay out of `same_sport`: comparing a
 recorded ride with a typed one is not a comparison of outings; they still
-count in the year totals and in `last_same_sport_at`.
+count in the year totals and in `last_same_sport_at`. The same section carries
+`sport_workouts` (every earlier outing of the sport, every origin included) so
+the model can weigh a record against a lifelong habit, and `route_places` — the
+whole recorded route in order with each place's nature (`hut`, `pass`,
+`summit`, …), which the capped display list loses.
+
+`include_companions: true` adds `companions`: the people on the outing, from a
+mutual confirmation only — a pending invitation, a refusal or a withdrawal
+names nobody. Each entry carries the displayed name, and how many earlier
+outings the owner and that person already shared in either direction
+(`previous_together`, `previous_this_year`). A local participant resolves to
+the account's display name, a remote one to the actor's name or handle. The
+section exists only for the summary: the MCP payload never asks for it
+(§8).
 
 It adds `:course`, the route cut into sections (`Allure::Insights::Course`,
 `Allure::Insights::CoursePlan` and `Allure::Gpx::RouteProfile`). The cut follows
@@ -151,10 +184,7 @@ filtered profile (WORKOUT.md), so nothing is smoothed twice. No point, no
 coordinate and no raw series leaves Ruby. The MCP does not ask for the course.
 
 `Workouts::SummaryFacts` returns the snapshot the prompt is built from: the
-facts, the digest, the locale, the units, the course and the sport's slug. The
-slug selects the jargon family (§4.1) and never enters the text; it stays out
-of the digest because a sport change already rewrites the `baseline:sport`
-fact.
+facts, the digest, the locale, the units and the course.
 
 ### 3.2 A fact
 
@@ -163,14 +193,14 @@ A flat hash, never a sentence the model must complete:
 | key | contents |
 |---|---|
 | `id` | stable string (`record:best_effort:km10`, `segment:rank:<id>`, `training:ratio`, `weather:wind`), the model cites it and the verifier resolves it |
-| `kind` | `baseline`, `record`, `segment`, `comparison`, `training`, `history`, `place`, `course`, `pacing`, `heart_rate`, `weather`, `climb`, `interval`, `section` |
+| `kind` | `baseline`, `record`, `segment`, `comparison`, `training`, `history`, `place`, `company`, `course`, `pacing`, `heart_rate`, `weather`, `climb`, `interval`, `section` |
 | `display` | the value in the member's units and language (« 62,4 km », « 1,6 fois votre activité moyenne sur 28 jours (50,0 km) ») |
 | `value` | the SI number when the fact has one, else `nil` |
 | `unit` | the SI unit symbol; a short token for a dimensionless value (`%`, `rank`, `share`, `count`, `ratio`); else `nil` |
 | `direction` | `up`, `down` or `flat`, relative to the member's better direction, else `nil` |
 | `sentiment` | `good`, `bad` or `neutral` |
-| `weight` | 0–100, the selection rank |
-| `source` | the context section the detector read (`workout`, `records_set`, `best_efforts`, `segment_efforts`, `training`, `history`, `course`, `splits`, `laps`) |
+| `weight` | 0–100, a tie-breaker for the prompt's bound only (§3.4); it never orders the prompt or marks a fact as the story |
+| `source` | the context section the detector read (`workout`, `records_set`, `best_efforts`, `segment_efforts`, `training`, `history`, `companions`, `course`, `splits`, `laps`) |
 
 ### 3.3 Detectors
 
@@ -185,7 +215,10 @@ simply no fact.
   of the other measurement family is dropped: a pace on a sport that reads in
   speed, a speed on a sport that reads in pace. In metric, the imperial
   standard distances (`mi5`, `half_mile`, …) stay out; an imperial member keeps
-  both vocabularies.
+  both vocabularies. While the sport has fewer than five outings, the label
+  carries the size of the history behind it (« Plus grande distance : 11,1 km
+  (votre première sortie) », « (sur 4 sorties) »): the record is true and says
+  little, and the model can see as much without a threshold of ours.
 - `segment` — a leaderboard podium (at least three participants: being first
   of one is no achievement) or an effort among the athlete's three best on that
   segment, with the time; and the effort against the athlete's own median on
@@ -219,17 +252,28 @@ simply no fact.
   - the gap since the last workout of the sport, from fourteen days, naming the
     sport; a typed session counts as the previous workout;
   - the round year total this workout crossed, in the member's own units (every
-    100 to 1 000, then every 500).
-- `place` — the route's places (« Par Chevreuse, Dampierre »), a first visit
-  once the account has ten workouts behind it, and a place visited at least
-  five times this year. The names come from the toponymy the REST serializer
-  already serves. A place is scene-setting: every place fact sits below the
-  notable threshold, and a first visit weighs 64. The id carries the place's
-  position (`place:first:0`), never its name, so the model copies an id it
-  cannot misspell; the labels avoid a preposition in front of a toponym. A
-  virtual workout reduces all of it to one `place:venue` fact (« Monde :
-  Watopia »).
-- `section` — one line of the course, never selected as a fact (§3.4): where
+    100 to 1 000, then every 500);
+  - the sport's lifetime count before this outing (`history:sport_count`), so
+    the model can weigh a record against a lifelong habit instead of the code
+    deciding what a record is worth; the very first outing says so
+    (« Randonnée : première sortie »).
+- `place` — the whole recorded route in order (« Par Chevreuse, Dampierre »),
+  with a hut, a pass, a summit or another natural feature named as such
+  (`place:route`); a first visit once the account has ten workouts behind it,
+  and a place visited at least five times this year. A first visit names its
+  position on the route (« Première visite : Le Tour (départ) »), so a
+  departure, a passage and an arrival do not read alike. The nature comes from
+  `workout_place_names.kind`, never guessed from the name. The id carries the
+  place's position (`place:first:0`), never its name, so the model copies an
+  id it cannot misspell. A virtual workout reduces all of it to one
+  `place:venue` fact (« Monde : Watopia »).
+- `company` — who was there, from a mutually confirmed participation only:
+  the names (`company:with`), a first outing with someone (`company:first:<n>`)
+  and the Nth outing together this year for the person with the longest shared
+  history (`company:regular:<n>`). Never a pending invitation, a refusal, a
+  withdrawal or a co-presence suggestion.
+- `section` — one line of the course, context by nature and never a reason to
+  write more (§3.4): where
   it runs (« de 4,2 km à 9,8 km »), what it is (a detected climb with its name,
   length, grade and ascent; a descent with its drop; flat or rolling, read from
   the measured ascent; « section » for the equal cut), its pace or speed, its
@@ -251,25 +295,33 @@ simply no fact.
 - `pacing` — the fastest split, from the non-partial splits.
 - `heart_rate` — the average and the maximum, and the dominant zone when the
   profile's zones were sliced.
-- `weather` — the headwind and tailwind shares of the route, the temperature
-  range, the apparent temperature and the condition; only from a `ready` row.
+- `weather` — the headwind and tailwind shares of the route when the headwind
+  is a real obstacle (at least a quarter of the distance), and one conditions
+  fact carrying what the provider measured: the condition, the temperature
+  range, the apparent temperature, the wind and its gusts, precipitation and
+  night; only from a `ready` row. The code suppresses only what carries no
+  information (a dry day's zero millimetres, a light wind's share); a plain
+  16 % headwind made the model open on « le vent de face n'a touché que 16 % du
+  parcours ». Whether the weather is worth telling is the model's call.
 - `climb` — the biggest detected climb: its name, length and grade.
 - `interval` — the detected fast intervals: their count and the longest.
 
 ### 3.4 Selection
 
-`Facts.select` returns at most 18 facts: every `baseline` fact, then the
-highest `weight`, at most three per kind (`history` keeps four), ties broken by
-kind order and then by `id`. The order is stable, so the digest is stable.
-`Facts.sentence_range` turns that selection into the length the prompt asks
-for (§4.1), and `Facts.highlight` names the heaviest non-baseline fact,
-preferring a `good` or `bad` one. A fact counts as notable only above
-`NOTABLE_WEIGHT` (70) **and** when its sentiment is not neutral: a slower usual
-pace, a lighter week or a headwind under a quarter of the route never makes a
-quiet outing talkative (§4.1). A `section` is never selected, never counted and
-never highlighted: the course is material for a sentence, not a reason to write
-one. The sections are appended after the selection, so they never take a slot
-from a fact.
+Every fact normally travels: the model chooses what the outing is about. The
+selection keeps at most 40 facts, far above what the detectors produce, and only
+a pathological workout loses its lowest `weight` extras; the bound is a prompt
+limit, not a ranking. The order is stable, so the digest is stable. Nothing marks a fact as the story: there is no
+highlight, no notable threshold and no per-kind cap. No sentence count is
+derived from the facts either — the answer is bounded to three sentences (§4.1).
+A `section` is context by nature: it is appended after the facts, never competes
+for the slots and never lengthens the answer.
+
+The prompt groups the facts by theme in a fixed order (record, segment,
+comparison, training, history, place, company, course, pacing, heart rate,
+weather, climb, interval), never by weight. The only editorial hint is the
+screen: the figures the workout page already renders (`baseline`) travel apart
+from the facts it does not show (§4.2).
 
 ### 3.5 Formatting
 
@@ -298,33 +350,44 @@ Written in English; the answer is in the member's language. It states:
   for its owner;
 - the target language and the [DESIGN.md](DESIGN.md) §4 glossary of that
   language (workout → activité, personal best → record, and so on), with the
-  note that the sport's jargon may replace one of those words in a sentence;
+  note that the sport's own vocabulary may replace one of those words in a
+  sentence;
 - the voice of [DESIGN.md](DESIGN.md) §3.1–§3.2, one step past the ordinary
   playful register: « a training partner texting right after the outing: warm,
   direct, a bit cheeky. Spoken language, never a report. » The athlete is the
-  subject (« you rode 204.6 km », never « the route offered »), the verbs are
-  the sport's own, and the model is given the administrative words to avoid in
-  that language (inscrit, fixe, établi, offert, « a pris son temps »). The
+  subject, and a sentence may open on a place, the weather, a person or a
+  detail before it reaches the athlete — the opening is not fixed. The verbs
+  are the sport's own, and the model is given the administrative words to avoid
+  in that language (inscrit, fixe, établi, offert, « a pris son temps »). The
   address form is spelled out — `vous` in French, `du`/`tú`/`je` in German,
-  Spanish and Dutch (DESIGN.md §3.4–§3.4b). Sentences run to 20 words, one
-  idea each, opening on the number or the action; at most one « but » in the
-  summary; the date and the sport name are never restated, the page already
-  shows them; one exclamation mark at most, reserved to a personal best or a
-  first; no emoji, no slogan, no fake congratulation; a hard day stays kind.
-  This is where a small model was writing « Les 204,6 km inscrits ce 18 mars
-  fixent votre plus grande distance » and « Le parcours a offert 1 793 m de
-  dénivelé »: the two defects to avoid by name are the administrative verb and
-  the summary written around figures instead of around the athlete;
-- when the sport has a family in `Allure::Insights::Jargon`, a handful of words
-  of its vocabulary in the member's language — D+, bosse, col for cycling,
-  fractionné for running — with the instruction to borrow one or two, never a
-  glossary. A sport without a family gets no jargon line, so the model invents
-  none. No listed word carries a number or a unit, and a rule keeps the units
-  intact: jargon may replace a word, never a unit;
-- the narrative instruction: open with the highlighted fact, build one short
-  story around it, never list the facts, restate the baseline figures only
-  when they serve the story, and answer one quiet sentence when nothing is
-  notable;
+  Spanish and Dutch (DESIGN.md §3.4–§3.4b). Sentences run to 20 words, the
+  rhythm is spoken and the lengths uneven, a fragment is allowed; the model is
+  told to link what belongs together, to avoid opening two sentences the same
+  way, and to keep at most one warm or wry remark that is true of this outing.
+  At most one « but » in the summary; the date and the sport name are never
+  restated, the page already shows them; one exclamation mark at most, reserved
+  to a personal best or a first; no emoji, no slogan, no fake congratulation; a
+  hard day stays kind. The two defects to avoid by name are the administrative
+  verb and the summary written around figures instead of around the athlete.
+  The prompt writes no model sentence: the earlier « you rode 204.6 km »
+  illustration is exactly what produced « Vous avez avalé 54,9 km » on every
+  ride;
+- the free narrative instruction: « Choose what this outing is about. One
+  detail usually carries it: a climb, a place, the weather, the people, the
+  shape of the route, a number. Tell that one, and let the rest go. The facts
+  marked as already on the page are rarely worth repeating; the ones the page
+  does not show are often the story. Most outings need one or two sentences,
+  three only for a big day. Never list the facts, and stop as soon as the story
+  is told. » Nothing imposes an opening: the previous prompt's « Start with the
+  number or the action » plus its highlighted record is what made almost every
+  summary begin with a figure and a personal best. The instruction gives the
+  length as an expectation, not as a range to fill: « write between 1 and 4 »
+  read as four slots, one fact per sentence;
+- the sport's vocabulary as an offer, not a glossary: two ordinary words of
+  the family, plus one climb word when the outing climbed, with « borrow it »
+  and « most summaries need none ». A sport without a family gets no line. No
+  word carries a number or a unit, so jargon can never replace a unit the
+  verifier does not check (§3.5);
 - « The course table describes the route in order. Use it to tell the shape of
   the outing: where it climbed, where the pace was easy or hard, how it ended.
   Never walk through the sections one by one; pick the one or two that carry
@@ -332,45 +395,57 @@ Written in English; the answer is in the member's language. It states:
   effort. Never claim fatigue, loss or a constant effort unless a course fact
   says it. Cite the section ids you use. »;
 - « Use only the facts below. Never invent a number, a place, a person, a time
-  or a comparison. You may name a place that a fact carries, to set the scene,
-  but never a place it does not carry. Every sentence cites at least one fact
-  id, in its `fact_ids` field and never in the text. Write between `min` and
-  `max` sentences, as stated. Write every number in digits with its unit,
-  exactly as its fact writes them. Jargon may replace a word, never a unit.
-  Rephrase the fact labels freely: they are data, not prose. »;
-- the title is a punchy nickname, 2 to 6 words and at most 60 characters, with
-  the sport's jargon welcome; it uses only numbers the facts carry, a place
-  from the facts makes a good one, and it is never the sport and the date alone
-  the way an import names a file;
-- three style examples in the member's language — one rich outing, one personal
-  best, one quiet one — marked as fictional facts whose places, numbers and
-  wording must never be reused. They show the rhythm; a small local model
-  copies what it is shown, and each number an example prints is one its own
-  fictional fact carries.
+  or a comparison. You may name a place or a person that a fact carries, to set
+  the scene, but never one it does not carry. Every sentence cites at least one
+  fact id, in its `fact_ids` field and never in the text. Write at most the
+  stated number of sentences, and stop as soon as the story is told. Write
+  every number in digits with its unit, exactly as its fact writes them. A word
+  may replace another, never a unit. Rephrase the fact labels freely: they are
+  data, not prose. »;
+- the title is a punchy nickname, 2 to 6 words and at most 60 characters; it
+  uses only numbers the facts carry, a place, a person or a detail from the
+  facts makes a good one, and it is never the sport and the date alone the way
+  an import names a file;
+- the answer shape itself, as one compact JSON object (`title`, `sentences`,
+  each sentence's `text` and `fact_ids`), so the prompt-only path and a
+  thinking mode need no schema (§4.3).
 
-The sentence bounds are computed, not chosen by the model: `Facts.sentence_range`
-counts the facts at or above `NOTABLE_WEIGHT` (70) whose sentiment is not
-neutral — a section never counts — and returns `1..1` for none or one, `1..2`
-for two, `2..3` for three or four and `3..5` beyond. One telling fact is a one-sentence summary, not that fact plus a
-recap of the dashboard. A scene-setting `place` fact sits below that threshold,
-so it decorates a quiet sentence without making it a story.
+There are no style examples. A small local model copies what it is shown: the
+three examples of the previous prompt produced the same figure, colon,
+personal-best opening in most summaries. The voice paragraph describes the
+register; it never models a sentence. The sport's vocabulary stays, but as two
+or three words offered once, never a list to place.
+
+The answer is bounded to `1..3` sentences (`Prompt::SENTENCES`), not derived
+from the facts. One true sentence is complete, and the prompt tells the model
+to stop as soon as the story is told; a quiet outing is never padded and a rich
+one is never walked through fact by fact. The prompt also says that most
+outings need one or two sentences, so the bound reads as a ceiling rather than
+a target.
 
 ### 4.2 User prompt
 
-A table of `id | display | sentiment`, under the sport, the local date, the
-sentence bounds and one `Highlight this fact: <id> — <display>` line naming
-`Facts.highlight` (the heaviest non-baseline fact, a `good` or `bad` one before
-a neutral one; a baseline figure and a section never are).
+The sport, the local date and the length expectation (« usually one or two,
+three at most »), then every fact under one
+of two headings: « Facts already shown on the workout page (rarely worth
+repeating) » for the `baseline` figures, and « Facts the page does not show »
+for everything else, in the fixed thematic order of §3.4. A line is
+`id | display`; there is no sentiment column, no weight and no highlight line.
+The grouping is about the screen, not the story: it tells the model what the
+member can already read, and leaves the choice of angle to it.
+
 Then, apart from the facts, the course: `section:1` to `section:8` in route
 order, each with its terrain, its pace and its heart rate. Keeping the course
 out of the facts table is what stops it from competing for the summary's angle.
-Never a coordinate, a place name absent from the facts, or an account name.
+Never a coordinate. The only places and people the model may name are the ones
+a `place` or `company` fact carries.
 
 The verifier checks the numbers, not the proper nouns: a model that names a
-place the facts do not carry is not caught mechanically. The prompt forbids it,
-the style examples use no real toponym, and the only names the model sees are
-the `place` facts — but a hallucinated toponym stays possible, and acceptable
-only because the summary is the owner's own screen (AI.md §1).
+place or a person the facts do not carry is not caught mechanically. The prompt
+forbids it, and the only names the model sees are the `place` and `company`
+facts — but a hallucinated toponym stays possible, and acceptable only because
+the summary is the owner's own screen (AI.md §1). A partner's name is sent to
+the model only after a mutual confirmation, and the consent copy says so (§7).
 
 ### 4.3 Schema
 
@@ -401,8 +476,8 @@ only because the summary is the owner's own screen (AI.md §1).
 
 No `oneOf`, no deeper nesting: the reference endpoint returned nothing in 180 s
 on a schema with a nested object per sentence, and answered in 12 s on this
-shape. `maxItems` is the upper bound §4.1 computes, clamped to five;
-`minItems` is one, because a quiet outing is a complete answer.
+shape. `maxItems` is the fixed bound of §4.1, clamped to five; `minItems` is
+one, because a quiet outing is a complete answer.
 
 ### 4.4 Verification
 
@@ -410,9 +485,11 @@ shape. `maxItems` is the upper bound §4.1 computes, clamped to five;
 
 1. every `fact_id` resolves to a fact of the snapshot;
 2. every number in a sentence occurs in the union of the `display` strings of
-   the facts **that sentence cites** — compared on digits only, after
-   normalising `,` and `.` decimals and space, narrow-space and `'` thousands
-   separators, and ignoring `°` and unit suffixes;
+   the facts **that sentence cites** — compared on digits only, after removing
+   space, narrow-space and `'` thousands separators and ignoring `°` and unit
+   suffixes. A decimal separator belongs to its number: `11,4` is `114`, not
+   `11` and `4`, so a title can no longer borrow `11` from `11,4 %`, the way
+   « Le Cheylas à 11 km/h » passed the check of a `11,4 %` section;
 3. a sentence that writes one of the snapshot's fact ids in its text is
    dropped: the id is data for the machine, and a small model does slip
    (« La montée de section:4 … »);
@@ -422,14 +499,13 @@ shape. `maxItems` is the upper bound §4.1 computes, clamped to five;
    (`Rails.logger.warn`, never the text);
 6. no surviving sentence triggers one retry at `temperature: 0` with the
    refused sentences and their facts; still none, the row is `failed`;
-7. sentences beyond the computed bound are dropped, never rewritten: the
+7. sentences beyond the prompt's bound are dropped, never rewritten: the
    prompt-only fallback does not enforce `maxItems` by itself.
 
 The verifier never rewrites a sentence; it drops it. It checks numbers and
-fact ids, not proper nouns: a place name the model invents is not caught here.
-The facts are the only place names it sees, the style examples forbid reusing
-theirs, and a place fact never enters a publication or a programmatic surface
-(§8).
+fact ids, not proper nouns: a place or a person the model invents is not caught
+here. The facts are the only names it sees, and a place or company fact never
+enters a publication or a programmatic surface (§8).
 
 ## 5. Data model
 
@@ -449,6 +525,10 @@ theirs, and a place fact never enters a publication or a programmatic surface
 | `requested_at` | the last explicit member request, the five-minute throttle key |
 | `generated_at` | |
 | `last_error` | a closed code on `failed`: `rejected` (a terminal 4xx), `invalid` (no usable JSON, or no verified sentence) or `unavailable` (429, 5xx or timeout after the retries) — never a provider message |
+
+A `facts` snapshot may carry the displayed name of a confirmed participant in
+a `company` fact. It is owner-only, travels with the account export (§8), and
+never enters a publication or a programmatic surface.
 
 `users.ai_enabled` boolean, default `false`, not null.
 
@@ -482,7 +562,8 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
   - it builds the facts and the digest (cheap, no network);
   - it returns untouched when a `ready` row already carries the current
     digest and version, and when the workout started before `AUTO_WINDOW` and
-    the call is not an explicit request;
+    the call is neither an explicit request nor a participation change
+    (`bypass_window`);
   - otherwise it marks the row `pending` and enqueues
     `Workouts::GenerateSummaryJob` on the `ai` queue with
     `wait: 30.seconds`, so a burst of derivations produces one run.
@@ -492,6 +573,17 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
   - at the end of `Workouts::EnrichToponymyJob`: the places are facts, and the
     digest only moves when they changed;
   - at the end of `Workouts::EnrichWeatherJob` and `HeartRates::RezoneJob`;
+  - by `Participations::SummaryRefresh` when a participation becomes
+    confirmed (`Participations::Decide`,
+    `Federation::Inbox::ParticipationAnswer#accept`) — the source workout and,
+    for a link, the participant's own recording. A confirmation bypasses
+    `AUTO_WINDOW`: a name must not outlive it on an old workout either. When the
+    row was already `pending`, `schedule` leaves it alone (the running job
+    computed its facts before), so the service enqueues one recheck five
+    minutes later; that job recomputes the digest and regenerates only if it
+    moved. A withdrawal first destroys a summary whose facts carry a `company`
+    fact, so a name never outlives the confirmation while the regeneration
+    waits, then schedules the same workouts;
   - by the block's request (`POST /workouts/:id/summary`), which bypasses
     `AUTO_WINDOW`;
   - by `Settings::AssistantController#update` when the member opts in
@@ -531,8 +623,12 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
   instance configures a model): what the assistant does, the switch « Rédiger
   les synthèses de mes activités », the second switch « Afficher aussi la
   synthèse quand une description existe » once the first is on, the §19.40
-  sentence, then « Supprimer les synthèses enregistrées » when at least one
-  exists (confirmation-guarded, like the weather deletion) and « Rédiger les
+  sentence — which says that the measurements of the workout and the names of
+  its confirmed participants are sent to the model, without using « partagée »,
+  reserved for publishing elsewhere in the privacy copy — then « Supprimer les
+  synthèses
+  enregistrées » when at least one exists (confirmation-guarded, like the
+  weather deletion) and « Rédiger les
   synthèses de mes activités récentes » right after opting in.
 - **Workout page**: an owner-only block inside the figures card, under its
   primary tiles (DESIGN.md §10.26, §20.3), filling the card's width. The
@@ -541,7 +637,7 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
   turned on « Afficher aussi la synthèse quand une description existe ». It is
   absent for a reader, a participant, a manual entry and a credit row, and a
   description-only page shows no assistant block at all. Anatomy:
-  - the sentences run as one flowing paragraph (one to five sentences, never
+  - the sentences run as one flowing paragraph (one to three sentences, never
     more); a small info icon closes the last line and carries the §19.40
     attribution in its tooltip and accessible name;
   - the proposed title appears below the text only while `title_source` is
@@ -574,8 +670,9 @@ and `facts_digest` ([DERIVATIONS.md](DERIVATIONS.md) §3).
 None in this version:
 
 - the REST `Workout` detail does not carry the summary;
-- `get_workout_context` returns neither the summary nor the `history` section
-  the assistant reads it from;
+- `get_workout_context` returns neither the summary nor the `history` and
+  `companions` sections the assistant reads it from; a participant's name is
+  not a measurement and never leaves the summary path;
 - no webhook event, no federation tag, no publication key, no `weather`-style
   received representation.
 
@@ -630,11 +727,34 @@ non-streaming call is the single provider seam both versions use.
 
 ## 11. Tests
 
+For a local blind reading, run `dip rails dev_tools:insights_compare ACCOUNT=marie LIMIT=8`
+to list the workouts, then repeat with `CALL=1` on an opted-in development account.
+Use `IDS=id1,id2` (the printed short ids) to keep the same selection across runs.
+The candidate defaults to `PROMPT=legacy`, the previous prompt kept only in
+`devtools/lib/dev_tools/legacy_summary_prompt.rb`; `PROMPT=reference` instead
+runs the production prompt on both sides, for a model-only comparison.
+`OPTIONS='{"reasoning_effort":"medium","max_tokens":5000}'` merges provider
+options into the candidate's request, which is how a thinking mode is measured
+without changing the instance; `DIRECTION="..."` appends an editorial
+instruction to the candidate. `MODEL`, `TEMP` and `TOKENS` override the
+candidate's model alias, temperature and output token limit. Both sides
+otherwise inherit the instance options and use the same snapshot, schema,
+verification and verification retry as the job. Read the two series and mark
+preferences in `pairs.txt` before opening `diagnostics.txt`; `diversity.txt`
+counts the openings, the records, the repeated three-word phrases, the fact
+kinds cited and, when the snapshot carried one, how often a company, weather or
+place fact was used. The reasoning, when the candidate asked for it, is printed
+there and never stored. These are private local files under `tmp/insights-*`;
+remove the run directory after review. No summary is persisted to the database.
+
 - `spec/lib/allure/insights/`: each detector (pure), including every history
-  and place threshold and its quiet case, the record family and the imperial
-  distances, the course's sections and their summary facts, the selection's
-  determinism, the sentence range and highlight, the digest, the formatter's
-  parity with `WorkoutsHelper`, and the verifier's outcomes.
+  and place threshold and its quiet case, the record family, its scale on a
+  young sport and the imperial distances, the company facts and their
+  confirmation rule, the weather conditions fact and the light wind it leaves
+  out, the course's sections and their summary facts, the prompt's free
+  selection, its two fact groups, its optional vocabulary and its spoken
+  rhythm, the digest, the formatter's parity with `WorkoutsHelper`, and the
+  verifier's outcomes, including a decimal that must match whole.
 - `spec/lib/allure/gpx/route_profile_spec.rb`: the boundaries, an interval
   that straddles one, the moving time across a pause, the segment break, the
   missing elevation, the heart rate and the positionless recording.
@@ -649,7 +769,12 @@ non-streaming call is the single provider seam both versions use.
   stripped, `AI_REQUEST_OPTIONS` merged without overriding, `max_tokens`
   always present.
 - `spec/jobs/workouts/generate_summary_job_spec.rb`: success, digest no-op,
-  verification retry, terminal failure, ineligible workout (no row).
+  verification retry, terminal failure, ineligible workout (no row), and the
+  prompt-only call a thinking mode asks for.
+- `spec/services/participations/summary_refresh_spec.rb`: a confirmation
+  schedules the summary and rechecks a row that was already being written, an
+  old workout is regenerated past `AUTO_WINDOW`, and a withdrawal drops one
+  carrying a company fact before scheduling the next.
 - Eligibility, `AUTO_WINDOW`, the five-minute throttle and the daily cap.
 - Request specs: the owner's block in each state, the description-first rule,
   the 404 for another account, the title action and `title_source`, the
@@ -658,7 +783,10 @@ non-streaming call is the single provider seam both versions use.
 - `spec/services/workouts/context_payload_spec.rb`: the history section's
   exclusions (later workouts, other sports, manual entries in `same_sport`),
   the gap's last outing (`last_same_sport_at`, typed sessions included), the
-  year-to-date scope and the place counts.
+  year-to-date scope, the place counts and kinds, and the companions — a
+  confirmed participation only, both directions of a shared outing, the first
+  and repeated counts, never a pending, declined or withdrawn row, and a
+  remote name kept on one line.
 - `spec/jobs/workouts/enrich_toponymy_job_spec.rb`: the summary is scheduled
   once the places are known, and a summary error never replays the geocoding.
 - `spec/docs/environment_reference_spec.rb` and the five locale files.

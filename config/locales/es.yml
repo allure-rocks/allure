@@ -5096,7 +5096,7 @@ es:
           pb: PB
           eb: EB
   assistant:
-    notice: "Este resumen se redacta automáticamente a partir de las métricas de esta actividad. Puede equivocarse: las cifras de las tarjetas son la referencia. Las métricas se envían al modelo configurado por el operador de esta instancia."
+    notice: "Este resumen se redacta automáticamente a partir de las métricas de esta actividad y de los nombres de sus participantes confirmados. Puede equivocarse: las cifras de las tarjetas son la referencia. Estos datos se envían al modelo configurado por el operador de esta instancia."
   insights:
     facts:
       places:
@@ -5117,7 +5117,12 @@ es:
       heart_rate: "%{average} bpm de media, %{max} como máximo"
       zone: "%{share} del tiempo en la zona %{zone}"
       wind: "Viento en contra en el %{head} del recorrido, a favor en el %{tail}"
-      temperature: "%{range}, %{condition}, sensación de %{apparent}"
+      weather:
+        night: "de noche"
+        apparent: "sensación de %{value}"
+        wind: "viento %{value}"
+        gusts: "rachas %{value}"
+        precipitation: "%{value} de precipitación"
       climb: "%{name}: %{distance} al %{grade}"
       intervals: "%{count} esfuerzos rápidos, el más largo %{distance} a %{speed}"
       history_pace_faster: "%{delta} más rápido que tu ritmo habitual en esta distancia (%{usual})"
@@ -5142,9 +5147,31 @@ es:
       gap_year: "%{sport}: primera salida en más de un año"
       year_total: "El año suma ya %{distance} (%{sport})"
       route: "Por %{places}"
-      first_visit: "Lugar nuevo: %{place}"
+      first_visit: "Primera visita: %{place} (%{role})"
+      place_roles:
+        start: "salida"
+        finish: "llegada"
+        passage: "de paso"
       venue: "Mundo: %{place}"
       regular_place: "%{place}: %{count} actividades este año"
+      place_kind: "%{name} (%{kind})"
+      place_kinds:
+        pass: "puerto"
+        summit: "cumbre"
+        hut: "refugio"
+        viewpoint: "mirador"
+        waterfall: "cascada"
+        spring: "manantial"
+        cave: "cueva"
+        landmark: "lugar de interés"
+      names_connector: "y"
+      with: "Con %{names}"
+      with_first: "Primera salida con %{name}"
+      with_regular: "%{count} salidas este año con %{name}"
+      sport_count: "%{sport}: %{count}.ª salida hasta la fecha"
+      sport_first: "%{sport}: primera salida"
+      record_scale_first: "%{label} (tu primera salida)"
+      record_scale: "%{label} (de %{count} salidas)"
       segment_median_faster: "%{delta} por debajo de tu tiempo medio en %{label} (%{count} intentos)"
       segment_median_slower: "%{delta} por encima de tu tiempo medio en %{label} (%{count} intentos)"
       section:

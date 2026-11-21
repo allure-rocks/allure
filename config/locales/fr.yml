@@ -5097,7 +5097,7 @@ fr:
           pb: Po
           eb: Eo
   assistant:
-    notice: "Cette synthèse est rédigée automatiquement à partir des mesures de cette activité. Elle peut se tromper : les chiffres des cartes font foi. Les mesures sont envoyées au modèle configuré par l'opérateur de cette instance."
+    notice: "Cette synthèse est rédigée automatiquement à partir des mesures de cette activité et du nom de ses participants confirmés. Elle peut se tromper : les chiffres des cartes font foi. Ces informations sont envoyées au modèle configuré par l'opérateur de cette instance."
   insights:
     facts:
       places:
@@ -5118,7 +5118,12 @@ fr:
       heart_rate: "%{average} bpm de moyenne, %{max} au maximum"
       zone: "%{share} du temps en zone %{zone}"
       wind: "Vent de face sur %{head} du parcours, de dos sur %{tail}"
-      temperature: "%{range}, %{condition}, ressenti %{apparent}"
+      weather:
+        night: "de nuit"
+        apparent: "ressenti %{value}"
+        wind: "vent %{value}"
+        gusts: "rafales %{value}"
+        precipitation: "%{value} de précipitations"
       climb: "%{name} : %{distance} à %{grade}"
       intervals: "%{count} efforts rapides, le plus long %{distance} à %{speed}"
       history_pace_faster: "%{delta} plus rapide que votre allure habituelle sur cette distance (%{usual})"
@@ -5143,9 +5148,31 @@ fr:
       gap_year: "%{sport} : première activité depuis plus d'un an"
       year_total: "Ça porte l'année à %{distance} (%{sport})"
       route: "Par %{places}"
-      first_visit: "Nouveau lieu : %{place}"
+      first_visit: "Première visite : %{place} (%{role})"
+      place_roles:
+        start: "départ"
+        finish: "arrivée"
+        passage: "passage"
       venue: "Monde : %{place}"
       regular_place: "%{place} : %{count} activités cette année"
+      place_kind: "%{name} (%{kind})"
+      place_kinds:
+        pass: "col"
+        summit: "sommet"
+        hut: "refuge"
+        viewpoint: "point de vue"
+        waterfall: "cascade"
+        spring: "source"
+        cave: "grotte"
+        landmark: "site"
+      names_connector: "et"
+      with: "Avec %{names}"
+      with_first: "Première sortie avec %{name}"
+      with_regular: "%{count}e sortie ensemble cette année avec %{name}"
+      sport_count: "%{sport} : %{count}e sortie à ce jour"
+      sport_first: "%{sport} : première sortie"
+      record_scale_first: "%{label} (votre première sortie)"
+      record_scale: "%{label} (sur %{count} sorties)"
       segment_median_faster: "%{delta} sous votre temps médian sur %{label} (%{count} passages)"
       segment_median_slower: "%{delta} au-dessus de votre temps médian sur %{label} (%{count} passages)"
       section:

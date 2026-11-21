@@ -9,7 +9,10 @@ module Workouts
     COALESCE = 30.seconds
 
     class << self
-      def schedule(workout, explicit: false) = new(workout, explicit:).call
+      # `bypass_window` is for a participation change, not for an archive: a
+      # name must not outlive a confirmation on an old workout, even though the
+      # automatic window would have left that workout alone (AI.md §6).
+      def schedule(workout, explicit: false, bypass_window: false) = new(workout, explicit:, bypass_window:).call
 
       # The day's provider calls, over the rows touched in the last 24 hours.
       def budget_exhausted?(now: Time.current)
@@ -18,16 +21,17 @@ module Workouts
       end
     end
 
-    def initialize(workout, explicit: false)
+    def initialize(workout, explicit: false, bypass_window: false)
       @workout = workout
       @explicit = explicit
+      @bypass_window = bypass_window
     end
 
     def call
-      # An archive import must never queue months of model calls; the owner's
-      # explicit request is the only way past the window. Checked before
-      # anything reads the account.
-      return if !explicit && workout.started_at < AUTO_WINDOW.ago
+      # An archive import must never queue months of model calls; only the
+      # owner's explicit request and a participation change get past the
+      # window. Checked before anything reads the account.
+      return if !explicit && !bypass_window && workout.started_at < AUTO_WINDOW.ago
       return unless SummaryEligibility.eligible?(workout)
 
       row = workout.assistant_summary
@@ -54,6 +58,6 @@ module Workouts
 
     private
 
-    attr_reader :workout, :explicit
+    attr_reader :workout, :explicit, :bypass_window
   end
 end

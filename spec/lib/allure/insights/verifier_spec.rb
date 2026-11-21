@@ -131,6 +131,24 @@ RSpec.describe Allure::Insights::Verifier do
     expect(result.sentences.size).to eq(2)
   end
 
+  it "keeps a decimal whole, so a title cannot borrow its integer part" do
+    decimal = described_class.new([ fact("section:7", "montée, 11,4 % de pente") ])
+    result = decimal.call(answer([
+      { "text" => "La pente atteint 11,4 %.", "fact_ids" => [ "section:7" ] }
+    ], title: "Le Cheylas à 11 km/h"))
+
+    expect(result.sentences.size).to eq(1)
+    expect(result.title).to be_nil
+  end
+
+  it "accepts a decimal written with a point" do
+    result = verifier.call(answer([
+      { "text" => "Vous avez parcouru 62.4 km.", "fact_ids" => [ "baseline:distance" ] }
+    ]))
+
+    expect(result.sentences.size).to eq(1)
+  end
+
   it "accepts a sentence without any number" do
     result = verifier.call(answer([
       { "text" => "Une sortie de vélo sur route.", "fact_ids" => [ "baseline:distance" ] },

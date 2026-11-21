@@ -41,6 +41,14 @@ RSpec.describe Workouts::GenerateSummaryJob, :assistant do
     clear_enqueued_jobs
   end
 
+  def with_request_options(value)
+    previous = ENV["AI_REQUEST_OPTIONS"]
+    ENV["AI_REQUEST_OPTIONS"] = value
+    yield
+  ensure
+    previous.nil? ? ENV.delete("AI_REQUEST_OPTIONS") : ENV["AI_REQUEST_OPTIONS"] = previous
+  end
+
   it "writes a verified answer and counts the call" do
     schedule
     stub_answers(valid_answer)
@@ -69,7 +77,7 @@ RSpec.describe Workouts::GenerateSummaryJob, :assistant do
     }).to have_been_requested
   end
 
-  it "lends the workout's sport's jargon to the provider" do
+  it "shows the provider no jargon list and no style example to copy" do
     cycling = create(:workout, user:, sport: catalog_sport("cycling"), started_at: 2.days.ago)
     Workouts::SummaryRefresh.schedule(cycling)
     clear_enqueued_jobs
@@ -78,14 +86,29 @@ RSpec.describe Workouts::GenerateSummaryJob, :assistant do
     described_class.perform_now(cycling)
 
     expect(a_request(:post, url).with { |request|
-      JSON.parse(request.body)["messages"].first["content"].include?("D+, bosse, col")
+      system = JSON.parse(request.body)["messages"].first["content"]
+      !system.include?("D+, bosse, col") && system.include?("Choose what this outing is about")
     }).to have_been_requested
   end
 
-  it "accepts one quiet sentence and asks the provider for the narrative bounds" do
+  it "asks for the answer in the prompt when a thinking mode is configured" do
+    with_request_options('{"reasoning_effort":"medium","max_tokens":5000}') do
+      schedule
+      stub_answers(valid_answer)
+
+      described_class.perform_now(workout)
+    end
+
+    expect(a_request(:post, url).with { |request|
+      body = JSON.parse(request.body)
+      !body.key?("response_format") && body["messages"].first["content"].include?('"fact_ids"')
+    }).to have_been_requested
+  end
+
+  it "accepts one quiet sentence within the fixed narrative bound" do
     schedule
     # The first workout of a sport holds its records: drop them so the facts
-    # carry nothing but the baseline and the bounds are one sentence.
+    # carry nothing but the baseline.
     workout.records.delete_all
     quiet = JSON.generate(
       "title" => "Boucle tranquille",
@@ -100,8 +123,8 @@ RSpec.describe Workouts::GenerateSummaryJob, :assistant do
     expect(row.sentences.size).to eq(1)
     expect(a_request(:post, url).with { |request|
       body = JSON.parse(request.body)
-      body["temperature"] == 0.6 &&
-        body.dig("response_format", "json_schema", "schema", "properties", "sentences", "maxItems") == 1
+      body["temperature"] == 0.7 &&
+        body.dig("response_format", "json_schema", "schema", "properties", "sentences", "maxItems") == 3
     }).to have_been_requested
   end
 

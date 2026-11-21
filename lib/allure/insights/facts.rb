@@ -11,12 +11,11 @@ module Allure
     # and touches neither the database nor the network. Each detector emits zero
     # or more facts; the selection keeps the most telling ones.
     class Facts
-      MAX_FACTS = 18
-      PER_KIND = 3
-      HISTORY_PER_KIND = 4
-      # The weight from which a non-baseline fact is worth a sentence of its own
-      # (AI.md §3.4). Below it, the summary says one quiet sentence and stops.
-      NOTABLE_WEIGHT = 70
+      # A bound on the prompt, not a ranking of what matters: the summary may
+      # tell any of them (AI.md §3.4). The detectors stay well under it, so in
+      # practice every fact travels; a pathological workout loses only its
+      # lowest-weight extras.
+      MAX_FACTS = 40
       # The history detectors' windows (AI.md §3.3), all relative to the
       # workout's own start so the facts stay deterministic.
       RECENT_DAYS = 90
@@ -35,6 +34,18 @@ module Allure
       SIMILAR_ASCENT_FLOOR = 50.0
       FIRST_VISIT_FLOOR = 10
       REGULAR_PLACE_FLOOR = 4
+      # A record on the first outings of a sport compares with nothing
+      # (AI.md §3.3): the label carries its scale instead of pretending.
+      RECORD_SCALE_LIMIT = 5
+      # The route's exposure is worth a fact only when the headwind is a real
+      # obstacle; the plain wind speed already travels in the conditions.
+      WIND_EXPOSURE_MIN = 0.25
+      # The place kinds worth naming in a summary: a settlement is the plain
+      # toponym the model already reads (AI.md §3.3).
+      PLACE_KIND_KEYS = {
+        "pass" => "pass", "summit" => "summit", "hut" => "hut", "viewpoint" => "viewpoint",
+        "waterfall" => "waterfall", "spring" => "spring", "cave" => "cave", "landmark" => "landmark"
+      }.freeze
       MIN_DISTANCE = 1_000.0
       MIN_ASCENT = 50.0
       # The route in sections (AI.md §3.3). The sections themselves are not
@@ -54,14 +65,15 @@ module Allure
       IMPERIAL_EFFORTS = /\A(?:mi\d+|half_mile)\z/
       PACE_METRICS = %w[average_pace best_pace].freeze
       SPEED_METRICS = %w[average_speed max_speed].freeze
-      KINDS = %w[baseline record segment comparison training history place course pacing heart_rate weather
-                 climb interval section].freeze
+      KINDS = %w[baseline record segment comparison training history place company course pacing heart_rate
+                 weather climb interval section].freeze
       # The context section each kind reads, unless a detector overrides it.
       SOURCES = {
         "baseline" => "workout", "record" => "records_set", "segment" => "segment_efforts",
         "comparison" => "segment_efforts", "training" => "training", "history" => "history",
-        "place" => "history", "course" => "course", "pacing" => "splits", "heart_rate" => "workout",
-        "weather" => "workout", "climb" => "laps", "interval" => "laps", "section" => "course"
+        "place" => "history", "company" => "companions", "course" => "course", "pacing" => "splits",
+        "heart_rate" => "workout", "weather" => "workout", "climb" => "laps", "interval" => "laps",
+        "section" => "course"
       }.freeze
 
       class << self
@@ -76,40 +88,6 @@ module Allure
                       facts: facts.map(&:to_h) }
           Digest::SHA256.hexdigest(JSON.generate(payload))
         end
-
-        # The non-baseline facts that carry a story (AI.md §3.4). A neutral
-        # figure — a slower usual pace, a smaller week — never makes an outing
-        # notable on its own; the route's sections are context by nature and
-        # never count either.
-        def notable(facts)
-          facts.reject { it.kind == "baseline" || it.kind == "section" }
-               .select { it.weight >= NOTABLE_WEIGHT && informative?(it) }
-        end
-
-        def informative?(fact) = fact.sentiment.to_s != "neutral"
-
-        # How many sentences the answer may carry: a plain outing gets one, a
-        # big one up to five, and the model is never asked to pad (AI.md §4.1).
-        # A single telling fact is one sentence, not one fact plus a recap of
-        # the dashboard.
-        def sentence_range(facts)
-          case notable(facts).size
-          when 0, 1 then 1..1
-          when 2 then 1..2
-          when 3..4 then 2..3
-          else 3..5
-          end
-        end
-
-        # The fact the summary opens with: the most telling one, never a
-        # baseline figure the member already reads on the page. A neutral fact
-        # only opens when nothing else is left (AI.md §4.2); a route section is
-        # never the subject.
-        def highlight(facts)
-          facts.reject { it.kind == "baseline" || it.kind == "section" }
-               .min_by { |item| [ informative?(item) ? 0 : 1, -item.weight, KINDS.index(item.kind),
-                                  item.id ] }
-        end
       end
 
       def initialize(context, locale:)
@@ -118,14 +96,15 @@ module Allure
         @format = Format.new(locale: @locale, unit_system: context.dig(:account, :unit_system) || "metric")
       end
 
-      # The selected facts, then the route's sections: the model reads the whole
-      # course, but a section never competes for the 18 selected slots and never
-      # lengthens the answer (AI.md §3.4).
+      # Every fact, bounded to the prompt's limit, then the route's sections:
+      # the model chooses what the outing is about (AI.md §3.4), and a section
+      # never competes for the bounded slots (AI.md §4.2). The prompt renders
+      # the facts thematically; this order only keeps the digest stable.
       def build
         selected(
           baseline_facts + record_facts + segment_facts + comparison_facts + training_facts +
-          history_facts + place_facts + course_facts + pacing_facts + heart_rate_facts + weather_facts +
-          climb_facts + interval_facts
+          history_facts + place_facts + company_facts + course_facts + pacing_facts + heart_rate_facts +
+          weather_facts + climb_facts + interval_facts
         ) + section_facts
       end
 
@@ -199,8 +178,26 @@ module Allure
         return unless formatted
 
         label = t("records.types.#{record[:type].to_s.downcase}", default: record[:type].to_s)
-        fact("record:#{record[:sport]}:#{record[:type]}", "record", "#{label} : #{formatted}",
+        fact("record:#{record[:sport]}:#{record[:type]}", "record", scaled_record("#{label} : #{formatted}"),
              value: record[:value], unit: record[:metric], direction: "up", sentiment: :good, weight: 92)
+      end
+
+      # « Plus grande distance : 11,1 km (votre première sortie) » (AI.md
+      # §3.3): on a young sport the record is true and says little, and the
+      # label tells the model the size of the history behind it. A habitual
+      # sport keeps the bare label.
+      def scaled_record(display)
+        previous = context.dig(:history, :sport_workouts)
+        return display if previous.nil?
+
+        count = previous.to_i + 1
+        return display if count > RECORD_SCALE_LIMIT
+
+        if count == 1
+          t("insights.facts.record_scale_first", label: display)
+        else
+          t("insights.facts.record_scale", label: display, count:)
+        end
       end
 
       # A pace record on a sport that reads in speed (a ride, a hike) says
@@ -236,8 +233,9 @@ module Allure
         label = t("records.distances.#{effort[:distance_key]}", default: effort[:distance_key].to_s)
         display = t("insights.facts.effort", place: t("insights.facts.places.#{place_word(place)}"), label:,
                                             time: format.duration(effort[:elapsed_time]))
-        fact("record:best_effort:#{effort[:distance_key]}", "record", display, value: effort[:elapsed_time], unit: "s",
-             direction: "up", sentiment: :good, weight: place == 1 ? 95 : 82, source: "best_efforts")
+        fact("record:best_effort:#{effort[:distance_key]}", "record", scaled_record(display),
+             value: effort[:elapsed_time], unit: "s", direction: "up", sentiment: :good,
+             weight: place == 1 ? 95 : 82, source: "best_efforts")
       end
 
       # --- segments and their comparison ------------------------------------
@@ -337,8 +335,24 @@ module Allure
       def history_facts
         [
           usual_pace_fact, usual_heart_rate_fact, longest_since_fact, climb_since_fact,
-          fastest_since_fact, similar_fact, gap_fact, year_total_fact
+          fastest_since_fact, similar_fact, gap_fact, year_total_fact, sport_count_fact
         ].compact
+      end
+
+      # The sport's lifetime count before this outing, so the model can weigh a
+      # record against three outings of the sport instead of the code deciding
+      # what a record is worth (AI.md §3.3–§3.4).
+      def sport_count_fact
+        previous = context.dig(:history, :sport_workouts)
+        return if previous.nil?
+
+        count = previous.to_i + 1
+        display = if count == 1
+          t("insights.facts.sport_first", sport: sport_name)
+        else
+          t("insights.facts.sport_count", count:, sport: sport_name)
+        end
+        fact("history:sport_count", "history", display, value: count, unit: "count", weight: 38)
       end
 
       # The pace this workout held against the usual one over a comparable
@@ -582,10 +596,20 @@ module Allure
           return [ fact("place:venue", "place", t("insights.facts.venue", place: names.first), weight: 45) ]
         end
 
-        facts = [ fact("place:route", "place", t("insights.facts.route", places: names.join(", ")), weight: 45) ]
+        route = route_places.map { |place| place_label(place) }.join(", ")
+        facts = [ fact("place:route", "place", t("insights.facts.route", places: route), weight: 45) ]
         facts.concat(first_visit_facts(names))
         facts.concat(regular_place_facts(names))
         facts
+      end
+
+      # A named hut, pass or summit is setting the model cannot guess from a
+      # bare toponym. A settlement needs no gloss (AI.md §3.3).
+      def place_label(place)
+        key = PLACE_KIND_KEYS[place[:kind].to_s]
+        return place[:name] unless key
+
+        t("insights.facts.place_kind", name: place[:name], kind: t("insights.facts.place_kinds.#{key}"))
       end
 
       # The id is the position, never the name: the model must copy it into
@@ -597,8 +621,19 @@ module Allure
         index = names.each_index.find { |i| place_history[names[i]] && !place_history[names[i]][:seen_before] }
         return [] unless index
 
-        [ fact("place:first:#{index}", "place", t("insights.facts.first_visit", place: names[index]),
+        [ fact("place:first:#{index}", "place",
+               t("insights.facts.first_visit", place: names[index], role: t("insights.facts.place_roles.#{place_role(index, names.size)}")),
                direction: "up", sentiment: :good, weight: 64) ]
+      end
+
+      # Where the place sits on the route: the first entry is the departure and
+      # the last the arrival, both sorted by distance (AI.md §3.3). A loop
+      # whose endpoints share a name keeps only the departure.
+      def place_role(index, size)
+        return "start" if index.zero?
+        return "finish" if index == size - 1
+
+        "passage"
       end
 
       def regular_place_facts(names)
@@ -613,15 +648,63 @@ module Allure
 
       def place_history = context.dig(:history, :places) || {}
       def previous_workouts = context.dig(:history, :previous_workouts).to_i
-      # The serializer serves names, the context from a raw record may serve
-      # `{name, kind}` entries: accept both.
-      def workout_places
+
+      # The assistant reads the recorded route in order, with each place's
+      # nature; the serializer's capped display list is the fallback for a
+      # context built without the history section (AI.md §3.1).
+      def route_places
+        rows = Array(context.dig(:history, :route_places))
+        return rows.grep(Hash).map { { name: it["name"] || it[:name], kind: it["kind"] || it[:kind] } } if rows.any?
+
         Array(workout[:places]).filter_map do |place|
-          case place
-          when Hash then place["name"]
-          when String then place
-          end
+          name = place.is_a?(Hash) ? (place["name"] || place[:name]) : place
+          { name:, kind: nil } if name.present?
         end
+      end
+
+      def workout_places = route_places.filter_map { it[:name] }
+
+      # --- the company ------------------------------------------------------
+
+      # Who was there, only from mutual confirmations (AI.md §3.3). The names
+      # are scene-setting and a first or a habit is worth telling; a pending
+      # invitation is not.
+      def company_facts
+        people = Array(context.dig(:companions, :people)).grep(Hash)
+        return [] if people.empty?
+
+        names = people.filter_map { it[:name] || it["name"] }.uniq
+        return [] if names.empty?
+
+        facts = [ fact("company:with", "company", t("insights.facts.with", names: join_names(names)),
+                       weight: 80) ]
+        people.each_with_index do |person, index|
+          next unless (person[:previous_together] || person["previous_together"]).to_i.zero?
+
+          facts << fact("company:first:#{index}", "company",
+                        t("insights.facts.with_first", name: person[:name] || person["name"]),
+                        direction: "up", sentiment: :good, weight: 74)
+        end
+        regular = people.each_with_index.filter_map do |person, index|
+          previous = (person[:previous_this_year] || person["previous_this_year"]).to_i
+          [ person, index, previous ] if previous >= 2
+        end.max_by { |_person, _index, previous| previous }
+        if regular
+          person, index, previous = regular
+          facts << fact("company:regular:#{index}", "company",
+                        t("insights.facts.with_regular", count: previous + 1, name: person[:name] || person["name"]),
+                        value: previous + 1, unit: "count", weight: 60)
+        end
+        facts.first(3)
+      end
+
+      # « Sophie et Paul », « Sophie, Paul et Joan »: the conjunction belongs to
+      # the member's language, and Array#to_sentence would read the default
+      # locale rather than this summary's.
+      def join_names(names)
+        return names.first if names.size == 1
+
+        "#{names[0..-2].join(", ")} #{t('insights.facts.names_connector')} #{names.last}"
       end
 
       # --- the course -------------------------------------------------------
@@ -886,6 +969,9 @@ module Allure
 
       # --- weather ----------------------------------------------------------
 
+      # The whole weather, in one fact: the model decides whether it is worth
+      # telling (AI.md §3.3). The code filters only what carries no
+      # information — a dry day's zero millimetres.
       def weather_facts
         weather = workout[:weather]
         summary = weather && weather[:summary]
@@ -896,23 +982,33 @@ module Allure
         if exposure.is_a?(Hash)
           head = exposure[:head].to_f
           tail = exposure[:tail].to_f
-          if head >= 0.1 || tail >= 0.1
+          if head >= WIND_EXPOSURE_MIN
             facts << fact("weather:wind", "weather",
                           t("insights.facts.wind", head: format.share(head), tail: format.share(tail)),
-                          value: head, unit: "share", sentiment: head >= 0.25 ? :bad : :neutral,
-                          weight: head >= 0.25 ? 78 : 52)
+                          value: head, unit: "share", sentiment: :bad, weight: 78)
           end
         end
-        low = summary[:temperature_min]
-        high = summary[:temperature_max]
-        if low && high
-          facts << fact("weather:temperature", "weather",
-                        t("insights.facts.temperature", range: format.temperature_range(low, high),
-                                                        condition: condition(summary[:condition]),
-                                                        apparent: format.temperature(summary[:apparent_temperature])),
-                        value: high, unit: "°C", weight: 50)
+        conditions = weather_conditions(summary)
+        if conditions
+          facts << fact("weather:conditions", "weather", conditions,
+                        value: summary[:temperature_max], unit: "°C", weight: 50)
         end
         facts
+      end
+
+      def weather_conditions(summary)
+        parts = []
+        parts << t("insights.facts.weather.night") if summary[:is_day] == false
+        parts << condition(summary[:condition]) if summary[:condition].present?
+        parts << format.temperature_range(summary[:temperature_min], summary[:temperature_max]) \
+          if summary[:temperature_min] && summary[:temperature_max]
+        parts << t("insights.facts.weather.apparent", value: format.temperature(summary[:apparent_temperature])) \
+          if summary[:apparent_temperature]
+        parts << t("insights.facts.weather.wind", value: format.speed(summary[:wind_speed])) if summary[:wind_speed]
+        parts << t("insights.facts.weather.gusts", value: format.speed(summary[:wind_gusts])) if summary[:wind_gusts]
+        parts << t("insights.facts.weather.precipitation", value: format.precipitation(summary[:precipitation])) \
+          if summary[:precipitation].to_f.positive?
+        parts.compact_blank.presence&.join(" · ")
       end
 
       def condition(token) = t("weather.conditions.#{token}", default: token.to_s)
@@ -991,23 +1087,14 @@ module Allure
 
       def imperial? = context.dig(:account, :unit_system).to_s == "imperial"
 
+      # A bound, not a ranking: every fact normally travels, and only an
+      # unusually busy workout loses its lowest-weight extras (AI.md §3.4).
       def selected(facts)
         baseline = facts.select { it.kind == "baseline" }
         rest = facts.reject { it.kind == "baseline" || it.kind == "section" }
                     .sort_by { |item| [ -item.weight, KINDS.index(item.kind), item.id ] }
-        chosen = []
-        per_kind = Hash.new(0)
-        rest.each do |item|
-          break if baseline.length + chosen.length >= MAX_FACTS
-          next if per_kind[item.kind] >= per_kind_limit(item.kind)
-
-          chosen << item
-          per_kind[item.kind] += 1
-        end
-        (baseline + chosen).first(MAX_FACTS)
+        (baseline + rest.first([ MAX_FACTS - baseline.length, 0 ].max)).first(MAX_FACTS)
       end
-
-      def per_kind_limit(kind) = kind == "history" ? HISTORY_PER_KIND : PER_KIND
 
       def place_word(place) = %w[first second third][place.to_i - 1]
     end

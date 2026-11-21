@@ -28,6 +28,7 @@ module Federation
         participation.update!(participant_confirmed_at: @now)
         Notifications::Create.new(user: participation.workout.user, kind: "participation_confirmed",
                                   actor: participation.participant_actor, subject: participation).call!
+        Participations::SummaryRefresh.confirmed!(participation) if participation.confirmed?
         true
       end
 
@@ -52,6 +53,7 @@ module Federation
 
         participation.update!(withdrawn_at: @now)
         Notifications::Withdraw.new(subject: participation).call!
+        Participations::SummaryRefresh.withdrawn!(participation)
         true
       end
 

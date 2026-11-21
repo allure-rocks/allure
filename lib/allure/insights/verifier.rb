@@ -82,8 +82,12 @@ module Allure
       end
 
       # Digits only: « 2 068 m », « 2'068 », « 2 068 » and « 2068 » are one
-      # number; a decimal comma or point is ignored, and so are units and °.
-      def digits(text) = text.to_s.gsub(/[[:space:]'’]/, "").scan(/\d+/)
+      # number, and so are units and °. A decimal separator belongs to its
+      # number: « 11,4 % » is one number, not « 11 » and « 4 », so a title can
+      # no longer borrow « 11 » from it.
+      def digits(text)
+        text.to_s.gsub(/(?<=\d)[.,](?=\d)/, "").gsub(/[[:space:]'’]/, "").scan(/\d+/)
+      end
     end
   end
 end

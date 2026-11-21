@@ -176,6 +176,18 @@ module Allure
         t(key, value: temperature_number(celsius))
       end
 
+      # The weather summary stores precipitation in millimetres (WEATHER.md);
+      # WeatherHelper#format_precipitation is the UI's equivalent.
+      def precipitation(millimetres)
+        return if millimetres.nil?
+
+        if imperial?
+          t("units.precipitation.in", value: decimal(Allure::Units.millimetres_to_inches(millimetres), precision: 2))
+        else
+          t("units.precipitation.mm", value: decimal(millimetres, precision: 1))
+        end
+      end
+
       # « 11–16 °C » between two positive values, « −8 à −5 °C » once a bound is
       # negative (WeatherHelper#format_temperature_range).
       def temperature_range(minimum, maximum)
