@@ -43,7 +43,7 @@ RSpec.describe "Workout delivery summary" do
   end
 
   it "lists the active publication by its profile and date, never as a second copy of the workout" do
-    publish!
+    publication = publish!
     workout.update!(title: "Edited after publishing")
 
     get workout_path(workout)
@@ -52,11 +52,15 @@ RSpec.describe "Workout delivery summary" do
     row = Nokogiri::HTML(response.body).at_css("#section-sharing .allure-publication-row")
     expect(row.at_css('[data-audience-state="public"]')).to be_present
     expect(row.text).to include(I18n.t("workouts.snapshot.profile", name: profile.name))
+    date = I18n.l(publication.published_at.in_time_zone(owner.time_zone || Time.zone), format: :long)
+    expect(row.text).to include(I18n.t("workouts.snapshot.published_on", date:))
     expect(row.at_css("a[href='#{workout_path(workout, as: :publication, audience: "public")}']")).to be_present
+    expect(row.at_css("a.btn[href='#{new_replacement_workout_path(workout, publication_id: publication.to_param)}']").text.strip)
+      .to eq(I18n.t("workouts.publication.replace_short"))
+    expect(row.at_css(".dropdown-menu a[href='#{new_replacement_workout_path(workout, publication_id: publication.to_param)}']").text.strip)
+      .to eq(I18n.t("workouts.publication.replace_short"))
     # The frozen title lives on the reader's view, not in a projected card.
     expect(row.text).not_to include("Shareable ride")
-    expect(response.body).to include(escaped("workouts.publication.replace"))
-    expect(response.body).to include(escaped("workouts.publication.replace_hint"))
   end
 
   it "hides the publication list and distribution from non-owners" do
@@ -144,12 +148,14 @@ RSpec.describe "Workout delivery summary" do
   end
 
   it "asks for replace confirmation with the irrevocability warning" do
-    publish!
+    publication = publish!
     sign_in_as(owner)
 
-    get workout_path(workout)
+    get new_replacement_workout_path(workout, publication_id: publication.to_param)
 
+    expect(response).to have_http_status(:ok)
     expect(response.body).to include(escaped("workouts.publication.replace_confirm.title"))
     expect(response.body).to include(escaped("workouts.publication.replace_confirm.body"))
+    expect(response.body).to include(escaped("workouts.publication.replace_hint"))
   end
 end

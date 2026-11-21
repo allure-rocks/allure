@@ -12,6 +12,17 @@ The developer contracts are published under `docs/dev/`; see
 
 ### Changed
 
+- Publishing, adding and replacing a publication open a dedicated owner-only
+  page that names the activity and shows the profile with its audience, the
+  delay, the shared and withheld fields, the warnings and the photo choice
+  before one primary action. A rejected submission keeps the owner's choices;
+  success returns to the Publications card
+  ([PUBLISHING.md](docs/dev/PUBLISHING.md), [DESIGN.md](docs/dev/DESIGN.md)
+  §19.1, §20.3).
+- On a phone, a publication row keeps the identity on the first line with a
+  `⋯` menu for the shared media, Remplacer and Retirer, and the reader link
+  below. The card's add action meets the 44 px touch target
+  ([DESIGN.md](docs/dev/DESIGN.md) §20.3).
 - The assistant summary now chooses what an outing is about: the facts arrive
   grouped by theme with no imposed opening and no style example, so summaries
   stop opening on a figure and a personal best. The sport's vocabulary is one

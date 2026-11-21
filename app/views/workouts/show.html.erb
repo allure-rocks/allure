@@ -76,7 +76,7 @@
             <%# A positionless recording is not publishable yet: the sharing
                 card states it instead of offering the form. %>
             <% if @active_publications.empty? && @scheduled_publications.empty? && @workout.positioned? %>
-              <%= link_to t("workouts.publication.publish"), "#section-sharing", class: "btn btn-primary" %>
+              <%= link_to t("workouts.publication.publish"), new_publication_workout_path(@workout), class: "btn btn-primary" %>
             <% end %>
             <%= link_to t("workouts.show.edit"), edit_workout_path(@workout), class: "btn btn-outline-primary d-none d-md-inline-flex" %>
             <div class="dropdown">
@@ -356,7 +356,7 @@
     <section id="section-sharing" class="allure-detail-section">
       <%= render "sharing", workout: @workout, active_publications: @active_publications,
                             scheduled_publications: @scheduled_publications,
-                            profiles: @profiles, readiness: @publication_readiness,
+                            can_add_publication: @can_add_publication,
                             delivery_summaries: @delivery_summaries,
                             auto_publications: @auto_publications %>
     </section>

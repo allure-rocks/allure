@@ -550,6 +550,56 @@
   }
 }
 
+// The sharing card's header pairs a title (and its state line) with the add
+// and withdraw actions; it wraps when a translation outgrows a phone.
+.allure-sharing-card > .card-header {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+// The card's add action is a touch target too (§18.4), even though it sits in
+// the header rather than the row.
+@media (max-width: 991.98px), (pointer: coarse) {
+  .allure-sharing-card > .card-header .btn {
+    min-height: 44px;
+  }
+}
+
+// A publication row (DESIGN.md §20.3): badge and identity lead; from lg the
+// actions share that line and end it, below lg they drop under the identity,
+// the reader link staying left and the `⋯` menu right.
+// A 9rem basis keeps badge, identity and the `⋯` menu on the row's first
+// line down to 320 px; the identity still grows into the free space.
+.allure-publication-row__identity {
+  flex: 1 1 9rem;
+  min-width: 0;
+}
+
+.allure-publication-row__actions {
+  flex-basis: 100%;
+}
+
+@media (min-width: 992px) {
+  .allure-publication-row__actions {
+    flex-basis: auto;
+    margin-inline-start: auto;
+  }
+}
+
+@media (max-width: 991.98px), (pointer: coarse) {
+  .allure-publication-row__actions,
+  .allure-publication-row__menu {
+    .btn,
+    .dropdown-item {
+      min-height: 44px;
+    }
+
+    .btn-icon {
+      min-width: 44px;
+    }
+  }
+}
+
 // What a profile shares, as two short lists (DESIGN.md §19.1): the items
 // flow side by side and wrap, so a long profile stays a few lines tall.
 .allure-share-list {

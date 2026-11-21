@@ -2826,6 +2826,12 @@ nl:
       shared_heading: "Dit wordt precies gedeeld:"
       withheld_heading: "Niet gedeeld met dit profiel:"
       list_title: "Publicaties"
+      actions: "Acties voor de publicatie (%{audience})"
+      publish_title: Activiteit publiceren
+      back_to_workout: Terug naar de activiteit
+      choose_profile: Kies een profiel
+      profile_option: "%{name} — %{audience}"
+      audience_label: "Publiek:"
       delete_all: "Alle publicaties verwijderen"
       withdraw: "Verwijderen"
       replace_short: "Vervangen"

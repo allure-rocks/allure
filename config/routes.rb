@@ -148,6 +148,8 @@ Rails.application.routes.draw do
       patch :placement, on: :member
     end
     member do
+      get "publish", action: :new_publication, as: :new_publication
+      get "republish", action: :new_replacement, as: :new_replacement
       post :publish
       post :republish
       post :delivery_refresh

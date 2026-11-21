@@ -1,0 +1,34 @@
+<% title = t(@replaced ? "workouts.publication.replace" : "workouts.publication.publish_title") %>
+<% content_for :title, title %>
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
+
+<% content_for :page_header do %>
+  <div>
+    <%= link_to workout_path(@workout, anchor: "section-sharing"), class: "btn btn-ghost-primary mb-2" do %>
+      <i class="ti ti-arrow-left me-1" aria-hidden="true"></i><%= t("workouts.publication.back_to_workout") %>
+    <% end %>
+    <h1 class="page-title"><%= title %></h1>
+    <p class="text-secondary text-break mt-1 mb-0"><%= @workout.title %> · <%= format_started_at(@workout.started_at) %></p>
+  </div>
+<% end %>
+
+<div class="row row-cards">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <% if @profiles.any? %>
+          <%= render "publish_form", workout: @workout, replaced: @replaced, profiles: @profiles,
+                                     readiness: @publication_readiness, selected_profile: @selected_profile,
+                                     selected_delay: @selected_delay, photo_choice: @photo_choice, error: @publication_error %>
+        <% else %>
+          <% if @publication_error %>
+            <div class="alert alert-danger" role="alert" tabindex="-1" autofocus><%= @publication_error %></div>
+          <% end %>
+          <p class="text-secondary mb-0"><%= t("workouts.publication.add_unavailable") %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -94,7 +94,7 @@ RSpec.describe "Publication photos" do
   it "lists the ready photos only when the selected profile shares photos" do
     sign_in_as(owner)
 
-    get workout_path(workout)
+    get new_publication_workout_path(workout)
 
     page = response.parsed_body
     choice = page.at_css("input[name='photo_ids[]'][value='#{photo.to_param}']")
@@ -105,11 +105,44 @@ RSpec.describe "Publication photos" do
     selected = PublishingProfile.find(page.at_css("select[name='publishing_profile_id'] option[selected]")["value"])
     selected.update!(settings: selected.settings.merge("photos" => true))
 
-    get workout_path(workout)
+    get new_publication_workout_path(workout)
 
     page = response.parsed_body
     expect(page.at_css("[data-publication-preview-target='photoChoice']").key?("hidden")).to be(false)
     expect(page.at_css("[data-publication-preview-target='photoOff']").key?("hidden")).to be(true)
+  end
+
+  it "keeps an explicitly empty photo selection after a validation error" do
+    sign_in_as(owner)
+
+    post publish_workout_path(workout), params: { publishing_profile_id: profile.id, publish_delay: 10, photo_selection: "1" }
+
+    expect(response).to have_http_status(:unprocessable_content)
+    expect(response.parsed_body.at_css("input[name='photo_ids[]']")).to be_present
+    expect(response.parsed_body.at_css("input[name='photo_ids[]'][checked]")).to be_nil
+    expect(workout.reload.live_audiences).to be_empty
+  end
+
+  it "keeps a checked sensitive photo and the chosen delay when the acknowledgement is missing" do
+    factory = RGeo::Geographic.spherical_factory(srid: 4326)
+    photo.update!(exif_location: factory.point(6.4, 45.079))
+    create(:privacy_zone, user: owner, center: photo.exif_location, radius_meters: 150)
+    delay = PublishingProfile::PUBLISH_DELAYS.fetch("1_day")
+    profile
+    sign_in_as(owner)
+
+    get new_publication_workout_path(workout)
+    expect(response.parsed_body.at_css("input[name='photo_ids[]'][checked]")).to be_nil
+
+    post publish_workout_path(workout), params: {
+      publishing_profile_id: profile.id, publish_delay: delay, photo_selection: "1", photo_ids: [ photo.to_param ]
+    }
+
+    expect(response).to have_http_status(:unprocessable_content)
+    expect(response.parsed_body.at_css("input[name='photo_ids[]'][checked]")["value"]).to eq(photo.to_param)
+    expect(response.parsed_body.at_css("input[name='photos_acknowledged'][checked]")).to be_nil
+    expect(response.parsed_body.at_css("select[name='publish_delay'] option[selected]")["value"]).to eq(delay.to_s)
+    expect(workout.reload.live_audiences).to be_empty
   end
 
   it "publishes the owner's choice from the form" do

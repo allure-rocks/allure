@@ -33,7 +33,8 @@ RSpec.describe "Workout publishing" do
     expect { post publish_workout_path(workout), params: publish_params(profile) }
       .to change(WorkoutPublication, :count).by(1)
 
-    expect(response).to redirect_to(workout_path(workout))
+    expect(response).to have_http_status(:see_other)
+    expect(response).to redirect_to(workout_path(workout, anchor: "section-sharing"))
     publication = workout.reload.active_publications.first
     expect(publication.publishing_profile).to eq(profile)
     expect(publication).not_to be_scheduled
@@ -51,7 +52,7 @@ RSpec.describe "Workout publishing" do
     expect { post publish_workout_path(workout), params: scheduled_params(profile) }
       .to change(WorkoutPublication, :count).by(1)
 
-    expect(response).to redirect_to(workout_path(workout))
+    expect(response).to redirect_to(workout_path(workout, anchor: "section-sharing"))
     publication = workout.reload.scheduled_publications.first
     expect(publication.publishing_profile).to eq(profile)
     expect(publication.scheduled_for).to be_within(1.second).of(1.day.from_now)
@@ -78,8 +79,10 @@ RSpec.describe "Workout publishing" do
       post publish_workout_path(workout), params: publish_params(profile, delay: 3_600)
     }.not_to change(WorkoutPublication, :count)
 
-    expect(response).to redirect_to(workout_path(workout))
-    expect(flash[:alert]).to eq(I18n.t("workouts.publish.errors.invalid_delay"))
+    expect(response).to have_http_status(:unprocessable_content)
+    expect(response.body).to include(ERB::Util.html_escape(I18n.t("workouts.publish.errors.invalid_delay")))
+    expect(response.parsed_body.at_css("select[name='publishing_profile_id'] option[selected]")["value"]).to eq(profile.id.to_s)
+    expect(response.parsed_body.at_css("input[name='commit'][disabled]")).to be_present
   end
 
   it "does not let another user publish the source workout" do
@@ -90,6 +93,9 @@ RSpec.describe "Workout publishing" do
 
     expect(response).to have_http_status(:not_found)
     expect(workout.reload.scheduled_publications.first).to be_nil
+
+    get new_publication_workout_path(workout)
+    expect(response).to have_http_status(:not_found)
   end
 
   it "rejects a second publication while one is scheduled" do
@@ -101,8 +107,8 @@ RSpec.describe "Workout publishing" do
       post publish_workout_path(workout), params: publish_params(profile)
     }.not_to change(WorkoutPublication, :count)
 
-    expect(response).to redirect_to(workout_path(workout))
-    expect(flash[:alert]).to eq(I18n.t("workouts.publish.errors.already_scheduled"))
+    expect(response).to have_http_status(:unprocessable_content)
+    expect(response.body).to include(ERB::Util.html_escape(I18n.t("workouts.publish.errors.already_scheduled")))
   end
 
   it "lists the scheduled publication with its actions instead of the publish form" do
@@ -126,7 +132,8 @@ RSpec.describe "Workout publishing" do
     # add action only offers the audience the scheduled one leaves free.
     expect(response.parsed_body.at_css("#section-sharing").text).not_to include("Shareable ride")
     expect(response.body).not_to include(I18n.t("workouts.publication.delete_all"))
-    expect(response.parsed_body.at_css("#section-sharing .allure-publication-list button[disabled]")).to be_nil
+    expect(response.parsed_body.at_css("#section-sharing select[name='publishing_profile_id']")).to be_nil
+    get new_publication_workout_path(workout)
     followers = owner.publishing_profiles.find_by!(built_in_key: "followers")
     offered = response.parsed_body.css("select[name='publishing_profile_id'] option").map { it["value"] }
     expect(offered).to include(followers.id.to_s)
@@ -137,7 +144,7 @@ RSpec.describe "Workout publishing" do
     profile = create(:publishing_profile, :custom, :without_endpoint_masks, user: owner, audience: "public")
     sign_in_as(owner)
 
-    get workout_path(workout)
+    get new_publication_workout_path(workout)
 
     expect(response.body).to include(I18n.t("workouts.publication.delay"))
     expect(response.body).to include(ERB::Util.html_escape(I18n.t("workouts.publication.delay_hint")))
@@ -146,9 +153,11 @@ RSpec.describe "Workout publishing" do
     expect(selected.text).to eq(I18n.t("publishing_profiles.delays.immediate"))
     submit = response.parsed_body.at_css("input[name='commit']")
     expect(submit["value"]).to eq(I18n.t("workouts.publication.publish"))
+    expect(response.parsed_body.at_css("[data-publication-preview-target='audience']").text).to include(I18n.t("publishing_profiles.audiences.public"))
+    expect(response.parsed_body.css("[data-publication-preview-target='shared'], input[name='commit']").map(&:name)).to eq(%w[ul input])
 
     profile.update!(publish_delay_seconds: one_week)
-    get workout_path(workout)
+    get new_publication_workout_path(workout)
 
     selected = response.parsed_body.at_css("select[name='publish_delay'] option[selected]")
     expect(selected["value"]).to eq(one_week.to_s)
@@ -239,7 +248,7 @@ RSpec.describe "Workout publishing" do
       post republish_workout_path(workout), params: scheduled_params(second_profile)
     }.to change(WorkoutPublication, :count).by(1)
 
-    expect(response).to redirect_to(workout_path(workout))
+    expect(response).to redirect_to(workout_path(workout, anchor: "section-sharing"))
     second = workout.reload.scheduled_publications.first
     expect(second).to be_present
     expect(second.uuid).not_to eq(first.uuid)
@@ -259,7 +268,7 @@ RSpec.describe "Workout publishing" do
     expect { post publish_workout_path(workout), params: scheduled_params(profile) }
       .to change(WorkoutPublication, :count).by(1)
 
-    expect(response).to redirect_to(workout_path(workout))
+    expect(response).to redirect_to(workout_path(workout, anchor: "section-sharing"))
     expect(workout.reload.scheduled_publications.first.audience).to eq("followers")
   end
 
@@ -295,7 +304,7 @@ RSpec.describe "Workout publishing" do
     profile = create(:publishing_profile, user: owner)
     sign_in_as(owner)
 
-    get workout_path(workout)
+    get new_publication_workout_path(workout)
 
     expect(response).to have_http_status(:ok)
     expect(response.body).to include("Le départ est configuré pour être masqué")
@@ -309,7 +318,7 @@ RSpec.describe "Workout publishing" do
     create(:publishing_profile, user: owner)
     sign_in_as(owner)
 
-    get workout_path(workout)
+    get new_publication_workout_path(workout)
 
     followers = owner.publishing_profiles.find_by!(built_in_key: "followers")
     option = response.parsed_body.at_css("option[value='#{followers.id}']")

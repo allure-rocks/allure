@@ -16,10 +16,11 @@ RSpec.describe "Workout publication preview" do
     get publication_preview_workout_path(workout), params: { publishing_profile_id: profile_param.id }, headers: headers
   end
 
-  # The fields the workout page lists as shared by `profile`, from the
+  # The fields the publish page lists as shared by `profile`, from the
   # per-profile data the publish form swaps in on a profile change.
   def shared_fields
-    get workout_path(workout)
+    profile
+    get new_publication_workout_path(workout)
     form = Nokogiri::HTML(response.body).at_css("form[data-publication-preview-readiness-value]")
     JSON.parse(form["data-publication-preview-readiness-value"]).fetch(profile.id.to_s).fetch("shared")
   end
