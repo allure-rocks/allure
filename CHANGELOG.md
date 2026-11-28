@@ -10,6 +10,18 @@ The developer contracts are published under `docs/dev/`; see
 
 ## [Unreleased]
 
+### Security
+
+- Ruby 4.0.10 replaces 4.0.7 in `.ruby-version`, the production image and CI,
+  and the development image's base tag is pinned to the same patch instead of
+  floating on `4.0`. The release fixes seven vulnerabilities published on
+  18 November 2026, in Ruby's regular expression engine and in the case
+  conversion of strings; proofs of concept show that several can reach remote
+  code execution (GHSA-34m4-m9fh-gqp5, GHSA-7x2q-68qv-6p8x,
+  GHSA-87fm-7w84-j2px, GHSA-wpqw-5qxg-m68r, GHSA-3p8q-wmhx-vm2w,
+  GHSA-7whj-cfh7-xgm4, GHSA-pvgc-g7gj-pv6h). Operators rebuild their images as
+  for any release.
+
 ### Fixed
 
 - A sport shows only the measures it reads: pace and speed are one channel,
