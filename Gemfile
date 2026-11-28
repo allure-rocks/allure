@@ -78,7 +78,7 @@ gem "httparty"
 gem "multipart-post"
 # The Model Context Protocol endpoint for AI assistants (docs/dev/MCP.md), served
 # stateless from a controller; the official SDK tracks protocol revisions.
-gem "mcp", "~> 1.10"
+gem "mcp", "~> 1.11"
 # Push notifications for the iOS companion (docs/dev/PUSH.md): RFC 8291
 # payload encryption and the VAPID header; the request itself goes through the
 # federation client and its SSRF guard.
@@ -116,7 +116,7 @@ group :test do
   gem "shoulda-matchers", "~> 8.0"
   # Federation is tested offline against pinned fixtures captured from real
   # instances — see spec/fixtures/vcr_cassettes and PLAN.md §6 (Tier 1).
-  gem "webmock", "~> 3.26"
+  gem "webmock", "~> 3.41"
   gem "vcr", "~> 6.4"
   # The public REST API's contract tests validate every request and response
   # against docs/openapi/v1.yaml (docs/dev/API.md).
