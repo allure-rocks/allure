@@ -5,7 +5,7 @@
 # compiled Vite output only. The route-image-worker target adds the small Node
 # runtime, route renderer sources, Playwright Core, MapLibre and Chromium.
 
-ARG RUBY_VERSION=4.0.7
+ARG RUBY_VERSION=4.0.10
 ARG NODE_VERSION=24.22.0
 
 FROM docker.io/library/node:${NODE_VERSION}-slim AS node

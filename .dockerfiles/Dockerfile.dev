@@ -6,7 +6,10 @@
 # irrelevant. This is deliberate: rgeo/GEOS and pg build reliably on Debian,
 # and much less reliably on darwin/arm64.
 
-ARG RUBY_VERSION=4.0
+# Pinned to the exact patch, like the production image: a rebuild must land on
+# the Ruby version CI and production run, and a security release is then a
+# visible change instead of a silent drift in a local image.
+ARG RUBY_VERSION=4.0.10
 ARG NODE_VERSION=24
 
 # Debian trixie ships a Node too old for Vite 7 (needs >= 20.19 / 22.12), so we
